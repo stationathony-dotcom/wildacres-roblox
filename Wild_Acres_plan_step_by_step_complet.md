@@ -99,7 +99,7 @@ La feuille actuelle parle de l'accueil et du personnage global, mais plusieurs f
 ### 2C. Déplacements et état du personnage
 - [~] Finaliser marche, course, saut et caméra. _(18/11 : la vitesse n'était appliquée nulle part → marche = BaseSpeed, course [Maj] / stick / bouton 🏃 avec endurance, monture = RIDE × allure ; saut et caméra Roblox par défaut, shift-lock retiré)_
 - [x] Définir nage, entrée/sortie de l'eau et comportement dans les rivières/lacs.
-- [~] Définir montée/descente des pentes, escaliers, échelles et obstacles. _(escaliers générés aux falaises, rampes / marches et ÉCHELLES grimpables en construction libre (18/11) ; à tester en Play)_
+- [x] Définir montée/descente des pentes, escaliers, échelles et obstacles. _(escaliers générés aux falaises, rampes / marches et ÉCHELLES grimpables en construction libre ; testé en Play le 18/11 : escalier de falaise de 9 marches (1,47 stud) gravi en 1,8 s, grande échelle grimpée (état Grimper, +8,3 studs), rampes des ponts)_
 - [x] Définir dégâts de chute et protections éventuelles.
 - [x] Définir santé, récupération, soins, repos et états temporaires si ces systèmes sont conservés.
 - [x] Définir KO/mort, réapparition, protection à l'arrivée et récupération des objets.
@@ -136,7 +136,7 @@ La feuille actuelle parle de l'accueil et du personnage global, mais plusieurs f
 - [~] Refaire le village de test avec maisons à colombages, torchis, pierre, bois sombre, chaume, tuiles ou ardoise.
 - [~] Ajouter et harmoniser puits, place, marché, forge, moulin (grand moulin fait le 18/11), taverne, auberge, grange, écurie, chapelle/sanctuaire et palissade.
 - [~] Ajouter hameaux, fermes isolées, tours de guet, ruines, camps, ports et bâtiments abandonnés. _(18/11 : quais des villages côtiers, châteaux sur les hauteurs ; restent hameaux et camps)_
-- [~] Revoir les ponts visuellement et fonctionnellement. _(planches, poutres, rambardes, piliers, culées, rampes, garde invisible anti-chute ; lanternes aux deux bouts (18/11) ; à revoir en Play)_
+- [x] Revoir les ponts visuellement et fonctionnellement. _(planches, poutres, rambardes, piliers, culées, rampes, garde invisible anti-chute ; lanternes aux deux bouts ; testé en Play le 18/11 : ponts de 9 et 117 studs traversés sans chute (8,1 s pour le grand), capture : tablier, rambardes et piliers lisibles)_
 - [ ] Vérifier tailles, hauteurs de portes, passages, meubles et escaliers.
 - [ ] Remplacer les modèles temporaires et anciens modèles conservés uniquement comme archive.
 
@@ -166,7 +166,7 @@ La feuille actuelle parle de l'accueil et du personnage global, mais plusieurs f
 - [x] Ajouter tri, recherche et filtres si absents.
 - [x] Ajouter transfert multiple et déplacement rapide vers coffres/ateliers/étals.
 - [x] Définir empilement, division, fusion, échange, suppression, vente et dépôt.
-- [~] Butin au sol (façon Minecraft / Fortnite) : ramassage au clic, invite [E] ou [Q] pour tout autour (`Systemes/Butin`) — à tester en Play.
+- [x] Butin au sol (façon Minecraft / Fortnite) : ramassage au clic, invite [E] ou [Q] pour tout autour (`Systemes/Butin`) — testé en Play le 18/11 (posé sur le sol, [Q] ramasse tout, message hors de portée).
 - [x] Définir les objets liés au personnage, non échangeables, consommables ou posables.
 - [x] Ajouter confirmations pour détruire ou vendre un objet rare.
 - [ ] Tester sac très volumineux, transferts massifs et inventaire saturé.
@@ -191,7 +191,7 @@ La feuille actuelle parle de l'accueil et du personnage global, mais plusieurs f
 - [x] Vérifier l'absence de réapparition indésirable des arbres, rochers, filons et cactus, conformément à la règle actuelle du monde fini. _(règle changée le 18/11 à sa demande : les FILONS et les PLANTES SAUVAGES repoussent façon WoW ; arbres, rochers, cactus restent finis — banc `resistance`)_
 - [x] Tester le reboisement et la repousse choisie des plantes.
 - [~] Vérifier que les ressources rares sont accessibles dans plusieurs stratégies ou régions, sans être infinies. _(minerai : filons + butin de créatures ; plantes rares : plusieurs biomes + butin ; repousse lente ; à mesurer en jeu)_
-- [~] Vérifier les outils : acquisition, amélioration, utilisation, animation, portée, délai et sauvegarde. _(atelier, paliers pierre/cuivre/fer, cadence 0,25 s, portée 14-16 studs, usure sauvegardée `wear` ; animation = coup « Slash » ; à tester en Play)_
+- [x] Vérifier les outils : acquisition, amélioration, utilisation, animation, portée, délai et sauvegarde. _(atelier, paliers pierre/cuivre/fer, cadence 0,25 s, portée 14-16 studs, usure sauvegardée `wear` ; animation = coup « Slash » ; testé en Play le 18/11 : bouleau abattu à la hache, 7 bois tombés au sol et ramassés, 60 coups demandés en 7 s → 15 comptés (cadence), usure `wear.axe = 15` dans le profil sauvegardé)_
 
 ## ÉTAPE 6 — TERMINER L'ARTISANAT ET LES STATIONS DE MÉTIER
 
