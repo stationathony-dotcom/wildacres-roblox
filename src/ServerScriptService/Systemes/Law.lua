@@ -97,6 +97,14 @@ function Law.crime(player: Player, kind: string, pos: Vector3, victimId: string?
 			G.Protection.ring(alarmOwner, player, pos)
 			seenBy = "L'alarme"
 		else
+			-- sans témoin : la victime s'en apercevra demain, et le shérif enquêtera (Law.newDay)
+			if (kind == "theft" or kind == "breakin") and victimId then
+				local l = law()
+				l.unseen = l.unseen or {}
+				if #l.unseen < 60 then
+					table.insert(l.unseen, { x = math.floor(pos.X), z = math.floor(pos.Z), t = now, kind = kind, victim = victimId })
+				end
+			end
 			return false
 		end
 	end
@@ -309,6 +317,42 @@ local function spreadGossip()
 	end
 end
 
+-- Enquête du shérif (18/11) sur les vols / effractions que personne n'a vus : au matin, la victime
+-- s'en aperçoit ; si quelqu'un a été vu dans le coin à ce moment-là, on le soupçonne. Pas de preuve,
+-- donc pas d'étoile ni de prime : de la méfiance (avis du voisinage, un peu d'honneur) et un nom
+-- donné à la victime si c'est un joueur — à elle d'en faire ce qu'elle veut.
+local KIND_LABEL = { theft = "un vol", breakin = "une effraction" }
+function Law.investigate()
+	local l = law()
+	for _, c in l.unseen or {} do
+		local suspect = Law.wasSeenNear(c.x, c.z, c.t, c.victim)
+		local victimNpc = G.Npcs.byId(c.victim)
+		local victimPlayer = G.Util.playerOf(c.victim)
+		if victimNpc then
+			victimNpc.per.memory.robbed = G.world.day
+		end
+		if suspect then
+			local here = Vector3.new(c.x, 0, c.z)
+			for _, e in G.Npcs.list do
+				if e.state ~= "gone" and e.root and (Vector3.new(e.root.Position.X, 0, e.root.Position.Z) - here).Magnitude < 120 then
+					G.Npcs.addOpId(e.per, suspect, -10)
+				end
+			end
+			local who = G.Util.playerOf(suspect)
+			if who then
+				Law.addHonor(who, -3)
+				G.Util.toast(who, "🔎 Le shérif enquête sur " .. KIND_LABEL[c.kind] .. " d'hier : des gens t'ont vu dans le coin… On se méfie de toi.", "danger")
+			end
+			if victimPlayer and victimPlayer ~= who then
+				G.Util.toast(victimPlayer, "🔎 Le shérif a enquêté sur " .. KIND_LABEL[c.kind] .. " chez toi : on a vu " .. (who and who.DisplayName or "quelqu'un d'absent") .. " rôder par là.", "big")
+			end
+		elseif victimPlayer then
+			G.Util.toast(victimPlayer, "🔎 Le shérif a enquêté sur " .. KIND_LABEL[c.kind] .. " chez toi : personne n'a rien vu.")
+		end
+	end
+	l.unseen = {}
+end
+
 function Law.newDay()
 	local l = law()
 	for _, m in l.missing do
@@ -326,13 +370,16 @@ function Law.newDay()
 		end
 		for _, player in G.Game.players() do
 			local g = D.gender(m.female == true)
-			G.Util.toast(player, m.name .. " a disparu." .. (suspect and (" Des gens se souviennent t'avoir vu avec " .. g.lui .. "…") or ""))
-			if suspect then
+			-- (avant le 18/11 : TOUS les joueurs étaient montrés du doigt et perdaient de l'honneur)
+			local isSuspect = suspect ~= nil and G.Util.pid(player) == suspect
+			G.Util.toast(player, m.name .. " a disparu." .. (isSuspect and (" Des gens se souviennent t'avoir vu avec " .. g.lui .. "…") or ""))
+			if isSuspect then
 				Law.addHonor(player, -5)
 			end
 		end
 	end
 	table.clear(l.missing)
+	Law.investigate()
 	spreadGossip()
 	for _, player in G.Game.players() do
 		local prof = G.Joueurs.get(player)
