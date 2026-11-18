@@ -215,6 +215,14 @@ function U.playerDist(pos: Vector3): number
 	return bd
 end
 
+-- Geste du joueur (cueillir, fabriquer, manger, batir, commerce) : tous les clients l'animent
+-- (StarterPlayerScripts/Gestes). Un compteur relance le même geste deux fois de suite.
+local gesteN = 0
+function U.geste(player: Player, kind: string)
+	gesteN += 1
+	player:SetAttribute("Geste", kind .. ":" .. gesteN)
+end
+
 function U.nearestPlayer(pos: Vector3, maxDist: number?): (Player?, number)
 	local best, bd = nil, maxDist or math.huge
 	for _, pl in game:GetService("Players"):GetPlayers() do

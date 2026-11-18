@@ -1093,6 +1093,9 @@ function Npcs.talk(player: Player, id: string)
 		Npcs.addOp(e, player, 1)
 	end
 	talking[player] = id
+	if not asleep(e) and not e.lying then
+		oneShot(e, "wave") -- il salue de la main
+	end
 	local key = D.greeting_key(e.per, prof.honor, prof.stars, true, Npcs.op(e, player))
 	Npcs.react(e, key)
 	-- les enfants (et le colporteur de passage) ont leurs propres mots
@@ -1130,8 +1133,12 @@ function Npcs.choice(player: Player, choice: string)
 			Npcs.addOp(e, player, 2)
 		end
 		Npcs.react(e, key)
+		if key == "gossip" or math.random() < 0.3 then
+			oneShot(e, "laugh")
+		end
 		send(player, e, D.line(e.data.persona, key, textVars(e, player)), options(e, player))
 	elseif choice == "rumor" then
+		oneShot(e, "point") -- il montre la direction du doigt
 		send(player, e, rumor(e, player), options(e, player))
 	elseif choice == "gift" then
 		local opts = {}
@@ -1157,6 +1164,7 @@ function Npcs.choice(player: Player, choice: string)
 		local charisme = G.Joueurs.stats(player).charisme or 0
 		Npcs.addOp(e, player, gain + charisme)
 		Npcs.react(e, "gift")
+		oneShot(e, "cheer") -- ravi du cadeau
 		send(player, e, D.line(e.data.persona, "gift", textVars(e, player)), options(e, player))
 	elseif choice == "back" then
 		send(player, e, "…", options(e, player))

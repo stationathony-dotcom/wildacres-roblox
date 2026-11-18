@@ -603,6 +603,9 @@ local function harvest(player: Player, id: string, mode: string)
 	if hitting and tooSoon(player) then
 		return
 	end
+	if mode == "berries" or mode == "take" then
+		G.Util.geste(player, "cueillir") -- à la main : on se penche, la main fouille
+	end
 	if mode == "chop" then
 		local pw = powerOf(player, "axe")
 		if pw == 0 then

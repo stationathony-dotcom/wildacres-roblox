@@ -105,7 +105,7 @@ La feuille actuelle parle de l'accueil et du personnage global, mais plusieurs f
 - [x] Définir KO/mort, réapparition, protection à l'arrivée et récupération des objets.
 - [x] Définir le rôle des lits, auberges et maisons comme points de réapparition.
 - [x] Éviter la perte injuste d'objets lors d'un bug, d'une déconnexion ou d'un transfert raté.
-- [ ] Ajouter les états d'animation utiles : porter, récolter, fabriquer, pêcher, monter, nager, interagir.
+- [~] Ajouter les états d'animation utiles : porter, récolter, fabriquer, pêcher, monter, nager, interagir. _(18/11 `Gestes.client` : récolter / semer à la main, fabriquer, manger, bâtir, commercer, offrir l'appât — gestes procéduraux vus par tous ; pêcher = coup de canne ; nager / sauter = Roblox ; restent porter un corps et monter à cheval)_
 
 **DÉCIDÉ (AUDIT.md) : absentes comme jauges ; la nourriture reste un bonus.** **DÉCISION :** définir précisément si faim, soif, fatigue et température sont de vrais systèmes ou s'ils sont volontairement absents. Ne les ajoute pas juste pour faire « survie » si cela transforme le jeu en corvée.
 
@@ -293,7 +293,7 @@ La feuille actuelle parle de l'accueil et du personnage global, mais plusieurs f
 - [x] Définir les catégories d'équipement de combat déjà présentes et leurs statistiques en jeu. _(Gear : coiffe, armure, arme, bijou ; stats force, défense, vie, vitesse, chance, charisme, discrétion ; rareté 1-4)_
 - [~] Définir les rôles de l'armure, du bouclier, des accessoires et des améliorations. _(armure : défense / vie ; accessoires : chance, charisme, force… ; arme : puissance ; pas de bouclier)_
 - [~] Définir les compétences de combat, leurs coûts, délais, conditions et progression. _(compétence Combat (+1 % de dégâts / niveau), talents Coup précis, Robuste, Menottes… ; pas de sorts actifs (volontaire))_
-- [ ] Ajouter/valider les animations, effets et sons nécessaires pour que chaque action soit lisible.
+- [~] Ajouter/valider les animations, effets et sons nécessaires pour que chaque action soit lisible. _(18/11 : gestes des actions sans outil, réactions des PNJ ; coups d'outil, éclats, sons Util.sfx existants ; à revoir action par action en Play)_
 - [~] Définir les effets temporaires de jeu éventuels : ralentissement, étourdissement bref, protection ou affaiblissement, sans effets injustes ou permanents. _(poison / toile des araignées et myconides : ralenti 40 % pendant 3 s (18/11) ; buffs d'objets (encens…) ; pas d'étourdissement)_
 - [x] Définir l'agressivité des ennemis, leur cible, leur poursuite maximale et leur retour à leur territoire.
 - [x] Définir les phases et signaux des boss, les contributions de groupe et le partage des récompenses. _(2 phases (à mi-vie : plus rapide, attaques plus serrées), préparation visible ; butin partagé : chaque participant à ≥ 10 % des dégâts reçoit sa part (18/11))_
@@ -558,8 +558,8 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [~] Créer sons d'ambiance distincts par biome, météo et moment de la journée.
 - [~] Ajouter sons d'outils, récolte, forge, cuisine, portes, animaux, montures, interactions et interface.
 - [ ] Ajouter musique réglable et discrète si elle est prévue.
-- [ ] Ajouter animations de récolte, fabrication, pêche, cuisine, commerce, dressage, construction et repos.
-- [ ] Ajouter animations et réactions pour habitants, animaux et créatures.
+- [~] Ajouter animations de récolte, fabrication, pêche, cuisine, commerce, dressage, construction et repos. _(18/11 : récolte, fabrication (et cuisine, même grille), commerce, dressage, construction faits et vus en Play ; pêche = coup de canne ; reste le repos)_
+- [x] Ajouter animations et réactions pour habitants, animaux et créatures. _(18/11 : les habitants saluent quand on leur parle, montrent la direction d'une rumeur, applaudissent un cadeau, rient en bavardant, l'enfant attrapé rit ; existants : émoticônes, fuite, bêtes qui se dandinent en marchant, créatures qui sautillent et tremblent avant d'attaquer)_
 - [ ] Uniformiser éclairages, matériaux, proportions, couleurs et style médiéval.
 - [~] Vérifier que les effets visuels indiquent clairement danger, rareté, progression et résultat. _(18/11 : barre d'usure des nœuds, barre d'usure des outils, reflets des gisements, liseré de rareté)_
 - [x] Vérifier volume, distance et répétition des sons.

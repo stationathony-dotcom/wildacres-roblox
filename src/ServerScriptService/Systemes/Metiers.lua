@@ -1171,6 +1171,7 @@ local function tagStep(e)
 		G.Npcs.addOp(e, t.player, 6)
 		G.Npcs.setState(e, "routine")
 		G.Util.emote(e.model, "love", 2.5)
+		G.Npcs.oneShot(e, "laugh")
 		G.Util.toast(t.player, "🎉 Touché ! " .. e.data.name .. " rit aux éclats. (Demande-lui un secret…)", "gain")
 	elseif os.clock() > t.untilT then
 		e.tag = nil

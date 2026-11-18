@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.0 — 2026-11-18
+- **Gestes** : on se penche pour cueillir ou semer à la main, on travaille à l'atelier, on mange, on tend l'appât à une bête, on pose une pièce, on tend la main au comptoir — animés pour tous les joueurs, sans téléchargement ; les habitants saluent, montrent la direction, applaudissent un cadeau, rient
 - **Plans de construction** : /plan copier <nom> [rayon], /plan poser <nom> (dans le sens du regard ; pièces du sac ou leurs matériaux, rien n'est posé s'il manque quelque chose), /plan donner <nom> <pseudo>, /plan liste, /plan oublier
 - Messages clairs quand une action échoue : trop loin du comptoir (fenêtre fermée), coffre disparu / trop loin / verrouillé, butin hors de portée
 - **Performance** : monstres, bêtes et PNJ loin des joueurs pensent moins souvent, et rien n'est renvoyé sur le réseau quand une créature ne bouge pas (boucle serveur 1,79 → 0,86 ms/image au village de départ) ; contacts physiques coupés sur le décor fixe (17 763 → 458 pièces)

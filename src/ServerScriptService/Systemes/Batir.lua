@@ -160,6 +160,7 @@ function Batir.place(player: Player, data)
 	end
 	table.insert(reg.state.built, d)
 	makePart(d, folderOf(reg))
+	G.Util.geste(player, "batir")
 	-- une pièce reprise revient entière : XP de pose plafonnée (150 pièces/jour = une belle maison)
 	G.Joueurs.addSkillXpCapped(player, "artisanat", 1, "pose", 150)
 	G.Joueurs.sync(player)

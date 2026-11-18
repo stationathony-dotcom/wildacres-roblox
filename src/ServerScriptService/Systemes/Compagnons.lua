@@ -171,6 +171,7 @@ function Compagnons.tame(player: Player, en)
 		return
 	end
 	takeBait(player, t.bait)
+	G.Util.geste(player, "offrir") -- on tend l'appât, accroupi, main ouverte
 	G.Joueurs.sync(player)
 	busy[player] = true
 	en.taming = player

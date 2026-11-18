@@ -187,7 +187,12 @@ function Farm.targetCell(player: Player): (number?, number?)
 end
 
 local function swing(player)
-	G.Props.swing(player)
+	local char = player.Character
+	if char and char:FindFirstChildOfClass("Tool") then
+		G.Props.swing(player) -- houe, arrosoir… : le coup de l'outil
+	else
+		G.Util.geste(player, "cueillir") -- semer, récolter à la main : on se penche
+	end
 end
 
 local function dust(pos: Vector3, color: Color3)

@@ -574,6 +574,7 @@ function J.eat(player: Player, item: string)
 			heal = math.floor(heal * 1.25)
 		end
 		hum.Health = math.min(hum.MaxHealth, hum.Health + heal)
+		G.Util.geste(player, "manger")
 		G.Util.toast(player, "Miam ! " .. info.icon .. " (+" .. heal .. " vie)")
 	end
 end

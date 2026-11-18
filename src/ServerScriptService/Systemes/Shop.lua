@@ -303,6 +303,7 @@ function Shop.buy(player: Player, item: string, n: number)
 	if e.data.metier then
 		G.Metiers.bought(e, item, n)
 	end
+	G.Util.geste(player, "commerce")
 	G.Npcs.addOp(e, player, 1)
 	G.Joueurs.sync(player)
 	refresh(player)
@@ -347,6 +348,7 @@ function Shop.sell(player: Player, item: string, n: number)
 		G.Metiers.sold(e, item, sold) -- ses matières : elles feront sa fournée de demain
 	end
 	if total > 0 then
+		G.Util.geste(player, "commerce")
 		G.Joueurs.add(player, "gold", total, true)
 		G.Util.toast(player, "+" .. total .. " 💰", "gain")
 		G.Joueurs.addSkillXp(player, "commerce", 1 + math.floor(total / 25))
@@ -690,6 +692,7 @@ function Shop.craftGrid(player: Player, slots, pick: number?)
 	end
 	if Shop.craft(player, index, r.gear and 1 or k) then
 		G.Joueurs.learnRecipe(player, Config.recipeKey(r))
+		G.Util.geste(player, "fabriquer")
 	end
 end
 
