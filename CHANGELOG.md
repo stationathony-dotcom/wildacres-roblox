@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.0 — 2026-11-18
+- **Élevage** : une bête près de son abri (poulailler, étable, bergerie) donne un produit de plus ; poules et vaches bien nourries et abreuvées aussi (l'abreuvoir et la mangeoire ne leur servaient à rien)
 - **Construction** : arche en plein cintre et mur courbe (pierre, brique, pierre taillée, bois, torchis) — de quoi faire arcades, portails et tours rondes
 - **Fers à cheval** (enclume : 2 lingots de fer, 4 clous) : ferrer sa monture lui donne +12 % d'allure, pour de bon ; en selle, le cavalier a enfin une vraie posture
 - **Terriers** : lapins et renards ont un terrier près de leur gîte ; effrayés, ils y filent et s'y cachent (un prédateur perd leur trace), puis ressortent quand le calme revient

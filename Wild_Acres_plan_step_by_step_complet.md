@@ -252,7 +252,7 @@ La feuille actuelle parle de l'accueil et du personnage global, mais plusieurs f
 - [x] Reproduction d'animaux et certains troupeaux indiqués comme présents.
 - [~] Compléter les espèces domestiques, leurs produits et leurs usages. _(poule → œufs, vache → lait, mouton → laine, ruche → miel ; cheval, âne, mulet pour la monte)_
 - [~] Définir eau, nourriture, abri, espace, croissance, reproduction et production. _(eau + nourriture : abreuvoir et mangeoire ; reproduction plafonnée par l'espace (anti-surcharge) ; production par espèce (`ANIMALS.every`))_
-- [~] Ajouter étables, poulaillers, enclos, pâtures, abreuvoirs et mangeoires nécessaires. _(abreuvoir + mangeoire à poser : production plus rapide (18/11) ; enclos = clôtures et pièces de construction libre ; restent étables / poulaillers tout faits)_
+- [x] Ajouter étables, poulaillers, enclos, pâtures, abreuvoirs et mangeoires nécessaires. _(abreuvoir + mangeoire à poser : production plus rapide (18/11) ; enclos = clôtures et pièces de construction libre ; étable, poulailler, bergerie, écurie, porcherie, grange posables (catalogue) ; 18/11 : une bête près de SON abri (poule–poulailler, vache–étable, mouton–bergerie/étable) donne +1 produit, et +1 si elle produit chaque jour et a abreuvoir + mangeoire (avant : sans effet pour elle) ; testé en Play : poule près d'un poulailler → 2 œufs au lieu de 1)_
 - [x] Ajouter collecte de lait, laine, œufs, miel, plumes et autres produits. _(Traire / Tondre / Ramasser l'œuf, ruches, nids à dénicher pour les plumes)_
 - [x] Définir soins, récupération et gestion des animaux bloqués.
 - [~] Définir attribution de propriété et transfert d'un animal.

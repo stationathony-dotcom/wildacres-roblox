@@ -170,6 +170,7 @@ function Animals.collect(player: Player, id: string)
 	if math.random() < 0.05 * (G.Joueurs.stats(player).chance or 0) + 0.25 * G.Joueurs.talent(player, "eleveur") + 0.01 * G.Joueurs.skill(player, "elevage") then
 		n = 2
 	end
+	n += (a.state.abri and 1 or 0) + (a.state.soin and 1 or 0)
 	G.Joueurs.add(player, k.product, n)
 	G.Joueurs.addSkillXp(player, "elevage", 5)
 	refreshPrompt(a)
@@ -430,14 +431,27 @@ function Animals.newDay()
 	end
 	-- bien soignées (abreuvoir ET mangeoire à moins de 24 studs) : un jour d'avance chaque matin
 	local troughs, feeders = {}, {}
+	-- abris (18/11) : une bête près de SON abri produit aussi un jour plus tôt
+	local SHELTER = { Cat_henhouse = { chicken = true }, Cat_stable = { cow = true, sheep = true }, Cat_sheepfold = { sheep = true } }
+	local shelters = {}
 	for _, reg in G.World.loaded do
 		for _, m in reg.placedModels or {} do
 			if m.Parent and m.Name == "Abreuvoir" then
 				table.insert(troughs, m:GetPivot().Position)
 			elseif m.Parent and m.Name == "Mangeoire" then
 				table.insert(feeders, m:GetPivot().Position)
+			elseif m.Parent and SHELTER[m.Name] then
+				table.insert(shelters, { pos = m:GetPivot().Position, kinds = SHELTER[m.Name] })
 			end
 		end
+	end
+	local function sheltered(a): boolean
+		for _, sh in shelters do
+			if sh.kinds[a.kind] and (sh.pos - a.pos).Magnitude < 20 then
+				return true
+			end
+		end
+		return false
 	end
 	local function near(list, pos)
 		for _, p in list do
@@ -448,9 +462,14 @@ function Animals.newDay()
 		return false
 	end
 	for _, a in Animals.list do
-		if a.pos and #troughs > 0 and #feeders > 0 and near(troughs, a.pos) and near(feeders, a.pos) then
+		local cared = a.pos ~= nil and #troughs > 0 and #feeders > 0 and near(troughs, a.pos) and near(feeders, a.pos)
+		if cared then
 			a.state.days += 1
 		end
+		-- soins comptés à la récolte : +1 produit à l'abri, +1 bien nourrie pour une bête qui produit
+		-- chaque jour (pour elle, « un jour d'avance » ne changeait rien)
+		a.state.abri = (a.pos ~= nil and #shelters > 0 and sheltered(a)) or nil
+		a.state.soin = (cared and a.k.every <= 1) or nil
 		if a.state.days >= a.k.every then
 			a.state.product = true
 		end
