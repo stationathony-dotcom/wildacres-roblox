@@ -616,7 +616,7 @@ local function onCommand(player: Player, text: string)
 	if cmd == "/aide" then
 		say(player, "💬 /coince · /signaler <pseudo> <motif> · /bloquer · /debloquer · /bloques")
 		say(player, "🔑 /autoriser <pseudo> [coffres|batir] · /retirer · /autorises · /ceder <pseudo> · /louer <pseudo> <jours> <prix> · /accepter")
-		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon>")
+		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan")
 	elseif cmd == "/demonter" then
 		local r = tonumber(args[1])
 		if not r then
@@ -624,6 +624,41 @@ local function onCommand(player: Player, text: string)
 		end
 		local n = G.Batir.removeAround(player, r)
 		say(player, n > 0 and ("🧱 " .. n .. " pièce(s) reprise(s), matériaux rendus.") or "Aucune de tes pièces dans ce rayon.")
+	elseif cmd == "/plan" then
+		local sub = string.lower(args[1] or "")
+		local ok, msg
+		if sub == "copier" then
+			ok, msg = G.Batir.copyPlan(player, args[2], tonumber(args[3]))
+		elseif sub == "poser" then
+			ok, msg = G.Batir.placePlan(player, args[2])
+		elseif sub == "donner" then
+			local target = findPlayer(args[3])
+			if not target then
+				return say(player, "/plan donner <nom> <pseudo>  (joueur présent sur ce serveur)")
+			end
+			ok, msg = G.Batir.givePlan(player, args[2], target)
+		elseif sub == "oublier" then
+			local prof = G.Joueurs.get(player)
+			local n = string.lower(args[2] or "")
+			if prof and prof.plans and prof.plans[n] then
+				prof.plans[n] = nil
+				G.Joueurs.markDirty(player)
+				ok, msg = true, "Plan « " .. n .. " » oublié."
+			else
+				ok, msg = false, "Pas de plan de ce nom (/plan liste)."
+			end
+		elseif sub == "liste" then
+			local prof = G.Joueurs.get(player)
+			local rows = {}
+			for n, pl in (prof and prof.plans) or {} do
+				table.insert(rows, n .. " (" .. #pl.pieces .. " pièces" .. (pl.by and pl.by ~= player.DisplayName and (", de " .. pl.by) or "") .. ")")
+			end
+			table.sort(rows)
+			ok, msg = true, #rows > 0 and ("📐 Tes plans : " .. table.concat(rows, " · ")) or "Aucun plan. /plan copier <nom> [rayon] près de TES constructions."
+		else
+			return say(player, "📐 /plan copier <nom> [rayon] · /plan poser <nom> · /plan donner <nom> <pseudo> · /plan liste · /plan oublier <nom>")
+		end
+		say(player, msg, ok and "gain" or nil)
 	elseif cmd == "/coince" then
 		unstuck(player)
 	elseif cmd == "/signaler" then
@@ -709,7 +744,7 @@ function Admin.init(g)
 	local folder = TextChatService:FindFirstChild("CommandesWA") or Instance.new("Folder")
 	folder.Name = "CommandesWA"
 	folder.Parent = TextChatService
-	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter" } do
+	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan" } do
 		local c = folder:FindFirstChild(alias) or Instance.new("TextChatCommand")
 		c.Name = alias
 		c.PrimaryAlias = alias

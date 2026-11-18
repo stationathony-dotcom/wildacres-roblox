@@ -39,6 +39,7 @@ Save.FIELDS = {
 	"journal", "settings", "mailClaimed", "lastWorld", "created", "buffs", "blocked", "treasures",
 	"wear", -- 18/11 : usure des outils (facultatif : absent = outils neufs)
 	"warnings", -- 18/11 : avertissements de modération (sanctions graduées)
+	"plans", -- 18/11 : plans de construction copiés (Batir), facultatif
 }
 
 -- v -> fonction qui transforme une sauvegarde v en v+1 (ne jamais modifier une migration publiée)

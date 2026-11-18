@@ -347,7 +347,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [~] Ajouter les formes manquantes retenues : courbes, arches, rampes, rambardes, pièces inclinées et raccords. _(rampes, barrières, pentes, coins, piliers, colonnes, échelles (18/11) ; restent courbes et arches)_
 - [ ] Vérifier le placement libre, rotation, retournement et reprise d'une pièce.
 - [~] Ajouter sélection multiple, déplacement et récupération en lot si nécessaire. _(récupération en lot : /demonter <rayon>, matériaux rendus (18/11) ; reprendre une pièce rend enfin ses matériaux (bug corrigé) ; restent sélection / déplacement)_
-- [ ] Ajouter plan de construction partageable si cela ne supprime pas le coût des matériaux.
+- [x] Ajouter plan de construction partageable si cela ne supprime pas le coût des matériaux. _(18/11 : /plan copier <nom> [rayon] (ses pièces, relatif aux pieds et au regard), /plan poser <nom> (dans l'orientation du regard, pièces du sac sinon leurs matériaux, tout ou rien avec la liste de ce qui manque), /plan donner <nom> <pseudo>, /plan liste, /plan oublier ; 10 plans × 500 pièces (taille de sauvegarde) ; testé en Play : copie, refus « Il te manque : 9 Planches », pose, rotation de 90°)_
 - [ ] Vérifier collisions, pièces flottantes involontaires et accès aux portes.
 - [ ] Optimiser et tester les grandes maisons très détaillées.
 - [x] Vérifier sauvegarde et chargement des constructions complexes.

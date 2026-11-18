@@ -221,6 +221,219 @@ function Batir.removeAround(player: Player, radius: number): number
 	return #ids
 end
 
+-- ----------------------------------------------------------------- Plans de construction (18/11)
+-- On copie SES pièces autour de soi en un plan (positions relatives à ses pieds et à son regard),
+-- on le repose ailleurs dans l'orientation de son regard, on le donne à un autre joueur. Poser un
+-- plan ne fait rien gagner : chaque pièce sort du sac, sinon ses matériaux ; s'il manque quoi que ce
+-- soit, RIEN n'est posé (tout ou rien) et le joueur sait ce qui lui manque.
+-- Limites techniques (taille de la sauvegarde du perso, pas une règle de jeu) : 10 plans, 500 pièces.
+local PLAN_MAX, PLAN_PIECES, PLAN_RADIUS = 10, 500, 16
+Batir.PLAN_MAX, Batir.PLAN_PIECES = PLAN_MAX, PLAN_PIECES
+
+-- repère du joueur : pieds sur la grille de 0,5, regard arrondi au quart de tour
+local function frameOf(root: BasePart): (CFrame, number)
+	local look = root.CFrame.LookVector
+	local q = math.floor(math.atan2(-look.X, -look.Z) / (math.pi / 2) + 0.5) % 4
+	local feet = root.Position - Vector3.new(0, 3, 0)
+	local o = Vector3.new(round(feet.X, 0.5), round(feet.Y, 0.5), round(feet.Z, 0.5))
+	return CFrame.new(o) * CFrame.Angles(0, math.rad(90 * q), 0), q
+end
+
+local function planName(s: any): string?
+	if type(s) ~= "string" then
+		return nil
+	end
+	s = string.lower(string.sub(s, 1, 20))
+	return string.match(s, "^[%w_%-]+$") and s or nil
+end
+
+function Batir.copyPlan(player: Player, name: string, radius: number?): (boolean, string)
+	local prof = G.Joueurs.get(player)
+	local root = G.Util.root(player)
+	name = planName(name)
+	if not prof or not root then
+		return false, "Impossible pour le moment."
+	end
+	if not name then
+		return false, "Nom de plan : lettres et chiffres seulement (ex. /plan copier maison)."
+	end
+	prof.plans = prof.plans or {}
+	local count = 0
+	for _ in prof.plans do
+		count += 1
+	end
+	if not prof.plans[name] and count >= PLAN_MAX then
+		return false, "Tu as déjà " .. PLAN_MAX .. " plans : /plan oublier <nom> pour faire de la place."
+	end
+	radius = math.clamp(tonumber(radius) or 10, 2, PLAN_RADIUS)
+	local frame, q = frameOf(root)
+	local pieces = {}
+	for _, reg in G.World.loaded do
+		for _, d in reg.state.built or {} do
+			local pos = Vector3.new(d.x, d.y, d.z)
+			if G.Util.owns(player, d.o) and (pos - frame.Position).Magnitude <= radius then
+				local rel = frame:PointToObjectSpace(pos)
+				table.insert(pieces, { b = d.b, x = round(rel.X, 0.5), y = round(rel.Y, 0.5), z = round(rel.Z, 0.5), r = ((d.r or 0) - q) % 4, f = d.f })
+				if #pieces > PLAN_PIECES then
+					return false, "Trop de pièces pour un seul plan (" .. PLAN_PIECES .. " au plus) : réduis le rayon."
+				end
+			end
+		end
+	end
+	if #pieces == 0 then
+		return false, "Aucune de TES pièces dans un rayon de " .. radius .. " studs."
+	end
+	prof.plans[name] = { pieces = pieces, by = player.DisplayName, day = G.world.day }
+	G.Joueurs.markDirty(player)
+	return true, "📐 Plan « " .. name .. " » : " .. #pieces .. " pièces copiées. Pose-le ailleurs avec /plan poser " .. name .. "."
+end
+
+function Batir.placePlan(player: Player, name: string): (boolean, string)
+	local prof = G.Joueurs.get(player)
+	local root = G.Util.root(player)
+	name = planName(name)
+	local plan = prof and name and prof.plans and prof.plans[name]
+	if not plan or not root then
+		return false, "Pas de plan de ce nom (/plan liste)."
+	end
+	local frame, q = frameOf(root)
+	-- 1. tout vérifier avant de rien prendre
+	local todo, needPieces = {}, {}
+	for _, p in plan.pieces do
+		local b = blockOf(p.b)
+		if not b then
+			return false, "Ce plan contient une pièce qui n'existe plus (" .. tostring(p.b) .. ")."
+		end
+		local w = frame:PointToWorldSpace(Vector3.new(p.x, p.y, p.z))
+		local d = {
+			id = G.Util.newId("b"), b = p.b, x = round(w.X, 0.5), y = round(w.Y, 0.5), z = round(w.Z, 0.5),
+			r = ((p.r or 0) + q) % 4, f = p.f or nil, o = G.Util.pid(player),
+		}
+		if d.y < Config.Y_MIN or d.y > Config.Y_MAX + 60 then
+			return false, "Ici, le plan dépasserait trop haut ou trop bas."
+		end
+		local pos = Vector3.new(d.x, d.y, d.z)
+		local reg = G.World.regionAt(pos)
+		if not reg then
+			return false, "Le plan déborde sur une région pas encore chargée : rapproche-toi du centre."
+		end
+		local cx, cz = math.floor(d.x / Config.CELL), math.floor(d.z / Config.CELL)
+		if (reg.plan.poiW[G.WG.idx(cx - reg.plan.x0, cz - reg.plan.z0)] or 0) > 0.3 then
+			return false, "On ne bâtit pas au milieu d'un village ou d'une ferme."
+		end
+		if not G.Parcelles.canBuild(player, pos) then
+			return false, "Le plan déborde sur un terrain où tu ne peux pas bâtir."
+		end
+		local dup = false
+		for _, o in reg.state.built or {} do
+			if o.b == d.b and math.abs(o.x - d.x) < 0.3 and math.abs(o.y - d.y) < 0.3 and math.abs(o.z - d.z) < 0.3 and (o.r or 0) == d.r then
+				dup = true -- déjà là (plan reposé au même endroit) : ni posée ni payée
+				break
+			end
+		end
+		if not dup then
+			table.insert(todo, { d = d, reg = reg })
+			needPieces[p.b] = (needPieces[p.b] or 0) + 1
+		end
+	end
+	if #todo == 0 then
+		return false, "Tout ce plan est déjà construit ici."
+	end
+	-- 2. ce que ça coûte : les pièces du sac d'abord, les matériaux pour le reste
+	local takePieces, needMat = {}, {}
+	for bid, n in needPieces do
+		local b = blockOf(bid)
+		local have = math.min(n, G.Joueurs.count(player, b.item))
+		takePieces[b.item] = have
+		for item, k in b.cost or {} do
+			needMat[item] = (needMat[item] or 0) + k * (n - have)
+		end
+	end
+	local missing = {}
+	for item, n in needMat do
+		local short = n - G.Joueurs.count(player, item)
+		if short > 0 then
+			local info = Config.ITEMS[item]
+			table.insert(missing, short .. " " .. (info and info.name or item))
+		end
+	end
+	if #missing > 0 then
+		table.sort(missing)
+		return false, "Il te manque : " .. table.concat(missing, ", ", 1, math.min(6, #missing)) .. (#missing > 6 and "…" or "") .. ". Rien n'a été posé."
+	end
+	-- 3. tout prendre (en cas d'échec improbable, on rend ce qui a été pris)
+	local taken = {}
+	local function refund()
+		for item, n in taken do
+			G.Joueurs.add(player, item, n, true)
+		end
+	end
+	for item, n in takePieces do
+		if n > 0 then
+			if not G.Joueurs.take(player, item, n) then
+				refund()
+				return false, "Ton sac a changé pendant la pose : réessaie."
+			end
+			taken[item] = (taken[item] or 0) + n
+		end
+	end
+	for item, n in needMat do
+		if n > 0 then
+			if not G.Joueurs.take(player, item, n) then
+				refund()
+				return false, "Ton sac a changé pendant la pose : réessaie."
+			end
+			taken[item] = (taken[item] or 0) + n
+		end
+	end
+	-- 4. poser (par paquets : une grande maison ne fige pas le serveur)
+	for i, t in todo do
+		t.reg.state.built = t.reg.state.built or {}
+		table.insert(t.reg.state.built, t.d)
+		makePart(t.d, folderOf(t.reg))
+		if i % 60 == 0 then
+			task.wait()
+		end
+	end
+	G.Joueurs.addSkillXpCapped(player, "artisanat", #todo, "pose", 150)
+	G.Joueurs.sync(player)
+	G.Util.sfx("pelle", frame.Position)
+	return true, "🏗️ Plan « " .. name .. " » posé : " .. #todo .. " pièces."
+end
+
+function Batir.givePlan(player: Player, name: string, target: Player): (boolean, string)
+	local prof, tprof = G.Joueurs.get(player), G.Joueurs.get(target)
+	name = planName(name)
+	local plan = prof and name and prof.plans and prof.plans[name]
+	if not plan then
+		return false, "Pas de plan de ce nom (/plan liste)."
+	end
+	if not tprof or target == player then
+		return false, "Ce joueur n'est pas là."
+	end
+	if G.Admin and G.Admin.blocks and G.Admin.blocks(target, player) then
+		return false, target.DisplayName .. " ne reçoit rien de toi."
+	end
+	tprof.plans = tprof.plans or {}
+	local count = 0
+	for _ in tprof.plans do
+		count += 1
+	end
+	local tname = name
+	local k = 2
+	while tprof.plans[tname] do
+		tname = string.sub(name, 1, 17) .. "_" .. k
+		k += 1
+	end
+	if count >= PLAN_MAX then
+		return false, target.DisplayName .. " a déjà " .. PLAN_MAX .. " plans."
+	end
+	tprof.plans[tname] = { pieces = table.clone(plan.pieces), by = plan.by or player.DisplayName, day = G.world.day }
+	G.Joueurs.markDirty(target)
+	G.Util.toast(target, "📐 " .. player.DisplayName .. " t'offre son plan « " .. tname .. " » (" .. #plan.pieces .. " pièces) : /plan poser " .. tname, "gain")
+	return true, "📐 Plan « " .. name .. " » donné à " .. target.DisplayName .. "."
+end
+
 -- Casser la pièce d'un autre (cambriolage, démolition) : coups de pioche / hache
 function Batir.smash(player: Player, tool: string): boolean
 	local root = G.Util.root(player)
