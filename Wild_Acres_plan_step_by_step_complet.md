@@ -105,7 +105,7 @@ La feuille actuelle parle de l'accueil et du personnage global, mais plusieurs f
 - [x] Définir KO/mort, réapparition, protection à l'arrivée et récupération des objets.
 - [x] Définir le rôle des lits, auberges et maisons comme points de réapparition.
 - [x] Éviter la perte injuste d'objets lors d'un bug, d'une déconnexion ou d'un transfert raté.
-- [~] Ajouter les états d'animation utiles : porter, récolter, fabriquer, pêcher, monter, nager, interagir. _(18/11 `Gestes.client` : récolter / semer à la main, fabriquer, manger, bâtir, commercer, offrir l'appât — gestes procéduraux vus par tous ; pêcher = coup de canne ; nager / sauter = Roblox ; restent porter un corps et monter à cheval)_
+- [x] Ajouter les états d'animation utiles : porter, récolter, fabriquer, pêcher, monter, nager, interagir. _(18/11 `Gestes.client` : récolter / semer à la main, fabriquer, manger, bâtir, commercer, offrir l'appât ; états continus à cheval (en selle, rênes) et porter un corps (bras tendus) — vus par tous, vérifiés en Play, articulations remises exactement à zéro ensuite ; pêcher = coup de canne ; nager / sauter = Roblox)_
 
 **DÉCIDÉ (AUDIT.md) : absentes comme jauges ; la nourriture reste un bonus.** **DÉCISION :** définir précisément si faim, soif, fatigue et température sont de vrais systèmes ou s'ils sont volontairement absents. Ne les ajoute pas juste pour faire « survie » si cela transforme le jeu en corvée.
 

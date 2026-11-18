@@ -1,10 +1,15 @@
--- Gestes (18/11) : cueillir, fabriquer, manger, bâtir, commercer, offrir (dressage) — sans animation à télécharger.
--- Le serveur pose sur le joueur l'attribut « Geste » = "type:n" (Util.geste) ; CHAQUE client anime
--- le personnage concerné (le sien et ceux des autres) en tournant ses articulations par-dessus
--- l'animation de marche : C0 pour un Motor6D, Attachment0 pour une AnimationConstraint (nouveaux
--- avatars). Entrée et sortie adoucies ; à la fin, chaque articulation retrouve exactement sa valeur.
+-- Gestes (18/11) — sans animation à télécharger :
+--   · gestes ponctuels : cueillir, fabriquer, manger, bâtir, commercer, offrir (dressage). Le serveur
+--     pose sur le joueur l'attribut « Geste » = "type:n" (Util.geste) ;
+--   · états continus : à cheval (attribut Riding : jambes écartées, genoux pliés), porter un corps
+--     (attribut Carrying : bras tendus).
+-- CHAQUE client anime tous les personnages (le sien et ceux des autres) en tournant leurs
+-- articulations par-dessus l'animation Roblox : C0 pour un Motor6D, Attachment0 pour une
+-- AnimationConstraint (nouveaux avatars). Une seule base par personnage (valeurs d'origine) :
+-- base × état × geste, entrées et sorties adoucies ; au repos, chaque articulation retrouve
+-- exactement sa valeur d'origine.
 -- Axes (calibrés en Play) : épaule / hanche +X = vers l'avant ; taille / nuque −X = vers l'avant /
--- le bas ; genou / coude −X = plié.
+-- le bas ; genou / coude −X = plié ; hanche ±Z = jambe écartée.
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -13,8 +18,11 @@ local rad, sin, pi = math.rad, math.sin, math.pi
 local function X(deg)
 	return CFrame.Angles(rad(deg), 0, 0)
 end
+local function XZ(dx, dz)
+	return CFrame.Angles(rad(dx), 0, rad(dz))
+end
 
--- p(t, w) : t = temps écoulé (s), w = poids 0..1 ; renvoie { articulation = CFrame }
+-- gestes ponctuels : p(t, w) avec t = temps écoulé (s), w = poids 0..1
 local POSES = {
 	cueillir = { dur = 1.0, p = function(t, w)
 		local reach = sin(t * pi * 3) * 12
@@ -56,7 +64,24 @@ local POSES = {
 	end },
 }
 
-local active = {} -- personnage -> { pose, t0, joints, base }
+-- états continus : attribut du joueur -> pose(w)
+local STATES = {
+	Riding = function(w)
+		return {
+			LeftHip = XZ(55 * w, -22 * w), RightHip = XZ(55 * w, 22 * w),
+			LeftKnee = X(-75 * w), RightKnee = X(-75 * w),
+			LeftShoulder = X(30 * w), RightShoulder = X(30 * w), LeftElbow = X(-40 * w), RightElbow = X(-40 * w),
+		}
+	end,
+	Carrying = function(w)
+		return {
+			LeftShoulder = X(75 * w), RightShoulder = X(75 * w), LeftElbow = X(-25 * w), RightElbow = X(-25 * w),
+			Waist = X(6 * w), -- on se cambre un peu sous le poids
+		}
+	end,
+}
+
+local rigs = {} -- personnage -> { joints, base, gesture = {pose, t0}?, w = { [état] = poids }, dirty }
 
 local function jointsOf(char: Model)
 	local t = {}
@@ -68,72 +93,93 @@ local function jointsOf(char: Model)
 	return t
 end
 
-local function getBase(j)
+local function getCF(j): CFrame
 	return j:IsA("Motor6D") and j.C0 or j.Attachment0.CFrame
 end
 
-local function setRel(j, base: CFrame, cf: CFrame)
+local function setCF(j, cf: CFrame)
 	if j:IsA("Motor6D") then
-		j.C0 = base * cf
+		j.C0 = cf
 	elseif j.Attachment0 then
-		j.Attachment0.CFrame = base * cf
+		j.Attachment0.CFrame = cf
 	end
 end
 
-local function stop(char)
-	local a = active[char]
-	if not a then
-		return
-	end
-	active[char] = nil
-	for name, base in a.base do
-		local j = a.joints[name]
-		if j and j.Parent then
-			setRel(j, base, CFrame.identity)
+local function rigOf(char: Model)
+	local r = rigs[char]
+	if not r then
+		local joints = jointsOf(char)
+		local base = {}
+		for name, j in joints do
+			base[name] = getCF(j)
 		end
+		r = { joints = joints, base = base, w = {}, dirty = false }
+		rigs[char] = r
 	end
+	return r
 end
 
-local function start(char: Model, kind: string)
-	local pose = POSES[kind]
-	if not pose or not char.Parent then
-		return
-	end
-	local prev = active[char]
-	stop(char) -- un nouveau geste remplace l'ancien (bases restaurées d'abord)
-	local joints = (prev and prev.joints) or jointsOf(char)
-	local base = {}
-	for name, j in joints do
-		base[name] = getBase(j)
-	end
-	active[char] = { pose = pose, t0 = os.clock(), joints = joints, base = base }
+local function ease(x: number): number
+	x = math.clamp(x, 0, 1)
+	return x * x * (3 - 2 * x)
 end
 
--- entrée en 0,15 s, sortie en 0,2 s (ease in-out)
-local function weight(t: number, dur: number): number
-	local function ease(x)
-		x = math.clamp(x, 0, 1)
-		return x * x * (3 - 2 * x)
-	end
-	return math.min(ease(t / 0.15), ease((dur - t) / 0.2))
-end
-
+local last = os.clock()
 RunService.RenderStepped:Connect(function()
 	local now = os.clock()
-	for char, a in active do
-		local t = now - a.t0
-		if t >= a.pose.dur or not char.Parent then
-			stop(char)
-		else
-			local w = weight(t, a.pose.dur)
-			local ok, offs = pcall(a.pose.p, t, w)
-			if ok then
-				for name, cf in offs do
-					local j, base = a.joints[name], a.base[name]
-					if j and base and j.Parent then
-						setRel(j, base, cf)
+	local dt = math.min(now - last, 0.1)
+	last = now
+	for _, player in Players:GetPlayers() do
+		local char = player.Character
+		if char and char.Parent then
+			local r = rigs[char]
+			-- états voulus (on n'alloue un rig que s'il y a quelque chose à jouer)
+			local wantAny = false
+			for attr in STATES do
+				if player:GetAttribute(attr) == true then
+					wantAny = true
+				end
+			end
+			if wantAny or (r and (r.gesture or r.dirty)) then
+				r = r or rigOf(char)
+				local offs = {}
+				local active = false
+				for attr, fn in STATES do
+					local target = player:GetAttribute(attr) == true and 1 or 0
+					local w = r.w[attr] or 0
+					w += math.sign(target - w) * math.min(math.abs(target - w), dt / 0.25) -- 0,25 s
+					r.w[attr] = w
+					if w > 0.001 then
+						active = true
+						for name, cf in fn(ease(w)) do
+							offs[name] = (offs[name] or CFrame.identity) * cf
+						end
 					end
 				end
+				local g = r.gesture
+				if g then
+					local t = now - g.t0
+					if t >= g.pose.dur then
+						r.gesture = nil
+					else
+						active = true
+						local w = math.min(ease(t / 0.15), ease((g.pose.dur - t) / 0.2))
+						local ok, res = pcall(g.pose.p, t, w)
+						if ok then
+							for name, cf in res do
+								offs[name] = (offs[name] or CFrame.identity) * cf
+							end
+						end
+					end
+				end
+				-- applique (ou remet exactement la base des articulations qui ne bougent plus)
+				for name, j in r.joints do
+					local base = r.base[name]
+					if base and j.Parent then
+						setCF(j, offs[name] and base * offs[name] or base)
+					end
+				end
+				r.dirty = active
 			end
 		end
 	end
@@ -144,12 +190,15 @@ local function watch(player: Player)
 		local v = player:GetAttribute("Geste")
 		local kind = type(v) == "string" and string.match(v, "^(%a+)")
 		local char = player.Character
-		if kind and char then
-			start(char, kind)
+		local pose = kind and POSES[kind]
+		if pose and char and char.Parent then
+			local r = rigOf(char)
+			r.gesture = { pose = pose, t0 = os.clock() } -- un nouveau geste remplace l'ancien
+			r.dirty = true
 		end
 	end)
 	player.CharacterRemoving:Connect(function(char)
-		active[char] = nil
+		rigs[char] = nil
 	end)
 end
 
@@ -157,3 +206,8 @@ for _, p in Players:GetPlayers() do
 	watch(p)
 end
 Players.PlayerAdded:Connect(watch)
+Players.PlayerRemoving:Connect(function(p)
+	if p.Character then
+		rigs[p.Character] = nil
+	end
+end)
