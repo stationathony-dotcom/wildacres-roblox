@@ -9,6 +9,7 @@ local Game = {}
 local G
 local playing = {}
 local sleepers = {} -- joueur -> heure de réveil (os.clock)
+local dawnAt, dawnDay
 local sprinting = {} -- joueur -> true pendant qu'il tient [Maj]
 local fallTop = {} -- joueur -> plus haute position Y depuis qu'il a quitté le sol (chute)
 
@@ -266,9 +267,13 @@ local function wake(player: Player, msg: string?)
 end
 
 -- Peut-on dormir maintenant ? (vérifié AVANT de faire payer une chambre)
-function Game.canSleep(player: Player): (boolean, string?)
+local function sleepHours(): boolean
 	local h = G.Clock.hour()
-	if h >= 6 and h < G.Config.SLEEP_FROM then
+	return h < 6 or h >= G.Config.SLEEP_FROM
+end
+
+function Game.canSleep(player: Player): (boolean, string?)
+	if not sleepHours() then
 		return false, "Tu n'as pas sommeil. On dort à partir de " .. G.Config.SLEEP_FROM .. " h."
 	end
 	local prof = G.Joueurs.get(player)
@@ -300,34 +305,47 @@ function Game.sleep(player: Player, bedPos: Vector3)
 	end
 	player:SetAttribute("Stamina", player:GetAttribute("MaxStamina") or G.Config.MAX_STAMINA)
 	G.remotes.Fade:FireClient(player, "Tu t'endors… (la nuit passe si tout le monde dort)", 0)
-	-- tout le monde dort ?
-	local all = true
-	for _, p in Game.players() do
-		if not sleepers[p] then
-			all = false
-			break
-		end
-	end
-	if all then
-		task.delay(2, function()
-			G.Clock.skipToMorning()
-			for p in sleepers do
-				wake(p, nil)
-			end
-			for _, p in Game.players() do
-				G.Util.toast(p, string.format("Tout le monde a dormi : jour %d.", G.world.day), "big")
-				task.spawn(G.Save.save, p)
-			end
-		end)
-	end
 end
 
--- Appelé par la boucle : réveille ceux dont la sieste est finie
+-- Le passage au matin exige deux secondes de sommeil collectif pendant la même nuit.
 local function sleepStep()
 	local now = os.clock()
 	for p, t in sleepers do
 		if now >= t then
 			wake(p, "Tu te sens reposé. Ce lit est désormais ton point de réapparition.")
+		end
+	end
+	if not next(sleepers) or not sleepHours() then
+		dawnAt = nil
+		return
+	end
+	local players = Game.players()
+	if #players == 0 then
+		dawnAt = nil
+		return
+	end
+	for _, p in players do
+		if not sleepers[p] then
+			dawnAt = nil
+			return
+		end
+	end
+	if not dawnAt or dawnDay ~= G.world.day then
+		dawnAt, dawnDay = now + 2, G.world.day
+		return
+	end
+	if now < dawnAt then
+		return
+	end
+	dawnAt = nil
+	for _, p in players do
+		wake(p, nil)
+	end
+	G.Clock.skipToMorning()
+	for _, p in players do
+		if p.Parent then
+			G.Util.toast(p, string.format("Tout le monde a dormi : jour %d.", G.world.day), "big")
+			task.spawn(G.Save.save, p)
 		end
 	end
 end
