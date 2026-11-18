@@ -64,7 +64,7 @@ scales|Écailles|🐉|16|m|-|
 resin|Résine|🟧|8|m|-|
 beeswax|Cire d'abeille|🕯️|14|m|honey1 >2|materiaux
 antler|Bois de cerf|🦌|24|m|-|
-fat|Graisse|🧈|6|m|meat2|materiaux
+fat|Graisse|🥓|6|m|meat2|materiaux
 # ---------- Graines d'arbre (tombent en abattant ; se plantent, l'arbre pousse en 3 jours)
 seed_tree_chene|Gland (chêne)|🌰|4|u:planter:tree_chene|-|
 seed_tree_sapin|Pomme de pin (sapin)|🌲|4|u:planter:tree_sapin|-|
@@ -165,7 +165,7 @@ herbal_salve|Baume d'herboriste|🧴|70|f55|nettle2 sage1 fat1 @alembic #cuisine
 calming_draught|Philtre apaisant|🧪|110|f70|extract1 valerian2 rosemary1 @alembic #cuisine:10|alchimie
 perfume|Parfum|🌸|90|v|bottle1 lavender2 rosemary1 #cuisine:6|commerce
 # ---------- Ingrédients et cuisine
-butter|Beurre|🧈|40|f12|milk2|cuisine
+butter|Beurre|🟨|40|f12|milk2|cuisine
 cheese|Fromage|🧀|70|f30|milk3 salt1 @furnace #cuisine:4|cuisine
 sugar|Sucre|🍬|12|m|beetroot2 @furnace|cuisine
 oil|Huile|🌿|14|m|pea3 @bench|cuisine

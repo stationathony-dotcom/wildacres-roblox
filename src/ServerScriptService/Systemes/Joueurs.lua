@@ -256,7 +256,7 @@ end
 
 -- Bonus temporaire d'une caractéristique (le plus fort l'emporte, la durée se prolonge)
 local BUFF_LABEL = { charisme = "Propre et parfumé", chance = "Encens porte-bonheur" }
-function J.addBuff(player: Player, stat: string, v: number, seconds: number)
+function J.addBuff(player: Player, stat: string, v: number, seconds: number, label: string?)
 	local p = J.profiles[player]
 	if not p or not G.Gear.STATS[stat] then
 		return false
@@ -268,7 +268,7 @@ function J.addBuff(player: Player, stat: string, v: number, seconds: number)
 	p.buffs[stat] = { val, math.max(now + seconds, cur and cur[2] or 0) }
 	J.applyStats(player)
 	J.markDirty(player)
-	G.Util.toast(player, "✨ " .. (BUFF_LABEL[stat] or G.Gear.STATS[stat]) .. " : +" .. val .. " " .. G.Gear.STATS[stat]
+	G.Util.toast(player, "✨ " .. (label or BUFF_LABEL[stat] or G.Gear.STATS[stat]) .. " : +" .. val .. " " .. G.Gear.STATS[stat]
 		.. " pendant " .. math.floor(seconds / 60) .. " min.", "gain")
 	return true
 end

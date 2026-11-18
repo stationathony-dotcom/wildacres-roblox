@@ -315,7 +315,7 @@ La feuille actuelle parle de l'accueil et du personnage global, mais plusieurs f
 La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur simulation et leurs métiers.
 
 ### 10A. Habitants et routines
-- [~] Créer les rôles : fermier, éleveur, forgeron, boulanger, cuisinier, marchand, aubergiste, garde, shérif, messager, artisan, voyageur, dirigeant. _(fermiers, marchands, shérifs, habitants, maire élu ; services : forgeron (réparation), palefrenier (écurie), aubergiste (lits), poste ; aubergiste qui sert un repas chaud (18/11) ; restent boulanger / cuisinier en PNJ dédiés)_
+- [~] Créer les rôles : fermier, éleveur, forgeron, boulanger, cuisinier, marchand, aubergiste, garde, shérif, messager, artisan, voyageur, dirigeant. _(fermiers, marchands, shérifs, habitants, maire élu ; services : forgeron (réparation), palefrenier (écurie), aubergiste (lits), poste ; aubergiste qui sert un repas chaud (18/11) ; 18/11 `Metiers` : boulanger, cuisinier, forgeron, guérisseur, prêtre, palefrenier, enfants et colporteur en vrais PNJ (testés en Play) ; restent nobles / seigneurs, artisans dédiés)_
 - [~] Définir pour chaque PNJ : domicile, métier, horaires, déplacements, interactions et réactions. _(domicile et lieu de travail générés, horaires jour / nuit, repas à la taverne, abri sous l'orage, réactions aux crimes)_
 - [x] Faire travailler, se reposer, manger et circuler les habitants.
 - [~] Ajouter réactions aux dangers, intempéries, événements et crimes.
@@ -331,10 +331,10 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [~] Prévoir des dialogues courts et des choix utilisables sur mobile. _(dialogues à boutons courts (Discuter, Nouvelles, Travail, Boutique…) ; à tester sur mobile)_
 
 ### 10C. Services PNJ
-- [~] Marchands avec inventaire, spécialité, prix, horaires et renouvellement. _(boutique, rachat ≤ 80 %, commandes du village selon son biome, horaires (tient boutique le jour))_
+- [~] Marchands avec inventaire, spécialité, prix, horaires et renouvellement. _(boutique, rachat ≤ 80 %, commandes du village selon son biome, horaires (tient boutique le jour) ; 18/11 : artisans à STOCK RÉEL — ce que les joueurs leur vendent devient la fournée du lendemain (blé → pain, minerai → ferrures, plantes → remèdes), colporteur de passage aux produits d'autres biomes ; testé en Play)_
 - [x] Forgerons/artisans avec services de fabrication ou réparation si prévus. _(forge de village : « Faire réparer mes outils » contre de l'or, enclume et four publics (18/11))_
 - [x] Auberges avec lits, repos, réapparition et location.
-- [~] Écuries avec stockage, récupération et gestion des montures. _(18/11 : « Faire venir ma monture » à l'écurie d'un village, pension 5 or, même si sa région n'est pas chargée)_ _(18/11 : codé, à tester en Play)_
+- [~] Écuries avec stockage, récupération et gestion des montures. _(18/11 : « Faire venir ma monture » à l'écurie d'un village, pension 5 or, même si sa région n'est pas chargée)_ _(18/11 : tenue par un palefrenier (foin, nourriture, sangles), testé en Play)_
 - [x] Messagers et services de courrier si distincts du courrier joueur. _(Systemes/Poste, boîtes aux lettres des villages ; gains de concours versés par courrier)_
 - [x] Services publics : affichage, commandes de village, réparations, projets collectifs. _(tableau d'affichage, tableau des quêtes, commandes du marchand, conseil du village et ses projets, reconstruction par les villageois)_
 

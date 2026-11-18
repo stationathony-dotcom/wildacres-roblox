@@ -136,7 +136,8 @@ local function workPos(e): Vector3
 		end
 		return homeOutside(e)
 	end
-	return Vector3.new(w[1], G.Util.groundY(w[1], w[2]) + 3, w[2])
+	-- 3e valeur : hauteur donnée (poste à l'intérieur d'un bâtiment, au-dessus du terrain)
+	return Vector3.new(w[1], (w[3] or G.Util.groundY(w[1], w[2])) + 3, w[2])
 end
 
 local function plazaPos(e): Vector3
@@ -158,8 +159,13 @@ local function wantsOutside(e): boolean
 	local h = hour()
 	-- sous l'orage, les villageois s'abritent chez eux (le shérif et le marchand tiennent leur poste)
 	local role = e.data.role
-	if G.Meteo and G.Meteo.kind and G.Meteo.kind() == "orage" and role ~= "sheriff" and role ~= "merchant" then
+	-- (les gens de métier tiennent aussi leur comptoir sous l'orage)
+	if G.Meteo and G.Meteo.kind and G.Meteo.kind() == "orage" and role ~= "sheriff" and role ~= "merchant" and not e.data.shopkeeper then
 		return false
+	end
+	local hours = e.data.hours
+	if hours then
+		return h >= hours[1] and h < hours[2]
 	end
 	return h >= 6 and h < (role == "sheriff" and 23 or 21)
 end
@@ -488,14 +494,14 @@ local function routine(e)
 	local h = hour()
 	local spot = homeOutside(e)
 	local radius = 10
-	local lunch = (h >= 12 and h < 13) and e.data.role ~= "merchant" and e.data.role ~= "sheriff" and lunchPos(e)
+	local lunch = (h >= 12 and h < 13) and e.data.role ~= "merchant" and e.data.role ~= "sheriff" and not e.data.shopkeeper and lunchPos(e)
 	if lunch then
 		spot = lunch
 		radius = 6
 	elseif h >= 8 and h < 18 then
 		spot = workPos(e)
 		local role = e.data.role
-		radius = role == "sheriff" and 30 or (role == "merchant" and 1 or (role == "farmer" and 14 or 14))
+		radius = e.data.radius or (role == "sheriff" and 30 or (role == "merchant" and 1 or 14))
 	elseif h >= 18 then
 		spot = plazaPos(e)
 		radius = 16
@@ -519,7 +525,8 @@ local function routine(e)
 		return
 	end
 	if e.goalTimer <= 0 or not e.goal then
-		e.goalTimer = math.random(20, 60) / 10
+		-- les enfants ne tiennent pas en place : nouveau but plus souvent
+		e.goalTimer = e.data.restless and math.random(8, 22) / 10 or math.random(20, 60) / 10
 		local off = Vector3.new(math.random(-radius * 10, radius * 10) / 10, 0, math.random(-radius * 10, radius * 10) / 10)
 		local g = spot + off
 		if G.Util.isWater(g.X, g.Z) then
@@ -527,7 +534,7 @@ local function routine(e)
 		end
 		e.goal = Vector3.new(g.X, spot.Y, g.Z)
 	end
-	moveTo(e, e.goal, Config.NPC_WALK)
+	moveTo(e, e.goal, e.data.walk or Config.NPC_WALK)
 end
 
 local function flee(e)
@@ -545,7 +552,7 @@ local function flee(e)
 	if G.Util.isWater(goal.X, goal.Z) then
 		goal = e.root.Position + Vector3.new(-away.Z, 0, away.X).Unit * 16
 	end
-	moveTo(e, goal, Config.NPC_RUN)
+	moveTo(e, goal, e.data.run or Config.NPC_RUN)
 	if e.stateTime > 6 and away.Magnitude > Config.SIGHT then
 		setState(e, "routine")
 	end
@@ -677,7 +684,8 @@ function Npcs.reactToCrime(e, kind: string, at: Vector3, player: Player)
 	if kind == "theft" then
 		return
 	end
-	setState(e, D.persona(e.data.persona).brave and "fight" or "flee")
+	-- un enfant ne se bat jamais : il court prévenir
+	setState(e, (D.persona(e.data.persona).brave and not e.data.child) and "fight" or "flee")
 end
 
 function Npcs.alert(e, at: Vector3)
@@ -692,6 +700,13 @@ end
 -- Coup reçu (du joueur). Renvoie vrai si le PNJ est assommé.
 function Npcs.hit(e, dmg: number, player: Player): boolean
 	if e.state == "ko" or e.state == "carried" or e.state == "gone" then
+		return false
+	end
+	-- les enfants ne peuvent pas être frappés (règles Roblox) : ils détalent, rien de plus
+	if e.data.child then
+		e.target = player
+		setState(e, "flee")
+		Npcs.react(e, "flee")
 		return false
 	end
 	local root = G.Util.root(player)
@@ -781,7 +796,7 @@ local function spawn(reg, n, per)
 		id = n.id, data = n, per = per, reg = reg, model = model, hum = hum, root = root,
 		state = "routine", stateTime = 0, think = math.random() * 0.25, goal = nil, goalTimer = 0,
 		unseen = 0, barkCd = math.random(0, 10), hitCd = 0, pathAge = 0, stuck = 0, tracks = {},
-		maxHp = n.role == "sheriff" and 160 or 80,
+		maxHp = n.maxHp or (n.role == "sheriff" and 160 or 80),
 	}
 	e.hp = e.maxHp
 	e.pathObj = PathfindingService:CreatePath({
@@ -878,6 +893,47 @@ function Npcs.onRegionUnload(reg)
 	end
 end
 
+-- PNJ ajouté par une couche à graine propre (Metiers : gens de métier, enfants, colporteur).
+-- Même moteur que les habitants du plan ; `n` a la même forme qu'une entrée de reg.plan.npcs.
+function Npcs.addExtra(reg, n)
+	if list[n.id] or not reg.npcFolder then
+		return list[n.id]
+	end
+	local per = Npcs.persist(n.id)
+	if per.ko and not per.gone then
+		per.ko = nil
+	end
+	if per.gone then
+		return nil
+	end
+	local ok, e = pcall(spawn, reg, n, per)
+	if not ok then
+		warn("[WildAcres] PNJ " .. tostring(n.name) .. " : " .. tostring(e))
+		return nil
+	end
+	return e
+end
+
+-- Retire un PNJ vivant (le colporteur qui reprend la route)
+function Npcs.remove(e)
+	G.Bodies.forget(e)
+	list[e.id] = nil
+	for p, id in talking do
+		if id == e.id then
+			talking[p] = nil
+			G.remotes.Dialog:FireClient(p, nil)
+		end
+	end
+	local npcs = e.reg and e.reg.npcs
+	local i = npcs and table.find(npcs, e)
+	if i then
+		table.remove(npcs, i)
+	end
+	if e.model then
+		e.model:Destroy()
+	end
+end
+
 -- habitants debout d'une région (quêtes : un village sans personne debout est « déserté »)
 function Npcs.standingIn(regKey: string): number
 	local n = 0
@@ -952,6 +1008,9 @@ end
 local GIFTABLE = { "flower", "berries", "mushroom", "egg", "milk", "wool", "fish_1", "fish_2", "fish_3", "fish_4", "fish_5", "fish_6", "fish_7", "parsnip", "carrot", "potato", "wheat", "tomato", "melon", "beetroot", "eggplant", "pumpkin" }
 
 local function options(e, player: Player)
+	if e.data.child then
+		return G.Metiers.childOptions(e, player)
+	end
 	local prof = G.Joueurs.get(player)
 	local opts = { { id = "chat", text = "Discuter" }, { id = "rumor", text = "Des nouvelles du coin ?" } }
 	if e.per.lastGift ~= G.world.day then
@@ -966,7 +1025,8 @@ local function options(e, player: Player)
 	if role == "merchant" or role == "farmer" or e.data.persona == "filou" then
 		table.insert(opts, { id = "trade", text = role == "merchant" and "Voir la boutique" or (role == "farmer" and "Acheter des bêtes / vendre" or "Revendre (sans questions)") })
 	end
-	if G.Quetes and G.Quetes.isVillage and G.Quetes.isVillage(e.reg and e.reg.key) then
+	-- (le colporteur est de passage : il n'a pas de travail du village à donner)
+	if e.data.metier ~= "peddler" and G.Quetes and G.Quetes.isVillage and G.Quetes.isVillage(e.reg and e.reg.key) then
 		table.insert(opts, 2, { id = "quetes", text = "📜 Tu as du travail pour moi ?" })
 	end
 	if role == "merchant" then
@@ -974,6 +1034,9 @@ local function options(e, player: Player)
 		table.insert(opts, { id = "bank", text = "La banque (coffre sûr)" })
 	end
 	table.insert(opts, { id = "bye", text = "Au revoir" })
+	if e.data.metier then
+		G.Metiers.addOptions(e, player, opts) -- comptoir et services du métier, avant « Au revoir »
+	end
 	return opts
 end
 
@@ -981,6 +1044,9 @@ local function send(player: Player, e, text: string, opts)
 	local label = (e.data.role == "sheriff" and "Shérif" or (e.data.role == "merchant" and "Marchand" or (e.data.role == "farmer" and "Fermier" or "Habitant")))
 	if e.data.female then
 		label = ({ Habitant = "Habitante", Marchand = "Marchande", Fermier = "Fermière" })[label] or label
+	end
+	if e.data.metier then
+		label = G.Metiers.label(e)
 	end
 	G.remotes.Dialog:FireClient(player, {
 		npc = e.id, name = e.data.name, role = label .. " · " .. D.persona(e.data.persona).label,
@@ -1025,7 +1091,9 @@ function Npcs.talk(player: Player, id: string)
 	talking[player] = id
 	local key = D.greeting_key(e.per, prof.honor, prof.stars, true, Npcs.op(e, player))
 	Npcs.react(e, key)
-	send(player, e, D.line(e.data.persona, key, textVars(e, player)), options(e, player))
+	-- les enfants (et le colporteur de passage) ont leurs propres mots
+	local text = (e.data.metier and G.Metiers.greet(e, player)) or D.line(e.data.persona, key, textVars(e, player))
+	send(player, e, text, options(e, player))
 end
 
 local function rumor(e, player: Player): string
@@ -1088,6 +1156,18 @@ function Npcs.choice(player: Player, choice: string)
 		send(player, e, D.line(e.data.persona, "gift", textVars(e, player)), options(e, player))
 	elseif choice == "back" then
 		send(player, e, "…", options(e, player))
+	elseif string.sub(choice, 1, 2) == "m:" and e.data.metier then
+		-- services des gens de métier (Metiers.choice) : un texte = le dialogue continue, false = fermé
+		local res = G.Metiers.choice(player, e, string.sub(choice, 3))
+		if type(res) == "string" then
+			send(player, e, res, options(e, player))
+		elseif res == false then
+			G.remotes.Dialog:FireClient(player, nil)
+			talking[player] = nil
+			if e.state == "talk" then
+				setState(e, "routine")
+			end
+		end
 	elseif choice == "quetes" then
 		G.remotes.Dialog:FireClient(player, nil)
 		talking[player] = nil

@@ -3442,7 +3442,8 @@ local function game_()
 		end
 		hp, mx = hp or 0, math.max(1, mx or 1)
 		local mood = target:GetAttribute("Humeur") or (Players:GetPlayerFromCharacter(target) and "passif" or "neutre")
-		tName.Text = target:GetAttribute("Nom") or target.Name
+		-- façon WoW : le métier entre chevrons (« Marthe <Boulangère> »)
+		tName.Text = (target:GetAttribute("Nom") or target.Name) .. (target:GetAttribute("Titre") and (" <" .. target:GetAttribute("Titre") .. ">") or "")
 		tName.TextColor3 = MOOD_COLOR[mood] or C.text
 		-- les créatures ont un niveau (danger) ; les joueurs n'en ont pas
 		tLevel.Text = tostring(target:GetAttribute("Niveau") or (Players:GetPlayerFromCharacter(target) and "🧍") or "?")

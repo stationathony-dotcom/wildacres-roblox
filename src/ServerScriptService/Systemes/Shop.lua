@@ -118,23 +118,74 @@ function Shop.sellPrice(player: Player, e, item: string): number
 	-- invariant anti-arbitrage : un marchand ne rachète jamais plus de 80 % de ce qu'il te vendrait
 	-- le même objet (sinon acheter puis revendre au même comptoir créait de l'or à l'infini)
 	price = math.min(price, math.floor(Shop.buyPrice(player, e, info.price) * 0.8))
+	-- un artisan paie mieux SES matières (boulanger : le grain…), par-dessus le plafond du comptoir
+	if e.data.metier then
+		price = math.floor(price * G.Metiers.bonus(e, item))
+	end
+	-- objet qu'un PNJ VEND quelque part : jamais plus de 80 % du prix le plus bas auquel on peut
+	-- l'acheter (sinon : acheter chez un PNJ peu gourmand, revendre chez un radin ou un artisan)
+	local sm = Shop.npcSold()[item]
+	if sm then
+		price = math.min(price, math.floor(Shop.buyPrice(player, e, info.price, true) * sm * 0.8))
+	end
 	return math.max(1, price)
 end
 
-function Shop.buyPrice(player: Player, e, base: number): number
+-- objets vendus par au moins un PNJ -> multiplicateur de son prix le plus bas (1 ; 1,4 chez le
+-- seul colporteur). Construit au premier appel (Metiers est initialisé après Shop).
+local npcSoldCache = nil
+function Shop.npcSold()
+	if npcSoldCache then
+		return npcSoldCache
+	end
+	local t = {}
+	for _, item in Config.SHOP do
+		t[item] = 1
+	end
+	for id in Config.CROPS do
+		if Config.ITEMS["seed_" .. id] then
+			t["seed_" .. id] = 1 -- graines du fermier
+		end
+	end
+	if G.Metiers and G.Metiers.soldItems then
+		for item, m in G.Metiers.soldItems() do
+			t[item] = math.min(t[item] or math.huge, m)
+		end
+	end
+	npcSoldCache = t
+	return t
+end
+
+local minGreed = nil
+function Shop.minGreed(): number
+	if not minGreed then
+		minGreed = math.huge
+		for _, t in D.TRAITS do
+			minGreed = math.min(minGreed, t.greed or 1)
+		end
+	end
+	return minGreed
+end
+
+-- `floor` : le prix le plus bas possible pour ce joueur (PNJ le moins gourmand, avis au maximum)
+function Shop.buyPrice(player: Player, e, base: number, floor: boolean?): number
 	local prof = G.Joueurs.get(player)
 	local charisme = G.Joueurs.stats(player).charisme or 0
-	local greed = D.persona(e.data.persona).greed
+	local greed = floor and Shop.minGreed() or D.persona(e.data.persona).greed
 	local honorMult = prof.honor < 0 and (1 + (-prof.honor) / 200) or (1 - prof.honor / 1000)
-	local opinionMult = 1 - math.clamp(G.Npcs.op(e, player), -50, 50) / 500
+	local op = floor and 50 or math.clamp(G.Npcs.op(e, player), -50, 50)
+	local opinionMult = 1 - op / 500
 	return math.max(1, math.floor(base * greed * honorMult * opinionMult * (1 - math.min(0.3, charisme * 0.02))))
 end
 
 local function catalog(player: Player, e)
 	local buy = {}
+	local wants = nil -- nil = rachète tout ; sinon seulement ces objets (gens de métier)
 	local role = e.data.role
 	local biome = e.root and G.Clock.biomeAt(e.root.Position) or "prairie"
-	if role == "merchant" then
+	if e.data.metier then
+		buy, wants = G.Metiers.catalog(player, e)
+	elseif role == "merchant" then
 		for _, item in Config.SHOP do
 			local info = Config.ITEMS[item]
 			local crop = info.seed and Config.CROPS[info.seed]
@@ -157,7 +208,7 @@ local function catalog(player: Player, e)
 	local prof = G.Joueurs.get(player)
 	local sell = {}
 	for item, n in prof.inv do
-		if item ~= "gold" and n > 0 then
+		if item ~= "gold" and n > 0 and (not wants or wants[item]) then
 			local price = Shop.sellPrice(player, e, item)
 			if price > 0 then
 				local info = Config.ITEMS[item]
@@ -178,8 +229,13 @@ local function refresh(player: Player)
 	end
 	local buy, sell = catalog(player, e)
 	local title = e.data.role == "merchant" and ("Boutique de " .. e.data.name) or (e.data.role == "farmer" and ("Ferme de " .. e.data.name) or (e.data.name .. " (receleur)"))
+	local greeting = nil
+	if e.data.metier then
+		title = G.Metiers.shopTitle(e)
+		greeting = G.Metiers.greeting(e, buy) -- étal vide : il dit ce qui lui manque
+	end
 	G.remotes.Menu:FireClient(player, { kind = "shop", title = title, buy = buy, sell = sell, gold = G.Joueurs.count(player, "gold"),
-		greeting = D.line(e.data.persona, "trade", { titre = D.title_for(G.Joueurs.get(player).honor) }) })
+		greeting = greeting or D.line(e.data.persona, "trade", { titre = D.title_for(G.Joueurs.get(player).honor) }) })
 end
 
 function Shop.open(player: Player, e)
@@ -212,6 +268,14 @@ function Shop.buy(player: Player, item: string, n: number)
 	if info and info.tool then
 		n = 1
 	end
+	-- gens de métier : stock réel (ce que les joueurs leur ont apporté)
+	if e.data.metier then
+		n = math.min(n, entry.n or 0)
+		if n <= 0 then
+			G.Util.toast(player, "Plus en stock.")
+			return
+		end
+	end
 	if string.sub(item, 1, 7) == "animal:" and not G.Animals.canOwnMore(player) then
 		return
 	end
@@ -225,6 +289,9 @@ function Shop.buy(player: Player, item: string, n: number)
 		G.Util.toast(player, Config.ANIMALS[kind].name .. " achetée ! Elle te suit : mène-la où tu veux et appuie [R] pour l'installer.", "big")
 	else
 		G.Joueurs.add(player, item, n)
+	end
+	if e.data.metier then
+		G.Metiers.bought(e, item, n)
 	end
 	G.Npcs.addOp(e, player, 1)
 	G.Joueurs.sync(player)
@@ -241,6 +308,14 @@ function Shop.sell(player: Player, item: string, n: number)
 	if n <= 0 then
 		return
 	end
+	-- un artisan ne rachète que ce dont il se sert (le client ne décide pas de ce qui est accepté)
+	if e.data.metier then
+		local _, wants = G.Metiers.catalog(player, e)
+		if not (wants and wants[item]) then
+			return
+		end
+	end
+	local sold = 0
 	local total = 0
 	for _ = 1, n do
 		local price = Shop.sellPrice(player, e, item)
@@ -251,8 +326,12 @@ function Shop.sell(player: Player, item: string, n: number)
 			break
 		end
 		total += price
+		sold += 1
 		local k = e.reg.key .. ":" .. item
 		soldToday[k] = (soldToday[k] or 0) + 1
+	end
+	if sold > 0 and e.data.metier then
+		G.Metiers.sold(e, item, sold) -- ses matières : elles feront sa fournée de demain
 	end
 	if total > 0 then
 		G.Joueurs.add(player, "gold", total, true)

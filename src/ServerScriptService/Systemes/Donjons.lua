@@ -152,6 +152,16 @@ local function siteOf(reg)
 	return { x = x, z = z, yaw = best.yaw }
 end
 
+-- Grotte d'une région dont le plan est déjà calculé (sinon nil : on ne génère rien pour une rumeur).
+-- Sert aux enfants des villages, qui connaissent les cachettes du coin.
+function Donjons.siteNear(rx: number, rz: number)
+	local plan = G.wg and G.wg.planCache[rx .. "," .. rz]
+	if not plan then
+		return nil
+	end
+	return siteOf({ plan = plan, rx = rx, rz = rz })
+end
+
 function Donjons.onRegionLoad(reg)
 	local site = siteOf(reg)
 	if not site then

@@ -30,15 +30,18 @@ function Villages.meal(player: Player)
 		return
 	end
 	if os.clock() - (lastMeal[player] or -999) < 60 then
-		return G.Util.toast(player, "🍲 L'aubergiste : « Tu sors de table, voyons ! »")
+		G.Util.toast(player, "🍲 « Tu sors de table, voyons ! »")
+		return false
 	end
 	if not G.Joueurs.take(player, "gold", 12) then
-		return G.Util.toast(player, "🍲 L'aubergiste : « Un repas chaud, c'est 12 or. »")
+		G.Util.toast(player, "🍲 « Un repas chaud, c'est 12 or. »")
+		return false
 	end
 	lastMeal[player] = os.clock()
 	hum.Health = hum.MaxHealth
 	G.Joueurs.sync(player)
 	G.Util.toast(player, "🍲 Ragoût fumant et pain frais : te voilà requinqué.", "gain")
+	return true
 end
 
 function Villages.init(g)
@@ -149,20 +152,25 @@ function Villages.onRegionLoad(reg)
 		end
 	end
 	Villages.palisade(reg, center, taken)
+	-- Taverne, forge, écurie : depuis le 18/11 (Metiers), le comptoir est tenu par une vraie personne
+	-- (cuisinier, forgeron, palefrenier) : plus d'invite posée sur le bâtiment (sauf si Metiers manque)
+	local staffed = function(name)
+		return G.Metiers and G.Metiers.handles and G.Metiers.handles(name) == true
+	end
 	-- taverne : l'aubergiste sert un repas chaud (rend toute la vie) — 18/11
-	local tav = reg.houses["v:Taverne"]
+	local tav = not staffed("Taverne") and reg.houses["v:Taverne"]
 	if tav and tav.model and tav.model.PrimaryPart then
 		local a = G.Util.anchor(tav.model, tav.model.PrimaryPart.CFrame * CFrame.new(0, 2, 10), "Aubergiste")
 		G.Util.prompt(a, "taverne_repas", "Repas chaud (12 or)", "Taverne · " .. (poi.name or ""), { dist = 12, key = Enum.KeyCode.F })
 	end
 	-- forge : le forgeron répare les outils contre de l'or (Shop.repairAll)
-	local forge = reg.houses["v:Forge"]
+	local forge = not staffed("Forge") and reg.houses["v:Forge"]
 	if forge and forge.model and forge.model.PrimaryPart then
 		local a = G.Util.anchor(forge.model, forge.model.PrimaryPart.CFrame * CFrame.new(0, 2, 9), "Forgeron")
 		G.Util.prompt(a, "forge_reparer", "Faire réparer mes outils", "Forgeron · " .. (poi.name or ""), { dist = 12, key = Enum.KeyCode.F })
 	end
 	-- écurie : on y fait venir sa monture (Horses.fetch)
-	local stable = reg.houses["v:Ecurie"]
+	local stable = not staffed("Ecurie") and reg.houses["v:Ecurie"]
 	if stable and stable.model and stable.model.PrimaryPart then
 		local base = stable.model.PrimaryPart
 		local a = G.Util.anchor(stable.model, base.CFrame * CFrame.new(0, 2, 10), "Palefrenier")

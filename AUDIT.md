@@ -533,3 +533,28 @@ unique. Sons : porte et fabrication (établi/forge) ajoutés aussi.
 - Anciens modèles gardés dans `ServerStorage.Modeles_avant_18nov` (retour arrière possible ; aucune retouche
   manuelle perdue : toutes les pièces d'avant existent encore).
 - Rebâtir : `require(OutilsDev.ConstruireModeles).maisons()` / `.villages2()` / `.moulin()` (mode Edit).
+
+## Gens de métier, enfants, colporteur (18/11, `Systemes/Metiers`, testé en Play sur la graine 7)
+- Demande : « PNJ et métiers » de `listes ennemi.txt` (boulanger, cuisinier, médecin, prêtre, enfants, voyageurs…).
+- Couche serveur à graine propre (`WG.hash(seed, "metiers", rx, rz, rôle, génération)`) : RegionPlan n'est pas
+  touché, les habitants existants gardent leurs ids. Les nouveaux PNJ passent par `Npcs.addExtra` (même moteur :
+  routine, vue, témoins, fuite, K.O., avis par joueur) ; ids `m:<région>:<rôle>:<génération>`.
+- Chaque artisan travaille dans « son » bâtiment de village (absent → pas d'artisan) et dort chez un habitant
+  (second occupant). Ils tiennent leur comptoir sous l'orage et ne vont pas déjeuner.
+- Économie : stock réel dans `G.world.extra.metiers[région].roles[rôle]` ; la valeur catalogue des matières
+  vendues (points) + une petite base devient la fournée du lendemain (tour à tour, du moins cher au plus cher,
+  25 max par article). Rien n'est créé : la base est perdue si inutilisée, le reste est reporté. Vérifié :
+  10 blé vendus 120 or → le lendemain pain complet + pain de campagne en plus du pain et des galettes.
+- Anti-arbitrage élargi (`Shop.npcSold`) : seuls les objets qu'un PNJ VEND sont plafonnés au plus bas prix
+  possible ; les ressources brutes gardent l'ancien plafond (sinon −15 % sur toute la revente).
+- Enfants : exclus des cibles de combat, `Npcs.hit` sans effet (règles Roblox), personas non courageux ;
+  secret = grotte d'une région voisine au plan déjà calculé (`Donjons.siteNear`, rien n'est généré pour ça).
+- Tests Play : dialogues et libellés (« Boulanger · Jovial »), étal + vente refusée hors spécialité, réparation
+  (−13 or), soin (vie pleine, ralenti levé), prêtre (confession 50 or → +10 honneur puis refus le jour même,
+  bénédiction, aumône), chat perdu (« Trop lent ! ») et gagné puis secret, colporteur forcé (`Metiers.forcePeddler`),
+  `Clock.newDay` sans erreur, capture : tenues lisibles, enfant à 0,62.
+- [~] Pas encore vu : le remplacement d'un artisan tué (3 jours), à plusieurs joueurs, sur mobile.
+- Remarque hors sujet : plusieurs villages de la même île portent le même nom (graine 7 : 7 « Clos-Doré ») —
+  générateur de noms à revoir (sans changer la consommation de rng de RegionPlan).
+- Restent de la liste : nobles / seigneurs (châteaux), artisans dédiés (charpentier, tisserand), éleveur distinct
+  du fermier.

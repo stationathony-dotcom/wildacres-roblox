@@ -135,7 +135,8 @@ function Combat.attack(player: Player, itemId: string?, targetId: string?)
 		end
 	end
 	for _, e in G.Npcs.list do
-		if e.model.Parent and e.state ~= "ko" and e.state ~= "carried" and e.state ~= "gone" then
+		-- les enfants ne sont jamais des cibles
+		if e.model.Parent and e.state ~= "ko" and e.state ~= "carried" and e.state ~= "gone" and not e.data.child then
 			consider(e.root.Position, e, "npc", 1)
 		end
 	end
