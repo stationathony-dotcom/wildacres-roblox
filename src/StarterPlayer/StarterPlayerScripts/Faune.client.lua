@@ -1,0 +1,346 @@
+-- Faune passive (étape 9A) : purement visuelle et locale (chaque client voit sa propre petite
+-- faune autour de lui → zéro coût serveur, zéro réseau). Elle réagit au joueur, au biome, à l'heure
+-- et à la météo :
+--   · moineaux au sol qui picorent puis s'envolent quand on approche (et vont se poser plus loin) ;
+--   · oiseaux qui tournent haut dans le ciel (corbeaux au marais, mouettes près de l'eau) ;
+--   · papillons le jour (prairie, forêt, marais ; jamais sous la pluie) ;
+--   · lucioles la nuit (marais, prairie, forêt) ;
+--   · écureuils le jour (forêt, prairie) : trottinent, puis filent vers l'arbre le plus proche et y
+--     grimpent quand on approche (18/11) ;
+-- Rien n'est sauvegardé, rien ne se chasse : c'est le décor qui vit.
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+if workspace:GetAttribute("Mode") == "accueil" then
+	return
+end
+
+local player = Players.LocalPlayer
+local Shared = ReplicatedStorage:WaitForChild("Shared")
+local Config = require(Shared:WaitForChild("Config"))
+
+local folder = Instance.new("Folder")
+folder.Name = "FauneLocale"
+folder.Parent = workspace
+
+local rng = Random.new()
+local WG = nil
+local function biomeAt(pos: Vector3): string
+	local seed = workspace:GetAttribute("Seed")
+	if not seed then
+		return "prairie"
+	end
+	if not WG or WG.seed ~= seed then
+		local ok, mod = pcall(require, Shared:WaitForChild("WorldGen"))
+		if not ok then
+			return "prairie"
+		end
+		WG = mod.new(seed, workspace:GetAttribute("Gen"))
+	end
+	local CELL, REGION = Config.CELL, Config.REGION
+	local ok, b = pcall(WG.regionBiome, WG, math.floor(pos.X / CELL / REGION), math.floor(pos.Z / CELL / REGION))
+	return ok and b or "prairie"
+end
+
+local params = RaycastParams.new()
+params.FilterType = Enum.RaycastFilterType.Exclude
+local function ground(x: number, z: number, fromY: number): (Vector3?, Enum.Material?)
+	params.FilterDescendantsInstances = { folder, player.Character }
+	local hit = workspace:Raycast(Vector3.new(x, fromY + 60, z), Vector3.new(0, -160, 0), params)
+	if hit then
+		return hit.Position, hit.Material
+	end
+	return nil
+end
+
+local function hour(): number
+	local m = workspace:GetAttribute("Minutes") or 480
+	return (m / 60) % 24
+end
+
+local function part(size: Vector3, color: Color3, mat: Enum.Material?, parent: Instance): BasePart
+	local p = Instance.new("Part")
+	p.Anchored = true
+	p.CanCollide = false
+	p.CanQuery = false
+	p.CanTouch = false
+	p.CastShadow = false
+	p.Size = size
+	p.Color = color
+	p.Material = mat or Enum.Material.SmoothPlastic
+	p.Parent = parent
+	return p
+end
+
+-- ---------------------------------------------------------------- Modèles (quelques pièces)
+local function makeBird(color: Color3, scale: number): Model
+	local m = Instance.new("Model")
+	local body = part(Vector3.new(0.35, 0.3, 0.6) * scale, color, nil, m)
+	body.Name = "Corps"
+	local head = part(Vector3.new(0.25, 0.25, 0.25) * scale, color, nil, m)
+	head.Name = "Tete"
+	local beak = part(Vector3.new(0.08, 0.08, 0.16) * scale, Color3.fromRGB(230, 170, 60), nil, m)
+	beak.Name = "Bec"
+	local wl = part(Vector3.new(0.5, 0.05, 0.3) * scale, color:Lerp(Color3.new(0, 0, 0), 0.2), nil, m)
+	wl.Name = "AileG"
+	local wr = part(Vector3.new(0.5, 0.05, 0.3) * scale, color:Lerp(Color3.new(0, 0, 0), 0.2), nil, m)
+	wr.Name = "AileD"
+	m.PrimaryPart = body
+	m.Parent = folder
+	return m
+end
+
+local function poseBird(m: Model, cf: CFrame, flap: number, scale: number)
+	local P = m.PrimaryPart :: BasePart
+	P.CFrame = cf
+	m.Tete.CFrame = cf * CFrame.new(0, 0.12 * scale, -0.38 * scale)
+	m.Bec.CFrame = cf * CFrame.new(0, 0.1 * scale, -0.55 * scale)
+	local a = math.sin(flap) * 0.9
+	m.AileG.CFrame = cf * CFrame.new(-0.22 * scale, 0.05 * scale, 0) * CFrame.Angles(0, 0, a) * CFrame.new(-0.22 * scale, 0, 0)
+	m.AileD.CFrame = cf * CFrame.new(0.22 * scale, 0.05 * scale, 0) * CFrame.Angles(0, 0, -a) * CFrame.new(0.22 * scale, 0, 0)
+end
+
+local function makeButterfly(color: Color3): Model
+	local m = Instance.new("Model")
+	local body = part(Vector3.new(0.05, 0.05, 0.25), Color3.fromRGB(40, 30, 20), nil, m)
+	body.Name = "Corps"
+	part(Vector3.new(0.3, 0.02, 0.28), color, Enum.Material.Neon, m).Name = "AileG"
+	part(Vector3.new(0.3, 0.02, 0.28), color, Enum.Material.Neon, m).Name = "AileD"
+	m.PrimaryPart = body
+	m.Parent = folder
+	return m
+end
+
+local function makeSquirrel(color: Color3): Model
+	local m = Instance.new("Model")
+	local body = part(Vector3.new(0.35, 0.35, 0.6), color, nil, m)
+	body.Name = "Corps"
+	part(Vector3.new(0.28, 0.28, 0.28), color, nil, m).Name = "Tete"
+	local tail = part(Vector3.new(0.3, 0.75, 0.3), color:Lerp(Color3.fromRGB(255, 220, 180), 0.15), Enum.Material.Fabric, m)
+	tail.Name = "Queue"
+	m.PrimaryPart = body
+	m.Parent = folder
+	return m
+end
+
+local function poseSquirrel(m: Model, cf: CFrame, hop: number, climbing: boolean)
+	local c = cf * CFrame.new(0, math.abs(math.sin(hop)) * 0.25, 0)
+	if climbing then
+		c = c * CFrame.Angles(math.rad(80), 0, 0)
+	end
+	m.PrimaryPart.CFrame = c
+	m.Tete.CFrame = c * CFrame.new(0, 0.12, -0.38)
+	m.Queue.CFrame = c * CFrame.new(0, 0.38, 0.38) * CFrame.Angles(math.rad(-20), 0, 0)
+end
+
+-- arbre le plus proche (modèles « tree_… » posés par Props) dans un rayon donné
+local function nearestTree(pos: Vector3, r: number): Vector3?
+	local best, bd = nil, r
+	local monde = workspace:FindFirstChild("Monde")
+	for _, reg in monde and monde:GetChildren() or {} do
+		local objs = reg:IsA("Folder") and reg:FindFirstChild("Objets")
+		if objs then
+			for _, m in objs:GetChildren() do
+				if m:IsA("Model") and string.sub(m.Name, 1, 5) == "tree_" then
+					local p = m:GetPivot().Position
+					local d = (p - pos).Magnitude
+					if d < bd then
+						best, bd = p, d
+					end
+				end
+			end
+		end
+	end
+	return best
+end
+
+-- ---------------------------------------------------------------- Population
+local critters = {} -- { kind, model, pos, vel, state, t, ... }
+local MAX = { sol = 5, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3 }
+local counts = { sol = 0, ciel = 0, papillon = 0, luciole = 0, ecureuil = 0 }
+
+local function remove(i: number)
+	local c = critters[i]
+	counts[c.kind] -= 1
+	c.model:Destroy()
+	table.remove(critters, i)
+end
+
+local function spawn(kind: string, root: Vector3, biome: string)
+	local a = rng:NextNumber(0, math.pi * 2)
+	local d = kind == "ciel" and rng:NextNumber(10, 60) or rng:NextNumber(18, 45)
+	local x, z = root.X + math.cos(a) * d, root.Z + math.sin(a) * d
+	local g, mat = ground(x, z, root.Y)
+	if not g or mat == Enum.Material.Water then
+		return
+	end
+	local c = { kind = kind, t = 0, phase = rng:NextNumber(0, 6) }
+	if kind == "sol" then
+		local col = biome == "neige" and Color3.fromRGB(230, 230, 235) or Color3.fromRGB(130, 95, 70)
+		c.scale = 1
+		c.model = makeBird(col, c.scale)
+		c.pos = g + Vector3.new(0, 0.2, 0)
+		c.yaw = rng:NextNumber(0, 6.28)
+		c.state = "picore"
+	elseif kind == "ciel" then
+		local col = biome == "marais" and Color3.fromRGB(25, 25, 30) or Color3.fromRGB(235, 235, 240)
+		c.scale = 2.4
+		c.model = makeBird(col, c.scale)
+		c.center = Vector3.new(x, g.Y + rng:NextNumber(45, 70), z)
+		c.radius = rng:NextNumber(18, 40)
+		c.speed = rng:NextNumber(0.25, 0.45) * (rng:NextNumber() < 0.5 and 1 or -1)
+	elseif kind == "papillon" then
+		local cols = { Color3.fromRGB(255, 200, 60), Color3.fromRGB(120, 180, 255), Color3.fromRGB(255, 130, 180), Color3.fromRGB(255, 255, 255) }
+		c.model = makeButterfly(cols[rng:NextInteger(1, #cols)])
+		c.home = g + Vector3.new(0, 1.2, 0)
+		c.pos = c.home
+	elseif kind == "ecureuil" then
+		local col = biome == "foret" and Color3.fromRGB(190, 92, 40) or Color3.fromRGB(150, 100, 70)
+		c.model = makeSquirrel(col)
+		c.pos = g + Vector3.new(0, 0.2, 0)
+		c.yaw = rng:NextNumber(0, 6.28)
+		c.state = "trotte"
+		c.ground = g.Y
+	else -- luciole
+		local p = part(Vector3.new(0.14, 0.14, 0.14), Color3.fromRGB(220, 255, 120), Enum.Material.Neon, folder)
+		p.Shape = Enum.PartType.Ball
+		c.model = p
+		c.home = g + Vector3.new(0, rng:NextNumber(0.8, 3), 0)
+		c.pos = c.home
+	end
+	counts[kind] += 1
+	table.insert(critters, c)
+end
+
+local spawnT = 0
+RunService.Heartbeat:Connect(function(dt)
+	local char = player.Character
+	local hrp = char and char:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not hrp then
+		return
+	end
+	local root = hrp.Position
+	local h = hour()
+	local day = h >= 6.5 and h < 19.5
+	local wet = workspace:GetAttribute("Weather") == "pluie" or workspace:GetAttribute("Weather") == "orage"
+	spawnT -= dt
+	if spawnT <= 0 then
+		spawnT = 1.5
+		local biome = biomeAt(root)
+		local want = {
+			sol = (day and not wet and biome ~= "desert") and MAX.sol or 0,
+			ciel = (day and workspace:GetAttribute("Weather") ~= "orage") and MAX.ciel or 1,
+			papillon = (day and not wet and (biome == "prairie" or biome == "foret" or biome == "marais")) and MAX.papillon or 0,
+			luciole = (not day and not wet and (biome == "marais" or biome == "prairie" or biome == "foret")) and MAX.luciole or 0,
+			ecureuil = (day and not wet and (biome == "foret" or biome == "prairie")) and MAX.ecureuil or 0,
+		}
+		-- trop loin, ou hors de saison/heure : on retire en douceur
+		for i = #critters, 1, -1 do
+			local c = critters[i]
+			local p = c.pos or c.center
+			if (p - root).Magnitude > 110 or counts[c.kind] > want[c.kind] then
+				if c.kind == "sol" and c.state ~= "envol" then
+					c.state = "envol"
+					c.t = 0
+					c.vel = Vector3.new(rng:NextNumber(-1, 1), 1.4, rng:NextNumber(-1, 1)).Unit * 22
+				elseif c.kind ~= "sol" then
+					remove(i)
+				end
+			end
+		end
+		for kind, n in want do
+			if counts[kind] < n then
+				spawn(kind, root, biome)
+			end
+		end
+	end
+	local now = os.clock()
+	for i = #critters, 1, -1 do
+		local c = critters[i]
+		c.t += dt
+		if c.kind == "sol" then
+			if c.state == "picore" then
+				-- tout près ? il s'envole (bruit d'ailes visuel : battement rapide)
+				if (c.pos - root).Magnitude < 11 then
+					c.state = "envol"
+					c.t = 0
+					local away = (c.pos - root) * Vector3.new(1, 0, 1)
+					away = away.Magnitude > 0.1 and away.Unit or Vector3.new(1, 0, 0)
+					c.vel = (away + Vector3.new(0, 1.1, 0)).Unit * 24
+				end
+				local peck = math.max(0, math.sin(now * 9 + c.phase)) * 0.35
+				if math.random() < dt * 0.6 then
+					c.yaw += rng:NextNumber(-1.2, 1.2) -- se retourne de temps en temps
+				end
+				poseBird(c.model, CFrame.new(c.pos) * CFrame.Angles(0, c.yaw, 0) * CFrame.Angles(-peck, 0, 0), 0, c.scale)
+			else
+				c.pos += c.vel * dt
+				c.vel += Vector3.new(0, 2, 0) * dt
+				local look = CFrame.lookAt(c.pos, c.pos + c.vel)
+				poseBird(c.model, look, now * 40 + c.phase, c.scale)
+				if c.t > 6 or (c.pos - root).Magnitude > 140 then
+					remove(i)
+				end
+			end
+		elseif c.kind == "ecureuil" then
+			if c.state == "trotte" then
+				if (c.pos - root).Magnitude < 12 then
+					-- dérangé : file vers l'arbre le plus proche (sinon s'enfuit tout droit)
+					c.state = "fuite"
+					c.t = 0
+					c.tree = nearestTree(c.pos, 30)
+					local away = (c.pos - root) * Vector3.new(1, 0, 1)
+					c.dir = c.tree and ((c.tree - c.pos) * Vector3.new(1, 0, 1)).Unit or (away.Magnitude > 0.1 and away.Unit or Vector3.new(1, 0, 0))
+				elseif math.random() < dt * 0.5 then
+					c.yaw += rng:NextNumber(-1.5, 1.5)
+				end
+				local step = math.max(0, math.sin(now * 3 + c.phase)) * 2.5 * dt
+				c.pos += Vector3.new(-math.sin(c.yaw), 0, -math.cos(c.yaw)) * step
+				poseSquirrel(c.model, CFrame.new(c.pos) * CFrame.Angles(0, c.yaw, 0), now * 10 + c.phase, false)
+			elseif c.state == "fuite" then
+				c.pos += c.dir * 14 * dt
+				local flat = c.tree and ((c.tree - c.pos) * Vector3.new(1, 0, 1)).Magnitude or 99
+				if c.tree and flat < 1 then
+					c.state = "grimpe"
+					c.t = 0
+				end
+				poseSquirrel(c.model, CFrame.lookAt(c.pos, c.pos + c.dir), now * 18 + c.phase, false)
+				if c.t > 5 then
+					remove(i)
+					continue
+				end
+			else -- grimpe au tronc puis disparaît dans le feuillage
+				c.pos += Vector3.new(0, 6 * dt, 0)
+				poseSquirrel(c.model, CFrame.new(c.pos) * CFrame.Angles(0, c.yaw, 0), now * 14, true)
+				if c.pos.Y > c.ground + 9 then
+					remove(i)
+					continue
+				end
+			end
+		elseif c.kind == "ciel" then
+			local a = now * c.speed + c.phase
+			local p = c.center + Vector3.new(math.cos(a) * c.radius, math.sin(a * 0.7) * 3, math.sin(a) * c.radius)
+			local tangent = Vector3.new(-math.sin(a), 0, math.cos(a)) * (c.speed > 0 and 1 or -1)
+			c.pos = p
+			-- vol plané : quelques battements puis on glisse
+			local flap = (math.sin(now * 0.8 + c.phase) > 0.3) and now * 18 or 0.35
+			poseBird(c.model, CFrame.lookAt(p, p + tangent) * CFrame.Angles(0, 0, (c.speed > 0 and -0.25 or 0.25)), flap, c.scale)
+		elseif c.kind == "papillon" then
+			local tgt = c.home + Vector3.new(math.sin(now * 0.7 + c.phase) * 3, math.sin(now * 2.3 + c.phase) * 0.6, math.cos(now * 0.53 + c.phase) * 3)
+			local prev = c.pos
+			c.pos = tgt
+			local dir = tgt - prev
+			local cf = CFrame.lookAt(tgt, tgt + (dir.Magnitude > 0.001 and dir or Vector3.new(0, 0, -1)))
+			local a = math.sin(now * 22 + c.phase) * 1.1
+			c.model.Corps.CFrame = cf
+			c.model.AileG.CFrame = cf * CFrame.Angles(0, 0, a) * CFrame.new(-0.16, 0, 0)
+			c.model.AileD.CFrame = cf * CFrame.Angles(0, 0, -a) * CFrame.new(0.16, 0, 0)
+		else -- luciole : dérive lente, clignote
+			c.pos = c.home + Vector3.new(math.sin(now * 0.3 + c.phase) * 2.5, math.sin(now * 0.9 + c.phase) * 0.8, math.cos(now * 0.25 + c.phase) * 2.5)
+			c.model.CFrame = CFrame.new(c.pos)
+			c.model.Transparency = 0.15 + 0.85 * (0.5 + 0.5 * math.sin(now * 2.2 + c.phase * 3)) ^ 3
+		end
+	end
+end)

@@ -1,0 +1,265 @@
+Honnêtement, **Wild Acres possède déjà une base très ambitieuse** : exploration, construction, agriculture, élevage, métiers, commerce, criminalité, justice, créatures, progression, clans et mondes persistants.
+
+Mais il manque encore plusieurs systèmes importants pour que le jeu devienne un véritable monde médiéval vivant, dans lequel les joueurs peuvent créer leur propre histoire.
+
+Voici mon audit de ce qu'il reste à imaginer et à développer.
+
+# 1. Les systèmes de gameplay manquants
+
+(Priorité élevée)
+
+| Système             | Ce qu'il faudrait ajouter                          |
+| ------------------- | -------------------------------------------------- |
+| Réputation          | Réputation individuelle auprès de chaque village   |
+| Relations PNJ       | Amitié, confiance, rivalité, reconnaissance        |
+| Dialogue            | Dialogues à choix multiples et conséquences        |
+| Missions dynamiques | PNJ qui génèrent des demandes selon les événements |
+| Contrats            | Commandes de joueurs, artisans et marchands        |
+| Récompenses         | Titres, objets uniques, plans, accès et privilèges |
+| Progression avancée | Déblocages après le niveau 50                      |
+| Succès              | Collection de défis et accomplissements            |
+| Collection          | Bestiaire, recettes, cartes, objets et découvertes |
+| Journal             | Historique des quêtes, indices et aventures        |
+
+# 2. Une véritable vie médiévale
+
+(Identité du jeu)
+
+C'est probablement l'un des plus gros potentiels de Wild Acres.
+
+- Dormir et se reposer.
+- Louer une chambre dans une auberge.
+- Acheter une maison ou un terrain.
+- Payer des taxes locales.
+- Entretenir ses bâtiments.
+- Allumer des torches et des cheminées.
+- Utiliser des puits et des fontaines.
+- Faire des feux de camp.
+- Participer aux fêtes de village.
+- Organiser des mariages entre personnages fictifs.
+- Créer des tavernes.
+- Jouer à des jeux de société.
+- Organiser des foires.
+- Participer à des tournois.
+- Devenir propriétaire d'une auberge.
+- Employer des PNJ.
+- Faire transporter des marchandises.
+- Organiser des convois.
+- Posséder plusieurs propriétés.
+- Construire des villages avec d'autres joueurs.
+
+# 3. Les systèmes politiques et sociaux
+
+Wild Acres pourrait aller beaucoup plus loin que les simples clans.
+
+1. Création de guildes.
+2. Création de familles.
+3. Hiérarchie des clans.
+4. Chefs et sous-chefs.
+5. Conseils de clan.
+6. Votes et élections.
+7. Diplomatie entre clans.
+8. Alliances.
+9. Traités commerciaux.
+10. Pactes de non-agression.
+11. Déclaration de conflits.
+12. Gestion des territoires.
+13. Construction de villes.
+14. Impôts territoriaux.
+15. Protection des villages.
+16. Gestion des ressources communes.
+17. Système de lois locales.
+18. Primes sur les personnages recherchés.
+19. Réputation politique.
+20. Possibilité de devenir dirigeant d'une ville.
+
+# 4. Des événements mondiaux
+
+Pour éviter que le monde devienne répétitif :
+
+**Fêtes et foires**
+
+Marchés exceptionnels, foires commerciales, concours agricoles et célébrations.
+
+**Événements météorologiques**
+
+Tempêtes, fortes chutes de neige, sécheresses, inondations et brouillards.
+
+**Événements mystérieux**
+
+Ruines découvertes, créatures inhabituelles, trésors et phénomènes étranges.
+
+**Événements économiques**
+
+Pénuries, caravanes commerciales, arrivées de marchands et variations des prix.
+
+**Événements politiques**
+
+Changements de dirigeants, conflits territoriaux, alliances et demandes de protection.
+
+# 5. Des activités pour les joueurs
+
+Il faut que les joueurs puissent s'amuser même sans suivre de quêtes.
+
+- Courses de chevaux.
+- Concours de pêche.
+- Concours de cuisine.
+- Concours de construction.
+- Concours agricoles.
+- Chasse au trésor.
+- Jeux de dés.
+- Jeux de cartes fictifs.
+- Tir à l'arc sur cibles fictives.
+- Tournois sportifs.
+- Courses d'obstacles.
+- Exploration collective.
+- Expéditions en groupe.
+- Commerce entre joueurs.
+- Vente aux enchères.
+- Expositions d'objets rares.
+- Concours de dressage.
+- Organisation de festivals.
+- Construction collaborative.
+- Création de marchés entre joueurs.
+
+# 6. Les systèmes économiques manquants
+
+C'est un point particulièrement important avec 40 joueurs par monde.
+
+- Banques.
+- Coffres bancaires.
+- Comptes personnels.
+- Taxes.
+- Salaires.
+- Loyers.
+- Boutiques appartenant aux joueurs.
+- Marchés publics.
+- Enchères.
+- Contrats commerciaux.
+- Transport de marchandises.
+- Coûts d'entretien des propriétés.
+- Coûts d'entretien des armées.
+- Rareté régionale des ressources.
+- Prix variables selon l'offre et la demande.
+- Métiers spécialisés.
+- Système de commandes.
+- Protection contre la duplication d'objets.
+- Limites économiques contre l'inflation.
+
+# 7. Les systèmes de progression à approfondir
+
+| Domaine     | Ajouts possibles                        |
+| ----------- | --------------------------------------- |
+| Compétences | Maîtrise, spécialisations et rangs      |
+| Talents     | Branches avancées et choix exclusifs    |
+| Exploration | Découvertes et récompenses permanentes  |
+| Artisanat   | Qualité, rareté et réputation           |
+| Agriculture | Variétés et amélioration des cultures   |
+| Élevage     | Lignées et caractéristiques des animaux |
+| Dressage    | Compétences propres aux montures        |
+| Commerce    | Réputation commerciale et spécialités   |
+| Justice     | Réputation auprès des autorités         |
+| Clans       | Grades, responsabilités et titres       |
+
+# 8. Les systèmes techniques et multijoueurs
+
+(Indispensable avant la sortie)
+
+C'est moins visible pour les joueurs, mais essentiel pour la réussite du projet.
+
+- Sauvegarde fiable des personnages.
+- Sauvegarde des mondes.
+- Sauvegarde des constructions.
+- Protection contre les duplications.
+- Gestion des changements de serveur.
+- Gestion des déconnexions.
+- Protection contre les exploitations de bugs.
+- Limitation des actions répétitives abusives.
+- Modération des joueurs.
+- Signalement des comportements problématiques.
+- Gestion des permissions des clans.
+- Protection des propriétés hors ligne.
+- Optimisation mobile.
+- Streaming des régions.
+- Limitation des objets actifs.
+- Synchronisation des joueurs.
+- Gestion des serveurs pleins.
+- Tests de charge à 40 joueurs.
+- Système de récupération après erreur de sauvegarde.
+
+# 9. L'interface Roblox
+
+L'interface doit être pensée comme une véritable `ScreenGui`, avec des éléments utilisables à la souris, au tactile et à la manette.
+
+- HUD principal.
+- Inventaire.
+- Équipement.
+- Compétences.
+- Talents.
+- Quêtes.
+- Carte.
+- Bestiaire.
+- Livre de recettes.
+- Journal.
+- Commerce.
+- Banque.
+- Construction.
+- Gestion de propriété.
+- Gestion de monture.
+- Gestion de clan.
+- Gestion d'armée.
+- Paramètres.
+- Notifications.
+- Messagerie.
+- Liste des joueurs.
+- Menu d'interaction contextuel.
+- Tutoriels intégrés.
+
+# 10. Les grandes fonctionnalités à ajouter
+
+Voici celles que je considère comme particulièrement intéressantes pour rendre Wild Acres reconnaissable.
+
+**Villes fondées par les joueurs**
+
+Les joueurs pourraient partir de rien et développer un véritable village avec ses bâtiments, habitants, commerces et dirigeants.
+
+**Commerce entre régions**
+
+Chaque biome aurait ses ressources, ses spécialités et ses besoins. Les joueurs auraient intérêt à voyager.
+
+**Guildes d'aventuriers**
+
+Les joueurs pourraient créer des groupes spécialisés dans l'exploration, les contrats, la collecte et les expéditions.
+
+**Secrets et découvertes**
+
+Des énigmes, des lieux cachés, des histoires anciennes et des collections à compléter dans chaque monde.
+
+**Élevage avancé**
+
+Des caractéristiques transmissibles, des races différentes et des montures spécialisées.
+
+---
+
+# Mon bilan : ce qui manque vraiment
+
+Je classerais les chantiers restants dans cet ordre :
+
+| Priorité | Chantier                                     |
+| -------- | -------------------------------------------- |
+| 1        | Terminer et tester les systèmes fondamentaux |
+| 2        | Sauvegardes, sécurité et données             |
+| 3        | PNJ, dialogues et réputation                 |
+| 4        | Économie et commerce entre joueurs           |
+| 5        | Exploration et événements dynamiques         |
+| 6        | Villes, propriétés et politique              |
+| 7        | Activités secondaires                        |
+| 8        | Progression avancée                          |
+| 9        | Interface et accessibilité Roblox            |
+| 10       | Optimisation et modération                   |
+
+**Mon conseil :** ne cherche pas seulement à ajouter des fonctionnalités. Cherche à créer des systèmes qui interagissent entre eux.
+
+Par exemple : un joueur cultive du blé, le vend à un boulanger, qui fabrique du pain, qui le vend à une auberge, qui nourrit les voyageurs, lesquels apportent de nouvelles demandes au village. C'est ce genre de chaîne qui peut rendre Wild Acres vivant.
+
+La prochaine étape intéressante serait de construire une **liste maîtresse de toutes les fonctionnalités de Wild Acres**, en distinguant ce qui existe déjà, ce qui est codé mais non testé, ce qui reste à développer et ce qui est simplement une idée.

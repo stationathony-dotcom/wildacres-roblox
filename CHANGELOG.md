@@ -1,0 +1,150 @@
+# Journal des versions
+
+Une version = un jour de travail. Le numéro de format des sauvegardes est dans `Save.lua` (`version`) ;
+toute mise à jour qui change un format ajoute une migration (étape 1A).
+
+Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
+
+## 0.2.0 — 2026-11-18
+- Bestiaire, 2e fournée : +36 créatures (rôdeur obscur, hurleur nocturne, gardien des tombes, dévoreur de lumière, chevalier oublié, griffon, hippogriffe, wyverne, dragonnet, mante géante, fée des ronces, anguille monstrueuse, tortue ancienne, crabe géant, sirène, kelpie, gardien du lac, géant des forêts, troll des montagnes, homme-taureau…) — 161 créatures au total, chacune avec sa prise et sa pièce d'équipement
+- Bestiaire : +39 créatures de « listes ennemi.txt » (bandits variés, mercenaires, gardes corrompus, ours brun, loup polaire, harpie, ent corrompu, ver des sables, basilic, géant de glace, momie, moine déchu, cyclope, troll des cavernes…) et 3 boss itinérants (Wyverne des neiges, Géant des montagnes, Bête des profondeurs)
+- **Prises de créatures** : chacune des 125 créatures lâche une matière qui lui est propre (soie, venin, crocs, écailles, essence, cœur de golem…) et chacune a SA pièce d'équipement à fabriquer (arme, armure, coiffe ou bijou selon la bête, stats selon son niveau, rareté selon son rang) ; les boss lâchent une ÂME rare → pièce LÉGENDAIRE à l'enclume — `Shared/Prises.lua` (généré par `tools/generer_prises.py`)
+- Taverne : repas chaud servi par l'aubergiste (12 or, toute la vie rendue)
+- **Bug corrigé** : reprendre sa propre pièce de construction rend ses matériaux (rien ne revenait) ; /demonter <rayon> pour tout reprendre autour de soi
+- Groupes : une déconnexion de moins de 5 minutes ne fait plus perdre son groupe (retour automatique, ou groupe reformé)
+- Poison et toile des créatures : ralenti 40 % pendant 3 s (message), jamais permanent
+- Boss en groupe : chaque participant (≥ 10 % des dégâts) reçoit sa part (équipement, minerai, honneur, XP)
+- Armée : « Équiper l'armée » à la caserne ([R]) — 1 fer + 1 cuir par soldat, +25 % de dégâts, −20 % de dégâts reçus
+- Compagnons : confiance (+5 par jour nourri, −15 par jour affamé) qui augmente leurs dégâts jusqu'à +30 %
+- /aide : liste des commandes des joueurs
+- Commandes entre joueurs : /commande <objet> <n> <prix> (or bloqué), /commandes, /livrer <n°> (payé tout de suite, livraison par courrier), /annuler <n°>
+- Modération graduée (admins) : /wa joueur, avertir (compteur sauvegardé), muet N min, expulser, bannir N jours (BanAsync) — tout au registre
+- Location de terres : /louer <pseudo> <jours> <prix>, le locataire paie à /accepter et peut bâtir / ouvrir chez toi jusqu'au terme (accès retiré seul)
+- Élevage : abreuvoir et mangeoire (établi, élevage 2) — une bête près des deux produit un jour plus tôt
+- Titres : Herboriste, Maître herboriste, Bûcheron (100 arbres), Mineur (100 roches / filons), Spéléologue (3 coffres anciens), Capitaine (voilier) ; collection « Plantes sauvages »
+- Grottes : énigme des leviers — le coffre ancien reste scellé tant que les leviers cachés dans les salles ne sont pas tous abaissés
+- Commandes pour tous : /coince (se dégager), /signaler <pseudo> <motif>, /ceder <pseudo> + /accepter (céder un terrain) ; forgeron de village qui répare contre de l'or ; concours de construction au tableau
+- Stations : BAC DE TANNAGE (cuir, fourrure, sangles) et ALAMBIC (extraits, potions, élixirs) ; pièces de forge (clous, charnières, chaînes…) à l'enclume ; nouvelles recettes pour la sauge, l'ortie et la valériane (infusion, tisane du soir, soupe d'orties, baume, philtre)
+- Stations de métier : ENCLUME (outils, armes, armures de métal) et MÉTIER À TISSER (fils, tissus, toile, étoffes), à fabriquer à l'établi ; la forge de chaque village sert d'enclume et de four à tous ; lanternes aux bouts des ponts
+- La clochette de troupeau rappelle aussi les compagnons égarés qui te suivent
+- Après un crime vu, les marchands de la région ferment boutique 2 minutes (« Il y a un voleur dans le coin ! »)
+- Construction libre : échelles grimpables (4 et 8 studs ; bois, rondins, fer) ; clans dissous au dernier départ (nom libéré)
+- Écurie : « Faire venir ma monture » (pension 5 or), même si elle est loin ; avertissement en mer quand l'orage se lève
+- Écureuils (forêt, prairie) qui filent grimper à l'arbre le plus proche ; empreintes des bêtes sur neige, sable, boue, terre (`Traces.client`)
+- Voilier (établi, artisanat 14 : 20 planches, 3 toiles, 4 cordes, 6 clous) : mât, voile, foc ; 28 studs/s au lieu de 16, vire moins sec ; se pose et se reprend comme la barque
+- Quais : chaque village au bord de l'eau a son embarcadère sur la rive la plus proche, d'où l'on « prend la mer » (voyage entre mondes) comme au port d'arrivée
+- **Vitesse enfin appliquée** (rien ne la réglait) : courir avec [Maj] (manette : clic du stick gauche) consomme l'endurance, la caractéristique vitesse compte, à cheval on va vraiment plus vite (RIDE 38 × allure) ; verrou de caméra « Maj » de Roblox désactivé pour libérer la touche
+- Montures : ânes (20 %) et mulets (15 %) parmi les bêtes des fermes — plus petits, moins chers (110 / 170 or), plus lents (×0,68 / ×0,82), plus faciles à apprivoiser ; l'espèce suit la bête (sauvegardée)
+- Concours de minage et de bûcheronnage au tableau d'affichage (comptés par le jeu, comme pêche et récolte)
+- Reflets façon WoW sur les filons et plantes que ta compétence permet de récolter (`Gisements.client`)
+- Décors de village cassables au clic : chacun donne ce qui lui ressemble (foin → blé, tonneau → planches, puits → pierre…) ; décors légers à mains nues (lentement), le reste à l'outil ; barre d'usure ; vandalisme si on te voit (inchangé)
+- Infobulle des outils : usure en % et coups restants (ou « Neuf : N coups »)
+- Quêtes de cueillette : l'herboriste du village demande les plantes sauvages de son biome (accessibles jusqu'à agriculture 10)
+- Les armes s'usent aussi à chaque coup porté (épée, gourdin, hache / pioche en arme)
+- Réparer un outil usé (sac → « 🔧 Réparer ») près d'un établi : moitié des matériaux de sa recette, usure remise à zéro, un peu d'artisanat
+- Usure des outils (Minecraft) : chaque coup use l'outil, il casse à bout (pierre 150, cuivre 350, fer 700 coups), avertissement à 10 %, barre d'usure verte → rouge sous l'icône ; sauvegardée (`wear`) — banc `usure` 8/8
+- Herboristerie façon WoW : plantes sauvages par biome (camomille, menthe, thym, millepertuis, valériane, sauge, ortie, romarin, lavande, mandragore, racine ancienne, fleur nocturne), les rares exigent l'agriculture (jusqu'à 20), repoussent en 4 jours, repérées sur la minicarte dès agriculture 5 ; alimentent l'alchimie — `Systemes/Herbes` (banc `herbes` 10/10)
+- Filons façon WoW : un filon miné revient au même endroit (5 à 9 jours selon le minerai) ; repérage sur la minicarte dès minage 5, chaque filon exigeant sa compétence (fer 12, or 25) — banc `resistance` 20/20
+- Onglets du chat façon image : Monde (général), Commerce (tous), Clan (membres du clan), Groupe (membres du groupe) — `Systemes/Canaux`, synchro toutes les 3 s, **à tester en Play**
+- Bosquets autour des villages (image cible) : 4 à 6 bosquets denses par région voisine, vrais arbres abattables, tirage à part (mondes existants intacts), jamais sur l'eau, une route ou une construction de joueur — `Systemes/Bosquets` (banc `bosquets` OK sur 3 graines)
+- Icônes 3D aussi pour les ressources (bois, pierre, minerais, argile, blé, fibres, baies…), vue de 3/4 — `ReplicatedStorage.IconesObjets` (banc `icones_outils`)
+- Récolte façon Minecraft pour TOUT : clic sur n'importe quel objet (maintenir = frapper en continu, barre d'usure), résistance propre à chaque objet (±25 %, taille des arbres), force selon l'outil (pierre < cuivre < fer) et la compétence ; bois à mains nues possible mais très lent, roche / filons / argile / cactus impossibles sans outil ; filons façon WoW (palier + compétence) ; l'usure retombe après 8 s ; cadence fixe d'un coup / 0,25 s (banc `resistance` 14/14, `moissons` 19/19)
+- Quêtes façon WoW : on les prend et les rend au **tableau des quêtes** du village (nouveau, « ! » doré) ou auprès de **n'importe quel habitant** (« Tu as du travail ? ») ; village déserté = plus d'offres, ses quêtes se rendent ailleurs (transfert) ; le journal [J] ne montre plus que les quêtes en cours (banc 22/22)
+- Champs de blé près des villages, **récoltables au clic** façon Minecraft (tombe au sol, graine parfois, repousse en 3 jours) — `Systemes/Moissons`, générique (banc 15/15)
+- Icônes 3D des outils dans la barre rapide et le sac ; herbe plus courte ; emoji Unicode 13+ (invisibles dans Roblox) remplacés
+- Rendu façon image cible : lumière vive et chaude (`Shared/Eclairage`, partagé avec l'aperçu Edit), châteaux sur les hauteurs près des villages (`Systemes/Chateaux`, toujours un près du départ), potences à lanterne, HUD aux proportions de l'image (propre échelle, barre rapide comprise), chat en bas à gauche avec onglets
+
+- Villages : maisons à étage, jardinières, fenêtres allumées le soir, grand moulin aux ailes qui tournent
+- Habitants habillés selon leur île (fourrures, tenues du désert, capuches des marais…)
+- Monde libre (bâtir chez les autres, PvP partout) et tourelles de défense à munitions
+- Quêtes facultatives proposées par les villages, différentes sur chaque île (journal [J])
+- Îles à thème tirées au hasard (glaces, sables, brumes, vergers…) : biomes, villages et faune propres
+- Interface façon MMO (portrait, boussole, minicarte, météo, menu, notifications) ; plus de niveau : les caractéristiques montent en pratiquant
+- Butin au sol façon Minecraft / Fortnite : clic, [E], [Q] pour tout ramasser
+- Fiche de référence générée, rareté des objets, objets introuvables corrigés, journal des versions
+- Étape 9A : nids d'oiseaux à dénicher dans la nature (plumes, œufs) (`dbbab46`)
+- Plan : créatures de nuit, réapparition et laisse vérifiées (`b24b03b`)
+- Étape 8C : nasses à poser dans l'eau, prise quotidienne (`412a678`)
+- Étape 8C : les appâts servent à la pêche (touche plus rapide, poissons rares) (`5dd6d03`)
+- Étape 7A : redessin des cultures étalé (budget 6 ms/frame) et limité aux cases changées (`e9df47a`)
+- Étape 8B : bêtes plus bloquées après perte du meneur, don d'une bête sur la parcelle d'un autre (`62cb96e`)
+- Étape 6A : plafonds d'XP sur les gestes réversibles (terrassement, pose, échanges) (`0fbf20a`)
+- Étape 8B : reproduction des bêtes nourries, plafond de 24 bêtes par éleveur (`d38d463`)
+- Étape 5 : message de manque complet et banc de toutes les recettes (389 OK) (`ae0c61c`)
+- Étape 4B : transferts en masse vers les coffres (compléter les piles, tout prendre) (`aa558f6`)
+- Étape 3D : restauration du relief (/wa terrain) et filet anti-chute sous le sol (`3d4f098`)
+- Étape 16B : îlots au large avec épaves à fouiller et un phare (`f4cf791`)
+- Étape 21 : sons de porte et de fabrication (établi / forge), Pro Sound Effects (`1771529`)
+- AUDIT : fin automatique des concours testée (`78a222f`)
+- Carte [M] : croix de la carte au trésor ; trésors testés en jeu (`a2951e2`)
+
+## 0.1.0 — 2026-11-17
+
+- Étape 18 : cartes au trésor (cache réelle tirée dans le monde, indice, boussole = distance exacte, déterrer à la pelle ; 4 fragments = 1 carte) — compilé, non testé en jeu (`eeca0f9`)
+- Plan : points couverts par l'existant ou par décision, justifiés dans AUDIT (`8c0bd52`)
+- Banc : découpage des secteurs (`178bc22`)
+- Monde : secteurs trop volumineux découpés par région à la sauvegarde (plus de perte au-delà de 4 Mo) (`736b4e3`)
+- AUDIT : ce que le joueur doit faire lui-même (`a56a8e2`)
+- Étape 17 : une invasion non repoussée laisse une maison en ruine (rebâtie en 4 jours ou par le maire) (`e82fd20`)
+- Étape 8A : arbres fruitiers pérennes (cueillette tous les 3 jours) ; décisions conservation, boss, mobile documentées (`df88a25`)
+- Étape 26 : banc de régression en Play (13/13) (`9498f0f`)
+- Étape 12C : historique des mouvements de la banque (12 derniers) (`55ecf87`)
+- Étape 12B : hôtel des ventes avec recherche, tri par prix unitaire et prix à l'unité affiché (`f59137a`)
+- Étape 13 : invitations de groupe, de clan et d'échange expirent au bout de 60 s (`3e0cc95`)
+- Étape 14 : zone sûre à l'arrivée, protection de 10 min contre celui qui t'a mis K.O. (`0e3a9c5`)
+- Paramètres : rappel des commandes de chat et des touches (`d02dcb3`)
+- Étape 11B : confiance par propriétaire (/autoriser coffres|batir, /retirer), accès autorisés journalisés (`d45149d`)
+- Feuille de route : monde médiéval à jour (`e605ea8`)
+- Interface : boutique, coffres, étal, courrier et hôtel des ventes en cases d'icônes façon WoW (demande du joueur) (`af720fa`)
+- Étape 10A : PNJ abrités sous l'orage, déjeuner à la taverne, déblocage des PNJ coincés ; ânes/charrettes écartés (documenté) (`ef7a2fe`)
+- Étape 15B : avant-postes de clan (bannière, réapparition, vivres, déclin, contestables) (`4068002`)
+- Étape 25 : boucle serveur chronométrée et isolée par système, /wa perf (`1a48257`)
+- Étapes 7/18 : journal de découvertes par monde et carte personnelle [M] avec brouillard (`e65c4b9`)
+- Étape 21 : bruitages 3D (hache, pioche, pelle, coups, pièces) Pro Sound Effects, préchargés (`ca2eae0`)
+- Étape 19 : tableau d'affichage des villages (concours de pêche/récolte arbitrés, rassemblements jugés, cagnotte bloquée) (`9ae41db`)
+- Étape 16B : barque (fabriquée, mise à l'eau, pilotée côté serveur, passager, échouage, sauvegardée) (`00b812a`)
+- Étape 15D : politique de village (maire élu par les habitants, trésor, taxe du marché, projets publics, registre) (`6accb6a`)
+- Étape 9A : faune passive locale (moineaux qui s'envolent, oiseaux en vol, papillons, lucioles) selon biome, heure et météo (`c962244`)
+- Étapes 22/24 : commandes admin /wa (météo, interrupteurs, annonces, maintenance, restauration), journal durable, /bloquer entre joueurs (`d4e7565`)
+- Étape 20 : panneau Paramètres [O] (volume d'ambiance, flashs, secousses), sauvegardé avec le perso (`255ee43`)
+- Étape 17 : météo et saisons (pluie qui arrose, orage et foudre, brouillard qui aveugle les témoins), ambiance client avec sons (`329b93d`)
+- Étape 6/12A : faille d'arbitrage achat-revente corrigée, recettes pompes à or rééquilibrées (`25c2cae`)
+- Étape 4B/4C : recherche et tri dans le sac, confirmation avant de démonter un équipement épique ou légendaire (`2c49ada`)
+- Étape 4A : catalogue audité, 16 objets sans usage reçoivent une fonction, bonus temporaires, doublons de nom corrigés (`c4514a0`)
+- Étape 3C : auberge (lits à louer, réapparition), écurie, tour de guet, palissade autour des villages ; on ne paie plus une chambre où l'on ne peut pas dormir (`a8ea83f`)
+- Étape 3A : version du générateur portée par chaque monde, banc de génération (4 graines : 0 défaut) (`496da8d`)
+- Étape 2C : dégâts de chute (seuil 20 studs, secousse et voile rouge), pas de chute après téléportation ou cheval (`a9002db`)
+- Étape 0 (AUDIT.md) et étape 2 : reprise du dernier monde, accueil débloqué, apparence villageoise, armure visible (`e5e7e4e`)
+- Étape 1 : sauvegardes et autorité serveur fiabilisées (`9dbf0e3`)
+- Sauvegarde de la place avant le plan step by step (`6ffd5ce`)
+- Villages : taverne, forge, chapelle et marché ; correctif du chargement des objets (plantations) (`1ded705`)
+- Ponts : tablier en travers (il manquait), culées et bornes de pierre (`a2eaf4f`)
+- Reboiser : graines d'arbre à l'abattage, plantation, pousse en 3 jours (`cca9afe`)
+- Tout destructible (maisons, décor, objets posés) avec vandalisme si vu ; shérif à combattre au lieu de l'arrestation d'office (`0570735`)
+- Combat lisible (plaques, cible façon WoW, attaques annoncées), invites d'action dessinées, monde fini (`42194d4`)
+- Artisanat en grille (recettes à découvrir), pièces de construction fabriquées puis posées depuis la main, fiche personnage façon WoW (`58b9464`)
+- Interface : sac façon WoW, barre d'action rapide façon Minecraft, talents façon WoW (`680aa12`)
+- Villages médiévaux : maisons à colombages, toits de chaume, tuiles, ardoise et bardeaux, décor de village (`c8a72ff`)
+- Grottes et donjons, bestiaire médiéval (52 créatures, camps de bandits, boss uniques) (`5a91625`)
+- Crue : l'eau noie les prés bas, arrose les champs et laisse un limon ; compost utilisable (`c0fa6c7`)
+- Catalogue : toits en pignon et arches corrigés, point d'appel de test Studio (`c325d41`)
+- Catalogue médiéval complet : 373 objets, 52 équipements, 14 cultures, trouvailles, toits (`d83032c`)
+- Convoi attaqué et construction lot 1 (rondins, pierre taillée, torchis, pisé, fer) (`b7b3030`)
+- Inventions et reproduction des bêtes (`1ec3770`)
+- Construction libre façon Minecraft (sans maison prédéfinie) (`74ee931`)
+- Terrassement et construction étendue (`bfb27c5`)
+- Place Studio à jour (scripts, modèles 3D, réglages) (`20c93f2`)
+- Bac à sable sans indication : plus de guerres déclarées, plus d'annonces (`1907aab`)
+- Guerres et territoires de clans, auberge, faune vivante (`7755c23`)
+- Poste et hôtel des ventes (`9dbd6b7`)
+- Clans : fondation, grades, coffre commun atomique, journal (`af86546`)
+- Monde vivant : événements de monde et boss itinérants originaux (`46b7896`)
+- Armée, groupes, collections et titres ; plus de plafonds arbitraires (`7e24586`)
+- Univers de mondes : port, carte maritime, exploration de l'inconnu, danger (`730fd85`)
+- Économie : échange entre joueurs, commandes des villages, banque, étal, registre (`1170604`)
+- Esprit GTA et grind : serrures, crochetage, compagnons, primes, compétences, talents (`3e5cbf4`)
+- Monde vivant : 19 nouvelles créatures, monstres de nuit, butin, niveaux (`7f6c80b`)
+- Artisanat façon Minecraft, parcelles, avis des PNJ par joueur (`014fd46`)
+- Interface joueur : accueil (liste des mondes), barre du haut, sac, atelier, boutique, dialogues (`83d5495`)
+- Multi façon MMO : mondes persistants, biomes, île finie (`64a8022`)
+- Portage Roblox de Wild Acres : scripts serveur, génération de monde, outils de dev (`2e3396f`)

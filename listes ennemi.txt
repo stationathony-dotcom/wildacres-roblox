@@ -1,0 +1,738 @@
+Pour **Wild Acres**, je partirais sur un bestiaire médiéval assez riche, avec des ennemis humains, des animaux hostiles, des créatures fantastiques et des boss.
+
+L'idée est que chaque biome possède ses propres dangers, que certains ennemis apparaissent uniquement la nuit et que les joueurs puissent rencontrer des adversaires différents selon leur niveau et leur exploration.
+
+# **1. Ennemis humains**
+
+[Pinterest](https://images.openai.com/static-rsc-4/89qZhIACc8JBbaevfYfjemAt48F9-HT54-HldRV5dqOSjg0Flab8Ag505ChOsUpKJtoOoLSjISJcxnh2LMLklayNnvQu0fENEpGYDSkg-OR3bYEqYIlyvfx2sivEKfrM7uF8_UsPboIyyZXoHBpwgg-lk3BQv4GZTRg46dpcBFs?purpose=inline)
+
+[Rogue Guide for Beginners: Mastering the Rogue in D&D 5e](https://images.openai.com/static-rsc-4/_fmUTgZDU6_-7HXhmzXolDjIhixdXCrzhaaU3ZR-71FWeEcOKdZrpsoSaCBieJUnRJ1SxXkCQyUW0S9y3ZAEFqYpDITC3ULmJ6lFOu2KwAcqKVGcHlEai8IOFCF2AKgKTtUZz6pyxwM6_uvl1-OuGoU5WPCgJtEHsISoLXGDFcs?purpose=inline)
+
+[Fantasy Bandit Leader](https://images.openai.com/static-rsc-4/ERKaVavuiQn3z7M2_r7HXNUaqW8VahyNTABtg1iHOuJlx5jX0dqD68UK8yDtvHgUdnnEN2K3Ko2Pp2Euznva_PDctF70hY0icWEH8OuC6IhQ2Bshsrg1qATTKk2VmNmEei_p82DVGnD4p5QvizsVBuv-uIVUKwglgcVHIita8-o?purpose=inline)
+
+11
+
+- Bandit des routes
+- Voleur de grand chemin
+- Pillard
+- Braconnier
+- Contrebandier
+- Mercenaire
+- Garde renégat
+- Soldat déserteur
+- Maraudeur
+- Pilleur de ruines
+- Brigand à cheval
+- Chef de bande
+- Assassin fictif
+- Faux marchand
+- Garde corrompu
+- Chasseur de primes hostile
+
+# **2. Animaux sauvages hostiles**
+
+[Forgotten Creatures - Wolf Update WIP at Skyrim Nexus - Mods and Community](https://images.openai.com/static-rsc-4/0SqBq07eN9_d5-JmoHvXpiub3JXs3bx7Olg3FfpLU1zU2gM_YnBE4VHsp0tIQvPIjW8tfKgwv4mHMoHXECX4U7fhbyowbBqNAPBr62p1NdckN36RB9_rnGo5zc9LC_fe3cxE4D6OWzeJj6HKb1X8iMcSucIbW2AmFQp8uHKZsz8?purpose=inline)
+
+[Sangliers | Chroniques Oubliées DRS](https://images.openai.com/static-rsc-4/onzp0_wHG2YFmErbe7sIVQ0NeW6cjYwH0qb07xoq2NpiACmss-iVVCF2QzmuDV-AokWIzUmKvTm1Yp1aVWmoDC7lhGSvzrfeGCnBOyRVznQR-qiEE0yKcuGzxY7D4OFQBXUEW58lGCHHOoaZwqjiiLDpOIEaX3a9fRzQKFT3gVE?purpose=inline)
+
+[Monster Artwork | Monster Fantasy Art | CharGen](https://images.openai.com/static-rsc-4/6HfA9hvFG7-F_6-zp4pWyiDlso5jdyLJcwKJj13sRK1R1_-ulaRuwR3xMHt9d81ew9LIchhNVzn6z2NXV-8MrgP5qIA2LWjHxI_VYdLGUie3pr050SXjPUESCU5nhSlfoobFbV6V6bM8uf6ZlACaNDIhcKLnlYKy4syvQSWhE10?purpose=inline)
+
+10
+
+- Loup
+- Loup noir
+- Loup des neiges
+- Sanglier
+- Ours brun
+- Ours des cavernes
+- Lynx
+- Renard enragé
+- Chien sauvage
+- Chien errant
+- Aigle géant fantastique
+- Serpent venimeux
+- Crocodile des marais
+- Chauve-souris géante
+- Araignée géante
+- Essaim d'abeilles sauvages
+
+# **3. Créatures des forêts**
+
+[Troll -Mythical being of folklore | mythicalcreatures.info](https://images.openai.com/static-rsc-4/EdmKVNk4RhOkEWysORQNLPjrpqKvX34nYcgh2f_-ldmJerTRQuEkrGUXy2Go3SeRsSLKQ_Lmh4BnEu8Ft2cuyji7fPKdngr3L8I02UbrKql4DQkR5P6zaNgCapgTRh7A7nzuOZ0S0-Ok2DoCKEv1tiJoDuQkMbv_8gx-LDZ5Whw?purpose=inline)
+
+[AI Game Master - Monster Compendium - Corrupted Treant](https://images.openai.com/static-rsc-4/1akvSDJyx6sShlM5qwf7W1weFmIs-R4k0zIN-Gajvsx_TN_Bc-mWX6FyQrrGXgjNfjsCsNYjJDlUjvDBPu-NzGBoBSTW0LKCUXCxYpHU9EQGicJxSOJgNgHqf4DdIfHmZQ1HKbNngJee17H0y0kVWScptkOrUfqPzLYRB7EPJfA?purpose=inline)
+
+[Monsters in The Wizarding World  | Friends & Fables](https://images.openai.com/static-rsc-4/XL2BttiDD4t2H3nMA_Tx6V6QakPLOmyyh5VD3ArBGel2zC_KqkQKFvQaSPpfOMoHtqz1HUwdmXQVFVFiDuh60yXmL8dstWPREPTKGBIN3IxaHSaCSV12W2HTA2P3XBjOyIAM4a7sopqYzERQgAHCYNFPIQaveNi20kZjgFer9wg?purpose=inline)
+
+11
+
+- Gobelin des bois
+- Gobelin archer
+- Troll des racines
+- Ent corrompu
+- Homme-champignon
+- Araignée sylvestre
+- Cerf spectral
+- Sanglier colossal
+- Sorcier des ronces
+- Golem de bois
+- Chasseur nocturne
+- Esprit des arbres
+
+# **4. Créatures des marais**
+
+[Swamp monster (AI art) by 3D1viner on DeviantArt](https://images.openai.com/static-rsc-4/FExRYoGMQiqklziw3B7ses5i493WlkvY_wS_Cd2AwYNsvB6Z9-vGaBIByqH23u6i_0ALz7eC4ezqpud_ylrWZep_aP518PDMZanor7yeosd8yEin7hEuqMX10AwYjbqVhAc6DnKCXEi6f3WLZ1P4yZS14nJ_9sgmTApiz90___M?purpose=inline)
+
+[Swamp Witch 2 by Xorgul on DeviantArt](https://images.openai.com/static-rsc-4/sgoZTJ2yI7pnFsqYoi0k35R1mEyTTBDfmHz9iY3oFpiih72UwGlse1PTdyJRjC4adkwsOeFtvCo4f7VVXL8Uxc3gdAOhrtV2bwxmOuuak8zKJG0LQPl0buMiDcD2eNa26QpJkKckxDCp8lryWrYXevyeTdAJ6iaKi-S0m6TnveI?purpose=inline)
+
+[Prints Tagged "Leech Horror" - Original Magic Art](https://images.openai.com/static-rsc-4/TIBxq1cv0trRYnUiK_eFNXmQ2w6TfZ7fZb_pojIpZJy2j0D7nUFBXELwt60_4D0cq08Hrt9QSvbO8t75GKw-HNui2FSwNlr8HKEErpDy6goHfXx0yG737J5l13gqXkjmVqjqXr9svtwwr998j2IHAN1TxVANX4YLC6wBe9ul2Vs?purpose=inline)
+
+14
+
+- Gobelin des marais
+- Crapaud géant
+- Sanglier des marécages
+- Lézard des tourbières
+- Sangsue géante
+- Araignée des roseaux
+- Sorcière des marais
+- Homme-boue
+- Serpent des eaux
+- Golem de vase
+- Esprit noyé
+- Bête des profondeurs
+
+# **5. Créatures des déserts**
+
+[Carnax — Sunscryer](https://images.openai.com/static-rsc-4/lFZ22JO67LtYNjaEBLG-7rctJHvLcAypUhVRKTDCpitnoHHYQNpfZxvIQVKv23aO-Db0d2YtKt5Ib9mov6UUzBBPdTB3YEjXSO_pMSf2AOjBsZKNM3KCUhhQMyNKdfXlxt4gCnCZqevJqiUNTKrDpO8x5IDc2I8D-IJ8c3J0euQ?purpose=inline)
+
+[Giant sandworm in desert landscape | Premium Photo Illustration - rawpixel](https://images.openai.com/static-rsc-4/NdcKQF-SWzTs3E8GJe-aYFblBQwNtsIdx_KqOB8F6FLdxh3GOm9TqfyAkVSSiDGececoHPP7hGGwSYAJt3M0CLsZY3zkarya2quXfU-3VcFz53QfkauPqn-SoNSBtR_VhZdhnGcgtf_RwJbm-pL2CiHOhh90aohppfepQpOYKRY?purpose=inline)
+
+[Shifting Sand Stalker - viralcodex's GitHub Creature](https://images.openai.com/static-rsc-4/pkeMGMNdP95PaUekbo8WNQF5xwpfZmrpmDghmwUjiDbKva_g7OAOSVvtueV1uWorVq6XVD70Ix-9wfsxtngQQ6tvdABAtbcYwXTzIsT4HTNN9kF_au0jNCinhm8NqxLDMn1gPiOi3v_mtNjDGBrO2csoKOTiVbBisp_WL8V7QFY?purpose=inline)
+
+12
+
+- Scorpion géant
+- Serpent des dunes
+- Chacal sauvage
+- Hyène monstrueuse
+- Scarabée cuirassé
+- Araignée du désert
+- Ver des sables
+- Golem de grès
+- Pillard du désert
+- Gardien des ruines
+- Spectre des dunes
+- Basilic des sables
+
+# **6. Créatures des toundras**
+
+[Monsters in Arcanum: Of Steamworks and Magick Obscura | Friends & Fables](https://images.openai.com/static-rsc-4/X2B8HAVe42U_aIHyGPN7s7EsQzxubJP61Tzke6fN0xUc0wLo5e_MXmU6zPAzX5ynZw0Jo-yo1zd46LshZ15phndXANsUUa07dhRY8hufzAVgSz5RPQOEZ5cCLoWZOSO-TLIbSgsg0kRmddh40ZI_2DLrQfhPh10CEmLY10l4_uI?purpose=inline)
+
+[Yeti — Moescape](https://images.openai.com/static-rsc-4/v5WhU2eru7p5EOFIe4df0qMJlQtOgH-FFFSvDIfjH_fQnUXFk_sMm0iEwaEXbeVG1mEfKaeigiW6WBg2wBUbqNC7OkJFR2uq1sv-HvPn3zxp-Hsj1FEBxA2NZ2jvhNMGoAYHLWFROHir9VCJlqKA2nLQ1OHmJcVaL19qBLDhdSQ?purpose=inline)
+
+[The Frozen Troll | Story.com](https://images.openai.com/static-rsc-4/SlCmhdotVtd_reSHz8UUnVSGDuu36g-BkCT5IXj4nZp2shvhtBCS6wOf1qbFa12DWNi-Xjec0v1FH0eVb05Z0KnXik9me132-SfkKYy4R6W8O96UTXhMhj90LUAGRwjvNZdqElDQGtmrqM65xlwonyoP5BOj2svaMb7HfxdbjSY?purpose=inline)
+
+12
+
+- Loup polaire
+- Ours blanc
+- Yéti
+- Troll des glaces
+- Araignée de givre
+- Renard spectral
+- Sanglier givré
+- Géant de glace
+- Spectre du blizzard
+- Wyverne des neiges
+- Golem de glace
+- Cerf corrompu
+
+# **7. Créatures nocturnes**
+
+[Shadowstalker Species in Majara | World Anvil](https://images.openai.com/static-rsc-4/UuBl_nJEstzQ48U9RmFADtQANDmnZF-GW2BGicDeyVin5_mdDIOL4ddwxc6bc1xyrxuoAq_DRWPHFrgbHtrSzFuf39J6fQ_6Zbb0NYTTJXae4JYQKgg2iTDsA80gotDp4q9UmuayaZWdDNVrq5yg6HA3cbxveDZYjdWs78wrWp0?purpose=inline)
+
+[AI Game Master - Monster Compendium - Phantom Wraith](https://images.openai.com/static-rsc-4/ely5wkXHVX4TynjIZnFXAuuio3UhE4Jr8E8w9xZT7H5J4YekKZ3QbnazNQA95T5JUIpnBPyR-RozxFhY3td5x5GSCxpXFX_d9UJBpG2jmRnafyya3cxDUoZRpcFzXxyIr2lI6OEx_vxJG2QVatRvGipo8SdAO0f7nzSEcX8O_Lw?purpose=inline)
+
+[Supernatural Stories: Mystery, Suspicion, Supernatural | AI Art Generator | Easy-Peasy.AI](https://images.openai.com/static-rsc-4/T42rYsV9FExErsFsgwJfnm5m1DZF-CPYvs1Nem1BwbKzDUlV-O4ajDO_ILblMy8w3gI3TW4X3VkIBh22IGh-5h6__YXra9Y0j5WCCZzIvmLHh2GKUrrp28mTr99b5GLpmOTdHz6zWh7TsQTPzg7scNdc9Lu4vFflR8HlNoyatq0?purpose=inline)
+
+12
+
+Ces ennemis pourraient apparaître uniquement après la tombée de la nuit.
+
+- Rôdeur obscur
+- Spectre errant
+- Ombre rampante
+- Chasseur de lune
+- Hurleur nocturne
+- Corbeau fantôme
+- Loup des ombres
+- Revenant
+- Gardien des tombes
+- Esprit des bois
+- Dévoreur de lumière
+- Marcheur sans visage
+
+# **8. Morts-vivants et créatures maudites**
+
+- Squelette errant
+- Squelette ancien
+- Revenant
+- Goule
+- Spectre
+- Fantôme de chevalier
+- Gardien maudit
+- Moine déchu
+- Esprit des ruines
+- Ombre possédée
+- Gargouille animée
+- Chevalier oublié
+- Gardien du tombeau
+- Momie ancienne
+- Roi déchu
+
+# **9. Créatures volantes**
+
+[Titan Quest 2 Early Access preview — Gods and Monsters](https://images.openai.com/static-rsc-4/UkqvnG1nYbtJlf--kQUk2lrYaezRUrgcPwaeffOH8CuPKicdZoiJU3idt63JxFWdkJN7_kWvCi4ZFWI6uTh2WSGn3-xkXHGtDhyxqLfPjHsvZJBRXhQagSO1h2L0DDzqm539OJlNJNX2ZtYwDeOE3MlvokkZnTvxiZCcgpL8d6A?purpose=inline)
+
+[Flying Harpy | Mythical creatures, Fantasy creatures, Fantasy art](https://images.openai.com/static-rsc-4/fusgq6LKZ9FK4rhqP8HNStVYhCsWUexzAGXNFQB2ZJBz_mQMxP4RYPnrOZ-0EhgYoxWSUnn4affRgroYYLI6gzSTSU_nlBofim6b6GBnjgZTVnSaMVpb28ZQDwzoijp_x2ze7A6FKiFSeGPWrmqPZpJrOBCnEf6WFKwqmesV_ko?purpose=inline)
+
+[Gerador de Nomes de Wyverns Voadores de Monster Hunter | Qual é o nome do seu wyvern?](https://images.openai.com/static-rsc-4/5mTDUJjF5Exv2YEJCvWgHE0E8UTmbtSUJFrfJznVf1hedw-hQsWHwVc0m2oKxBOU4bOZqjIyEZoUVo0puCksiIqYFZPIU_Aww_LidKoOXs1eq29rPaojQzSYq3MLIMHErSUQJHjvceYoKXt2X9I_HfbbeBpUImSbpIqmXWpx2Ck?purpose=inline)
+
+4
+
+- Corbeau géant
+- Chauve-souris des cavernes
+- Harpie
+- Griffon
+- Hippogriffe
+- Wyverne
+- Aigle des montagnes
+- Chouette spectrale
+- Fée des ronces
+- Mante religieuse géante
+- Dragonnet
+- Rapace des falaises
+
+# **10. Créatures aquatiques**
+
+[The Lake Brosno Dragon: Russia's Nessie – Hangar1publishing](https://images.openai.com/static-rsc-4/jTO52VKRpAPlUnqWMiDSbmwove8l833Br3rbGKqm7AInjWpgULVCmG0jfYi6wrgbD0WPgUqsbyVsjWypTPBP_eDFmIbK_fvS95b3cS97W5GPZ6TgfVbvYqxYjZPzNBEZRJfBmrzTmgdMOp8ZOeFpJNlGj-3EOUJwTo9omdIZw3A?purpose=inline)
+
+[Biouna — Yodayo](https://images.openai.com/static-rsc-4/abCK1HMEbUsI4z35xAJK9ie9hRYBIuZNZvssidbn4h9vJky-hwfmQAdE5fbN4OymYnDJEJwDkbkl0wtefoEYBLiEIKVyLJsj4ONYUz64JYrNMn4wKtLxyo0GGKEYQuxV9T6Pdc6TpSD2IqXqRJckfwIXvy4Oz6Lbak9PaLTvNq8?purpose=inline)
+
+[Kraken : le monstre Marin | Les Bijoux Viking](https://images.openai.com/static-rsc-4/GsWTeWik3-PxGTP2KQDwpEblnlugvccToC5e2V94ymEPU_GjlD1ED4paGiGoHt42BqufZNQkwv8ZR9YCZjZw9kKjiDs7qNNwjKFR6ju-QIvLFqOr00CjNcer1D8_iR6wZgfReGdPoy-VRg8tjrZhnxL26gT3L69rpWi1Hxz-zVY?purpose=inline)
+
+10
+
+- Serpent des rivières
+- Poisson carnassier géant
+- Anguille monstrueuse
+- Tortue ancienne
+- Crabe géant
+- Méduse d'eau douce fantastique
+- Sirène hostile
+- Esprit des eaux
+- Kelpie
+- Serpent marin
+- Monstre des profondeurs
+- Gardien du lac
+
+# **11. Géants et créatures puissantes**
+
+[Vanyeti History of Everything Timeline](https://images.openai.com/static-rsc-4/7j27FBqRpODk8jx4FXI92C2jrWjQq1ZDcvvkML6moSRUek4yenmiD9IBwLmocATjt8rQufRCwXhmtywQ_oFQzXClo1-emaGeWdVSd2Yy3K4qu4iODDyW_5jjt9fnYvntP0G32NxV7rSEW8CnP8Ir2iinKcb3CH26L2scnLoVjPY?purpose=inline)
+
+[D&D Ogre Guide: Stats, Lore, and Action Figures](https://images.openai.com/static-rsc-4/g3wc6f3GVnt9V-QhgvCuVsHUBEvXdNafi_P-7zy3fD7cFI1vY8boPlUvNA1X_s--PdXEvv0vHGIVANi3DrM8voFGSukiYnQj6QNACct1hJWkiGK66G9A-rFnb7N-2K7T86vqGu7AjH9A1c9NIJHuVqX9-p5gJlXcFaBM8284H_o?purpose=inline)
+
+[Dnd 5e Cyclops Tactics - build challenging encounters against a Cyclops - ANGRY GOLEM GAMES](https://images.openai.com/static-rsc-4/U9lzeWFrg5HXVKvFLebdZgk5ZzWkrAwP-bPXdMhWkwAwMAScb6WSlO1LbaDfthIGQhrEeWV-qGO63MTdlD3AdSwfShX6y8aDHHJdxnArKTmdYzfpsxENR2lv3ognZJ_x1rcD1q6s4-spjEZyyzlcyIaDIIPjW3U4BovmSXb_Hr0?purpose=inline)
+
+11
+
+- Ogre
+- Cyclope
+- Géant des montagnes
+- Géant des forêts
+- Troll des cavernes
+- Troll des montagnes
+- Colosse de pierre
+- Colosse de terre
+- Gardien de granit
+- Minotaure
+- Homme-taureau
+- Géant des ruines
+
+# **12. Boss uniques**
+
+[AI Art for Game Design — Create Game Graphics Free | Nano Banana 2](https://images.openai.com/static-rsc-4/LgBmVg2zSM7vgD65drwVS8XL7rgtAXbPruqLaRUo8QD84aNTSf4T7GjEIEHEwDIKD2OkV4b3wsGGt1Ic_Z6_z-Fti6ae8rw5f7vj-xR_zYhFK6q53ezf62FCbj-LAFu8X3Apnpm2USYgOI-mB5zF0kiMnsalsfKPOCXcJgwaEXo?purpose=inline)
+
+[tree-man prompts - text to image generation prompts for Stable Diffusion, Midjourney and Dall-E](https://images.openai.com/static-rsc-4/FJVu2d5oFNLVq2G1h7ueyeSJgIYLc2cDgQ0nTjdpxX2fZQTo7VDDO6_xUxYhRXkx_qPE4rHR_TnDO7wnGmEH3b3tIxGBFmuQbdaoNPSwjaOpMuxwLG5Z5xxoQsFA-k6ceOBsJeLRRNFquSbvDSEnuYAV7FlInhkqKlDZ8zmUEJQ?purpose=inline)
+
+[Awesome GPT Image 2 Prompts](https://images.openai.com/static-rsc-4/3xrzssdXsHpA0Fczr-IyHqCaUVksSRTGvNZcmaBH7D9igCLmgn3BCOTx9H3x_OYlvXy2JUpJKonyIvcgcDzh86zzKNYx8I9Pt19tn5UbUYGh4uDlV_Hv8hEcQSAvdqrn7x9A8ApPFROT0XsBIpCZQcn_8Z99IFKb73MmqbnfoVo?purpose=inline)
+
+8
+
+Voici des boss que je créerais spécialement pour Wild Acres :
+
+| Boss                     | Lieu d'apparition | Récompense possible |
+| ------------------------ | ----------------- | ------------------- |
+| Vargor, le Roi des loups | Forêt rousse      | Fourrure royale     |
+| Brumeglace               | Toundra           | Cristal de givre    |
+| Mère des Ronces          | Forêt ancienne    | Graine ancienne     |
+| Le Colosse oublié        | Ruines            | Pierre gravée       |
+| Roi des marais           | Marais            | Écaille noire       |
+| Scarabée royal           | Désert            | Carapace dorée      |
+| Le Veilleur des tombes   | Cimetière ancien  | Relique funéraire   |
+| Aile-de-Cendre           | Montagnes         | Plume ardente       |
+| Le Serpent des abysses   | Lac profond       | Perle abyssale      |
+| Le Roi sans couronne     | Château abandonné | Couronne oubliée    |
+
+# **13. Ennemis spéciaux et événements**
+
+Ces ennemis ne seraient pas présents en permanence.
+
+- Convoi de bandits
+- Meute de loups affamés
+- Migration de créatures
+- Invasion de gobelins
+- Chasseurs de trésors hostiles
+- Patrouille de gardes renégats
+- Apparition d'un spectre ancien
+- Réveil d'un golem
+- Créature attirée par une tempête
+- Boss itinérant
+- Gardien d'une ruine nouvellement découverte
+- Bête qui rôde autour des villages la nuit
+
+# **14. Comment répartir les ennemis dans Wild Acres ?**
+
+Je ferais une répartition comme celle-ci :
+
+| Environnement | Ennemis principaux                       |
+| ------------- | ---------------------------------------- |
+| Prairie       | Bandits, loups, sangliers                |
+| Forêt rousse  | Loups, gobelins, trolls, araignées       |
+| Désert        | Scorpions, chacals, scarabées, golems    |
+| Toundra       | Loups polaires, yétis, trolls de glace   |
+| Marais        | Serpents, goules, hommes-boue, sorcières |
+| Ruines        | Squelettes, spectres, gardiens anciens   |
+| Grottes       | Araignées, chauves-souris, golems        |
+| Montagnes     | Griffons, trolls, géants                 |
+| Océan         | Serpents marins, monstres aquatiques     |
+
+## **15. Les caractéristiques à donner à chaque ennemi**
+
+Pour que les ennemis ne soient pas juste des sacs à points de vie, chacun devrait avoir :
+
+- **Territoire :** où il vit.
+- **Horaires :** jour, nuit ou toutes les heures.
+- **Comportement :** passif, méfiant, territorial ou agressif.
+- **Rareté :** commun, rare, très rare ou légendaire.
+- **Difficulté :** adaptée à sa dangerosité.
+- **Butin :** ressources ou objets particuliers.
+- **Variantes :** apparence, taille et caractéristiques différentes.
+- **Réaction :** fuit, défend son territoire, poursuit ou appelle ses congénères.
+
+**Mon idée préférée :** certains ennemis devraient avoir leur propre vie. Un troll pourrait dormir dans une grotte, un groupe de bandits pourrait installer un campement, et un griffon pourrait changer de montagne selon les jours.
+
+Cela donnerait vraiment l'impression d'explorer un monde vivant.
+
+Pour l'inspiration historique et légendaire, les bestiaires médiévaux européens sont une excellente source : ils évoquent notamment dragons, griffons, basilics, manticores et autres créatures fantastiques.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://www.medievalists.net\&sz=32)
+
+Medievalists.net+2
+Maintenant que tu as les **items, les ennemis et les éléments de construction**, tu as déjà trois grosses parties du contenu de Wild Acres.
+
+Mais pour créer un véritable monde médiéval vivant, il reste plusieurs grandes catégories à définir. Je te propose de les organiser comme une liste de production, pour ne rien oublier.
+
+# **Les grandes catégories qui manquent**
+
+## **1. Les PNJ et les habitants**
+
+[Beispieltext - KI generiert: Rollenspiel](https://images.openai.com/static-rsc-4/Wx4wnutTBK4nFpZJVUOgr0Lg6aNeB-1IPUl-HjeK6aH8oyHHwGGVloJh2dK-AXuimUjVFz3BGx1Gm6b5J-EnrrUeg1FOiuXuAGj0omRnUoMuDK7glWYFymmpMkxpeKZpAdxsv0qdjkjGBZCCf6mE5nHLTvIB7Vhfg-c7U4RpgaE?purpose=inline)
+
+[The making of . . . pentiment - 30 Nov 2023 - EDGE Magazine - Readly](https://images.openai.com/static-rsc-4/Ap2RpljKUhRZAeH_XC_AtxI6I2MN6pfHT4XepBBkO5nWQxLkDvGvXOCtrCiKKHM9Wl1zYWCkZv8Gx5_LhfXDp8kdsI-T4riI9IqOIRT2E3kWYuG2bI_Ory_TsU35Iu3Gkv6al7V6-5y4YBgxbww351EzdKRUbUcBCwTb05xXNNg?purpose=inline)
+
+[Breathe Life into Your NPCs: A Game Master's Secret Playbook – Soar Forge](https://images.openai.com/static-rsc-4/eMxmHNomrRyCE-RTuk6Mg7Z659UyI9EXCdctTjr-jpVWUXKuyrnpvz00laGri-rG9S2DscKFb3-nVR56n0PnXwy-sfZizcnk0e_ipE_rxkUhzWLjBHPSI2ibgl1DE_1OSrJAKhLDJ83EnR2aoUqp-De_X7S_0uMM5VgT6dHD7AY?purpose=inline)
+
+14
+
+- Villageois
+- Fermiers
+- Marchands
+- Forgerons
+- Cuisiniers
+- Boulangers
+- Aubergistes
+- Gardes
+- Shérifs
+- Médecins
+- Prêtres
+- Artisans
+- Éleveurs
+- Voyageurs
+- Nobles
+- Rois et seigneurs
+- Bandits PNJ
+- Enfants PNJ
+
+À prévoir également : dialogues, routines quotidiennes, relations, réputation, demandes et réactions aux événements.
+
+## **2. Les animaux et la faune passive**
+
+[The Guardians of the Enchanted Forest | Story.com](https://images.openai.com/static-rsc-4/-r9GdgMLZI4yooDG6I11ds0WYX-IB5D81zcgk3LLBbN6HdxuEeVfOpy8WjoLgf_t4xcr3juQPQrTjLhBySWrzrvyswz7PjgyyQ2XIWP8qwEKOw6H2voVWTNJZoaVrGzTf9q7Gp-1zIUTRLUSKz6f4-waZiqIKd-7yNp6jc2kXMo?purpose=inline)
+
+[画像ギャラリー No.004 | ［GDC 2025］牧畜や釣り，それに絡む食料生産もさらに豊かに。中世ヨーロッパ風サバイバルシム「Bellwright」の最新版をチェックしてきた](https://images.openai.com/static-rsc-4/lR0bLZUhNhwXZXOAvz2OTmPt1LB3n_vv1tnC0pgs8DB9bK3mgBMCgBc90SIdvM47YVxhjoSsXBTaaQLPsYjHqHDyrelKb6HRO8C_vOuc5WAT9nWbG9rFVev0U6_LtMXcyJtZ9PHyEsph6nQb6QHEFzG_iwA_BpHrjm4x158I5kA?purpose=inline)
+
+[THE OWL'S SECRET SCHOOL | Free Children Book from Monkey Pen](https://images.openai.com/static-rsc-4/3mfCqLGqvfzDYvFGC3M5pDSKwXwDEFfeI8DOedENaKGPbJy2zmMdm2MIjOBRuzRb27F_AWHa78VRN-B1WVY9Eb8e9we6zUsSOthNvjdNlKZFipPXxdZk5brVtAD8OFniKG4T8rekp9_p0tFnX94n9nq45RTPsOs7fVaf7EDKgPc?purpose=inline)
+
+12
+
+- Cerfs
+- Biches
+- Lapins
+- Lièvres
+- Renards
+- Écureuils
+- Hérissons
+- Blaireaux
+- Chevreuils
+- Marmottes
+- Papillons
+- Abeilles
+- Libellules
+- Grenouilles
+- Tortues
+- Poissons
+- Oiseaux
+- Corbeaux
+- Pigeons
+- Canards sauvages
+
+## **3. Les activités et métiers**
+
+C'est une catégorie particulièrement importante : elle donne aux joueurs des choses à faire même s'ils ne veulent pas combattre.
+
+- Agriculture
+- Élevage
+- Pêche
+- Chasse
+- Cuisine
+- Boulangerie
+- Forgeronnerie
+- Menuiserie
+- Maçonnerie
+- Tissage
+- Couture
+- Tannerie
+- Apiculture
+- Herboristerie
+- Alchimie
+- Extraction minière
+- Bûcheronnage
+- Commerce
+- Dressage
+- Équitation
+- Exploration
+- Archéologie
+- Transport de marchandises
+
+## **4. Les lieux et bâtiments du monde**
+
+[Reino-Arcano de Lorunnia Organization in Gondwana | World Anvil](https://images.openai.com/static-rsc-4/YSY_VqwhaYi8szRYQEJ0nMKTCYRChSsnk67olck-MUgMmNoi3Xf5mhqEc5kguxde405Lcdgh_-lXrZ3mMrNShtuW5BNJu2wAgoSEsrB4ZMzhTCe9JEueV1fwG9BoyLaCl7-x90siT-o1GNJLcJRcDNsVM04niHRK3c_FsZTjljQ?purpose=inline)
+
+[Mersch et ses alentours | Commune de Mersch](https://images.openai.com/static-rsc-4/4U3IANJxFg_9Smj6GMDu4SeyIxYC9ZKflqXSkAVLVrzs15ZDsY1G6eehVSPdxA0C03bEvVy1rGaOamId-mL3LqJvqb5H7iZPzIDJDdOsHzQ6aISjbKUZpiZIAI-h51ofs_XLKaMEKOwaiC0tgIe7lkdQR7XSytrw8ol5cVY0e5M?purpose=inline)
+
+[Obelisk in the Dwarven Mine - Concept Art - ChatbotsPlace](https://images.openai.com/static-rsc-4/_lnOGKXXzxah3Q7rsJnqxCd6I7YxBcwnH1X4HItvU97R8tJ_qPsY7okBqksjGVgSaIlI-v0B7Iq-_4k4c0oF4jyljg10L1PWRPealentdLYhW8zckc8s1HCwlwfrsbi7gNsvpvgDAdis_iFAKA9lXZDZImbDnpe7Otjk47JDS64?purpose=inline)
+
+12
+
+- Villages
+- Villes
+- Châteaux
+- Fermes
+- Tavernes
+- Auberges
+- Marchés
+- Forgerons
+- Moulins
+- Scieries
+- Mines
+- Grottes
+- Cimetières
+- Ruines
+- Tours de guet
+- Camps de bandits
+- Sanctuaires
+- Donjons
+- Ports
+- Ponts
+- Carrières
+- Campements de voyageurs
+
+## **5. Les montures et moyens de transport**
+
+[トレードウェイの山賊Retake版｜月刊ダンドラ](https://images.openai.com/static-rsc-4/SuY2qCWEJipWZcOStu2BMQn_PqBb1NlFnEaRSydglJbAP0a1zU6IqTAr9ADNQPDpwJCjKmVubv_92TW5z5SpcuhctVjYcZE7KPhj5fnhFCwswDi-2sRh6cN1fI656JYdoZucG9fV0S_P2YsDWYnjlmJDKYVxQuvxnHdmYVsIt5o?purpose=inline)
+
+[ultra Realistic medieval  - Free AI Image | Tensor.Art | Tensor.Art](https://images.openai.com/static-rsc-4/Myxz_b4joLvxU2gBQ7ACCGx9oZilaOvg1SAF_65hy1qATd-aOn8sERfrp1FLvJ-LsvrmsNVo34K_sSLe2tF5SWu2yY9p3wFdZkUQW7thYJeJgJDk92IEScK1BAbawGyN6OPePLGNvEJAGOs2mF-DHYiMOXFZ1O6LLOb-8-WInMc?purpose=inline)
+
+[Horse Barding](https://images.openai.com/static-rsc-4/5nG01EmjGEHRwUf_0MhivSrGLXOqKScSUpTCGO_k57NPH6QVzA6B5ao7onffCOUsWm2dibvfK9RezrunCQRVlDFbnOnrcwb69saXa58RfUKSDAhysZ-36ixA9hXyS6LKeaaTkElzIVqlMBzR8PexccXRqmrn7e1lH516-OLoZZA?purpose=inline)
+
+12
+
+- Chevaux de différentes races
+- Ânes
+- Mulets
+- Chariots
+- Charrettes
+- Diligences
+- Barques
+- Voiliers
+- Radeaux
+- Navires marchands
+- Traversées en ferry
+- Routes commerciales
+
+## **6. Les systèmes de progression**
+
+- Niveaux du personnage
+- Compétences
+- Talents
+- Expérience
+- Réputation
+- Honneur
+- Titres
+- Succès
+- Collections
+- Recettes à débloquer
+- Plans rares
+- Spécialisations
+- Maîtrise des métiers
+
+## **7. L'économie**
+
+[the-evolution-of-awnings](https://images.openai.com/static-rsc-4/H2spXO3eMK8o0uyUqB3d_Gy0Wf98r6ML47KoM0LdO8T7-tIFpob09lt9mJr1BR43wMQKjTYvAL5S8ViCEMCphYGUbXOA_Q_ZZXmOlTiOXj11gy9KGIbzGbbV6Z952O9pAZ8OnOVjjRFrnDV0SzdkeXyk6jfqkh1sdIkoDRLflfU?purpose=inline)
+
+[centurysigns.com](https://www.centurysigns.com/blogs/the-evolution-of-awnings?utm_source=chatgpt.com)
+
+- Monnaies
+- Marchands PNJ
+- Boutiques de joueurs
+- Marchés
+- Hôtel des ventes
+- Échanges entre joueurs
+- Contrats commerciaux
+- Commandes de villageois
+- Prix variables
+- Taxes
+- Banques
+- Coffres-forts
+- Locations de propriétés
+- Transport de marchandises
+- Système de réputation commerciale
+
+## **8. Les activités et loisirs**
+
+- Courses de chevaux
+- Tir à l'arc sportif
+- Concours de pêche
+- Concours agricoles
+- Foires
+- Festivals
+- Jeux de dés
+- Jeux de plateau
+- Musique
+- Danse
+- Collection d'objets
+- Chasse au trésor
+- Exploration de ruines
+- Concours d'artisanat
+- Décoration de maisons
+- Événements organisés par les joueurs
+
+## **9. Les clans et la vie politique**
+
+[The Hunter's Guild Organization in A World Lit Only By Fire | World Anvil](https://images.openai.com/static-rsc-4/hOfmvwT-cuhDo1okw33LH9Z8yPBNbbh_rlINK6i9aQN3j_KAZW64MEMJFxllvSXbfCg_m770sHW_wp8itnawRhfqLvEirQ5ieAukXbgKXBnSZ5liLGDWhNQNn31wrEiMYOCBo3iP3tww3I9mXNlIZwVCscuKV4igiD9j7bqfyik?purpose=inline)
+
+[The Cursed King | Story.com](https://images.openai.com/static-rsc-4/nPBszX7GhIc_xQLXYTXRVWx9g0hmm7ysohza38hkyHYXDcyLUIsFlxiJ2g3t7avz51Hm4qJMlMLEVdirMjZpbL7CIAdnhI4okRhk8dD4Jj6qp5hOvQPVrxp_kNveg43EPNvLd3_JAdGzF_owLiLFBkq6p2N7cUZh2ere1CukI04?purpose=inline)
+
+[Crimson Desert: Guía Completa del RPG que Rivaliza con Elden Ring (2026) - Arkaia Corporation](https://images.openai.com/static-rsc-4/LwnPB0siKSDD6wtK7W0Kv1f7W11WYvpOVbkjgsaxkO9uOB84192I_QxGWIdhUYEYO2TLv_AlmFwB4FapdOxCxfIQ_PTfd3Rhnnc6up_8OtYgB3iZQGO5fuEflnBe-lK-SPdRdZpGCIvHBYRjclhngpcG8pj1sAPclsimgcp_WaI?purpose=inline)
+
+9
+
+- Création de clans
+- Recrutement
+- Grades et responsabilités
+- Blasons
+- Drapeaux
+- Quartiers généraux
+- Alliances
+- Relations entre clans
+- Territoires
+- Avant-postes
+- Diplomatie
+- Taxes territoriales
+- Armées
+- Guerres de clans
+- Conseils de village
+- Élections de dirigeants
+
+## **10. Les événements du monde**
+
+- Marché itinérant
+- Fête des récoltes
+- Foire médiévale
+- Tempête
+- Inondation
+- Sécheresse
+- Hiver rigoureux
+- Migration animale
+- Invasion de créatures
+- Apparition d'un boss
+- Convoi marchand
+- Découverte d'une ruine
+- Trésor enfoui
+- Tournoi
+- Événement maritime
+- Événement saisonnier
+
+## **11. L'environnement et la météo**
+
+[霧の森の小道 ファンタジー背景素材（16:9 / 朝の森） - NeoAIWorks - BOOTH](https://images.openai.com/static-rsc-4/LRf5sprd615m2dVraja7qYn_tacY4Fs_gPCmnzeOvoKYx4S6sB1kRCyjsaBKFL4Zz-RfvCtFI1n9dBavWtFwDBIILLeGIzOF7XaaelvscO5CRc_kLll-DbKYizCy8y3qo1A4OR-3hNgasAcdKRkKruYWQq6uzmQt0W0__3Gmx0g?purpose=inline)
+
+[Adventures | The Editor's Wastebasket](https://images.openai.com/static-rsc-4/V6_gL5X3QURo40nksq8voFE3Ind1oD5Pe0FzUhaNXa4D-xCGB60lhOjuqhg7cK1cx3Ou7dn3-duBOotPy2BFtEBsUXlm8EfVz_2bQHlGnAygAHSbQZSE5r2vcUIHf0p4PB8moQ9FEruCqwlBCBA-shiy9TPcpQsHq8Jyd6sy-Z4?purpose=inline)
+
+[The Midnight Lodge | Dark Fantasy Hybrid Visual Art by Enrico Fossati](https://images.openai.com/static-rsc-4/eJqq9TJtGuvTHWcULRGlRnmhPNA_LBD0Db1uY-FDGDjZmeM_5g-CcaBGmA6-JtmuNJvkT0vm3km5pqcV4d0jhR62q3uixXUsLB8zpLQE7aayXJD6BtxCuewI-0YlmLrUURglozQAQMif-E5SNUo3Lv-Vjb0SfW7iIRrlzOud-BA?purpose=inline)
+
+12
+
+- Cycle jour/nuit
+- Saisons
+- Pluie
+- Orages
+- Brouillard
+- Neige
+- Vents
+- Températures
+- Rivières
+- Lacs
+- Cascades
+- Grottes
+- Végétation évolutive
+- Ressources renouvelables
+- Traces laissées par les joueurs
+- Faune avec des comportements naturels
+
+## **12. Les systèmes multijoueurs**
+
+- Amis
+- Groupes
+- Clans
+- Invitations
+- Échanges sécurisés
+- Commerce entre joueurs
+- Propriétés privées
+- Coffres partagés
+- Construction collaborative
+- Visites de maisons
+- Messagerie
+- Liste des joueurs
+- Gestion des permissions
+- Signalement et modération
+- Protection contre le harcèlement
+
+## **13. L'interface et le confort de jeu**
+
+- Inventaire
+- Banque
+- Carte
+- Boussole
+- Journal de quêtes
+- Livre de recettes
+- Menu des compétences
+- Menu des talents
+- Menu des clans
+- Menu de construction
+- Menu de commerce
+- Menu des animaux
+- Menu des montures
+- Paramètres graphiques
+- Commandes mobiles
+- Tutoriel et aide
+
+# **Mon bilan pour Wild Acres**
+
+Voilà comment je classerais tout le contenu à développer :
+
+## **Catalogue de développement**
+
+État de préparation des grandes catégories
+
+**Items et ressources**
+
+Déjà travaillé
+
+**Construction**
+
+Déjà travaillé
+
+**Ennemis**
+
+Déjà travaillé
+
+**PNJ et habitants**
+
+À créer
+
+**Animaux et faune**
+
+À créer
+
+**Métiers et activités**
+
+À détailler
+
+**Lieux et bâtiments**
+
+À détailler
+
+**Montures et transports**
+
+À créer
+
+**Progression**
+
+À détailler
+
+**Économie**
+
+À détailler
+
+**Clans et politique**
+
+À détailler
+
+**Événements**
+
+À créer
+
+**Environnement**
+
+À créer
+
+**Multijoueur et interface**
+
+À détailler
+
+## **Dans quel ordre continuer ?**
+
+Je te conseille de faire les choses dans cet ordre :
+
+1. **PNJ et habitants** : donner de la vie aux villages.
+2. **Animaux et faune** : peupler les biomes.
+3. **Métiers et activités** : donner des occupations aux joueurs.
+4. **Lieux et bâtiments** : enrichir l'exploration.
+5. **Montures et transports** : faciliter les déplacements.
+6. **Économie et progression** : créer une vraie durée de vie.
+7. **Clans et événements** : développer la dimension MMORPG.
+
+**Mon conseil :** ne cherche pas seulement à accumuler des objets. Chaque catégorie doit apporter de nouvelles possibilités de jeu. Wild Acres doit être un monde dans lequel un joueur peut passer des heures à vivre comme fermier, marchand, explorateur, artisan ou chef de clan sans être obligé de combattre.

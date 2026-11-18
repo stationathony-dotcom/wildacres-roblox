@@ -1,0 +1,44 @@
+Non, tout n'est pas encore là, mais j'ai comblé le plus gros trou, les créatures, en ne touchant qu'à des données. Aucun modèle 3D neuf : les créatures réutilisent les formes générées. Tout est enregistré dans Studio et dans Git (1927e78), mais rien n'a encore été testé en Play.
+
+Ennemis :
+- 39 nouvelles créatures tirées de listes ennemi.txt :
+  - humains : voleurs, pillards, mercenaires, gardes corrompus ;
+  - bêtes : ours brun, loup polaire, renard enragé, harpie, aigle géant ;
+  - forêt et marais : ent corrompu, gobelins des bois et des marais ;
+  - désert : ver des sables, basilic, momie ;
+  - toundra et nuit : géant de glace, loup des ombres, marcheur sans visage…
+- 3 nouveaux boss itinérants : Wyverne des neiges, Géant des montagnes, Bête des profondeurs.
+- Au total : 125 créatures, dont 16 boss.
+
+Butin propre à chaque créature : une matière qui a du sens selon la bête.
+- Exemples : soie des araignées, venin des serpents, crocs des loups, écailles des basilics, essence des spectres, cœur des golems, masques des bandits…
+- Chances de l'obtenir : 35 % sur une créature normale, 70 % sur une élite. Un boss en donne 2 ou 3.
+- Chaque matière sert à fabriquer sa propre pièce d'équipement, façon MMORPG :
+  - une arme, une armure, une coiffe ou un bijou selon la bête ;
+  - des stats qui montent avec son niveau et une rareté selon son rang ;
+  - fabriquée à la bonne station : enclume, bac de tannage, mé
+- Boss : ils lâchent en plus une âme rare (une fois sur deux), qui sert à fabriquer une pièce légendaire à l'enclume.
+
+Ce qui manque encore dans les .txt :
+- listes ennemi.txt : environ 250 entrées restent sans créaturres aquatiques, des dragonnets et griffons, des PNJ civils(médecins, prêtres, enfants…) et la faune passive (hérissons, blaireaux, canards…).
+- liste items.txt : environ 300 éléments sur 813, surtout des de décoration. Une partie existe sous un autre nom.
+- liste quetes.txt et idee.txt : ce sont des idées à piocher, une sélection est faite.
+
+Pour continuer au même faible coût, je peux faire une deuxième fournée de créatures (aquatiques, volants) puis les objets de construction et de décoration
+qui manquent. Pour envoyer sur GitHub : ! git push.
+
+✻ Baked for 6m 5s · done 16:04
+
+❯ go on
+
+Deuxième fournée : 36 créatures parmi celles qui manquent encomarais, nocturnes, maudites, géants. Chacune avec sa matière et sa pièce d'équipement.
+
+  Made 1 scratchpad edit +92, ran 1 shell command
+
+Je complète les règles du générateur pour ces nouvelles bêtes (plumes de griffon, pince de crabe, carapace de tortue, crin de kelpie…), puis je régénère.
+
+  Called roblox-studio 2 times, ran 2 shell commands
+
+Tout est cohérent : 130 créatures du bestiaire, toutes avec leur matière, et aucun objet de butin ni nom de liste inconnu.
+
+  Called roblox-studio, ran 1 shell command

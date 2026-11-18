@@ -1,0 +1,709 @@
+Pour **Wild Acres**, je te propose une très grande bibliothèque de quêtes : des petites missions de village, des quêtes d'exploration, de métier, de commerce, de construction, de clans, de justice, des événements et de longues histoires.
+
+L'objectif est que les joueurs aient toujours quelque chose à faire, même lorsqu'ils ont déjà atteint un niveau élevé. Certaines quêtes seront uniques, d'autres répétables, quotidiennes, hebdomadaires ou déclenchées aléatoirement.
+
+# **Bibliothèque de quêtes de Wild Acres**
+
+## **1. Quêtes de débutant et tutoriels**
+
+Ces quêtes permettent aux nouveaux joueurs de découvrir les systèmes du jeu.
+
+1. **Bienvenue à Valdor** — Parler au maire du village.
+2. **Un nouveau départ** — Récolter 10 morceaux de bois.
+3. **Premiers outils** — Fabriquer une hache rudimentaire.
+4. **La pierre est précieuse** — Récolter 10 pierres.
+5. **Un outil indispensable** — Fabriquer une pioche.
+6. **À la découverte du monde** — Visiter trois lieux proches.
+7. **Un endroit où dormir** — Construire un lit.
+8. **Un sac bien rempli** — Récupérer cinq ressources différentes.
+9. **Le premier repas** — Préparer un plat.
+10. **Un peu de monnaie** — Vendre trois objets au marchand.
+11. **Apprenti artisan** — Fabriquer un objet sur un établi.
+12. **La vie à la ferme** — Planter cinq graines.
+13. **Un compagnon de route** — Rencontrer un dresseur.
+14. **La première monture** — Découvrir les écuries.
+15. **Un monde immense** — Découvrir un nouveau biome.
+
+## **2. Quêtes de village et de PNJ**
+
+Des missions données par les habitants, marchands, artisans et responsables locaux.
+
+16. **Le boulanger est débordé** — Lui apporter 10 unités de farine.
+17. **Une livraison urgente** — Livrer du pain à une maison.
+18. **Le forgeron manque de métal** — Lui apporter 15 minerais de cuivre.
+19. **Le charpentier a besoin d'aide** — Lui fournir 20 planches.
+20. **Une maison à réparer** — Réparer plusieurs éléments d'une maison.
+21. **Le puits est vide** — Rapporter des seaux d'eau.
+22. **La fête approche** — Livrer des décorations au maire.
+23. **Un villageois a perdu ses affaires** — Retrouver trois objets perdus.
+24. **La livraison de tissus** — Apporter du tissu au tailleur.
+25. **Un repas pour les voyageurs** — Préparer cinq repas.
+26. **Le marchand impatient** — Livrer une commande avant son expiration.
+27. **Le garde fatigué** — Lui apporter de quoi manger.
+28. **Une lettre importante** — Transmettre une lettre à un autre village.
+29. **La vieille maison** — Retrouver les matériaux nécessaires à sa rénovation.
+30. **Le marché du dimanche** — Aider à installer les étals.
+31. **La cloche ne fonctionne plus** — Trouver les pièces nécessaires à sa réparation.
+32. **Un invité de marque** — Préparer une chambre pour un voyageur.
+33. **Le collectionneur** — Retrouver plusieurs objets anciens.
+34. **Une histoire oubliée** — Interroger les anciens du village.
+35. **La grande inauguration** — Participer à l'ouverture d'un nouveau bâtiment.
+
+## **3. Quêtes d'agriculture**
+
+Pour développer la compétence Agriculture.
+
+36. **Première récolte** — Récolter 10 blés.
+37. **Une ferme productive** — Cultiver cinq parcelles.
+38. **Le champ du boulanger** — Produire 30 blés.
+39. **Des légumes frais** — Récolter 10 carottes.
+40. **La saison des citrouilles** — Faire pousser cinq citrouilles.
+41. **Un jardin coloré** — Cultiver cinq plantes différentes.
+42. **Le fermier voisin** — Aider un autre agriculteur.
+43. **La terre fertile** — Améliorer plusieurs parcelles.
+44. **La récolte exceptionnelle** — Obtenir une récolte de grande qualité.
+45. **Une commande royale** — Produire une grande quantité de nourriture.
+46. **Les graines rares** — Trouver une variété de graine spéciale.
+47. **Le jardin botanique** — Cultiver toutes les plantes d'une collection.
+48. **L'irrigation** — Construire un système d'arrosage.
+49. **Le verger** — Planter cinq arbres fruitiers.
+50. **La grande moisson** — Récolter 100 ressources agricoles.
+
+## **4. Quêtes d'élevage et d'animaux**
+
+51. **Un premier animal** — Acheter ou obtenir un animal d'élevage.
+52. **La basse-cour** — Installer trois poules.
+53. **Des œufs frais** — Récolter 10 œufs.
+54. **La traite du matin** — Récolter du lait.
+55. **Le troupeau s'agrandit** — Posséder cinq animaux.
+56. **Un abri confortable** — Construire une étable.
+57. **Le mouton égaré** — Retrouver un mouton perdu.
+58. **La laine du village** — Fournir 20 unités de laine.
+59. **Le marchand de bétail** — Livrer deux animaux.
+60. **Le vétérinaire** — Apporter des produits de soin pour animaux.
+61. **Un élevage réputé** — Faire grandir plusieurs animaux.
+62. **Le concours agricole** — Présenter un animal au concours.
+63. **Le cheval sauvage** — Repérer un cheval dans la nature.
+64. **Une monture fidèle** — Apprendre à monter un cheval.
+65. **Le meilleur élevage** — Obtenir une récompense pour son élevage.
+
+## **5. Quêtes de bûcheronnage et de minage**
+
+66. **Le bois du charpentier** — Récolter 20 bûches.
+67. **Un arbre remarquable** — Trouver un arbre rare.
+68. **Le chantier du pont** — Fournir 50 bûches.
+69. **Le bois exotique** — Trouver une essence provenant d'un autre biome.
+70. **Le minerai de cuivre** — Récolter 15 minerais de cuivre.
+71. **Les profondeurs de la mine** — Explorer une mine abandonnée.
+72. **Le fer recherché** — Rapporter 20 minerais de fer.
+73. **La galerie oubliée** — Découvrir une ancienne galerie.
+74. **Le filon caché** — Trouver un gisement rare.
+75. **La forge du maître** — Livrer plusieurs métaux à un forgeron.
+76. **Les cristaux mystérieux** — Trouver trois cristaux rares.
+77. **La mine effondrée** — Retrouver une sortie dans une mine.
+78. **L'outil parfait** — Fabriquer un outil de qualité supérieure.
+79. **Le géologue** — Identifier plusieurs types de minerais.
+80. **Le trésor souterrain** — Découvrir un coffre dans une mine.
+
+## **6. Quêtes de pêche et de cuisine**
+
+81. **La première prise** — Pêcher un poisson.
+82. **Le repas du pêcheur** — Pêcher cinq poissons.
+83. **Un poisson exceptionnel** — Attraper une espèce rare.
+84. **La commande de l'auberge** — Livrer 10 poissons.
+85. **Les eaux profondes** — Pêcher dans une zone éloignée.
+86. **Le vieux pêcheur** — Retrouver sa canne perdue.
+87. **Le concours de pêche** — Participer à une compétition.
+88. **Le cuisinier débutant** — Préparer trois recettes.
+89. **Le banquet du village** — Préparer 20 portions de nourriture.
+90. **Une recette ancienne** — Retrouver une recette oubliée.
+91. **Le plat régional** — Préparer une spécialité d'un biome.
+92. **Le chef renommé** — Réussir plusieurs recettes difficiles.
+93. **Le garde affamé** — Préparer des repas pour les gardes.
+94. **Le festin du roi** — Fournir les ingrédients d'un grand banquet.
+95. **Le livre de cuisine** — Découvrir 10 recettes différentes.
+
+## **7. Quêtes d'artisanat et de construction**
+
+96. **Le premier établi** — Construire un établi.
+97. **Un toit au-dessus de la tête** — Construire une petite maison.
+98. **Le foyer chaleureux** — Installer une cheminée.
+99. **Une maison complète** — Installer un lit, une table et des chaises.
+100. **Le menuisier** — Fabriquer 20 planches.
+101. **Le maçon** — Fabriquer 30 blocs de pierre.
+102. **La grande grange** — Construire une grange.
+103. **Le pont du village** — Participer à la construction d'un pont.
+104. **Le moulin** — Construire ou réparer un moulin.
+105. **Le chantier communal** — Livrer des matériaux à un chantier.
+106. **Le mobilier du maire** — Fabriquer un ensemble de meubles.
+107. **La maison idéale** — Faire valider une construction par un PNJ.
+108. **L'artisan reconnu** — Fabriquer 10 objets différents.
+109. **Le bâtiment remarquable** — Participer à la construction d'un bâtiment public.
+110. **Le maître constructeur** — Construire une propriété répondant à plusieurs critères.
+
+## **8. Quêtes d'exploration et de découverte**
+
+111. **La carte incomplète** — Découvrir cinq zones inconnues.
+112. **Le vieux chemin** — Retrouver une route oubliée.
+113. **La tour abandonnée** — Explorer une ancienne tour.
+114. **Le pont détruit** — Trouver un autre passage vers une région.
+115. **La ruine mystérieuse** — Explorer des ruines anciennes.
+116. **Les traces dans la forêt** — Suivre une piste.
+117. **Le campement oublié** — Découvrir un ancien camp.
+118. **La grotte lumineuse** — Explorer une grotte particulière.
+119. **Le sommet du monde** — Atteindre le sommet d'une montagne.
+120. **Le phare isolé** — Trouver un phare éloigné.
+121. **Le désert perdu** — Découvrir une oasis.
+122. **La forêt rousse** — Trouver un arbre remarquable.
+123. **La toundra silencieuse** — Découvrir une ancienne installation.
+124. **Le marais brumeux** — Trouver un passage caché.
+125. **L'explorateur légendaire** — Découvrir tous les lieux d'une région.
+126. **Les frontières du monde** — Atteindre les limites explorables d'une île.
+127. **Une nouvelle terre** — Participer à la découverte d'un nouveau monde.
+128. **Les cartes du cartographe** — Cartographier plusieurs régions.
+129. **Le journal du voyageur** — Retrouver plusieurs pages d'un carnet.
+130. **Le secret de l'île** — Résoudre une énigme répartie sur plusieurs lieux.
+
+## **9. Quêtes de chasse et de créatures**
+
+131. **Les empreintes** — Identifier les traces d'un animal.
+132. **Le cerf de la forêt** — Observer un cerf rare.
+133. **Le prédateur nocturne** — Découvrir une créature active la nuit.
+134. **Le troupeau disparu** — Retrouver des animaux égarés.
+135. **Le nid abandonné** — Découvrir un nid inhabituel.
+136. **Le naturaliste** — Observer cinq espèces animales.
+137. **Le bestiaire** — Compléter dix entrées du bestiaire.
+138. **Le gardien des animaux** — Protéger des animaux d'une menace.
+139. **La créature des marais** — Découvrir une créature rare.
+140. **L'oiseau des montagnes** — Observer un oiseau difficile à trouver.
+141. **Le loup solitaire** — Retrouver un loup isolé.
+142. **Le grand ours** — Découvrir le territoire d'un ours.
+
+Je vais compléter la bibliothèque avec beaucoup plus de variété : **quêtes de métiers, d'exploration, de créatures, de justice, de commerce, de clans, d'événements, d'énigmes et de vie quotidienne**. Je continue la numérotation après les 142 premières idées pour que tu puisses tout regrouper dans un seul catalogue.
+
+Toutes les quêtes ne doivent pas forcément être des combats : dans Wild Acres, un joueur doit aussi pouvoir progresser en étant marchand, fermier, explorateur, artisan, éleveur ou chef de clan.
+
+# **Wild Acres — Grande bibliothèque de quêtes**
+
+## **9. Créatures, faune et observation**
+
+143. **Le renard curieux** — Observer un renard sans le faire fuir.
+144. **Le troupeau de cerfs** — Repérer un groupe de cerfs dans la forêt.
+145. **Le chant du hibou** — Trouver un hibou pendant la nuit.
+146. **Les oiseaux migrateurs** — Observer trois espèces d'oiseaux.
+147. **Le lac aux grenouilles** — Découvrir une zone où vivent de nombreuses grenouilles.
+148. **Le terrier mystérieux** — Identifier l'animal qui habite un terrier.
+149. **Le biologiste amateur** — Photographier ou enregistrer dix observations d'animaux.
+150. **Le vieux castor** — Retrouver un barrage de castors.
+151. **Le nid de l'aigle** — Localiser un nid en altitude.
+152. **La tanière des loups** — Découvrir une tanière et en noter l'emplacement.
+153. **Le papillon rare** — Trouver un papillon particulier.
+154. **Les lucioles** — Observer un rassemblement de lucioles.
+155. **La migration des troupeaux** — Suivre un troupeau pendant son déplacement.
+156. **L'animal blessé** — Apporter des fournitures au soigneur pour aider un animal.
+157. **Le gardien du refuge** — Nourrir et surveiller les animaux d'un refuge.
+158. **Le concours du bestiaire** — Présenter les observations de plusieurs espèces.
+159. **Une espèce introuvable** — Découvrir une espèce encore inconnue du joueur.
+160. **Le maître naturaliste** — Compléter une collection d'observations d'un biome.
+
+## **10. Donjons, ruines et boss**
+
+161. **L'entrée scellée** — Trouver comment ouvrir l'entrée d'un ancien donjon.
+162. **Les couloirs oubliés** — Explorer toutes les salles d'un donjon.
+163. **Le mécanisme ancien** — Résoudre une énigme mécanique.
+164. **Les trois leviers** — Trouver et activer trois mécanismes dans le bon ordre.
+165. **La salle des symboles** — Reconstituer un code à partir de fresques.
+166. **Le coffre du gardien** — Trouver le coffre caché d'un donjon.
+167. **Le gardien de pierre** — Affronter ou contourner un gardien ancien.
+168. **La crypte silencieuse** — Explorer une crypte abandonnée.
+169. **La bibliothèque interdite** — Retrouver un manuscrit dans des ruines.
+170. **Le temple enfoui** — Découvrir l'entrée d'un temple sous le sable.
+171. **La porte des anciens** — Réunir les éléments nécessaires à son ouverture.
+172. **L'épreuve du courage** — Réussir une épreuve dans un donjon.
+173. **L'épreuve de sagesse** — Résoudre une série d'énigmes.
+174. **L'épreuve d'agilité** — Traverser une salle d'obstacles.
+175. **Le gardien du désert** — Découvrir le repaire d'un boss du désert.
+176. **Le seigneur des marais** — Retrouver la source d'une étrange activité dans les marais.
+177. **Le géant de glace** — Explorer les terres d'une créature légendaire.
+178. **Le dernier mécanisme** — Activer le mécanisme final d'un temple.
+179. **La salle du trésor** — Atteindre la salle secrète d'un donjon.
+180. **Les explorateurs réunis** — Terminer un donjon avec plusieurs joueurs.
+
+## **11. Quêtes nocturnes et phénomènes mystérieux**
+
+181. **La lumière dans la forêt** — Suivre une lumière aperçue entre les arbres.
+182. **Les bruits du marais** — Identifier l'origine de sons étranges.
+183. **Le voyageur nocturne** — Retrouver un voyageur disparu pendant la nuit.
+184. **La silhouette sur la colline** — Découvrir qui se tient près d'une vieille tour.
+185. **Les lanternes éteintes** — Rallumer plusieurs lanternes sur une route.
+186. **Le brouillard inhabituel** — Trouver l'origine d'un brouillard étrange.
+187. **La maison abandonnée** — Examiner une habitation désertée.
+188. **Le cercle de pierres** — Découvrir la fonction d'un cercle ancien.
+189. **Les traces lumineuses** — Suivre des marques mystérieuses.
+190. **La créature des ruines** — Identifier une présence dans des ruines.
+191. **La cloche de minuit** — Découvrir pourquoi une cloche sonne seule.
+192. **Le lac brillant** — Observer un phénomène lumineux sur l'eau.
+193. **La nuit sans oiseaux** — Découvrir pourquoi les oiseaux ont quitté une zone.
+194. **Le gardien endormi** — Réveiller un ancien gardien par une énigme.
+195. **Le secret de la pleine lune** — Réunir des indices lors d'une nuit particulière.
+
+## **12. Quêtes de vol, de contrebande et de criminalité**
+
+Ces quêtes peuvent avoir des conséquences : témoins, réputation, primes, recherches et interventions des gardes.
+
+196. **Le colis discret** — Transporter un colis sans attirer l'attention.
+197. **La cargaison suspecte** — Découvrir la provenance d'une marchandise douteuse.
+198. **Le marchand clandestin** — Trouver un vendeur caché.
+199. **La marchandise perdue** — Retrouver un objet volé.
+200. **Le coffre disparu** — Enquêter sur la disparition d'un coffre.
+201. **Une affaire risquée** — Livrer un objet à un personnage recherché.
+202. **Le passage secret** — Découvrir un passage utilisé par des contrebandiers.
+203. **La dette du brigand** — Retrouver un objet que doit un hors-la-loi.
+204. **Le repaire abandonné** — Explorer une ancienne cachette de bandits.
+205. **La filière de contrebande** — Découvrir plusieurs intermédiaires d'un réseau clandestin.
+206. **Le receleur** — Identifier un marchand qui vend des biens volés.
+207. **La prime importante** — Retrouver un individu recherché.
+208. **Une réputation dangereuse** — Accomplir plusieurs missions pour une organisation criminelle fictive.
+209. **Le butin partagé** — Répartir une récompense entre plusieurs membres d'un groupe.
+210. **La cargaison interdite** — Découvrir et signaler une cargaison illicite.
+211. **Le témoin silencieux** — Retrouver un témoin d'un vol.
+212. **Le propriétaire lésé** — Restituer des objets à leur propriétaire.
+213. **Le marché de nuit** — Découvrir un marché qui n'apparaît qu'à certaines heures.
+214. **Le chef des brigands** — Retrouver le responsable d'un groupe de hors-la-loi.
+215. **La dernière affaire** — Choisir entre rendre un butin ou le conserver.
+
+## **13. Quêtes de justice, gardes et réputation**
+
+216. **Le recrutement** — Se présenter auprès du capitaine de la garde.
+217. **La patrouille du matin** — Effectuer une patrouille dans le village.
+218. **La route dangereuse** — Escorter un marchand sur une route.
+219. **Le vol au marché** — Retrouver le responsable d'un vol.
+220. **Le témoin important** — Recueillir le témoignage d'un villageois.
+221. **Le fugitif** — Retrouver une personne recherchée.
+222. **La récompense promise** — Rapporter la preuve d'une mission accomplie.
+223. **Une garde renforcée** — Surveiller une zone pendant une durée définie.
+224. **Le convoi royal** — Escorter une cargaison importante.
+225. **L'apprenti shérif** — Réussir plusieurs missions de justice.
+226. **Le tribunal du village** — Participer à une audience fictive.
+227. **Une erreur judiciaire** — Retrouver les preuves permettant d'innocenter un personnage.
+228. **Le village inquiet** — Rassurer les habitants après plusieurs incidents.
+229. **La prisonnière clé** — Retrouver un document nécessaire à la résolution d'une affaire.
+230. **Le protecteur de Valdor** — Atteindre un niveau élevé de réputation auprès de la garde.
+
+## **14. Quêtes de commerce et d'économie**
+
+231. **Le premier contrat** — Accepter et terminer une commande commerciale.
+232. **Les prix du marché** — Comparer les prix de trois villages.
+233. **Le marchand itinérant** — Livrer une marchandise dans un autre biome.
+234. **Une bonne affaire** — Trouver une offre intéressante.
+235. **Les réserves du village** — Fournir des ressources à un entrepôt.
+236. **Le convoi commercial** — Accompagner plusieurs marchands.
+237. **Le comptable** — Retrouver les erreurs d'un registre commercial.
+238. **Le marché prospère** — Contribuer à augmenter les stocks d'un marché.
+239. **Le fournisseur officiel** — Obtenir un contrat régulier avec un commerçant.
+240. **Une commande sur mesure** — Fabriquer un objet demandé par un client.
+241. **Les marchandises rares** — Trouver cinq produits difficiles à obtenir.
+242. **Le commerce entre biomes** — Échanger des ressources provenant de trois biomes.
+243. **La boutique du joueur** — Ouvrir une boutique personnelle.
+244. **Le premier client** — Réaliser une vente dans sa boutique.
+245. **Le commerçant réputé** — Atteindre un certain niveau de réputation commerciale.
+246. **La caravane perdue** — Retrouver une cargaison égarée.
+247. **Le contrat royal** — Fournir des marchandises à un représentant royal.
+248. **La foire commerciale** — Installer un étal lors d'une foire.
+249. **Le grand négociant** — Conclure plusieurs contrats importants.
+250. **La route des marchands** — Réaliser des livraisons dans tous les villages connus.
+
+## **15. Quêtes de transport et de voyage**
+
+251. **Le premier voyage** — Visiter un village éloigné.
+252. **Le cheval de bât** — Transporter une cargaison avec un animal de bât.
+253. **Une selle adaptée** — Fabriquer ou acheter une selle.
+254. **Le voyageur expérimenté** — Parcourir une longue distance.
+255. **La route effondrée** — Trouver un itinéraire alternatif.
+256. **Le passeur** — Transporter plusieurs voyageurs en bateau.
+257. **La traversée** — Rejoindre une autre partie de l'île par la mer.
+258. **Le bateau en panne** — Retrouver le matériel nécessaire à sa réparation.
+259. **Le chantier naval** — Fournir des matériaux pour construire un bateau.
+260. **Le capitaine** — Effectuer plusieurs voyages maritimes.
+261. **La carte marine** — Découvrir plusieurs points de navigation.
+262. **Les îles lointaines** — Explorer une île éloignée.
+263. **La diligence** — Organiser un voyage en diligence.
+264. **Le relais routier** — Trouver ou construire un point de repos sur une route.
+265. **Le grand explorateur** — Visiter tous les moyens de transport disponibles.
+
+## **16. Quêtes de clans et de coopération**
+
+266. **Un groupe se forme** — Rejoindre ou créer un clan.
+267. **Le premier quartier général** — Définir un lieu de rassemblement.
+268. **Les couleurs du clan** — Choisir un emblème et des couleurs.
+269. **Le coffre commun** — Déposer des ressources dans le coffre du clan.
+270. **Le chantier collectif** — Construire un bâtiment avec des membres du clan.
+271. **La mission commune** — Accomplir une quête à trois joueurs ou plus.
+272. **Le messager du clan** — Transmettre un message à un autre clan.
+273. **Le recrutement** — Accueillir de nouveaux membres.
+274. **Le tournoi amical** — Organiser une compétition entre membres.
+275. **La réserve collective** — Réunir des ressources pour le clan.
+276. **Le chef responsable** — Répartir des tâches entre les membres.
+277. **La réunion** — Organiser une réunion dans le quartier général.
+278. **L'ambassadeur** — Rencontrer un autre clan.
+279. **L'accord commercial** — Échanger des ressources avec un autre clan.
+280. **Le pacte d'amitié** — Conclure une alliance.
+281. **La défense du domaine** — Protéger une zone appartenant au clan.
+282. **Le monument du clan** — Construire un monument collectif.
+283. **La grande expédition** — Explorer un donjon en groupe.
+284. **Le clan réputé** — Obtenir une reconnaissance auprès de plusieurs villages.
+285. **La légende du clan** — Réussir une longue série de missions collectives.
+
+## **17. Quêtes de territoire, armée et stratégie**
+
+286. **Le premier recrue** — Recruter un premier soldat fictif.
+287. **La caserne** — Construire une caserne.
+288. **L'équipement des recrues** — Fournir du matériel à plusieurs recrues.
+289. **Le quartier-maître** — Organiser les réserves de l'armée.
+290. **Les exercices** — Organiser une activité d'entraînement.
+291. **La tour de guet** — Construire un poste d'observation.
+292. **La frontière** — Explorer les limites d'un territoire.
+293. **Le poste avancé** — Installer un campement dans une zone éloignée.
+294. **La carte stratégique** — Cartographier un territoire.
+295. **Le conseil des officiers** — Réunir plusieurs responsables.
+296. **Le ravitaillement** — Apporter des provisions à un camp.
+297. **La bannière** — Fabriquer une bannière pour une armée.
+298. **Le territoire contesté** — Participer à une mission de négociation territoriale.
+299. **Le traité de paix** — Contribuer à conclure un accord entre deux clans.
+300. **Le commandant** — Diriger une mission collective.
+
+## **18. Quêtes sociales et vie quotidienne**
+
+301. **Une nouvelle rencontre** — Faire connaissance avec cinq habitants.
+302. **Le bon voisin** — Aider un joueur à terminer une tâche.
+303. **Un cadeau inattendu** — Offrir un objet à un autre joueur.
+304. **La fête des voisins** — Participer à une fête de village.
+305. **Le joueur généreux** — Donner plusieurs ressources à des joueurs.
+306. **Le guide touristique** — Faire découvrir un village à un nouveau joueur.
+307. **La soirée à l'auberge** — Participer à une activité sociale.
+308. **Le conteur** — Écouter trois histoires racontées par des PNJ.
+309. **La chasse au trésor collective** — Résoudre une énigme avec d'autres joueurs.
+310. **Le concours de décoration** — Présenter une maison décorée.
+311. **Le mariage des voisins** — Aider à préparer une célébration fictive.
+312. **Le musicien du village** — Participer à une représentation.
+313. **Le tournoi de lancer** — Participer à un jeu d'adresse.
+314. **Le champion du village** — Remporter une compétition locale.
+315. **La grande fête** — Participer à plusieurs activités d'un festival.
+
+## **19. Quêtes d'événements et de festivals**
+
+316. **La fête des récoltes** — Livrer des produits agricoles.
+317. **Le marché d'hiver** — Préparer un étal de saison.
+318. **La chasse aux œufs** — Trouver des objets cachés dans le village.
+319. **Le festival des lanternes** — Allumer des lanternes dans plusieurs rues.
+320. **Le concours de cuisine** — Préparer un plat pour un jury.
+321. **La course des montures** — Participer à une course.
+322. **La foire artisanale** — Exposer trois objets fabriqués.
+323. **La fête de la pêche** — Réussir un défi de pêche.
+324. **Le concours de construction** — Construire selon un thème imposé.
+325. **La fête de la musique** — Trouver les musiciens dispersés dans le village.
+326. **Le festival des animaux** — Présenter des animaux d'élevage.
+327. **La journée des explorateurs** — Découvrir plusieurs lieux signalés.
+328. **Le tournoi des clans** — Participer à des épreuves entre clans.
+329. **La grande parade** — Préparer une monture ou un char décoré.
+330. **Le carnaval des villages** — Obtenir plusieurs éléments de costume.
+331. **Le concours de décoration hivernale** — Décorer une habitation.
+332. **Le repas communautaire** — Apporter des ingrédients pour un banquet.
+333. **La course aux trésors** — Trouver plusieurs coffres temporaires.
+334. **Le festival des métiers** — Présenter ses compétences professionnelles.
+335. **La célébration du royaume** — Participer à une grande fête organisée sur plusieurs villages.
+
+## **20. Quêtes propres aux biomes**
+
+### **Prairie**
+
+336. **Les fleurs des champs** — Récolter plusieurs variétés de fleurs.
+337. **La ferme abandonnée** — Retrouver les propriétaires d'une ferme déserte.
+338. **Le vieux moulin** — Rassembler les pièces nécessaires à sa réparation.
+339. **La colline aux moutons** — Retrouver un troupeau égaré.
+340. **Le puits de la prairie** — Explorer un ancien puits.
+
+### **Forêt rousse**
+
+341. **Les feuilles éternelles** — Trouver une plante particulière.
+342. **La cabane du bûcheron** — Découvrir une cabane isolée.
+343. **Le sentier des champignons** — Trouver plusieurs champignons différents.
+344. **Le grand arbre** — Découvrir un arbre remarquable.
+345. **Le camp des forestiers** — Réapprovisionner un campement.
+
+### **Désert**
+
+346. **Les traces dans le sable** — Suivre des empreintes.
+347. **L'oasis oubliée** — Découvrir une oasis.
+348. **Le puits ensablé** — Trouver comment le remettre en état.
+349. **La caravane disparue** — Retrouver une caravane.
+350. **Le tombeau des dunes** — Découvrir une ancienne tombe.
+
+### **Toundra**
+
+351. **La cabane gelée** — Trouver un moyen de rejoindre une cabane isolée.
+352. **Les provisions du nord** — Livrer des denrées à un camp.
+353. **Le lac gelé** — Découvrir les secrets d'un lac.
+354. **Le refuge de montagne** — Réparer un refuge.
+355. **Les lumières du nord** — Observer un phénomène lumineux inhabituel.
+
+## **21. Quêtes de collection et de fabrication avancée**
+
+356. **La collection de minerais** — Obtenir un exemplaire de chaque minerai courant.
+357. **Le collectionneur de bois** — Réunir toutes les essences de bois.
+358. **Le musée du village** — Donner des objets intéressants à un musée.
+359. **Les pièces anciennes** — Rassembler plusieurs pièces de monnaie anciennes.
+360. **Le catalogue des meubles** — Fabriquer plusieurs types de meubles.
+361. **L'armurerie complète** — Fabriquer plusieurs équipements différents.
+362. **Le maître du cuir** — Fabriquer plusieurs objets en cuir.
+363. **L'atelier du verrier** — Produire différents objets en verre.
+364. **La collection de potions** — Fabriquer plusieurs préparations fictives.
+365. **Le tisserand** — Produire plusieurs types de tissus.
+366. **Le joaillier** — Fabriquer plusieurs bijoux.
+367. **Le décorateur** — Réunir une collection de décorations.
+368. **Le restaurateur** — Restaurer un objet ancien.
+369. **L'objet parfait** — Fabriquer un objet de qualité exceptionnelle.
+370. **L'inventaire du musée** — Compléter une collection d'objets rares.
+
+## **22. Quêtes de mystères et de longues histoires**
+
+371. **La lettre sans signature** — Découvrir qui a envoyé une lettre mystérieuse.
+372. **Le nom effacé** — Identifier un personnage dont le nom a disparu des archives.
+373. **Les trois cartes** — Réunir trois morceaux d'une carte ancienne.
+374. **Le journal du roi** — Retrouver plusieurs pages d'un journal royal.
+375. **Le secret de Valdor** — Découvrir l'origine du village.
+376. **La tour des anciens** — Comprendre le rôle d'une tour abandonnée.
+377. **La tombe inconnue** — Découvrir à qui appartient une tombe ancienne.
+378. **Le symbole mystérieux** — Retrouver plusieurs représentations d'un symbole.
+379. **L'énigme des statues** — Trouver l'ordre correct de plusieurs statues.
+380. **Le passage oublié** — Découvrir un passage caché entre deux régions.
+381. **L'héritage perdu** — Retrouver plusieurs objets appartenant à une famille.
+382. **Les héritiers** — Déterminer qui doit recevoir un domaine.
+383. **Le château silencieux** — Explorer un château désert.
+384. **Le pacte ancien** — Retrouver les termes d'un ancien accord.
+385. **Les quatre sceaux** — Découvrir quatre sceaux répartis dans le monde.
+386. **La bibliothèque secrète** — Ouvrir une salle cachée dans une bibliothèque.
+387. **Le dernier cartographe** — Retrouver les cartes d'un ancien explorateur.
+388. **Le royaume disparu** — Découvrir les vestiges d'un royaume oublié.
+389. **La vérité sur le gardien** — Comprendre l'histoire d'une créature légendaire.
+390. **Les chroniques de Wild Acres** — Terminer une grande série de quêtes historiques.
+
+## **23. Quêtes quotidiennes et hebdomadaires**
+
+Ces missions peuvent être renouvelées automatiquement pour donner régulièrement des objectifs aux joueurs.
+
+391. **La tournée du boulanger** — Livrer du pain à cinq habitants.
+392. **Le bois du jour** — Récolter une quantité définie de bois.
+393. **La commande du forgeron** — Fournir les minerais demandés.
+394. **Le repas quotidien** — Préparer trois plats.
+395. **La pêche matinale** — Rapporter cinq poissons.
+396. **Le marché approvisionné** — Remplir les stocks d'un marchand.
+397. **Le facteur** — Distribuer plusieurs lettres.
+398. **Le garde de service** — Effectuer une patrouille.
+399. **L'animal du jour** — Nourrir ses animaux.
+400. **Le jardinier** — Arroser et récolter ses cultures.
+401. **Le voyageur** — Visiter un lieu indiqué.
+402. **Le petit artisan** — Fabriquer trois objets.
+403. **Le client mystère** — Répondre à une commande aléatoire.
+404. **La livraison express** — Terminer une livraison dans le temps imparti.
+405. **Le service communautaire** — Aider un autre joueur.
+406. **Le défi du mineur** — Trouver un minerai choisi aléatoirement.
+407. **Le défi du cuisinier** — Réaliser une recette tirée au sort.
+408. **La collecte hebdomadaire** — Réunir plusieurs ressources différentes.
+409. **Le grand voyage hebdomadaire** — Visiter trois régions éloignées.
+410. **Le contrat de la semaine** — Terminer une commande particulièrement importante.
+
+## **24. Quêtes de métiers spécialisés**
+
+411. **L'apprenti tailleur** — Fabriquer un vêtement simple.
+412. **La commande du seigneur** — Fabriquer un vêtement de cérémonie.
+413. **Le tanneur** — Transformer plusieurs peaux en cuir.
+414. **Le maître tanneur** — Produire du cuir de qualité supérieure.
+415. **Le verrier débutant** — Fabriquer une bouteille en verre.
+416. **Le vitrier** — Installer des fenêtres sur une maison.
+417. **Le joaillier débutant** — Fabriquer un bijou.
+418. **La commande de la noblesse** — Créer un bijou personnalisé.
+419. **Le relieur** — Fabriquer un livre.
+420. **Le copiste** — Reproduire plusieurs pages d'un manuscrit.
+421. **L'enlumineur** — Décorer un livre ancien.
+422. **Le potier** — Fabriquer cinq objets en argile.
+423. **Le maître potier** — Réaliser un objet décoratif rare.
+424. **Le sculpteur** — Créer une statue.
+425. **Le peintre** — Décorer plusieurs panneaux.
+426. **Le teinturier** — Produire plusieurs couleurs de tissu.
+427. **Le fabricant de bougies** — Produire des bougies pour une auberge.
+428. **Le fabricant de cordes** — Fournir des cordages à un chantier naval.
+429. **L'horloger** — Restaurer un mécanisme ancien.
+430. **L'artisan polyvalent** — Fabriquer un objet provenant de cinq métiers différents.
+
+## **25. Quêtes liées aux maisons et aux propriétés**
+
+431. **Le premier terrain** — Obtenir une parcelle constructible.
+432. **Les fondations** — Préparer le terrain d'une maison.
+433. **Une maison accueillante** — Installer les éléments essentiels d'une habitation.
+434. **Le jardin privé** — Aménager un jardin autour de sa maison.
+435. **La clôture** — Délimiter sa propriété.
+436. **Le portail** — Installer une entrée sur son terrain.
+437. **La réserve personnelle** — Installer des coffres de rangement.
+438. **La maison sécurisée** — Installer un système de protection autorisé par le jeu.
+439. **Le voisinage** — Faire connaissance avec les propriétaires voisins.
+440. **Le quartier agréable** — Améliorer plusieurs éléments de son quartier.
+441. **Le propriétaire responsable** — Entretenir sa propriété.
+442. **Le domaine agricole** — Installer une exploitation sur son terrain.
+443. **La résidence secondaire** — Obtenir un second lieu de résidence, si le système le permet.
+444. **Le manoir** — Construire une grande demeure répondant à des critères précis.
+445. **L'architecte du royaume** — Faire reconnaître plusieurs constructions.
+446. **Le propriétaire généreux** — Mettre une installation à disposition d'autres joueurs.
+447. **La maison d'hôtes** — Aménager des chambres pour les voyageurs.
+448. **Le domaine prospère** — Posséder une propriété avec plusieurs installations fonctionnelles.
+449. **La restauration du patrimoine** — Rénover une bâtisse ancienne.
+450. **Le village modèle** — Participer à la rénovation d'un village entier.
+
+## **26. Quêtes de compagnons et de dressage**
+
+451. **La confiance du cheval** — Gagner la confiance d'un cheval.
+452. **Le premier entraînement** — Faire effectuer un exercice à sa monture.
+453. **La monture endurante** — Parcourir une longue distance avec son cheval.
+454. **Le cheval bien équipé** — Installer une selle et des sacoches.
+455. **Le concours équestre** — Participer à une épreuve avec sa monture.
+456. **Le chien fidèle** — Apprendre une commande à son chien.
+457. **Le chien de berger** — Guider un troupeau avec un chien.
+458. **Le compagnon explorateur** — Découvrir une région avec son compagnon.
+459. **Le compagnon retrouvé** — Retrouver un compagnon qui s'est éloigné.
+460. **Le dresseur débutant** — Apprendre plusieurs commandes à un animal.
+461. **La ménagerie** — Posséder plusieurs espèces de compagnons.
+462. **Le compagnon rare** — Trouver un animal particulièrement rare.
+463. **Le gardien du refuge** — Aider un refuge à accueillir de nouveaux animaux.
+464. **Le concours de dressage** — Présenter un compagnon devant un jury.
+465. **Le lien exceptionnel** — Atteindre un haut niveau de confiance avec un compagnon.
+
+## **27. Quêtes de navigation et de vie maritime**
+
+466. **Le marin débutant** — Effectuer une première sortie en bateau.
+467. **Le port animé** — Aider un port à préparer une livraison.
+468. **Le pêcheur côtier** — Pêcher dans plusieurs zones côtières.
+469. **L'épave mystérieuse** — Découvrir l'emplacement d'une épave.
+470. **Le coffre englouti** — Retrouver un coffre au fond de l'eau.
+471. **La balise maritime** — Réparer une balise de navigation.
+472. **Le phare éteint** — Rallumer un phare.
+473. **Le navigateur** — Atteindre trois destinations maritimes.
+474. **La cargaison mouillée** — Retrouver et livrer une cargaison endommagée.
+475. **Le chantier du port** — Fournir les matériaux nécessaires à l'agrandissement du port.
+476. **La flotte commerciale** — Organiser plusieurs livraisons en bateau.
+477. **Le capitaine expérimenté** — Réussir un voyage maritime difficile.
+478. **La crique cachée** — Découvrir un passage côtier secret.
+479. **Les îlots oubliés** — Visiter plusieurs petites îles.
+480. **La carte des marées** — Étudier les changements d'accès à certaines zones.
+
+## **28. Quêtes de connaissance et de réputation**
+
+481. **L'élève du sage** — Écouter plusieurs leçons d'un personnage érudit.
+482. **Les langues anciennes** — Découvrir la signification de symboles anciens.
+483. **Le maître des cartes** — Compléter une carte régionale.
+484. **L'histoire de la prairie** — Interroger les habitants sur l'histoire locale.
+485. **Les archives royales** — Consulter plusieurs documents anciens.
+486. **Le chercheur** — Réunir des informations sur une créature.
+487. **Le professeur** — Aider un PNJ à enseigner une compétence.
+488. **L'école du village** — Fournir du matériel à une école.
+489. **Le jeune apprenti** — Accompagner un PNJ dans l'apprentissage d'un métier.
+490. **Le concours de connaissances** — Répondre correctement à plusieurs questions.
+491. **Le bibliothécaire** — Classer des livres dans une bibliothèque.
+492. **Le livre manquant** — Retrouver un ouvrage emprunté.
+493. **Le chroniqueur** — Consigner les événements importants d'un village.
+494. **La réputation locale** — Gagner la confiance des habitants.
+495. **L'ami des villages** — Être reconnu dans plusieurs villages.
+
+## **29. Quêtes de défis et de records**
+
+496. **Le long voyage** — Parcourir une distance déterminée sans utiliser de téléportation.
+497. **La récolte record** — Obtenir une récolte particulièrement importante.
+498. **Le mineur infatigable** — Découvrir plusieurs gisements en une expédition.
+499. **Le pêcheur patient** — Réussir plusieurs prises consécutives.
+500. **Le maître artisan** — Fabriquer une série d'objets sans échec.
+501. **Le bâtisseur méthodique** — Construire un bâtiment à partir d'un plan.
+502. **Le cavalier rapide** — Terminer un parcours chronométré à cheval.
+503. **Le navigateur prudent** — Atteindre une destination sans perdre sa cargaison.
+504. **Le collectionneur complet** — Compléter une collection définie.
+505. **Le survivant de l'hiver** — Réussir une expédition dans la toundra.
+506. **Le marcheur des marais** — Traverser une zone marécageuse en trouvant le bon itinéraire.
+507. **Le spécialiste des biomes** — Réaliser une activité dans chaque biome.
+508. **Le polyvalent** — Accomplir une mission dans cinq compétences différentes.
+509. **Le travail d'équipe** — Terminer un défi avec plusieurs joueurs.
+510. **Le défi du maître** — Réaliser une mission avancée dans un délai limité.
+
+## **30. Quêtes aléatoires et générées par le monde**
+
+Ces quêtes sont particulièrement utiles pour que le monde reste vivant. Le système peut sélectionner des missions à partir de PNJ, de lieux, de ressources et d'événements.
+
+511. **Le village en manque de bois** — Un village demande une quantité aléatoire de bois.
+512. **La commande surprise** — Un artisan demande un objet aléatoire.
+513. **Le voyageur égaré** — Un PNJ apparaît dans une zone et cherche son village.
+514. **Le marchand ambulant** — Un marchand demande une escorte.
+515. **La ferme en difficulté** — Une exploitation a besoin d'aide.
+516. **Le troupeau dispersé** — Des animaux se sont éloignés de leur enclos.
+517. **Le chantier urgent** — Un bâtiment doit être réparé rapidement.
+518. **La route encombrée** — Un passage doit être dégagé.
+519. **Le coffre découvert** — Un PNJ a trouvé un coffre et demande de l'aide pour l'identifier.
+520. **La récolte imprévue** — Une récolte exceptionnelle nécessite des bras supplémentaires.
+521. **La cargaison perdue** — Une livraison a disparu sur une route.
+522. **La mine abandonnée** — Une mine a besoin d'être explorée.
+523. **Le campement temporaire** — Des voyageurs ont besoin d'un abri.
+524. **Le visiteur mystérieux** — Un personnage inconnu arrive dans un village.
+525. **La demande du maire** — Le maire choisit une mission selon les besoins du village.
+526. **Le besoin du marchand** — Un marchand réclame le produit dont son stock manque.
+527. **Le signal du garde** — Une patrouille demande de l'aide à proximité.
+528. **La découverte rare** — Une ressource spéciale apparaît quelque part sur l'île.
+529. **La rumeur du jour** — Un PNJ donne un indice menant vers un lieu aléatoire.
+530. **L'événement imprévu** — Un événement local déclenche une mission collective.
+
+## **31. Quêtes de coopération entre joueurs**
+
+531. **Deux artisans** — Deux joueurs doivent fabriquer ensemble un objet.
+532. **La grande livraison** — Plusieurs joueurs réunissent une cargaison.
+533. **L'expédition organisée** — Un groupe visite plusieurs lieux.
+534. **La ferme collective** — Des joueurs travaillent sur une exploitation commune.
+535. **Le chantier partagé** — Plusieurs joueurs contribuent à une construction.
+536. **Le convoi sécurisé** — Un groupe accompagne une caravane.
+537. **La chasse aux indices** — Chaque joueur trouve une partie de l'énigme.
+538. **Le donjon coordonné** — Les joueurs doivent résoudre ensemble des mécanismes.
+539. **Les métiers complémentaires** — Plusieurs métiers doivent produire un objet final.
+540. **Le sauvetage du voyageur** — Un groupe doit retrouver un PNJ perdu.
+541. **Le marché collectif** — Des joueurs fournissent plusieurs produits à un marché.
+542. **L'alliance temporaire** — Deux clans doivent réussir une mission commune.
+543. **Le festival organisé** — Des joueurs préparent différentes activités.
+544. **La grande expédition maritime** — Plusieurs équipages visitent des îles.
+545. **Les gardiens du village** — Plusieurs joueurs assurent ensemble la protection d'un village fictif.
+
+## **32. Quêtes secrètes et découvertes cachées**
+
+546. **Le coffre sans serrure** — Trouver un coffre qui s'ouvre avec une énigme.
+547. **Le message dans l'arbre** — Découvrir une inscription cachée dans la forêt.
+548. **La pierre gravée** — Identifier une inscription ancienne.
+549. **Le passage derrière la cascade** — Découvrir une zone cachée.
+550. **Le tableau incomplet** — Retrouver les morceaux d'une illustration ancienne.
+551. **La statue tournée** — Résoudre une énigme avec plusieurs statues.
+552. **Le livre sans titre** — Découvrir l'origine d'un livre mystérieux.
+553. **La chambre secrète** — Trouver une pièce cachée dans un bâtiment.
+554. **La mélodie oubliée** — Retrouver les notes d'une ancienne mélodie.
+555. **Le code du vieux moulin** — Déchiffrer un code découvert dans un moulin.
+556. **Le chemin des pierres** — Suivre une succession de pierres particulières.
+557. **Le signe des explorateurs** — Retrouver les marques laissées par un ancien groupe.
+558. **Le coffre du premier colon** — Découvrir les affaires d'un ancien habitant.
+559. **L'île invisible** — Découvrir une île accessible uniquement sous certaines conditions.
+560. **Le secret des cinq biomes** — Réunir des indices dans les cinq biomes.
+
+## **Comment organiser ces 560 idées dans le jeu**
+
+Pour que le système reste intéressant et que les joueurs ne soient pas noyés sous les missions, je te conseille de répartir les quêtes en cinq familles :
+
+| Type        | Fonctionnement                                              |
+| ----------- | ----------------------------------------------------------- |
+| Principales | Grandes histoires, personnages importants, secrets du monde |
+| Secondaires | Missions de villages, PNJ et exploration                    |
+| Répétables  | Livraison, récolte, fabrication, pêche, contrats            |
+| Événements  | Festivals, phénomènes rares, événements de monde            |
+| Secrètes    | Indices cachés, lieux rares, énigmes et découvertes         |
+
+**Une règle importante pour Wild Acres :** les quêtes doivent récompenser plusieurs styles de jeu. Un joueur qui ne veut jamais combattre doit quand même pouvoir obtenir de l'expérience, de l'or, des objets rares et de la réputation grâce à l'agriculture, au commerce, à l'artisanat ou à l'exploration.
+
+Les 560 idées constituent une bibliothèque de départ : certaines pourront être transformées en séries de plusieurs étapes, et d'autres pourront être générées automatiquement selon les besoins des villages et les événements du monde.
