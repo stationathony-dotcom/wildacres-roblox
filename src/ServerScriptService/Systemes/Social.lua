@@ -76,6 +76,16 @@ local TITLES = {
 		end
 		return n >= 40 -- 40 rangs de caractéristiques gagnés en pratiquant
 	end },
+	-- titres de noblesse accordés par le seigneur d'un château (Metiers : honneur + or au trésor)
+	{ id = "ecuyer", name = "Écuyer", test = function(p)
+		return (p.stats.noblesse or 0) >= 1
+	end },
+	{ id = "chevalier", name = "Chevalier", test = function(p)
+		return (p.stats.noblesse or 0) >= 2
+	end },
+	{ id = "baron", name = "Baron", test = function(p)
+		return (p.stats.noblesse or 0) >= 3
+	end },
 }
 Social.TITLES = TITLES
 local TITLE_BY_ID = {}

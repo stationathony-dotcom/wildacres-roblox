@@ -558,3 +558,12 @@ unique. Sons : porte et fabrication (établi/forge) ajoutés aussi.
   générateur de noms à revoir (sans changer la consommation de rng de RegionPlan).
 - Restent de la liste : nobles / seigneurs (châteaux), artisans dédiés (charpentier, tisserand), éleveur distinct
   du fermier.
+
+## Châteaux habités (18/11, Metiers + Chateaux + Social, testé en Play sur la graine 7)
+- `Chateaux` marque la région (`reg.castle`, `reg.castleVillage`) ; `Metiers.spawnCastle` pose le seigneur dans la
+  `Cour`, deux gardes devant l'attache `Entree` (horaires 0–24, bourrus donc ils se battent contre un crime vu).
+- Postes remplacés comme les artisans (`Metiers.currentId` : 3 jours après une disparition).
+- Seigneur : rachète `prise_*` et `ame_*` (+20 %, ne vend rien) ; titres de noblesse = dépense facultative des
+  riches, gardée par l'honneur, or au trésor du village voisin. Testé : refus (honneur 0), confirmation, 3000 → 2500 or,
+  titre « Écuyer » débloqué, puis trophée de géant des forêts racheté 115 or (base 126) ; `Clock.newDay` sans doublon.
+- [~] Pas vu : château d'un village autre que celui de départ, gardes face à un vrai crime.

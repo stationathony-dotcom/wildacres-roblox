@@ -82,7 +82,22 @@ local PEDDLER = { label = "Colporteur", labelF = "Colporteuse", trade = "🎒 Vo
 -- raretés du colporteur (prix fixés ici : ces objets n'ont pas de prix de catalogue)
 local PEDDLER_RARE = { unknown_recipe = 120, craftsman_plan = 220, recipe_book = 160, manual_cook = 120, manual_farm = 120, manual_herd = 120, manual_fish = 120 }
 
-local ADULT_PERSONAS = { "bourru", "jovial", "anxieux", "commere", "radin", "pieux" }
+-- Château (Chateaux.lua) : un seigneur dans la cour, deux gardes à la porte
+local LORD = { label = "Seigneur", labelF = "Dame", trade = "🏆 Vendre des trophées de chasse", garb = "noble", bonus = 1.2 }
+local GUARD = { label = "Garde du château", labelF = "Garde du château", garb = "garde" }
+-- Titres de noblesse : dépense facultative des joueurs riches (or au trésor du village), sans plafond
+-- de richesse mais avec une réputation à tenir. Les titres eux-mêmes vivent dans Social.TITLES.
+local NOBILITY = {
+	{ id = "ecuyer", name = "Écuyer", honor = 20, gold = 500 },
+	{ id = "chevalier", name = "Chevalier", honor = 40, gold = 2500 },
+	{ id = "baron", name = "Baron", honor = 60, gold = 10000 },
+}
+Metiers.NOBILITY = NOBILITY
+local function isTrophy(item: string): boolean
+	return string.sub(item, 1, 6) == "prise_" or string.sub(item, 1, 4) == "ame_"
+end
+
+local ADULT_PERSONAS ={ "bourru", "jovial", "anxieux", "commere", "radin", "pieux" }
 local CHILD_PERSONAS = { "jovial", "anxieux", "commere" }
 
 local CHILD_LINES = {
@@ -218,6 +233,32 @@ local GARB = {
 		weld(m, torso, "Gilet", Vector3.new(0.5, 1.7, 1.08), CFrame.new(-0.62, 0, 0), Color3.fromRGB(110, 76, 46), Enum.Material.Leather)
 		weld(m, torso, "Gilet", Vector3.new(0.5, 1.7, 1.08), CFrame.new(0.62, 0, 0), Color3.fromRGB(110, 76, 46), Enum.Material.Leather)
 	end,
+	noble = function(m, torso)
+		local red, gold = Color3.fromRGB(130, 30, 40), Color3.fromRGB(220, 180, 70)
+		weld(m, torso, "Cape", Vector3.new(2.1, 3.4, 0.12), CFrame.new(0, -0.6, 0.6), red)
+		weld(m, torso, "Fourrure", Vector3.new(2.2, 0.4, 1.3), CFrame.new(0, 0.85, 0.05), Color3.fromRGB(240, 236, 228))
+		local head = m:FindFirstChild("Head")
+		if head then
+			weld(m, head, "Couronne", Vector3.new(1.3, 0.3, 1.3), CFrame.new(0, 0.62, 0), gold, Enum.Material.Metal)
+			for i = 0, 3 do
+				weld(m, head, "Fleuron", Vector3.new(0.22, 0.3, 0.22), CFrame.Angles(0, math.rad(i * 90), 0) * CFrame.new(0, 0.88, -0.58), gold, Enum.Material.Metal)
+			end
+		end
+		weld(m, torso, "Chaine", Vector3.new(0.9, 0.12, 0.1), CFrame.new(0, 0.3, -0.54), gold, Enum.Material.Metal)
+	end,
+	garde = function(m, torso)
+		local steel = Color3.fromRGB(150, 155, 165)
+		weld(m, torso, "Tabard", Vector3.new(1.3, 2.4, 1.1), CFrame.new(0, -0.4, 0), Color3.fromRGB(40, 60, 120))
+		weld(m, torso, "Blason", Vector3.new(0.6, 0.7, 0.08), CFrame.new(0, 0.1, -0.58), Color3.fromRGB(220, 180, 70))
+		paint(m, { "LeftUpperArm", "RightUpperArm", "LeftLowerArm", "RightLowerArm" }, steel)
+		local head = m:FindFirstChild("Head")
+		if head then
+			weld(m, head, "Casque", Vector3.new(1.35, 0.7, 1.35), CFrame.new(0, 0.5, 0), steel, Enum.Material.Metal)
+			weld(m, head, "Nasal", Vector3.new(0.14, 0.6, 0.1), CFrame.new(0, 0.1, -0.66), steel, Enum.Material.Metal)
+		end
+		weld(m, torso, "Lance", Vector3.new(0.18, 8, 0.18), CFrame.new(1.4, 1, -0.6), Color3.fromRGB(110, 80, 50), Enum.Material.Wood)
+		weld(m, torso, "Fer", Vector3.new(0.3, 0.8, 0.12), CFrame.new(1.4, 5.3, -0.6), steel, Enum.Material.Metal)
+	end,
 	hotte = function(m, torso)
 		local wood = Color3.fromRGB(120, 86, 52)
 		weld(m, torso, "Hotte", Vector3.new(1.7, 2.2, 1.1), CFrame.new(0, 0.25, 1.05), wood, Enum.Material.WoodPlanks)
@@ -320,24 +361,78 @@ end
 
 -- ----------------------------------------------------------------- Apparition
 
+-- id du titulaire actuel d'un poste (ou nil : poste vacant). Tué et caché : la place reste vide
+-- REPLACE_DAYS jours, puis quelqu'un d'autre la reprend (nouvelle génération, nouveau nom).
+function Metiers.currentId(reg, role: string)
+	local st = roleState(reg.key, role)
+	local id = "m:" .. reg.key .. ":" .. role .. ":" .. st.gen
+	local per = G.world.npcs[id]
+	if per and per.gone then
+		st.goneDay = st.goneDay or G.world.day
+		if G.world.day - st.goneDay < REPLACE_DAYS then
+			return nil, st
+		end
+		st.gen += 1
+		st.goneDay = nil
+		id = "m:" .. reg.key .. ":" .. role .. ":" .. st.gen
+	end
+	return id, st
+end
+
+-- Le château : seigneur (ou dame) dans la cour, deux gardes de faction à la porte, jour et nuit
+local function spawnCastle(reg)
+	local model = reg.castle
+	if not model or not model.Parent then
+		return
+	end
+	local cour = model:FindFirstChild("Cour")
+	local base = model.PrimaryPart
+	local entree = base and base:FindFirstChild("Entree")
+	local taken = {}
+	local posts = {}
+	if cour and cour:IsA("BasePart") then
+		local p = cour.Position
+		table.insert(posts, { role = "lord", work = { p.X, p.Z, p.Y + cour.Size.Y / 2 } })
+	end
+	if entree then
+		local cf = entree.WorldCFrame
+		for i, side in { -1, 1 } do
+			local p = (cf * CFrame.new(side * 4.5, 0, 2)).Position
+			table.insert(posts, { role = "guard" .. i, work = { p.X, p.Z, p.Y } })
+		end
+	end
+	for _, post in posts do
+		local cur = reg.metiers[post.role]
+		local id = not (cur and cur.model.Parent and cur.state ~= "gone") and Metiers.currentId(reg, post.role)
+		local isLord = post.role == "lord"
+		if id then
+			local rng = Random.new(G.WG.hash(G.world.seed, "chateau-pnj", reg.rx, reg.rz, id))
+			local female = rng:NextNumber() < (isLord and 0.5 or 0.3)
+			local n = {
+				id = id, name = pickName(rng, female, taken), female = female, role = isLord and "lord" or "guard",
+				metier = isLord and "lord" or "guard", persona = isLord and ({ "bourru", "radin", "pieux", "jovial" })[rng:NextInteger(1, 4)] or "bourru",
+				look = makeLook(rng, female, nil), work = post.work, plaza = post.work, village = reg.castleVillage and reg.castleVillage.name,
+				shopkeeper = true, radius = isLord and 6 or 1, maxHp = isLord and 100 or 150,
+				hours = not isLord and { 0, 24 } or nil, -- les gardes ne dorment pas
+			}
+			local e = G.Npcs.addExtra(reg, n)
+			if e then
+				dress(e, isLord and LORD.garb or GUARD.garb)
+				reg.metiers[post.role] = e
+			end
+		end
+	end
+end
+
 local function spawnRole(reg, role: string, houses, taken)
 	local def = ROLES[role]
 	local h = building(reg, def.at)
 	if not h then
 		return nil -- pas de forge dans ce village : pas de forgeron
 	end
-	local st = roleState(reg.key, role)
-	local id = "m:" .. reg.key .. ":" .. role .. ":" .. st.gen
-	local per = G.world.npcs[id]
-	if per and per.gone then
-		-- tué et caché : la place reste vide quelques jours, puis quelqu'un d'autre la reprend
-		st.goneDay = st.goneDay or G.world.day
-		if G.world.day - st.goneDay < REPLACE_DAYS then
-			return nil
-		end
-		st.gen += 1
-		st.goneDay = nil
-		id = "m:" .. reg.key .. ":" .. role .. ":" .. st.gen
+	local id, st = Metiers.currentId(reg, role)
+	if not id then
+		return nil
 	end
 	local rng = Random.new(G.WG.hash(G.world.seed, "metiers", reg.rx, reg.rz, role, st.gen))
 	local female = rng:NextNumber() < 0.5
@@ -462,8 +557,19 @@ local function spawnPeddler(reg, forced: boolean?)
 end
 
 function Metiers.onRegionLoad(reg)
+	if not G.Npcs.addExtra then
+		return
+	end
+	if reg.castle then
+		reg.metiers = {}
+		local ok, err = pcall(spawnCastle, reg)
+		if not ok then
+			warn("[WildAcres] Metiers château : " .. tostring(err))
+		end
+		return
+	end
 	local poi = reg.plan.poi
-	if not poi or poi.kind ~= "village" or not G.Npcs.addExtra then
+	if not poi or poi.kind ~= "village" then
 		return
 	end
 	reg.metiers = {}
@@ -537,7 +643,7 @@ function Metiers.label(e): string
 	if role == "child" then
 		return e.data.female and "Fillette" or "Garçon"
 	end
-	local def = ROLES[role] or (role == "peddler" and PEDDLER)
+	local def = ROLES[role] or (role == "peddler" and PEDDLER) or (role == "lord" and LORD) or (role == "guard" and GUARD)
 	if not def then
 		return "Habitant"
 	end
@@ -546,11 +652,14 @@ end
 
 function Metiers.hasShop(e): boolean
 	local role = e.data.metier
-	return role == "peddler" or (ROLES[role] ~= nil and ROLES[role].products ~= nil)
+	return role == "peddler" or role == "lord" or (ROLES[role] ~= nil and ROLES[role].products ~= nil)
 end
 
 function Metiers.shopTitle(e): string
 	local role = e.data.metier
+	if role == "lord" then
+		return "Trophées pour " .. (e.data.female and "Dame " or "Sire ") .. e.data.name
+	end
 	if role == "peddler" then
 		return "Hotte de " .. e.data.name .. " (" .. string.lower(Metiers.label(e)) .. ")"
 	end
@@ -573,6 +682,15 @@ end
 function Metiers.catalog(player: Player, e)
 	local role = e.data.metier
 	local buy, wants = {}, {}
+	if role == "lord" then
+		-- il ne vend rien ; il paie les trophées de créatures (prises, âmes de boss)
+		for item in G.Joueurs.get(player).inv do
+			if isTrophy(item) then
+				wants[item] = true
+			end
+		end
+		return buy, wants
+	end
 	if role == "peddler" then
 		local p = peddlerStock(e.reg)
 		for _, it in p.order do
@@ -622,6 +740,9 @@ end
 -- multiplicateur de rachat d'un objet par ce PNJ (sa spécialité)
 function Metiers.bonus(e, item: string): number
 	local role = e.data.metier
+	if role == "lord" then
+		return isTrophy(item) and LORD.bonus or 1
+	end
 	if role == "peddler" then
 		return localCrops(e)[item] and PEDDLER_BUY or 1
 	end
@@ -656,7 +777,9 @@ function Metiers.greeting(e, buy): string?
 		return nil
 	end
 	local role = e.data.metier
-	if role == "baker" then
+	if role == "lord" then
+		return "Je ne vends rien. Mais je paie bien les trophées des bêtes qui menacent mes terres."
+	elseif role == "baker" then
 		return "Plus une miette ! Apporte-moi du grain, je cuirai demain."
 	elseif role == "cook" then
 		return "Marmite vide… Rapporte-moi de quoi cuisiner."
@@ -703,13 +826,38 @@ local function sparkle(player: Player, color: Color3)
 	Debris:AddItem(pe, 2)
 end
 
+-- « de Baron », « d'Écuyer »
+local function deTitre(name: string): string
+	local first = string.sub(name, 1, 1)
+	local vowel = string.find("AEIOUaeiou", first, 1, true) ~= nil or string.sub(name, 1, 2) == "É"
+	return (vowel and "d'" or "de ") .. name
+end
+
+-- prochain titre de noblesse du joueur (nil : déjà baron)
+function Metiers.nextRank(player: Player)
+	local prof = G.Joueurs.get(player)
+	local rank = (prof and prof.stats and prof.stats.noblesse) or 0
+	return NOBILITY[rank + 1], rank
+end
+
 -- options en plus des habituelles (avant « Au revoir »)
 function Metiers.addOptions(e, player: Player, opts)
 	local role = e.data.metier
 	local def = ROLES[role]
 	local add = {}
 	if Metiers.hasShop(e) then
-		table.insert(add, { id = "trade", text = (def and def.trade) or PEDDLER.trade })
+		table.insert(add, { id = "trade", text = (def and def.trade) or (role == "lord" and LORD.trade) or PEDDLER.trade })
+	end
+	if role == "lord" then
+		local nxt = Metiers.nextRank(player)
+		if nxt then
+			local pending = e.knight and e.knight[player]
+			if pending and os.clock() - pending < 30 then
+				table.insert(add, { id = "m:adouber_ok", text = "✅ Je prête serment (" .. nxt.gold .. " or)" })
+			else
+				table.insert(add, { id = "m:adouber", text = "⚔️ Demander le titre " .. deTitre(nxt.name) })
+			end
+		end
 	end
 	for _, s in (def and def.services) or {} do
 		if s == "repas" then
@@ -763,6 +911,12 @@ local PEDDLER_LINES = {
 	"Des graines d'ailleurs, des plantes rares… et je rachète bien ce qui pousse ici.",
 }
 
+local LORD_LINES = {
+	"Approche, {titre}. Les nouvelles des terres m'intéressent toujours.",
+	"Ces bêtes qui rôdent autour du village… Rapporte-m'en les trophées, je paierai.",
+	"Un vassal fidèle vaut plus qu'une tour de pierre. Le serais-tu ?",
+}
+
 local function childLine(e): string
 	return D.format(CHILD_LINES[math.random(1, #CHILD_LINES)], { e = e.data.female and "e" or "" })
 end
@@ -772,6 +926,8 @@ function Metiers.greet(e, player: Player): string?
 		return childLine(e)
 	elseif e.data.metier == "peddler" then
 		return PEDDLER_LINES[math.random(1, #PEDDLER_LINES)]
+	elseif e.data.metier == "lord" then
+		return D.format(LORD_LINES[math.random(1, #LORD_LINES)], { titre = D.title_for(G.Joueurs.get(player).honor) })
 	end
 	return nil
 end
@@ -935,6 +1091,40 @@ function Metiers.choice(player: Player, e, what: string): (string | boolean)?
 		G.Joueurs.sync(player)
 		G.Util.emote(e.model, "heart", 2)
 		return txt
+	elseif (what == "adouber" or what == "adouber_ok") and role == "lord" then
+		local nxt, rank = Metiers.nextRank(player)
+		e.knight = e.knight or setmetatable({}, { __mode = "k" })
+		if not nxt then
+			return "Tu es déjà baron" .. (prof.honor >= 0 and "" or ", même si ta réputation en souffre") .. ". Je n'ai rien de plus à t'offrir."
+		end
+		if prof.stars > 0 then
+			e.knight[player] = nil
+			return "Un recherché, anobli ? Règle d'abord tes comptes avec le shérif."
+		end
+		if prof.honor < nxt.honor then
+			e.knight[player] = nil
+			return "Pour être " .. nxt.name .. ", il faut une réputation sans tache (honneur " .. nxt.honor .. ", tu en as " .. prof.honor .. ")."
+		end
+		if what == "adouber" or not e.knight[player] or os.clock() - e.knight[player] > 30 then
+			-- action coûteuse et définitive : on demande confirmation
+			e.knight[player] = os.clock()
+			return "Le titre " .. deTitre(nxt.name) .. " se paie " .. nxt.gold .. " or, versés au trésor du village. Tu prêtes serment ?"
+		end
+		e.knight[player] = nil
+		if not G.Joueurs.take(player, "gold", nxt.gold) then
+			return "Il te manque de l'or : " .. nxt.gold .. " or pour le titre " .. deTitre(nxt.name) .. "."
+		end
+		prof.stats.noblesse = rank + 1
+		G.Joueurs.markDirty(player)
+		local vk = e.reg.castleVillage and e.reg.castleVillage.key
+		G.Politique.credit(vk, nxt.gold, "noblesse")
+		G.Economie.record(player, "noblesse", nxt.name .. " (-" .. nxt.gold .. ")")
+		G.Social.checkTitles(player)
+		G.Joueurs.sync(player)
+		sparkle(player, Color3.fromRGB(255, 215, 90))
+		G.Util.sfx("pieces", e.root.Position)
+		G.Npcs.addOp(e, player, 10)
+		return "Relève-toi, " .. nxt.name .. " " .. player.DisplayName .. ". Porte ce titre avec honneur."
 	elseif what == "monture" and has("monture") then
 		local at = e.root.Position + e.root.CFrame.LookVector * 6
 		G.Horses.fetch(player, at)
@@ -1023,12 +1213,12 @@ function Metiers.step(dt: number)
 				end
 			end
 			-- le colporteur remballe le soir ; un autre jour, il passera ailleurs
-			local ped = reg.metierPeddler
+			local ped = not reg.castle and reg.metierPeddler
 			-- (assommé ou porté : on ne le fait pas disparaître sous les yeux de qui s'en occupe)
 			local busy = ped and (ped.state == "ko" or ped.state == "carried")
 			if ped and not busy and (hour >= 19 or hour < 8 or ped.state == "gone") then
 				peddlerLeaves(reg)
-			elseif not ped and hour >= 8 and hour < 19 and math.random() < 0.01 then
+			elseif not reg.castle and not ped and hour >= 8 and hour < 19 and math.random() < 0.01 then
 				pcall(spawnPeddler, reg)
 			end
 		end
@@ -1052,7 +1242,22 @@ function Metiers.newDay()
 	end
 	-- remplaçants des artisans disparus, dans les villages chargés
 	for _, reg in G.World.loaded do
-		if reg.metiers then
+		if reg.metiers and reg.castle then
+			-- château : le seigneur et les gardes manquants (spawnCastle ignore les postes tenus)
+			local missing = false
+			for _, role in { "lord", "guard1", "guard2" } do
+				local cur = reg.metiers[role]
+				if cur and (cur.state == "gone" or not cur.model.Parent) then
+					reg.metiers[role] = nil
+					missing = true
+				elseif not cur then
+					missing = true
+				end
+			end
+			if missing then
+				pcall(spawnCastle, reg)
+			end
+		elseif reg.metiers then
 			local houses, taken = homes(reg), takenNames(reg)
 			for _, role in ORDER do
 				local cur = reg.metiers[role]

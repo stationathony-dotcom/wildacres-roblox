@@ -1,7 +1,8 @@
 -- Châteaux sur les hauteurs (image cible du 18/11 : le château sur sa colline, vu du village).
 -- Le village de départ et 3 villages sur 5 environ ont un château dans une région voisine SANS lieu : posé sur le
 -- point le plus haut d'un terrain assez plat, loin des routes et de l'eau, porte tournée vers le
--- village. Simple décor qu'on visite (cour ouverte) : aucune règle, aucun garde.
+-- village. On le visite (cour ouverte) ; depuis le 18/11 un seigneur y tient audience et deux gardes
+-- veillent à la porte (Metiers).
 -- Posé par-dessus la génération, avec son propre tirage (les mondes existants ne bougent pas) ;
 -- la décision est gardée dans l'état de la région (reg.state.chateau) : une fois posé il reste, et
 -- il ne se pose jamais sur ce que les joueurs ont construit. Doit passer AVANT Props : il retire
@@ -52,7 +53,7 @@ local function villageFor(rx: number, rz: number)
 		if poi and poi.kind == "village" then
 			local c = choiceOf(vx, vz)
 			if c and c[1] == rx and c[2] == rz then
-				return poi
+				return poi, vx, vz
 			end
 		end
 	end
@@ -100,7 +101,7 @@ function Chateaux.onRegionLoad(reg)
 	local plan = reg.plan
 	local CELL = Config.CELL
 	local spot = st.chateau
-	local village = villageFor(reg.rx, reg.rz)
+	local village, vx, vz = villageFor(reg.rx, reg.rz)
 	if not spot then
 		if not village then
 			return -- pas de décision enregistrée : rien à retenir, le tirage est le même à chaque fois
@@ -137,6 +138,10 @@ function Chateaux.onRegionLoad(reg)
 		model:SetAttribute("Lieu", "Château")
 		G.World.place(model, spot.x, spot.y, spot.z, spot.yaw, reg.folder)
 		G.Clock.seasonize(model)
+		-- habité (Metiers, 18/11) : seigneur dans la cour, gardes à la porte ; l'or de la noblesse
+		-- va au trésor du village voisin
+		reg.castle = model
+		reg.castleVillage = village and { key = vx .. "," .. vz, name = village.name } or nil
 	end
 end
 
