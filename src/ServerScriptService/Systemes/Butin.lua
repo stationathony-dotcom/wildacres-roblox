@@ -279,6 +279,7 @@ function Butin.pick(player: Player, id: number): boolean
 		return false
 	end
 	if (root.Position - d.pos).Magnitude > PICK_RANGE then
+		G.Util.toast(player, "Trop loin pour le ramasser : approche-toi.")
 		return false
 	end
 	if not canTake(player, d) then

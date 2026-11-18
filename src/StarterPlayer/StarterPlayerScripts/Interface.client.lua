@@ -2126,6 +2126,8 @@ local function game_()
 			end
 			shop.Visible = true
 			renderShop()
+		elseif data.kind == "close" then
+			closeAll() -- le serveur ferme la fenêtre (trop loin du comptoir, coffre disparu…)
 		end
 	end)
 

@@ -542,7 +542,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [x] Inventorier tous les menus et fenêtres : accueil, personnage, sac, barre rapide, talents, compétences, atelier, recette, coffre, banque, boutique, étal, hôtel des ventes, courrier, groupe, clan, territoire, armée, carte, journal, monture, animal, construction et paramètres. _(→ `docs/INTERFACE.md`, 18/11)_
 - [x] Remplacer les listes textuelles restantes par une interface cohérente avec icônes là où cela améliore la lecture : boutique, coffre, courrier, étal et clan.
 - [~] Ajouter recherche, filtres, tri, pagination et infobulles pour les listes longues. _(infobulles des outils avec usure, 18/11)_
-- [ ] Ajouter états vides, chargement, réussite, échec et messages d'erreur compréhensibles.
+- [x] Ajouter états vides, chargement, réussite, échec et messages d'erreur compréhensibles. _(chargement : fondu « Arrivée à … » + messages de sauvegarde, renvoi expliqué si le perso ne charge pas ; vides : boutique / sac / étals des artisans qui disent ce qui leur manque ; 18/11 : les échecs muets disent pourquoi — trop loin du comptoir (fenêtre fermée), coffre disparu / trop loin / verrouillé, butin hors de portée ; testé en Play)_
 - [~] Ajouter confirmations pour les achats, destructions, échanges et actions irréversibles. _(confirmation pour détruire / vendre un objet rare, double confirmation des échanges)_
 - [ ] Tester clavier/souris, tactile et manette.
 - [~] Tester petits écrans, tablettes et différentes résolutions.

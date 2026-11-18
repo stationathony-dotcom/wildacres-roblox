@@ -238,6 +238,13 @@ local function refresh(player: Player)
 		greeting = greeting or D.line(e.data.persona, "trade", { titre = D.title_for(G.Joueurs.get(player).honor) }) })
 end
 
+-- on s'est éloigné du comptoir pendant que la fenêtre était ouverte : on le dit, on ferme
+function Shop.tooFar(player: Player)
+	open[player] = nil
+	G.Util.toast(player, "Trop loin du comptoir : rapproche-toi pour commercer.")
+	G.remotes.Menu:FireClient(player, { kind = "close" })
+end
+
 function Shop.open(player: Player, e)
 	open[player] = e
 	refresh(player)
@@ -250,8 +257,11 @@ end
 
 function Shop.buy(player: Player, item: string, n: number)
 	local e = open[player]
-	if not e or not near(player, e) or type(item) ~= "string" then
+	if not e or type(item) ~= "string" then
 		return
+	end
+	if not near(player, e) then
+		return Shop.tooFar(player)
 	end
 	n = math.clamp(math.floor(n), 1, 20)
 	local buy = catalog(player, e)
@@ -300,8 +310,11 @@ end
 
 function Shop.sell(player: Player, item: string, n: number)
 	local e = open[player]
-	if not e or not near(player, e) or type(item) ~= "string" then
+	if not e or type(item) ~= "string" then
 		return
+	end
+	if not near(player, e) then
+		return Shop.tooFar(player)
 	end
 	n = math.clamp(math.floor(n), 1, 999)
 	n = math.min(n, G.Joueurs.count(player, item))
@@ -968,12 +981,26 @@ function Shop.chestMove(player: Player, id: string, item: string, n: number, put
 	end
 	local d = findPlaced(id)
 	local root = G.Util.root(player)
-	if not d or d.item ~= "chest" or not root or (Vector3.new(d.x, root.Position.Y, d.z) - root.Position).Magnitude > 14 then
+	if not d or d.item ~= "chest" or not root then
+		if not quiet then
+			G.Util.toast(player, "Ce coffre n'est plus là.")
+			G.remotes.Menu:FireClient(player, { kind = "close" })
+		end
+		return
+	end
+	if (Vector3.new(d.x, root.Position.Y, d.z) - root.Position).Magnitude > 14 then
+		if not quiet then
+			G.Util.toast(player, "Trop loin du coffre : rapproche-toi.")
+			G.remotes.Menu:FireClient(player, { kind = "close" })
+		end
 		return
 	end
 	d.items = d.items or {}
 	-- un coffre verrouillé d'un autre : seulement après l'avoir crocheté
 	if (d.lock or 0) > 0 and not G.Util.owns(player, d.owner) and unlocked[player] ~= d.id and not G.Util.trusted(player, d.owner, "coffres") then
+		if not quiet then
+			G.Util.toast(player, "🔒 Ce coffre est verrouillé.")
+		end
 		return
 	end
 	n = math.clamp(math.floor(n), 1, 999)
