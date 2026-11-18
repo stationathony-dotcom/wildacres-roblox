@@ -334,7 +334,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [x] Marchands avec inventaire, spécialité, prix, horaires et renouvellement. _(boutique, rachat ≤ 80 %, commandes du village selon son biome, horaires (tient boutique le jour) ; 18/11 : artisans à STOCK RÉEL — ce que les joueurs leur vendent devient la fournée du lendemain (blé → pain, minerai → ferrures, plantes → remèdes), colporteur de passage aux produits d'autres biomes ; testé en Play)_
 - [x] Forgerons/artisans avec services de fabrication ou réparation si prévus. _(forge de village : « Faire réparer mes outils » contre de l'or, enclume et four publics (18/11))_
 - [x] Auberges avec lits, repos, réapparition et location.
-- [~] Écuries avec stockage, récupération et gestion des montures. _(18/11 : « Faire venir ma monture » à l'écurie d'un village, pension 5 or, même si sa région n'est pas chargée)_ _(18/11 : tenue par un palefrenier (foin, nourriture, sangles), testé en Play)_
+- [x] Écuries avec stockage, récupération et gestion des montures. _(« Faire venir ma monture » auprès du palefrenier de l'écurie d'un village, pension 5 or, même si sa région n'est pas chargée ; foin, nourriture, sangles à son comptoir ; testé en Play le 18/11 : cheval acheté à la ferme de Diane, amené à Clos-Doré à 8 studs du palefrenier, 5 or prélevés)_
 - [x] Messagers et services de courrier si distincts du courrier joueur. _(Systemes/Poste, boîtes aux lettres des villages ; gains de concours versés par courrier)_
 - [x] Services publics : affichage, commandes de village, réparations, projets collectifs. _(tableau d'affichage, tableau des quêtes, commandes du marchand, conseil du village et ses projets, reconstruction par les villageois)_
 
