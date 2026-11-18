@@ -24,8 +24,8 @@ banque agrandissable sans fin, champs sans limite.
 - [x] Compétences (10, grind), talents (19), mini-jeux serveur, compagnons
 - [x] Serrures, crochetage, alarme, cambriolages, journal, étoiles et primes persistantes
 - [x] Anti-abus : maison jamais vidée, absents protégés, bouclier d'arrivée, anti-farm d'XP
-- [~] Butin au sol façon Minecraft / Fortnite (récolte, minage, fouille, créatures, coffres) : clic, [E], [Q] tout autour ; réservé 30 s, disparaît en 5 min — banc Edit 16/16, **à tester en Play**
-- [~] HUD façon image cible (portrait, boussole, lieu, météo, minicarte, menu, notifications) — aperçu Edit OK, proportions de l'image (18/11), à voir en Play ; monde : lumière, châteaux, potences (banc `chateaux` OK)
+- [x] Butin au sol façon Minecraft / Fortnite (récolte, minage, fouille, créatures, coffres) : clic, [E], [Q] tout autour ; réservé 30 s, disparaît en 5 min — banc Edit 16/16, testé en Play le 18/11 (posé sur le sol, [Q] ramasse tout)
+- [x] HUD façon image cible (portrait, boussole, lieu, météo, minicarte, menu, notifications) — vu en Play le 18/11 (captures : tout en place) ; reste à voir sur mobile ; monde : lumière, châteaux, potences (banc `chateaux` OK)
 - [x] Plus de niveau ni de barre d'XP : les caractéristiques montent en pratiquant (banc 13/13)
 - [x] Îles différentes générées au hasard : 7 thèmes (biomes, villages, faune signature, danger) — générateur v2
 - [x] Quêtes facultatives par village, propres à chaque île (9 sortes, journal [J]) — banc 15/15, à voir en Play
