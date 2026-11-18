@@ -273,8 +273,8 @@ La feuille actuelle parle de l'accueil et du personnage global, mais plusieurs f
 ### 9A. Faune passive
 - [~] Compléter oiseaux, petits mammifères, insectes, reptiles, amphibiens et animaux aquatiques par biome. _(moineaux, rapaces, corbeaux, mouettes, papillons, lucioles, écureuils (18/11), lapins, renards, cerfs, crapauds…)_
 - [x] Définir horaires, habitat, sons et réactions.
-- [~] Ajouter comportements simples : manger, boire, se reposer, fuir, se cacher, migrer.
-- [~] Ajouter traces, empreintes, nids, terriers, plumes, poils et cris. _(empreintes 18/11, nids à dénicher, plumes ; cris des bêtes 18/11 : mouton, vache, loup qui hurle la nuit, chouette, en son 3D (Cris.client, Pro Sound Effects), vérifié en Play ; restent les terriers)_
+- [~] Ajouter comportements simples : manger, boire, se reposer, fuir, se cacher, migrer. _(18/11 : se cacher — lapin et renard effrayés filent à leur terrier, disparaissent dessous, ressortent quand personne n'est plus à 14 studs ; un prédateur perd la trace ; testé en Play)_
+- [x] Ajouter traces, empreintes, nids, terriers, plumes, poils et cris. _(empreintes 18/11, nids à dénicher, plumes ; cris des bêtes 18/11 : mouton, vache, loup qui hurle la nuit, chouette, en son 3D (Cris.client, Pro Sound Effects), vérifié en Play  ; terriers des lapins et renards (butte + trou, vérifiés en Play))_
 - [x] Simuler les animaux éloignés de façon légère pour préserver les performances.
 
 ### 9B. Ennemis et créatures neutres

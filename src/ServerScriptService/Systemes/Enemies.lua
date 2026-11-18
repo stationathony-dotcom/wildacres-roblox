@@ -57,9 +57,9 @@ local KINDS = {
 	-- animaux sauvages : fuient, se chassent
 	deer = { name = "Cerf", model = "Cerf", hp = 60, dmg = 0, speed = 16, level = 1, style = "flee", radius = 1.4, passive = true,
 		loot = { { "meat", 2, 3, 1 }, { "leather", 1, 2, 0.9 } } },
-	rabbit = { name = "Lapin", model = "Lapin", hp = 20, dmg = 0, speed = 15, level = 1, style = "flee", radius = 0.6, passive = true,
+	rabbit = { name = "Lapin", model = "Lapin", hp = 20, dmg = 0, speed = 15, level = 1, style = "flee", radius = 0.6, passive = true, burrow = true,
 		loot = { { "meat", 1, 1, 1 }, { "fur", 1, 1, 0.3 } } },
-	fox = { name = "Renard", model = "Renard", hp = 40, dmg = 0, speed = 15, level = 1, style = "flee", radius = 0.8, passive = true,
+	fox = { name = "Renard", model = "Renard", hp = 40, dmg = 0, speed = 15, level = 1, style = "flee", radius = 0.8, passive = true, burrow = true,
 		loot = { { "fur", 1, 1, 0.8 } } },
 	penguin = { name = "Pingouin", model = "Pingouin", hp = 40, dmg = 0, speed = 7, level = 1, style = "flee", radius = 0.8, passive = true,
 		loot = { { "feather", 1, 2, 1 }, { "meat", 1, 1, 0.6 } } },
@@ -172,6 +172,52 @@ local function healthBar(en)
 	en.model:SetAttribute("Humeur", mood)
 end
 
+-- Terrier d'un lapin / renard : butte de terre et trou sombre près de son gîte (décor seul, sans
+-- collision). Position tirée de l'id de la bête : la même à chaque chargement.
+function Enemies.burrow(en, parent: Instance): Vector3?
+	local r = Random.new(G.WG.hash(G.world and G.world.seed or 0, "terrier", en.id))
+	local a = r:NextNumber(0, math.pi * 2)
+	local x, z = en.home.X + math.cos(a) * r:NextNumber(4, 9), en.home.Z + math.sin(a) * r:NextNumber(4, 9)
+	if G.Util.isWater(x, z) then
+		return nil
+	end
+	local y = G.Util.groundY(x, z)
+	local m = Instance.new("Model")
+	m.Name = "Terrier"
+	local function part(size, cf, color, mat, shape)
+		local p = Instance.new("Part")
+		p.Anchored = true
+		p.CanCollide = false
+		p.CanTouch = false
+		p.CanQuery = false
+		p.Size = size
+		p.CFrame = cf
+		p.Color = color
+		p.Material = mat
+		if shape then
+			-- maillage : une butte ovale / un trou rond qui suivent la taille de la pièce (une Part
+			-- « Ball » reste une sphère parfaite, une « Cylinder » un tube régulier)
+			local mesh = Instance.new("SpecialMesh")
+			mesh.MeshType = shape == Enum.PartType.Ball and Enum.MeshType.Sphere or Enum.MeshType.Cylinder
+			mesh.Parent = p
+		end
+		p.Parent = m
+		return p
+	end
+	local yaw = r:NextNumber(0, 360)
+	local base = CFrame.new(x, y, z) * CFrame.Angles(0, math.rad(yaw), 0)
+	-- assez haut pour dépasser de l'herbe du terrain (sinon invisible)
+	part(Vector3.new(4.6, 2.2, 4), base * CFrame.new(0, 0.4, 0.5), Color3.fromRGB(112, 84, 56), Enum.Material.Ground, Enum.PartType.Ball)
+	part(Vector3.new(4.2, 1.2, 3.2), base * CFrame.new(0, 1.1, 0.7), Color3.fromRGB(96, 72, 48), Enum.Material.Ground, Enum.PartType.Ball)
+	part(Vector3.new(0.3, 1.7, 1.7), base * CFrame.new(0, 0.75, -1.5) * CFrame.Angles(0, math.rad(90), 0), Color3.fromRGB(22, 16, 11), Enum.Material.SmoothPlastic, Enum.PartType.Cylinder)
+	for i = 1, 3 do
+		part(Vector3.one * r:NextNumber(0.35, 0.6), base * CFrame.new(r:NextNumber(-1.8, 1.8), 0.25, r:NextNumber(-2.6, -1.8)), Color3.fromRGB(120, 110, 100), Enum.Material.Slate)
+	end
+	m:PivotTo(m:GetPivot())
+	m.Parent = parent
+	return Vector3.new(x, y, z) + base.LookVector * 1.5 -- l'entrée du trou (−Z local = LookVector)
+end
+
 local function spawn(reg, d, parent)
 	local k = KINDS[d.kind]
 	if not k then
@@ -198,6 +244,9 @@ local function spawn(reg, d, parent)
 	model:PivotTo(CFrame.new(en.pos) * CFrame.Angles(0, en.yaw, 0))
 	model.Parent = parent
 	healthBar(en)
+	if k.burrow and parent then
+		en.burrow = Enemies.burrow(en, parent)
+	end
 	if d.free then
 		return en -- compagnon : géré par Compagnons, pas par l'IA sauvage
 	end
@@ -408,6 +457,18 @@ end
 -- Animal sauvage : broute, s'enfuit quand on approche ou qu'on le frappe
 local function thinkPassive(en, dt: number)
 	local k = en.k
+	if en.state == "hidden" then
+		-- au fond du terrier : il ressort quand plus personne n'est près de l'entrée (8 s au moins)
+		local b = en.burrow
+		local _, near = G.Util.nearestPlayer(b or en.pos, 14)
+		if not b or (en.t > 8 and near >= 14) then
+			en.state = "idle"
+			en.t = 0
+			en.pos = b or en.home
+			render(en)
+		end
+		return
+	end
 	local player, pd = G.Util.nearestPlayer(en.pos, 40)
 	local proot = player and G.Util.root(player)
 	local scared = proot and (pd < (player:GetAttribute("Crouch") and 7 or 15) or en.state == "hurt" or en.state == "flee")
@@ -421,7 +482,21 @@ local function thinkPassive(en, dt: number)
 		if away.Magnitude < 0.1 then
 			away = Vector3.new(1, 0, 0)
 		end
-		moveToward(en, en.pos + away.Unit * 8, k.speed, dt)
+		local b = en.burrow
+		if b and (b - en.pos).Magnitude < 30 then
+			-- il file vers son terrier et s'y cache (jusqu'à ce que le calme revienne)
+			moveToward(en, b, k.speed * 1.1, dt)
+			if (Vector3.new(b.X - en.pos.X, 0, b.Z - en.pos.Z)).Magnitude < 1.2 then
+				en.state = "hidden"
+				en.t = 0
+				en.pos = b - Vector3.new(0, 4, 0)
+				puff(b + Vector3.new(0, 0.5, 0), Color3.fromRGB(120, 90, 60), 6)
+				render(en)
+				return
+			end
+		else
+			moveToward(en, en.pos + away.Unit * 8, k.speed, dt)
+		end
 		en.hop += dt * 10
 		if en.t > 4 and pd > 20 then
 			en.state = "idle"
@@ -480,7 +555,7 @@ local function think(en, dt: number)
 	elseif en.state == "hunt" then
 		-- un prédateur poursuit sa proie (cerf, lapin…)
 		local prey = en.prey
-		if not prey or prey.dead or (prey.pos - en.pos).Magnitude > 50 or far then
+		if not prey or prey.dead or prey.state == "hidden" or (prey.pos - en.pos).Magnitude > 50 or far then -- (réfugié au terrier : perdu)
 			en.prey = nil
 			en.state = "idle"
 			en.t = 0

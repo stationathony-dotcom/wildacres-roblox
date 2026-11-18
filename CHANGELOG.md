@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.0 — 2026-11-18
+- **Terriers** : lapins et renards ont un terrier près de leur gîte ; effrayés, ils y filent et s'y cachent (un prédateur perd leur trace), puis ressortent quand le calme revient
 - **Cris des bêtes** en son 3D : moutons, vaches ; la nuit, un loup hurle au loin et une chouette hulule ; endormi, le personnage s'assoupit (tête basse, respiration lente)
 - **Musique** discrète façon Minecraft (jour, village, nuit, grotte ; longs silences entre les morceaux), réglable ou coupée dans les Paramètres [O]
 - **Gestes** : on se penche pour cueillir ou semer à la main, on travaille à l'atelier, on mange, on tend l'appât à une bête, on pose une pièce, on tend la main au comptoir — animés pour tous les joueurs, sans téléchargement ; les habitants saluent, montrent la direction, applaudissent un cadeau, rient
