@@ -48,6 +48,7 @@ function J.init(g)
 		end
 		p.settings = {
 			vol = math.clamp(tonumber(data.vol) or 0.6, 0, 1),
+			music = math.clamp(tonumber(data.music) or 0.5, 0, 1),
 			flash = data.flash == true,
 			shake = data.shake == true,
 			names = data.names ~= false,

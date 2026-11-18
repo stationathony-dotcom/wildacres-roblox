@@ -343,9 +343,10 @@ end)
 -- (action "settings") et réappliqués à chaque connexion (payload Inventory.settings).
 do
 	local UserInputService = game:GetService("UserInputService")
-	local settings = { vol = 0.6, flash = false, shake = false }
+	local settings = { vol = 0.6, music = 0.5, flash = false, shake = false }
 	local function apply()
 		player:SetAttribute("VolAmbiance", settings.vol)
+		player:SetAttribute("VolMusique", settings.music) -- lu par Musique.client
 		player:SetAttribute("ReduceFlash", settings.flash or nil)
 		player:SetAttribute("ReduceShake", settings.shake or nil)
 	end
@@ -396,7 +397,7 @@ do
 	end
 	local panel = Instance.new("Frame")
 	panel.Name = "Panneau"
-	panel.Size = UDim2.fromOffset(330, 250)
+	panel.Size = UDim2.fromOffset(330, 310)
 	panel.Position = UDim2.fromScale(0.5, 0.5)
 	panel.AnchorPoint = Vector2.new(0.5, 0.5)
 	panel.BackgroundColor3 = Color3.fromRGB(24, 19, 15)
@@ -424,6 +425,12 @@ do
 	volRow.Size = UDim2.new(1, -28, 0, 34)
 	volRow.Position = UDim2.fromOffset(14, 70)
 	volRow.Parent = panel
+	txt(panel, "🎵 Musique (discrète, selon le lieu et l'heure)", UDim2.new(1, -28, 0, 20), UDim2.fromOffset(14, 108), 13)
+	local musicRow = Instance.new("Frame")
+	musicRow.BackgroundTransparency = 1
+	musicRow.Size = UDim2.new(1, -28, 0, 34)
+	musicRow.Position = UDim2.fromOffset(14, 130)
+	musicRow.Parent = panel
 	local toggles = {}
 	local function toggle(y, label, key)
 		txt(panel, label, UDim2.new(1, -110, 0, 30), UDim2.fromOffset(14, y), 13)
@@ -434,10 +441,10 @@ do
 			render()
 		end)
 	end
-	toggle(116, "⚡ Réduire les flashs (éclairs)", "flash")
-	toggle(152, "📳 Réduire les secousses", "shake")
+	toggle(176, "⚡ Réduire les flashs (éclairs)", "flash")
+	toggle(212, "📳 Réduire les secousses", "shake")
 	local help = txt(panel, "Dans le chat : /bloquer <pseudo> · /debloquer · /autoriser <pseudo> coffres|batir · /retirer <pseudo> · /autorises\n[O] Paramètres · [M] Carte",
-		UDim2.new(1, -28, 0, 44), UDim2.fromOffset(14, 192), 11, Color3.fromRGB(150, 140, 120))
+		UDim2.new(1, -28, 0, 44), UDim2.fromOffset(14, 252), 11, Color3.fromRGB(150, 140, 120))
 	help.TextWrapped = true
 	render = function()
 		volRow:ClearAllChildren()
@@ -447,6 +454,18 @@ do
 			btn(volRow, i == 0 and "🔇" or tostring(i * 20), UDim2.fromOffset(46, 30), UDim2.fromOffset(i * 50, 2),
 				on and GOLD or Color3.fromRGB(60, 50, 40), function()
 					settings.vol = v
+					dirty = true
+					apply()
+					render()
+				end)
+		end
+		musicRow:ClearAllChildren()
+		for i = 0, 5 do
+			local v = i / 5
+			local on = math.abs(settings.music - v) < 0.05
+			btn(musicRow, i == 0 and "🔇" or tostring(i * 20), UDim2.fromOffset(46, 30), UDim2.fromOffset(i * 50, 2),
+				on and GOLD or Color3.fromRGB(60, 50, 40), function()
+					settings.music = v
 					dirty = true
 					apply()
 					render()
@@ -490,6 +509,7 @@ do
 	Remotes:WaitForChild("Inventory").OnClientEvent:Connect(function(data)
 		if type(data) == "table" and type(data.settings) == "table" and not panel.Visible then
 			settings.vol = tonumber(data.settings.vol) or settings.vol
+			settings.music = tonumber(data.settings.music) or settings.music
 			settings.flash = data.settings.flash == true
 			settings.shake = data.settings.shake == true
 			apply()

@@ -557,7 +557,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 
 - [~] Créer sons d'ambiance distincts par biome, météo et moment de la journée.
 - [~] Ajouter sons d'outils, récolte, forge, cuisine, portes, animaux, montures, interactions et interface.
-- [ ] Ajouter musique réglable et discrète si elle est prévue.
+- [x] Ajouter musique réglable et discrète si elle est prévue. _(18/11 `Musique.client` : un morceau selon le lieu et l'heure (jour, village, nuit, grotte) puis 60–120 s de silence, fondu 3 s ; 6 morceaux sous licence Roblox (APM, DistroKid), chargement vérifié en Play ; volume Musique dans les Paramètres [O], sauvegardé, 🔇 coupe tout)_
 - [~] Ajouter animations de récolte, fabrication, pêche, cuisine, commerce, dressage, construction et repos. _(18/11 : récolte, fabrication (et cuisine, même grille), commerce, dressage, construction faits et vus en Play ; pêche = coup de canne ; reste le repos)_
 - [x] Ajouter animations et réactions pour habitants, animaux et créatures. _(18/11 : les habitants saluent quand on leur parle, montrent la direction d'une rumeur, applaudissent un cadeau, rient en bavardant, l'enfant attrapé rit ; existants : émoticônes, fuite, bêtes qui se dandinent en marchant, créatures qui sautillent et tremblent avant d'attaquer)_
 - [ ] Uniformiser éclairages, matériaux, proportions, couleurs et style médiéval.
