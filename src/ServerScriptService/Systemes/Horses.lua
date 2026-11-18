@@ -311,7 +311,9 @@ function Horses.mount(player: Player, h)
 	w.Parent = base
 	h.model.Parent = char
 	hum.HipHeight = seat + SIT_OFFSET - rootHalf
-	player:SetAttribute("MountSpeed", (Config.MOUNTS[h.species] or Config.MOUNTS.cheval).speed) -- allure (Game)
+	local prof = G.Joueurs.get(player)
+	local shod = prof and prof.horse and prof.horse.id == h.id and prof.horse.shod
+	player:SetAttribute("MountSpeed", (Config.MOUNTS[h.species] or Config.MOUNTS.cheval).speed * (shod and (Config.SHOD_BONUS or 1) or 1)) -- allure (Game)
 	player:SetAttribute("Riding", true)
 end
 
@@ -399,6 +401,42 @@ function Horses.fetch(player: Player, at: Vector3)
 	ph.region = reg and reg.key or ph.region
 	G.Joueurs.markDirty(player)
 	G.Util.toast(player, "🐴 Le palefrenier t'amène ta monture (" .. Horses.STABLE_FEE .. " or).")
+end
+
+-- Ferrer sa monture (fers à cheval forgés à l'enclume) : il faut être à côté d'elle (ou dessus).
+-- Une fois ferrée, elle le reste ; +12 % d'allure (Config.SHOD_BONUS).
+function Horses.shoe(player: Player, item: string): boolean
+	local prof = G.Joueurs.get(player)
+	local ph = prof and prof.horse
+	if not ph then
+		G.Util.toast(player, "Tu n'as pas de monture à ferrer.")
+		return false
+	end
+	if ph.shod then
+		G.Util.toast(player, "Ta monture est déjà ferrée.")
+		return false
+	end
+	local h = live[ph.id]
+	local root = G.Util.root(player)
+	local close = riding[player] ~= nil or (h and root and (h.model:GetPivot().Position - root.Position).Magnitude < 10)
+	if not close then
+		G.Util.toast(player, "Approche-toi de ta monture pour la ferrer.")
+		return false
+	end
+	if not G.Joueurs.take(player, item, 1) then
+		return false
+	end
+	ph.shod = true
+	G.Joueurs.markDirty(player)
+	G.Joueurs.sync(player)
+	if riding[player] then
+		player:SetAttribute("MountSpeed", (player:GetAttribute("MountSpeed") or 1) * (Config.SHOD_BONUS or 1))
+	end
+	local pos = h and h.model:GetPivot().Position or root.Position
+	G.Util.sfx("forge", pos)
+	G.Util.geste(player, "fabriquer")
+	G.Util.toast(player, "🧲 Ta monture est ferrée : elle galope plus vite (+" .. math.floor(((Config.SHOD_BONUS or 1) - 1) * 100 + 0.5) .. " %).", "gain")
+	return true
 end
 
 -- Siffler : le cheval du joueur accourt (s'il n'est pas trop loin)

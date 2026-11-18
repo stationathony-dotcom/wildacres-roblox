@@ -487,7 +487,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [ ] Tester les voyages en groupe et les départs séparés.
 
 ### 16C. Transport terrestre
-- [~] Finaliser chevaux et équipement de monture. _(18/11 : vitesse à cheval enfin appliquée, selles colorées ; reste harnais / sacoches)_
+- [x] Finaliser chevaux et équipement de monture. _(18/11 : vitesse à cheval enfin appliquée, selles colorées ; FERS À CHEVAL 18/11 (enclume : 2 lingots de fer + 4 clous) : +12 % d'allure pour de bon, testés en Play (achat d'un cheval, ferrage, allure 1,00 → 1,12, posture de cavalier) ; sacoches écartées exprès : le sac est sans limite, une monture-coffre n'apporterait rien)_
 - [x] Ajouter ânes et mulets si retenus.
 - [x] Ajouter selles, harnais, sacoches et matériel de transport. _(selles colorées ; charrettes ; sacoches volontairement absentes : le sac n'a pas de limite)_
 - [x] Ajouter charrettes, chariots et wagons si retenus.

@@ -750,6 +750,12 @@ function C.matchGrid(counts)
 	return nil, 0
 end
 
+-- 18/11 : fers à cheval (enclume) — ferrer SA monture : +12 % d'allure, pour de bon. Ajoutés EN
+-- DERNIER : les indices des recettes existantes ne bougent pas.
+C.ITEMS.horseshoes = { name = "Fers à cheval", icon = "🧲", price = 90, use = "cat_ferrer" }
+table.insert(C.RECIPES, { item = "horseshoes", needs = { iron_ingot = 2, nails = 4 }, station = "anvil", cat = "outils", skill = { "artisanat", 8 } })
+C.SHOD_BONUS = 1.12
+
 -- Rareté de chaque objet (une fois que tous les objets existent)
 Catalogue.assignRarity(C)
 

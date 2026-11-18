@@ -634,6 +634,9 @@ function J.useCatalogue(player: Player, item: string, info)
 	elseif use == "nasse" then
 		G.Nasses.place(player) -- retire l'objet du sac seulement si la nasse est posée
 		return
+	elseif use == "ferrer" then
+		G.Horses.shoe(player, item) -- retire les fers du sac seulement si la monture est ferrée
+		return
 	elseif use == "rappel" then
 		local n = G.Animals.gather(player)
 		local c = (G.Compagnons and rawget(G.Compagnons, "recall")) and G.Compagnons.recall(player) or 0
