@@ -285,12 +285,36 @@ local function makeOffer(v, period: number, i: number)
 	return q
 end
 
+-- Commandes du tableau. La rotation est décalée par village et chaque commande
+-- possède un identifiant distinct des trois offres historiques.
+local VILLAGE_ORDERS = {
+	{ title = "Une livraison urgente", item = "bread", count = 5 },
+	{ title = "Le puits est vide", item = "bucket", count = 3 },
+	{ title = "Le marché du dimanche", item = "stall", count = 1 },
+	{ title = "Une maison à réparer", item = "planks", count = 12 },
+}
+
+local function villageOrder(v, period: number)
+	local seed = G.WG.hash(G.world.seed, "commande_village", v.key)
+	local order = VILLAGE_ORDERS[(seed + period) % #VILLAGE_ORDERS + 1]
+	local rng = Random.new(G.WG.hash(seed, period))
+	local unitPrice = Config.ITEMS[order.item].price or 45
+	local gold = reward(rng, 10 + unitPrice * order.count * 0.8)
+	return {
+		id = v.key .. ":" .. period .. ":commande",
+		v = v.key, vname = v.name,
+		kind = "apporter", key = order.item, need = order.count,
+		title = order.title, gold = gold, xp = 10 + math.floor(gold / 4),
+	}
+end
+
 function Quetes.offers(v)
 	local period = math.floor((G.world.day or 1) / PERIOD)
 	local list = {}
 	for i = 1, PER_VILLAGE do
 		table.insert(list, makeOffer(v, period, i))
 	end
+	table.insert(list, villageOrder(v, period))
 	return list
 end
 

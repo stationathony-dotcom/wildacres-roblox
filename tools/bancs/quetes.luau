@@ -1,5 +1,5 @@
 -- Banc des quêtes facultatives (mode Edit, sans Play) : Quetes avec un G simulé sur une vraie île.
--- Vérifie : villages trouvés, 3 offres par village, offres identiques pour tous et différentes d'une
+-- Vérifie : villages trouvés, 4 offres par village, offres identiques pour tous et différentes d'une
 -- île à l'autre, prise / progression / rendu / abandon, apporter (objets pris), lettre, refus loin
 -- du village, pas deux fois la même offre.
 local folder = Instance.new("Folder")
@@ -67,9 +67,21 @@ local function at(vv)
 end
 local v = vs[1]
 local offers = Q.offers(v)
-check("3 offres au village " .. v.name, #offers == 3)
+check("4 offres au village " .. v.name, #offers == 4)
 local again = Q.offers(v)
 check("mêmes offres pour tout le monde (déterministe)", again[1].id == offers[1].id and again[1].title == offers[1].title and again[1].need == offers[1].need)
+local orders = {}
+local startDay = G.world.day
+for rotation = 0, 3 do
+	G.world.day = startDay + 2 * rotation
+	local order = Q.offers(v)[4]
+	local same = Q.offers(v)[4]
+	check("commande stable, distincte et réalisable (" .. order.title .. ")",
+		order.id == same.id and order.gold == same.gold and order.id:match(":commande$")
+			and order.kind == "apporter" and Config.ITEMS[order.key] ~= nil and order.need > 0 and not orders[order.key])
+	orders[order.key] = true
+end
+G.world.day = startDay
 
 -- variété : sur tous les villages, plusieurs sortes de quêtes
 local kinds, n = {}, 0
