@@ -184,6 +184,37 @@ function U.isWater(x: number, z: number): boolean
 end
 
 -- Joueur le plus proche d'une position (et sa distance)
+-- Positions des joueurs, recalculées au plus une fois par image (niveau de détail des simulations :
+-- monstres, bêtes et PNJ loin de tout joueur pensent moins souvent)
+local spotsT, spots = -1, {}
+function U.playerSpots(): { Vector3 }
+	local now = os.clock()
+	if now - spotsT < 0.03 then
+		return spots
+	end
+	spotsT = now
+	table.clear(spots)
+	for _, pl in game:GetService("Players"):GetPlayers() do
+		local ch = pl.Character
+		local root = ch and ch:FindFirstChild("HumanoidRootPart")
+		if root then
+			table.insert(spots, root.Position)
+		end
+	end
+	return spots
+end
+
+function U.playerDist(pos: Vector3): number
+	local bd = math.huge
+	for _, p in U.playerSpots() do
+		local d = (p - pos).Magnitude
+		if d < bd then
+			bd = d
+		end
+	end
+	return bd
+end
+
 function U.nearestPlayer(pos: Vector3, maxDist: number?): (Player?, number)
 	local best, bd = nil, maxDist or math.huge
 	for _, pl in game:GetService("Players"):GetPlayers() do

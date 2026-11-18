@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.0 — 2026-11-18
+- **Performance** : monstres, bêtes et PNJ loin des joueurs pensent moins souvent, et rien n'est renvoyé sur le réseau quand une créature ne bouge pas (boucle serveur 1,79 → 0,86 ms/image au village de départ) ; contacts physiques coupés sur le décor fixe (17 763 → 458 pièces)
 - **Gens de métier** (`Systemes/Metiers`) : boulanger, cuisinier, forgeron, guérisseur, prêtre, palefrenier en vrais PNJ (routine, témoins, K.O., avis), tenues propres (toque, tablier de cuir, robe, capuche, hotte), métier entre chevrons dans le cadre de cible ; leur STOCK vient de ce que les joueurs leur vendent (blé → pain du lendemain, minerai → ferrures, plantes → remèdes), petite fournée de base sinon ; ils paient 15 % de mieux leurs matières et ne rachètent qu'elles ; un artisan tué est remplacé 3 jours plus tard
 - Services : repas chaud (cuisinier), réparation (forgeron, avec coups de marteau), soin + fin du ralenti (guérisseur, 8 or), bénédiction +2 chance 15 min / confession (rachète jusqu'à 10 honneur par jour, jamais la prime) / aumône (prêtre ; l'or va au trésor du village), monture (palefrenier) — les invites posées sur la taverne, la forge et l'écurie disparaissent
 - **Enfants** sur la place (1 à 3 par village) : jamais frappables ni combattants, ils fuient les recherchés ; jeu de chat (20 s pour les attraper) ; une fois attrapés, ils soufflent un secret (grotte cachée du coin, lieu à visiter)

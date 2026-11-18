@@ -278,7 +278,19 @@ function Animals.step(dt: number)
 		if not a.model.Parent then
 			table.remove(Animals.list, i)
 		else
-			a.t += step
+			-- niveau de détail : une bête loin de tout joueur bouge par grands pas, rarement
+			local dtA = step
+			if not a.leader then
+				local d = G.Util.playerDist(a.pos)
+				local iv = d < 120 and 0 or (d < 300 and 0.25 or 1)
+				a.lodAcc = (a.lodAcc or 0) + step
+				if a.lodAcc < iv then
+					continue
+				end
+				dtA = math.min(a.lodAcc, 1.5)
+				a.lodAcc = 0
+			end
+			a.t += dtA
 			local target
 			local speed = a.k.speed
 			if a.leader then
@@ -307,20 +319,26 @@ function Animals.step(dt: number)
 			end
 			if target then
 				local d = Vector3.new(target.X - a.pos.X, 0, target.Z - a.pos.Z)
+				local moved = false
 				if d.Magnitude > 0.5 then
-					local np = a.pos + d.Unit * math.min(d.Magnitude, speed * step)
+					local np = a.pos + d.Unit * math.min(d.Magnitude, speed * dtA)
 					if not G.Util.isWater(np.X, np.Z) and (a.leader or inPen(a, np)) then
 						local ny = G.Util.groundY(np.X, np.Z)
 						if math.abs(ny - a.pos.Y) < 4 or a.leader then
 							a.pos = Vector3.new(np.X, ny, np.Z)
 							a.yaw = math.atan2(-d.X, -d.Z)
+							moved = true
 						end
 					else
 						a.goal = nil
 					end
 				end
-				local bob = math.abs(math.sin(os.clock() * 8)) * 0.15
-				a.model:PivotTo(CFrame.new(a.pos + Vector3.new(0, bob, 0)) * CFrame.Angles(0, a.yaw, 0))
+				-- dandinement seulement en marche ; immobile, on ne renvoie rien sur le réseau
+				if moved or a.wasMoving then
+					local bob = moved and math.abs(math.sin(os.clock() * 8)) * 0.15 or 0
+					a.model:PivotTo(CFrame.new(a.pos + Vector3.new(0, bob, 0)) * CFrame.Angles(0, a.yaw, 0))
+				end
+				a.wasMoving = moved
 			end
 		end
 	end

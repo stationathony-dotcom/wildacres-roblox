@@ -321,7 +321,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [~] Ajouter réactions aux dangers, intempéries, événements et crimes.
 - [~] Ajouter fuite, alerte, refuge et retour à la routine. _(fuite devant un recherché, alerte, retour à la routine après le dialogue ; refuge à la maison la nuit)_
 - [x] Prévoir la récupération d'un PNJ coincé ou disparu.
-- [ ] Optimiser la simulation loin des joueurs.
+- [x] Optimiser la simulation loin des joueurs. _(18/11 : PNJ calmes à plus de 300 studs de tout joueur : 1 réflexion/s au lieu de 4)_
 
 ### 10B. Dialogues et relations
 - [x] Ajouter salutations, informations locales, commerce, rumeurs et demandes facultatives. _(Discuter, « Des nouvelles du coin ? », boutique, commandes, « Tu as du travail pour moi ? » → quêtes du village)_
@@ -617,10 +617,10 @@ Ces outils sont souvent oubliés, mais ils sont essentiels pour un jeu persistan
 - [ ] Tester serveur complet avec maisons complexes, animaux, PNJ, armées, événements et combats simultanés.
 - [ ] Tester plusieurs serveurs actifs sur un même monde persistant.
 - [ ] Optimiser le streaming des régions et le chargement initial.
-- [ ] Limiter les collisions physiques inutiles.
+- [x] Limiter les collisions physiques inutiles. _(18/11 : CanTouch coupé sur tout le décor fixe des régions, aucun script n'écoutant Touched : 17 763 → 458 pièces ; collisions déjà limitées à 4 779 / 19 850)_
 - [ ] Réduire les détails des modèles éloignés si nécessaire.
-- [ ] Simuler les PNJ et animaux éloignés de manière moins coûteuse.
-- [ ] Limiter les boucles de calcul et les requêtes de sauvegarde excessives.
+- [x] Simuler les PNJ et animaux éloignés de manière moins coûteuse. _(18/11 : niveau de détail par distance — monstres 30 / 6 / 1 Hz, bêtes 20 / 4 / 1 Hz, rien n'est renvoyé sur le réseau quand rien ne bouge ; mesuré au village de départ : boucle 1,79 → 0,86 ms/image, monstres 1,48 → 0,55 ms)_
+- [x] Limiter les boucles de calcul et les requêtes de sauvegarde excessives. _(boucles : voir ci-dessus ; sauvegardes vérifiées 18/11 : joueur / 90 s (verrou), monde / 150 s en n'écrivant que les secteurs changés, présence / 15 s ; ≈ 27 écritures/min à 40 joueurs pour un budget de 460)_
 - [ ] Tester les grandes parcelles et les constructions très détaillées.
 - [~] Tester les mondes très modifiés et les registres remplis.
 - [~] Surveiller FPS, mémoire, latence, chargement, erreurs et déconnexions.

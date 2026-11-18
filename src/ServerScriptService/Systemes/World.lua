@@ -299,6 +299,13 @@ local function loadRegion(rx: number, rz: number)
 	writeTerrain(plan)
 	local folder = Instance.new("Folder")
 	folder.Name = "R" .. key
+	-- aucun script n'écoute Touched : les pièces fixes du décor ne calculent plus leurs contacts
+	-- (CanTouch). CanQuery reste vrai : clics, visée, invites et rayons en ont besoin.
+	folder.DescendantAdded:Connect(function(d)
+		if d:IsA("BasePart") and d.Anchored then
+			d.CanTouch = false
+		end
+	end)
 	folder.Parent = World.folder
 	local reg = { key = key, rx = rx, rz = rz, plan = plan, folder = folder, state = World.regionState(key), houses = {} }
 	World.loaded[key] = reg

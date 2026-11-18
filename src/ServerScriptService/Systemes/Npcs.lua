@@ -654,7 +654,11 @@ function Npcs.step(dt: number)
 			e.hitCd -= dt
 			e.think -= dt
 			if e.think <= 0 then
-				e.think = 0.25
+				-- loin de tout joueur (rien à voir, personne pour le voir), il pense 4 fois moins souvent ;
+				-- en alerte, en fuite, au combat : toujours à plein régime
+				local s = e.state
+				local calm = s == "routine" or s == "inside" or s == "talk"
+				e.think = (calm and G.Util.playerDist(e.root.Position) > 300) and 1 or 0.25
 				local ok, err = pcall(think, e)
 				if not ok then
 					warn("[WildAcres] PNJ " .. e.data.name .. " : " .. tostring(err))

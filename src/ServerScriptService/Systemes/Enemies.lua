@@ -91,6 +91,7 @@ local PREDATORS = {
 }
 local AGGRO = 34
 local LEASH = 70
+local LOD_NEAR, LOD_FAR = 160, 350 -- au-delà, la créature pense moins souvent (personne ne la voit de près)
 local RESPAWN_DAYS = 3
 
 function Enemies.init(g)
@@ -349,6 +350,12 @@ local function render(en)
 			a:Destroy()
 		end
 	end
+	-- rien n'a bougé : pas de PivotTo (chaque déplacement de modèle part sur le réseau vers tous)
+	local windup = en.state == "windup"
+	if not windup and not en.lastWindup and en.lastLift == lift and en.lastYaw == en.yaw and en.lastPos and (en.pos - en.lastPos).Magnitude < 0.02 then
+		return
+	end
+	en.lastPos, en.lastYaw, en.lastLift, en.lastWindup = en.pos, en.yaw, lift, windup
 	en.model:PivotTo(CFrame.new(en.pos + Vector3.new(0, lift, 0)) * CFrame.Angles(0, en.yaw, 0) * shake)
 end
 
@@ -430,8 +437,12 @@ local function thinkPassive(en, dt: number)
 	end
 	if en.bar then
 		en.bar.Enabled = not en.k.passive or en.hp < en.maxHp
-		en.bar.Frame.Fill.Size = UDim2.fromScale(math.max(0, en.hp / en.maxHp), 1)
-		en.model:SetAttribute("PV", math.max(0, en.hp))
+		local pv = math.max(0, en.hp)
+		if en.barPv ~= pv then -- (barre et attribut renvoyés seulement s'ils changent)
+			en.barPv = pv
+			en.bar.Frame.Fill.Size = UDim2.fromScale(pv / en.maxHp, 1)
+			en.model:SetAttribute("PV", pv)
+		end
 	end
 	render(en)
 end
@@ -580,8 +591,12 @@ local function think(en, dt: number)
 	end
 	if en.bar then
 		en.bar.Enabled = not en.k.passive or en.hp < en.maxHp
-		en.bar.Frame.Fill.Size = UDim2.fromScale(math.max(0, en.hp / en.maxHp), 1)
-		en.model:SetAttribute("PV", math.max(0, en.hp))
+		local pv = math.max(0, en.hp)
+		if en.barPv ~= pv then -- (barre et attribut renvoyés seulement s'ils changent)
+			en.barPv = pv
+			en.bar.Frame.Fill.Size = UDim2.fromScale(pv / en.maxHp, 1)
+			en.model:SetAttribute("PV", pv)
+		end
 	end
 	render(en)
 end
@@ -600,10 +615,23 @@ function Enemies.step(dt: number)
 		if en.dead or not en.model.Parent then
 			table.remove(Enemies.list, i)
 		else
-			local ok, err = pcall(think, en, step)
-			if not ok then
-				warn("[WildAcres] monstre : " .. tostring(err))
-				en.dead = true
+			-- niveau de détail : près d'un joueur (ou en plein combat, ou boss) à 30 Hz ; plus loin,
+			-- 6 Hz puis 1 Hz avec un pas de temps cumulé (même trajet, moins de calculs et de réseau)
+			local interval = 0
+			local st = en.state
+			if not (en.boss or en.pet or st == "chase" or st == "windup" or st == "hurt" or st == "flee") then
+				local d = G.Util.playerDist(en.pos)
+				interval = d < LOD_NEAR and 0 or (d < LOD_FAR and 1 / 6 or 1)
+			end
+			en.lodAcc = (en.lodAcc or 0) + step
+			if en.lodAcc >= interval then
+				local dt2 = math.min(en.lodAcc, 1.5)
+				en.lodAcc = 0
+				local ok, err = pcall(think, en, dt2)
+				if not ok then
+					warn("[WildAcres] monstre : " .. tostring(err))
+					en.dead = true
+				end
 			end
 		end
 	end
