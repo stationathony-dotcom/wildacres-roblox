@@ -7,6 +7,7 @@
 --   · lucioles la nuit (marais, prairie, forêt) ;
 --   · écureuils le jour (forêt, prairie) : trottinent, puis filent vers l'arbre le plus proche et y
 --     grimpent quand on approche (18/11) ;
+--   · canards sauvages qui nagent sur les eaux calmes le jour.
 -- Rien n'est sauvegardé, rien ne se chasse : c'est le décor qui vit.
 
 local Players = game:GetService("Players")
@@ -102,6 +103,36 @@ local function poseBird(m: Model, cf: CFrame, flap: number, scale: number)
 	m.AileD.CFrame = cf * CFrame.new(0.22 * scale, 0.05 * scale, 0) * CFrame.Angles(0, 0, -a) * CFrame.new(0.22 * scale, 0, 0)
 end
 
+local function makeDuck(): Model
+	local m = makeBird(Color3.fromRGB(133, 118, 97), 1.7)
+	m.Name = "Canard sauvage"
+	m.Tete.Color = Color3.fromRGB(43, 104, 79)
+	m.Bec.Color = Color3.fromRGB(237, 186, 62)
+	return m
+end
+
+local function poseDuck(m: Model, cf: CFrame)
+	m.PrimaryPart.CFrame = cf
+	m.Tete.CFrame = cf * CFrame.new(0, 0.32, -0.45)
+	m.Bec.CFrame = cf * CFrame.new(0, 0.25, -0.72)
+	m.AileG.CFrame = cf * CFrame.new(-0.3, 0.04, 0.06) * CFrame.Angles(0, math.pi / 2, 0)
+	m.AileD.CFrame = cf * CFrame.new(0.3, 0.04, 0.06) * CFrame.Angles(0, math.pi / 2, 0)
+end
+
+local DUCK_RADIUS = 3
+local function duckRoute(center: Vector3): boolean
+	for step = 0, 7 do
+		local a = step * math.pi / 4
+		local x = center.X + math.cos(a) * DUCK_RADIUS
+		local z = center.Z + math.sin(a) * DUCK_RADIUS
+		local hit, material = ground(x, z, center.Y)
+		if not hit or material ~= Enum.Material.Water or math.abs(hit.Y - center.Y) > 0.2 then
+			return false
+		end
+	end
+	return true
+end
+
 local function makeButterfly(color: Color3): Model
 	local m = Instance.new("Model")
 	local body = part(Vector3.new(0.05, 0.05, 0.25), Color3.fromRGB(40, 30, 20), nil, m)
@@ -158,8 +189,8 @@ end
 
 -- ---------------------------------------------------------------- Population
 local critters = {} -- { kind, model, pos, vel, state, t, ... }
-local MAX = { sol = 5, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3 }
-local counts = { sol = 0, ciel = 0, papillon = 0, luciole = 0, ecureuil = 0 }
+local MAX = { sol = 5, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3, canard = 2 }
+local counts = { sol = 0, ciel = 0, papillon = 0, luciole = 0, ecureuil = 0, canard = 0 }
 
 local function remove(i: number)
 	local c = critters[i]
@@ -173,11 +204,17 @@ local function spawn(kind: string, root: Vector3, biome: string)
 	local d = kind == "ciel" and rng:NextNumber(10, 60) or rng:NextNumber(18, 45)
 	local x, z = root.X + math.cos(a) * d, root.Z + math.sin(a) * d
 	local g, mat = ground(x, z, root.Y)
-	if not g or mat == Enum.Material.Water then
+	if not g or (mat == Enum.Material.Water) ~= (kind == "canard") then
 		return
 	end
 	local c = { kind = kind, t = 0, phase = rng:NextNumber(0, 6) }
-	if kind == "sol" then
+	if kind == "canard" then
+		if not duckRoute(g) then
+			return
+		end
+		c.model = makeDuck()
+		c.center = g
+	elseif kind == "sol" then
 		local col = biome == "neige" and Color3.fromRGB(230, 230, 235) or Color3.fromRGB(130, 95, 70)
 		c.scale = 1
 		c.model = makeBird(col, c.scale)
@@ -235,6 +272,7 @@ RunService.Heartbeat:Connect(function(dt)
 			papillon = (day and not wet and (biome == "prairie" or biome == "foret" or biome == "marais")) and MAX.papillon or 0,
 			luciole = (not day and not wet and (biome == "marais" or biome == "prairie" or biome == "foret")) and MAX.luciole or 0,
 			ecureuil = (day and not wet and (biome == "foret" or biome == "prairie")) and MAX.ecureuil or 0,
+			canard = (day and not wet and biome ~= "neige" and biome ~= "desert") and MAX.canard or 0,
 		}
 		-- trop loin, ou hors de saison/heure : on retire en douceur
 		for i = #critters, 1, -1 do
@@ -319,6 +357,12 @@ RunService.Heartbeat:Connect(function(dt)
 					continue
 				end
 			end
+		elseif c.kind == "canard" then
+			local a = c.t * 0.4 + c.phase
+			local offset = Vector3.new(math.cos(a) * DUCK_RADIUS, 0.2 + math.sin(a * 5) * 0.05, math.sin(a) * DUCK_RADIUS)
+			c.pos = c.center + offset
+			local tangent = Vector3.new(-math.sin(a), 0, math.cos(a))
+			poseDuck(c.model, CFrame.lookAt(c.pos, c.pos + tangent))
 		elseif c.kind == "ciel" then
 			local a = now * c.speed + c.phase
 			local p = c.center + Vector3.new(math.cos(a) * c.radius, math.sin(a * 0.7) * 3, math.sin(a) * c.radius)
