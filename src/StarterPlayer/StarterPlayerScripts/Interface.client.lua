@@ -3233,6 +3233,26 @@ local function game_()
 		sel.LineThickness = 0.04
 		sel.Color3 = C.green
 		sel.Parent = g
+		-- pièce composée (arche, mur courbe) : ses blocs suivent la racine (soudés)
+		local compose = Config.SHAPE_PARTS and Config.SHAPE_PARTS[b.shape]
+		if compose then
+			g.Transparency = 1
+			g:SetAttribute("Compose", true)
+			for _, sp in compose(b.size) do
+				local c = Instance.new("Part")
+				c.Size = sp[1]
+				c.CFrame = g.CFrame * sp[2]
+				c.Anchored = false
+				c.Massless = true
+				c.CanCollide, c.CanQuery, c.CanTouch = false, false, false
+				c.Transparency = 0.45
+				c.Material = g.Material
+				c.Parent = g
+				local w = Instance.new("WeldConstraint")
+				w.Part0, w.Part1 = g, c
+				w.Parent = c
+			end
+		end
 		ghost = g
 	end
 
@@ -3288,8 +3308,13 @@ local function game_()
 		ghostCF = CFrame.new(p) * rot
 		ghost.CFrame = b.shape == "pillar" and ghostCF * CFrame.Angles(0, 0, math.rad(90)) or ghostCF
 		local ok = haveBlock() > 0
-		ghost.Transparency = 0.4
+		ghost.Transparency = ghost:GetAttribute("Compose") and 1 or 0.4
 		ghost.Color = ok and b.color or C.red
+		for _, c in ghost:GetChildren() do
+			if c:IsA("BasePart") then
+				c.Color = ghost.Color
+			end
+		end
 		local sel = ghost:FindFirstChildOfClass("SelectionBox")
 		if sel then
 			sel.Color3 = ok and C.green or C.red

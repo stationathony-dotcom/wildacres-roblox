@@ -576,6 +576,42 @@ C.BUILD_SHAPES = {
 	-- 18/11 : échelles grimpables (treillis Roblox : largeur 2, hauteur multiple de 2)
 	{ id = "echelle", name = "Échelle", shape = "ladder", size = Vector3.new(2, 4, 2), cost = 2, mats = { "bois", "rondin", "fer" } },
 	{ id = "grandeechelle", name = "Grande échelle", shape = "ladder", size = Vector3.new(2, 8, 2), cost = 3, mats = { "bois", "rondin", "fer" } },
+	-- 18/11 : pièces composées (plusieurs blocs, une seule pièce à poser / reprendre / casser)
+	{ id = "arche", name = "Arche", shape = "arch", size = Vector3.new(4, 4, 0.6), cost = 4, mats = { "pierre", "brique", "taille", "bois" } },
+	{ id = "murcourbe", name = "Mur courbe", shape = "curve", size = Vector3.new(4, 4, 4), cost = 5, mats = { "pierre", "brique", "taille", "bois", "torchis" } },
+}
+
+-- Formes composées : liste de { taille, décalage } dans le repère de la pièce (centre = 0).
+-- Partagées par le serveur (Batir) et le fantôme de construction (Interface) : même dessin.
+C.SHAPE_PARTS = {
+	-- arche : deux montants, neuf claveaux en demi-cercle (ouverture 2,4 × 3,2), deux remplissages
+	arch = function(size: Vector3)
+		local t = size.Z
+		local out = {
+			{ Vector3.new(0.8, size.Y, t), CFrame.new(-1.6, 0, 0) },
+			{ Vector3.new(0.8, size.Y, t), CFrame.new(1.6, 0, 0) },
+		}
+		for k = 0, 8 do
+			local a = k / 8 * math.pi
+			table.insert(out, { Vector3.new(0.8, 0.74, t), CFrame.new(math.cos(a) * 1.6, math.sin(a) * 1.6, 0) * CFrame.Angles(0, 0, a) })
+		end
+		table.insert(out, { Vector3.new(0.7, 0.5, t), CFrame.new(-0.95, 1.75, 0) })
+		table.insert(out, { Vector3.new(0.7, 0.5, t), CFrame.new(0.95, 1.75, 0) })
+		return out
+	end,
+	-- mur courbe : quart de cercle de rayon 3,75 autour du coin (−2, −2), six segments
+	curve = function(size: Vector3)
+		local out = {}
+		local r, n = 3.75, 6
+		local seg = r * (math.pi / 2) / n + 0.1
+		for k = 0, n - 1 do
+			local a = (k + 0.5) / n * math.pi / 2
+			local pos = Vector3.new(-2 + math.cos(a) * r, 0, -2 + math.sin(a) * r)
+			local tangent = Vector3.new(-math.sin(a), 0, math.cos(a))
+			table.insert(out, { Vector3.new(0.5, size.Y, seg), CFrame.lookAt(pos, pos + tangent) })
+		end
+		return out
+	end,
 }
 C.BLOCKS = {}
 C.BLOCK_ORDER = {}
@@ -665,7 +701,7 @@ C.Prises.apply(C)
 local SHAPE_ICON = {
 	bloc = "⬛", dalle = "🟫", plancher = "🟫", mur = "🧱", demimur = "🧱", grandmur = "🧱", mince = "🧱", poutre = "📏", linteau = "📏",
 	poteau = "🏛️", hautpoteau = "🏛️", pilier = "🏛️", colonne = "🏛️", pente = "🔺", coin = "🔺", toitpointu = "🔺", rampe = "📐",
-	marche = "📐", barriere = "➖", grille = "🔲",
+	marche = "📐", barriere = "➖", grille = "🔲", arche = "🌉", murcourbe = "🧱",
 }
 local HAND_MATS = { bois = true, rondin = true, chaume = true, torchis = true, pise = true }
 for _, id in C.BLOCK_ORDER do

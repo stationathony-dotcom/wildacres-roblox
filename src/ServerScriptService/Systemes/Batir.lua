@@ -41,7 +41,31 @@ local function makePart(d, parent: Instance)
 		return nil
 	end
 	local p
-	if b.shape == "wedge" then
+	local compose = Config.SHAPE_PARTS and Config.SHAPE_PARTS[b.shape]
+	if compose then
+		-- pièce composée : une racine invisible (visée, reprise, casse) + ses blocs
+		p = Instance.new("Part")
+		p.Transparency = 1
+		p.CanCollide = false
+		local cf = cframeOf(d)
+		for _, sp in compose(b.size) do
+			local c = Instance.new("Part")
+			c.Name = "Bloc"
+			c.Anchored = true
+			c.Size = sp[1]
+			c.CFrame = cf * sp[2]
+			c.Material = b.mat
+			c.Color = b.color
+			c.TopSurface = Enum.SurfaceType.Smooth
+			c.BottomSurface = Enum.SurfaceType.Smooth
+			if b.transp then
+				c.Transparency = b.transp
+			end
+			c:SetAttribute("Built", d.id)
+			c:SetAttribute("Owner", d.o)
+			c.Parent = p
+		end
+	elseif b.shape == "wedge" then
 		p = Instance.new("WedgePart")
 	elseif b.shape == "corner" then
 		p = Instance.new("CornerWedgePart")
@@ -69,7 +93,7 @@ local function makePart(d, parent: Instance)
 	p.Color = b.color
 	p.TopSurface = Enum.SurfaceType.Smooth
 	p.BottomSurface = Enum.SurfaceType.Smooth
-	if b.transp then
+	if b.transp and not compose then
 		p.Transparency = b.transp
 	end
 	p.Name = "Piece"

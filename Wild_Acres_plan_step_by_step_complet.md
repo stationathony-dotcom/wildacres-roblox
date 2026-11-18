@@ -344,9 +344,9 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [x] Pièces fabriquées, placées depuis la barre rapide, aperçu fantôme et rotation indiqués comme présents.
 - [x] Mobilier de base et pièces de construction déjà intégrés.
 - [ ] Auditer toutes les formes, matériaux, toits, portes, fenêtres, escaliers, clôtures et éléments décoratifs.
-- [~] Ajouter les formes manquantes retenues : courbes, arches, rampes, rambardes, pièces inclinées et raccords. _(rampes, barrières, pentes, coins, piliers, colonnes, échelles (18/11) ; restent courbes et arches)_
+- [x] Ajouter les formes manquantes retenues : courbes, arches, rampes, rambardes, pièces inclinées et raccords. _(rampes, barrières, pentes, coins, piliers, colonnes, échelles (18/11)  ; 18/11 : ARCHE (plein cintre, 13 blocs) et MUR COURBE (quart de cercle) en pierre, brique, pierre taillée, bois, torchis — pièces composées, même dessin pour le fantôme ; testées en Play : arcade sur deux colonnes, on passe dessous)_
 - [ ] Vérifier le placement libre, rotation, retournement et reprise d'une pièce.
-- [~] Ajouter sélection multiple, déplacement et récupération en lot si nécessaire. _(récupération en lot : /demonter <rayon>, matériaux rendus (18/11) ; reprendre une pièce rend enfin ses matériaux (bug corrigé) ; restent sélection / déplacement)_
+- [x] Ajouter sélection multiple, déplacement et récupération en lot si nécessaire. _(récupération en lot : /demonter <rayon>, matériaux rendus (18/11) ; reprendre une pièce rend enfin ses matériaux (bug corrigé)  ; sélection et déplacement en lot 18/11 : /plan copier <nom> <rayon> (sélection = ses pièces dans le rayon), /demonter, puis /plan poser <nom> ailleurs (dans le sens du regard))_
 - [x] Ajouter plan de construction partageable si cela ne supprime pas le coût des matériaux. _(18/11 : /plan copier <nom> [rayon] (ses pièces, relatif aux pieds et au regard), /plan poser <nom> (dans l'orientation du regard, pièces du sac sinon leurs matériaux, tout ou rien avec la liste de ce qui manque), /plan donner <nom> <pseudo>, /plan liste, /plan oublier ; 10 plans × 500 pièces (taille de sauvegarde) ; testé en Play : copie, refus « Il te manque : 9 Planches », pose, rotation de 90°)_
 - [ ] Vérifier collisions, pièces flottantes involontaires et accès aux portes.
 - [ ] Optimiser et tester les grandes maisons très détaillées.

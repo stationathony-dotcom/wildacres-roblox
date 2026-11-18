@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.0 — 2026-11-18
+- **Construction** : arche en plein cintre et mur courbe (pierre, brique, pierre taillée, bois, torchis) — de quoi faire arcades, portails et tours rondes
 - **Fers à cheval** (enclume : 2 lingots de fer, 4 clous) : ferrer sa monture lui donne +12 % d'allure, pour de bon ; en selle, le cavalier a enfin une vraie posture
 - **Terriers** : lapins et renards ont un terrier près de leur gîte ; effrayés, ils y filent et s'y cachent (un prédateur perd leur trace), puis ressortent quand le calme revient
 - **Cris des bêtes** en son 3D : moutons, vaches ; la nuit, un loup hurle au loin et une chouette hulule ; endormi, le personnage s'assoupit (tête basse, respiration lente)
