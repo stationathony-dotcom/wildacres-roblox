@@ -372,6 +372,7 @@ straw_bed|Paillasse|🛏️|0|p:paillasse:Y|straw8 linen1|mobilier
 wardrobe|Armoire|🚪|0|p:armoire:BF|planks10 hinge2 @bench #artisanat:4|mobilier
 reinforced_chest|Coffre renforcé|📦|0|p:coffre:F|planks6 iron_bar2 @bench #artisanat:8|mobilier
 bookcase|Bibliothèque|📚|0|p:biblio:BF|planks10 history_book1 @bench|mobilier
+keepsake_box|Coffret|🎁|0|p:coffret:BF|planks2 hinge1 @bench|mobilier
 counter|Comptoir|🌲|0|p:comptoir:B|planks10 nails4 @bench|mobilier
 desk|Bureau|🖋️|0|p:bureau:BF|planks8 inkwell1 @bench|mobilier
 fireplace|Cheminée|🔥|0|p:cheminee:P|stone20 brick10 @bench #artisanat:6|mobilier
@@ -843,6 +844,11 @@ ARCH.etagere = function(m, c)
 	end
 	P(m, V(0.2, 4.4, 1), V(-1.7, 2.2, 0), DARK, Mat.Wood)
 	P(m, V(0.2, 4.4, 1), V(1.7, 2.2, 0), DARK, Mat.Wood)
+end
+ARCH.coffret = function(m, c)
+	P(m, V(1.35, 0.46, 0.85), V(0, 0.23, 0), c, Mat.Wood)
+	P(m, V(1.42, 0.14, 0.92), V(0, 0.53, 0), DARK, Mat.Wood)
+	P(m, V(0.22, 0.2, 0.06), V(0, 0.38, 0.46), IRON, Mat.Metal)
 end
 ARCH.biblio = function(m, c)
 	ARCH.etagere(m, c)
