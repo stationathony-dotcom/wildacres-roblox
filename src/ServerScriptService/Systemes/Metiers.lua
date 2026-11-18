@@ -1121,10 +1121,11 @@ function Metiers.choice(player: Player, e, what: string): (string | boolean)?
 		G.Economie.record(player, "noblesse", nxt.name .. " (-" .. nxt.gold .. ")")
 		G.Social.checkTitles(player)
 		G.Joueurs.sync(player)
+		G.Avatar.applyCape(player) -- la cape de son rang, tout de suite
 		sparkle(player, Color3.fromRGB(255, 215, 90))
 		G.Util.sfx("pieces", e.root.Position)
 		G.Npcs.addOp(e, player, 10)
-		return "Relève-toi, " .. nxt.name .. " " .. player.DisplayName .. ". Porte ce titre avec honneur."
+		return "Relève-toi, " .. nxt.name .. " " .. player.DisplayName .. ". Porte ce titre — et cette cape — avec honneur."
 	elseif what == "monture" and has("monture") then
 		local at = e.root.Position + e.root.CFrame.LookVector * 6
 		G.Horses.fetch(player, at)

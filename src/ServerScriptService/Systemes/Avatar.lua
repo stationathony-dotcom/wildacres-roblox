@@ -434,6 +434,41 @@ function Avatar.refresh(player: Player)
 			end
 		end
 	end
+	Avatar.applyCape(player)
+end
+
+-- Cape de noblesse (18/11) : récompense visible des titres accordés par un seigneur (Metiers).
+-- Écuyer : cape brune ; Chevalier : bleue à bordure d'argent ; Baron : pourpre brodée d'or.
+local CAPES = {
+	{ cloth = Color3.fromRGB(110, 76, 46) },
+	{ cloth = Color3.fromRGB(40, 64, 130), trim = Color3.fromRGB(200, 205, 215) },
+	{ cloth = Color3.fromRGB(96, 30, 92), trim = Color3.fromRGB(226, 186, 70) },
+}
+function Avatar.applyCape(player: Player)
+	local char = player.Character
+	local torso = char and (char:FindFirstChild("UpperTorso") or char:FindFirstChild("Torso"))
+	if not torso then
+		return
+	end
+	local old = char:FindFirstChild("Cape_WA")
+	if old then
+		old:Destroy()
+	end
+	local prof = G.Joueurs.get(player)
+	local rank = prof and prof.stats and prof.stats.noblesse or 0
+	local c = CAPES[math.clamp(rank, 0, #CAPES)]
+	if not c then
+		return
+	end
+	local folder = Instance.new("Model")
+	folder.Name = "Cape_WA"
+	folder.Parent = char
+	local h = torso.Size.Y
+	weld(folder, torso, "Cape", V(torso.Size.X * 1.05, h * 2.15, 0.12), C(0, -h * 0.55, torso.Size.Z / 2 + 0.08), c.cloth, Enum.Material.Fabric)
+	weld(folder, torso, "Agrafe", V(torso.Size.X * 1.1, 0.28, torso.Size.Z * 1.05), C(0, h / 2 - 0.1, 0), c.trim or c.cloth:Lerp(Color3.new(0, 0, 0), 0.3), Enum.Material.Fabric)
+	if c.trim then
+		weld(folder, torso, "Bordure", V(torso.Size.X * 1.06, 0.14, 0.14), C(0, -h * 1.6 + 0.05, torso.Size.Z / 2 + 0.1), c.trim, Enum.Material.Metal)
+	end
 end
 
 return Avatar

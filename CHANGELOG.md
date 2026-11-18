@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.0 — 2026-11-18
+- **Capes de noblesse** : écuyer (brune), chevalier (bleue bordée d'argent), baron (pourpre brodée d'or), portées dès l'adoubement
 - **Enquêtes** : un vol ou une effraction que personne n'a vu est découvert le lendemain ; si quelqu'un a été vu dans le coin, il est soupçonné (méfiance, un peu d'honneur, jamais d'étoile sans témoin) et la victime apprend son nom
 - **Bug corrigé** : quand quelqu'un disparaissait, tous les joueurs connectés étaient soupçonnés et perdaient de l'honneur (seul le suspect l'est désormais)
 - **Élevage** : une bête près de son abri (poulailler, étable, bergerie) donne un produit de plus ; poules et vaches bien nourries et abreuvées aussi (l'abreuvoir et la mangeoire ne leur servaient à rien)

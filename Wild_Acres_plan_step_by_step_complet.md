@@ -232,7 +232,7 @@ La feuille actuelle parle de l'accueil et du personnage global, mais plusieurs f
 - [ ] Vérifier que les talents apportent de vrais choix, sans choix obligatoire unique.
 - [x] Vérifier le coût et la possibilité de réinitialiser les talents.
 - [~] Ajouter journal de découvertes, recettes, lieux visités, espèces et ressources connues.
-- [~] Compléter titres, collections, hauts faits et récompenses cosmétiques. _(19 titres dont Herboriste, Maître herboriste, Bûcheron, Mineur, Spéléologue, Capitaine (18/11) ; collection des plantes sauvages ; restent récompenses cosmétiques)_
+- [x] Compléter titres, collections, hauts faits et récompenses cosmétiques. _(19 titres dont Herboriste, Maître herboriste, Bûcheron, Mineur, Spéléologue, Capitaine (18/11) ; collection des plantes sauvages  ; 18/11 : titres de noblesse Écuyer / Chevalier / Baron (seigneur des châteaux) et leur CAPE portée par le personnage (brune, bleue bordée d'argent, pourpre brodée d'or), selles colorées, tenues ; vu en Play)_
 - [x] Ajouter objectifs personnels facultatifs si utiles, sans transformer le bac à sable en suite de quêtes obligatoires.
 - [~] Définir des objectifs de long terme : bâtir, maîtriser un métier, découvrir des mondes, collectionner, commercer, développer un clan. _(titres, collections, compétences jusqu'au niveau 50, domaine sans plafond, clans, armée, mondes à découvrir)_
 - [ ] Vérifier le parcours d'un joueur occasionnel et d'un nouveau joueur.
