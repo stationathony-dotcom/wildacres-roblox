@@ -274,7 +274,7 @@ La feuille actuelle parle de l'accueil et du personnage global, mais plusieurs f
 - [~] Compléter oiseaux, petits mammifères, insectes, reptiles, amphibiens et animaux aquatiques par biome. _(moineaux, rapaces, corbeaux, mouettes, papillons, lucioles, écureuils (18/11), lapins, renards, cerfs, crapauds…)_
 - [x] Définir horaires, habitat, sons et réactions.
 - [~] Ajouter comportements simples : manger, boire, se reposer, fuir, se cacher, migrer.
-- [~] Ajouter traces, empreintes, nids, terriers, plumes, poils et cris. _(empreintes 18/11, nids à dénicher, plumes ; restent terriers, cris)_
+- [~] Ajouter traces, empreintes, nids, terriers, plumes, poils et cris. _(empreintes 18/11, nids à dénicher, plumes ; cris des bêtes 18/11 : mouton, vache, loup qui hurle la nuit, chouette, en son 3D (Cris.client, Pro Sound Effects), vérifié en Play ; restent les terriers)_
 - [x] Simuler les animaux éloignés de façon légère pour préserver les performances.
 
 ### 9B. Ennemis et créatures neutres
@@ -558,7 +558,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [~] Créer sons d'ambiance distincts par biome, météo et moment de la journée.
 - [~] Ajouter sons d'outils, récolte, forge, cuisine, portes, animaux, montures, interactions et interface.
 - [x] Ajouter musique réglable et discrète si elle est prévue. _(18/11 `Musique.client` : un morceau selon le lieu et l'heure (jour, village, nuit, grotte) puis 60–120 s de silence, fondu 3 s ; 6 morceaux sous licence Roblox (APM, DistroKid), chargement vérifié en Play ; volume Musique dans les Paramètres [O], sauvegardé, 🔇 coupe tout)_
-- [~] Ajouter animations de récolte, fabrication, pêche, cuisine, commerce, dressage, construction et repos. _(18/11 : récolte, fabrication (et cuisine, même grille), commerce, dressage, construction faits et vus en Play ; pêche = coup de canne ; reste le repos)_
+- [x] Ajouter animations de récolte, fabrication, pêche, cuisine, commerce, dressage, construction et repos. _(18/11 : récolte, fabrication (et cuisine, même grille), commerce, dressage, construction faits et vus en Play ; pêche = coup de canne ; repos : il s'assoupit, tête basse, respiration lente (attribut Sleeping), vu en Play)_
 - [x] Ajouter animations et réactions pour habitants, animaux et créatures. _(18/11 : les habitants saluent quand on leur parle, montrent la direction d'une rumeur, applaudissent un cadeau, rient en bavardant, l'enfant attrapé rit ; existants : émoticônes, fuite, bêtes qui se dandinent en marchant, créatures qui sautillent et tremblent avant d'attaquer)_
 - [ ] Uniformiser éclairages, matériaux, proportions, couleurs et style médiéval.
 - [~] Vérifier que les effets visuels indiquent clairement danger, rareté, progression et résultat. _(18/11 : barre d'usure des nœuds, barre d'usure des outils, reflets des gisements, liseré de rareté)_

@@ -1,7 +1,8 @@
 -- Gestes (18/11) — sans animation à télécharger :
 --   · gestes ponctuels : cueillir, fabriquer, manger, bâtir, commercer, offrir (dressage). Le serveur
 --     pose sur le joueur l'attribut « Geste » = "type:n" (Util.geste) ;
---   · états continus : à cheval (attribut Riding : jambes écartées, genoux pliés), porter un corps
+--   · états continus : à cheval (attribut Riding : jambes écartées, genoux pliés), repos (Sleeping),
+--     porter un corps
 --     (attribut Carrying : bras tendus).
 -- CHAQUE client anime tous les personnages (le sien et ceux des autres) en tournant leurs
 -- articulations par-dessus l'animation Roblox : C0 pour un Motor6D, Attachment0 pour une
@@ -71,6 +72,15 @@ local STATES = {
 			LeftHip = XZ(55 * w, -22 * w), RightHip = XZ(55 * w, 22 * w),
 			LeftKnee = X(-75 * w), RightKnee = X(-75 * w),
 			LeftShoulder = X(30 * w), RightShoulder = X(30 * w), LeftElbow = X(-40 * w), RightElbow = X(-40 * w),
+		}
+	end,
+	-- repos (attribut Sleeping, posé par Game.sleep) : il s'assoupit, tête basse, épaules tombantes,
+	-- et respire lentement
+	Sleeping = function(w)
+		local breath = sin(os.clock() * 1.6) * 3
+		return {
+			Neck = X((-38 + breath) * w), Waist = X((-12 - breath * 0.5) * w),
+			LeftShoulder = X(-6 * w), RightShoulder = X(-6 * w), LeftKnee = X(-8 * w), RightKnee = X(-8 * w),
 		}
 	end,
 	Carrying = function(w)
