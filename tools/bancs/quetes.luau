@@ -252,5 +252,68 @@ do
 	G.world.day = day
 end
 
+-- La première prise : seul un ferrage réussi fait avancer la quête.
+do
+	local day = G.world.day
+	local offer
+	for d = 10, 410, 2 do
+		G.world.day = d
+		for _, q in Q.offers(v) do
+			if q.title == "La première prise" then
+				offer = q
+				break
+			end
+		end
+		if offer then
+			break
+		end
+	end
+	check("la première prise apparaît avec un objectif d'un poisson", offer and offer.kind == "pecher" and offer.need == 1)
+	if offer then
+		local Fishing = mod("Fishing")
+		local biteMult = 100
+		G.Quetes = Q
+		G.Meteo = { biteMult = function() return biteMult end }
+		G.Clock = { biomeAt = function() return "prairie" end }
+		G.Props = { swing = function() end }
+		G.Social = { collect = function() end }
+		G.Activites = {}
+		G.Util.root = function() return { Position = pos, CFrame = CFrame.new(pos) } end
+		G.Util.isWater = function() return true end
+		G.Util.finds = function() end
+		G.Joueurs.stats = function() return {} end
+		G.Joueurs.skill = function() return 1 end
+		P.GetAttribute = function() return nil end
+		P.SetAttribute = function() end
+		Fishing.init(G)
+
+		at(v)
+		Q.take(P, offer.id)
+		local st = G.world.players["5"].quetes
+		local entry
+		for _, active in sent.actives do
+			if active.id == offer.id then
+				entry = active
+				break
+			end
+		end
+		check("le journal affiche « Pêcher un poisson »", entry and entry.what == "Pêcher un poisson" and not entry.ready)
+		local gold = bag.gold or 0
+		Fishing.use(P)
+		Fishing.use(P) -- ferrage avant la touche
+		Q.turnIn(P, offer.id)
+		check("un ferrage trop tôt ne permet pas le rendu", st.act[offer.id] and st.act[offer.id].got == 0 and (bag.gold or 0) == gold)
+		biteMult = 0 -- la touche est immédiate
+		Fishing.use(P)
+		Fishing.use(P)
+		check("un poisson effectivement pris complète l'objectif", st.act[offer.id] and st.act[offer.id].got == 1)
+		Q.turnIn(P, offer.id)
+		Q.turnIn(P, offer.id)
+		check("la quête rendue verse sa récompense une seule fois", st.act[offer.id] == nil
+			and st.fait[offer.id] == G.world.day and (bag.gold or 0) - gold == offer.gold)
+	end
+	G.world.day = day
+end
+
 folder:Destroy()
 return string.format("%d échec(s) — île %d (%s)\n%s", fails, G.world.seed, G.wg.theme.id, table.concat(res, "\n"))

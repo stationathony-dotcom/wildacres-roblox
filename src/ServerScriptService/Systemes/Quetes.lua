@@ -234,6 +234,9 @@ local function makeOffer(v, period: number, i: number)
 	elseif roll < 0.64 then
 		q.kind, q.key, q.need, q.title = "miner", "ore", r:NextInteger(5, 12), pick(r, { "Le minerai de cuivre", "Les profondeurs de la mine", "Le fer recherché" })
 		q.gold = reward(r, 12 * q.need)
+	elseif roll < 0.66 then
+		q.kind, q.key, q.need, q.title = "pecher", "fish", 1, "La première prise"
+		q.gold = reward(r, 14)
 	elseif roll < 0.72 then
 		q.kind, q.key, q.need, q.title = "pecher", "fish", r:NextInteger(3, 8), pick(r, { "Le pêcheur côtier", "Le poisson du vendredi", "La friture du village" })
 		q.gold = reward(r, 14 * q.need)
@@ -358,6 +361,9 @@ local function what(q): string
 	elseif q.kind == "miner" then
 		return string.format("Miner %d roches ou filons", q.need)
 	elseif q.kind == "pecher" then
+		if q.need == 1 then
+			return "Pêcher un poisson"
+		end
 		return string.format("Pêcher %d poissons", q.need)
 	elseif q.kind == "semer" then
 		return string.format("Semer %d graines sur des cases bêchées", q.need)
