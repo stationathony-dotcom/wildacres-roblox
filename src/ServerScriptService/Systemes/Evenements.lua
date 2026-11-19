@@ -10,6 +10,8 @@
 --  · Convoi attaqué : chasser les bandits = payé par le marchand ; piller après coup = vol.
 --  · Crue : près d'une rivière ou d'un marais, l'eau monte sur les terres basses quelques minutes.
 --    Les champs inondés sont arrosés, et le limon les fait pousser d'un cran quand l'eau se retire.
+--  · Découverte archéologique (19/11, idee.txt § 6) : la terre s'est affaissée près d'un joueur et
+--    laisse voir des tertres ; on les fouille avec une pelle (antiquités, qui s'étudient ou se vendent).
 
 local Debris = game:GetService("Debris")
 local TweenService = game:GetService("TweenService")
@@ -38,6 +40,9 @@ function Evenements.init(g)
 	end)
 	G.Interact.onPrompt("convoy", function(player, prompt)
 		Evenements.handlers.convoy(player, prompt)
+	end)
+	G.Interact.onPrompt("fouille", function(player, prompt)
+		Evenements.handlers.dig(player, prompt)
 	end)
 end
 
@@ -163,6 +168,38 @@ local function startCrystals()
 		end
 	end
 	nearby(center, 160, "Une lueur traverse le ciel et s'écrase non loin…")
+	return true
+end
+
+-- ----------------------------------------------------------------- Découverte archéologique
+
+local DIG_LOOT = { { "old_vase", 30 }, { "fossil", 25 }, { "inscription", 25 }, { "relic_fragment", 20 }, { "ancient_coin", 20 },
+	{ "ruin_piece", 15 }, { "old_page", 10 }, { "artifact", 4 }, { "relic", 2 } }
+
+local function startDig()
+	local center = spotIn(nil, 40, 110)
+	if not center then
+		return false
+	end
+	for _ = 1, 6 do
+		local pos = center + Vector3.new(math.random(-14, 14), 0, math.random(-14, 14))
+		if not G.Util.isWater(pos.X, pos.Z) then
+			local y = G.Util.groundY(pos.X, pos.Z)
+			local m = Instance.new("Part")
+			m.Name = "Tertre"
+			m.Shape = Enum.PartType.Cylinder
+			m.Size = Vector3.new(0.9, 3.2, 3.2)
+			m.Anchored = true
+			m.CanCollide = false
+			m.Material = Enum.Material.Ground
+			m.Color = Color3.fromRGB(122, 96, 66)
+			m.CFrame = CFrame.new(pos.X, y + 0.2, pos.Z) * CFrame.Angles(0, 0, math.rad(90))
+			m.Parent = workspace
+			G.Util.prompt(m, "fouille", "Fouiller", "Terre retournée", { dist = 8, hold = 2.5 })
+			Debris:AddItem(m, 1200)
+		end
+	end
+	nearby(center, 140, "Le sol s'est affaissé non loin : on dirait des pierres taillées qui affleurent…")
 	return true
 end
 
@@ -368,6 +405,37 @@ local function startGolem()
 end
 
 Evenements.handlers = {
+	dig = function(player, prompt)
+		local mound = prompt.Parent
+		if not (mound and mound.Parent) then
+			return
+		end
+		if not (G.Joueurs.has(player, "shovel") or G.Joueurs.has(player, "spade")) then
+			G.Util.toast(player, "Il te faudrait une pelle pour fouiller ici.")
+			return
+		end
+		mound:Destroy()
+		local total = 0
+		for _, l in DIG_LOOT do
+			total += l[2]
+		end
+		local finds = 1 + (math.random() < 0.15 * G.Joueurs.talent(player, "archeologue") and 1 or 0)
+		for _ = 1, finds do
+			local r = math.random() * total
+			for _, l in DIG_LOOT do
+				r -= l[2]
+				if r <= 0 then
+					if G.Config.ITEMS[l[1]] then
+						G.Joueurs.add(player, l[1], l[1] == "ancient_coin" and math.random(2, 4) or 1)
+					end
+					break
+				end
+			end
+		end
+		G.Joueurs.addStatXp(player, "chance", 15)
+		G.Joueurs.wearTool(player, "shovel", 1)
+		G.Joueurs.sync(player)
+	end,
 	crystal = function(player, prompt)
 		local item, n = prompt.Parent:GetAttribute("Item"), prompt.Parent:GetAttribute("N") or 1
 		if item then
@@ -411,7 +479,7 @@ Evenements.handlers = {
 -- Studio / tests : force un événement ("fair", "invasion", "crystals", "convoy", "flood", "boss")
 function Evenements.force(kind: string)
 	local f = ({ fair = startFair, invasion = startInvasion, crystals = startCrystals, convoy = startConvoy, flood = startFlood, boss = startBoss,
-		orage = startStorm, golem = startGolem })[kind]
+		orage = startStorm, golem = startGolem, fouilles = startDig })[kind]
 	return f and f() or false
 end
 
@@ -512,7 +580,7 @@ function Evenements.step(dt: number)
 		return
 	end
 	local night = G.Clock.isNight()
-	local options = night and { startInvasion, startBoss, startCrystals, startFlood, startGolem } or { startFair, startBoss, startCrystals, startConvoy, startFlood, startGolem }
+	local options = night and { startInvasion, startBoss, startCrystals, startFlood, startGolem } or { startFair, startBoss, startCrystals, startConvoy, startFlood, startGolem, startDig }
 	local f = options[math.random(1, #options)]
 	-- un orage gronde : une fois sur deux, c'est lui qui attire quelque chose
 	if G.Meteo and G.Meteo.kind and G.Meteo.kind() == "orage" and math.random() < 0.5 then

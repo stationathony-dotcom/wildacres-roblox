@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Découverte archéologique** (événement de jour, rien d'annoncé : seuls les joueurs proches le remarquent) : 6 tertres apparaissent ; on les fouille avec une pelle (vase ancien, fossile, inscription, fragment de relique, pièces anciennes, page ancienne, rarement un artefact ou une relique) ; le talent Archéologue donne parfois une trouvaille de plus ; Chance en hausse
 - **Pénuries** : tous les 2 jours, environ un village sur deux manque d'une denrée de base (blé, planches, fer, lait, poisson grillé, cuir…) et la paie +80 % ; aucune annonce, le marchand le dit au comptoir ; seulement des objets qu'aucun PNJ ne vend (pas de pompe à or)
 - **Hauts niveaux des métiers** : Fromage affiné (élevage 20), Grand festin (cuisine 30) et Banquet du seigneur (cuisine 40) — des **festins** dont l'effet profite à tous les joueurs à 25 studs de celui qui mange ; Acier damassé (minage 30, four) pour la Lame damassée et la Cotte damassée ; Planches de chêne fines (bûcheronnage 25) pour l'Arc long de maître
 - **Renom d'artisan** : chaque pièce signée achetée par un autre joueur à l'hôtel des ventes (prix fixe ou enchère) fait monter le renom de son artisan sur ce monde ; paliers connu (5), réputé (15), maître reconnu (40), illustre (100) : affiché à côté de ses pièces en vente, +3 par palier pour la qualité de façon ; /renom
