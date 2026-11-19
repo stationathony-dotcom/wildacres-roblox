@@ -12,6 +12,7 @@
 --   · marmottes actives le jour dans la toundra.
 --   · grenouilles qui bondissent dans les marais.
 --   · libellules en vol bas sur les eaux du marais.
+--   · lièvres en prairie et tortues terrestres au marais.
 -- Rien n'est sauvegardé, rien ne se chasse : c'est le décor qui vit.
 
 local Players = game:GetService("Players")
@@ -120,6 +121,8 @@ local BURROWERS = {
 	blaireau = { name = "Blaireau", size = Vector3.new(0.85, 0.7, 1.5), coat = Color3.fromRGB(100, 101, 105), face = Color3.fromRGB(224, 220, 206), speed = 2.2 },
 	marmotte = { name = "Marmotte", size = Vector3.new(0.72, 0.64, 1.1), coat = Color3.fromRGB(137, 100, 61), face = Color3.fromRGB(182, 150, 108), speed = 1.8 },
 	grenouille = { name = "Grenouille", size = Vector3.new(0.54, 0.32, 0.56), coat = Color3.fromRGB(73, 111, 42), face = Color3.fromRGB(154, 175, 81), speed = 1.2 },
+	lievre = { name = "Lièvre", size = Vector3.new(0.58, 0.61, 0.88), coat = Color3.fromRGB(151, 112, 83), face = Color3.fromRGB(176, 145, 119), speed = 2.4 },
+	tortue = { name = "Tortue", size = Vector3.new(0.95, 0.5, 1.24), coat = Color3.fromRGB(62, 80, 48), face = Color3.fromRGB(131, 147, 83), speed = 0.65 },
 }
 
 local function makeBurrower(kind: string): Model
@@ -132,6 +135,16 @@ local function makeBurrower(kind: string): Model
 	local face = part(spec.size * 0.54, spec.face, nil, m)
 	face.Shape = Enum.PartType.Ball
 	face.Position = Vector3.new(0, kind == "grenouille" and 0.035 or -0.06, -spec.size.Z * 0.46)
+	if kind == "tortue" then
+		for _, side in { -1, 1 } do
+			for _, z in { -0.33, 0.35 } do
+				local foot = part(Vector3.new(0.25, 0.15, 0.24), spec.face, nil, m)
+				foot.Shape = Enum.PartType.Ball
+				foot.Position = Vector3.new(side * 0.43, -0.16, z)
+			end
+		end
+		return m
+	end
 	local dark = Color3.fromRGB(40, 36, 33)
 	if kind == "grenouille" then
 		for _, side in { -1, 1 } do
@@ -158,6 +171,16 @@ local function makeBurrower(kind: string): Model
 			local spine = part(Vector3.new(0.11, 0.16, 0.5), spec.coat:Lerp(spec.face, 0.35), nil, m)
 			spine.Position = Vector3.new(i * 0.1, 0.22 - math.abs(i) * 0.026, 0.08)
 		end
+	elseif kind == "lievre" then
+		for _, side in { -1, 1 } do
+			local ear = part(Vector3.new(0.12, 0.47, 0.13), spec.coat, nil, m)
+			ear.Shape = Enum.PartType.Ball
+			ear.CFrame = CFrame.new(face.Position + Vector3.new(side * 0.13, 0.27, 0.09))
+				* CFrame.Angles(math.rad(18), 0, side * math.rad(10))
+		end
+		local tail = part(Vector3.new(0.22, 0.22, 0.24), spec.face, nil, m)
+		tail.Shape = Enum.PartType.Ball
+		tail.Position = Vector3.new(0, 0.03, 0.43)
 	else
 		for _, side in { -1, 1 } do
 			local ear = part(Vector3.new(0.15, 0.17, 0.11), spec.coat, nil, m)
@@ -266,7 +289,10 @@ end
 
 -- ---------------------------------------------------------------- Population
 local critters = {} -- { kind, model, pos, vel, state, t, ... }
-local MAX = { sol = 5, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3, canard = 2, herisson = 2, blaireau = 1, marmotte = 2, grenouille = 3, libellule = 3 }
+local MAX = {
+	sol = 5, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3, canard = 2,
+	herisson = 2, blaireau = 1, marmotte = 2, grenouille = 3, libellule = 3, lievre = 2, tortue = 2,
+}
 local counts = {}
 for kind in MAX do
 	counts[kind] = 0
@@ -370,6 +396,8 @@ RunService.Heartbeat:Connect(function(dt)
 			marmotte = (day and not wet and biome == "neige") and MAX.marmotte or 0,
 			grenouille = biome == "marais" and MAX.grenouille or 0,
 			libellule = (day and not wet and biome == "marais") and MAX.libellule or 0,
+			lievre = (day and not wet and biome == "prairie") and MAX.lievre or 0,
+			tortue = (day and biome == "marais") and MAX.tortue or 0,
 		}
 		-- trop loin, ou hors de saison/heure : on retire en douceur
 		for i = #critters, 1, -1 do
@@ -457,6 +485,10 @@ RunService.Heartbeat:Connect(function(dt)
 		elseif BURROWERS[c.kind] then
 			local spec = BURROWERS[c.kind]
 			local away = (c.pos - root) * Vector3.new(1, 0, 1)
+			if c.kind == "tortue" and away.Magnitude < 9 then
+				c.model:PivotTo(CFrame.new(c.pos - Vector3.new(0, 0.06, 0)) * CFrame.Angles(0, c.yaw, 0))
+				continue
+			end
 			if not c.flee and away.Magnitude < 9 then
 				c.flee = true
 				c.t = 0
@@ -481,7 +513,8 @@ RunService.Heartbeat:Connect(function(dt)
 				end
 				c.step = 0
 			end
-			local height = c.kind == "grenouille" and math.abs(math.sin(c.t * 5 + c.phase)) ^ 3 * 0.32 or 0
+			local hops = c.kind == "grenouille" or c.kind == "lievre"
+			local height = hops and math.abs(math.sin(c.t * 5 + c.phase)) ^ 3 * 0.32 or 0
 			c.model:PivotTo(CFrame.new(c.pos + Vector3.new(0, height, 0)) * CFrame.Angles(0, c.yaw, 0))
 		elseif c.kind == "canard" then
 			local a = c.t * 0.4 + c.phase

@@ -17,6 +17,8 @@ Branche de travail `mission/wildacres`, créée depuis `d30b9ea`. La racine du p
 
 ## Journal et problèmes
 
+- 19/11. Lièvres en prairie et tortues terrestres au marais, visibles le jour. Le lièvre bondit et fuit, la tortue s’aplatit et reste sur place à l’approche du joueur. Build Rojo et essais Studio Edit sur terrain simulé réussis.
+
 - 19/11. Libellules en vol bas au-dessus des eaux du marais. Build Rojo et test Studio Edit avec sol et météo simulés réussis.
 
 - 19/11. Fourchette ancienne en cuivre et couteau de table en fer, produits à l’enclume par deux et échangeables. Build Rojo et contrôle Studio Edit de la reconnaissance des deux recettes dans la grille réussis.

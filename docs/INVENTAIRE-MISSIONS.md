@@ -1891,7 +1891,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [ ] (390) Cerfs
 - [ ] (391) Biches
 - [ ] (392) Lapins
-- [ ] (393) Lièvres
+- [x] (393) Lièvres
 - [ ] (394) Renards
 - [ ] (395) Écureuils
 - [x] (396) Hérissons
@@ -1902,7 +1902,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [ ] (401) Abeilles
 - [x] (402) Libellules
 - [x] (403) Grenouilles
-- [ ] (404) Tortues
+- [x] (404) Tortues
 - [ ] (405) Poissons
 - [ ] (406) Oiseaux
 - [ ] (407) Corbeaux
