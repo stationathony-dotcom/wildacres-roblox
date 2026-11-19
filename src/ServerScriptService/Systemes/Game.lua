@@ -368,6 +368,7 @@ function Game.onDeath(player: Player)
 		if hp then
 			hp.stats.bounties = (hp.stats.bounties or 0) + 1
 			G.Social.checkTitles(hunter)
+			if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(hunter, "prime", "recherche") end
 		end
 		if bounty > 0 then
 			G.Joueurs.add(hunter, "gold", bounty, true)

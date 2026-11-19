@@ -29,8 +29,9 @@ local SKILL_OF = {
 	tuer = "combat", abattre = "bucheronnage", miner = "minage", pecher = "peche", recolter = "agriculture",
 	fabriquer = "artisanat", semer = "agriculture", vendre = "commerce", apporter = "commerce", lettre = "commerce", decouvrir = "commerce",
 	collecter = "elevage", naviguer = "peche",
+	batir = "artisanat", apprivoiser = "dressage", prime = "combat",
 }
-local ICON = { tuer = "⚔️", abattre = "🪓", miner = "⛏️", pecher = "🎣", recolter = "🌾", semer = "🌱", vendre = "💰", fabriquer = "🛠️", apporter = "📦", lettre = "✉️", decouvrir = "🧭", collecter = "🥛", naviguer = "⛵" }
+local ICON = { tuer = "⚔️", abattre = "🪓", miner = "⛏️", pecher = "🎣", recolter = "🌾", semer = "🌱", vendre = "💰", fabriquer = "🛠️", apporter = "📦", lettre = "✉️", decouvrir = "🧭", collecter = "🥛", naviguer = "⛵", batir = "🧱", apprivoiser = "🐾", prime = "⚖️" }
 Quetes.VOYAGE_DISTANCE = 150 -- studs ramés d'affilée = une traversée (Barques)
 
 -- ---------------------------------------------------------------- villages de l'île
@@ -287,6 +288,16 @@ local function makeOffer(v, period: number, i: number)
 		local title = spec and spec[1] or pick(r, { "Apprenti artisan", "La commande surprise", "Le maître artisan" })
 		q.kind, q.key, q.need, q.title = "fabriquer", item, n, title
 		q.gold = reward(r, 20 + (Config.ITEMS[item].price or 10) * q.need)
+	elseif roll < 0.905 then
+		-- 19/11 (« liste quetes.txt » : construction, dressage, justice)
+		q.kind, q.key, q.need, q.title = "batir", "piece", r:NextInteger(10, 30), pick(r, { "Un abri pour le berger", "La palissade du village", "Le pont du gué", "Un toit pour la fête" })
+		q.gold = reward(r, 4 * q.need)
+	elseif roll < 0.915 then
+		q.kind, q.key, q.need, q.title = "apprivoiser", "bete", 1, pick(r, { "Un compagnon fidèle", "Le dresseur de bêtes", "Une monture pour le messager" })
+		q.gold = reward(r, 80)
+	elseif roll < 0.92 then
+		q.kind, q.key, q.need, q.title = "prime", "recherche", 1, pick(r, { "Justice pour le village", "La tête mise à prix" })
+		q.gold = reward(r, 120)
 	elseif roll < 0.94 then
 		local others = {}
 		for _, o in villages() do
@@ -394,6 +405,12 @@ local function what(q): string
 		return string.format("Semer %d graines sur des cases bêchées", q.need)
 	elseif q.kind == "collecter" then
 		return string.format("Récolter %d %s %s sur tes bêtes de ferme", q.need, info and info.icon or "", info and info.name or q.key)
+	elseif q.kind == "batir" then
+		return string.format("Poser %d pièces de construction", q.need)
+	elseif q.kind == "apprivoiser" then
+		return "Apprivoiser une bête (compagnon ou monture)"
+	elseif q.kind == "prime" then
+		return "Mettre K.O. un recherché et toucher sa prime"
 	elseif q.kind == "naviguer" then
 		return q.need == 1 and "Faire une traversée en barque (150 studs d'affilée)"
 			or string.format("Faire %d traversées en barque (150 studs d'affilée)", q.need)

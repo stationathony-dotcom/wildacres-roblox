@@ -307,6 +307,7 @@ function Horses.use(player: Player, h, mode: string)
 				G.Npcs.remember(h.owner, "robbed")
 			end
 			makeMine(player, h)
+			if mode == "tame" and G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "apprivoiser", "bete") end
 			G.Util.toast(player, mode == "tame" and "Le cheval croque la carotte… il est à toi !" or "Le cheval te suit volontiers. Il est à toi… en quelque sorte.", "big")
 		end)
 	end

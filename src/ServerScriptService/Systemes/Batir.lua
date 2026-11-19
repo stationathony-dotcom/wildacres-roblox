@@ -187,6 +187,7 @@ function Batir.place(player: Player, data)
 	-- une pièce reprise revient entière : XP de pose plafonnée (150 pièces/jour = une belle maison)
 	G.Joueurs.addSkillXpCapped(player, "artisanat", 1, "pose", 150)
 	G.Social.bump(player, "built")
+	if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "batir", "piece") end
 	G.Joueurs.sync(player)
 end
 
