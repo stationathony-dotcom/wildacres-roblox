@@ -450,6 +450,10 @@ C.RECIPES = {
 	-- équipement fabriqué (stats fixes ; les pièces rares viennent des coffres et des monstres)
 	{ gear = { slot = "armor", name = "Armure de cuir", rarity = 1, stats = { defense = 3, vie = 1 } }, needs = { leather = 6, rope = 2 }, station = "bench", cat = "equipement", skill = { "artisanat", 3 } },
 	{ gear = { slot = "hat", name = "Bonnet de fourrure", visual = "bonnet", rarity = 1, stats = { vie = 2, defense = 1 } }, needs = { fur = 3, cloth = 1 }, station = "bench", cat = "equipement", skill = { "artisanat", 3 } },
+	-- tenues de zone (19/11, Systemes/Froid) : sommets et neige, désert, marais
+	{ gear = { slot = "armor", name = "Manteau fourré", rarity = 1, stats = { vie = 2, defense = 2 } }, needs = { fur = 4, leather = 2, rope = 1 }, station = "bench", cat = "equipement", skill = { "artisanat", 4 } },
+	{ gear = { slot = "hat", name = "Turban de lin", visual = "capuche", rarity = 1, stats = { vie = 1, vitesse = 1 } }, needs = { linen = 2 }, station = "bench", cat = "equipement", skill = { "artisanat", 3 } },
+	{ gear = { slot = "trinket", name = "Bottes de marais", rarity = 1, stats = { vitesse = 1, defense = 1 } }, needs = { leather = 3, resin = 1 }, station = "bench", cat = "equipement", skill = { "artisanat", 3 } },
 	{ gear = { slot = "armor", name = "Cape de soie", rarity = 2, stats = { discretion = 4, vitesse = 1 } }, needs = { silk = 6, cloth = 2 }, station = "bench", cat = "equipement", skill = { "artisanat", 8 } },
 	{ gear = { slot = "trinket", name = "Amulette d'os", rarity = 1, stats = { force = 2 } }, needs = { bone = 5, rope = 1 }, station = "bench", cat = "equipement", skill = { "artisanat", 4 } },
 	{ gear = { slot = "trinket", name = "Anneau d'or", rarity = 2, stats = { chance = 3, charisme = 2 } }, needs = { gold_ingot = 2 }, station = "bench", cat = "equipement", skill = { "artisanat", 18 } },

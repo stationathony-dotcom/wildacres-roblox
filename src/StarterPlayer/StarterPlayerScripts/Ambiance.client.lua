@@ -516,3 +516,20 @@ do
 		end
 	end)
 end
+
+-- Obscurité des grottes sans lumière (19/11, Systemes/Froid : attribut « Obscur ») : l'écran s'assombrit
+do
+	local Players = game:GetService("Players")
+	local TweenService = game:GetService("TweenService")
+	local me = Players.LocalPlayer
+	local cc = Instance.new("ColorCorrectionEffect")
+	cc.Name = "ObscuriteGrotte"
+	cc.Brightness = 0
+	cc.Parent = game:GetService("Lighting")
+	local function apply()
+		local dark = me:GetAttribute("Obscur") == true
+		TweenService:Create(cc, TweenInfo.new(1.5), { Brightness = dark and -0.35 or 0, Contrast = dark and -0.15 or 0 }):Play()
+	end
+	me:GetAttributeChangedSignal("Obscur"):Connect(apply)
+	apply()
+end

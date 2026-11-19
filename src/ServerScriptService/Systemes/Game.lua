@@ -602,6 +602,12 @@ function Game.step(dt: number)
 					if cold and not riding then
 						target *= 0.85 -- engourdi par le froid
 					end
+					if p:GetAttribute("Enlise") then
+						target *= 0.8 -- boue des marais (Froid.isStuck)
+					end
+					if p:GetAttribute("Obscur") and not riding then
+						target *= 0.85 -- à tâtons dans le noir (Froid.isDark)
+					end
 					if math.abs(hum.WalkSpeed - target) > 0.05 and hum.WalkSpeed > 0 then
 						hum.WalkSpeed = target
 					end

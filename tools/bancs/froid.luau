@@ -9,6 +9,7 @@ local function check(name, ok)
 	table.insert(out, (ok and "OK   " or "ÉCHEC ") .. name)
 end
 local biome, night = "neige", true
+local statsT, bagT = {}, {}
 local placed = {}
 local prof = { equipped = {} }
 local P = { Character = nil }
@@ -19,12 +20,12 @@ end
 function P:SetAttribute(k, v)
 	attrs[k] = v
 end
-local root = { Position = Vector3.new(12000, 60, 12000) }
+local root = { Position = Vector3.new(12000, 10, 12000) }
 local toasts = {}
 local G = {
 	Clock = { biomeAt = function() return biome end, isNight = function() return night end },
 	World = { loaded = { { state = { placed = placed } } } },
-	Joueurs = { get = function() return prof end },
+	Joueurs = { get = function() return prof end, stats = function() return statsT end, count = function(_, i) return bagT[i] or 0 end },
 	Game = { players = function() return { P } end },
 	Util = { root = function() return root end, toast = function(_, t) table.insert(toasts, t) end },
 }
@@ -75,5 +76,39 @@ check("a bu : désaltéré", c == false and why == "désaltéré")
 attrs.Desaltere = nil
 F.step(3.1)
 check("step : attribut Soif posé + message", attrs.Soif == true and toasts[#toasts]:find("chaleur") ~= nil)
+-- tenue légère et robustesse
+G.Clock.hour = function() return 13 end
+prof.equipped.hat = { name = "Turban de lin" }
+c, why = F.isHot(P, pos)
+check("turban de lin : protège de la chaleur", c == false and why == "tenue légère")
+prof.equipped.hat = nil
+statsT.vie = 10
+c, why = F.isHot(P, pos)
+check("Vie 10 : endure la chaleur", c == false and why == "robuste")
+statsT.vie = 0
+-- sommets : froid la nuit même hors neige
+biome, night = "prairie", true
+check("sommet (34 studs), la nuit, en prairie : froid", F.isCold(P, Vector3.new(0, 34, 0)) == true)
+check("en contrebas (10 studs) : pas froid", F.isCold(P, Vector3.new(0, 10, 0)) == false)
+-- grottes
+check("grotte sans lumière : obscur", F.isDark(P, Vector3.new(0, -120, 0)) == true)
+bagT.miner_lamp = 1
+check("lampe de mineur dans le sac : on y voit", F.isDark(P, Vector3.new(0, -120, 0)) == false)
+check("à l'air libre : jamais obscur", F.isDark(P, Vector3.new(0, 5, 0)) == false)
+-- boue des marais (vrai terrain)
+local T = workspace.Terrain
+local M = Vector3.new(13000, 0, 13000)
+T:FillBlock(CFrame.new(M + Vector3.new(0, -2, 0)), Vector3.new(20, 4, 20), Enum.Material.Mud)
+task.wait(0.2)
+biome = "marais"
+check("boue du marais, sans bottes : on s'enlise", F.isStuck(P, M + Vector3.new(0, 2, 0)) == true)
+prof.equipped.trinket = { name = "Bottes de marais" }
+c, why = F.isStuck(P, M + Vector3.new(0, 2, 0))
+check("bottes de marais : sol tenu", c == false and why == "bottes")
+prof.equipped.trinket = nil
+statsT.force = 8
+c, why = F.isStuck(P, M + Vector3.new(0, 2, 0))
+check("Force 8 : se tire de la boue", c == false and why == "fort")
+T:FillBlock(CFrame.new(M + Vector3.new(0, -2, 0)), Vector3.new(22, 6, 22), Enum.Material.Air)
 mod:Destroy()
 return fails .. " échec(s)\n" .. table.concat(out, "\n")
