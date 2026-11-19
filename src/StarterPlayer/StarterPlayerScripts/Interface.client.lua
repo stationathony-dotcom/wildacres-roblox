@@ -762,6 +762,11 @@ local function game_()
 		end
 		if info.food then
 			table.insert(lines, { "Rend " .. info.food .. " points de vie", Color3.fromRGB(30, 255, 0) })
+			-- effet de repas / potion (Shared/Equilibre, Shared/Alchimie)
+			if info.meal then
+				local STAT = { force = "Force", defense = "Défense", vie = "Vie", vitesse = "Vitesse", chance = "Chance", charisme = "Charisme", discretion = "Discrétion" }
+				table.insert(lines, { string.format("+%d %s pendant %d min", info.meal[2], STAT[info.meal[1]] or info.meal[1], math.floor(info.meal[3] / 60)), Color3.fromRGB(255, 210, 0) })
+			end
 		end
 		if info.use and USE_TEXT[info.use] then
 			table.insert(lines, { USE_TEXT[info.use], Color3.fromRGB(30, 255, 0) })

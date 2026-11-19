@@ -107,6 +107,9 @@ E.MEAL_STATS = {
 	{ "vie", { "carrot", "cabbage", "tomato", "pumpkin", "potato", "apple", "berr", "pear", "plum", "grape", "bean", "pea", "onion", "garlic", "wheat", "flour", "bread", "milk", "cheese", "butter" } },
 }
 
+-- effets fixés à la main quand le nom du plat dit autre chose que ses ingrédients
+E.MEALS = { vigor_elixir = { "force", 3 } }
+
 E.changes = {} -- journal des corrections (lu par le banc tools/bancs/equilibre.luau)
 
 local function note(s: string)
@@ -146,6 +149,11 @@ local function mealStat(needs): string
 end
 
 function E.apply(C)
+	-- potions de l'alambic (Shared/Alchimie) : ajoutées d'abord, pour passer par le prix plancher
+	local okA, Alchimie = pcall(require, script.Parent.Alchimie)
+	if okA then
+		Alchimie.apply(C)
+	end
 	local I, R = C.ITEMS, C.RECIPES
 	-- 1. recettes copiées
 	for _, r in R do
@@ -293,8 +301,9 @@ function E.apply(C)
 				note("nourriture " .. r.item .. " " .. out.food)
 			end
 			if not out.meal then
-				local stat = mealStat(r.needs)
-				local v = math.clamp(1 + math.floor(out.food / 30), 1, 3)
+				local fixed = E.MEALS[r.item]
+				local stat = fixed and fixed[1] or mealStat(r.needs)
+				local v = fixed and fixed[2] or math.clamp(1 + math.floor(out.food / 30), 1, 3)
 				local minutes = math.clamp(5 + math.floor(out.food / 6), 5, 15)
 				out.meal = { stat, v, minutes * 60 }
 			end
