@@ -23,14 +23,14 @@
    - un chapeau de fermier.
 
    Il faut pour ça des bonus de compétence sur les pièces (par exemple `skill = { peche = 2 }`), lus par les systèmes de métier. C'est le plus gros manque.
-3. **Pas de bonus d'ensemble.** Les 12 matières des séries forment des panoplies naturelles. Porter 3 pièces de la même matière (Loup gris, Garde du pont…) pourrait donner un petit bonus. Le système de séries s'y prête déjà.
+3. **FAIT le 19/11** (`Equilibre.setBonus`, appelé par `Joueurs.stats`) — **Pas de bonus d'ensemble.** Les 12 matières des séries forment des panoplies naturelles. Porter 3 pièces de la même matière (Loup gris, Garde du pont…) pourrait donner un petit bonus. Le système de séries s'y prête déjà.
 4. **Les boucliers sont rangés comme bijoux.** Ils entrent en concurrence avec les anneaux. Il faudrait un emplacement « main gauche » pour le bouclier ou la torche.
 5. **Des pièces de créatures en double.** Il y a 15 « Collier de crocs de [bête] » et 8 « Lame venimeuse de [bête] », avec la même forme et presque les mêmes stats. Deux façons de corriger :
    - les regrouper par famille et par palier (crocs de petite bête, de grande bête, de bête légendaire) ;
    - ou donner à chacune un effet propre (venin, givre, saignement).
 6. **Armes absentes** : armes de jet (javelots, haches de jet), harpon de pêche, fronde. Il n'y a qu'un type de munition : il manque des flèches de fer ou barbelées.
 7. **Monture et compagnon** : pas de selle ni de caparaçon à équiper. Le collier de chien n'a aucune stat.
-8. **Deux systèmes d'arme en parallèle.** Les épées-outils (`sword`, `sword_fe`, `sword_steel`, `sword_diamond` dans `Config`, avec `weapon = dégâts`) coexistent avec l'emplacement Arme de l'équipement. Il faut vérifier lesquels comptent au combat, et n'en garder qu'un.
+8. **Vérifié le 19/11** : `Combat.damageOf` prend le plus fort des deux (arme tenue en main ou arme portée), et les échelles se tiennent (épée d'acier 80, de diamant 110 ; arme portée de rareté 4 : 120-130). Rien de cassé, mais c'est déroutant : à terme, ne garder les épées-outils que comme outils. — **Deux systèmes d'arme en parallèle.** Les épées-outils (`sword`, `sword_fe`, `sword_steel`, `sword_diamond` dans `Config`, avec `weapon = dégâts`) coexistent avec l'emplacement Arme de l'équipement. Il faut vérifier lesquels comptent au combat, et n'en garder qu'un.
 
 ## Visuels à retravailler (par priorité)
 

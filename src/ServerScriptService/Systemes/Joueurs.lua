@@ -237,6 +237,13 @@ end
 function J.stats(player: Player)
 	local p = J.profiles[player]
 	local t = G.Gear.totals(p and p.equipped or {})
+	-- panoplies : plusieurs pièces de la même matière (Shared/Equilibre)
+	local okE, Eq = pcall(require, game:GetService("ReplicatedStorage").Shared.Equilibre)
+	if okE and p then
+		for k, v in (Eq.setBonus(p.equipped)) do
+			t[k] = (t[k] or 0) + v
+		end
+	end
 	for k, xp in (p and p.statXp) or {} do
 		local lv = G.Config.statLevel(xp)
 		if lv > 0 then
@@ -548,6 +555,14 @@ function J.equip(player: Player, id: number)
 			G.Avatar.refresh(player)
 			J.markDirty(player)
 			G.Util.toast(player, "Équipé : " .. item.name)
+			-- panoplie complétée ? (Shared/Equilibre)
+			local okS, EqS = pcall(require, game:GetService("ReplicatedStorage").Shared.Equilibre)
+			if okS then
+				local _, active = EqS.setBonus(p.equipped)
+				for _, line in active do
+					G.Util.toast(player, "🛡️ Panoplie " .. line, "gain")
+				end
+			end
 			return
 		end
 	end

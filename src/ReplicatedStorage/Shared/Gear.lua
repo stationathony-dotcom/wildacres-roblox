@@ -97,6 +97,10 @@ function G.describe(item): string
 	if req then
 		made ..= " · requiert " .. (req[4] or G.STATS[req[1]] or req[1]) .. " " .. req[2]
 	end
+	local set = okE and Eq.setText(item)
+	if set then
+		made ..= " · " .. set
+	end
 	-- bonus de métier (équipement de métier)
 	for k, v in item.skills or {} do
 		table.insert(parts, string.format("+%d %s", v, (okE and Eq.SKILL_LABEL[k]) or k))

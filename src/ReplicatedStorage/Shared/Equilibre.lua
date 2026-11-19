@@ -560,6 +560,54 @@ E.TRADE_GEAR = {
 	{ "trinket", "Chaîne de maître marchand", 3, { charisme = 4 }, { commerce = 4 }, { gold_ingot = 2, silver_ingot = 1 }, 20 },
 }
 
+-- 12. PANOPLIES (19/11) : les 12 matières des séries forment des ensembles. Porter plusieurs pièces
+--     de la même matière donne un bonus dans la stat de cette matière (E.MATERIAL_STAT).
+E.SET_STEPS = { { 2, 1 }, { 4, 3 }, { 6, 6 } } -- { pièces portées, bonus }
+E.STAT_LABEL = { force = "Force", defense = "Défense", vie = "Vie", vitesse = "Vitesse", chance = "Chance", charisme = "Charisme", discretion = "Discrétion" }
+E.SET_NAME = {
+	lin = "Valdor", cuir = "Cuir huilé", forge = "Forge cuivrée", loup = "Loup gris", garde = "Garde du pont", ronces = "Ronces vertes",
+	soleil = "Soleil rouge", nord = "Veille d'hiver", os = "Reliquaire d'os", lune = "Lune d'argent", ambre = "Ambre royal", diamant = "Diamant boréal",
+}
+
+-- bonus des panoplies portées : { [stat] = bonus }, et la liste lisible des panoplies actives
+function E.setBonus(equipped)
+	local count = {}
+	for _, item in equipped or {} do
+		local m = type(item) == "table" and item.design and item.design.material
+		if m and E.MATERIAL_STAT[m] then
+			count[m] = (count[m] or 0) + 1
+		end
+	end
+	local bonus, active = {}, {}
+	for m, n in count do
+		local v = 0
+		for _, step in E.SET_STEPS do
+			if n >= step[1] then
+				v = step[2]
+			end
+		end
+		if v > 0 then
+			local st = E.MATERIAL_STAT[m]
+			bonus[st] = (bonus[st] or 0) + v
+			table.insert(active, string.format("%s (%d pièces) +%d %s", E.SET_NAME[m] or m, n, v, E.STAT_LABEL[st] or st))
+		end
+	end
+	return bonus, active
+end
+
+-- texte de la panoplie d'une pièce (description)
+function E.setText(item): string?
+	local m = type(item) == "table" and item.design and item.design.material
+	if not (m and E.MATERIAL_STAT[m]) then
+		return nil
+	end
+	local parts = {}
+	for _, step in E.SET_STEPS do
+		table.insert(parts, step[1] .. " : +" .. step[2])
+	end
+	return "panoplie " .. (E.SET_NAME[m] or m) .. " (" .. table.concat(parts, ", ") .. " " .. (E.STAT_LABEL[E.MATERIAL_STAT[m]] or E.MATERIAL_STAT[m]) .. ")"
+end
+
 function E.finish(C)
 	local okG, Gear = pcall(require, script.Parent.Gear)
 	local SLOTS = okG and Gear.SLOTS or {}
