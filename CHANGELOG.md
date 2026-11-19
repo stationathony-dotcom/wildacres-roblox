@@ -5,6 +5,13 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
+## 0.2.1 — 2026-11-19
+- **Herbe haute** : touffes de brins dans les prairies, roseaux au marais, oyats sur le sable, dessinées autour de chaque joueur (rien sur le réseau, rayon selon la qualité graphique) ; herbe du terrain plus longue. Fauchables au clic : un peu de fibre, parfois une graine de blé ; une touffe fauchée disparaît pour tous et repousse le lendemain (`Shared/HerbeHaute`, `Systemes/Fauche`, `HerbeHaute.client`, banc `fauche`)
+- **Quêtes** : nouvelles commandes tirées au hasard selon l'île — chantier du pont, chantier communal, fer recherché, commande du forgeron, banquet, tisserand, verrier, maçon, plat régional, premier repas, repas du pêcheur ; deux sortes nouvelles : récolter le lait / les œufs / la laine de ses bêtes, faire des traversées en barque
+- **Hameaux** : 2 ou 3 maisons autour d'un puits, avec habitants, dans environ une région sauvage sur dix ; quêtes de départ facultatives (semer, vendre, premiers outils, lit, premier repas)
+- **Bugs corrigés** : la nuit pouvait passer alors qu'un joueur venait d'arriver ; une sauvegarde en attente pouvait être modifiée pendant l'écriture ; saluer / discuter / offrir à un PNJ bloquait le bonus du jour pour les AUTRES joueurs ; une collecte de courrier interrompue pouvait se perdre ; chasse au trésor : coups de pelle non sauvegardés, creusage possible depuis un pont
+- Faune passive (nuit du 18→19) : canards, hérissons, blaireaux, marmottes, grenouilles, libellules, lièvres, tortues, pigeons, abeilles, poissons, biches ; pichet, coffret, couverts, porte-documents, sac de marchand
+
 ## 0.2.0 — 2026-11-18
 - **Capes de noblesse** : écuyer (brune), chevalier (bleue bordée d'argent), baron (pourpre brodée d'or), portées dès l'adoubement
 - **Enquêtes** : un vol ou une effraction que personne n'a vu est découvert le lendemain ; si quelqu'un a été vu dans le coin, il est soupçonné (méfiance, un peu d'honneur, jamais d'étoile sans témoin) et la victime apprend son nom

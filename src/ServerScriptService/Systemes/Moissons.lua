@@ -96,6 +96,14 @@ function Moissons.newDay()
 end
 
 function Moissons.harvest(player: Player, id: string)
+	if string.sub(id, 1, 3) == "fh|" then
+		-- herbe haute dessinée par le client (Systemes/Fauche)
+		local F = G.Fauche and rawget(G.Fauche, "harvest")
+		if F then
+			F(player, id)
+		end
+		return
+	end
 	local e = live[id]
 	if not e or not e.reg.state.moisson or e.reg.state.moisson[e.key] then
 		return

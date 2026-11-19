@@ -69,6 +69,11 @@ function E.apply(Lighting: Lighting, terrain: Terrain)
 	terrain.WaterReflectance = 0.35
 	terrain.WaterWaveSize = 0.12
 	terrain.WaterWaveSpeed = 8
+	-- herbe du terrain plus haute (image cible) ; les touffes hautes s'y ajoutent (HerbeHaute.client)
+	pcall(function()
+		terrain.Decoration = true
+		terrain.GrassLength = 0.6
+	end)
 	for m, c in E.TERRAIN do
 		terrain:SetMaterialColor(m, c)
 	end
