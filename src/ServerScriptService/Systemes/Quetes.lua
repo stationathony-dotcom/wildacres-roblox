@@ -4,7 +4,7 @@
 -- dépendent de son biome, de ses cultures, de la faune PROPRE à l'île (Bestiaire.islandPool) et des
 -- autres villages (lettres). Deux îles n'ont donc pas les mêmes quêtes.
 -- Sortes : apporter (objets rendus au village), chasser, abattre, miner, pêcher, récolter, fabriquer,
--- découvrir (nouveaux lieux), lettre (à porter dans un autre village).
+-- semer, vendre, découvrir (nouveaux lieux), lettre (à porter dans un autre village).
 -- Récompense : or + XP de la compétence liée (donc des caractéristiques) + parfois un objet + honneur.
 -- État : G.world.players[uid].quetes = { act = { [id] = quête }, fait = { [idOffre] = jour } } (monde).
 -- OÙ (18/11, à sa demande) : comme dans WoW, on PREND et on REND une quête au TABLEAU DES QUÊTES du
@@ -27,9 +27,9 @@ local NEAR = 110 -- studs autour de la place du village
 
 local SKILL_OF = {
 	tuer = "combat", abattre = "bucheronnage", miner = "minage", pecher = "peche", recolter = "agriculture",
-	fabriquer = "artisanat", apporter = "commerce", lettre = "commerce", decouvrir = "commerce",
+	fabriquer = "artisanat", semer = "agriculture", vendre = "commerce", apporter = "commerce", lettre = "commerce", decouvrir = "commerce",
 }
-local ICON = { tuer = "⚔️", abattre = "🪓", miner = "⛏️", pecher = "🎣", recolter = "🌾", fabriquer = "🛠️", apporter = "📦", lettre = "✉️", decouvrir = "🧭" }
+local ICON = { tuer = "⚔️", abattre = "🪓", miner = "⛏️", pecher = "🎣", recolter = "🌾", semer = "🌱", vendre = "💰", fabriquer = "🛠️", apporter = "📦", lettre = "✉️", decouvrir = "🧭" }
 
 -- ---------------------------------------------------------------- villages de l'île
 
@@ -169,6 +169,8 @@ end
 
 -- demandes « apporter » : { titre, objets possibles, quantité min, max }
 local WANTS = {
+	{ "Un nouveau départ", { "wood" }, 10, 10 },
+	{ "La pierre est précieuse", { "stone" }, 10, 10 },
 	{ "Le boulanger est débordé", { "flour", "wheat" }, 8, 16 },
 	{ "Le forgeron manque de métal", { "copper_ore", "ore", "copper_ingot", "iron_ingot" }, 5, 12 },
 	{ "Le charpentier a besoin d'aide", { "planks", "wood" }, 12, 24 },
@@ -179,7 +181,13 @@ local WANTS = {
 	{ "La fête approche", { "flowers", "ribbon", "honey" }, 3, 6 },
 	{ "Le vétérinaire", { "herbs", "chamomile", "mint" }, 3, 8 },
 }
-local CRAFTS = { "rope", "planks", "bread", "nails", "torch", "bucket", "basket", "fishing_rod", "lantern" }
+local CRAFTS = { "rope", "planks", "bread", "nails", "torch", "bucket_empty", "basket", "fishing_rod", "lantern", "axe", "pickaxe", "bed" }
+local INTRO_CRAFT_TITLES = {
+	axe = "Premiers outils",
+	pickaxe = "Un outil indispensable",
+	bed = "Un endroit où dormir",
+	bread = "Le premier repas",
+}
 local KILL_TITLES = { "Une bête rôde près de {v}", "La chasse du village", "Les troupeaux en danger", "Nettoyer les chemins" }
 
 local function sub(s: string, v): string
@@ -229,6 +237,12 @@ local function makeOffer(v, period: number, i: number)
 	elseif roll < 0.72 then
 		q.kind, q.key, q.need, q.title = "pecher", "fish", r:NextInteger(3, 8), pick(r, { "Le pêcheur côtier", "Le poisson du vendredi", "La friture du village" })
 		q.gold = reward(r, 14 * q.need)
+	elseif roll < 0.74 then
+		q.kind, q.key, q.need, q.title = "semer", "graine", 5, "La vie à la ferme"
+		q.gold = reward(r, 24)
+	elseif roll < 0.76 then
+		q.kind, q.key, q.need, q.title = "vendre", "boutique", 3, "Un peu de monnaie"
+		q.gold = reward(r, 9)
 	elseif roll < 0.80 then
 		-- plantes sauvages du coin (Systemes/Herbes) : l'herboriste du village, 2 fois sur 5
 		local herbs = {}
@@ -250,7 +264,9 @@ local function makeOffer(v, period: number, i: number)
 		end
 	elseif roll < 0.87 then
 		local item = pickExisting(r, CRAFTS) or "rope"
-		q.kind, q.key, q.need, q.title = "fabriquer", item, r:NextInteger(1, 4), pick(r, { "Apprenti artisan", "La commande surprise", "Le maître artisan" })
+		local n = r:NextInteger(1, 4)
+		local title = pick(r, { "Apprenti artisan", "La commande surprise", "Le maître artisan" })
+		q.kind, q.key, q.need, q.title = "fabriquer", item, INTRO_CRAFT_TITLES[item] and 1 or n, INTRO_CRAFT_TITLES[item] or title
 		q.gold = reward(r, 20 + (Config.ITEMS[item].price or 10) * q.need)
 	elseif roll < 0.94 then
 		local others = {}
@@ -343,6 +359,10 @@ local function what(q): string
 		return string.format("Miner %d roches ou filons", q.need)
 	elseif q.kind == "pecher" then
 		return string.format("Pêcher %d poissons", q.need)
+	elseif q.kind == "semer" then
+		return string.format("Semer %d graines sur des cases bêchées", q.need)
+	elseif q.kind == "vendre" then
+		return string.format("Vendre %d objets à un marchand ou à un artisan", q.need)
 	elseif q.kind == "recolter" then
 		local verb = (Config.CROPS and Config.CROPS[q.key]) and "Récolter" or "Cueillir (plante sauvage)"
 		return string.format("%s %d %s %s", verb, q.need, info and info.icon or "", info and info.name or q.key)
@@ -495,8 +515,8 @@ end
 
 -- ---------------------------------------------------------------- progression (appelée par les systèmes)
 
--- kind : tuer (clé = espèce), abattre, miner, pecher, recolter (clé = culture), fabriquer (clé = objet),
--- decouvrir (n'importe quel lieu)
+-- Les cultures, objets et espèces ont leurs propres clés. Semis et ventes utilisent
+-- les clés fixes « graine » et « boutique ». Les découvertes acceptent tout nouveau lieu.
 function Quetes.note(player: Player, kind: string, key: string?, n: number?)
 	local st = G.world and G.world.players[tostring(player.UserId)]
 	st = st and st.quetes

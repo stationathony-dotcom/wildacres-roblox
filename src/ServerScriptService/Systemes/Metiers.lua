@@ -379,6 +379,32 @@ function Metiers.currentId(reg, role: string)
 	return id, st
 end
 
+-- Hameau (Hameaux.lua) : un habitant par maison, propriétaire de son lit (porte fermée la nuit).
+-- Fermiers de leur champ le jour, au puits le soir. Remplacés comme les autres s'ils disparaissent.
+function Metiers.spawnHamlet(reg)
+	local hm = reg.hamlet
+	reg.metiers = reg.metiers or {}
+	local taken = {}
+	for i, hid in hm.houses do
+		local role = "hameau" .. i
+		local cur = reg.metiers[role]
+		local id = not (cur and cur.model.Parent and cur.state ~= "gone") and Metiers.currentId(reg, role)
+		if id then
+			local rng = Random.new(G.WG.hash(G.world.seed, "hameau-pnj", reg.rx, reg.rz, id))
+			local female = rng:NextNumber() < 0.5
+			local n = {
+				id = id, name = pickName(rng, female, taken), female = female, role = i == 1 and "farmer" or "villager",
+				persona = ADULT_PERSONAS[rng:NextInteger(1, #ADULT_PERSONAS)], look = makeLook(rng, female, i == 1 and "paille" or nil),
+				house = hid, work = (i == 1 and hm.field) or "house", plaza = { hm.center.X, hm.center.Z },
+			}
+			local e = G.Npcs.addExtra(reg, n)
+			if e then
+				reg.metiers[role] = e
+			end
+		end
+	end
+end
+
 -- Le château : seigneur (ou dame) dans la cour, deux gardes de faction à la porte, jour et nuit
 local function spawnCastle(reg)
 	local model = reg.castle
@@ -565,6 +591,13 @@ function Metiers.onRegionLoad(reg)
 		local ok, err = pcall(spawnCastle, reg)
 		if not ok then
 			warn("[WildAcres] Metiers château : " .. tostring(err))
+		end
+		return
+	end
+	if reg.hamlet then
+		local ok, err = pcall(Metiers.spawnHamlet, reg)
+		if not ok then
+			warn("[WildAcres] Metiers hameau : " .. tostring(err))
 		end
 		return
 	end
@@ -1220,7 +1253,7 @@ function Metiers.step(dt: number)
 			local busy = ped and (ped.state == "ko" or ped.state == "carried")
 			if ped and not busy and (hour >= 19 or hour < 8 or ped.state == "gone") then
 				peddlerLeaves(reg)
-			elseif not reg.castle and not ped and hour >= 8 and hour < 19 and math.random() < 0.01 then
+			elseif reg.metierKids and not ped and hour >= 8 and hour < 19 and math.random() < 0.01 then -- (villages seulement)
 				pcall(spawnPeddler, reg)
 			end
 		end
@@ -1244,7 +1277,9 @@ function Metiers.newDay()
 	end
 	-- remplaçants des artisans disparus, dans les villages chargés
 	for _, reg in G.World.loaded do
-		if reg.metiers and reg.castle then
+		if reg.metiers and reg.hamlet then
+			pcall(Metiers.spawnHamlet, reg)
+		elseif reg.metiers and reg.castle then
 			-- château : le seigneur et les gardes manquants (spawnCastle ignore les postes tenus)
 			local missing = false
 			for _, role in { "lord", "guard1", "guard2" } do

@@ -300,6 +300,9 @@ function Farm.plant(player: Player, cropId: string)
 	end
 	local entry = cells[cellKey(cx, cz)]
 	local crop = Config.CROPS[cropId]
+	if not crop then
+		return
+	end
 	if not entry or entry.plotId then
 		G.Util.toast(player, "Bêche d'abord la terre avec la houe (case devant toi).")
 		return
@@ -328,6 +331,7 @@ function Farm.plant(player: Player, cropId: string)
 	entry.state.stage = 0
 	entry.state.withered = nil
 	render(entry)
+	if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "semer", "graine") end
 end
 
 function Farm.water(player: Player)

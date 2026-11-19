@@ -1,3 +1,5 @@
 *.lock
 *AutoRecovery*
 __pycache__/
+/wildacres-nuit.git/
+/.production-nocturne/

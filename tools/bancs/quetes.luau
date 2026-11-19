@@ -215,5 +215,42 @@ Q.drop(P, any[1].id)
 check("abandon sans conséquence", G.world.players["5"].quetes.act[any[1].id] == nil)
 check("le client reçoit la liste", sent ~= nil and sent.actives ~= nil)
 
+-- La vie à la ferme : une offre facultative, cinq semis confirmés par le serveur.
+do
+	local day = G.world.day
+	local village = vs[1]
+	local offer
+	for d = 10, 210, 2 do
+		G.world.day = d
+		for _, q in Q.offers(village) do
+			if q.kind == "semer" then
+				offer = q
+				break
+			end
+		end
+		if offer then
+			break
+		end
+	end
+	check("une offre de semis apparaît", offer ~= nil)
+	if offer then
+		at(village)
+		Q.take(P, offer.id)
+		local active = G.world.players["5"].quetes.act
+		Q.note(P, "recolter", "graine")
+		Q.note(P, "semer", "autre")
+		check("seuls les semis valides comptent", active[offer.id] and active[offer.id].got == 0)
+		for _ = 1, 4 do
+			Q.note(P, "semer", "graine")
+		end
+		Q.turnIn(P, offer.id)
+		check("quatre semis ne suffisent pas", active[offer.id] and active[offer.id].got == 4)
+		Q.note(P, "semer", "graine")
+		Q.turnIn(P, offer.id)
+		check("cinq semis permettent le rendu", active[offer.id] == nil)
+	end
+	G.world.day = day
+end
+
 folder:Destroy()
 return string.format("%d échec(s) — île %d (%s)\n%s", fails, G.world.seed, G.wg.theme.id, table.concat(res, "\n"))

@@ -352,6 +352,7 @@ function Shop.sell(player: Player, item: string, n: number)
 		G.Joueurs.add(player, "gold", total, true)
 		G.Util.toast(player, "+" .. total .. " 💰", "gain")
 		G.Joueurs.addSkillXp(player, "commerce", 1 + math.floor(total / 25))
+		if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "vendre", "boutique", sold) end
 		if total >= 200 then
 			G.Economie.record(player, "vente", n .. " " .. item .. " → " .. total)
 		end

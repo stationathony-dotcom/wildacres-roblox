@@ -47,7 +47,7 @@ PhysicsService:CollisionGroupSetCollidable("PNJ", "PNJ", false)
 -- Chargement des systèmes (un système absent est remplacé par un bouchon silencieux)
 local NAMES = { "Util", "Interact", "Clock", "World", "Joueurs", "Save", "Mondes", "Game", "Avatar", "Tools", "Props", "Farm",
 	"Doors", "Npcs", "Law", "Animals", "Horses", "Enemies", "Combat", "Fishing", "Shop", "Bodies", "Parcelles",
-	"Minijeux", "Compagnons", "Protection", "Economie", "Social", "Armee", "Evenements", "Clans", "Poste", "Terraforme", "Batir", "Machines", "Donjons", "Bestiaire", "Demolir", "Villages", "Meteo", "Admin", "Politique", "Barques", "Activites", "Journal", "Avantpostes", "Ilots", "Nasses", "Nids", "Butin", "Quetes", "Tourelles", "Chateaux", "Moissons", "Bosquets", "Canaux", "Herbes", "Metiers" }
+	"Minijeux", "Compagnons", "Protection", "Economie", "Social", "Armee", "Evenements", "Clans", "Poste", "Terraforme", "Batir", "Machines", "Donjons", "Bestiaire", "Demolir", "Villages", "Meteo", "Admin", "Politique", "Barques", "Activites", "Journal", "Avantpostes", "Ilots", "Nasses", "Nids", "Butin", "Quetes", "Tourelles", "Chateaux", "Moissons", "Bosquets", "Canaux", "Herbes", "Metiers", "Hameaux" }
 local stub = setmetatable({}, { __index = function()
 	return function() end
 end })
@@ -77,7 +77,7 @@ end
 
 -- Systèmes appelés au chargement d'une région et au changement de jour
 G.regionSystems = {}
-for _, name in { "Bosquets", "Herbes", "Chateaux", "Props", "Farm", "Villages", "Moissons", "Doors", "Npcs", "Metiers", "Animals", "Horses", "Enemies", "Bestiaire", "Shop", "Compagnons", "Batir", "Donjons", "Demolir", "Ilots", "Nids" } do
+for _, name in { "Bosquets", "Herbes", "Chateaux", "Hameaux", "Props", "Farm", "Villages", "Moissons", "Doors", "Npcs", "Metiers", "Animals", "Horses", "Enemies", "Bestiaire", "Shop", "Compagnons", "Batir", "Donjons", "Demolir", "Ilots", "Nids" } do
 	if G[name] ~= stub and G[name].onRegionLoad then
 		table.insert(G.regionSystems, G[name])
 	end

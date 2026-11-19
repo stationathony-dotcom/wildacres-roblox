@@ -294,7 +294,10 @@ local function loadRegion(rx: number, rz: number)
 		return
 	end
 	G.Mondes.ensureRegion(rx, rz) -- état sauvegardé de la région (secteur lu au besoin)
-	local plan = G.wg:plan(rx, rz)
+	-- Les couches de décor ajoutent et retirent des ressources à chaque chargement.
+	-- Garder le plan mémorisé intact pour les prochains chargements.
+	local plan = table.clone(G.wg:plan(rx, rz))
+	plan.props = table.clone(plan.props)
 	task.wait()
 	writeTerrain(plan)
 	local folder = Instance.new("Folder")
