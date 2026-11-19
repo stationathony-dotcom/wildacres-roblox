@@ -115,7 +115,7 @@ end
 
 local current
 local form = { kind = "peche", delay = 60, dur = 60, prize = 100 }
-local KIND_LIST = { { "peche", "🎣 Pêche" }, { "recolte", "🌾 Récolte" }, { "minage", "⛏️ Minage" }, { "bucheronnage", "🪓 Bûcheronnage" }, { "construction", "🏠 Construction" }, { "libre", "🎪 Rassemblement" } }
+local KIND_LIST = { { "peche", "🎣 Pêche" }, { "recolte", "🌾 Récolte" }, { "minage", "⛏️ Minage" }, { "bucheronnage", "🪓 Bûcheronnage" }, { "construction", "🏠 Construction" }, { "libre", "🎪 Rassemblement" }, { "course", "🏇 Course" } }
 
 local function act(kind, data)
 	data.v = current.village
@@ -173,7 +173,7 @@ render = function(d)
 		end
 	end
 	section("Organiser")
-	local r1 = row(66) -- 2 lignes de 3 types
+	local r1 = row(96) -- 3 lignes de 3 types
 	label(r1, "Type", UDim2.fromOffset(100, 36), 13, TEXT, true).Position = UDim2.fromOffset(8, 0)
 	for i, k in KIND_LIST do
 		local b = button(r1, k[2], UDim2.fromOffset(118, 26), form.kind == k[1] and GOLD or OFF, function()

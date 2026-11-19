@@ -21,7 +21,11 @@ local KINDS = {
 	bucheronnage = { name = "Concours de bûcheronnage", icon = "🪓", auto = true }, -- arbres abattus
 	construction = { name = "Concours de construction", icon = "🏠", auto = false }, -- 18/11 : jugé par l'organisateur (expositions, déco)
 	libre = { name = "Rassemblement", icon = "🎪", auto = false },
+	-- 19/11 : course (à cheval ou à pied) du tableau jusqu'au village voisin ; le premier arrivé gagne
+	course = { name = "Course", icon = "🏇", auto = true, race = true },
 }
+local RACE_MIN = 250 -- studs : l'arrivée est le village le plus proche au-delà de cette distance
+local RACE_FINISH = 30 -- studs autour du centre du village d'arrivée
 Activites.KINDS = KINDS
 local JUDGE_MIN = 120 -- l'organisateur a 2 h de jeu pour désigner le gagnant d'un rassemblement
 
@@ -167,10 +171,21 @@ function Activites.create(player: Player, data)
 		G.Util.toast(player, "Il te faut " .. prize .. " 💰 pour la cagnotte (elle est bloquée jusqu'à la fin).")
 		return
 	end
+	local dest = nil
+	if k.race then
+		dest = Activites.raceDestination(village)
+		if not dest then
+			if prize > 0 then
+				G.Joueurs.add(player, "gold", prize)
+			end
+			G.Util.toast(player, "Aucun autre village assez loin pour une course.")
+			return
+		end
+	end
 	local id = G.Util.newId("act")
 	all()[id] = {
-		id = id, kind = data.kind, title = k.name .. " de " .. player.DisplayName, org = uid, orgName = player.DisplayName,
-		village = village, startMin = absMin() + delay, dur = dur, prize = prize, part = {}, scores = {}, state = "annonce",
+		id = id, kind = data.kind, title = k.name .. (dest and (" jusqu'à " .. dest.name) or "") .. " de " .. player.DisplayName, org = uid, orgName = player.DisplayName,
+		village = village, startMin = absMin() + delay, dur = dur, prize = prize, part = {}, scores = {}, state = "annonce", dest = dest,
 	}
 	G.Economie.record(player, "activite", k.name .. " cagnotte " .. prize)
 	G.Joueurs.sync(player)
@@ -178,6 +193,51 @@ function Activites.create(player: Player, data)
 	G.Util.toast(player, k.icon .. " Affiché ! Début dans " .. delay .. " min de jeu.", "gain")
 	send(player, village)
 end
+
+-- arrivée d'une course partie du tableau de ce village : le village le plus proche au-delà de RACE_MIN
+function Activites.raceDestination(village: string)
+	local v = G.world.extra and G.world.extra.villages and G.world.extra.villages[village]
+	local Q = G.Quetes and rawget(G.Quetes, "villages")
+	if not v or not Q then
+		return nil
+	end
+	local best, bd = nil, math.huge
+	for _, o in Q() do
+		local d = Vector2.new(o.x - v.cx, o.z - v.cz).Magnitude
+		if o.key ~= village and d >= RACE_MIN and d < bd then
+			best, bd = o, d
+		end
+	end
+	return best and { name = best.name, x = best.x, z = best.z, dist = math.floor(bd) } or nil
+end
+
+-- course en cours : départ (ceux qui ne sont pas au tableau sont hors course), puis premier arrivé
+local function raceStep(a)
+	if not a.started then
+		a.started = true
+		a.dq = {}
+		for puid in a.part do
+			local p = G.Util.playerOf("u" .. puid)
+			if not p or not nearBoard(p, a.village) then
+				a.dq[puid] = true
+				tell(puid, "🏇 « " .. a.title .. " » part sans toi : il fallait être au tableau au départ.")
+			else
+				tell(puid, string.format("🏇 Partez ! Arrivée : %s, à %d studs. Le premier arrivé gagne.", a.dest.name, a.dest.dist), "big")
+			end
+		end
+		return
+	end
+	for puid in a.part do
+		local p = not a.dq[puid] and G.Util.playerOf("u" .. puid)
+		local r = p and G.Util.root(p)
+		if r and Vector2.new(r.Position.X - a.dest.x, r.Position.Z - a.dest.z).Magnitude <= RACE_FINISH then
+			a.scores[puid] = 1
+			Activites.finish(a, { puid })
+			return
+		end
+	end
+end
+Activites.raceStep = raceStep
 
 -- Compteurs des concours : appelé par la pêche et les récoltes
 function Activites.note(player: Player, kind: string, n: number?)
@@ -226,6 +286,8 @@ function Activites.tick()
 			for puid in a.part do
 				tell(puid, KINDS[a.kind].icon .. " « " .. a.title .. " » commence ! (" .. a.dur .. " min de jeu)", "big")
 			end
+		elseif a.state == "encours" and KINDS[a.kind].race and now < a.startMin + a.dur then
+			raceStep(a)
 		elseif a.state == "encours" and now >= a.startMin + a.dur then
 			if KINDS[a.kind].auto then
 				local best, winners = 0, {}
