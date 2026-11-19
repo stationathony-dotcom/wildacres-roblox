@@ -616,7 +616,7 @@ local function onCommand(player: Player, text: string)
 	if cmd == "/aide" then
 		say(player, "💬 /coince · /signaler <pseudo> <motif> · /bloquer · /debloquer · /bloques")
 		say(player, "🔑 /autoriser <pseudo> [coffres|batir] · /retirer · /autorises · /ceder <pseudo> · /louer <pseudo> <jours> <prix> · /accepter")
-		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques · 🐴 /ecurie · 👨‍🌾 /ouvriers · 📕 /bestiaire · 🐾 /animaux · 🌾 /cultures · 🏰 /fonder <nom> · /villes")
+		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques · 🐴 /ecurie · 👨‍🌾 /ouvriers · 📕 /bestiaire · 🐾 /animaux · 🌾 /cultures · 🏰 /fonder <nom> · /villes · 🏆 /classement")
 		say(player, "💃 /danse · 👋 /salut · 👏 /applaudir · 🙇 /reverence")
 	elseif cmd == "/reputation" then
 		say(player, "🏘️ Ta réputation dans les villages de cette île :")
@@ -630,6 +630,38 @@ local function onCommand(player: Player, text: string)
 		G.Livres.bestiaire(player)
 	elseif cmd == "/animaux" then
 		G.Livres.animaux(player)
+	elseif cmd == "/classement" then
+		-- classements de métiers (idee.txt § vie sociale) : les joueurs de ce monde, par compétence
+		local want = args[1] and string.lower(args[1]) or nil
+		local sk = nil
+		for _, id in G.Config.SKILL_ORDER do
+			local name = string.lower(G.Config.SKILLS[id].name)
+			if want and (id == want or string.sub(name, 1, #want) == want) then
+				sk = id
+			end
+		end
+		local rows = {}
+		for _, p in G.Game.players() do
+			local v = 0
+			if sk then
+				v = G.Joueurs.skill(p, sk) or 0
+			else
+				for _, id in G.Config.SKILL_ORDER do
+					v += G.Joueurs.skill(p, id) or 0
+				end
+			end
+			table.insert(rows, { name = p.DisplayName, v = v })
+		end
+		table.sort(rows, function(a, b)
+			return a.v > b.v
+		end)
+		say(player, "🏆 Classement " .. (sk and (G.Config.SKILLS[sk].icon .. " " .. G.Config.SKILLS[sk].name) or "de maîtrise (toutes compétences)") .. " — joueurs de ce monde :")
+		for i = 1, math.min(10, #rows) do
+			say(player, string.format("  %d. %s — %d", i, rows[i].name, rows[i].v))
+		end
+		if not sk then
+			say(player, "  (/classement peche, /classement minage… pour une compétence)")
+		end
 	elseif cmd == "/fonder" then
 		local ok, msg = G.Villes.found(player, table.concat(args, " "))
 		say(player, msg)
@@ -786,7 +818,7 @@ function Admin.init(g)
 	local folder = TextChatService:FindFirstChild("CommandesWA") or Instance.new("Folder")
 	folder.Name = "CommandesWA"
 	folder.Parent = TextChatService
-	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques", "/ecurie", "/ouvriers", "/bestiaire", "/animaux", "/cultures", "/fonder", "/villes", "/danse", "/salut", "/applaudir", "/reverence" } do
+	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques", "/ecurie", "/ouvriers", "/bestiaire", "/animaux", "/cultures", "/fonder", "/villes", "/classement", "/danse", "/salut", "/applaudir", "/reverence" } do
 		local c = folder:FindFirstChild(alias) or Instance.new("TextChatCommand")
 		c.Name = alias
 		c.PrimaryAlias = alias

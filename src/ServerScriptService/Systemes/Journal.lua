@@ -89,12 +89,30 @@ function Journal.check(player: Player)
 		-- récompense permanente (19/11) : chaque lieu trouvé compte pour les succès d'explorateur et
 		-- endurcit le voyageur (vitesse et chance, par la pratique)
 		G.Social.bump(player, "lieux")
-		G.Joueurs.addStatXp(player, "vitesse", 25)
-		G.Joueurs.addStatXp(player, "chance", 10)
+		local dec = G.Joueurs.talent(player, "decouvreur")
+		G.Joueurs.addStatXp(player, "vitesse", dec > 0 and 50 or 25)
+		G.Joueurs.addStatXp(player, "chance", dec > 0 and 20 or 10)
+		if dec > 0 then
+			G.Joueurs.add(player, "gold", 20 * dec, true)
+		end
 		if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "decouvrir", poi.kind) end
 		G.Util.sfx("pieces", Vector3.zero, player)
 	end
 	G.remotes.Fx:FireClient(player, "carte", key)
+	-- talent Cartographe : les régions voisines se dessinent aussi sur la carte (sans fanfare)
+	local carto = G.Joueurs.talent(player, "cartographe")
+	if carto > 0 then
+		for dx = -carto, carto do
+			for dz = -carto, carto do
+				local k2 = (rx + dx) .. "," .. (rz + dz)
+				if not s.set[k2] and G.WG.inWorld(rx + dx, rz + dz) then
+					s.set[k2] = true
+					G.remotes.Fx:FireClient(player, "carte", k2)
+				end
+			end
+		end
+		persist(player, s)
+	end
 	G.Joueurs.markDirty(player)
 end
 
@@ -176,11 +194,12 @@ function Journal.digTreasure(player: Player): boolean
 	end
 	prof.treasures[G.world.id] = nil
 	local list = G.Config.Catalogue.TREASURE
-	for _ = 1, 3 do
+	local hunter = G.Joueurs.talent(player, "chasseur_tresor") > 0 -- talent Explorateur
+	for _ = 1, hunter and 4 or 3 do
 		local e = list[math.random(1, #list)]
 		G.Joueurs.add(player, e[1], math.random(e[2], e[3]))
 	end
-	G.Joueurs.add(player, "gold", math.random(80, 200))
+	G.Joueurs.add(player, "gold", math.floor(math.random(80, 200) * (hunter and 1.5 or 1)))
 	G.Util.finds(player, "event")
 	G.Util.toast(player, "💰 Un coffre enfoui ! Trésor déterré.", "big")
 	G.remotes.Fx:FireClient(player, "tresor", nil)

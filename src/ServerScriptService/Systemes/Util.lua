@@ -79,7 +79,14 @@ function U.finds(player: Player, source: string, pos: Vector3?)
 	pos = pos or (root and root.Position)
 	local biome = pos and G.Clock.biomeAt(pos) or nil
 	local luck = G.Joueurs.stats(player).chance or 0
+	local digging = source == "rock" or source == "dig"
+	if digging then
+		luck += 2 * G.Joueurs.talent(player, "prospecteur") -- talent Explorateur
+	end
 	local got = G.Config.Catalogue.rollFinds(source, biome, luck)
+	if digging and G.Joueurs.talent(player, "archeologue") > 0 and math.random() < 0.03 then
+		table.insert(got, { "old_page", 1 })
+	end
 	if G.Clock.isNight() and source ~= "event" then
 		for _, f in G.Config.Catalogue.rollFinds("night", biome, luck) do
 			table.insert(got, f)

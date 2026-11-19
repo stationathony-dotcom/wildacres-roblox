@@ -56,6 +56,9 @@ end
 
 -- a-t-il froid à cette position ? (renvoie aussi la raison de la chaleur, pour les tests)
 function Froid.isCold(player: Player, pos: Vector3): (boolean, string?)
+	if G.Joueurs.talent and G.Joueurs.talent(player, "survivaliste") > 0 then
+		return false, "survivaliste"
+	end
 	if G.Clock.biomeAt(pos) ~= "neige" or not G.Clock.isNight() then
 		return false, "pas de froid ici"
 	end
@@ -74,6 +77,9 @@ end
 Froid.HEAT_FROM, Froid.HEAT_TO = 11, 17
 Froid.DRINK_S = 300
 function Froid.isHot(player: Player, pos: Vector3): (boolean, string?)
+	if G.Joueurs.talent and G.Joueurs.talent(player, "survivaliste") > 0 then
+		return false, "survivaliste"
+	end
 	if G.Clock.biomeAt(pos) ~= "desert" or G.Clock.isNight() then
 		return false, "pas de chaleur ici"
 	end

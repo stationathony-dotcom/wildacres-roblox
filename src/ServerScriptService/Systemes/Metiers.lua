@@ -921,7 +921,11 @@ function Metiers.coachTrips(player: Player, e)
 	for _, v in Q() do
 		local d = Vector2.new(v.x - here.X, v.z - here.Z).Magnitude
 		if known[v.key] and d > 150 then
-			table.insert(list, { key = v.key, name = v.name, x = v.x, z = v.z, price = Metiers.COACH_BASE + math.floor(d / Metiers.COACH_STUDS) })
+			local price = Metiers.COACH_BASE + math.floor(d / Metiers.COACH_STUDS)
+			if G.Joueurs.talent and G.Joueurs.talent(player, "aventurier") > 0 then
+				price = math.ceil(price / 2) -- talent Explorateur
+			end
+			table.insert(list, { key = v.key, name = v.name, x = v.x, z = v.z, price = price })
 		end
 	end
 	table.sort(list, function(a, b)

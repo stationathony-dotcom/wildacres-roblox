@@ -2222,11 +2222,12 @@ local function game_()
 		primes = "🎯", menottes = "⛓️", robuste = "🛡️", critique = "🗡️",
 		fantome = "👻", cavaleur = "💨", terre_riche = "🌾", marchand_ne = "🪙", alpha = "🐺", cavalier = "🐎",
 		prodigue = "✋", veine = "💎", colosse = "🗿", traqueur = "🏹",
+		cartographe = "🗺️", prospecteur = "⛏️", archeologue = "📜", survivaliste = "🔥", decouvreur = "🧭", aventurier = "🐴", chasseur_tresor = "💰",
 	}
 	local nTrees = #Config.TALENT_TREES
 	local COLW = 150
 	local tal = new("Frame", {
-		Name = "Talents", Size = UDim2.fromOffset(nTrees * (COLW + 8) + 24, 560), -- 560 : palier 4 (talents de maître) Position = UDim2.fromScale(0.5, 0.5), AnchorPoint = Vector2.new(0.5, 0.5),
+		Name = "Talents", Size = UDim2.fromOffset(nTrees * (COLW + 8) + 24, 560), Position = UDim2.fromScale(0.5, 0.5), AnchorPoint = Vector2.new(0.5, 0.5), -- 560 : palier 4 (talents de maître)
 		BackgroundColor3 = Color3.fromRGB(20, 16, 13), BackgroundTransparency = 0.03, Visible = false, Parent = gui, ZIndex = 5,
 	}, { corner(6), stroke(Color3.fromRGB(176, 140, 72), 2.5) })
 	panels.Talents = tal
@@ -2244,7 +2245,7 @@ local function game_()
 	local tfoot = new("Frame", { Size = UDim2.new(1, -24, 0, 36), Position = UDim2.new(0, 12, 1, -46), BackgroundTransparency = 1, Parent = tal, ZIndex = 6 })
 	local TREE_BG = {
 		horsloi = Color3.fromRGB(40, 26, 40), fermier = Color3.fromRGB(32, 40, 24), dresseur = Color3.fromRGB(40, 32, 22),
-		artisan = Color3.fromRGB(38, 34, 30), justicier = Color3.fromRGB(26, 32, 44),
+		artisan = Color3.fromRGB(38, 34, 30), justicier = Color3.fromRGB(26, 32, 44), explorateur = Color3.fromRGB(24, 38, 40),
 	}
 
 	local function renderTalents()

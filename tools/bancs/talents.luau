@@ -42,7 +42,7 @@ for _, c in groups do
 		pairs2 = false
 	end
 end
-check("10 talents de maître, deux par voie", n == 10 and pairs2)
+check("12 talents de maître, deux par voie (6 voies)", n == 12 and pairs2)
 mod:Destroy()
 f:Destroy()
 return fails .. " échec(s)\n" .. table.concat(out, "\n")

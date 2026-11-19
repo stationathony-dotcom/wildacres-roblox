@@ -6,6 +6,9 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Voie Explorateur** (6e voie de talents, idee.txt) : Cartographe (la carte se dévoile autour de toi), Prospecteur (plus de trouvailles en minant / fouillant), Archéologue (pages anciennes), Survivaliste (insensible au froid et à la chaleur), Découvreur (lieux découverts : or et caractéristiques ×2), puis au choix Aventurier (diligence moitié prix) ou Chasseur de trésors (+50 % d'or, un objet de plus)
+- **/classement [compétence]** : classement des joueurs du monde, par compétence ou en maîtrise totale
+- Corrigé : la fenêtre des talents avait perdu son centrage (régression de l'agrandissement du jour)
 - **Règle « pas de zombies ni de squelettes » rétablie** : la production de nuit avait remis des squelettes errants, squelettes anciens et goules dans les apparitions de nuit et des grottes — remplacés par des créatures originales (ombre rampante, marcheur sans visage, esprit des ruines, troll des cavernes) ; le chevalier oublié n'est plus squelettique
 - **Quêtes** : trois sortes de plus tirées au tableau — bâtir (poser 10 à 30 pièces : palissade, pont, abri…), apprivoiser une bête (compagnon ou monture), livrer un recherché à la justice (prime) ; 16 sortes sur une île
 - **Villes de joueurs** : avec une **Charte de ville** (établi : planches, pierre, cordes, encre ; commerce 10), « /fonder <nom> » fonde une ville là où l'on se tient (à plus de 320 studs des villages et des autres villes, nom filtré) ; son nom s'affiche en haut de l'écran ; des **habitants PNJ s'y installent, un par lit posé** dans la ville (le lendemain matin), remplacés s'ils disparaissent ; /villes ; succès Fondateur (banc `villes` ; l'arrivée des habitants reste à voir en Play)

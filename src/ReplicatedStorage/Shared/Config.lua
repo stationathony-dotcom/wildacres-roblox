@@ -511,6 +511,7 @@ C.TALENT_TREES = {
 	{ id = "dresseur", name = "Dresseur", icon = "🐺" },
 	{ id = "artisan", name = "Artisan", icon = "⚒️" },
 	{ id = "justicier", name = "Justicier", icon = "⭐" },
+	{ id = "explorateur", name = "Explorateur", icon = "🧭" }, -- 19/11 (idee.txt : 6e voie, sans combat)
 }
 C.TALENTS = {
 	-- Hors-la-loi
@@ -549,6 +550,14 @@ C.TALENTS = {
 	{ id = "veine", tree = "artisan", name = "Veine du mineur", max = 1, req = 4, excl = "artisan_maitre", desc = "+2 minerais par filon. Exclusif avec Mains d'or." },
 	{ id = "colosse", tree = "justicier", name = "Colosse", max = 1, req = 4, excl = "justicier_maitre", desc = "+40 vie max. Exclusif avec Traqueur." },
 	{ id = "traqueur", tree = "justicier", name = "Traqueur", max = 1, req = 4, excl = "justicier_maitre", desc = "+60 % sur les primes encaissées. Exclusif avec Colosse." },
+	-- Explorateur (19/11, idee.txt « une sixième voie : l'Explorateur »)
+	{ id = "cartographe", tree = "explorateur", name = "Cartographe", max = 2, req = 0, desc = "Entrer dans une région dévoile aussi les régions voisines sur ta carte (rang 2 : deux régions autour)." },
+	{ id = "prospecteur", tree = "explorateur", name = "Prospecteur", max = 2, req = 1, desc = "Plus de trouvailles en minant et en fouillant (+2 de chance par rang)." },
+	{ id = "archeologue", tree = "explorateur", name = "Archéologue", max = 1, req = 2, desc = "En minant et en fouillant, tu tombes parfois sur une page ancienne (3 %)." },
+	{ id = "survivaliste", tree = "explorateur", name = "Survivaliste", max = 1, req = 2, desc = "Ni le froid de la neige ni la chaleur du désert ne te ralentissent." },
+	{ id = "decouvreur", tree = "explorateur", name = "Découvreur", max = 2, req = 3, desc = "Chaque lieu découvert rapporte 20 or par rang et entraîne deux fois plus tes caractéristiques." },
+	{ id = "aventurier", tree = "explorateur", name = "Aventurier", max = 1, req = 4, excl = "explorateur_maitre", desc = "La diligence te coûte moitié prix. Exclusif avec Chasseur de trésors." },
+	{ id = "chasseur_tresor", tree = "explorateur", name = "Chasseur de trésors", max = 1, req = 4, excl = "explorateur_maitre", desc = "Les trésors des cartes rapportent 50 % d'or et un objet de plus. Exclusif avec Aventurier." },
 }
 C.TALENT_BY_ID = {}
 for _, t in C.TALENTS do
