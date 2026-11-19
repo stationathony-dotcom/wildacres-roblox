@@ -95,9 +95,42 @@ function Combat.swoosh(player: Player)
 end
 
 -- applique un coup (corps à corps ou flèche) à la cible choisie
+-- Effets des armes de créatures (Shared/Equilibre) : venin = 3 piqûres (15 % des dégâts) ; feu =
+-- 2 brûlures (20 %) ; givre = l'ennemi ralentit de 40 % pendant 3 s (Enemies : moveToward).
+local FX_COLOR = { venin = Color3.fromRGB(120, 220, 90), feu = Color3.fromRGB(255, 150, 60) }
+local function weaponEffect(player: Player, en, fx: string, dmg: number)
+	if fx == "givre" then
+		en.slowUntil = os.clock() + 3
+		return
+	end
+	local ticks, part = 3, 0.15
+	if fx == "feu" then
+		ticks, part = 2, 0.2
+	end
+	task.spawn(function()
+		for _ = 1, ticks do
+			task.wait(1)
+			if en.dead or not (en.model and en.model.Parent) then
+				return
+			end
+			local d = math.max(1, math.floor(dmg * part))
+			en.invuln = 0
+			G.Enemies.hit(en, d, player)
+			if en.pos then
+				Combat.popup(en.pos + Vector3.new(0, 4, 0), tostring(d), FX_COLOR[fx] or Color3.new(1, 1, 1))
+			end
+		end
+	end)
+end
+
 local function applyHit(player: Player, best, kind: string, dmg: number, root: BasePart)
 	if kind == "enemy" then
 		G.Enemies.hit(best, dmg, player)
+		local wprof = G.Joueurs.get(player)
+		local w = wprof and wprof.equipped and wprof.equipped.weapon
+		if w and w.effect then
+			weaponEffect(player, best, w.effect, dmg)
+		end
 	elseif kind == "npc" then
 		G.Npcs.hit(best, dmg, player)
 	elseif kind == "animal" then

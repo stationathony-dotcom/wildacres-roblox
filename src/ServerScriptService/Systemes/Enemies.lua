@@ -349,6 +349,10 @@ end
 Enemies.floorFor = floorFor
 
 local function moveToward(en, target: Vector3, speed: number, dt: number)
+	-- givre (arme de créature, Systemes/Combat) : 40 % plus lent pendant quelques secondes
+	if en.slowUntil and os.clock() < en.slowUntil then
+		speed *= 0.6
+	end
 	local d = Vector3.new(target.X - en.pos.X, 0, target.Z - en.pos.Z)
 	if d.Magnitude < 0.2 then
 		return

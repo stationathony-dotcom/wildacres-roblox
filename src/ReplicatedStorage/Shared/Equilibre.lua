@@ -638,6 +638,13 @@ E.CREATURE_FAMILY = {
 	{ { "soie" }, { discretion = 0.8, vitesse = 0.7 } },
 }
 E.COLD_WORDS = { "polaire", "blizzard", "glace", "givre", "yéti", "neige", "hiver", "blanc" }
+-- effet au toucher des ARMES de créatures (Systemes/Combat) : { mots de la matière, effet }
+E.WEAPON_EFFECT = {
+	{ { "venin", "dard", "glande à venin" }, "venin" },
+	{ { "feu", "dragonnet", "braise", "flamme" }, "feu" },
+	{ { "givre", "glace", "polaire", "blizzard", "yéti", "neige" }, "givre" },
+}
+E.EFFECT_TEXT = { venin = "empoisonne (3 piqûres)", feu = "brûle (2 brûlures)", givre = "ralentit l'ennemi" }
 
 local function lower(s: string): string
 	return (string.lower((string.gsub(string.gsub(string.gsub(s, "É", "é"), "È", "è"), "Œ", "œ"))))
@@ -703,6 +710,16 @@ function E.finish(C)
 				end
 				g.stats = spread(weights, total, nil)
 				note("créature " .. g.name)
+			end
+			if mat and g.slot == "weapon" then
+				local n = lower(mat.name or "")
+				for _, fx in E.WEAPON_EFFECT do
+					for _, w in fx[1] do
+						if not g.effect and string.find(n, w, 1, true) then
+							g.effect = fx[2]
+						end
+					end
+				end
 			end
 			if mat then
 				local n = lower(mat.name or "")
