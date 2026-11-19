@@ -111,9 +111,11 @@ end
 
 local function addRenown(piece, buyerId: number)
 	local maker = type(piece) == "table" and piece.makerId
-	if not maker or maker == buyerId then
+	if not maker or maker == buyerId or piece.renownCounted then
 		return
 	end
+	-- une pièce ne compte qu'UNE fois dans toute sa vie (sinon deux comptes se la revendraient en boucle)
+	piece.renownCounted = true
 	G.world.renom = G.world.renom or {}
 	local key = tostring(maker)
 	local before = Ventes.renownTier(maker)
