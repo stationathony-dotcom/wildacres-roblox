@@ -14,6 +14,7 @@
 --   · libellules en vol bas sur les eaux du marais.
 --   · lièvres en prairie et tortues terrestres au marais.
 --   · pigeons qui picorent à proximité des villages.
+--   · abeilles solitaires dans les prairies par temps sec.
 -- Rien n'est sauvegardé, rien ne se chasse : c'est le décor qui vit.
 
 local Players = game:GetService("Players")
@@ -266,6 +267,24 @@ local function makeButterfly(color: Color3): Model
 	return m
 end
 
+local function makeBee(): Model
+	local m = Instance.new("Model")
+	m.Name = "Abeille"
+	local body = part(Vector3.new(0.22, 0.18, 0.32), Color3.fromRGB(229, 167, 45), nil, m)
+	body.Shape = Enum.PartType.Ball
+	body.Name = "Corps"
+	m.PrimaryPart = body
+	local stripe = part(Vector3.new(0.225, 0.185, 0.135), Color3.fromRGB(50, 39, 26), nil, m)
+	stripe.Shape = Enum.PartType.Ball
+	stripe.Name = "Rayure"
+	for _, name in { "AileG", "AileD" } do
+		local wing = part(Vector3.new(0.2, 0.02, 0.12), Color3.fromRGB(244, 233, 192), nil, m)
+		wing.Name = name
+		wing.Transparency = 0.38
+	end
+	return m
+end
+
 local function makeSquirrel(color: Color3): Model
 	local m = Instance.new("Model")
 	local body = part(Vector3.new(0.35, 0.35, 0.6), color, nil, m)
@@ -312,7 +331,7 @@ end
 -- ---------------------------------------------------------------- Population
 local critters = {} -- { kind, model, pos, vel, state, t, ... }
 local MAX = {
-	sol = 5, pigeon = 3, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3, canard = 2,
+	sol = 5, pigeon = 3, ciel = 3, papillon = 6, abeille = 4, luciole = 14, ecureuil = 3, canard = 2,
 	herisson = 2, blaireau = 1, marmotte = 2, grenouille = 3, libellule = 3, lievre = 2, tortue = 2,
 }
 local counts = {}
@@ -382,6 +401,15 @@ local function spawn(kind: string, root: Vector3, biome: string)
 		c.model = makeButterfly(cols[rng:NextInteger(1, #cols)])
 		c.home = g + Vector3.new(0, 1.2, 0)
 		c.pos = c.home
+	elseif kind == "abeille" then
+		if mat ~= Enum.Material.Grass and mat ~= Enum.Material.LeafyGrass then
+			return
+		end
+		c.model = makeBee()
+		c.home = g + Vector3.new(0, 0.9, 0)
+		c.pos = c.home
+		c.model:PivotTo(CFrame.new(c.pos))
+		c.model.Parent = folder
 	elseif kind == "ecureuil" then
 		local col = biome == "foret" and Color3.fromRGB(190, 92, 40) or Color3.fromRGB(150, 100, 70)
 		c.model = makeSquirrel(col)
@@ -420,6 +448,7 @@ RunService.Heartbeat:Connect(function(dt)
 			pigeon = (day and not wet and nearVillage(root)) and MAX.pigeon or 0,
 			ciel = (day and workspace:GetAttribute("Weather") ~= "orage") and MAX.ciel or 1,
 			papillon = (day and not wet and (biome == "prairie" or biome == "foret" or biome == "marais")) and MAX.papillon or 0,
+			abeille = (day and not wet and biome == "prairie") and MAX.abeille or 0,
 			luciole = (not day and not wet and (biome == "marais" or biome == "prairie" or biome == "foret")) and MAX.luciole or 0,
 			ecureuil = (day and not wet and (biome == "foret" or biome == "prairie")) and MAX.ecureuil or 0,
 			canard = (day and not wet and biome ~= "neige" and biome ~= "desert") and MAX.canard or 0,
@@ -567,6 +596,16 @@ RunService.Heartbeat:Connect(function(dt)
 			-- vol plané : quelques battements puis on glisse
 			local flap = (math.sin(now * 0.8 + c.phase) > 0.3) and now * 18 or 0.35
 			poseBird(c.model, CFrame.lookAt(p, p + tangent) * CFrame.Angles(0, 0, (c.speed > 0 and -0.25 or 0.25)), flap, c.scale)
+		elseif c.kind == "abeille" then
+			local a = c.t * 2.8 + c.phase
+			c.pos = c.home + Vector3.new(math.cos(a) * 0.8, math.sin(a * 3) * 0.22, math.sin(a) * 0.8)
+			local tangent = Vector3.new(-math.sin(a), 0, math.cos(a))
+			local cf = CFrame.lookAt(c.pos, c.pos + tangent)
+			local flap = math.sin(c.t * 38 + c.phase) * 0.8
+			c.model.Corps.CFrame = cf
+			c.model.Rayure.CFrame = cf * CFrame.new(0, 0, 0.035)
+			c.model.AileG.CFrame = cf * CFrame.Angles(0, 0, flap) * CFrame.new(-0.13, 0.05, 0)
+			c.model.AileD.CFrame = cf * CFrame.Angles(0, 0, -flap) * CFrame.new(0.13, 0.05, 0)
 		elseif c.kind == "papillon" then
 			local tgt = c.home + Vector3.new(math.sin(now * 0.7 + c.phase) * 3, math.sin(now * 2.3 + c.phase) * 0.6, math.cos(now * 0.53 + c.phase) * 3)
 			local prev = c.pos

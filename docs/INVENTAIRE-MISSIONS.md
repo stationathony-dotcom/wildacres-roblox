@@ -1899,7 +1899,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [ ] (398) Chevreuils
 - [x] (399) Marmottes
 - [ ] (400) Papillons
-- [ ] (401) Abeilles
+- [x] (401) Abeilles
 - [x] (402) Libellules
 - [x] (403) Grenouilles
 - [x] (404) Tortues
