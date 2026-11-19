@@ -119,7 +119,12 @@ local function startInvasion()
 	local foes = ({ prairie = { "wolf", "boar", "slime_blue" }, foret = { "spider", "myconid", "wolf" }, desert = { "scorpion", "goblin" },
 		neige = { "wolf_white", "ice_golem" }, marais = { "toad", "croc", "wisp" } })[reg.plan.biome] or { "wolf" }
 	local wave = {}
-	for i = 1, math.random(6, 10) do
+	-- palissade renforcée par un chantier commun (Systemes/Chantiers) : moins d'assaillants
+	local count = math.random(6, 10)
+	if reg.rx and G.Chantiers and rawget(G.Chantiers, "waveMult") then
+		count = math.max(3, math.floor(count * G.Chantiers.waveMult(reg.rx .. "," .. reg.rz)))
+	end
+	for i = 1, count do
 		local a = i / 10 * math.pi * 2
 		local pos = Vector3.new(cx + math.cos(a) * 70, 0, cz + math.sin(a) * 70)
 		local r = G.World.regionAt(pos) or reg

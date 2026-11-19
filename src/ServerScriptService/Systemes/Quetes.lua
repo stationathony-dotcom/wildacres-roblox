@@ -378,6 +378,11 @@ function Quetes.offers(v)
 		table.insert(list, makeOffer(v, period, i))
 	end
 	table.insert(list, villageOrder(v, period))
+	-- chantier commun du village (Systemes/Chantiers)
+	local ch = G.Chantiers.offer(v, period)
+	if type(ch) == "table" then
+		table.insert(list, ch)
+	end
 	return list
 end
 
@@ -567,6 +572,7 @@ function Quetes.turnIn(player: Player, id: string)
 	G.QuetesLieux.clear(player, q)
 	st.act[id] = nil
 	st.fait[id] = G.world.day
+	G.Chantiers.contribute(player, q, here) -- part d'un chantier commun (Systemes/Chantiers)
 	G.Joueurs.add(player, "gold", q.gold)
 	-- le village où on la rend t'en sait gré (Systemes/Reputation)
 	G.Reputation.add(player, here, math.clamp(3 + math.floor((q.gold or 0) / 40), 3, 10))

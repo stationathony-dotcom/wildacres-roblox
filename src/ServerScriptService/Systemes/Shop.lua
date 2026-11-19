@@ -236,6 +236,12 @@ function Shop.sellPrice(player: Player, e, item: string): number
 		local _, sellM = repMult(player, e.root.Position)
 		mult *= sellM -- réputation du village (Systemes/Reputation)
 	end
+	-- marché agrandi par un chantier commun (Systemes/Chantiers)
+	local VA = G.Reputation and rawget(G.Reputation, "villageAt")
+	local here = VA and e.root and VA(e.root.Position)
+	if here and G.Chantiers and rawget(G.Chantiers, "sellMult") then
+		mult *= G.Chantiers.sellMult(here.key)
+	end
 	local price = math.floor(info.price * mult * demandFactor(e.reg.key, item))
 	-- invariant anti-arbitrage : un marchand ne rachète jamais plus de 80 % de ce qu'il te vendrait
 	-- le même objet (sinon acheter puis revendre au même comptoir créait de l'or à l'infini)
