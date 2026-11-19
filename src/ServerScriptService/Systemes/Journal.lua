@@ -122,7 +122,8 @@ function Journal.readTreasureMap(player: Player)
 	prof.treasures = type(prof.treasures) == "table" and prof.treasures or {}
 	local t = prof.treasures[G.world.id]
 	if t then
-		G.Util.toast(player, "🗺️ Ta carte montre toujours une croix : " .. hintFor(player, t) .. ".", "big")
+		local progress = (t.dug or 0) > 0 and (" Coups de pelle : " .. t.dug .. "/3.") or ""
+		G.Util.toast(player, "🗺️ Ta carte montre toujours une croix : " .. hintFor(player, t) .. "." .. progress, "big")
 		return
 	end
 	local rng = Random.new()
@@ -157,9 +158,14 @@ function Journal.digTreasure(player: Player): boolean
 	if not t or not root or (Vector3.new(t.x, root.Position.Y, t.z) - root.Position).Magnitude > 8 then
 		return false
 	end
+	-- Vérifier aussi la hauteur pour les caves, ponts et survols de la croix.
+	if math.abs(root.Position.Y - G.Util.groundY(t.x, t.z)) > 8 then
+		return false
+	end
 	t.dug = (t.dug or 0) + 1
 	G.Util.sfx("pelle", root.Position)
 	if t.dug < 3 then
+		G.Joueurs.markDirty(player)
 		G.Util.toast(player, t.dug == 1 and "⛏️ La terre est meuble ici…" or "⛏️ Ça sonne creux !")
 		return true
 	end
