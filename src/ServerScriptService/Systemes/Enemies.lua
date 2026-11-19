@@ -773,7 +773,27 @@ local function dieInner(en, player: Player)
 		end
 	end
 	G.Social.collect(player, "creatures", en.kind)
-	if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "tuer", en.kind) end
+	if G.Quetes and rawget(G.Quetes, "note") then
+		G.Quetes.note(player, "tuer", en.kind)
+		-- coopération (19/11, liste quetes.txt § 31) : la quête de chasse avance aussi pour ceux qui ont
+		-- frappé la bête, et pour le groupe du tueur à moins de 60 studs
+		local credited = { [player] = true }
+		for p in en.hitters or {} do
+			if typeof(p) == "Instance" and p:IsA("Player") and p.Parent and not credited[p] then
+				credited[p] = true
+				G.Quetes.note(p, "tuer", en.kind)
+			end
+		end
+		local grp = G.Social and rawget(G.Social, "groupOf") and G.Social.groupOf(player)
+		local here = G.Util.root(player)
+		for _, m in (grp and grp.members) or {} do
+			local mr = not credited[m] and G.Util.root(m)
+			if mr and here and (mr.Position - here.Position).Magnitude < 60 then
+				credited[m] = true
+				G.Quetes.note(m, "tuer", en.kind)
+			end
+		end
+	end
 	if not k.passive then
 		G.Social.bump(player, "kills")
 		if en.boss then
