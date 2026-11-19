@@ -81,6 +81,11 @@ local KINDS = {
 	boss_goblin = { name = "Chef Gobelin", model = "Chef_Gobelin", hp = 1200, dmg = 50, speed = 14, level = 10, style = "charge", boss = true, radius = 2.4, minion = "goblin" },
 }
 Enemies.KINDS = KINDS
+
+-- Variante visuelle du cerf. L'espèce et l'identifiant d'origine restent
+-- communs au troupeau pour la sauvegarde, les prédateurs et les quêtes.
+local DOE = table.clone(KINDS.deer)
+DOE.name = "Biche"
 -- qui chasse qui (faune vivante)
 local PREDATORS = {
 	wolf = { rabbit = true, deer = true, fox = true },
@@ -226,6 +231,14 @@ local function spawn(reg, d, parent)
 	local model = G.Util.clone(k.model)
 	if not model then
 		return
+	end
+	if d.kind == "deer" and G.WG.hash(G.world and G.world.seed or 0, "biche", d.id) % 2 == 0 then
+		k = DOE
+		for _, part in model:GetDescendants() do
+			if part:IsA("BasePart") and part.Name == "Bois" then
+				part:Destroy()
+			end
+		end
 	end
 	local dist = reg and math.sqrt(reg.rx * reg.rx + reg.rz * reg.rz) or 0
 	local mult = (1 + math.max(0, dist - 2) * 0.12) * (1 + ((G.world and G.world.danger or 1) - 1) * 0.25)

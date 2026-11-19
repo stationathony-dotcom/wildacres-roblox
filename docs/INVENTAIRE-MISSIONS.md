@@ -1889,7 +1889,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 ### 2. Les animaux et la faune passive
 
 - [x] (390) Cerfs
-- [ ] (391) Biches
+- [x] (391) Biches
 - [x] (392) Lapins
 - [x] (393) Lièvres
 - [x] (394) Renards

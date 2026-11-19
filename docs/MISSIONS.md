@@ -17,6 +17,8 @@ Branche de travail `mission/wildacres`, créée depuis `d30b9ea`. La racine du p
 
 ## Journal et problèmes
 
+- 19/11. Biches intégrées aux troupeaux de cerfs comme variante visuelle déterminée par l’identifiant. Studio Edit a vérifié sur le modèle du jeu les deux variantes, les bois, la stabilité au rechargement, le butin et les identifiants. Build Rojo réussi.
+
 - 19/11. Poissons passifs diurnes juste sous la surface, plafonnés à quatre par client. Build Rojo et essai Studio Edit réussi sur un plan d’eau simulé. Les cerfs, lapins et renards passifs étaient déjà déclarés dans `Enemies.lua` et intégrés aux populations de `RegionPlan.lua`.
 
 - 19/11. Porte-documents et sac de marchand ajoutés comme marchandises fabricables à l’établi. Studio Edit a vérifié les deux recettes et confirmé la présence de 31 objets voisins dans le catalogue chargé. Build Rojo réussi.
