@@ -107,6 +107,69 @@ E.MEAL_STATS = {
 	{ "vie", { "carrot", "cabbage", "tomato", "pumpkin", "potato", "apple", "berr", "pear", "plum", "grape", "bean", "pea", "onion", "garlic", "wheat", "flour", "bread", "milk", "cheese", "butter" } },
 }
 
+-- 7. RIEN SANS USAGE (19/11, à sa demande : « pas de trucs juste là pour faire du chiffre ») : 122 objets
+--    ne servaient qu'à la revente. Chacun reçoit une fonction (usage, recette, équipement ou système).
+--    Usages gérés par Joueurs.useCatalogue : buff (bonus 20 min), livre (XP de métier), etudier
+--    (collection « trouvailles » + Chance), rendre (réputation du village où l'on est), deballer
+--    (rend son contenu), tresor, bourse, porter (devient une pièce d'équipement).
+E.USES = {
+	-- jeux, jouets, soins du corps : un petit bonus (consommé : on joue, on s'en sert)
+	board_game = { "buff", "chance" }, cards = { "buff", "chance" }, dice = { "buff", "chance" }, fair_ticket = { "buff", "chance" },
+	stone_figurine = { "buff", "chance" }, wood_figurine = { "buff", "chance" },
+	kite = { "buff", "vitesse" }, leather_ball = { "buff", "vitesse" }, hoop = { "buff", "vitesse" },
+	rag_doll = { "buff", "charisme" }, wood_toy = { "buff", "charisme" }, perfume = { "buff", "charisme" }, comb = { "buff", "charisme" },
+	pocket_mirror = { "buff", "charisme" }, brush = { "buff", "charisme" }, towel = { "buff", "vie" },
+	-- écrits : on apprend
+	songbook = { "livre", "commerce" }, diploma = { "livre", "artisanat" }, contract = { "livre", "commerce" },
+	recruit_contract = { "livre", "combat" }, patrol_log = { "livre", "combat" }, sea_chart = { "livre", "peche" },
+	-- antiquités : on les étudie (collection, Chance) — la voie Explorateur s'en nourrit
+	old_vase = { "etudier" }, fossil = { "etudier" }, inscription = { "etudier" }, ruin_piece = { "etudier" }, artifact = { "etudier" },
+	rare_shell = { "etudier" }, relic = { "etudier" }, decorated_ceramic = { "etudier" }, royal_seal = { "etudier" },
+	map_region = { "etudier" }, relic_fragment = { "etudier" },
+	-- à rapporter au village : réputation
+	recommendation = { "rendre", "15" }, lost_item = { "rendre", "6" }, guard_badge = { "rendre", "8" },
+	-- marchandises emballées : se transportent et se revendent groupées, se déballent
+	flour_sack = { "deballer", "flour:3" }, spice_sack = { "deballer", "spice:5" }, salt_sack = { "deballer", "salt:6" },
+	cloth_bale = { "deballer", "cloth:5" }, fruit_crate = { "deballer", "apple:4,pear:2" },
+	veg_basket = { "deballer", "carrot:2,cabbage:1,turnip:2" }, supply_chest = { "deballer", "rations:2,planks:6" },
+	jewel_box = { "tresor" }, ancient_key = { "tresor" }, packed_goods = { "tresor" }, event_token = { "bourse", "40" },
+	rare_book = { "recette", "" }, -- un livre rare apprend une recette encore inconnue
+}
+-- objets qui se PORTENT (deviennent une pièce d'équipement) : { emplacement, rareté, stats }
+E.WEAR = {
+	crown = { "hat", 4, { charisme = 8, chance = 3 } }, ring_gem = { "trinket", 3, { charisme = 5, chance = 3 } },
+	medal = { "trinket", 2, { charisme = 3, force = 1 } }, champion_ribbon = { "trinket", 2, { charisme = 3, vitesse = 1 } },
+	sheriff_badge = { "trinket", 3, { defense = 3, charisme = 4 } }, talisman = { "trinket", 3, { chance = 6 } },
+	spyglass = { "trinket", 2, { chance = 3, vitesse = 1 } }, merchant_bag = { "trinket", 3, { charisme = 5, chance = 2 } },
+	canvas_bag = { "trinket", 2, { vitesse = 2, chance = 1 } }, satchel = { "trinket", 1, { vitesse = 2 } }, seal = { "trinket", 2, { charisme = 3 } },
+}
+-- recettes en plus (matières de créatures, pièces, clés) : { objet, ingrédients, quantité, atelier }
+E.EXTRA = {
+	{ "leather", { raw_hide = 2, bark = 1 }, 1, "tannery" }, { "leather", { deer_hide = 1, bark = 1 }, 1, "tannery" },
+	{ "leather", { wolf_pelt = 1 }, 2, "tannery" },
+	{ "arrow", { branches = 1, tooth = 1, feather = 1 }, 8, "bench" }, { "arrow", { branches = 1, claw = 1, feather = 1 }, 8, "bench" },
+	{ "bait", { pollen = 2 }, 4 }, { "quill", { night_feather = 1 }, 4 },
+	{ "copper_ingot", { copper_coin = 10 }, 1, "furnace" }, { "silver_ingot", { silver_coin = 5 }, 1, "furnace" },
+	{ "gold_ingot", { gold_coin = 3 }, 1, "furnace" }, { "precious_ingot", { ancient_coin = 3 }, 1, "furnace" },
+	{ "lockpick", { rusty_key = 1 }, 2, "anvil" },
+}
+-- ingrédients ajoutés à des recettes existantes (objet devenu pièce d'un ensemble)
+E.ADD = {
+	clock = { hourglass = 1 }, voilier = { anchor = 1 }, well = { climbing_rope = 1 }, bookcase = { scroll_case = 1 }, desk = { document_case = 1 },
+}
+-- pierres, cœurs, fossiles : bijoux et armes (même format que E.MASTER)
+E.JEWELS = {
+	{ "trinket", "Talisman de pierres colorées", 2, { chance = 3, charisme = 2 }, { colored_stone = 3, leather_strap = 1 }, 12 },
+	{ "trinket", "Collier d'os fossile", 2, { force = 3, vie = 2 }, { fossil_bone = 2, rope = 1 }, 14 },
+	{ "trinket", "Cor de chasse", 3, { force = 4, vitesse = 4 }, { rare_horn = 1, copper_ingot = 1 }, 20 },
+	{ "trinket", "Bague au rubis", 3, { force = 5, vie = 3 }, { ruby = 1, gold_ingot = 1 }, 22 },
+	{ "trinket", "Amulette d'émeraude", 3, { chance = 5, vie = 3 }, { emerald = 1, silver_ingot = 1 }, 24 },
+	{ "weapon", "Bâton de bois pétrifié", 3, { force = 5, defense = 3 }, { petrified_wood = 2, steel = 1 }, 24, power = 7, visual = "6" },
+	{ "hat", "Diadème de saphir", 3, { charisme = 5, chance = 3 }, { sapphire = 1, silver_ingot = 2 }, 26 },
+	{ "trinket", "Écu à l'écaille ancienne", 4, { defense = 9, vie = 3 }, { ancient_scale = 2, steel = 2, oak_log = 2 }, 36 },
+	{ "trinket", "Cœur minéral serti", 4, { vie = 8, defense = 4 }, { mineral_heart = 1, precious_ingot = 1, ancient_crystal = 1 }, 38 },
+}
+
 -- effets fixés à la main quand le nom du plat dit autre chose que ses ingrédients
 E.MEALS = { vigor_elixir = { "force", 3 } }
 
@@ -229,6 +292,43 @@ function E.apply(C)
 			table.insert(R, { gear = { slot = m[1], name = m[2], rarity = m[3], stats = table.clone(m[4]), power = m.power, visual = m.visual },
 				needs = table.clone(m[5]), station = "bench", cat = "equipement", skill = { "artisanat", m[6] } })
 			note("maître " .. m[2])
+		end
+	end
+	-- 7. rien sans usage
+	for id, u in E.USES do
+		local info = I[id]
+		if info and not info.use then
+			info.use, info.useArg = "cat_" .. u[1], u[2]
+			note("usage " .. id .. " " .. u[1])
+		end
+	end
+	for id, w in E.WEAR do
+		local info = I[id]
+		if info and not info.use then
+			info.use, info.wearAs = "cat_porter", { w[1], w[2], w[3] }
+			note("se porte " .. id)
+		end
+	end
+	for _, x in E.EXTRA do
+		if I[x[1]] and known(C, x[2]) then
+			table.insert(R, { item = x[1], needs = table.clone(x[2]), count = (x[3] or 1) > 1 and x[3] or nil, station = x[4], cat = "materiaux" })
+			note("recette en plus " .. x[1])
+		end
+	end
+	for _, r in R do
+		local add = r.item and E.ADD[r.item]
+		if add and known(C, add) then
+			for id, n in add do
+				r.needs[id] = (r.needs[id] or 0) + n
+			end
+			note("ingrédient ajouté " .. r.item)
+		end
+	end
+	for _, m in E.JEWELS do
+		if known(C, m[5]) then
+			table.insert(R, { gear = { slot = m[1], name = m[2], rarity = m[3], stats = table.clone(m[4]), power = m.power, visual = m.visual },
+				needs = table.clone(m[5]), station = "bench", cat = "equipement", skill = { "artisanat", m[6] } })
+			note("bijou " .. m[2])
 		end
 	end
 	-- 2. métiers

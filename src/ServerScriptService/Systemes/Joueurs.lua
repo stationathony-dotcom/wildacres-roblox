@@ -591,6 +591,13 @@ function J.eat(player: Player, item: string)
 		if J.has(player, "plate") or J.has(player, "wood_plate") then
 			heal = math.floor(heal * 1.25)
 		end
+		-- couverts (19/11) : fourchette et couteau dans le sac, +10 % chacun
+		if J.has(player, "table_fork") then
+			heal = math.floor(heal * 1.1)
+		end
+		if J.has(player, "table_knife") then
+			heal = math.floor(heal * 1.1)
+		end
 		hum.Health = math.min(hum.MaxHealth, hum.Health + heal)
 		G.Util.geste(player, "manger")
 		G.Util.toast(player, "Miam ! " .. info.icon .. " (+" .. heal .. " vie)")
@@ -699,6 +706,41 @@ function J.useCatalogue(player: Player, item: string, info)
 			J.add(player, t[1], math.random(t[2], t[3]))
 		end
 		G.Util.toast(player, info.icon .. " Trouvé !")
+	elseif use == "porter" then
+		-- objet qui se porte (Shared/Equilibre E.WEAR) : devient une pièce d'équipement du sac
+		local w = info.wearAs
+		local p = J.profiles[player]
+		if w and p then
+			table.insert(p.gear, { slot = w[1], name = info.name, rarity = w[2], stats = table.clone(w[3]), power = 0, visual = "", id = math.random(1, 2 ^ 30) })
+			G.Util.toast(player, info.icon .. " " .. info.name .. " rejoint ton équipement : à porter depuis la fiche [P].", "gain")
+			J.markDirty(player)
+		end
+	elseif use == "etudier" then
+		-- antiquité étudiée : entrée de collection, la Chance (connaissance du monde) progresse
+		if G.Social and rawget(G.Social, "collect") then
+			G.Social.collect(player, "trouvailles", item)
+		end
+		J.addStatXp(player, "chance", 40)
+		J.addSkillXp(player, "commerce", 10)
+		G.Util.toast(player, info.icon .. " Tu étudies " .. info.name .. " : ta connaissance du monde grandit.", "gain")
+	elseif use == "deballer" then
+		for part in string.gmatch(arg or "", "[^,]+") do
+			local id, n = string.match(part, "^(.-):(%d+)$")
+			if id and G.Config.ITEMS[id] then
+				J.add(player, id, tonumber(n), true)
+			end
+		end
+		G.Util.toast(player, info.icon .. " " .. info.name .. " déballé.", "gain")
+	elseif use == "rendre" then
+		-- à rapporter : le village où l'on se trouve t'en sait gré (Systemes/Reputation)
+		local v = G.Quetes and rawget(G.Quetes, "nearVillage") and G.Quetes.nearVillage(player)
+		if not v then
+			J.add(player, item, 1, true)
+			G.Util.toast(player, "Rapporte-le dans un village : on saura quoi en faire.")
+		else
+			G.Reputation.add(player, v, tonumber(arg) or 5)
+			G.Util.toast(player, info.icon .. " " .. v.name .. " t'en est reconnaissant.", "gain")
+		end
 	elseif use == "graines" then
 		local crops = G.Config.CROP_ORDER
 		for _ = 1, 3 do

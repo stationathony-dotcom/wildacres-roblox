@@ -178,6 +178,13 @@ function Shop.sellPrice(player: Player, e, item: string): number
 	local charisme = G.Joueurs.stats(player).charisme or 0
 	local greed = D.persona(e.data.persona).greed
 	local mult = (1 + charisme * 0.02) / greed
+	-- balance et poids de mesure dans le sac : on ne se fait pas rouler, +5 % chacun (19/11)
+	if G.Joueurs.has(player, "scales_tool") then
+		mult *= 1.05
+	end
+	if G.Joueurs.has(player, "weights") then
+		mult *= 1.05
+	end
 	if e.data.persona == "filou" and e.data.role ~= "merchant" then
 		mult *= 0.6 * (1 + 0.3 * G.Joueurs.talent(player, "receleur"))
 	end

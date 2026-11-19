@@ -16,6 +16,9 @@ A.POTIONS = {
 	{ "potion_brume", "Potion de brume", "🌫️", 110, 10, { "discretion", 5, 20 }, { vial = 1, night_flower = 1, valerian = 2, slime_gel = 1 }, 22 },
 	{ "grande_potion", "Grande potion de soin", "❤️", 220, 150, { "vie", 4, 10 }, { healing_potion = 2, mandrake = 1 }, 25 },
 	{ "elixir_racine", "Élixir de racine ancienne", "🌿", 400, 60, { "vie", 5, 30 }, { extract = 2, ancient_root = 1 }, 32 },
+	-- plantes rares qui ne servaient à rien (19/11)
+	{ "elixir_lunaire", "Élixir lunaire", "🌙", 300, 20, { "chance", 6, 30 }, { extract = 1, moon_flower = 1, vial = 1 }, 28 },
+	{ "potion_sauvage", "Potion de force sauvage", "🍄", 260, 30, { "force", 5, 30 }, { extract = 1, rare_mushroom = 2 }, 26 },
 }
 
 function A.apply(C)

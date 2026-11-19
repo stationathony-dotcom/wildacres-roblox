@@ -181,7 +181,8 @@ function Combat.shoot(player: Player, targetId: string?)
 	if not root or player:GetAttribute("Carrying") then
 		return
 	end
-	if not G.Joueurs.take(player, "arrow", 1) then
+	-- munitions : flèches, sinon carreaux (19/11 : les carreaux n'avaient aucun usage)
+	if not G.Joueurs.take(player, "arrow", 1) and not G.Joueurs.take(player, "bolt", 1) and not G.Joueurs.take(player, "bolt_heavy", 1) then
 		G.Util.toast(player, "🏹 Plus de flèches. (Établi : bois, silex et plume.)")
 		return
 	end

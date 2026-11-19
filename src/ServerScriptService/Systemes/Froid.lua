@@ -25,7 +25,7 @@ Froid.TOUGH = 10 -- Vie (caractéristique) qui suffit à endurer froid et chaleu
 Froid.STRONG = 8 -- Force qui suffit à se tirer de la boue
 local LIGHT_WORDS = { "paille", "lin", "turban", "voile" }
 local BOOT_WORDS = { "botte", "cuissarde" }
-local LIGHT_ITEMS = { "lantern", "miner_lamp" }
+local LIGHT_ITEMS = { "lantern", "miner_lamp", "glow_mushroom" } -- champignon phosphorescent : petite lueur (19/11)
 
 Froid.WARM_R = 14
 local FIRES = { campfire = true, fireplace = true, brazier = true, wall_torch = true }
@@ -52,7 +52,8 @@ local function wears(player: Player, words): boolean
 	return false
 end
 local function warmGear(player: Player): boolean
-	return wears(player, WARM_WORDS)
+	-- une couverture dans le sac tient chaud aussi (19/11)
+	return wears(player, WARM_WORDS) or G.Joueurs.has(player, "blanket")
 end
 local function stat(player: Player, k: string): number
 	local ok, s = pcall(G.Joueurs.stats, player)
