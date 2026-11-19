@@ -517,6 +517,49 @@ E.STARTER_GEAR = {
 	{ "shoulders", "Spallières de bois", { defense = 1, vie = 1 }, { planks = 2, leather_strap = 1 } },
 }
 
+-- 11. ÉQUIPEMENT DE MÉTIER (19/11) : des niveaux de compétence tant qu'on porte la pièce (Joueurs.skill,
+--     plafond +10 par compétence). Ils jouent sur les EFFETS (rendements, qualité, prises…), jamais sur
+--     les déblocages (recettes, paliers : niveau entraîné seul, Joueurs.needSkill). Le 3e palier demande
+--     la compétence entraînée au niveau 20.
+E.SKILL_LABEL = {
+	agriculture = "Agriculture", bucheronnage = "Bûcheronnage", minage = "Minage", peche = "Pêche", cuisine = "Cuisine",
+	artisanat = "Artisanat", combat = "Combat", crochetage = "Crochetage", dressage = "Dressage", elevage = "Élevage", commerce = "Commerce",
+}
+E.TRADE_REQ = 20
+-- { emplacement, nom, rareté, stats, { compétence = bonus }, ingrédients, niveau d'artisanat }
+E.TRADE_GEAR = {
+	{ "hat", "Chapeau de paille du fermier", 1, { vie = 1 }, { agriculture = 1 }, { straw = 4, rope = 1 }, 0 },
+	{ "gloves", "Gants de jardinier", 2, { vie = 1, chance = 1 }, { agriculture = 2 }, { leather = 1, cloth = 1 }, 6 },
+	{ "armor", "Tablier de semeur", 3, { vie = 2, chance = 2 }, { agriculture = 4 }, { linen = 3, leather_strap = 1, flax = 2 }, 16 },
+	{ "gloves", "Gants de bûcheron", 1, { force = 1 }, { bucheronnage = 1 }, { leather = 1, fiber = 2 }, 0 },
+	{ "armor", "Vareuse de bûcheron", 2, { force = 1, vie = 1 }, { bucheronnage = 2 }, { wool_cloth = 2, leather_strap = 1 }, 6 },
+	{ "trinket", "Ceinture du hachereau", 3, { force = 3, vie = 1 }, { bucheronnage = 4 }, { soft_leather = 2, steel = 1, oak_log = 1 }, 16 },
+	{ "hat", "Casque de mineur", 1, { defense = 1 }, { minage = 1 }, { copper_ingot = 1, leather = 1 }, 0 },
+	{ "legs", "Genouillères de mineur", 2, { defense = 1, vie = 1 }, { minage = 2 }, { leather = 2, iron_ring = 2 }, 6 },
+	{ "gloves", "Gantelets de prospecteur", 3, { force = 2, defense = 2 }, { minage = 4 }, { steel = 1, soft_leather = 1, iron_ingot = 2 }, 16 },
+	{ "hat", "Chapeau de pêcheur", 1, { chance = 1 }, { peche = 1 }, { straw = 3, linen_thread = 1 }, 0 },
+	{ "boots", "Bottes de pêcheur", 2, { vie = 1, vitesse = 1 }, { peche = 2 }, { leather = 2, resin = 2 }, 6 },
+	{ "cape", "Ciré du capitaine", 3, { vie = 2, chance = 2 }, { peche = 4 }, { linen = 3, resin = 3, buckle = 1 }, 16 },
+	{ "hat", "Toque de cuisinier", 1, { charisme = 1 }, { cuisine = 1 }, { linen = 2 }, 0 },
+	{ "armor", "Tablier de cuisinier", 2, { vie = 1, charisme = 1 }, { cuisine = 2 }, { linen = 2, cloth = 1 }, 6 },
+	{ "trinket", "Médaillon du grand chef", 3, { charisme = 3, vie = 1 }, { cuisine = 4 }, { gold_ingot = 1, silver_ingot = 1 }, 16 },
+	{ "armor", "Tablier de forgeron", 1, { defense = 1 }, { artisanat = 1 }, { leather = 2 }, 0 },
+	{ "gloves", "Gants d'artisan", 2, { force = 1, chance = 1 }, { artisanat = 2 }, { soft_leather = 1, linen_thread = 1 }, 8 },
+	{ "hat", "Lunettes de maître artisan", 3, { chance = 3, charisme = 1 }, { artisanat = 4 }, { glass = 2, gold_ingot = 1, leather_strap = 1 }, 20 },
+	{ "gloves", "Gants de crocheteur", 1, { discretion = 1 }, { crochetage = 1 }, { soft_leather = 1 }, 0 },
+	{ "hat", "Cagoule de monte-en-l'air", 2, { discretion = 2, vitesse = 1 }, { crochetage = 2 }, { wool_cloth = 1, dyed_cloth = 1 }, 6 },
+	{ "trinket", "Bague du passe-partout", 3, { discretion = 3, chance = 1 }, { crochetage = 4 }, { silver_ingot = 1, lockpick = 3 }, 16 },
+	{ "gloves", "Gants de dresseur", 1, { vie = 1 }, { dressage = 1 }, { leather = 1, rope = 1 }, 0 },
+	{ "trinket", "Sifflet en os", 2, { charisme = 1, vitesse = 1 }, { dressage = 2 }, { bone = 2, feather = 1 }, 6 },
+	{ "cape", "Cape du maître des bêtes", 3, { vie = 2, charisme = 2 }, { dressage = 4 }, { fur = 2, horn = 1, buckle = 1 }, 16 },
+	{ "armor", "Blouse de berger", 1, { vie = 1 }, { elevage = 1 }, { cloth = 2 }, 0 },
+	{ "trinket", "Bâton de berger", 2, { vie = 1, vitesse = 1 }, { elevage = 2 }, { oak_log = 1, rope = 1 }, 6 },
+	{ "boots", "Bottes de vacher", 3, { vie = 2, vitesse = 2 }, { elevage = 4 }, { soft_leather = 2, iron_ring = 2, wool_cloth = 1 }, 16 },
+	{ "trinket", "Bourse de colporteur", 1, { charisme = 1 }, { commerce = 1 }, { leather = 1, linen_thread = 1 }, 0 },
+	{ "hat", "Chapeau de colporteur", 2, { charisme = 2, chance = 1 }, { commerce = 2 }, { wool_cloth = 1, feather = 2 }, 6 },
+	{ "trinket", "Chaîne de maître marchand", 3, { charisme = 4 }, { commerce = 4 }, { gold_ingot = 2, silver_ingot = 1 }, 20 },
+}
+
 function E.finish(C)
 	local okG, Gear = pcall(require, script.Parent.Gear)
 	local SLOTS = okG and Gear.SLOTS or {}
@@ -535,9 +578,20 @@ function E.finish(C)
 			note("départ " .. g[2])
 		end
 	end
+	for _, t in E.TRADE_GEAR do
+		if SLOTS[t[1]] and not have[t[2]] and known(C, t[6]) then
+			local skill = next(t[5])
+			local g = { slot = t[1], name = t[2], rarity = t[3], stats = table.clone(t[4]), skills = table.clone(t[5]), power = 0, visual = "" }
+			if t[3] >= 3 then
+				g.req = { skill, E.TRADE_REQ, "skill", E.SKILL_LABEL[skill] }
+			end
+			table.insert(R, { gear = g, needs = table.clone(t[6]), station = "bench", cat = "equipement", skill = t[7] > 0 and { "artisanat", t[7] } or nil })
+			note("métier " .. t[2])
+		end
+	end
 	for _, r in R do
 		local g = r.gear
-		if g and g.stats then
+		if g and g.stats and not g.skills then
 			local small = not E.MAIN_SLOTS[g.slot or ""]
 			-- séries générées : stats et dégâts selon la forme et la matière
 			local d = g.design

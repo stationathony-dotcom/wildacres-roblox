@@ -167,8 +167,9 @@ local function canPick(player: Player, tier: number): (boolean, string?)
 		return false, "Verrouillé. Il te faut un crochet 🎣 (atelier, onglet Sécurité)."
 	end
 	local need = Config.LOCK_SKILL[tier] or 0
-	if G.Joueurs.skill(player, "crochetage") < need then
-		return false, Config.LOCKS[tier].name .. " : il faut 🎣 Crochetage " .. need .. " (tu es " .. G.Joueurs.skill(player, "crochetage") .. ")."
+	-- palier de serrure : niveau entraîné (l'équipement aide à crocheter, pas à débloquer le palier)
+	if G.Joueurs.skillRaw(player, "crochetage") < need then
+		return false, Config.LOCKS[tier].name .. " : il faut 🎣 Crochetage " .. need .. " (tu es " .. G.Joueurs.skillRaw(player, "crochetage") .. ")."
 	end
 	if tier >= 2 and G.Joueurs.talent(player, "crochetage") < tier - 1 then
 		return false, Config.LOCKS[tier].name .. " : il faut le talent Crochetage rang " .. (tier - 1) .. "."

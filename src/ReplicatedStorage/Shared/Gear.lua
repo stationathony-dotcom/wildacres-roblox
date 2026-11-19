@@ -95,7 +95,11 @@ function G.describe(item): string
 	end)
 	local req = okE and Eq.requirement(item)
 	if req then
-		made ..= " · requiert " .. (G.STATS[req[1]] or req[1]) .. " " .. req[2]
+		made ..= " · requiert " .. (req[4] or G.STATS[req[1]] or req[1]) .. " " .. req[2]
+	end
+	-- bonus de métier (équipement de métier)
+	for k, v in item.skills or {} do
+		table.insert(parts, string.format("+%d %s", v, (okE and Eq.SKILL_LABEL[k]) or k))
 	end
 	return string.format("%s [%s]%s%s  %s", item.name, G.RARITIES[item.rarity].name, extra, made, table.concat(parts, "  "))
 end

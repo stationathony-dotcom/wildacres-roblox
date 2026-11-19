@@ -308,9 +308,26 @@ end
 
 -- ----------------------------------------------------------------- Compétences (pratique)
 
-function J.skill(player: Player, skill: string): number
+-- niveau ENTRAÎNÉ (sert aux déblocages : recettes, paliers, classements)
+function J.skillRaw(player: Player, skill: string): number
 	local p = J.profiles[player]
 	return p and G.Config.skillLevel(p.skills[skill] or 0) or 0
+end
+
+-- niveau EFFECTIF : entraîné + équipement de métier porté (Shared/Equilibre, plafond +10)
+function J.skill(player: Player, skill: string): number
+	local p = J.profiles[player]
+	if not p then
+		return 0
+	end
+	local bonus = 0
+	for _, item in p.equipped or {} do
+		local s = type(item) == "table" and item.skills
+		if s and s[skill] then
+			bonus += s[skill]
+		end
+	end
+	return G.Config.skillLevel(p.skills[skill] or 0) + math.min(10, bonus)
 end
 
 -- XP plafonnée par jour et par source : pour les gestes réversibles sans coût (poser/reprendre une
@@ -374,11 +391,12 @@ end
 
 -- Niveau de compétence suffisant ? (sinon message)
 function J.needSkill(player: Player, skill: string, level: number, what: string?): boolean
-	if J.skill(player, skill) >= level then
+	-- déblocage : niveau entraîné seulement (l'équipement aide à faire, pas à débloquer)
+	if J.skillRaw(player, skill) >= level then
 		return true
 	end
 	local info = G.Config.SKILLS[skill]
-	G.Util.toast(player, (what or "Ça") .. " demande " .. info.icon .. " " .. info.name .. " " .. level .. " (tu es " .. J.skill(player, skill) .. ").")
+	G.Util.toast(player, (what or "Ça") .. " demande " .. info.icon .. " " .. info.name .. " " .. level .. " (tu es " .. J.skillRaw(player, skill) .. ").")
 	return false
 end
 
@@ -514,9 +532,9 @@ function J.equip(player: Player, id: number)
 			local okE, Eq = pcall(require, game:GetService("ReplicatedStorage").Shared.Equilibre)
 			local req = okE and Eq.requirement(item)
 			if req then
-				local lv = G.Config.statLevel((p.statXp or {})[req[1]])
+				local lv = req[3] == "skill" and J.skillRaw(player, req[1]) or G.Config.statLevel((p.statXp or {})[req[1]])
 				if lv < req[2] then
-					G.Util.toast(player, "Il faut " .. (G.Gear.STATS[req[1]] or req[1]) .. " " .. req[2] .. " pour porter " .. item.name .. " (tu es à " .. lv .. ").")
+					G.Util.toast(player, "Il faut " .. (req[4] or G.Gear.STATS[req[1]] or req[1]) .. " " .. req[2] .. " pour porter " .. item.name .. " (tu es à " .. lv .. ").")
 					return
 				end
 			end
