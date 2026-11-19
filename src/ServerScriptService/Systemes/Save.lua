@@ -177,14 +177,30 @@ function Save.status(player: Player): string?
 	return s and s.status
 end
 
+local function copySnapshotValue(value, copies)
+	if type(value) ~= "table" then
+		return value
+	end
+	if copies[value] then
+		return copies[value]
+	end
+	local copy = {}
+	copies[value] = copy
+	for key, entry in pairs(value) do
+		copy[key] = copySnapshotValue(entry, copies)
+	end
+	return copy
+end
+
 function Save.snapshot(player: Player)
 	local prof = G.Joueurs.get(player)
 	if not prof then
 		return nil
 	end
 	local snap = { version = VERSION, saved = os.time() }
+	local copies = {}
 	for _, f in Save.FIELDS do
-		snap[f] = prof[f]
+		snap[f] = copySnapshotValue(prof[f], copies)
 	end
 	return snap
 end
