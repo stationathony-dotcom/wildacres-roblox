@@ -106,6 +106,8 @@ local FEATS = {
 	{ "faucheur", "Faucheur", "fauche", 300 },
 	{ "bien_vu", "Bien vu au village", "repBest", 50 },
 	{ "heros", "Héros du peuple", "repBest", 85 },
+	{ "conteur", "Conteur", "chroniques", 1 },
+	{ "chroniqueur", "Chroniqueur", "chroniques", 6 },
 }
 for _, f in FEATS do
 	local stat, need = f[3], f[4]

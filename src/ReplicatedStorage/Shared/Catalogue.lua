@@ -267,6 +267,7 @@ map_region|Carte régionale|🗺️|40|v|parchment2 ink1 #commerce:2|savoir
 map_world|Carte du monde|🗺️|160|v|map_region3 ink2 #commerce:10|savoir
 sea_chart|Carte maritime|🗺️|120|v|parchment3 ink2 #peche:8|savoir
 treasure_map|Carte au trésor|🗺️|0|u:carte_tresor|map_fragment4|savoir
+old_page|Page ancienne|📜|15|u:page|-|savoir
 map_fragment|Fragment de carte|🧩|20|m|-|
 compass|Boussole|🧭|70|v|copper_ingot1 iron_ingot1 glass1 @bench #artisanat:8|savoir
 old_compass|Boussole ancienne|🧭|260|v|-|
@@ -553,8 +554,8 @@ K.FINDS = {
 	rock = { { "flint", 0.2 }, { "gravel", 0.2 }, { "salt", 0.1, { "desert" } }, { "sulfur", 0.06, { "desert", "marais" } },
 		{ "silver_ore", 0.08, { "neige", "desert" } }, { "fossil", 0.006 }, { "fossil_bone", 0.005 }, { "ruby", 0.003 },
 		{ "sapphire", 0.003, { "neige" } }, { "emerald", 0.003, { "foret" } }, { "diamond", 0.0015 }, { "glowstone", 0.01 },
-		{ "ancient_crystal", 0.004 }, { "carved_stone", 0.004 }, { "ancient_coin", 0.006 } },
-	dig = { { "flint", 0.08 }, { "ancient_coin", 0.01 }, { "rusty_key", 0.01 }, { "relic_fragment", 0.006 }, { "inscription", 0.004 },
+		{ "ancient_crystal", 0.004 }, { "carved_stone", 0.004 }, { "ancient_coin", 0.006 }, { "old_page", 0.004 } },
+	dig = { { "old_page", 0.02 }, { "flint", 0.08 }, { "ancient_coin", 0.01 }, { "rusty_key", 0.01 }, { "relic_fragment", 0.006 }, { "inscription", 0.004 },
 		{ "fossil", 0.004 }, { "copper_coin", 0.05 }, { "silver_coin", 0.012 }, { "gold_coin", 0.003 } },
 	fish = { { "raw_fish", 0.3 }, { "salmon", 0.06, { "neige", "foret" } }, { "crab", 0.06, { "desert", "marais" } },
 		{ "crayfish", 0.06, { "marais", "prairie" } }, { "shellfish", 0.1 }, { "pearl", 0.01 }, { "rare_shell", 0.008 },
@@ -565,7 +566,7 @@ K.FINDS = {
 		{ "night_feather", 0.02 }, { "coin_purse", 0.04 }, { "treasure_map", 0.006 }, { "mystery_egg", 0.003 },
 		{ "ancient_scale", 0.002 }, { "rare_horn", 0.002 } },
 	night = { { "night_flower", 0.08 }, { "moon_flower", 0.03 }, { "glow_mushroom", 0.05 } },
-	event = { { "event_token", 0.5 }, { "merchant_purse", 0.2 }, { "spice", 0.3 }, { "treasure_map", 0.05 }, { "recommendation", 0.05 },
+	event = { { "old_page", 0.08 }, { "event_token", 0.5 }, { "merchant_purse", 0.2 }, { "spice", 0.3 }, { "treasure_map", 0.05 }, { "recommendation", 0.05 },
 		{ "lost_item", 0.2 }, { "craftsman_plan", 0.08 }, { "unknown_recipe", 0.08 }, { "royal_seal", 0.01 }, { "meteorite", 0.02 },
 		{ "rare_book", 0.03 }, { "relic", 0.02 }, { "champion_ribbon", 0.03 }, { "festival_prize", 0.1 }, { "sheriff_badge", 0.01 },
 		{ "talisman", 0.02 }, { "ancient_jewel", 0.02 }, { "old_vase", 0.03 }, { "ruin_piece", 0.03 }, { "mineral_heart", 0.005 },
@@ -574,7 +575,7 @@ K.FINDS = {
 
 -- Ce qu'un coffre au trésor (carte, bouteille, œuf…) peut rapporter
 K.TREASURE = { { "gold", 80, 260 }, { "ancient_coin", 1, 4 }, { "silver_coin", 2, 6 }, { "gold_coin", 1, 3 }, { "ancient_jewel", 1, 1 }, { "relic", 1, 1 }, { "ruby", 1, 1 },
-	{ "sapphire", 1, 1 }, { "emerald", 1, 1 }, { "pearl", 1, 3 }, { "old_vase", 1, 1 }, { "ancient_key", 1, 1 }, { "rare_book", 1, 1 } }
+	{ "sapphire", 1, 1 }, { "emerald", 1, 1 }, { "pearl", 1, 3 }, { "old_vase", 1, 1 }, { "ancient_key", 1, 1 }, { "rare_book", 1, 1 }, { "old_page", 1, 2 } }
 
 -- ---------------------------------------------------------------- Lecture du catalogue
 

@@ -622,6 +622,9 @@ function J.useCatalogue(player: Player, item: string, info)
 			G.Util.toast(player, "Approche-toi d'une de tes bêtes pour la nourrir.")
 			return
 		end
+	elseif use == "page" then
+		G.Chroniques.read(player) -- consomme la page seulement si elle apprend quelque chose
+		return
 	elseif use == "carte_tresor" then
 		G.Journal.readTreasureMap(player) -- consomme la carte seulement si une cache est tracée
 		return
