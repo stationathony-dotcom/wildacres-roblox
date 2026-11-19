@@ -1888,11 +1888,11 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### 2. Les animaux et la faune passive
 
-- [ ] (390) Cerfs
+- [x] (390) Cerfs
 - [ ] (391) Biches
-- [ ] (392) Lapins
+- [x] (392) Lapins
 - [x] (393) Lièvres
-- [ ] (394) Renards
+- [x] (394) Renards
 - [ ] (395) Écureuils
 - [x] (396) Hérissons
 - [x] (397) Blaireaux
@@ -1903,7 +1903,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (402) Libellules
 - [x] (403) Grenouilles
 - [x] (404) Tortues
-- [ ] (405) Poissons
+- [x] (405) Poissons
 - [ ] (406) Oiseaux
 - [ ] (407) Corbeaux
 - [x] (408) Pigeons

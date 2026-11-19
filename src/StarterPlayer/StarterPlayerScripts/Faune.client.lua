@@ -15,6 +15,7 @@
 --   · lièvres en prairie et tortues terrestres au marais.
 --   · pigeons qui picorent à proximité des villages.
 --   · abeilles solitaires dans les prairies par temps sec.
+--   · poissons qui nagent juste sous la surface.
 -- Rien n'est sauvegardé, rien ne se chasse : c'est le décor qui vit.
 
 local Players = game:GetService("Players")
@@ -225,18 +226,31 @@ local function poseDuck(m: Model, cf: CFrame)
 	m.AileD.CFrame = cf * CFrame.new(0.3, 0.04, 0.06) * CFrame.Angles(0, math.pi / 2, 0)
 end
 
-local DUCK_RADIUS = 3
-local function duckRoute(center: Vector3): boolean
+local WATER_ROUTE_RADIUS = 3
+local function waterRoute(center: Vector3): boolean
 	for step = 0, 7 do
 		local a = step * math.pi / 4
-		local x = center.X + math.cos(a) * DUCK_RADIUS
-		local z = center.Z + math.sin(a) * DUCK_RADIUS
+		local x = center.X + math.cos(a) * WATER_ROUTE_RADIUS
+		local z = center.Z + math.sin(a) * WATER_ROUTE_RADIUS
 		local hit, material = ground(x, z, center.Y)
 		if not hit or material ~= Enum.Material.Water or math.abs(hit.Y - center.Y) > 0.2 then
 			return false
 		end
 	end
 	return true
+end
+
+local function makeFish(): Model
+	local m = Instance.new("Model")
+	m.Name = "Poisson"
+	local back = Color3.fromRGB(88, 126, 129)
+	local body = part(Vector3.new(0.16, 0.22, 0.53), back, nil, m)
+	body.Shape = Enum.PartType.Ball
+	m.PrimaryPart = body
+	local tail = part(Vector3.new(0.045, 0.24, 0.16), Color3.fromRGB(60, 98, 104), nil, m)
+	tail.Position = Vector3.new(0, 0, 0.28)
+	tail.Name = "Queue"
+	return m
 end
 
 local function makeDragonfly(): Model
@@ -332,7 +346,7 @@ end
 local critters = {} -- { kind, model, pos, vel, state, t, ... }
 local MAX = {
 	sol = 5, pigeon = 3, ciel = 3, papillon = 6, abeille = 4, luciole = 14, ecureuil = 3, canard = 2,
-	herisson = 2, blaireau = 1, marmotte = 2, grenouille = 3, libellule = 3, lievre = 2, tortue = 2,
+	herisson = 2, blaireau = 1, marmotte = 2, grenouille = 3, libellule = 3, lievre = 2, tortue = 2, poisson = 4,
 }
 local counts = {}
 for kind in MAX do
@@ -351,17 +365,25 @@ local function spawn(kind: string, root: Vector3, biome: string)
 	local d = kind == "ciel" and rng:NextNumber(10, 60) or rng:NextNumber(18, 45)
 	local x, z = root.X + math.cos(a) * d, root.Z + math.sin(a) * d
 	local g, mat = ground(x, z, root.Y)
-	local water = kind == "canard" or kind == "libellule"
+	local water = kind == "canard" or kind == "libellule" or kind == "poisson"
 	if not g or (mat == Enum.Material.Water) ~= water then
 		return
 	end
 	local c = { kind = kind, t = 0, phase = rng:NextNumber(0, 6) }
 	if kind == "canard" then
-		if not duckRoute(g) then
+		if not waterRoute(g) then
 			return
 		end
 		c.model = makeDuck()
 		c.center = g
+	elseif kind == "poisson" then
+		if not waterRoute(g) then
+			return
+		end
+		c.model = makeFish()
+		c.center = g
+		c.model:PivotTo(CFrame.new(g - Vector3.new(0, 0.65, 0)))
+		c.model.Parent = folder
 	elseif kind == "libellule" then
 		c.model = makeDragonfly()
 		c.center = g
@@ -459,6 +481,7 @@ RunService.Heartbeat:Connect(function(dt)
 			libellule = (day and not wet and biome == "marais") and MAX.libellule or 0,
 			lievre = (day and not wet and biome == "prairie") and MAX.lievre or 0,
 			tortue = (day and biome == "marais") and MAX.tortue or 0,
+			poisson = day and MAX.poisson or 0,
 		}
 		-- trop loin, ou hors de saison/heure : on retire en douceur
 		for i = #critters, 1, -1 do
@@ -579,10 +602,18 @@ RunService.Heartbeat:Connect(function(dt)
 			c.model:PivotTo(CFrame.new(c.pos + Vector3.new(0, height, 0)) * CFrame.Angles(0, c.yaw, 0))
 		elseif c.kind == "canard" then
 			local a = c.t * 0.4 + c.phase
-			local offset = Vector3.new(math.cos(a) * DUCK_RADIUS, 0.2 + math.sin(a * 5) * 0.05, math.sin(a) * DUCK_RADIUS)
+			local offset = Vector3.new(math.cos(a) * WATER_ROUTE_RADIUS, 0.2 + math.sin(a * 5) * 0.05, math.sin(a) * WATER_ROUTE_RADIUS)
 			c.pos = c.center + offset
 			local tangent = Vector3.new(-math.sin(a), 0, math.cos(a))
 			poseDuck(c.model, CFrame.lookAt(c.pos, c.pos + tangent))
+		elseif c.kind == "poisson" then
+			local a = c.t * 0.95 + c.phase
+			c.pos = c.center + Vector3.new(math.cos(a) * WATER_ROUTE_RADIUS, -0.65 + math.sin(a * 2) * 0.13, math.sin(a) * WATER_ROUTE_RADIUS)
+			local tangent = Vector3.new(-math.sin(a), 0, math.cos(a))
+			local cf = CFrame.lookAt(c.pos, c.pos + tangent)
+			c.model.PrimaryPart.CFrame = cf
+			c.model.Queue.CFrame = cf * CFrame.new(0, 0, 0.22)
+				* CFrame.Angles(0, math.sin(c.t * 12 + c.phase) * 0.4, 0) * CFrame.new(0, 0, 0.06)
 		elseif c.kind == "libellule" then
 			local a = c.t * 1.6 + c.phase
 			c.pos = c.center + Vector3.new(math.cos(a) * 2, 1.9 + math.sin(a * 3) * 0.35, math.sin(a) * 2)
