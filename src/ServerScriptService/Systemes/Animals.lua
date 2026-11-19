@@ -162,7 +162,8 @@ function Animals.collect(player: Player, id: string)
 	local k = a.k
 	a.state.product = false
 	a.state.days = 0
-	if a.owner and not G.Util.owns(player, a.owner) then
+	local stolen = a.owner and not G.Util.owns(player, a.owner)
+	if stolen then
 		G.Law.crime(player, "theft", a.pos, a.owner)
 		G.Npcs.remember(a.owner, "robbed")
 	end
@@ -172,6 +173,9 @@ function Animals.collect(player: Player, id: string)
 	end
 	n += (a.state.abri and 1 or 0) + (a.state.soin and 1 or 0)
 	G.Joueurs.add(player, k.product, n)
+	if not stolen and G.Quetes and rawget(G.Quetes, "note") then
+		G.Quetes.note(player, "collecter", k.product, n)
+	end
 	G.Joueurs.addSkillXp(player, "elevage", 5)
 	refreshPrompt(a)
 end

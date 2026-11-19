@@ -28,8 +28,10 @@ local NEAR = 110 -- studs autour de la place du village
 local SKILL_OF = {
 	tuer = "combat", abattre = "bucheronnage", miner = "minage", pecher = "peche", recolter = "agriculture",
 	fabriquer = "artisanat", semer = "agriculture", vendre = "commerce", apporter = "commerce", lettre = "commerce", decouvrir = "commerce",
+	collecter = "elevage", naviguer = "peche",
 }
-local ICON = { tuer = "⚔️", abattre = "🪓", miner = "⛏️", pecher = "🎣", recolter = "🌾", semer = "🌱", vendre = "💰", fabriquer = "🛠️", apporter = "📦", lettre = "✉️", decouvrir = "🧭" }
+local ICON = { tuer = "⚔️", abattre = "🪓", miner = "⛏️", pecher = "🎣", recolter = "🌾", semer = "🌱", vendre = "💰", fabriquer = "🛠️", apporter = "📦", lettre = "✉️", decouvrir = "🧭", collecter = "🥛", naviguer = "⛵" }
+Quetes.VOYAGE_DISTANCE = 150 -- studs ramés d'affilée = une traversée (Barques)
 
 -- ---------------------------------------------------------------- villages de l'île
 
@@ -180,13 +182,26 @@ local WANTS = {
 	{ "La vieille maison", { "stone", "planks", "nails" }, 10, 20 },
 	{ "La fête approche", { "flowers", "ribbon", "honey" }, 3, 6 },
 	{ "Le vétérinaire", { "herbs", "chamomile", "mint" }, 3, 8 },
+	-- idées de la production du 18→19/11, remises en données (tirées comme les autres)
+	{ "Le chantier communal", { "brick" }, 8, 16 },
+	{ "Le chantier du pont", { "wood", "planks" }, 30, 50 },
+	{ "Le fer recherché", { "ore", "iron_ingot" }, 10, 20 },
+	{ "La commande du forgeron", { "copper_ingot", "iron_ingot", "nails" }, 5, 10 },
 }
-local CRAFTS = { "rope", "planks", "bread", "nails", "torch", "bucket_empty", "basket", "fishing_rod", "lantern", "axe", "pickaxe", "bed" }
-local INTRO_CRAFT_TITLES = {
-	axe = "Premiers outils",
-	pickaxe = "Un outil indispensable",
-	bed = "Un endroit où dormir",
-	bread = "Le premier repas",
+local CRAFTS = { "rope", "planks", "bread", "nails", "torch", "bucket_empty", "basket", "fishing_rod", "lantern", "axe", "pickaxe", "bed",
+	"steak", "stew", "linen", "wool_cloth", "bottle", "blk_bloc_pierre" }
+-- commandes nommées : { titre, quantité min, max } (sinon titre au hasard, 1 à 4)
+local CRAFT_SPECS = {
+	axe = { "Premiers outils", 1, 1 },
+	pickaxe = { "Un outil indispensable", 1, 1 },
+	bed = { "Un endroit où dormir", 1, 1 },
+	steak = { "Le premier repas", 1, 1 },
+	bread = { "Le banquet du village", 10, 20 },
+	stew = { "Le plat régional", 1, 2 },
+	linen = { "Le tisserand", 2, 4 },
+	wool_cloth = { "Le tisserand", 2, 4 },
+	bottle = { "Le verrier débutant", 1, 3 },
+	blk_bloc_pierre = { "Le maçon", 15, 30 },
 }
 local KILL_TITLES = { "Une bête rôde près de {v}", "La chasse du village", "Les troupeaux en danger", "Nettoyer les chemins" }
 
@@ -238,7 +253,7 @@ local function makeOffer(v, period: number, i: number)
 		q.kind, q.key, q.need, q.title = "pecher", "fish", 1, "La première prise"
 		q.gold = reward(r, 14)
 	elseif roll < 0.72 then
-		q.kind, q.key, q.need, q.title = "pecher", "fish", r:NextInteger(3, 8), pick(r, { "Le pêcheur côtier", "Le poisson du vendredi", "La friture du village" })
+		q.kind, q.key, q.need, q.title = "pecher", "fish", r:NextInteger(3, 8), pick(r, { "Le pêcheur côtier", "Le poisson du vendredi", "La friture du village", "Le repas du pêcheur" })
 		q.gold = reward(r, 14 * q.need)
 	elseif roll < 0.74 then
 		q.kind, q.key, q.need, q.title = "semer", "graine", 5, "La vie à la ferme"
@@ -267,9 +282,10 @@ local function makeOffer(v, period: number, i: number)
 		end
 	elseif roll < 0.87 then
 		local item = pickExisting(r, CRAFTS) or "rope"
-		local n = r:NextInteger(1, 4)
-		local title = pick(r, { "Apprenti artisan", "La commande surprise", "Le maître artisan" })
-		q.kind, q.key, q.need, q.title = "fabriquer", item, INTRO_CRAFT_TITLES[item] and 1 or n, INTRO_CRAFT_TITLES[item] or title
+		local spec = CRAFT_SPECS[item]
+		local n = spec and r:NextInteger(spec[2], spec[3]) or r:NextInteger(1, 4)
+		local title = spec and spec[1] or pick(r, { "Apprenti artisan", "La commande surprise", "Le maître artisan" })
+		q.kind, q.key, q.need, q.title = "fabriquer", item, n, title
 		q.gold = reward(r, 20 + (Config.ITEMS[item].price or 10) * q.need)
 	elseif roll < 0.94 then
 		local others = {}
@@ -288,6 +304,15 @@ local function makeOffer(v, period: number, i: number)
 			q.kind, q.key, q.need, q.title = "decouvrir", "lieu", 3, "À la découverte du monde"
 			q.gold = reward(r, 90)
 		end
+	elseif roll < 0.965 then
+		-- produits des bêtes de ferme (Animals.collect) : seulement les siennes, pas celles volées
+		local product = pickExisting(r, { "milk", "egg", "wool" }) or "egg"
+		local titles = { milk = "La traite du matin", egg = "Les œufs du marché", wool = "La tonte de printemps" }
+		q.kind, q.key, q.need, q.title = "collecter", product, r:NextInteger(2, 6), titles[product]
+		q.gold = reward(r, 12 + (Config.ITEMS[product].price or 10) * q.need * 0.8)
+	elseif roll < 0.98 then
+		q.kind, q.key, q.need, q.title = "naviguer", "bateau", r:NextInteger(1, 3), pick(r, { "Le marin débutant", "Le tour de l'île", "Prendre le large" })
+		q.gold = reward(r, 40 * q.need)
 	else
 		q.kind, q.key, q.need, q.title = "decouvrir", "lieu", r:NextInteger(2, 4), pick(r, { "À la découverte du monde", "Un monde immense", "Le cartographe" })
 		q.gold = reward(r, 45 * q.need)
@@ -367,6 +392,11 @@ local function what(q): string
 		return string.format("Pêcher %d poissons", q.need)
 	elseif q.kind == "semer" then
 		return string.format("Semer %d graines sur des cases bêchées", q.need)
+	elseif q.kind == "collecter" then
+		return string.format("Récolter %d %s %s sur tes bêtes de ferme", q.need, info and info.icon or "", info and info.name or q.key)
+	elseif q.kind == "naviguer" then
+		return q.need == 1 and "Faire une traversée en barque (150 studs d'affilée)"
+			or string.format("Faire %d traversées en barque (150 studs d'affilée)", q.need)
 	elseif q.kind == "vendre" then
 		return string.format("Vendre %d objets à un marchand ou à un artisan", q.need)
 	elseif q.kind == "recolter" then

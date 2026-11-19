@@ -9,6 +9,7 @@
 
 local Barques = {}
 local G, Config
+local Players = game:GetService("Players")
 
 local SPEED = 16 -- studs/s
 local TURN = 1.1 -- rad/s
@@ -123,7 +124,7 @@ local function spawnBoat(id: string, d)
 	-- rameur : seulement le propriétaire (sinon c'est un vol de bateau : on le fait descendre)
 	seat:GetPropertyChangedSignal("Occupant"):Connect(function()
 		local hum = seat.Occupant
-		local p = hum and game:GetService("Players"):GetPlayerFromCharacter(hum.Parent)
+		local p = hum and Players:GetPlayerFromCharacter(hum.Parent)
 		if p and not G.Util.owns(p, d.owner) then
 			task.defer(function()
 				hum.Sit = false
@@ -229,6 +230,10 @@ function Barques.step(dt: number)
 	for _, b in list do
 		local throttle, steer = 0, 0
 		local hum = b.seat.Occupant
+		if hum ~= b.rameur then
+			b.rameur = hum
+			b.depart = hum and Vector2.new(b.data.x, b.data.z)
+		end
 		if hum then
 			throttle, steer = b.seat.ThrottleFloat, b.seat.SteerFloat
 		end
@@ -238,7 +243,7 @@ function Barques.step(dt: number)
 		-- météo maritime lisible : on prévient le barreur quand la mer se lève (une fois par orage)
 		if hum and storm and not b.stormWarned then
 			b.stormWarned = true
-			local p = game:GetService("Players"):GetPlayerFromCharacter(hum.Parent)
+			local p = Players:GetPlayerFromCharacter(hum.Parent)
 			if p then
 				G.Util.toast(p, "🌊 La mer se lève : le bateau tangue et avance moins vite. Mieux vaut regagner la côte.", "danger")
 			end
@@ -255,9 +260,20 @@ function Barques.step(dt: number)
 			local px, pz = nx + dir.X * 5 * math.sign(b.speed), nz + dir.Z * 5 * math.sign(b.speed)
 			if G.Util.isWater(px, pz) then
 				b.data.x, b.data.z = nx, nz
+				local voyage = G.Quetes and rawget(G.Quetes, "VOYAGE_DISTANCE")
+				if hum and voyage and b.depart then
+					local position = Vector2.new(nx, nz)
+					if (position - b.depart).Magnitude >= voyage then
+						b.depart = position
+						local player = Players:GetPlayerFromCharacter(hum.Parent)
+						if player and G.Util.owns(player, b.data.owner) then
+							G.Quetes.note(player, "naviguer", "bateau")
+						end
+					end
+				end
 			else
 				if math.abs(b.speed) > 6 and hum then
-					local p = game:GetService("Players"):GetPlayerFromCharacter(hum.Parent)
+					local p = Players:GetPlayerFromCharacter(hum.Parent)
 					if p then
 						G.remotes.Fx:FireClient(p, "fall") -- petit choc contre la rive
 					end
