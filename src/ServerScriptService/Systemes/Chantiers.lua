@@ -5,6 +5,7 @@
 -- terminé = bénéfice durable pour le village, puis le chantier suivant commence.
 --   · marche : on vend 5 % plus cher dans ce village (Shop.sellPrice) ;
 --   · palissade : les invasions de nuit y arrivent moins nombreuses (Evenements.startInvasion) ;
+--   · lanternes : des lampadaires autour de la place ; les ombres rôdeuses (fearsLight) n'approchent plus.
 -- État : G.world.chantiers[clé du village] = { i = n° du chantier, have = { [matière] = n }, done = { [id] = jour } }.
 
 local Chantiers = {}
@@ -13,7 +14,50 @@ local G, Config
 Chantiers.PROJECTS = {
 	{ id = "marche", name = "agrandir le marché", needs = { planks = 300, stone = 200, cloth = 60 }, done = "Le marché est agrandi : on y vend 5 % plus cher." },
 	{ id = "palissade", name = "renforcer la palissade", needs = { wood = 400, rope = 80, iron_ingot = 40 }, done = "La palissade est renforcée : les assaillants y seront moins nombreux." },
+	{ id = "lanternes", name = "éclairer la place", needs = { lantern = 12, iron_ingot = 20, glass = 10 }, done = "La place est éclairée : les ombres n'osent plus s'en approcher." },
 }
+
+local CollectionService = game:GetService("CollectionService")
+
+-- lampadaires autour de la place d'un village aux lanternes (posés au chargement de la région)
+local function placeLamps(reg)
+	local poi = reg and reg.plan and reg.plan.poi
+	if not poi or poi.kind ~= "village" or not reg.folder or reg.chantierLamps then
+		return
+	end
+	reg.chantierLamps = true
+	local CELL = Config.CELL
+	local cx, cz = (poi.x0 + poi.w / 2) * CELL, (poi.z0 + poi.d / 2) * CELL
+	for i = 1, 4 do
+		local a = (i - 0.5) / 4 * math.pi * 2
+		local x, z = cx + math.cos(a) * 14, cz + math.sin(a) * 14
+		local lamp = G.Util.clone("Lampadaire")
+		if lamp then
+			local y = G.Util.groundY(x, z)
+			lamp:PivotTo(CFrame.lookAt(Vector3.new(x, y, z), Vector3.new(cx, y, cz)))
+			lamp.Parent = reg.folder
+			if G.Clock and G.Clock.seasonize then
+				G.Clock.seasonize(lamp)
+			end
+			-- une lumière qui compte pour les ombres (Protection.lightNear)
+			local tagged = false
+			for _, d in lamp:GetDescendants() do
+				if CollectionService:HasTag(d, "LumiereNuit") then
+					tagged = true
+				end
+			end
+			if not tagged and lamp.PrimaryPart then
+				CollectionService:AddTag(lamp.PrimaryPart, "LumiereNuit")
+			end
+		end
+	end
+end
+
+function Chantiers.onRegionLoad(reg)
+	if reg and reg.rx and Chantiers.built(reg.rx .. "," .. reg.rz, "lanternes") then
+		placeLamps(reg)
+	end
+end
 
 local function state(vkey: string)
 	G.world.chantiers = G.world.chantiers or {}
@@ -101,6 +145,9 @@ function Chantiers.contribute(player: Player, q, here)
 	s.done[p.id] = G.world.day
 	s.i += 1
 	s.have = {}
+	if p.id == "lanternes" and G.World.loaded then
+		placeLamps(G.World.loaded[q.v])
+	end
 	local v = here
 	for _, other in G.Game.players() do
 		local r = G.Util.root(other)

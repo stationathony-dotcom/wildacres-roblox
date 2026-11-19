@@ -77,7 +77,7 @@ end
 
 -- Systèmes appelés au chargement d'une région et au changement de jour
 G.regionSystems = {}
-for _, name in { "Bosquets", "Herbes", "Chateaux", "Hameaux", "Props", "Farm", "Villages", "Moissons", "Doors", "Npcs", "Metiers", "Villes", "Animals", "Horses", "Enemies", "Bestiaire", "Shop", "Compagnons", "Batir", "Donjons", "Demolir", "Ilots", "Nids" } do
+for _, name in { "Bosquets", "Herbes", "Chateaux", "Hameaux", "Props", "Farm", "Villages", "Moissons", "Doors", "Npcs", "Metiers", "Villes", "Animals", "Horses", "Enemies", "Bestiaire", "Shop", "Compagnons", "Batir", "Donjons", "Demolir", "Ilots", "Nids", "Chantiers" } do
 	if G[name] ~= stub and G[name].onRegionLoad then
 		table.insert(G.regionSystems, G[name])
 	end
