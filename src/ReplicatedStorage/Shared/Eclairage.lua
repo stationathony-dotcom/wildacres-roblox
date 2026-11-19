@@ -72,7 +72,7 @@ function E.apply(Lighting: Lighting, terrain: Terrain)
 	-- herbe du terrain plus haute (image cible) ; les touffes hautes s'y ajoutent (HerbeHaute.client)
 	pcall(function()
 		terrain.Decoration = true
-		terrain.GrassLength = 0.6
+		terrain.GrassLength = 0.4 -- 0,6 cachait les petits objets et le butin au sol (vu en capture le 19/11)
 	end)
 	for m, c in E.TERRAIN do
 		terrain:SetMaterialColor(m, c)

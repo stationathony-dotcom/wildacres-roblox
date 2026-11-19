@@ -1355,7 +1355,7 @@ local function game_()
 	-- Gauche : l'équipement porté autour du personnage + l'équipement dans le sac.
 	-- Droite : onglets Caractéristiques / Compétences / Collections / Titres.
 	local SLOT_ICON = { hat = "🎩", armor = "🥋", weapon = "🗡️", trinket = "💍" }
-	local STAT_ICON = { force = "💪", defense = "🛡️", vie = "❤️", vitesse = "👟", chance = "🍀", charisme = "😊", discretion = "🥷" }
+	local STAT_ICON = { force = "💪", defense = "🛡️", vie = "❤️", vitesse = "👟", chance = "🍀", charisme = "😊", discretion = "👤" }
 	local STAT_HELP = { force = "Dégâts", defense = "Moins de dégâts reçus", vie = "+10 vie max par point", vitesse = "Course, endurance",
 		chance = "Butin, pêche, trouvailles", charisme = "Prix, avis des PNJ", discretion = "Moins vu des témoins" }
 	STAT_ICON.discretion = "🌑"
@@ -2273,7 +2273,7 @@ local function game_()
 		crochetage = "🔓", ombre = "🌑", cavale = "🏃", receleur = "💰", main_verte = "🌿", arrosage = "💧", negociant = "⚖️", eleveur = "🐄",
 		apprivoiseur = "🎶", meute = "🐺", vigilance = "👁️", econome = "🧮", mineur = "⛏️", serrurier = "🔐", forgeron = "🔨",
 		primes = "🎯", menottes = "⛓️", robuste = "🛡️", critique = "🗡️",
-		fantome = "👻", cavaleur = "💨", terre_riche = "🌾", marchand_ne = "🪙", alpha = "🐺", cavalier = "🐎",
+		fantome = "👻", cavaleur = "💨", terre_riche = "🌾", marchand_ne = "🏷️", alpha = "🐺", cavalier = "🐎",
 		prodigue = "✋", veine = "💎", colosse = "🗿", traqueur = "🏹",
 		cartographe = "🗺️", prospecteur = "⛏️", archeologue = "📜", survivaliste = "🔥", decouvreur = "🧭", aventurier = "🐴", chasseur_tresor = "💰",
 	}

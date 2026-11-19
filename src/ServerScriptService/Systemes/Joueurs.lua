@@ -277,7 +277,7 @@ end
 -- ----------------------------------------------------------------- Caractéristiques (pratique)
 -- Pas de niveau de personnage : une caractéristique monte quand on pratique ce qui la travaille.
 
-local STAT_ICON = { force = "💪", defense = "🛡️", vie = "❤️", vitesse = "👟", chance = "🍀", charisme = "🗣️", discretion = "🥷" }
+local STAT_ICON = { force = "💪", defense = "🛡️", vie = "❤️", vitesse = "👟", chance = "🍀", charisme = "🗣️", discretion = "👤" }
 J.STAT_ICON = STAT_ICON
 
 function J.addStatXp(player: Player, stat: string, amount: number)
