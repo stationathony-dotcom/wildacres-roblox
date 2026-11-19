@@ -159,6 +159,47 @@ function Shop.wanted(villageKey: string, biome: string)
 	return wantedCache[ck]
 end
 
+-- PÉNURIES (19/11, « à ne pas oublier » § 4 événements économiques) : par période de SHORTAGE_DAYS
+-- jours, un village sur deux environ manque d'une denrée de base et la paie SHORTAGE_MULT fois plus.
+-- Aucune annonce : on l'apprend au comptoir (ou par les joueurs). Seulement des objets qu'aucun PNJ ne
+-- vend (sinon acheter ailleurs et revendre ici serait une pompe à or).
+Shop.SHORTAGE_MULT = 1.8
+Shop.SHORTAGE_DAYS = 2
+Shop.SHORTAGE_CHANCE = 0.5
+Shop.SHORTAGE_POOL = { "wheat", "flour", "planks", "wood", "stone", "iron_ingot", "copper_ingot", "rope", "cloth", "wool", "milk", "egg",
+	"grilled_fish", "raw_fish", "meat", "apple", "carrot", "potato", "salt", "leather", "coal", "honey", "herbs", "bread" }
+local shortageCache = {}
+function Shop.shortage(villageKey: string): string?
+	local period = math.floor((G.world.day or 1) / Shop.SHORTAGE_DAYS)
+	local ck = villageKey .. "|" .. period
+	if shortageCache[ck] ~= nil then
+		return shortageCache[ck] or nil
+	end
+	local rng = Random.new(G.WG.hash(G.world.seed or 0, "penurie", villageKey, period))
+	local pick = false
+	if rng:NextNumber() < Shop.SHORTAGE_CHANCE then
+		local sold = Shop.npcSold()
+		local pool = {}
+		for _, id in Shop.SHORTAGE_POOL do
+			if Config.ITEMS[id] and not sold[id] then
+				table.insert(pool, id)
+			end
+		end
+		if #pool > 0 then
+			pick = pool[rng:NextInteger(1, #pool)]
+		end
+	end
+	shortageCache[ck] = pick
+	return pick or nil
+end
+
+local function shortageAt(e): string?
+	local R = G.Reputation and rawget(G.Reputation, "villageAt")
+	local v = R and e.root and R(e.root.Position)
+	return v and Shop.shortage(v.key) or nil
+end
+Shop.shortageAt = shortageAt
+
 -- ce que le village de ce comptoir recherche (nil si le comptoir n'est pas dans un village)
 local function wantedAt(e)
 	local R = G.Reputation and rawget(G.Reputation, "villageAt")
@@ -207,6 +248,10 @@ function Shop.sellPrice(player: Player, e, item: string): number
 	local w = wantedAt(e)
 	if w and w.set[item] then
 		price = math.floor(math.max(price, info.price * 0.8) * Shop.WANTED_MULT)
+	end
+	-- pénurie dans ce village : la denrée qui manque est payée bien plus cher
+	if shortageAt(e) == item then
+		price = math.floor(math.max(price, info.price * 0.8) * Shop.SHORTAGE_MULT)
 	end
 	-- objet qu'un PNJ VEND quelque part : jamais plus de 80 % du prix le plus bas auquel on peut
 	-- l'acheter (sinon : acheter chez un PNJ peu gourmand, revendre chez un radin ou un artisan)
@@ -327,6 +372,12 @@ local function refresh(player: Player)
 	if e.data.metier then
 		title = G.Metiers.shopTitle(e)
 		greeting = G.Metiers.greeting(e, buy) -- étal vide : il dit ce qui lui manque
+	end
+	local short = shortageAt(e)
+	if short and Config.ITEMS[short] then
+		local info = Config.ITEMS[short]
+		local extra = "On manque de " .. info.icon .. " " .. info.name .. " en ce moment : payé +" .. math.floor((Shop.SHORTAGE_MULT - 1) * 100) .. " %."
+		greeting = (greeting and (greeting .. " ") or (D.line(e.data.persona, "trade", { titre = D.title_for(G.Joueurs.get(player).honor) }) .. " ")) .. extra
 	end
 	local w = wantedAt(e)
 	if w and #w.list > 0 and not e.data.metier then
