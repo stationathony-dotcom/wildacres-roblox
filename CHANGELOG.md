@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Bestiaire** : un livre avec la fiche de chaque créature vaincue (niveau, humeur, points de vie, coups, où et quand on la croise, ce qu'elle laisse) et le compte de celles qui restent à découvrir ; /bestiaire ou toucher « Créatures » dans l'onglet Collections de la fiche [P] (`Systemes/Livres`, `Livre.client`, banc `bestiaire_livre`)
 - **Courses** au tableau d'affichage : du village jusqu'au village voisin (le plus proche à plus de 250 studs), à cheval ou à pied ; il faut être au tableau au départ, le premier arrivé gagne la cagnotte, personne à l'arrivée = cagnotte rendue (banc `course`)
 - **Rangs de maîtrise** : chaque compétence a son rang (Novice, Apprenti 10, Compagnon 25, Maître 40, Grand maître 50), annoncé au passage et affiché dans la fiche [P] ; au niveau 50, un titre de maîtrise par compétence (Maître pêcheur, Grand chef, Maître d'armes, Roi des serrures…) ; les titres liés aux compétences se débloquent désormais dès le passage de niveau
 - **Ouvriers agricoles** : les fermiers de village louent des ouvriers (15 or par jour, contrat de 3 jours payé d'avance) qui arrosent chaque matin jusqu'à 40 cases semées chacun, où qu'elles soient sur l'île, même hors connexion ; on en loue autant qu'on veut (c'est l'or qui limite) ; /ouvriers (banc `ouvriers`)

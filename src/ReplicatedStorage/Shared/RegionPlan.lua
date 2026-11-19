@@ -66,6 +66,23 @@ local function shuffle(rng: Random, t)
 	end
 end
 
+-- créatures et faune par biome (partagées : lues aussi par le bestiaire, Systemes/Livres)
+local BIOME_FOES = {
+	prairie = { "slime", "slime_blue", "wolf", "boar", "boar" },
+	foret = { "myconid", "spider", "spider", "wolf", "bear", "boar" },
+	desert = { "goblin", "scorpion", "scorpion", "goblin", "slime_blue" },
+	neige = { "wolf_white", "wolf_white", "ice_golem", "yeti", "slime_blue" },
+	marais = { "toad", "toad", "wisp", "croc", "myconid" },
+}
+local BIOME_FAUNA = {
+	prairie = { "rabbit", "rabbit", "deer", "fox" },
+	foret = { "deer", "deer", "fox", "rabbit" },
+	desert = { "camel", "rabbit" },
+	neige = { "penguin", "penguin", "fox" },
+	marais = { "flamingo", "flamingo", "rabbit" },
+}
+WG.BIOME_FOES, WG.BIOME_FAUNA = BIOME_FOES, BIOME_FAUNA
+
 function WG:plan(rx: number, rz: number)
 	local pkey = rx .. "," .. rz
 	local cached = self.planCache[pkey]
@@ -710,20 +727,6 @@ function WG:plan(rx: number, rz: number)
 		end
 	end
 	-- créatures : monstres selon le biome (plus coriaces loin du départ), meutes de loups
-	local BIOME_FOES = {
-		prairie = { "slime", "slime_blue", "wolf", "boar", "boar" },
-		foret = { "myconid", "spider", "spider", "wolf", "bear", "boar" },
-		desert = { "goblin", "scorpion", "scorpion", "goblin", "slime_blue" },
-		neige = { "wolf_white", "wolf_white", "ice_golem", "yeti", "slime_blue" },
-		marais = { "toad", "toad", "wisp", "croc", "myconid" },
-	}
-	local BIOME_FAUNA = {
-		prairie = { "rabbit", "rabbit", "deer", "fox" },
-		foret = { "deer", "deer", "fox", "rabbit" },
-		desert = { "camel", "rabbit" },
-		neige = { "penguin", "penguin", "fox" },
-		marais = { "flamingo", "flamingo", "rabbit" },
-	}
 	local PACK = { wolf = true, wolf_white = true }
 	if dist >= 1 then
 		local pool = dist < 2 and { "slime", "boar" } or (dist < 3 and { "slime", "slime_blue", "boar", "wolf" } or BIOME_FOES[B])
