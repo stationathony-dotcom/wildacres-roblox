@@ -239,7 +239,7 @@ local function validLook(data)
 		return (v and v == math.floor(v) and v >= 1 and v <= max) and v or 1
 	end
 	return {
-		mode = data.mode == "villageois" and "villageois" or "roblox",
+		mode = "villageois", -- 19/11 (sa demande) : plus de skin Roblox, tout le monde a une allure du monde
 		skin = idx(data.skin, #WG.SKINS),
 		hair = table.find(HAIR_LIST, data.hair) and data.hair or "court",
 		hairColor = idx(data.hairColor, #WG.HAIR_COLORS),
@@ -248,31 +248,149 @@ local function validLook(data)
 	}
 end
 
+-- Création et établissements (19/11, ses mots : « personnaliser son perso en arrivant, avec des
+-- attributs qui collent à ce monde, pas garder son skin Roblox » ; « modifier par la suite en
+-- débloquant des trucs type coupe de cheveux » ; « coiffeur et établissements dans le genre »).
+--   · à la PREMIÈRE arrivée : écran de création, gratuit, parmi le choix de départ (STARTER) ;
+--   · ensuite : le BARBIER (coiffure, couleur de cheveux) et le TAILLEUR (tunique, chausses), au marché
+--     des villages. Un style hors du choix de départ se DÉBLOQUE une fois pour toutes (prix UNLOCK),
+--     puis on en change contre une petite façon (FEE). Le teint ne change pas après la création.
+-- prof.unlocks = { hair = { [nom] = true }, hairColor = { ["5"] = true }, shirt = {…}, pants = {…} }
+Avatar.STARTER = {
+	hair = { court = true, long = true, chauve = true, chignon = true },
+	hairColor = { [1] = true, [2] = true, [3] = true, [4] = true },
+	shirt = { [1] = true, [2] = true, [3] = true, [4] = true, [5] = true },
+	pants = { [1] = true, [2] = true, [3] = true, [4] = true, [5] = true },
+}
+Avatar.UNLOCK = { hair = 60, hairColor = 40, shirt = 30, pants = 30 }
+Avatar.FEE = 10
+Avatar.SHOPS = { barbier = { "hair", "hairColor" }, tailleur = { "shirt", "pants" } }
+local session = setmetatable({}, { __mode = "k" }) -- joueur -> { ctx, e, t }
+
+local function owned(prof, key: string, value): boolean
+	if Avatar.STARTER[key][value] then
+		return true
+	end
+	local u = prof.unlocks and prof.unlocks[key]
+	return u ~= nil and u[tostring(value)] == true
+end
+Avatar.owned = owned
+
+-- apparence par défaut (avant la création) : tirée de l'identifiant, dans le choix de départ
+function Avatar.defaultLook(player: Player)
+	local r = Random.new(player.UserId)
+	local hairs = { "court", "long", "chauve", "chignon" }
+	return { mode = "villageois", skin = r:NextInteger(1, #G.WG.SKINS), hair = hairs[r:NextInteger(1, #hairs)], hairColor = r:NextInteger(1, 4),
+		shirt = r:NextInteger(1, 5), pants = r:NextInteger(1, 5) }
+end
+
+-- ce que le client doit savoir pour l'écran (possédé, prix)
+local function shopInfo(prof, ctx: string)
+	local WG = G.WG
+	local own = { hair = {}, hairColor = {}, shirt = {}, pants = {} }
+	for _, h in HAIR_LIST do
+		own.hair[h] = owned(prof, "hair", h)
+	end
+	for key, list in { hairColor = WG.HAIR_COLORS, shirt = WG.SHIRTS, pants = WG.PANTS } do
+		for i in list do
+			own[key][i] = owned(prof, key, i)
+		end
+	end
+	return { kind = "look", ctx = ctx, owned = own, prices = Avatar.UNLOCK, fee = Avatar.FEE, look = prof.look }
+end
+
+-- ouvre l'écran d'apparence (création à l'arrivée, ou chez un barbier / tailleur e)
+function Avatar.open(player: Player, ctx: string, e)
+	local prof = G.Joueurs.get(player)
+	if not prof then
+		return
+	end
+	if ctx == "creation" and prof.look and prof.look.created then
+		return
+	end
+	session[player] = { ctx = ctx, e = e, t = os.clock() }
+	G.remotes.Menu:FireClient(player, shopInfo(prof, ctx))
+end
+
 function Avatar.setLook(player: Player, data)
 	local prof = G.Joueurs.get(player)
 	if not prof or type(data) ~= "table" then
 		return
 	end
-	local look = validLook(data)
-	local paidBefore = prof.look and prof.look.paid
-	if paidBefore and not G.Joueurs.take(player, "gold", LOOK_COST) then
-		G.Util.toast(player, "Changer d'apparence coûte " .. LOOK_COST .. " 💰 (barbier et tailleur).")
+	local s = session[player]
+	local ctx = s and s.ctx
+	if not s or os.clock() - s.t > 600 or (data.ctx and data.ctx ~= ctx) then
+		G.Util.toast(player, "Ton apparence se change chez le barbier ou le tailleur, au marché des villages.")
 		return
 	end
+	if s.e then
+		local root = G.Util.root(player)
+		if not root or not s.e.root or (root.Position - s.e.root.Position).Magnitude > 20 then
+			G.Util.toast(player, "Rapproche-toi de l'artisan.")
+			return
+		end
+	end
+	local want = validLook(data)
+	local cur = prof.look and prof.look.created and prof.look or nil
+	local look
+	local cost, newUnlocks = 0, {}
+	if ctx == "creation" then
+		if cur then
+			return
+		end
+		for key in Avatar.STARTER do
+			if not owned(prof, key, want[key]) then
+				G.Util.toast(player, "Ce style se débloque plus tard, chez le barbier ou le tailleur.")
+				return
+			end
+		end
+		look = want
+	else
+		local keys = Avatar.SHOPS[ctx]
+		if not keys or not cur then
+			return
+		end
+		look = table.clone(cur)
+		local changed = false
+		for _, key in keys do
+			if want[key] ~= cur[key] then
+				changed = true
+				look[key] = want[key]
+				if not owned(prof, key, want[key]) then
+					cost += Avatar.UNLOCK[key]
+					table.insert(newUnlocks, { key, want[key] })
+				end
+			end
+		end
+		if not changed then
+			return
+		end
+		cost += Avatar.FEE
+		if not G.Joueurs.take(player, "gold", cost) then
+			G.Util.toast(player, "Il te faut " .. cost .. " 💰 pour ça.")
+			return
+		end
+		prof.unlocks = prof.unlocks or {}
+		for _, u in newUnlocks do
+			prof.unlocks[u[1]] = prof.unlocks[u[1]] or {}
+			prof.unlocks[u[1]][tostring(u[2])] = true
+		end
+	end
+	look.mode = "villageois"
+	look.created = true
 	look.paid = true
 	prof.look = look
+	session[player] = nil
 	G.Joueurs.markDirty(player)
-	G.Util.toast(player, paidBefore and ("✂️ Nouvelle apparence (-" .. LOOK_COST .. " 💰).")
-		or ("✂️ Apparence choisie. La prochaine coûtera " .. LOOK_COST .. " 💰."), "gain")
+	G.Joueurs.sync(player)
+	if ctx == "creation" then
+		G.Util.toast(player, "✨ Bienvenue dans Wild Acres ! Le barbier et le tailleur des villages débloquent d'autres styles.", "big")
+	else
+		G.Util.toast(player, string.format("✂️ C'est fait (-%d 💰)%s.", cost, #newUnlocks > 0 and (", " .. #newUnlocks .. " style(s) débloqué(s) pour toujours") or ""), "gain")
+	end
+	G.remotes.Menu:FireClient(player, { kind = "close" })
 	if player.Character then
-		-- le corps « villageois » retire les vêtements Roblox : on recharge pour repartir propre
-		if look.mode == "roblox" then
-			local root = G.Util.root(player)
-			player:SetAttribute("RespawnPos", root and root.Position or nil)
-			player:LoadCharacter()
-		else
-			Avatar.refresh(player)
-		end
+		Avatar.refresh(player)
 	end
 end
 
@@ -291,10 +409,12 @@ function Avatar.applyLook(player: Player)
 		return
 	end
 	clearFolder(char, "Coiffure_WA")
-	local look = prof.look
-	if not look or look.mode ~= "villageois" then
-		return
+	-- jamais le skin Roblox : sans apparence choisie (ou l'ancien mode « avatar »), celle par défaut
+	if not prof.look or prof.look.mode ~= "villageois" then
+		prof.look = Avatar.defaultLook(player)
+		G.Joueurs.markDirty(player)
 	end
+	local look = prof.look
 	for _, c in char:GetChildren() do
 		if c:IsA("Shirt") or c:IsA("Pants") or c:IsA("ShirtGraphic") or c:IsA("Accessory") then
 			c:Destroy()

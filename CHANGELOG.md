@@ -6,6 +6,8 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Création du personnage à l'arrivée** : plus de skin Roblox — à la première arrivée, un écran de création (teint, coiffure, couleur de cheveux, tunique, chausses) parmi un choix de départ, gratuit ; les anciens persos en « avatar Roblox » repassent par la création
+- **Barbier et tailleur** au marché de chaque village : le barbier change coiffure et couleur de cheveux, le tailleur tunique et chausses ; les styles 🔒 hors du choix de départ se débloquent pour toujours (coupe 60 or, teinture 40, teinte de vêtement 30), puis chaque changement coûte 10 or de façon ; le teint ne change plus après la création (banc `apparence`)
 - **Zones exigeantes** (tenues ou caractéristiques) : sommets (au-dessus de 30 studs) froids la nuit, et le jour en neige ; désert en plein jour : tenue légère (paille, lin, turban), boire, ombre, ou Vie 10 ; boue des marais : on s'enlise sans bottes (ou Force 8) ; grottes : sans lanterne ni lampe de mineur dans le sac, l'écran s'assombrit et on avance à tâtons. Nouvelles tenues : Manteau fourré, Turban de lin, Bottes de marais, Lampe de mineur (banc `froid`)
 - **Voie Explorateur** (6e voie de talents, idee.txt) : Cartographe (la carte se dévoile autour de toi), Prospecteur (plus de trouvailles en minant / fouillant), Archéologue (pages anciennes), Survivaliste (insensible au froid et à la chaleur), Découvreur (lieux découverts : or et caractéristiques ×2), puis au choix Aventurier (diligence moitié prix) ou Chasseur de trésors (+50 % d'or, un objet de plus)
 - **/classement [compétence]** : classement des joueurs du monde, par compétence ou en maîtrise totale

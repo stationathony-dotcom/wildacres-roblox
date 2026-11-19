@@ -196,6 +196,14 @@ function Game.start(player: Player)
 	end)
 	G.Social.collect(player, "worlds", G.world.id)
 	G.Social.checkTitles(player)
+	-- première arrivée (ou ancienne apparence « avatar Roblox ») : écran de création du personnage
+	if not (prof.look and prof.look.created) then
+		task.delay(3, function()
+			if player.Parent then
+				G.Avatar.open(player, "creation", nil)
+			end
+		end)
+	end
 	task.spawn(function()
 		G.Clans.refreshTag(player)
 		G.Clans.remember(player)

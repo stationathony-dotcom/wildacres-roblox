@@ -75,7 +75,16 @@ local ROLES = {
 		intro = "Une bête bien nourrie te le rendra au centuple.",
 	},
 }
-local ORDER = { "baker", "cook", "blacksmith", "healer", "priest", "stablemaster" }
+-- 19/11 : établissements d'apparence (Avatar) au marché — barbier à gauche, tailleur à droite
+ROLES.barber = {
+	label = "Barbier", labelF = "Barbière", at = { "Marche_Village", "Taverne", "Auberge" }, front = 6, side = -7, garb = "tablier",
+	services = { "coiffure" }, intro = "Un coup de ciseaux ? J'ai des coupes que tu n'as jamais vues.",
+}
+ROLES.tailor = {
+	label = "Tailleur", labelF = "Couturière", at = { "Marche_Village", "Auberge", "Taverne" }, front = 6, side = 7, garb = "echarpe",
+	services = { "couture" }, intro = "Des teintes pour chaque saison, cousues main.",
+}
+local ORDER = { "baker", "cook", "blacksmith", "healer", "priest", "stablemaster", "barber", "tailor" }
 Metiers.ROLES = ROLES
 
 local PEDDLER = { label = "Colporteur", labelF = "Colporteuse", trade = "🎒 Voir sa marchandise", hat = "capuche", garb = "hotte" }
@@ -315,14 +324,14 @@ local function building(reg, names)
 end
 
 -- Poste de travail : l'attache « Travail » du bâtiment, sinon devant sa façade
-local function workSpot(h, front: number): { number }
+local function workSpot(h, front: number, side: number?): { number }
 	local pp = h.model.PrimaryPart
 	local a = pp:FindFirstChild("Travail")
-	if a and a:IsA("Attachment") then
+	if a and a:IsA("Attachment") and not side then
 		local p = a.WorldPosition
 		return { p.X, p.Z, p.Y }
 	end
-	local p = (pp.CFrame * CFrame.new(0, 0, front)).Position
+	local p = (pp.CFrame * CFrame.new(side or 0, 0, front)).Position
 	return { p.X, p.Z }
 end
 
@@ -495,7 +504,7 @@ local function spawnRole(reg, role: string, houses, taken)
 	local n = {
 		id = id, name = pickName(rng, female, taken), female = female, role = role, metier = role,
 		persona = def.persona or ADULT_PERSONAS[rng:NextInteger(1, #ADULT_PERSONAS)],
-		look = makeLook(rng, female, def.hat), work = workSpot(h, def.front or 8), plaza = { center.X, center.Z },
+		look = makeLook(rng, female, def.hat), work = workSpot(h, def.front or 8, def.side), plaza = { center.X, center.Z },
 		village = reg.plan.poi.name, house = #houses > 0 and houses[rng:NextInteger(1, #houses)] or nil, second = true,
 		shopkeeper = def.products ~= nil, radius = 3, maxHp = def.maxHp,
 	}
@@ -975,6 +984,10 @@ function Metiers.addOptions(e, player: Player, opts)
 			table.insert(add, { id = "m:changer", text = "🔁 Changer de monture (écurie)" })
 		elseif s == "pouliner" then
 			table.insert(add, { id = "m:pouliner", text = "🐣 Faire pouliner (3 carottes, 40 or)" })
+		elseif s == "coiffure" then
+			table.insert(add, { id = "m:coiffure", text = "✂️ Changer de coiffure" })
+		elseif s == "couture" then
+			table.insert(add, { id = "m:couture", text = "🧵 Changer de tenue" })
 		elseif s == "diligence" then
 			-- la diligence : vers les villages déjà découverts, les plus proches d'abord
 			for _, t in Metiers.coachTrips(player, e) do
@@ -1235,6 +1248,12 @@ function Metiers.choice(player: Player, e, what: string): (string | boolean)?
 	elseif what == "monture" and has("monture") then
 		local at = e.root.Position + e.root.CFrame.LookVector * 6
 		G.Horses.fetch(player, at)
+		return false
+	elseif what == "coiffure" and has("coiffure") then
+		G.Avatar.open(player, "barbier", e)
+		return false
+	elseif what == "couture" and has("couture") then
+		G.Avatar.open(player, "tailleur", e)
 		return false
 	elseif string.sub(what, 1, 5) == "dili_" and has("diligence") then
 		local key = string.sub(what, 6)
