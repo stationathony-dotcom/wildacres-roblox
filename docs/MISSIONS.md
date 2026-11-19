@@ -2,6 +2,8 @@
 
 Branche de travail `mission/wildacres`, créée depuis `d30b9ea`. La racine du projet sert de dossier des missions. Le parcours récursif a trouvé 18 fichiers TXT et six contenus distincts après normalisation des fins de ligne. Les deux copies sous `.production-nocturne` reprennent ces mêmes contenus.
 
+[Inventaire des entrées TXT](INVENTAIRE-MISSIONS.md) avec fichier, numéro de ligne et état de vérification. Les entrées ouvertes peuvent correspondre à des fonctionnalités déjà présentes.
+
 ## Suivi par source
 
 | Source | Terminées dans cette session | En cours ou à faire |
