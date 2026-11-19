@@ -4,6 +4,7 @@
 
 local PathfindingService = game:GetService("PathfindingService")
 local ServerStorage = game:GetService("ServerStorage")
+local RelationsPnj = require(script.Parent.RelationsPnj)
 
 local Npcs = {}
 local G, Config, D
@@ -1017,7 +1018,7 @@ local function options(e, player: Player)
 	end
 	local prof = G.Joueurs.get(player)
 	local opts = { { id = "chat", text = "Discuter" }, { id = "rumor", text = "Des nouvelles du coin ?" } }
-	if e.per.lastGift ~= G.world.day then
+	if RelationsPnj.disponible(e.per, G.world.day, G.Util.pid(player), "cadeau") then
 		for _, item in GIFTABLE do
 			if (prof.inv[item] or 0) > 0 then
 				table.insert(opts, { id = "gift", text = "Offrir un cadeau…" })
@@ -1088,8 +1089,7 @@ function Npcs.talk(player: Player, id: string)
 	if root then
 		face(e, root.Position)
 	end
-	if e.per.lastTalk ~= G.world.day then
-		e.per.lastTalk = G.world.day
+	if RelationsPnj.enregistrer(e.per, G.world.day, G.Util.pid(player), "salutation") then
 		Npcs.addOp(e, player, 1)
 	end
 	talking[player] = id
@@ -1128,8 +1128,7 @@ function Npcs.choice(player: Player, choice: string)
 	end
 	if choice == "chat" then
 		local key = (e.per.memory.heard and math.random() < 0.5) and "gossip" or "chat"
-		if e.per.lastChat ~= G.world.day then
-			e.per.lastChat = G.world.day
+		if RelationsPnj.enregistrer(e.per, G.world.day, G.Util.pid(player), "discussion") then
 			Npcs.addOp(e, player, 2)
 		end
 		Npcs.react(e, key)
@@ -1141,6 +1140,9 @@ function Npcs.choice(player: Player, choice: string)
 		oneShot(e, "point") -- il montre la direction du doigt
 		send(player, e, rumor(e, player), options(e, player))
 	elseif choice == "gift" then
+		if not RelationsPnj.disponible(e.per, G.world.day, G.Util.pid(player), "cadeau") then
+			return
+		end
 		local opts = {}
 		for _, item in GIFTABLE do
 			if (prof.inv[item] or 0) > 0 then
@@ -1155,10 +1157,12 @@ function Npcs.choice(player: Player, choice: string)
 		send(player, e, "(Que veux-tu offrir à " .. e.data.name .. " ?)", opts)
 	elseif string.sub(choice, 1, 5) == "give:" then
 		local item = string.sub(choice, 6)
-		if e.per.lastGift == G.world.day or not table.find(GIFTABLE, item) or not G.Joueurs.take(player, item, 1) then
+		local day, uid = G.world.day, G.Util.pid(player)
+		if not RelationsPnj.disponible(e.per, day, uid, "cadeau")
+			or not table.find(GIFTABLE, item) or not G.Joueurs.take(player, item, 1) then
 			return
 		end
-		e.per.lastGift = G.world.day
+		RelationsPnj.enregistrer(e.per, day, uid, "cadeau")
 		local info = Config.ITEMS[item]
 		local gain = (info.price or 10) >= 50 and 15 or 10
 		local charisme = G.Joueurs.stats(player).charisme or 0
