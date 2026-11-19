@@ -175,13 +175,15 @@ local function inbox(player: Player)
 	end
 	-- les colis déjà crédités (retrait de la boîte pas encore confirmé) ne s'affichent plus
 	local claimed = (G.Joueurs.get(player) or {}).mailClaimed or {}
-	local out = {}
+	local out, pending = {}, false
 	for _, p in list do
-		if not (p.id and claimed[p.id]) then
+		if p.id and claimed[p.id] then
+			pending = true
+		else
 			table.insert(out, p)
 		end
 	end
-	return out, true
+	return out, pending
 end
 
 -- Hôtel des ventes du monde (dans la sauvegarde du monde)
@@ -204,7 +206,7 @@ end
 
 function Poste.open(player: Player)
 	expire()
-	local mail = inbox(player)
+	local mail, pending = inbox(player)
 	local summary = {}
 	for _, p in mail do
 		table.insert(summary, { from = p.from, gold = p.gold or 0, items = p.items or {} })
@@ -220,7 +222,42 @@ function Poste.open(player: Player)
 	Poste.at = Poste.at or {}
 	local r = G.Util.root(player)
 	Poste.at[player] = r and r.Position or nil
-	G.remotes.Menu:FireClient(player, { kind = "post", mail = summary, market = rows, postage = POSTAGE })
+	G.remotes.Menu:FireClient(player, { kind = "post", mail = summary, mailPending = pending, market = rows, postage = POSTAGE })
+end
+
+-- Attribue un identifiant persistant aux anciens colis avant de les créditer.
+local function identifyLegacy(uid, list, claimed)
+	local function assign(parcels)
+		local changed, n = false, 0
+		for _, parcel in parcels do
+			if not parcel.id then
+				local previousId = ("ancien_" .. tostring(parcel.t) .. "_" .. tostring(parcel.from) .. "_" .. n)
+				parcel.id = claimed[previousId] and previousId or HttpService:GenerateGUID(false)
+				changed = true
+				n += 1
+			elseif not claimed[parcel.id] then
+				n += 1
+			end
+		end
+		return changed
+	end
+	for _, parcel in list do
+		if not parcel.id then
+			if not store then
+				assign(list)
+				return true, list
+			end
+			local latest
+			local ok = pcall(function()
+				store:UpdateAsync("m_" .. uid, function(raw)
+					latest = assert(decode(raw) or (raw == nil and {}), "boîte illisible")
+					return assign(latest) and HttpService:JSONEncode(latest) or nil
+				end)
+			end)
+			return ok, latest
+		end
+	end
+	return true, list
 end
 
 function Poste.collect(player: Player)
@@ -231,17 +268,23 @@ function Poste.collect(player: Player)
 	if not prof then
 		return
 	end
-	local got, okRead = inbox(player)
-	if not okRead then
+	local ok, parcels = readBox(player.UserId)
+	prof.mailClaimed = prof.mailClaimed or {}
+	if ok then
+		ok, parcels = identifyLegacy(player.UserId, parcels, prof.mailClaimed)
+	end
+	if not ok then
 		G.Util.toast(player, "La poste est fermée pour l'instant, réessaie.")
 		return
 	end
-	prof.mailClaimed = prof.mailClaimed or {}
+	if G.Joueurs.get(player) ~= prof or not atPost(player) then
+		return
+	end
 	-- 1) créditer + noter (même instant, même sauvegarde)
 	local n, ids = 0, {}
-	for _, p in got do
-		local id = p.id or ("ancien_" .. tostring(p.t) .. "_" .. tostring(p.from) .. "_" .. n)
-		p.id = id
+	for _, p in parcels do
+		local id = p.id
+		ids[id] = true
 		if not prof.mailClaimed[id] then
 			prof.mailClaimed[id] = os.time()
 			if (tonumber(p.gold) or 0) > 0 then
@@ -252,57 +295,59 @@ function Poste.collect(player: Player)
 					G.Joueurs.add(player, item, k, true)
 				end
 			end
-			ids[id] = true
 			n += 1
 		end
 	end
-	if n == 0 then
-		Poste.open(player)
-		return
+	if n > 0 then
+		G.Util.toast(player, "📬 " .. n .. " colis récupéré(s).", "gain")
+		G.Economie.record(player, "courrier", n .. " colis")
+		G.Joueurs.sync(player)
 	end
-	G.Util.toast(player, "📬 " .. n .. " colis récupéré(s).", "gain")
-	G.Economie.record(player, "courrier", n .. " colis")
-	G.Joueurs.sync(player)
 	-- 2) sauver le perso ; 3) seulement alors, vider ces colis de la boîte
-	local saved = G.Save.save(player)
-	if saved then
-		Poste.prune(player, ids, got)
+	if next(ids) and (not G.Save.save(player) or not Poste.prune(player, ids)) then
+		G.Util.toast(player, "La collecte reste à finaliser. Réessaie à la boîte aux lettres.")
 	end
 	Poste.open(player)
 end
 
 -- Retire de la boîte les colis crédités ; oublie les vieux identifiants notés
-function Poste.prune(player: Player, ids, got)
+function Poste.prune(player: Player, ids)
 	local uid = player.UserId
 	local function keep(list)
 		local out = {}
-		for i, p in list do
-			local id = p.id or (got[i] and got[i].id)
-			if not (id and ids[id]) then
+		for _, p in list do
+			if not (p.id and ids[p.id]) then
 				table.insert(out, p)
 			end
 		end
 		return out
 	end
+	local remaining
 	if not store then
-		memory[uid] = keep(memory[uid] or {})
+		remaining = keep(memory[uid] or {})
+		memory[uid] = remaining
 	else
-		pcall(function()
+		local ok = pcall(function()
 			store:UpdateAsync("m_" .. uid, function(old)
-				local list = decode(old) or {}
-				return HttpService:JSONEncode(keep(list))
+				local list = assert(decode(old) or (old == nil and {}), "boîte illisible")
+				remaining = keep(list)
+				return HttpService:JSONEncode(remaining)
 			end)
 		end)
+		if not ok then
+			return false
+		end
 	end
 	local prof = G.Joueurs.get(player)
 	if prof and prof.mailClaimed then
 		local limit = os.time() - 30 * 86400
 		for id, t in prof.mailClaimed do
-			if t < limit then
+			if t < limit and not ids[id] and not hasParcel(remaining, id) then
 				prof.mailClaimed[id] = nil
 			end
 		end
 	end
+	return true
 end
 
 function Poste.send(player: Player, toName: string, item: string, n: number)

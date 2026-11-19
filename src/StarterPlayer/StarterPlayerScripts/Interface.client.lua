@@ -2695,10 +2695,11 @@ local function game_()
 					end)
 				end
 			end
-			if #(d.mail or {}) == 0 then
+			local hasMail = #(d.mail or {}) > 0
+			if not hasMail and not d.mailPending then
 				label({ Text = "Aucun courrier.", TextColor3 = C.dim, Size = UDim2.new(1, 0, 0, 22), LayoutOrder = 1, Parent = postBody })
 			else
-				local b = button("Tout récupérer", C.green, function()
+				local b = button(hasMail and "Tout récupérer" or "Finaliser la collecte", C.green, function()
 					send("mail_collect")
 				end)
 				b.Size = UDim2.fromOffset(200, 38)
