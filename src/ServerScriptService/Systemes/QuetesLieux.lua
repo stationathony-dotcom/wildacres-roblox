@@ -224,7 +224,7 @@ function QuetesLieux.onTake(player: Player, q, here)
 	if q.kind == "retrouver" then
 		q.px, q.pz = pointNear(r, vx, vz, 50, 160)
 		q.where = hint(vx, vz, q.px, q.pz) .. " du village"
-		G.Util.toast(player, "🔍 On l'a perdue " .. q.where .. ".")
+		G.Util.toast(player, "🔍 Dernière trace : " .. q.where .. ".")
 	elseif q.kind == "visiter" then
 		q.where = hint(vx, vz, q.px, q.pz) .. " du village"
 	elseif q.kind == "enqueter" then
@@ -457,7 +457,7 @@ local function stepEscort(player: Player, q, root: BasePart)
 	if t and flat(e.root.Position, t.x, t.z) < ARRIVE_R then
 		e.hum:MoveTo(Vector3.new(t.x, e.root.Position.Y, t.z))
 		advance(player, q, nil)
-		G.Util.toast(player, "🚶 « Merci, me voilà arrivé à " .. t.name .. " ! » — " .. e.name)
+		G.Util.toast(player, "🚶 « Merci, me voici à " .. t.name .. " ! » — " .. e.name)
 	end
 end
 
