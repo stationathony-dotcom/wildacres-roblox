@@ -3,6 +3,8 @@
 --  · Arroseur : rempli au seau d'eau (3 jours par seau), il arrose chaque matin les cultures autour (3 x 3 cases).
 --  · Ruche : du miel tous les 2 jours, plus vite s'il y a des fleurs (pots, parterres) autour.
 -- L'état vit dans l'objet posé (d.mill, d.water, d.hive) et tourne même quand la région est déchargée.
+--  · Mécanismes (19/11) : le PONT-LEVIS se lève et s'abaisse, la TRAPPE s'ouvre (on tombe dedans) ;
+--    l'état (d.up) est gardé, et on peut y poser une serrure comme sur une porte (Protection.access).
 
 local Machines = {}
 local G, Config
@@ -18,6 +20,70 @@ function Machines.init(g)
 	end)
 	G.Interact.onPrompt("hive", function(player, prompt)
 		Machines.hive(player, prompt:GetAttribute("Placed"))
+	end)
+	G.Interact.onPrompt("mecanisme", function(player, prompt)
+		Machines.lever(player, prompt:GetAttribute("Placed"))
+	end)
+end
+
+-- ----------------------------------------------------------------- Mécanismes
+-- pièce mobile autour d'une charnière : { charnière dans le repère du modèle, angle « levé » }
+Machines.MECHS = {
+	drawbridge = { hinge = CFrame.new(0, 0.25, -4), angle = math.rad(-82), up = "Baisser le pont-levis", down = "Lever le pont-levis" },
+	trapdoor = { hinge = CFrame.new(0, 0.15, -1.5), angle = math.rad(-95), up = "Fermer la trappe", down = "Ouvrir la trappe" },
+}
+local rest = setmetatable({}, { __mode = "k" }) -- pièce -> CFrame au repos (rabattu), dans le repère du modèle
+
+local function modelOf(d, reg)
+	for _, m in (reg and reg.placedModels) or {} do
+		if m.Parent and m:GetAttribute("PlacedId") == d.id then
+			return m
+		end
+	end
+	return nil
+end
+
+-- place la pièce mobile (animée ou non) selon d.up
+function Machines.applyMech(model: Model, d, animate: boolean?)
+	local mech = Machines.MECHS[d.item]
+	if not mech or not model then
+		return
+	end
+	local pivot = model:GetPivot()
+	local hinge = pivot * mech.hinge
+	local rot = d.up and CFrame.Angles(mech.angle, 0, 0) or CFrame.identity
+	local TS = game:GetService("TweenService")
+	for _, p in model:GetDescendants() do
+		if p:IsA("BasePart") and p ~= model.PrimaryPart then -- la base invisible (pivot) ne bouge pas
+			rest[p] = rest[p] or pivot:ToObjectSpace(p.CFrame)
+			local target = hinge * rot * hinge:ToObjectSpace(pivot * rest[p])
+			if animate then
+				TS:Create(p, TweenInfo.new(1.2, Enum.EasingStyle.Quad), { CFrame = target }):Play()
+			else
+				p.CFrame = target
+			end
+		end
+	end
+	for _, pr in model:GetDescendants() do
+		if pr:IsA("ProximityPrompt") and pr:GetAttribute("Action") == "mecanisme" then
+			pr.ActionText = d.up and mech.up or mech.down
+		end
+	end
+end
+
+function Machines.lever(player: Player, id: string)
+	local d, reg = G.Protection.findPlaced(id)
+	if not d or not Machines.MECHS[d.item] then
+		return
+	end
+	local root = G.Util.root(player)
+	if not root or (Vector3.new(d.x, root.Position.Y, d.z) - root.Position).Magnitude > 14 then
+		return
+	end
+	G.Protection.access(player, d, function()
+		d.up = not d.up or nil
+		Machines.applyMech(modelOf(d, reg), d, true)
+		G.Util.sfx("porte", Vector3.new(d.x, root.Position.Y, d.z))
 	end)
 end
 

@@ -137,7 +137,7 @@ function Protection.useLock(player: Player, item: string)
 	local best, bd = nil, 9
 	for _, reg in G.World.loaded do
 		for _, d in reg.state.placed do
-			if (d.item == "chest" or d.item == "door") and G.Util.owns(player, d.owner) then
+			if (d.item == "chest" or d.item == "door" or d.item == "drawbridge" or d.item == "trapdoor") and G.Util.owns(player, d.owner) then
 				local dist = (Vector3.new(d.x, root.Position.Y, d.z) - root.Position).Magnitude
 				if dist < bd then
 					best, bd = d, dist
@@ -146,7 +146,7 @@ function Protection.useLock(player: Player, item: string)
 		end
 	end
 	if not best then
-		G.Util.toast(player, "Approche-toi d'un de TES coffres ou d'une de TES portes.")
+		G.Util.toast(player, "Approche-toi d'un de TES coffres, portes, pont-levis ou trappes.")
 		return
 	end
 	if (best.lock or 0) >= info.lock then
@@ -220,7 +220,7 @@ function Protection.access(player: Player, d, onOpen: () -> ())
 		return
 	end
 	if not d.owner or G.Util.owns(player, d.owner) or (d.lock or 0) == 0 then
-		if d.owner and not G.Util.owns(player, d.owner) and d.item == "door" then
+		if d.owner and not G.Util.owns(player, d.owner) and (d.item == "door" or d.item == "drawbridge" or d.item == "trapdoor") then
 			G.Law.crime(player, "breakin", Vector3.new(d.x, 0, d.z), d.owner)
 		end
 		onOpen()

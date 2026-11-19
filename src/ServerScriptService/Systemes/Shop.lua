@@ -816,6 +816,7 @@ local function buildPlaced(reg, d)
 		return
 	end
 	model.Name = info.place
+	model:SetAttribute("PlacedId", d.id)
 	if info.claim and G.Parcelles then
 		G.Parcelles.decorate(model, d.x, d.z)
 	end
@@ -847,6 +848,12 @@ local function buildPlaced(reg, d)
 		G.Util.prompt(base, "hive", "Récolter le miel", "Ruche" .. whose, { dist = 8, data = { Placed = d.id } })
 	elseif d.item == "stall" then
 		G.Util.prompt(base, "stall", "Voir l'étal", "Étal" .. whose, { dist = 8, data = { Placed = d.id } })
+	elseif G.Machines.MECHS and G.Machines.MECHS[d.item] then
+		local mech = G.Machines.MECHS[d.item]
+		G.Util.prompt(base, "mecanisme", d.up and mech.up or mech.down, info.name .. whose, { dist = 10, hold = 0.4, data = { Placed = d.id } })
+		if d.up then
+			task.defer(G.Machines.applyMech, model, d, false)
+		end
 	elseif d.item == "practice_lock" then
 		G.Util.prompt(base, "practice", "S'entraîner", "Serrure d'entraînement", { dist = 7, data = { Placed = d.id } })
 	elseif info.turret then
