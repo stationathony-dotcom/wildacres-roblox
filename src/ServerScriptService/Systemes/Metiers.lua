@@ -69,7 +69,7 @@ local ROLES = {
 	},
 	stablemaster = {
 		label = "Palefrenier", labelF = "Palefrenière", at = { "Ecurie" }, front = 6, hat = "paille", garb = "gilet",
-		shop = "Écurie", trade = "🐴 Foin et harnais", baseValue = 60, services = { "monture" },
+		shop = "Écurie", trade = "🐴 Foin et harnais", baseValue = 60, services = { "monture", "changer", "pouliner" },
 		inputs = { "hay", "oat", "wheat", "carrot", "apple", "leather" },
 		products = { "hay", "animal_feed", "leather_strap" },
 		intro = "Une bête bien nourrie te le rendra au centuple.",
@@ -907,6 +907,10 @@ function Metiers.addOptions(e, player: Player, opts)
 			table.insert(add, { id = "m:aumone", text = "🙏 Faire l'aumône (" .. ALMS_COST .. " or)" })
 		elseif s == "monture" then
 			table.insert(add, { id = "m:monture", text = "🐴 Faire venir ma monture" })
+		elseif s == "changer" then
+			table.insert(add, { id = "m:changer", text = "🔁 Changer de monture (écurie)" })
+		elseif s == "pouliner" then
+			table.insert(add, { id = "m:pouliner", text = "🐣 Faire pouliner (3 carottes, 40 or)" })
 		end
 	end
 	if def and def.inputs then
@@ -1162,6 +1166,12 @@ function Metiers.choice(player: Player, e, what: string): (string | boolean)?
 	elseif what == "monture" and has("monture") then
 		local at = e.root.Position + e.root.CFrame.LookVector * 6
 		G.Horses.fetch(player, at)
+		return false
+	elseif what == "changer" and has("changer") then
+		G.Horses.swap(player, e.root.Position + e.root.CFrame.LookVector * 6)
+		return false
+	elseif what == "pouliner" and has("pouliner") then
+		G.Horses.breed(player)
 		return false
 	end
 	return nil

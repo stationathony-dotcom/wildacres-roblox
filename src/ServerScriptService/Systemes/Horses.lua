@@ -23,6 +23,19 @@ function Horses.init(g)
 	G.Interact.onAction("whistle", function(player)
 		Horses.whistle(player)
 	end)
+	local function promptPos(prompt)
+		local a = prompt.Parent
+		return a and (a:IsA("Attachment") and a.WorldPosition or (a:IsA("BasePart") and a.Position)) or nil
+	end
+	G.Interact.onPrompt("ecurie_changer", function(player, prompt)
+		local pos = promptPos(prompt)
+		if pos then
+			Horses.swap(player, pos)
+		end
+	end)
+	G.Interact.onPrompt("ecurie_pouliner", function(player)
+		Horses.breed(player)
+	end)
 	G.Interact.onPrompt("ecurie", function(player, prompt)
 		local a = prompt.Parent
 		local pos = a and (a:IsA("Attachment") and a.WorldPosition or (a:IsA("BasePart") and a.Position)) or nil
@@ -46,9 +59,36 @@ local function speciesOf(d): string
 	return r < 0.2 and "ane" or (r < 0.35 and "mulet" or "cheval")
 end
 Horses.speciesOf = speciesOf
+
+-- Lignées (19/11) : chaque monture a son ALLURE (0,85 à 1,25 × la vitesse de son espèce), tirée de
+-- son identifiant pour les bêtes sauvages ou des fermes, HÉRITÉE des parents pour un poulain.
+local function allureOf(d): number
+	if type(d.allure) == "number" then
+		return d.allure
+	end
+	local h = 7
+	for i = 1, #tostring(d.id or "") do
+		h = (h * 131 + string.byte(tostring(d.id), i)) % 2147483647
+	end
+	local r = Random.new(h)
+	return math.floor((0.9 + r:NextNumber() * 0.12 + r:NextNumber() * 0.08) * 100 + 0.5) / 100
+end
+Horses.allureOf = allureOf
+local function stars(a: number): string
+	return a >= 1.12 and "★★★★" or a >= 1.04 and "★★★" or a >= 0.96 and "★★" or "★"
+end
+Horses.stars = stars
+-- poulain : pas encore montable pendant FOAL_DAYS jours
+Horses.FOAL_DAYS = 2
+local function young(d): boolean
+	return type(d.born) == "number" and G.world and G.world.day < d.born + Horses.FOAL_DAYS
+end
+
 local function label(h): string
 	local m = Config.MOUNTS[h.species] or Config.MOUNTS.cheval
-	return m.name .. " " .. string.lower(Config.HORSE_COATS[h.coat] and Config.HORSE_COATS[h.coat].name or "")
+	local d = h.data or h
+	return m.name .. " " .. string.lower(Config.HORSE_COATS[h.coat] and Config.HORSE_COATS[h.coat].name or "") .. " " .. stars(h.allure or allureOf(d))
+		.. (young(d) and " (poulain)" or "")
 end
 
 local function paint(model: Model, coat: number, saddle: number)
@@ -107,7 +147,10 @@ local function build(reg, d, parent)
 	local y = G.Util.groundY(d.x, d.z) - 0.1
 	model:PivotTo(CFrame.new(d.x, y, d.z) * CFrame.Angles(0, math.rad(d.yaw or math.random(0, 359)), 0))
 	model.Parent = parent
-	local h = { id = d.id, data = d, reg = reg, model = model, owner = d.owner, coat = d.coat, saddle = d.saddle or 0, species = sp }
+	if young(d) then
+		model:ScaleTo(model:GetScale() * 0.6) -- poulain
+	end
+	local h = { id = d.id, data = d, reg = reg, model = model, owner = d.owner, coat = d.coat, saddle = d.saddle or 0, species = sp, allure = allureOf(d) }
 	live[d.id] = h
 	if reg then
 		table.insert(reg.horses, h)
@@ -142,7 +185,7 @@ function Horses.onRegionLoad(reg)
 		local prof = G.Joueurs.get(player)
 		local ph = prof and prof.horse
 		if ph and not riding[player] and not live[ph.id] and ph.region == reg.key then
-			build(nil, { id = ph.id, x = ph.x, z = ph.z, coat = ph.coat, saddle = ph.saddle, species = ph.species, owner = G.Util.pid(player) }, horseFolder())
+			build(nil, { id = ph.id, x = ph.x, z = ph.z, coat = ph.coat, saddle = ph.saddle, species = ph.species, owner = G.Util.pid(player), allure = ph.allure, born = ph.born }, horseFolder())
 		end
 	end
 end
@@ -165,11 +208,16 @@ end
 
 local function makeMine(player: Player, h)
 	local prof = G.Joueurs.get(player)
-	-- l'ancien cheval est relâché
-	if prof.horse and live[prof.horse.id] and live[prof.horse.id] ~= h then
+	-- l'ancien cheval part à l'écurie (pas de limite : on garde toutes ses bêtes, cf. Horses.swap)
+	if prof.horse and prof.horse.id ~= h.id then
 		local old = live[prof.horse.id]
-		old.owner = nil
-		setPrompts(old)
+		if old and not old.mounted then
+			old.model:Destroy()
+			live[prof.horse.id] = nil
+		end
+		prof.stable = prof.stable or {}
+		table.insert(prof.stable, prof.horse)
+		G.Util.toast(player, "🐴 Ton ancienne monture rejoint l'écurie (palefrenier : « Changer de monture »).")
 	end
 	if h.reg then
 		h.reg.state.horses[h.id] = { gone = true }
@@ -192,7 +240,8 @@ local function makeMine(player: Player, h)
 	h.model.Parent = horseFolder()
 	local pos = h.model:GetPivot().Position
 	local reg = G.World.regionAt(pos)
-	prof.horse = { id = h.id, coat = h.coat, saddle = math.max(1, h.saddle), x = math.floor(pos.X), z = math.floor(pos.Z), region = reg and reg.key or "0,0", world = G.world.id, species = h.species }
+	prof.horse = { id = h.id, coat = h.coat, saddle = math.max(1, h.saddle), x = math.floor(pos.X), z = math.floor(pos.Z), region = reg and reg.key or "0,0", world = G.world.id, species = h.species,
+		allure = h.allure, born = h.data and h.data.born }
 	h.saddle = prof.horse.saddle
 	paint(h.model, h.coat, h.saddle)
 	setPrompts(h)
@@ -267,6 +316,10 @@ function Horses.mount(player: Player, h)
 	if riding[player] or player:GetAttribute("Carrying") then
 		return
 	end
+	if young(h.data or h) then
+		G.Util.toast(player, "C'est encore un poulain : il sera assez fort pour te porter dans quelques jours.")
+		return
+	end
 	local char = player.Character
 	local root = char and char:FindFirstChild("HumanoidRootPart") :: BasePart?
 	local hum = char and char:FindFirstChildOfClass("Humanoid")
@@ -313,7 +366,7 @@ function Horses.mount(player: Player, h)
 	hum.HipHeight = seat + SIT_OFFSET - rootHalf
 	local prof = G.Joueurs.get(player)
 	local shod = prof and prof.horse and prof.horse.id == h.id and prof.horse.shod
-	player:SetAttribute("MountSpeed", (Config.MOUNTS[h.species] or Config.MOUNTS.cheval).speed * (shod and (Config.SHOD_BONUS or 1) or 1)) -- allure (Game)
+	player:SetAttribute("MountSpeed", (Config.MOUNTS[h.species] or Config.MOUNTS.cheval).speed * (shod and (Config.SHOD_BONUS or 1) or 1) * (h.allure or 1)) -- allure (Game)
 	player:SetAttribute("Riding", true)
 end
 
@@ -390,7 +443,7 @@ function Horses.fetch(player: Player, at: Vector3)
 	local ph = prof.horse
 	local h = live[ph.id]
 	if not h then
-		h = build(nil, { id = ph.id, x = at.X, z = at.Z, coat = ph.coat, saddle = ph.saddle, species = ph.species, owner = G.Util.pid(player) }, horseFolder())
+		h = build(nil, { id = ph.id, x = at.X, z = at.Z, coat = ph.coat, saddle = ph.saddle, species = ph.species, owner = G.Util.pid(player), allure = ph.allure, born = ph.born }, horseFolder())
 	end
 	if not h then
 		return
@@ -401,6 +454,139 @@ function Horses.fetch(player: Player, at: Vector3)
 	ph.region = reg and reg.key or ph.region
 	G.Joueurs.markDirty(player)
 	G.Util.toast(player, "🐴 Le palefrenier t'amène ta monture (" .. Horses.STABLE_FEE .. " or).")
+end
+
+-- Changer de monture à l'écurie : la monture du moment y reste, la suivante (dans l'ordre d'arrivée)
+-- sort et attend à côté. Même pension que pour la faire venir.
+function Horses.swap(player: Player, at: Vector3): boolean
+	local prof = G.Joueurs.get(player)
+	if not prof or riding[player] then
+		return false
+	end
+	prof.stable = prof.stable or {}
+	if #prof.stable == 0 then
+		G.Util.toast(player, "Tu n'as pas d'autre monture à l'écurie.")
+		return false
+	end
+	if not G.Joueurs.take(player, "gold", Horses.STABLE_FEE) then
+		G.Util.toast(player, "La pension de l'écurie coûte " .. Horses.STABLE_FEE .. " or.")
+		return false
+	end
+	local nxt = table.remove(prof.stable, 1)
+	if prof.horse then
+		local old = live[prof.horse.id]
+		if old then
+			old.model:Destroy()
+			live[prof.horse.id] = nil
+		end
+		table.insert(prof.stable, prof.horse)
+	end
+	nxt.world = G.world.id
+	nxt.x, nxt.z = math.floor(at.X), math.floor(at.Z)
+	local reg = G.World.regionAt(at)
+	nxt.region = reg and reg.key or nxt.region
+	prof.horse = nxt
+	local h = build(nil, { id = nxt.id, x = at.X, z = at.Z, coat = nxt.coat, saddle = nxt.saddle, species = nxt.species, owner = G.Util.pid(player), allure = nxt.allure, born = nxt.born }, horseFolder())
+	G.Joueurs.markDirty(player)
+	G.Util.toast(player, "🐴 Le palefrenier sort " .. (h and label(h) or "ta monture") .. " (" .. Horses.STABLE_FEE .. " or).")
+	return true
+end
+
+-- Poulinage : la monture du moment + une monture adulte de l'écurie. Cheval × cheval = cheval,
+-- âne × âne = âne, cheval × âne = mulet ; le mulet est stérile. Le poulain hérite de la moyenne des
+-- allures (± un peu), de la robe d'un parent ; il grandit FOAL_DAYS jours avant d'être monté.
+Horses.BREED_COST = { gold = 40, carrot = 3 }
+Horses.BREED_EVERY = 2 -- jours entre deux poulinages
+local function child(a: string, b: string): string?
+	if a == "mulet" or b == "mulet" then
+		return nil
+	end
+	if a == b then
+		return a
+	end
+	return "mulet"
+end
+Horses.childSpecies = child
+function Horses.breed(player: Player): boolean
+	local prof = G.Joueurs.get(player)
+	local ph = prof and prof.horse
+	if not ph then
+		G.Util.toast(player, "Il te faut une monture.")
+		return false
+	end
+	if young(ph) then
+		G.Util.toast(player, "Ta monture est encore un poulain.")
+		return false
+	end
+	local spA = ph.species or "cheval"
+	if spA == "mulet" then
+		G.Util.toast(player, "Un mulet ne peut pas avoir de petit.")
+		return false
+	end
+	local mate
+	for _, d in prof.stable or {} do
+		if not young(d) and child(spA, d.species or "cheval") then
+			mate = d
+			break
+		end
+	end
+	if not mate then
+		G.Util.toast(player, "Il faut une autre monture adulte à l'écurie (pas un mulet).")
+		return false
+	end
+	if prof.breedDay and G.world.day < prof.breedDay + Horses.BREED_EVERY then
+		G.Util.toast(player, "Tes bêtes ont besoin de repos : reviens dans quelques jours.")
+		return false
+	end
+	local c = Horses.BREED_COST
+	if (G.Joueurs.count(player, "carrot") or 0) < c.carrot or (G.Joueurs.count(player, "gold") or 0) < c.gold then
+		G.Util.toast(player, "Le poulinage demande " .. c.carrot .. " carottes et " .. c.gold .. " or (soins du palefrenier).")
+		return false
+	end
+	G.Joueurs.take(player, "carrot", c.carrot)
+	G.Joueurs.take(player, "gold", c.gold)
+	local rng = Random.new()
+	local a = (allureOf(ph) + allureOf(mate)) / 2 + (rng:NextNumber() - 0.5) * 0.08
+	-- le savoir-faire du dresseur compte un peu (sélection des meilleurs)
+	a += math.min(0.03, (G.Joueurs.skill(player, "dressage") or 0) * 0.0005)
+	a = math.clamp(math.floor(a * 100 + 0.5) / 100, 0.85, 1.25)
+	local foal = {
+		id = G.Util.newId("pl"),
+		coat = rng:NextNumber() < 0.1 and rng:NextInteger(1, #Config.HORSE_COATS) or (rng:NextNumber() < 0.5 and ph.coat or mate.coat),
+		saddle = 1, species = child(spA, mate.species or "cheval"), allure = a, born = G.world.day, world = G.world.id,
+		parents = { ph.id, mate.id },
+	}
+	prof.stable = prof.stable or {}
+	table.insert(prof.stable, foal)
+	prof.breedDay = G.world.day
+	G.Joueurs.addSkillXp(player, "dressage", 20)
+	G.Joueurs.markDirty(player)
+	G.Joueurs.sync(player)
+	local m = Config.MOUNTS[foal.species] or Config.MOUNTS.cheval
+	G.Util.toast(player, string.format("🐣 Un poulain est né à l'écurie : %s, allure %s. Il grandit %d jours.", string.lower(m.name), stars(a), Horses.FOAL_DAYS), "big")
+	return true
+end
+
+-- /ecurie : la monture du moment puis celles de l'écurie
+function Horses.describe(player: Player): { string }
+	local prof = G.Joueurs.get(player)
+	local lines = {}
+	local function line(d, tag)
+		local m = Config.MOUNTS[d.species] or Config.MOUNTS.cheval
+		local coat = Config.HORSE_COATS[d.coat] and Config.HORSE_COATS[d.coat].name or ""
+		table.insert(lines, string.format("%s %s %s %s (allure %d %%)%s%s", tag, m.name, string.lower(coat), stars(allureOf(d)),
+			math.floor(allureOf(d) * 100 + 0.5), young(d) and " · poulain" or "", d.shod and " · ferré" or ""))
+	end
+	if prof and prof.horse then
+		line(prof.horse, "🐎")
+	end
+	for i, d in (prof and prof.stable) or {} do
+		line(d, i .. ".")
+	end
+	if #lines == 0 then
+		lines[1] = "Aucune monture. (Les fermes en vendent ; les chevaux sauvages s'apprivoisent.)"
+	end
+	return lines
 end
 
 -- Ferrer sa monture (fers à cheval forgés à l'enclume) : il faut être à côté d'elle (ou dessus).

@@ -175,6 +175,8 @@ function Villages.onRegionLoad(reg)
 		local base = stable.model.PrimaryPart
 		local a = G.Util.anchor(stable.model, base.CFrame * CFrame.new(0, 2, 10), "Palefrenier")
 		G.Util.prompt(a, "ecurie", "Faire venir ma monture", "Écurie · pension " .. (type(G.Horses.STABLE_FEE) == "number" and G.Horses.STABLE_FEE or 5) .. " or", { dist = 12 })
+		G.Util.prompt(a, "ecurie_changer", "Changer de monture", "Écurie", { dist = 12, key = Enum.KeyCode.R, pad = Enum.KeyCode.ButtonY })
+		G.Util.prompt(a, "ecurie_pouliner", "Faire pouliner (3 carottes, 40 or)", "Écurie", { dist = 12, key = Enum.KeyCode.F, pad = Enum.KeyCode.ButtonB, hold = 0.8 })
 	end
 	Villages.questBoard(reg, center, taken, poi.name or "", hf)
 	Villages.dock(reg, center, poi.name or "", hf)

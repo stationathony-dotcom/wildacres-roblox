@@ -616,10 +616,15 @@ local function onCommand(player: Player, text: string)
 	if cmd == "/aide" then
 		say(player, "💬 /coince · /signaler <pseudo> <motif> · /bloquer · /debloquer · /bloques")
 		say(player, "🔑 /autoriser <pseudo> [coffres|batir] · /retirer · /autorises · /ceder <pseudo> · /louer <pseudo> <jours> <prix> · /accepter")
-		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques")
+		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques · 🐴 /ecurie")
 	elseif cmd == "/reputation" then
 		say(player, "🏘️ Ta réputation dans les villages de cette île :")
 		for _, line in G.Reputation.describe(player) do
+			say(player, "  " .. line)
+		end
+	elseif cmd == "/ecurie" then
+		say(player, "🐴 Tes montures (la première est celle du moment ; le palefrenier les échange) :")
+		for _, line in G.Horses.describe(player) do
 			say(player, "  " .. line)
 		end
 	elseif cmd == "/chroniques" then
@@ -761,7 +766,7 @@ function Admin.init(g)
 	local folder = TextChatService:FindFirstChild("CommandesWA") or Instance.new("Folder")
 	folder.Name = "CommandesWA"
 	folder.Parent = TextChatService
-	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques" } do
+	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques", "/ecurie" } do
 		local c = folder:FindFirstChild(alias) or Instance.new("TextChatCommand")
 		c.Name = alias
 		c.PrimaryAlias = alias

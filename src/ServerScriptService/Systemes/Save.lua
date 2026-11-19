@@ -40,6 +40,7 @@ Save.FIELDS = {
 	"wear", -- 18/11 : usure des outils (facultatif : absent = outils neufs)
 	"warnings", -- 18/11 : avertissements de modération (sanctions graduées)
 	"plans", -- 18/11 : plans de construction copiés (Batir), facultatif
+	"stable", "breedDay", -- 19/11 : montures à l'écurie (Horses.swap / breed), facultatif
 }
 
 -- v -> fonction qui transforme une sauvegarde v en v+1 (ne jamais modifier une migration publiée)
