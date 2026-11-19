@@ -366,7 +366,7 @@ function Horses.mount(player: Player, h)
 	hum.HipHeight = seat + SIT_OFFSET - rootHalf
 	local prof = G.Joueurs.get(player)
 	local shod = prof and prof.horse and prof.horse.id == h.id and prof.horse.shod
-	player:SetAttribute("MountSpeed", (Config.MOUNTS[h.species] or Config.MOUNTS.cheval).speed * (shod and (Config.SHOD_BONUS or 1) or 1) * (h.allure or 1)) -- allure (Game)
+	player:SetAttribute("MountSpeed", (Config.MOUNTS[h.species] or Config.MOUNTS.cheval).speed * (shod and (Config.SHOD_BONUS or 1) or 1) * (h.allure or 1) * (1 + 0.12 * G.Joueurs.talent(player, "cavalier"))) -- allure (Game)
 	player:SetAttribute("Riding", true)
 end
 

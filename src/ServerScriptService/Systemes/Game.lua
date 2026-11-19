@@ -363,7 +363,7 @@ function Game.onDeath(player: Player)
 		G.Combat.noteKO(player, hunterId)
 	end
 	if hunter and os.clock() - hitAt < 10 and (prof.stars or 0) > 0 then
-		local bounty = math.floor((prof.bounty or 0) * (1 + 0.4 * G.Joueurs.talent(hunter, "primes")))
+		local bounty = math.floor((prof.bounty or 0) * (1 + 0.4 * G.Joueurs.talent(hunter, "primes") + 0.6 * G.Joueurs.talent(hunter, "traqueur")))
 		local hp = G.Joueurs.get(hunter)
 		if hp then
 			hp.stats.bounties = (hp.stats.bounties or 0) + 1

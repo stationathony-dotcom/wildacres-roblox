@@ -450,7 +450,7 @@ end
 
 local function damageOf(en): number
 	local owner = G.Util.playerOf(en.owner)
-	local bonus = owner and (1 + 0.4 * G.Joueurs.talent(owner, "meute")) or 1
+	local bonus = owner and (1 + 0.4 * G.Joueurs.talent(owner, "meute") + 0.6 * G.Joueurs.talent(owner, "alpha")) or 1
 	-- confiance : jusqu'à +30 % de dégâts pour une bête nourrie fidèlement depuis 20 jours
 	bonus *= 1 + 0.3 * math.clamp(((en.rec and en.rec.trust) or 0) / 100, 0, 1)
 	if en.rec and en.rec.equip then

@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Talents de maître** (choix exclusifs) : au 4e palier de chaque voie, deux talents dont on ne prend qu'un — Fantôme ou Cavaleur, Terre riche ou Marchand-né, Chef de meute ou Cavalier émérite, Mains d'or ou Veine du mineur, Colosse ou Traqueur ; « Oublier les talents » permet de changer ; arbre agrandi (banc `talents`)
 - **Chaleur** : dans le désert, de 11 h à 17 h, sans ombre ni toit, on a soif (mêmes effets que le froid) ; boire à la gourde ou à l'outre protège 5 minutes
 - **Froid** : dans la neige, la nuit, sans feu tout près (feu de camp, cheminée, braséro, torche), sans toit au-dessus de la tête ni vêtement chaud (fourrure, laine, peau, manteau, cape…), on avance 15 % moins vite et l'endurance revient deux fois moins vite ; rien de mortel (banc `froid`)
 - **Explorer rend plus fort** : chaque lieu découvert entraîne la vitesse et la chance (pour de bon) et compte pour les succès Pisteur (25 lieux) et Grand explorateur (100)

@@ -537,6 +537,18 @@ C.TALENTS = {
 	{ id = "menottes", tree = "justicier", name = "Menottes", max = 1, req = 1, desc = "Un recherché que tu mets K.O. part en cellule : tu touches la prime et de l'honneur." },
 	{ id = "robuste", tree = "justicier", name = "Robuste", max = 2, req = 1, desc = "+15 vie max par rang." },
 	{ id = "critique", tree = "justicier", name = "Coup précis", max = 2, req = 2, desc = "+12 % de chance de coup critique (x2) par rang." },
+	-- 19/11 (« à ne pas oublier » § 7 : branches avancées et choix exclusifs) : au palier 4 de chaque
+	-- voie, deux talents de maître — on n'en prend qu'UN (excl) ; « Oublier les talents » permet de changer
+	{ id = "fantome", tree = "horsloi", name = "Fantôme", max = 1, req = 4, excl = "horsloi_maitre", desc = "Les témoins te voient encore moins (-25 %). Exclusif avec Cavaleur." },
+	{ id = "cavaleur", tree = "horsloi", name = "Cavaleur", max = 1, req = 4, excl = "horsloi_maitre", desc = "Tes étoiles retombent deux fois plus vite. Exclusif avec Fantôme." },
+	{ id = "terre_riche", tree = "fermier", name = "Terre riche", max = 1, req = 4, excl = "fermier_maitre", desc = "+25 % de chance de récolte double. Exclusif avec Marchand-né." },
+	{ id = "marchand_ne", tree = "fermier", name = "Marchand-né", max = 1, req = 4, excl = "fermier_maitre", desc = "+20 % sur toutes tes ventes. Exclusif avec Terre riche." },
+	{ id = "alpha", tree = "dresseur", name = "Chef de meute", max = 1, req = 4, excl = "dresseur_maitre", desc = "Tes compagnons frappent 60 % plus fort. Exclusif avec Cavalier émérite." },
+	{ id = "cavalier", tree = "dresseur", name = "Cavalier émérite", max = 1, req = 4, excl = "dresseur_maitre", desc = "Toute monture galope 12 % plus vite sous toi. Exclusif avec Chef de meute." },
+	{ id = "prodigue", tree = "artisan", name = "Mains d'or", max = 1, req = 4, excl = "artisan_maitre", desc = "25 % de chance de ne pas consommer les ingrédients. Exclusif avec Veine du mineur." },
+	{ id = "veine", tree = "artisan", name = "Veine du mineur", max = 1, req = 4, excl = "artisan_maitre", desc = "+2 minerais par filon. Exclusif avec Mains d'or." },
+	{ id = "colosse", tree = "justicier", name = "Colosse", max = 1, req = 4, excl = "justicier_maitre", desc = "+40 vie max. Exclusif avec Traqueur." },
+	{ id = "traqueur", tree = "justicier", name = "Traqueur", max = 1, req = 4, excl = "justicier_maitre", desc = "+60 % sur les primes encaissées. Exclusif avec Colosse." },
 }
 C.TALENT_BY_ID = {}
 for _, t in C.TALENTS do

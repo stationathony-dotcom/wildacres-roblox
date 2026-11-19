@@ -283,7 +283,7 @@ function Law.step(dt: number)
 	for _, player in G.Game.players() do
 		local prof = G.Joueurs.get(player)
 		if prof and prof.stars > 0 then
-			heat[player] = (heat[player] or 0) + dt * (1 + 0.35 * G.Joueurs.talent(player, "cavale"))
+			heat[player] = (heat[player] or 0) + dt * (1 + 0.35 * G.Joueurs.talent(player, "cavale")) * (1 + G.Joueurs.talent(player, "cavaleur"))
 			if heat[player] >= Config.STAR_DECAY * 2 then -- les étoiles collent : il faut vraiment se cacher
 				heat[player] = 0
 				prof.stars -= 1

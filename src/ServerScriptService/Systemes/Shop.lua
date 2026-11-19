@@ -181,7 +181,7 @@ function Shop.sellPrice(player: Player, e, item: string): number
 	if e.data.persona == "filou" and e.data.role ~= "merchant" then
 		mult *= 0.6 * (1 + 0.3 * G.Joueurs.talent(player, "receleur"))
 	end
-	mult *= (1 + 0.1 * G.Joueurs.talent(player, "negociant")) * (1 + 0.005 * G.Joueurs.skill(player, "commerce"))
+	mult *= (1 + 0.1 * G.Joueurs.talent(player, "negociant")) * (1 + 0.2 * G.Joueurs.talent(player, "marchand_ne")) * (1 + 0.005 * G.Joueurs.skill(player, "commerce"))
 	mult *= G.Evenements.priceBonus(e.reg.key) -- foire au village
 	local repMult = G.Reputation and rawget(G.Reputation, "priceMult")
 	if repMult and e.root then
@@ -586,7 +586,7 @@ function Shop.craft(player: Player, index: number?, times: number?)
 	local skillName = r.skill and r.skill[1] or (r.cat == "cuisine" and "cuisine" or "artisanat")
 	local function spend(item, n)
 		-- talent Économe : parfois, les ingrédients ne partent pas
-		if math.random() < 0.15 * G.Joueurs.talent(player, "econome") then
+		if math.random() < 0.15 * G.Joueurs.talent(player, "econome") + 0.25 * G.Joueurs.talent(player, "prodigue") then
 			return
 		end
 		takeOf(player, item, n)

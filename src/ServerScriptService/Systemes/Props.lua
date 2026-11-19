@@ -766,7 +766,7 @@ local function harvest(player: Player, id: string, mode: string)
 			if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "miner", p.kind) end
 			G.Social.collect(player, "ores", p.kind)
 			-- talent Mineur + compétence : minerai en plus
-			local bonus = G.Joueurs.talent(player, "mineur")
+			local bonus = G.Joueurs.talent(player, "mineur") + 2 * G.Joueurs.talent(player, "veine")
 			if math.random() < 0.02 * G.Joueurs.skill(player, "minage") then
 				bonus += 1
 			end

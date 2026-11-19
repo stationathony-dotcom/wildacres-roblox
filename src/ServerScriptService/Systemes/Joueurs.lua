@@ -425,6 +425,16 @@ function J.learnTalent(player: Player, id: string)
 		G.Util.toast(player, "Il faut d'abord " .. t.req .. " point(s) dans cette voie.")
 		return
 	end
+	-- choix exclusif : un seul talent de maître par voie
+	if t.excl then
+		for tid, r in p.talents do
+			local o = G.Config.TALENT_BY_ID[tid]
+			if r > 0 and tid ~= id and o and o.excl == t.excl then
+				G.Util.toast(player, "Choix exclusif : tu as déjà pris « " .. o.name .. " » (oublie tes talents pour changer).")
+				return
+			end
+		end
+	end
 	p.talents[id] = (p.talents[id] or 0) + 1
 	G.Util.toast(player, "Talent appris : " .. t.name .. " (rang " .. p.talents[id] .. ")", "big")
 	J.applyStats(player)
@@ -473,6 +483,7 @@ function J.sightFactor(player: Player): number
 	local s = J.stats(player)
 	local f = 1 - math.min(0.6, (s.discretion or 0) * 0.05)
 	f *= 1 - 0.15 * J.talent(player, "ombre")
+	f *= 1 - 0.25 * J.talent(player, "fantome")
 	if player:GetAttribute("Crouch") then
 		f *= 0.6
 	end
@@ -487,7 +498,7 @@ function J.applyStats(player: Player)
 	local hum = ch and ch:FindFirstChildOfClass("Humanoid")
 	if hum then
 		local ratio = hum.Health / math.max(1, hum.MaxHealth)
-		hum.MaxHealth = G.Config.MAX_HP + (s.vie or 0) * 10 + 15 * J.talent(player, "robuste")
+		hum.MaxHealth = G.Config.MAX_HP + (s.vie or 0) * 10 + 15 * J.talent(player, "robuste") + 40 * J.talent(player, "colosse")
 		hum.Health = hum.MaxHealth * ratio
 	end
 end

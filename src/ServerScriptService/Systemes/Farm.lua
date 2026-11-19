@@ -463,7 +463,7 @@ function Farm.harvest(player: Player, key: string)
 	local mine = owner == nil or G.Util.owns(player, owner) or owner == "wild"
 	local prof = G.Joueurs.get(player)
 	local sel = mine and Farm.selectionLevel(prof and prof.selection and prof.selection[st.crop]) or 0
-	if math.random() < 0.1 + luck * 0.03 + 0.15 * G.Joueurs.talent(player, "main_verte") + 0.01 * G.Joueurs.skill(player, "agriculture") + 0.06 * sel then
+	if math.random() < 0.1 + luck * 0.03 + 0.15 * G.Joueurs.talent(player, "main_verte") + 0.25 * G.Joueurs.talent(player, "terre_riche") + 0.01 * G.Joueurs.skill(player, "agriculture") + 0.06 * sel then
 		n = 2
 		if sel >= 3 and math.random() < 0.05 * sel then
 			n = 3

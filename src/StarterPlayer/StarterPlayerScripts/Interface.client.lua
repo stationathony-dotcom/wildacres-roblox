@@ -2210,11 +2210,13 @@ local function game_()
 		crochetage = "🔓", ombre = "🌑", cavale = "🏃", receleur = "💰", main_verte = "🌿", arrosage = "💧", negociant = "⚖️", eleveur = "🐄",
 		apprivoiseur = "🎶", meute = "🐺", vigilance = "👁️", econome = "🧮", mineur = "⛏️", serrurier = "🔐", forgeron = "🔨",
 		primes = "🎯", menottes = "⛓️", robuste = "🛡️", critique = "🗡️",
+		fantome = "👻", cavaleur = "💨", terre_riche = "🌾", marchand_ne = "🪙", alpha = "🐺", cavalier = "🐎",
+		prodigue = "✋", veine = "💎", colosse = "🗿", traqueur = "🏹",
 	}
 	local nTrees = #Config.TALENT_TREES
 	local COLW = 150
 	local tal = new("Frame", {
-		Name = "Talents", Size = UDim2.fromOffset(nTrees * (COLW + 8) + 24, 470), Position = UDim2.fromScale(0.5, 0.5), AnchorPoint = Vector2.new(0.5, 0.5),
+		Name = "Talents", Size = UDim2.fromOffset(nTrees * (COLW + 8) + 24, 560), -- 560 : palier 4 (talents de maître) Position = UDim2.fromScale(0.5, 0.5), AnchorPoint = Vector2.new(0.5, 0.5),
 		BackgroundColor3 = Color3.fromRGB(20, 16, 13), BackgroundTransparency = 0.03, Visible = false, Parent = gui, ZIndex = 5,
 	}, { corner(6), stroke(Color3.fromRGB(176, 140, 72), 2.5) })
 	panels.Talents = tal
@@ -2275,7 +2277,17 @@ local function game_()
 				end
 				for k, t in list do
 					local rank = ranks[t.id] or 0
-					local locked = spent < t.req
+					-- choix exclusif (talents de maître) : l'autre talent du même groupe est déjà pris
+					local takenOther = nil
+					if t.excl then
+						for tid, r in ranks do
+							local o = Config.TALENT_BY_ID[tid]
+							if r > 0 and tid ~= t.id and o and o.excl == t.excl then
+								takenOther = o.name
+							end
+						end
+					end
+					local locked = spent < t.req or takenOther ~= nil
 					local maxed = rank >= t.max
 					local can = not locked and not maxed and free > 0
 					local x = COLW / 2 + (k - (#list + 1) / 2) * 64 - 26
@@ -2292,7 +2304,9 @@ local function game_()
 					}, { corner(4) })
 					b.MouseEnter:Connect(function()
 						local lines = { { t.name, C.text, 16 }, { "Rang " .. rank .. "/" .. t.max, C.dim, 12 }, { t.desc, Color3.fromRGB(255, 210, 0) } }
-						if locked then
+						if takenOther then
+							table.insert(lines, { "Exclusif : tu as pris « " .. takenOther .. " »", C.red })
+						elseif locked then
 							table.insert(lines, { "Demande " .. t.req .. " point(s) dans " .. tree.name, C.red })
 						elseif can then
 							table.insert(lines, { "Clic : apprendre", Color3.fromRGB(30, 255, 0), 12 })
