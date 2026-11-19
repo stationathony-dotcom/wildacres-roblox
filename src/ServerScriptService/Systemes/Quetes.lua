@@ -536,6 +536,8 @@ function Quetes.turnIn(player: Player, id: string)
 	st.act[id] = nil
 	st.fait[id] = G.world.day
 	G.Joueurs.add(player, "gold", q.gold)
+	-- le village où on la rend t'en sait gré (Systemes/Reputation)
+	G.Reputation.add(player, here, math.clamp(3 + math.floor((q.gold or 0) / 40), 3, 10))
 	if q.item then
 		G.Joueurs.add(player, q.item, 1)
 	end

@@ -467,6 +467,20 @@ local function game_()
 			if poi and cx >= poi.x0 - 8 and cx <= poi.x0 + poi.w + 8 and cz >= poi.z0 - 8 and cz <= poi.z0 + poi.d + 8 then
 				local name = poi.kind == "village" and poi.name or poi.kind == "farm" and ("Ferme de " .. poi.name)
 					or poi.kind == "ruin" and (poi.start and "Les vieilles ruines" or "Ruines") or poi.name
+				if poi.kind == "village" then
+					-- palier de réputation auprès de ce village (Systemes/Reputation), s'il te connaît
+					local ok, rep = pcall(function()
+						return game:GetService("HttpService"):JSONDecode(player:GetAttribute("Reputation") or "{}")
+					end)
+					local val = ok and type(rep) == "table" and rep[poi.name]
+					if val then
+						local tier = val >= 85 and "Héros" or val >= 50 and "Honoré" or val >= 20 and "Apprécié"
+							or val <= -60 and "Haï" or val <= -20 and "Mal vu" or nil
+						if tier then
+							name = name .. " · " .. tier
+						end
+					end
+				end
 				return POI_ICON[poi.kind] or "📍", name
 			end
 		end

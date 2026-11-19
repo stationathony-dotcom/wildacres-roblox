@@ -114,6 +114,11 @@ function Shop.sellPrice(player: Player, e, item: string): number
 	end
 	mult *= (1 + 0.1 * G.Joueurs.talent(player, "negociant")) * (1 + 0.005 * G.Joueurs.skill(player, "commerce"))
 	mult *= G.Evenements.priceBonus(e.reg.key) -- foire au village
+	local repMult = G.Reputation and rawget(G.Reputation, "priceMult")
+	if repMult and e.root then
+		local _, sellM = repMult(player, e.root.Position)
+		mult *= sellM -- réputation du village (Systemes/Reputation)
+	end
 	local price = math.floor(info.price * mult * demandFactor(e.reg.key, item))
 	-- invariant anti-arbitrage : un marchand ne rachète jamais plus de 80 % de ce qu'il te vendrait
 	-- le même objet (sinon acheter puis revendre au même comptoir créait de l'or à l'infini)
@@ -175,7 +180,15 @@ function Shop.buyPrice(player: Player, e, base: number, floor: boolean?): number
 	local honorMult = prof.honor < 0 and (1 + (-prof.honor) / 200) or (1 - prof.honor / 1000)
 	local op = floor and 50 or math.clamp(G.Npcs.op(e, player), -50, 50)
 	local opinionMult = 1 - op / 500
-	return math.max(1, math.floor(base * greed * honorMult * opinionMult * (1 - math.min(0.3, charisme * 0.02))))
+	-- réputation du village : `floor` prend la meilleure possible (garde-fou anti-arbitrage)
+	local R = G.Reputation and rawget(G.Reputation, "priceMult")
+	local repMult = 1
+	if floor then
+		repMult = G.Reputation and rawget(G.Reputation, "BEST_BUY") or 1
+	elseif R and e and e.root then
+		repMult = (R(player, e.root.Position))
+	end
+	return math.max(1, math.floor(base * greed * honorMult * opinionMult * repMult * (1 - math.min(0.3, charisme * 0.02))))
 end
 
 local function catalog(player: Player, e)
@@ -246,6 +259,12 @@ function Shop.tooFar(player: Player)
 end
 
 function Shop.open(player: Player, e)
+	local refuses = G.Reputation and rawget(G.Reputation, "refuses")
+	local no = refuses and e.root and refuses(player, e.root.Position)
+	if no then
+		G.Util.toast(player, no, "danger")
+		return
+	end
 	open[player] = e
 	refresh(player)
 end
@@ -353,6 +372,9 @@ function Shop.sell(player: Player, item: string, n: number)
 		G.Util.toast(player, "+" .. total .. " 💰", "gain")
 		G.Joueurs.addSkillXp(player, "commerce", 1 + math.floor(total / 25))
 		if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "vendre", "boutique", sold) end
+		if total >= 20 and e.root then
+			G.Reputation.addAt(player, e.root.Position, 1, "commerce")
+		end
 		if total >= 200 then
 			G.Economie.record(player, "vente", n .. " " .. item .. " → " .. total)
 		end

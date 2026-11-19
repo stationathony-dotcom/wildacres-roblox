@@ -47,7 +47,7 @@ PhysicsService:CollisionGroupSetCollidable("PNJ", "PNJ", false)
 -- Chargement des systèmes (un système absent est remplacé par un bouchon silencieux)
 local NAMES = { "Util", "Interact", "Clock", "World", "Joueurs", "Save", "Mondes", "Game", "Avatar", "Tools", "Props", "Farm",
 	"Doors", "Npcs", "Law", "Animals", "Horses", "Enemies", "Combat", "Fishing", "Shop", "Bodies", "Parcelles",
-	"Minijeux", "Compagnons", "Protection", "Economie", "Social", "Armee", "Evenements", "Clans", "Poste", "Terraforme", "Batir", "Machines", "Donjons", "Bestiaire", "Demolir", "Villages", "Meteo", "Admin", "Politique", "Barques", "Activites", "Journal", "Avantpostes", "Ilots", "Nasses", "Nids", "Butin", "Quetes", "Tourelles", "Chateaux", "Moissons", "Bosquets", "Canaux", "Herbes", "Metiers", "Hameaux", "Fauche" }
+	"Minijeux", "Compagnons", "Protection", "Economie", "Social", "Armee", "Evenements", "Clans", "Poste", "Terraforme", "Batir", "Machines", "Donjons", "Bestiaire", "Demolir", "Villages", "Meteo", "Admin", "Politique", "Barques", "Activites", "Journal", "Avantpostes", "Ilots", "Nasses", "Nids", "Butin", "Quetes", "Tourelles", "Chateaux", "Moissons", "Bosquets", "Canaux", "Herbes", "Metiers", "Hameaux", "Fauche", "Reputation" }
 local stub = setmetatable({}, { __index = function()
 	return function() end
 end })
@@ -83,7 +83,7 @@ for _, name in { "Bosquets", "Herbes", "Chateaux", "Hameaux", "Props", "Farm", "
 	end
 end
 G.daySystems = {}
-for _, name in { "Farm", "Props", "Npcs", "Metiers", "Law", "Animals", "Enemies", "Shop", "Horses", "Compagnons", "Armee", "Machines", "Demolir", "Meteo", "Politique", "Avantpostes", "Nasses", "Nids", "Moissons", "Fauche", "Admin" } do
+for _, name in { "Farm", "Props", "Npcs", "Metiers", "Law", "Animals", "Enemies", "Shop", "Horses", "Compagnons", "Armee", "Machines", "Demolir", "Meteo", "Politique", "Avantpostes", "Nasses", "Nids", "Moissons", "Fauche", "Reputation", "Admin" } do
 	if G[name] ~= stub and G[name].newDay then
 		table.insert(G.daySystems, G[name])
 	end

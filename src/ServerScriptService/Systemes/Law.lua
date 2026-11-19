@@ -109,6 +109,7 @@ function Law.crime(player: Player, kind: string, pos: Vector3, victimId: string?
 		end
 	end
 	lastCrime[player][kind] = now
+	G.Reputation.crime(player, kind, pos) -- le village proche l'apprend (Systemes/Reputation)
 	-- alerte : les commerces de la région ferment un moment (Npcs : « trade » refusé)
 	local creg = G.World.regionAt(pos)
 	if creg then

@@ -25,6 +25,7 @@ local function check(name, cond)
 end
 
 local bag, honor, toasts, sent = {}, 0, {}, nil
+local repGain = 0
 local pos = Vector3.zero
 local P = { UserId = 5, Name = "Q" }
 local G = {
@@ -41,6 +42,7 @@ local G = {
 		sync = function() end,
 	},
 	Law = { addHonor = function(_, n) honor += n end },
+	Reputation = { add = function(_, v, n) repGain += n end },
 	remotes = { Fx = { FireClient = function(_, _, kind, data) sent = data end } },
 	Interact = { onAction = function() end, onPrompt = function() end },
 	World = { loaded = {} },
@@ -141,6 +143,7 @@ if hunt then
 	check("loin du tableau : pas rendue", st.act[hunt.id] ~= nil)
 	at(hv)
 	Q.turnIn(P, hunt.id)
+	check("rendue : réputation du village en hausse", (repGain or 0) >= 3)
 	check("rendue : or + honneur", (bag.gold or 0) - g0 == hunt.gold and honor == 1 and st.act[hunt.id] == nil)
 	Q.take(P, hunt.id)
 	check("même offre pas reprise deux fois", st.act[hunt.id] == nil)
