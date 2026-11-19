@@ -5,6 +5,7 @@
 -- autres villages (lettres). Deux îles n'ont donc pas les mêmes quêtes.
 -- Sortes : apporter (objets rendus au village), chasser, abattre, miner, pêcher, récolter, fabriquer,
 -- semer, vendre, découvrir (nouveaux lieux), lettre (à porter dans un autre village).
+-- + quêtes « à un lieu » (Systemes/QuetesLieux) : retrouver, visiter, enquêter, escorter.
 -- Récompense : or + XP de la compétence liée (donc des caractéristiques) + parfois un objet + honneur.
 -- État : G.world.players[uid].quetes = { act = { [id] = quête }, fait = { [idOffre] = jour } } (monde).
 -- OÙ (18/11, à sa demande) : comme dans WoW, on PREND et on REND une quête au TABLEAU DES QUÊTES du
@@ -113,12 +114,17 @@ local function deserted(vkey: string): boolean
 end
 Quetes.deserted = deserted
 
+-- village où l'on rend la quête (lettre, escorte : celui d'arrivée)
+local function giverOf(q): string
+	return (q.kind == "lettre" or q.kind == "escorter") and q.key or q.v
+end
+
 -- la quête peut-elle être rendue ici ? (village d'origine, ou transférée si l'origine est déserte)
 local function receivable(q, here): (boolean, boolean)
 	if not here then
 		return false, false
 	end
-	local giver = q.kind == "lettre" and q.key or q.v
+	local giver = giverOf(q)
 	if here.key == giver then
 		return true, false
 	end
@@ -221,7 +227,9 @@ local function makeOffer(v, period: number, i: number)
 	local theme = G.wg and G.wg.theme
 	local roll = r:NextNumber()
 	local q = { v = v.key, vname = v.name }
-	if roll < 0.24 then
+	if r:NextNumber() < (tonumber(G.QuetesLieux.SHARE) or 0) and G.QuetesLieux.offer(v, r, q, reward, villages) then
+		-- quête « à un lieu » : remplie par Systemes/QuetesLieux
+	elseif roll < 0.24 then
 		local w = WANTS[r:NextInteger(1, #WANTS)]
 		local item = pickExisting(r, w[2])
 		local crops = Config.BIOME_CROPS[v.biome]
@@ -387,6 +395,10 @@ local function rec(player: Player)
 end
 
 local function what(q): string
+	local lieu = G.QuetesLieux.what(q)
+	if type(lieu) == "string" then
+		return lieu
+	end
 	local info = Config.ITEMS[q.key]
 	if q.kind == "apporter" then
 		return string.format("Apporter %d %s %s à %s", q.need, info and info.icon or "", info and info.name or q.key, q.vname)
@@ -429,11 +441,11 @@ end
 Quetes.what = what
 
 local function view(q, here)
-	local giver = q.kind == "lettre" and q.key or q.v
+	local giver = giverOf(q)
 	return {
 		id = q.id, kind = q.kind, icon = ICON[q.kind], title = q.title, what = what(q), need = q.need, got = q.got or 0,
 		gold = q.gold, item = q.item, skill = SKILL_OF[q.kind], ready = (q.got or 0) >= q.need or q.kind == "apporter",
-		where = q.kind == "lettre" and q.label or q.vname, canTurnIn = (receivable(q, here)), transferred = here ~= nil and here.key ~= giver and deserted(giver),
+		where = giverOf(q) ~= q.v and q.label or q.vname, canTurnIn = (receivable(q, here)), transferred = here ~= nil and here.key ~= giver and deserted(giver),
 	}
 end
 
@@ -502,6 +514,7 @@ function Quetes.take(player: Player, id: string)
 		if q.id == id and not st.act[id] and not st.fait[id] then
 			q.got = 0
 			st.act[id] = q
+			G.QuetesLieux.onTake(player, q, here)
 			if q.kind == "lettre" then
 				G.Util.toast(player, "✉️ On te confie une lettre scellée pour " .. (q.label or "?") .. ".")
 			end
@@ -515,6 +528,7 @@ end
 function Quetes.drop(player: Player, id: string)
 	local st = rec(player)
 	if type(id) == "string" and st.act[id] then
+		G.QuetesLieux.clear(player, st.act[id])
 		st.act[id] = nil
 		G.Util.toast(player, "Quête abandonnée. Aucune conséquence.")
 	end
@@ -534,11 +548,11 @@ function Quetes.turnIn(player: Player, id: string)
 	end
 	local ok, transfer = receivable(q, here)
 	if not ok then
-		G.Util.toast(player, "C'est à " .. (q.kind == "lettre" and q.label or q.vname) .. " qu'on t'attend.")
+		G.Util.toast(player, "C'est à " .. (giverOf(q) ~= q.v and q.label or q.vname) .. " qu'on t'attend.")
 		return
 	end
 	if transfer then
-		G.Util.toast(player, "📜 Plus personne à " .. (q.kind == "lettre" and q.label or q.vname) .. " : " .. here.name .. " reprend ta quête.")
+		G.Util.toast(player, "📜 Plus personne à " .. (giverOf(q) ~= q.v and q.label or q.vname) .. " : " .. here.name .. " reprend ta quête.")
 	end
 	if q.kind == "apporter" then
 		if not G.Joueurs.has(player, q.key, q.need) then
@@ -550,6 +564,7 @@ function Quetes.turnIn(player: Player, id: string)
 		G.Util.toast(player, "Pas encore : " .. (q.got or 0) .. " / " .. q.need .. ".")
 		return
 	end
+	G.QuetesLieux.clear(player, q)
 	st.act[id] = nil
 	st.fait[id] = G.world.day
 	G.Joueurs.add(player, "gold", q.gold)
@@ -594,6 +609,14 @@ end
 function Quetes.init(g)
 	G = g
 	Config = G.Config
+	-- icônes et compétences des quêtes « à un lieu »
+	local L = G.QuetesLieux
+	if type(L.ICON) == "table" then
+		for k, v in L.ICON do
+			ICON[k] = v
+			SKILL_OF[k] = L.SKILL[k]
+		end
+	end
 	G.Interact.onAction("quetes", function(player)
 		Quetes.send(player)
 	end)

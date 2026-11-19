@@ -47,4 +47,4 @@ Les quêtes d'aujourd'hui sont toutes du type **« fais N fois X »**. Les idée
 3. **Escorter** un PNJ ou une cargaison jusqu'à un autre village. On réutilise la diligence et les routes.
 4. **Enquêter** : deux ou trois indices à la suite. On réutilise les chroniques.
 
-Ces 4 sortes couvriraient environ 150 idées de plus. Elles ne sont pas faites.
+Ces 4 sortes couvrent environ 150 idées de plus. **Faites le 19/11** (`Systemes/QuetesLieux`), pas encore vues en Play.
