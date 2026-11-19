@@ -957,6 +957,8 @@ C.SHOD_BONUS = 1.12
 -- Rareté de chaque objet (une fois que tous les objets existent)
 -- corrections d'équilibre de la fabrication (docs/AUDIT-CRAFT.md), avant la rareté qui suit les prix
 require(script.Parent.Equilibre).apply(C)
+-- exigences de caractéristiques (Shared/Equilibre)
+require(script.Parent.Equilibre).finish(C)
 Catalogue.assignRarity(C)
 
 return C

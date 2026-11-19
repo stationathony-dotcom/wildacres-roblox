@@ -411,4 +411,169 @@ function E.apply(C)
 	end
 end
 
+-- ================================================================= après la génération d'équipement
+-- 8. EXIGENCES (19/11, ses mots : niveaux pour porter l'équipement ? → non, des CARACTÉRISTIQUES) :
+--    pas de niveau de personnage ; une pièce de rareté 3+ demande d'avoir ENTRAÎNÉ sa stat principale
+--    (niveau tiré de statXp, sans les bonus d'équipement). Une pièce déjà portée le reste.
+E.REQ = { [3] = 3, [4] = 6 }
+E.REQ_MASTER = 9 -- pièces de maître (artisanat 40+)
+
+function E.requirement(piece): { any }?
+	if type(piece) ~= "table" or type(piece.stats) ~= "table" then
+		return nil
+	end
+	if piece.req then
+		return piece.req
+	end
+	local lv = E.REQ[piece.rarity or 1]
+	if not lv then
+		return nil
+	end
+	local best, bv = nil, -1
+	for st, v in piece.stats do
+		if v > bv or (v == bv and st < (best or "")) then
+			best, bv = st, v
+		end
+	end
+	return best and { best, lv } or nil
+end
+
+-- 9. séries générées (Gear.expandRecipes : forme × matière) — stats qui ont du sens.
+--    Poids par forme (stat principale, stat d'appoint), touche de la matière, dégâts par forme.
+E.FORM_STATS = {
+	sword = { force = 1, defense = 0.5 }, dagger = { discretion = 1, vitesse = 0.6 }, axe = { force = 1, vie = 0.4 },
+	mace = { force = 1, defense = 0.5 }, pike = { vitesse = 0.8, force = 0.7 }, bow = { chance = 1, vitesse = 0.5 },
+	crossbow = { force = 0.8, chance = 0.7 }, hammer = { force = 1, defense = 0.6 }, greatsword = { force = 1.2, vie = 0.3 },
+	halberd = { defense = 0.8, force = 0.8 }, scythe = { force = 0.9, vitesse = 0.7 }, saber = { vitesse = 1, force = 0.6 },
+	helmet = { defense = 1, vie = 0.5 }, closedhelm = { defense = 1, vie = 0.7 }, hood = { discretion = 1, vitesse = 0.4 },
+	cresthelm = { force = 1, defense = 0.6 }, feathered = { charisme = 1, chance = 0.5 }, nasalhelm = { defense = 1, force = 0.4 },
+	plate = { defense = 1, vie = 0.6 }, tunic = { vitesse = 1, discretion = 0.4 }, brigandine = { vie = 1, defense = 0.6 },
+	mail = { defense = 1, vie = 0.4 }, leather = { discretion = 1, vitesse = 0.5 }, scale = { force = 0.8, defense = 0.8 },
+	gloves = { vitesse = 1, chance = 0.4 }, gauntlets = { force = 1, defense = 0.6 }, fingerless = { discretion = 1, vitesse = 0.6 },
+	pauldrons = { defense = 1, force = 0.4 }, lamellar = { vie = 1, defense = 0.5 }, hornshoulder = { force = 1, vie = 0.4 },
+	pants = { vitesse = 1, vie = 0.4 }, leggings = { discretion = 1, vitesse = 0.5 }, greaves = { defense = 1, vie = 0.5 },
+	cape = { discretion = 1, vitesse = 0.4 }, mantle = { vie = 1, charisme = 0.4 }, splitcape = { charisme = 1, chance = 0.4 },
+	boots = { vitesse = 1, chance = 0.3 }, tallboots = { vie = 1, vitesse = 0.5 }, sabatons = { defense = 1, vie = 0.5 },
+	ring = { chance = 1, force = 0.3 }, necklace = { charisme = 1, vie = 0.4 }, brooch = { charisme = 1, chance = 0.4 },
+	pendant = { vie = 1, chance = 0.4 }, bracelet = { force = 1, vitesse = 0.4 }, medallion = { chance = 1, charisme = 0.4 },
+}
+E.MATERIAL_STAT = {
+	lin = "vie", cuir = "vitesse", forge = "force", loup = "vitesse", garde = "defense", ronces = "vie",
+	soleil = "force", nord = "vie", os = "force", lune = "discretion", ambre = "charisme", diamant = "chance",
+}
+E.WEAPON_DAMAGE = {
+	dagger = 0.75, sword = 1, axe = 1.1, mace = 1.1, pike = 1, bow = 0.9, crossbow = 1.15,
+	hammer = 1.2, greatsword = 1.3, halberd = 1.2, scythe = 1.15, saber = 0.95,
+}
+-- budget de stats par rareté : emplacements principaux / petits emplacements (gants, épaulières…)
+E.BUDGET = { main = { 4, 6, 9, 13 }, small = { 2, 4, 6, 8 } }
+E.MAIN_SLOTS = { weapon = true, hat = true, armor = true, trinket = true }
+E.SMALL_FLOOR = { [3] = 6, [4] = 8 }
+
+local function spread(weights, total, accent)
+	-- une touche de matière (1 ou 2 points), le reste réparti selon les poids, arrondi au plus juste
+	local stats = {}
+	local left = total
+	if accent then
+		local a = total >= 9 and 2 or 1
+		stats[accent] = a
+		left -= a
+	end
+	local sum = 0
+	for _, w in weights do
+		sum += w
+	end
+	local keys = {}
+	for k in weights do
+		table.insert(keys, k)
+	end
+	table.sort(keys, function(x, y)
+		return weights[x] > weights[y]
+	end)
+	local given = 0
+	for i, k in keys do
+		local v = i == #keys and (left - given) or math.floor(left * weights[k] / sum + 0.5)
+		v = math.max(0, v)
+		given += v
+		if v > 0 then
+			stats[k] = (stats[k] or 0) + v
+		end
+	end
+	return stats
+end
+
+-- 10. pièces de départ des nouveaux emplacements (presque rien en rareté 1 : un débutant ne pouvait
+--     pas s'équiper). { emplacement, nom, stats, ingrédients } — « laine » dans le nom : tient chaud (Froid).
+E.STARTER_GEAR = {
+	{ "gloves", "Gants de paysan", { vitesse = 1, vie = 1 }, { cloth = 1, fiber = 2 } },
+	{ "gloves", "Mitaines de laine", { vie = 2 }, { wool_cloth = 1 } },
+	{ "boots", "Sabots de bois", { vie = 1, defense = 1 }, { planks = 2, leather_strap = 1 } },
+	{ "boots", "Bottes de toile", { vitesse = 2 }, { cloth = 2, leather = 1 } },
+	{ "legs", "Chausses de toile", { vitesse = 1, discretion = 1 }, { cloth = 2 } },
+	{ "legs", "Pantalon de laine", { vie = 2 }, { wool_cloth = 2 } },
+	{ "cape", "Cape de laine", { vie = 1, discretion = 1 }, { wool_cloth = 2, buckle = 1 } },
+	{ "cape", "Pèlerine de toile", { charisme = 1, vie = 1 }, { cloth = 2, rope = 1 } },
+	{ "shoulders", "Épaulières de cuir", { defense = 2 }, { leather = 2, rope = 1 } },
+	{ "shoulders", "Spallières de bois", { defense = 1, vie = 1 }, { planks = 2, leather_strap = 1 } },
+}
+
+function E.finish(C)
+	local okG, Gear = pcall(require, script.Parent.Gear)
+	local SLOTS = okG and Gear.SLOTS or {}
+	local R = C.RECIPES
+	-- pièces de départ (seulement si l'emplacement existe dans ce jeu)
+	local have = {}
+	for _, r in R do
+		if r.gear then
+			have[r.gear.name] = true
+		end
+	end
+	for _, g in E.STARTER_GEAR do
+		if SLOTS[g[1]] and not have[g[2]] and known(C, g[4]) then
+			table.insert(R, { gear = { slot = g[1], name = g[2], rarity = 1, stats = table.clone(g[3]), power = 0, visual = "" },
+				needs = table.clone(g[4]), station = "bench", cat = "equipement" })
+			note("départ " .. g[2])
+		end
+	end
+	for _, r in R do
+		local g = r.gear
+		if g and g.stats then
+			local small = not E.MAIN_SLOTS[g.slot or ""]
+			-- séries générées : stats et dégâts selon la forme et la matière
+			local d = g.design
+			local weights = d and E.FORM_STATS[d.form]
+			if weights then
+				local budget = (small and E.BUDGET.small or E.BUDGET.main)[g.rarity or 1] or 4
+				g.stats = spread(weights, budget, E.MATERIAL_STAT[d.material])
+				if g.slot == "weapon" and g.power then
+					g.power = math.max(2, math.floor(g.power * (E.WEAPON_DAMAGE[d.form] or 1) + 0.5))
+					g.name = string.gsub(g.name, " en lin de Valdor$", " de Valdor")
+				end
+				note("série " .. g.name)
+			elseif small then
+				-- petits emplacements faits main : plancher plus bas
+				local total, best, bv = 0, nil, -1
+				for st, v in g.stats do
+					total += v
+					if v > bv then
+						best, bv = st, v
+					end
+				end
+				local floor = E.SMALL_FLOOR[g.rarity or 1]
+				if floor and best and total < floor then
+					g.stats[best] += floor - total
+				end
+			end
+			-- exigence de caractéristique
+			if (g.rarity or 1) >= 3 then
+				local req = E.requirement({ stats = g.stats, rarity = g.rarity })
+				if req and r.skill and r.skill[2] >= 40 then
+					req[2] = E.REQ_MASTER
+				end
+				g.req = req
+			end
+		end
+	end
+end
+
 return E

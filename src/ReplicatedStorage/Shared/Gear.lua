@@ -89,6 +89,14 @@ function G.describe(item): string
 	end
 	local extra = item.slot == "weapon" and string.format(" (dégâts %d)", item.power) or ""
 	local made = (item.quality and (" · " .. item.quality) or "") .. (item.maker and (" · par " .. item.maker) or "")
+	-- exigence de caractéristique (Shared/Equilibre)
+	local okE, Eq = pcall(function()
+		return require(script.Parent.Equilibre)
+	end)
+	local req = okE and Eq.requirement(item)
+	if req then
+		made ..= " · requiert " .. (G.STATS[req[1]] or req[1]) .. " " .. req[2]
+	end
 	return string.format("%s [%s]%s%s  %s", item.name, G.RARITIES[item.rarity].name, extra, made, table.concat(parts, "  "))
 end
 

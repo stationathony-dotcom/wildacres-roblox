@@ -510,6 +510,16 @@ function J.equip(player: Player, id: number)
 	end
 	for i, item in p.gear do
 		if item.id == id then
+			-- exigence de caractéristique (Shared/Equilibre) : la stat principale ENTRAÎNÉE (sans équipement)
+			local okE, Eq = pcall(require, game:GetService("ReplicatedStorage").Shared.Equilibre)
+			local req = okE and Eq.requirement(item)
+			if req then
+				local lv = G.Config.statLevel((p.statXp or {})[req[1]])
+				if lv < req[2] then
+					G.Util.toast(player, "Il faut " .. (G.Gear.STATS[req[1]] or req[1]) .. " " .. req[2] .. " pour porter " .. item.name .. " (tu es à " .. lv .. ").")
+					return
+				end
+			end
 			table.remove(p.gear, i)
 			local old = p.equipped[item.slot]
 			if old then
