@@ -484,6 +484,16 @@ local function game_()
 				return POI_ICON[poi.kind] or "📍", name
 			end
 		end
+		-- villes fondées par les joueurs (Systemes/Villes)
+		local vf = ReplicatedStorage:FindFirstChild("Villes")
+		if vf then
+			for _, c in vf:GetChildren() do
+				local r = c:GetAttribute("R") or 70
+				if Vector2.new((c:GetAttribute("X") or 0) - pos.X, (c:GetAttribute("Z") or 0) - pos.Z).Magnitude <= r then
+					return "🏰", tostring(c:GetAttribute("Name") or "Ville")
+				end
+			end
+		end
 		local pf = ReplicatedStorage:FindFirstChild("Parcelles")
 		if pf then
 			for _, c in pf:GetChildren() do

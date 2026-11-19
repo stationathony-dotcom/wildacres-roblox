@@ -47,7 +47,7 @@ PhysicsService:CollisionGroupSetCollidable("PNJ", "PNJ", false)
 -- Chargement des systèmes (un système absent est remplacé par un bouchon silencieux)
 local NAMES = { "Util", "Interact", "Clock", "World", "Joueurs", "Save", "Mondes", "Game", "Avatar", "Tools", "Props", "Farm",
 	"Doors", "Npcs", "Law", "Animals", "Horses", "Enemies", "Combat", "Fishing", "Shop", "Bodies", "Parcelles",
-	"Minijeux", "Compagnons", "Protection", "Economie", "Social", "Armee", "Evenements", "Clans", "Poste", "Terraforme", "Batir", "Machines", "Donjons", "Bestiaire", "Demolir", "Villages", "Meteo", "Admin", "Politique", "Barques", "Activites", "Journal", "Avantpostes", "Ilots", "Nasses", "Nids", "Butin", "Quetes", "Tourelles", "Chateaux", "Moissons", "Bosquets", "Canaux", "Herbes", "Metiers", "Hameaux", "Fauche", "Reputation", "Chroniques", "Ouvriers", "Livres", "Froid" }
+	"Minijeux", "Compagnons", "Protection", "Economie", "Social", "Armee", "Evenements", "Clans", "Poste", "Terraforme", "Batir", "Machines", "Donjons", "Bestiaire", "Demolir", "Villages", "Meteo", "Admin", "Politique", "Barques", "Activites", "Journal", "Avantpostes", "Ilots", "Nasses", "Nids", "Butin", "Quetes", "Tourelles", "Chateaux", "Moissons", "Bosquets", "Canaux", "Herbes", "Metiers", "Hameaux", "Fauche", "Reputation", "Chroniques", "Ouvriers", "Livres", "Froid", "Villes" }
 local stub = setmetatable({}, { __index = function()
 	return function() end
 end })
@@ -77,13 +77,13 @@ end
 
 -- Systèmes appelés au chargement d'une région et au changement de jour
 G.regionSystems = {}
-for _, name in { "Bosquets", "Herbes", "Chateaux", "Hameaux", "Props", "Farm", "Villages", "Moissons", "Doors", "Npcs", "Metiers", "Animals", "Horses", "Enemies", "Bestiaire", "Shop", "Compagnons", "Batir", "Donjons", "Demolir", "Ilots", "Nids" } do
+for _, name in { "Bosquets", "Herbes", "Chateaux", "Hameaux", "Props", "Farm", "Villages", "Moissons", "Doors", "Npcs", "Metiers", "Villes", "Animals", "Horses", "Enemies", "Bestiaire", "Shop", "Compagnons", "Batir", "Donjons", "Demolir", "Ilots", "Nids" } do
 	if G[name] ~= stub and G[name].onRegionLoad then
 		table.insert(G.regionSystems, G[name])
 	end
 end
 G.daySystems = {}
-for _, name in { "Farm", "Props", "Npcs", "Metiers", "Law", "Animals", "Enemies", "Shop", "Horses", "Compagnons", "Armee", "Machines", "Demolir", "Meteo", "Politique", "Avantpostes", "Nasses", "Nids", "Moissons", "Fauche", "Reputation", "Ouvriers", "Admin" } do
+for _, name in { "Farm", "Props", "Npcs", "Metiers", "Law", "Animals", "Enemies", "Shop", "Horses", "Compagnons", "Armee", "Machines", "Demolir", "Meteo", "Politique", "Avantpostes", "Nasses", "Nids", "Moissons", "Fauche", "Reputation", "Ouvriers", "Villes", "Admin" } do
 	if G[name] ~= stub and G[name].newDay then
 		table.insert(G.daySystems, G[name])
 	end

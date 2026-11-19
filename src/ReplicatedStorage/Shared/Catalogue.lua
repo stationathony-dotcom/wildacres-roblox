@@ -269,6 +269,7 @@ map_world|Carte du monde|🗺️|160|v|map_region3 ink2 #commerce:10|savoir
 sea_chart|Carte maritime|🗺️|120|v|parchment3 ink2 #peche:8|savoir
 treasure_map|Carte au trésor|🗺️|0|u:carte_tresor|map_fragment4|savoir
 old_page|Page ancienne|📜|15|u:page|-|savoir
+charter|Charte de ville|📜|300|v|planks20 stone20 rope4 ink1 @bench #commerce:10|savoir
 map_fragment|Fragment de carte|🧩|20|m|-|
 compass|Boussole|🧭|70|v|copper_ingot1 iron_ingot1 glass1 @bench #artisanat:8|savoir
 old_compass|Boussole ancienne|🧭|260|v|-|

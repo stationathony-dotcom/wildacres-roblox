@@ -405,6 +405,35 @@ function Metiers.spawnHamlet(reg)
 	end
 end
 
+-- Ville de joueurs (Systemes/Villes) : un habitant par lit posé ; il travaille près de « son » lit et
+-- flâne au centre de la ville. Remplacé comme les autres s'il disparaît.
+function Metiers.spawnTown(reg, townId: string, v, beds)
+	reg.metiers = reg.metiers or {}
+	local taken = {}
+	for i, bed in beds do
+		local role = "ville_" .. townId .. "_" .. i
+		local cur = reg.metiers[role]
+		local id = not (cur and cur.model.Parent and cur.state ~= "gone") and Metiers.currentId(reg, role)
+		if id then
+			local rng = Random.new(G.WG.hash(G.world.seed, "ville-pnj", townId, id))
+			local female = rng:NextNumber() < 0.5
+			local n = {
+				id = id, name = pickName(rng, female, taken), female = female, role = "villager",
+				persona = ADULT_PERSONAS[rng:NextInteger(1, #ADULT_PERSONAS)], look = makeLook(rng, female, nil),
+				work = { bed.x + rng:NextNumber(-3, 3), bed.z + rng:NextNumber(-3, 3) }, plaza = { v.x, v.z },
+			}
+			local e = G.Npcs.addExtra(reg, n)
+			if e then
+				reg.metiers[role] = e
+				local founder = G.Util.playerOf(v.founder)
+				if founder and not cur then
+					G.Util.toast(founder, "🏰 " .. n.name .. " s'installe à " .. v.name .. ".", "gain")
+				end
+			end
+		end
+	end
+end
+
 -- Le château : seigneur (ou dame) dans la cour, deux gardes de faction à la porte, jour et nuit
 local function spawnCastle(reg)
 	local model = reg.castle
