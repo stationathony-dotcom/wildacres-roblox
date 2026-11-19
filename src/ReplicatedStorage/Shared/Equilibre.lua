@@ -66,6 +66,22 @@ E.GEAR = {
 	["Turban de lin"] = { add = { linen_thread = 1 } }, -- même recette que la Tunique
 }
 
+-- 5. équipement : une rareté doit valoir son prix (avant : rareté 4 ≈ 4 × le coût de la 3 pour +1,6
+--    de stat). Minimum de stats totales par rareté ; la stat principale reçoit la différence.
+E.RARITY_FLOOR = { [3] = 8, [4] = 12 }
+-- la Discrétion (voie Hors-la-loi) n'était que sur 37 pièces : les pièces furtives par nature en gagnent
+E.STEALTHY = { "Capuche", "Cape", "Masque", "Dague", "Gants", "Bottes souples", "Manteau sombre", "Cagoule" }
+-- 6. pièces de maître (artisanat 40 à 50 : avant, plus rien à débloquer après 37). Matières rares qui
+--    ne servaient presque pas. { emplacement, nom, rareté, stats, ingrédients, niveau, power, visual }
+E.MASTER = {
+	{ "trinket", "Pierre-cœur lumineuse", 4, { vie = 7, chance = 5, defense = 3 }, { glowstone = 2, ancient_root = 1, silver_ingot = 2 }, 40 },
+	{ "weapon", "Lame du météore", 4, { force = 9, chance = 4, vitesse = 3 }, { steel = 4, meteorite = 2, gold_ingot = 1, leather = 2 }, 42, power = 13, visual = "10" },
+	{ "armor", "Cuirasse des anciens", 4, { defense = 11, vie = 5 }, { steel = 6, carved_stone = 2, enchanted_cloth = 1 }, 44 },
+	{ "hat", "Couronne retrouvée", 4, { charisme = 9, chance = 5, vie = 2 }, { lost_crown = 1, gold_ingot = 2, pearl = 2 }, 46 },
+	{ "trinket", "Voile de l'ombre", 4, { discretion = 10, vitesse = 5 }, { enchanted_cloth = 2, night_flower = 3, soft_leather = 2 }, 48 },
+	{ "weapon", "Arc de givre", 4, { chance = 8, vitesse = 6, force = 2 }, { frost_crystal = 1, oak_log = 3, linen_thread = 4, diamond = 1 }, 50, power = 12, visual = "11" },
+}
+
 -- 2. métier requis : item -> { compétence, niveau } (seulement si la recette n'en demande pas déjà)
 E.GATES = {
 	steel = { "minage", 15 },
@@ -163,6 +179,48 @@ function E.apply(C)
 				end
 				note("équipement " .. r.gear.name)
 			end
+		end
+	end
+	-- 5. équipement : plancher de stats par rareté, discrétion des pièces furtives
+	for _, r in R do
+		local g = r.gear
+		if g and g.stats then
+			local total, best, bv = 0, nil, -1
+			for st, v in g.stats do
+				total += v
+				if v > bv then
+					best, bv = st, v
+				end
+			end
+			local floor = E.RARITY_FLOOR[g.rarity or 1]
+			if floor and best and total < floor then
+				g.stats[best] += floor - total
+				note("stats " .. g.name .. " " .. total .. "→" .. floor)
+			end
+			if not g.stats.discretion then
+				for _, word in E.STEALTHY do
+					if string.find(g.name, word, 1, true) then
+						g.stats.discretion = 1 + (g.rarity or 1)
+						note("discrétion " .. g.name)
+						break
+					end
+				end
+			end
+		end
+	end
+	-- 6. pièces de maître
+	for _, m in E.MASTER do
+		local exists = false
+		for _, r in R do
+			if r.gear and r.gear.name == m[2] then
+				exists = true
+				break
+			end
+		end
+		if not exists and known(C, m[5]) then
+			table.insert(R, { gear = { slot = m[1], name = m[2], rarity = m[3], stats = table.clone(m[4]), power = m.power, visual = m.visual },
+				needs = table.clone(m[5]), station = "bench", cat = "equipement", skill = { "artisanat", m[6] } })
+			note("maître " .. m[2])
 		end
 	end
 	-- 2. métiers
