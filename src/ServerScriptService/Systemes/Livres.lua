@@ -134,9 +134,12 @@ function Livres.animaux(player: Player)
 				end
 				local a = kind and G.Config.ANIMALS[kind]
 				local name = a and a.name or "Bête"
-				farm[name] = farm[name] or { n = 0, ready = 0, where = {} }
+				farm[name] = farm[name] or { n = 0, ready = 0, where = {}, best = 0, sum = 0 }
 				local f = farm[name]
 				f.n += 1
+				local rend = G.Animals and rawget(G.Animals, "yieldOf") and G.Animals.yieldOf({ id = id, state = st }) or 1
+				f.sum += rend
+				f.best = math.max(f.best, rend)
 				if st.product then
 					f.ready += 1
 				end
@@ -150,7 +153,8 @@ function Livres.animaux(player: Player)
 		for _ in f.where do
 			regions += 1
 		end
-		table.insert(lines, { t = string.format("🐄 %s × %d", name, f.n), x = string.format("%s · %d région(s).", f.ready > 0 and (f.ready .. " produit(s) à récolter") or "rien à récolter pour l'instant", regions) })
+		table.insert(lines, { t = string.format("🐄 %s × %d", name, f.n), x = string.format("%s · %d région(s) · lignée moyenne %d %%, meilleure %d %%.",
+			f.ready > 0 and (f.ready .. " produit(s) à récolter") or "rien à récolter pour l'instant", regions, math.floor(f.sum / f.n * 100 + 0.5), math.floor(f.best * 100 + 0.5)) })
 	end
 	local C = G.Compagnons and rawget(G.Compagnons, "recordsOf")
 	for _, rec in (C and C(pid)) or {} do

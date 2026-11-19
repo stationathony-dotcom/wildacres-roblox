@@ -26,12 +26,33 @@ local function find(id: string)
 	return nil
 end
 
+-- Lignées (19/11, « à ne pas oublier » § 7 Élevage) : chaque bête de ferme a son RENDEMENT
+-- (0,8 à 1,5), tiré de son identifiant pour les bêtes achetées, HÉRITÉ des deux parents pour une
+-- naissance (moyenne ± un peu, la compétence d'élevage aide). Au-dessus de 1 : chance d'un produit
+-- de plus à chaque récolte ; au-dessous : chance d'un de moins.
+function Animals.yieldOf(a): number
+	local st = a.state or a
+	if type(st.rend) == "number" then
+		return st.rend
+	end
+	local h = 11
+	for i = 1, #tostring(a.id or "") do
+		h = (h * 131 + string.byte(tostring(a.id), i)) % 2147483647
+	end
+	return math.floor((0.9 + Random.new(h):NextNumber() * 0.2) * 100 + 0.5) / 100
+end
+local function yieldStars(r: number): string
+	return r >= 1.3 and "★★★★" or r >= 1.12 and "★★★" or r >= 0.96 and "★★" or "★"
+end
+Animals.yieldStars = yieldStars
+
 local function refreshPrompt(a)
 	local k = Config.ANIMALS[a.kind]
 	local ready = a.state.product
 	local stolen = a.owner and not G.Util.isPlayerId(a.owner)
 	a.prompt.Enabled = ready
 	a.prompt.ActionText = Config.PRODUCT_VERB[k.product] .. (stolen and " (vol)" or "")
+	a.prompt.ObjectText = k.name .. " " .. yieldStars(Animals.yieldOf(a))
 	if a.sparkle then
 		a.sparkle.Enabled = ready
 	end
@@ -189,6 +210,13 @@ function Animals.collect(player: Player, id: string)
 		n = 2
 	end
 	n += (a.state.abri and 1 or 0) + (a.state.soin and 1 or 0)
+	-- lignée : une bonne bête donne parfois plus, une moins bonne parfois moins
+	local rend = Animals.yieldOf(a)
+	if rend > 1 and math.random() < (rend - 1) * 2 then
+		n += 1
+	elseif rend < 1 and math.random() < (1 - rend) * 2 then
+		n = math.max(1, n - 1)
+	end
 	G.Joueurs.add(player, k.product, n)
 	if not stolen and G.Quetes and rawget(G.Quetes, "note") then
 		G.Quetes.note(player, "collecter", k.product, n)
@@ -427,9 +455,16 @@ local function breed()
 	for _, list in groups do
 		for i = 1, #list - 1, 2 do
 			local parent = list[i]
+			local other = list[i + 1]
 			if math.random() < BREED_CHANCE and Animals.ownedBy(parent.owner) < Animals.capacity(parent.owner) then
 				local pos = parent.pos + Vector3.new(math.random(-3, 3), 0, math.random(-3, 3))
-				if addOwned(parent.reg, parent.kind, pos, parent.owner, parent.pen) then
+				local baby = addOwned(parent.reg, parent.kind, pos, parent.owner, parent.pen)
+				if baby then
+					local pl0 = G.Util.playerOf(parent.owner)
+					local skill = pl0 and (G.Joueurs.skill(pl0, "elevage") or 0) or 0
+					local r = (Animals.yieldOf(parent) + Animals.yieldOf(other)) / 2 + (math.random() - 0.45) * 0.12 + math.min(0.03, skill * 0.0006)
+					baby.state.rend = math.clamp(math.floor(r * 100 + 0.5) / 100, 0.8, 1.5)
+					refreshPrompt(baby)
 					born += 1
 					local pl = G.Util.playerOf(parent.owner)
 					if pl then
