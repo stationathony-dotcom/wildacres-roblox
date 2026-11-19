@@ -17,6 +17,8 @@ Branche de travail `mission/wildacres`, créée depuis `d30b9ea`. La racine du p
 
 ## Journal et problèmes
 
+- 19/11. Ajout des grenouilles qui bondissent dans les marais. Test Studio Edit réussi sur un sol simulé pour la limite de population, l’exclusion de l’eau, l’animation et le retrait hors du biome. Build Rojo réussi.
+
 - 19/11. Ajout des marmottes à la faune diurne de toundra. Studio Edit a validé le modèle, le plafond de deux animaux, le biome, le retrait sous la pluie et le cycle jour/nuit. Build Rojo réussi.
 
 - 19/11. Ajout du pichet en céramique dans les décorations fabricables au four. Vérification Studio Edit de la recette unique et du modèle plaçable réussie. Build Rojo réussi.

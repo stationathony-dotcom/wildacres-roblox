@@ -1901,7 +1901,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [ ] (400) Papillons
 - [ ] (401) Abeilles
 - [ ] (402) Libellules
-- [ ] (403) Grenouilles
+- [x] (403) Grenouilles
 - [ ] (404) Tortues
 - [ ] (405) Poissons
 - [ ] (406) Oiseaux
