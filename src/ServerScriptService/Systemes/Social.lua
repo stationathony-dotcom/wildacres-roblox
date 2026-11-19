@@ -38,6 +38,23 @@ local TITLES = {
 	{ id = "explorateur", name = "Explorateur", test = function(p)
 		return (p.stats.discovered or 0) >= 1
 	end },
+	-- collections du 19/11 : plantes sauvages, antiquités étudiées, recettes connues
+	{ id = "herboriste", name = "Herboriste", test = function(p)
+		return Social.count(p, "herbs") >= 8
+	end },
+	{ id = "antiquaire", name = "Antiquaire", test = function(p)
+		return Social.count(p, "trouvailles") >= 6
+	end },
+	{ id = "conservateur", name = "Conservateur de musée", test = function(p)
+		return Social.count(p, "trouvailles") >= 10
+	end },
+	{ id = "encyclopediste", name = "Encyclopédiste", test = function(p)
+		local n = 0
+		for _ in p.known or {} do
+			n += 1
+		end
+		return n >= 150
+	end },
 	{ id = "notoire", name = "Hors-la-loi notoire", test = function(p)
 		return (p.stats.maxBounty or 0) >= 500
 	end },
