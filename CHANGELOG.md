@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Règle « pas de zombies ni de squelettes » rétablie** : la production de nuit avait remis des squelettes errants, squelettes anciens et goules dans les apparitions de nuit et des grottes — remplacés par des créatures originales (ombre rampante, marcheur sans visage, esprit des ruines, troll des cavernes) ; le chevalier oublié n'est plus squelettique
 - **Quêtes** : trois sortes de plus tirées au tableau — bâtir (poser 10 à 30 pièces : palissade, pont, abri…), apprivoiser une bête (compagnon ou monture), livrer un recherché à la justice (prime) ; 16 sortes sur une île
 - **Villes de joueurs** : avec une **Charte de ville** (établi : planches, pierre, cordes, encre ; commerce 10), « /fonder <nom> » fonde une ville là où l'on se tient (à plus de 320 studs des villages et des autres villes, nom filtré) ; son nom s'affiche en haut de l'écran ; des **habitants PNJ s'y installent, un par lit posé** dans la ville (le lendemain matin), remplacés s'ils disparaissent ; /villes ; succès Fondateur (banc `villes` ; l'arrivée des habitants reste à voir en Play)
 - **Talents de maître** (choix exclusifs) : au 4e palier de chaque voie, deux talents dont on ne prend qu'un — Fantôme ou Cavaleur, Terre riche ou Marchand-né, Chef de meute ou Cavalier émérite, Mains d'or ou Veine du mineur, Colosse ou Traqueur ; « Oublier les talents » permet de changer ; arbre agrandi (banc `talents`)

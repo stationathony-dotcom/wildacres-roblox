@@ -226,7 +226,7 @@ local KINDS = {
 		loot = { { "relic_fragment", 1, 1, 0.5 } }, gold = 2 },
 	possessed_shade = { name = "Ombre possédée", form = "spectre", look = { "N", "R" }, hp = 170, dmg = 24, speed = 14, level = 6, style = "charge", radius = 1.3, night = true, fearsLight = true,
 		loot = { { "bone", 1, 2, 0.5 } }, gold = 2 },
-	forgotten_knight = { name = "Chevalier oublié", form = "humain", look = { "P", "PC", weapon = "epee", helmet = true, squelette = true }, hp = 360, dmg = 32, speed = 11, level = 8, style = "charge", radius = 1.5, night = true, elite = true,
+	forgotten_knight = { name = "Chevalier oublié", form = "humain", look = { "P", "PC", weapon = "epee", helmet = true }, hp = 360, dmg = 32, speed = 11, level = 8, style = "charge", radius = 1.5, night = true, elite = true,
 		loot = { { "steel", 1, 2, 0.6 } }, gold = 5 },
 	cave_bat = { name = "Chauve-souris des cavernes", form = "volant", look = { "N", "R", chauvesouris = true }, hp = 50, dmg = 10, speed = 16, level = 2, style = "charge", radius = 1.1, flies = true, night = true,
 		loot = { { "bone", 1, 1, 0.3 } } },
@@ -311,11 +311,11 @@ local DAY = {
 	marais = { "freshwater_jellyfish", "leech", "leech", "bog_lizard", "swamp_boar", "mud_man", "water_snake", "swamp_goblin", "reed_spider", "mud_golem", "smuggler", "river_serpent", "monster_eel", "ancient_turtle", "giant_crab", "hostile_siren", "kelpie", "lake_guardian", "earth_colossus" },
 }
 local NIGHT = {
-	prairie = { "assassin", "fallen_king", "skeleton", "skeleton", "ghoul", "revenant", "giant_crow", "ghost_knight", "shadow_wolf", "faceless_walker", "ghost_crow", "creeping_shadow", "fallen_monk", "dark_prowler", "wandering_spectre", "night_howler", "tomb_warden", "forgotten_knight" },
-	foret = { "assassin", "skeleton", "ghoul", "spectral_stag", "giant_crow", "revenant", "tree_spirit", "shadow_wolf", "ancient_skeleton", "ghost_crow", "moon_hunter", "night_stalker", "woods_spirit", "spectral_owl" },
-	desert = { "fallen_king", "skeleton", "dune_spectre", "dune_spectre", "ghoul", "mummy", "ancient_skeleton", "creeping_shadow", "ruin_spirit", "cursed_warden", "light_eater" },
-	neige = { "blizzard_spectre", "skeleton", "revenant", "spectral_fox", "faceless_walker", "possessed_shade", "night_howler" },
-	marais = { "swamp_witch", "drowned_spirit", "drowned_spirit", "ghoul", "creeping_shadow", "fallen_monk", "water_spirit", "possessed_shade" },
+	prairie = { "assassin", "fallen_king", "creeping_shadow", "creeping_shadow", "faceless_walker", "revenant", "giant_crow", "ghost_knight", "shadow_wolf", "faceless_walker", "ghost_crow", "creeping_shadow", "fallen_monk", "dark_prowler", "wandering_spectre", "night_howler", "tomb_warden", "forgotten_knight" },
+	foret = { "assassin", "creeping_shadow", "faceless_walker", "spectral_stag", "giant_crow", "revenant", "tree_spirit", "shadow_wolf", "ruin_spirit", "ghost_crow", "moon_hunter", "night_stalker", "woods_spirit", "spectral_owl" },
+	desert = { "fallen_king", "creeping_shadow", "dune_spectre", "dune_spectre", "faceless_walker", "mummy", "ruin_spirit", "creeping_shadow", "ruin_spirit", "cursed_warden", "light_eater" },
+	neige = { "blizzard_spectre", "creeping_shadow", "revenant", "spectral_fox", "faceless_walker", "possessed_shade", "night_howler" },
+	marais = { "swamp_witch", "drowned_spirit", "drowned_spirit", "faceless_walker", "creeping_shadow", "fallen_monk", "water_spirit", "possessed_shade" },
 }
 local RARE = { prairie = "cyclops", foret = "ogre", desert = "minotaur", neige = "cave_bear", marais = "ogre" }
 Bestiaire.DAY, Bestiaire.NIGHT, Bestiaire.RARE = DAY, NIGHT, RARE -- lus par le banc de référence
@@ -382,9 +382,9 @@ function Bestiaire.signature(seed: number, theme): string?
 	return all[G.WG.hash(seed, "signature") % #all + 1]
 end
 Bestiaire.CAVE = {
-	prairie = { "giant_bat", "cave_spider", "skeleton", "slime_blue", "stone_golem" },
+	prairie = { "giant_bat", "cave_spider", "cave_troll", "slime_blue", "stone_golem" },
 	foret = { "giant_bat", "cave_spider", "cave_spider", "myconid", "cave_bear", "cave_bat" },
-	desert = { "giant_bat", "desert_spider", "beetle", "skeleton", "stone_golem" },
+	desert = { "giant_bat", "desert_spider", "beetle", "cave_troll", "stone_golem" },
 	neige = { "giant_bat", "frost_spider", "ice_golem", "cave_bear" },
 	marais = { "giant_bat", "leech", "mud_man", "drowned_spirit" },
 }

@@ -1,5 +1,5 @@
 -- Créatures du monde : monstres par biome (bondissent, crachent, chargent, tirent), monstres de NUIT
--- (zombies, squelettes : ils brûlent à l'aube), bêtes NEUTRES (ripostent si on les frappe) et animaux
+-- (créatures originales, pas de zombies ni de squelettes : elles s'effacent à l'aube), bêtes NEUTRES (ripostent si on les frappe) et animaux
 -- SAUVAGES (fuient, se chassent pour la viande et le cuir), trois boss dans leurs antres (2 phases).
 -- Chaque attaque est annoncée (pose) pour pouvoir esquiver. Plus on s'éloigne du départ, plus c'est dur.
 -- loot = { {objet, min, max, chance} } ; xp = expérience gagnée.

@@ -18,7 +18,7 @@ local function check(name, ok)
 	end
 	table.insert(out, (ok and "OK   " or "ÉCHEC ") .. name)
 end
-local prof = { col = { creatures = { wolf = true, boar = true, skeleton = true } } }
+local prof = { col = { creatures = { wolf = true, boar = true, creeping_shadow = true } } }
 local sent
 local G = {
 	Config = Config,
@@ -41,7 +41,7 @@ check(string.format("compte : 3 sur %d", total), sent and sent.sous:find("3 cré
 check("triées par niveau", sent and sent.lignes[1].t:find("niveau 1") ~= nil or sent.lignes[1].t:find("niveau 2") ~= nil)
 local all = sent and (sent.lignes[1].t .. sent.lignes[1].x .. sent.lignes[2].x .. sent.lignes[3].x) or ""
 check("butin nommé", all:find("Laisse") ~= nil)
-check("lieu de vie (squelette la nuit)", all:find("nuit") ~= nil)
+check("lieu de vie (ombre rampante la nuit)", all:find("nuit") ~= nil)
 check("lieu de vie des créatures d'origine (loup)", not all:find("lieux secrets"))
 prof.col.creatures = {}
 L.bestiaire({})
@@ -49,7 +49,7 @@ check("aucune créature : pages blanches", sent.lignes[1].t:find("blanches") ~= 
 mod:Destroy()
 f:Destroy()
 local ls = {}
-for _, l in (function() prof.col.creatures = { wolf = true, skeleton = true } L.bestiaire({}) return sent.lignes end)() do
+for _, l in (function() prof.col.creatures = { wolf = true, creeping_shadow = true } L.bestiaire({}) return sent.lignes end)() do
 	table.insert(ls, l.t .. " — " .. l.x)
 end
 return fails .. " échec(s)\n" .. table.concat(out, "\n") .. "\n\n" .. table.concat(ls, "\n")
