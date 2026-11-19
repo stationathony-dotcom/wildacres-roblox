@@ -170,6 +170,29 @@ E.JEWELS = {
 	{ "trinket", "Cœur minéral serti", 4, { vie = 8, defense = 4 }, { mineral_heart = 1, precious_ingot = 1, ancient_crystal = 1 }, 38 },
 }
 
+-- 14. ARMES DE JET ET MONTURE (19/11) : objets neufs { id, nom, icône, prix, recette, quantité, atelier, niveau }
+--     Munitions des armes de jet (Combat.shoot lit piece.ammo) ; harnachement : dans le sac, il augmente
+--     l'allure de la monture (Horses.mount : E.TACK).
+E.NEW_ITEMS = {
+	{ "javelin", "Javelot", "🔱", 6, { planks = 1, iron_ingot = 1, feather = 1 }, 4, "bench", 6 },
+	{ "throwing_knife", "Couteau de lancer", "🔪", 5, { iron_ingot = 1 }, 6, "anvil", 8 },
+	{ "saddle_leather", "Selle de cuir", "🐎", 120, { leather = 4, buckle = 2, wool_cloth = 1 }, 1, "tannery", 6 },
+	{ "saddle_race", "Selle de course", "🏇", 320, { soft_leather = 3, silver_ingot = 1, buckle = 2 }, 1, "tannery", 18 },
+	{ "stirrups", "Étriers", "🔗", 80, { iron_ingot = 2, leather_strap = 2 }, 1, "anvil", 8 },
+}
+E.TACK = { saddle_race = 1.15, saddle_leather = 1.08 } -- la meilleure selle compte ; étriers en plus
+E.STIRRUPS = 1.05
+-- armes de jet (emplacement Arme, tir à distance) : { nom, rareté, stats, dégâts, munition, ingrédients, niveau }
+E.RANGED_GEAR = {
+	{ "Fronde", 1, { chance = 2, vitesse = 1 }, 3, "stone", { leather = 1, rope = 1 }, 0 },
+	{ "Fronde de berger renforcée", 2, { chance = 3, vitesse = 2 }, 5, "stone", { soft_leather = 1, linen_thread = 2 }, 8 },
+	{ "Couteaux de lancer", 2, { discretion = 3, vitesse = 3 }, 5, "throwing_knife", { leather_strap = 2, iron_ingot = 1 }, 10 },
+	{ "Javelots de chasse", 2, { force = 3, vitesse = 3 }, 6, "javelin", { oak_log = 1, leather = 1 }, 10 },
+	{ "Javelots de guerre", 3, { force = 6, vitesse = 3 }, 8, "javelin", { steel = 1, oak_log = 1, leather = 1 }, 20 },
+	{ "Baudrier du lanceur de couteaux", 3, { discretion = 6, vitesse = 3 }, 7, "throwing_knife", { soft_leather = 2, steel = 1 }, 22 },
+}
+E.AMMO_NAME = { stone = "Pierre", javelin = "Javelot", throwing_knife = "Couteau de lancer", arrow = "Flèche" }
+
 -- effets fixés à la main quand le nom du plat dit autre chose que ses ingrédients
 E.MEALS = { vigor_elixir = { "force", 3 } }
 
@@ -292,6 +315,23 @@ function E.apply(C)
 			table.insert(R, { gear = { slot = m[1], name = m[2], rarity = m[3], stats = table.clone(m[4]), power = m.power, visual = m.visual },
 				needs = table.clone(m[5]), station = "bench", cat = "equipement", skill = { "artisanat", m[6] } })
 			note("maître " .. m[2])
+		end
+	end
+	-- 14. objets neufs (munitions, harnachement)
+	for _, x in E.NEW_ITEMS do
+		local id, name, icon, price, needs, count, station, level = table.unpack(x)
+		if not I[id] and known(C, needs) then
+			I[id] = { name = name, icon = icon, price = price }
+			table.insert(R, { item = id, needs = table.clone(needs), count = count > 1 and count or nil, station = station, cat = "outils", skill = level > 0 and { "artisanat", level } or nil })
+			note("nouvel objet " .. id)
+		end
+	end
+	for _, x in E.RANGED_GEAR do
+		local name, rarity, stats, power, ammo, needs, level = table.unpack(x)
+		if I[ammo] and known(C, needs) then
+			table.insert(R, { gear = { slot = "weapon", name = name, rarity = rarity, stats = table.clone(stats), power = power, visual = "2", ranged = true, ammo = ammo },
+				needs = table.clone(needs), station = "bench", cat = "equipement", skill = level > 0 and { "artisanat", level } or nil })
+			note("arme de jet " .. name)
 		end
 	end
 	-- 7. rien sans usage

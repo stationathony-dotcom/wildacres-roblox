@@ -28,8 +28,8 @@
 5. **En partie fait le 19/11** : les stats suivent maintenant la famille de la matière, et les bêtes du froid tiennent chaud. Les armes au venin empoisonnent et celles de givre ralentissent (`Combat` : weaponEffect). Reste la forme identique (visuel). — **Des pièces de créatures en double.** Il y a 15 « Collier de crocs de [bête] » et 8 « Lame venimeuse de [bête] », avec la même forme et presque les mêmes stats. Deux façons de corriger :
    - les regrouper par famille et par palier (crocs de petite bête, de grande bête, de bête légendaire) ;
    - ou donner à chacune un effet propre (venin, givre, saignement).
-6. **Armes absentes** : armes de jet (javelots, haches de jet), harpon de pêche, fronde. Il n'y a qu'un type de munition : il manque des flèches de fer ou barbelées.
-7. **Monture et compagnon** : pas de selle ni de caparaçon à équiper. Le collier de chien n'a aucune stat.
+6. **En partie fait le 19/11** : frondes, couteaux de lancer, javelots (munitions propres). Restent harpon et flèches de fer. — **Armes absentes** : armes de jet (javelots, haches de jet), harpon de pêche, fronde. Il n'y a qu'un type de munition : il manque des flèches de fer ou barbelées.
+7. **En partie fait le 19/11** : selles et étriers (allure). Restent caparaçon et équipement de compagnon. — **Monture et compagnon** : pas de selle ni de caparaçon à équiper. Le collier de chien n'a aucune stat.
 8. **Vérifié le 19/11** : `Combat.damageOf` prend le plus fort des deux (arme tenue en main ou arme portée), et les échelles se tiennent (épée d'acier 80, de diamant 110 ; arme portée de rareté 4 : 120-130). Rien de cassé, mais c'est déroutant : à terme, ne garder les épées-outils que comme outils. — **Deux systèmes d'arme en parallèle.** Les épées-outils (`sword`, `sword_fe`, `sword_steel`, `sword_diamond` dans `Config`, avec `weapon = dégâts`) coexistent avec l'emplacement Arme de l'équipement. Il faut vérifier lesquels comptent au combat, et n'en garder qu'un.
 
 ## Visuels à retravailler (par priorité)

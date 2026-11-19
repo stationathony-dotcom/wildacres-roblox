@@ -97,6 +97,9 @@ function G.describe(item): string
 	if req then
 		made ..= " · requiert " .. (req[4] or G.STATS[req[1]] or req[1]) .. " " .. req[2]
 	end
+	if item.ammo and okE and Eq.AMMO_NAME then
+		made ..= " · arme de jet (" .. (Eq.AMMO_NAME[item.ammo] or item.ammo) .. ")"
+	end
 	if item.effect and okE and Eq.EFFECT_TEXT then
 		made ..= " · " .. (Eq.EFFECT_TEXT[item.effect] or item.effect)
 	end

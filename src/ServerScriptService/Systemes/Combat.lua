@@ -215,8 +215,18 @@ function Combat.shoot(player: Player, targetId: string?)
 		return
 	end
 	-- munitions : flèches, sinon carreaux (19/11 : les carreaux n'avaient aucun usage)
-	if not G.Joueurs.take(player, "arrow", 1) and not G.Joueurs.take(player, "bolt", 1) and not G.Joueurs.take(player, "bolt_heavy", 1) then
-		G.Util.toast(player, "🏹 Plus de flèches. (Établi : bois, silex et plume.)")
+	-- arme de jet (Shared/Equilibre) : sa propre munition (pierres, javelots, couteaux) ; sinon flèches puis carreaux
+	local w = rangedWeapon(player)
+	local ammoOf = w and w.ammo
+	local hasAmmo
+	if ammoOf then
+		hasAmmo = G.Joueurs.take(player, ammoOf, 1)
+	else
+		hasAmmo = G.Joueurs.take(player, "arrow", 1) or G.Joueurs.take(player, "bolt", 1) or G.Joueurs.take(player, "bolt_heavy", 1)
+	end
+	if not hasAmmo then
+		local names = { stone = "🪨 Plus de pierres pour la fronde.", javelin = "🔱 Plus de javelots. (Établi : planche, fer et plume.)", throwing_knife = "🔪 Plus de couteaux de lancer. (Enclume : fer.)" }
+		G.Util.toast(player, names[ammoOf or ""] or "🏹 Plus de flèches. (Établi : bois, silex et plume.)")
 		return
 	end
 	local char = player.Character
