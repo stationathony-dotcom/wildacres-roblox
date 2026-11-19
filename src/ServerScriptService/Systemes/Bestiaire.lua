@@ -258,7 +258,10 @@ local KINDS = {
 		loot = { { "fish_1", 1, 2, 0.5 } }, gold = 1 },
 	hostile_siren = { name = "Sirène hostile", form = "spectre", look = { "BL", "V" }, hp = 180, dmg = 22, speed = 12, level = 6, style = "spore", radius = 1.3, proj = { color = Color3.fromRGB(200, 200, 230), size = 0.8 },
 		loot = { { "relic_fragment", 1, 1, 0.3 } }, gold = 3 },
-	-- 19/11 (« listes ennemi.txt », reste) : assassin, roi déchu, méduse des marais
+	-- 19/11 (« listes ennemi.txt », reste) : assassin, roi déchu, méduse des marais, esprit de l'orage
+	-- (ce dernier n'apparaît que pendant un orage : Evenements « orage »)
+	storm_wraith = { name = "Esprit de l'orage", form = "spectre", look = { "BL", "W", scale = 1.3 }, hp = 420, dmg = 32, speed = 16, level = 7, style = "charge", radius = 1.6, elite = true,
+		loot = { { "glowstone", 1, 2, 0.8 }, { "ancient_crystal", 1, 1, 0.25 } }, gold = 6 },
 	assassin = { name = "Assassin de l'ombre", form = "humain", look = { "N", "N", weapon = "epee", hood = true }, hp = 200, dmg = 34, speed = 17, level = 6, style = "charge", radius = 1.2, night = true,
 		loot = { { "coin_purse", 1, 1, 0.5 }, { "lockpick", 1, 2, 0.4 } }, gold = 4 },
 	fallen_king = { name = "Roi déchu", form = "spectre", look = { "PC", "BL", weapon = "epee", helmet = true, scale = 1.4 }, hp = 900, dmg = 40, speed = 11, level = 9, style = "charge", radius = 1.8, night = true, elite = true,

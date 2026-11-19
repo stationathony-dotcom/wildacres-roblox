@@ -329,6 +329,44 @@ local function startBoss()
 	return true
 end
 
+-- Créature attirée par l'orage (19/11) : pendant un orage, un éclair « fait lever » un esprit de
+-- l'orage près d'un joueur ; il se dissipe avec la pluie (8 min) s'il n'est pas vaincu.
+local function startStorm()
+	if not (G.Meteo and G.Meteo.kind and G.Meteo.kind() == "orage") then
+		return false
+	end
+	local pos, reg = spotIn(nil, 50, 90)
+	if not pos then
+		return false
+	end
+	local en = G.Enemies.spawn(reg, { id = "orage#" .. G.world.day .. "#" .. math.random(1, 1e6), kind = "storm_wraith", x = pos.X, z = pos.Z }, reg.enemyFolder)
+	if not en then
+		return false
+	end
+	en.transient = true
+	G.Util.sfx("coup", pos)
+	table.insert(active, { kind = "boss", en = en, name = "L'esprit de l'orage", untilT = os.clock() + 480 })
+	nearby(pos, 160, "⚡ Un éclair frappe le sol tout près… et quelque chose s'en relève.")
+	return true
+end
+
+-- Réveil d'un golem (19/11) : un colosse de pierre s'arrache du sol, loin des villages ; il se
+-- rendort au bout de 10 min s'il n'est pas abattu (butin de colosse : pierre, minerai, cœur).
+local function startGolem()
+	local pos, reg = spotIn(nil, 70, 130)
+	if not pos or (reg.plan.poi and reg.plan.poi.kind == "village") then
+		return false
+	end
+	local en = G.Enemies.spawn(reg, { id = "golem#" .. G.world.day .. "#" .. math.random(1, 1e6), kind = "stone_golem", x = pos.X, z = pos.Z }, reg.enemyFolder)
+	if not en then
+		return false
+	end
+	en.transient = true
+	table.insert(active, { kind = "boss", en = en, name = "Le colosse de pierre", untilT = os.clock() + 600 })
+	nearby(pos, 200, "Les rochers grondent : un colosse de pierre s'arrache du sol !")
+	return true
+end
+
 Evenements.handlers = {
 	crystal = function(player, prompt)
 		local item, n = prompt.Parent:GetAttribute("Item"), prompt.Parent:GetAttribute("N") or 1
@@ -372,7 +410,8 @@ Evenements.handlers = {
 
 -- Studio / tests : force un événement ("fair", "invasion", "crystals", "convoy", "flood", "boss")
 function Evenements.force(kind: string)
-	local f = ({ fair = startFair, invasion = startInvasion, crystals = startCrystals, convoy = startConvoy, flood = startFlood, boss = startBoss })[kind]
+	local f = ({ fair = startFair, invasion = startInvasion, crystals = startCrystals, convoy = startConvoy, flood = startFlood, boss = startBoss,
+		orage = startStorm, golem = startGolem })[kind]
 	return f and f() or false
 end
 
@@ -473,8 +512,12 @@ function Evenements.step(dt: number)
 		return
 	end
 	local night = G.Clock.isNight()
-	local options = night and { startInvasion, startBoss, startCrystals, startFlood } or { startFair, startBoss, startCrystals, startConvoy, startFlood }
+	local options = night and { startInvasion, startBoss, startCrystals, startFlood, startGolem } or { startFair, startBoss, startCrystals, startConvoy, startFlood, startGolem }
 	local f = options[math.random(1, #options)]
+	-- un orage gronde : une fois sur deux, c'est lui qui attire quelque chose
+	if G.Meteo and G.Meteo.kind and G.Meteo.kind() == "orage" and math.random() < 0.5 then
+		f = startStorm
+	end
 	local ok, res = pcall(f)
 	if ok and res then
 		lastEventDay = G.world.day

@@ -291,6 +291,8 @@ P.KINDS = {
 		gear = { slot = "armor", name = "Tunique de soie d'araignée géante", rarity = 1, stats = { defense = 2, vie = 2 } } },
 	stone_golem = { mat = "prise_stone_golem", name = "Cœur de colosse de pierre", icon = "💠", price = 126, rank = "E", level = 8, n = 2, needs = { leather = 3, rope = 1 }, station = "tannery", skill = 16,
 		gear = { slot = "armor", name = "Plastron de cœur de colosse de pierre", rarity = 3, stats = { defense = 5, vie = 5 } } },
+	storm_wraith = { mat = "prise_storm_wraith", name = "Essence d'esprit de l'orage", icon = "👻", price = 111, rank = "E", level = 7, n = 2, needs = { rope = 1, copper_ingot = 1 }, station = "bench", skill = 14,
+		gear = { slot = "trinket", name = "Talisman d'essence d'esprit de l'orage", rarity = 3, stats = { force = 5, discretion = 4 } } },
 	stray_dog = { mat = "prise_stray_dog", name = "Croc de chien errant", icon = "🦴", price = 11, rank = "-", level = 1, n = 3, needs = { rope = 1, copper_ingot = 1 }, station = "bench", skill = 2,
 		gear = { slot = "trinket", name = "Collier de crocs de chien errant", rarity = 1, stats = { force = 1, vitesse = 1 } } },
 	swamp_boar = { mat = "prise_swamp_boar", name = "Défense de sanglier des marécages", icon = "🐗", price = 26, rank = "-", level = 4, n = 3, needs = { iron_ingot = 2, planks = 1 }, station = "anvil", skill = 8,
