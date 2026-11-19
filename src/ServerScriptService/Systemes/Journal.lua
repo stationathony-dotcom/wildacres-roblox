@@ -90,8 +90,13 @@ function Journal.check(player: Player)
 		-- endurcit le voyageur (vitesse et chance, par la pratique)
 		G.Social.bump(player, "lieux")
 		local dec = G.Joueurs.talent(player, "decouvreur")
-		G.Joueurs.addStatXp(player, "vitesse", dec > 0 and 50 or 25)
-		G.Joueurs.addStatXp(player, "chance", dec > 0 and 20 or 10)
+		-- expédition (19/11) : découvert avec un membre du groupe à moins de 60 studs = +50 %
+		local exp = (G.Social and rawget(G.Social, "groupBonus") and G.Social.groupBonus(player) > 1) and 1.5 or 1
+		G.Joueurs.addStatXp(player, "vitesse", math.floor((dec > 0 and 50 or 25) * exp))
+		G.Joueurs.addStatXp(player, "chance", math.floor((dec > 0 and 20 or 10) * exp))
+		if exp > 1 then
+			G.Util.toast(player, "🧭 Découverte en expédition : +50 % d'expérience.")
+		end
 		if dec > 0 then
 			G.Joueurs.add(player, "gold", 20 * dec, true)
 		end
