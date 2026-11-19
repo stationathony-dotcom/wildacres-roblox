@@ -590,6 +590,17 @@ C.BUILD_SHAPES = {
 	-- 18/11 : pièces composées (plusieurs blocs, une seule pièce à poser / reprendre / casser)
 	{ id = "arche", name = "Arche", shape = "arch", size = Vector3.new(4, 4, 0.6), cost = 4, mats = { "pierre", "brique", "taille", "bois" } },
 	{ id = "murcourbe", name = "Mur courbe", shape = "curve", size = Vector3.new(4, 4, 4), cost = 5, mats = { "pierre", "brique", "taille", "bois", "torchis" } },
+	-- 19/11 (« liste items.txt » : escaliers, dômes, toits ronds, murs percés, créneaux)
+	{ id = "escalier", name = "Escalier droit", shape = "stairs", size = Vector3.new(4, 4, 4), cost = 4, mats = { "bois", "pierre", "taille", "brique" } },
+	{ id = "colimacon", name = "Escalier en colimaçon", shape = "spiral", size = Vector3.new(4, 8, 4), cost = 8, mats = { "bois", "pierre", "taille" } },
+	{ id = "dome", name = "Dôme", shape = "dome", size = Vector3.new(4, 2, 4), cost = 5, mats = { "pierre", "taille", "brique", "ardoise", "tuile", "fer", "verre" } },
+	{ id = "toitconique", name = "Toit conique", shape = "cone", size = Vector3.new(4, 4, 4), cost = 5, mats = { "chaume", "ardoise", "tuile", "bardeau", "bois" } },
+	{ id = "murfenetre", name = "Mur avec fenêtre", shape = "windowwall", size = Vector3.new(4, 4, 0.5), cost = 3, mats = { "bois", "pierre", "brique", "rondin", "taille", "torchis", "pise" } },
+	{ id = "murporte", name = "Mur avec porte", shape = "doorwall", size = Vector3.new(4, 4, 0.5), cost = 3, mats = { "bois", "pierre", "brique", "rondin", "taille", "torchis", "pise" } },
+	{ id = "meurtriere", name = "Mur à meurtrière", shape = "slitwall", size = Vector3.new(4, 4, 0.6), cost = 3, mats = { "pierre", "taille", "brique" } },
+	{ id = "pignon", name = "Pignon (mur triangulaire)", shape = "gable", size = Vector3.new(4, 2, 0.5), cost = 2, mats = { "bois", "pierre", "brique", "torchis", "pise", "taille" } },
+	{ id = "creneaux", name = "Créneaux", shape = "battlement", size = Vector3.new(4, 1.6, 0.8), cost = 3, mats = { "pierre", "taille", "brique", "bois" } },
+	{ id = "chapiteau", name = "Chapiteau", shape = "capital", size = Vector3.new(2.2, 1, 2.2), cost = 2, mats = { "pierre", "taille", "bois" } },
 }
 
 -- Formes composées : liste de { taille, décalage } dans le repère de la pièce (centre = 0).
@@ -624,6 +635,119 @@ C.SHAPE_PARTS = {
 		return out
 	end,
 }
+-- 19/11 : une sous-pièce peut porter une 3e valeur, sa forme Roblox : "cyl" (cylindre, axe X) ou
+-- "wedge" (coin). Aide commune : disques empilés (dôme, toit conique), marches, murs percés.
+local VERT = CFrame.Angles(0, 0, math.pi / 2) -- un cylindre debout (son axe X devient vertical)
+local function disc(y: number, d: number, h: number)
+	return { Vector3.new(h, d, d), CFrame.new(0, y, 0) * VERT, "cyl" }
+end
+-- mur percé : une ouverture (largeur w, hauteur h, bas à y0 depuis le pied du mur)
+local function holed(size: Vector3, w: number, h: number, y0: number)
+	local W, H, T = size.X, size.Y, size.Z
+	local base, side = -H / 2, (W - w) / 2
+	local out = {
+		{ Vector3.new(side, H, T), CFrame.new(-W / 2 + side / 2, 0, 0) },
+		{ Vector3.new(side, H, T), CFrame.new(W / 2 - side / 2, 0, 0) },
+	}
+	local top = H - y0 - h
+	if top > 0.01 then
+		table.insert(out, { Vector3.new(w, top, T), CFrame.new(0, base + y0 + h + top / 2, 0) })
+	end
+	if y0 > 0.01 then
+		table.insert(out, { Vector3.new(w, y0, T), CFrame.new(0, base + y0 / 2, 0) })
+	end
+	return out
+end
+C.SHAPE_PARTS.stairs = function(size: Vector3)
+	local out, n = {}, 4
+	local sh, sd = size.Y / n, size.Z / n
+	for k = 0, n - 1 do
+		-- chaque marche va jusqu'au sol : un escalier plein, sans vide dessous
+		local h = sh * (k + 1)
+		table.insert(out, { Vector3.new(size.X, h, sd), CFrame.new(0, -size.Y / 2 + h / 2, size.Z / 2 - sd * (k + 0.5)) })
+	end
+	return out
+end
+C.SHAPE_PARTS.spiral = function(size: Vector3)
+	local out = { { Vector3.new(size.Y, 0.8, 0.8), CFrame.new(0, 0, 0) * VERT, "cyl" } } -- noyau central
+	local n = 12
+	local r = size.X / 2
+	for k = 0, n - 1 do
+		local a = k / n * math.pi * 2
+		local y = -size.Y / 2 + (k + 0.5) * size.Y / n
+		local cf = CFrame.new(0, y, 0) * CFrame.Angles(0, -a, 0) * CFrame.new(r / 2, 0, 0)
+		table.insert(out, { Vector3.new(r, 0.3, 1.2), cf })
+	end
+	return out
+end
+C.SHAPE_PARTS.dome = function(size: Vector3)
+	local out, n = {}, 5
+	local R = size.X / 2
+	local h = size.Y / n
+	for k = 0, n - 1 do
+		local y = (k + 0.5) * h
+		local d = 2 * math.sqrt(math.max(0.05, R * R - (y / size.Y * R) ^ 2))
+		table.insert(out, disc(-size.Y / 2 + y, d, h + 0.02))
+	end
+	return out
+end
+C.SHAPE_PARTS.cone = function(size: Vector3)
+	local out, n = {}, 7
+	local h = size.Y / n
+	for k = 0, n - 1 do
+		local d = math.max(0.3, size.X * (1 - (k + 0.5) / n))
+		table.insert(out, disc(-size.Y / 2 + (k + 0.5) * h, d, h + 0.02))
+	end
+	return out
+end
+C.SHAPE_PARTS.windowwall = function(size: Vector3)
+	return holed(size, 1.6, 1.4, 1.6)
+end
+C.SHAPE_PARTS.doorwall = function(size: Vector3)
+	return holed(size, 1.8, 3, 0)
+end
+C.SHAPE_PARTS.slitwall = function(size: Vector3)
+	return holed(size, 0.35, 1.6, 1.4)
+end
+C.SHAPE_PARTS.gable = function(size: Vector3)
+	-- deux coins dos à dos : un triangle de la largeur du mur
+	local hw = size.X / 2
+	return {
+		-- le côté haut d'un coin est vers son +Z : on le tourne vers le milieu (la pointe du pignon)
+		{ Vector3.new(size.Z, size.Y, hw), CFrame.new(-hw / 2, 0, 0) * CFrame.Angles(0, math.pi / 2, 0), "wedge" },
+		{ Vector3.new(size.Z, size.Y, hw), CFrame.new(hw / 2, 0, 0) * CFrame.Angles(0, -math.pi / 2, 0), "wedge" },
+	}
+end
+C.SHAPE_PARTS.battlement = function(size: Vector3)
+	local baseH = size.Y * 0.45
+	local mh = size.Y - baseH
+	local out = { { Vector3.new(size.X, baseH, size.Z), CFrame.new(0, -size.Y / 2 + baseH / 2, 0) } }
+	for _, x in { -size.X * 0.3, size.X * 0.3 } do
+		table.insert(out, { Vector3.new(size.X * 0.3, mh, size.Z), CFrame.new(x, size.Y / 2 - mh / 2, 0) })
+	end
+	return out
+end
+C.SHAPE_PARTS.capital = function(size: Vector3)
+	return {
+		{ Vector3.new(size.X, size.Y * 0.4, size.Z), CFrame.new(0, size.Y * 0.3, 0) },
+		{ Vector3.new(size.Y * 0.6, size.X * 0.75, size.Z * 0.75), CFrame.new(0, -size.Y * 0.2, 0) * VERT, "cyl" },
+	}
+end
+-- crée une sous-pièce (serveur et fantôme) : bloc, cylindre ou coin selon sp[3]
+function C.makeSubPart(sp)
+	local c
+	if sp[3] == "wedge" then
+		c = Instance.new("WedgePart")
+	else
+		c = Instance.new("Part")
+		if sp[3] == "cyl" then
+			c.Shape = Enum.PartType.Cylinder
+		end
+	end
+	c.Size = sp[1]
+	return c
+end
+
 C.BLOCKS = {}
 C.BLOCK_ORDER = {}
 for _, m in C.BUILD_MATERIALS do
@@ -713,6 +837,8 @@ local SHAPE_ICON = {
 	bloc = "⬛", dalle = "🟫", plancher = "🟫", mur = "🧱", demimur = "🧱", grandmur = "🧱", mince = "🧱", poutre = "📏", linteau = "📏",
 	poteau = "🏛️", hautpoteau = "🏛️", pilier = "🏛️", colonne = "🏛️", pente = "🔺", coin = "🔺", toitpointu = "🔺", rampe = "📐",
 	marche = "📐", barriere = "➖", grille = "🔲", arche = "🌉", murcourbe = "🧱",
+	escalier = "📐", colimacon = "🌀", dome = "🔵", toitconique = "⛺", murfenetre = "🔳", murporte = "🚪",
+	meurtriere = "🏰", pignon = "🔺", creneaux = "🏰", chapiteau = "🏛️",
 }
 local HAND_MATS = { bois = true, rondin = true, chaume = true, torchis = true, pise = true }
 for _, id in C.BLOCK_ORDER do

@@ -3264,7 +3264,7 @@ local function game_()
 			g.Transparency = 1
 			g:SetAttribute("Compose", true)
 			for _, sp in compose(b.size) do
-				local c = Instance.new("Part")
+				local c = Config.makeSubPart and Config.makeSubPart(sp) or Instance.new("Part")
 				c.Size = sp[1]
 				c.CFrame = g.CFrame * sp[2]
 				c.Anchored = false

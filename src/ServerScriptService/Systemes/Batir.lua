@@ -49,10 +49,9 @@ local function makePart(d, parent: Instance)
 		p.CanCollide = false
 		local cf = cframeOf(d)
 		for _, sp in compose(b.size) do
-			local c = Instance.new("Part")
+			local c = Config.makeSubPart(sp)
 			c.Name = "Bloc"
 			c.Anchored = true
-			c.Size = sp[1]
 			c.CFrame = cf * sp[2]
 			c.Material = b.mat
 			c.Color = b.color
