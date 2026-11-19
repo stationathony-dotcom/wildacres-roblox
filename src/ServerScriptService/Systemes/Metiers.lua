@@ -69,7 +69,7 @@ local ROLES = {
 	},
 	stablemaster = {
 		label = "Palefrenier", labelF = "Palefrenière", at = { "Ecurie" }, front = 6, hat = "paille", garb = "gilet",
-		shop = "Écurie", trade = "🐴 Foin et harnais", baseValue = 60, services = { "monture", "changer", "pouliner" },
+		shop = "Écurie", trade = "🐴 Foin et harnais", baseValue = 60, services = { "monture", "changer", "pouliner", "diligence" },
 		inputs = { "hay", "oat", "wheat", "carrot", "apple", "leather" },
 		products = { "hay", "animal_feed", "leather_strap" },
 		intro = "Une bête bien nourrie te le rendra au centuple.",
@@ -873,6 +873,37 @@ function Metiers.nextRank(player: Player)
 	return NOBILITY[rank + 1], rank
 end
 
+-- Diligence (19/11, « listes ennemi.txt » § transports) : le palefrenier mène en voiture vers un
+-- village DÉJÀ découvert (journal), contre COACH_BASE + distance / COACH_STUDS or. Les 4 plus proches
+-- sont proposés. La monture reste à l'écurie de départ (l'écurie d'arrivée la fait venir).
+Metiers.COACH_BASE = 10
+Metiers.COACH_STUDS = 25
+function Metiers.coachTrips(player: Player, e)
+	local Q = G.Quetes and rawget(G.Quetes, "villages")
+	if not Q or not e.root then
+		return {}
+	end
+	local known = {}
+	for k in string.gmatch(G.Journal.keysFor(player) or "", "[^;]+") do
+		known[k] = true
+	end
+	local here = e.root.Position
+	local list = {}
+	for _, v in Q() do
+		local d = Vector2.new(v.x - here.X, v.z - here.Z).Magnitude
+		if known[v.key] and d > 150 then
+			table.insert(list, { key = v.key, name = v.name, x = v.x, z = v.z, price = Metiers.COACH_BASE + math.floor(d / Metiers.COACH_STUDS) })
+		end
+	end
+	table.sort(list, function(a, b)
+		return a.price < b.price
+	end)
+	while #list > 4 do
+		table.remove(list)
+	end
+	return list
+end
+
 -- options en plus des habituelles (avant « Au revoir »)
 function Metiers.addOptions(e, player: Player, opts)
 	local role = e.data.metier
@@ -911,6 +942,11 @@ function Metiers.addOptions(e, player: Player, opts)
 			table.insert(add, { id = "m:changer", text = "🔁 Changer de monture (écurie)" })
 		elseif s == "pouliner" then
 			table.insert(add, { id = "m:pouliner", text = "🐣 Faire pouliner (3 carottes, 40 or)" })
+		elseif s == "diligence" then
+			-- la diligence : vers les villages déjà découverts, les plus proches d'abord
+			for _, t in Metiers.coachTrips(player, e) do
+				table.insert(add, { id = "m:dili_" .. t.key, text = string.format("🐴 Diligence pour %s (%d or)", t.name, t.price) })
+			end
 		end
 	end
 	if def and def.inputs then
@@ -1167,6 +1203,30 @@ function Metiers.choice(player: Player, e, what: string): (string | boolean)?
 		local at = e.root.Position + e.root.CFrame.LookVector * 6
 		G.Horses.fetch(player, at)
 		return false
+	elseif string.sub(what, 1, 5) == "dili_" and has("diligence") then
+		local key = string.sub(what, 6)
+		for _, t in Metiers.coachTrips(player, e) do
+			if t.key == key then
+				if (G.Joueurs.get(player).stars or 0) > 0 then
+					return "Avec ta tête sur les avis de recherche ? Le cocher ne veut pas d'ennuis."
+				end
+				if not G.Joueurs.take(player, "gold", t.price) then
+					return "La place coûte " .. t.price .. " or."
+				end
+				G.Joueurs.sync(player)
+				G.remotes.Fade:FireClient(player, "🐴 En route pour " .. t.name .. "…", 0) -- écran noir
+				task.delay(1.2, function()
+					if player.Parent then
+						G.Game.teleport(player, Vector3.new(t.x + 6, G.Util.groundY(t.x + 6, t.z + 6), t.z + 6))
+						task.wait(1.4)
+						G.remotes.Fade:FireClient(player, nil, 1)
+						G.Util.toast(player, "🐴 Bienvenue à " .. t.name .. ".", "big")
+					end
+				end)
+				return false
+			end
+		end
+		return "Je ne connais pas la route de ce village."
 	elseif what == "changer" and has("changer") then
 		G.Horses.swap(player, e.root.Position + e.root.CFrame.LookVector * 6)
 		return false

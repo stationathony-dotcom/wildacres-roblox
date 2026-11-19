@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Diligence** : le palefrenier propose la route vers les 4 villages déjà découverts les plus proches (10 or + 1 or par 25 studs) ; voyage en fondu au noir ; refusé aux recherchés ; la monture reste à l'écurie de départ (banc `diligence`)
 - **Événements** : pendant un orage, un éclair peut faire se lever un **esprit de l'orage** près d'un joueur (il se dissipe en 8 min) ; un **colosse de pierre** peut s'arracher du sol loin des villages (il se rendort en 10 min) ; seuls ceux qui sont dans le coin le remarquent
 - Bestiaire : **assassin de l'ombre** (nuit, prairie et forêt : rapide, frappe fort, bourse et crochets), **roi déchu** (élite de nuit, prairie et désert : bijou ancien, sceau royal), **méduse des marais** ; chacun avec sa prise et sa pièce d'équipement (164 créatures)
 - **Roue à eau** : posée au bord de l'eau à moins de 16 studs d'un moulin, elle le fait moudre tout le blé (1 pour 1 au lieu de 2 pour 3) ; le moulin le dit quand on le remplit (banc `roue_eau`)
