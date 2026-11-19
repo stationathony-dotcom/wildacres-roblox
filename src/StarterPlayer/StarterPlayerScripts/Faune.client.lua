@@ -8,6 +8,7 @@
 --   · écureuils le jour (forêt, prairie) : trottinent, puis filent vers l'arbre le plus proche et y
 --     grimpent quand on approche (18/11) ;
 --   · canards sauvages qui nagent sur les eaux calmes le jour.
+--   · hérissons et blaireaux nocturnes qui se réfugient quand on les approche.
 -- Rien n'est sauvegardé, rien ne se chasse : c'est le décor qui vit.
 
 local Players = game:GetService("Players")
@@ -111,6 +112,40 @@ local function makeDuck(): Model
 	return m
 end
 
+local BURROWERS = {
+	herisson = { name = "Hérisson", size = Vector3.new(0.6, 0.5, 0.9), coat = Color3.fromRGB(87, 64, 48), face = Color3.fromRGB(183, 148, 111), speed = 1.4 },
+	blaireau = { name = "Blaireau", size = Vector3.new(0.85, 0.7, 1.5), coat = Color3.fromRGB(100, 101, 105), face = Color3.fromRGB(224, 220, 206), speed = 2.2 },
+}
+
+local function makeBurrower(kind: string): Model
+	local spec = BURROWERS[kind]
+	local m = Instance.new("Model")
+	m.Name = spec.name
+	local body = part(spec.size, spec.coat, Enum.Material.Fabric, m)
+	body.Shape = Enum.PartType.Ball
+	m.PrimaryPart = body
+	local face = part(spec.size * 0.54, spec.face, nil, m)
+	face.Shape = Enum.PartType.Ball
+	face.Position = Vector3.new(0, -0.06, -spec.size.Z * 0.46)
+	local dark = Color3.fromRGB(40, 36, 33)
+	local nose = part(Vector3.new(0.12, 0.1, 0.12), dark, nil, m)
+	nose.Shape = Enum.PartType.Ball
+	nose.Position = face.Position - Vector3.new(0, 0, face.Size.Z * 0.48)
+	if kind == "blaireau" then
+		for _, side in { -1, 1 } do
+			local stripe = part(Vector3.new(0.1, 0.18, 0.34), dark, nil, m)
+			stripe.Shape = Enum.PartType.Ball
+			stripe.Position = face.Position + Vector3.new(side * 0.15, 0.07, 0)
+		end
+	else
+		for i = -2, 2 do
+			local spine = part(Vector3.new(0.11, 0.16, 0.5), spec.coat:Lerp(spec.face, 0.35), nil, m)
+			spine.Position = Vector3.new(i * 0.1, 0.22 - math.abs(i) * 0.026, 0.08)
+		end
+	end
+	return m
+end
+
 local function poseDuck(m: Model, cf: CFrame)
 	m.PrimaryPart.CFrame = cf
 	m.Tete.CFrame = cf * CFrame.new(0, 0.32, -0.45)
@@ -189,8 +224,11 @@ end
 
 -- ---------------------------------------------------------------- Population
 local critters = {} -- { kind, model, pos, vel, state, t, ... }
-local MAX = { sol = 5, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3, canard = 2 }
-local counts = { sol = 0, ciel = 0, papillon = 0, luciole = 0, ecureuil = 0, canard = 0 }
+local MAX = { sol = 5, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3, canard = 2, herisson = 2, blaireau = 1 }
+local counts = {}
+for kind in MAX do
+	counts[kind] = 0
+end
 
 local function remove(i: number)
 	local c = critters[i]
@@ -214,6 +252,12 @@ local function spawn(kind: string, root: Vector3, biome: string)
 		end
 		c.model = makeDuck()
 		c.center = g
+	elseif BURROWERS[kind] then
+		c.model = makeBurrower(kind)
+		c.pos = g + Vector3.new(0, BURROWERS[kind].size.Y / 2, 0)
+		c.yaw = rng:NextNumber(0, math.pi * 2)
+		c.model:PivotTo(CFrame.new(c.pos) * CFrame.Angles(0, c.yaw, 0))
+		c.model.Parent = folder
 	elseif kind == "sol" then
 		local col = biome == "neige" and Color3.fromRGB(230, 230, 235) or Color3.fromRGB(130, 95, 70)
 		c.scale = 1
@@ -273,6 +317,8 @@ RunService.Heartbeat:Connect(function(dt)
 			luciole = (not day and not wet and (biome == "marais" or biome == "prairie" or biome == "foret")) and MAX.luciole or 0,
 			ecureuil = (day and not wet and (biome == "foret" or biome == "prairie")) and MAX.ecureuil or 0,
 			canard = (day and not wet and biome ~= "neige" and biome ~= "desert") and MAX.canard or 0,
+			herisson = (not day and not wet and (biome == "prairie" or biome == "foret")) and MAX.herisson or 0,
+			blaireau = (not day and not wet and biome == "foret") and MAX.blaireau or 0,
 		}
 		-- trop loin, ou hors de saison/heure : on retire en douceur
 		for i = #critters, 1, -1 do
@@ -357,6 +403,34 @@ RunService.Heartbeat:Connect(function(dt)
 					continue
 				end
 			end
+		elseif BURROWERS[c.kind] then
+			local spec = BURROWERS[c.kind]
+			local away = (c.pos - root) * Vector3.new(1, 0, 1)
+			if not c.flee and away.Magnitude < 9 then
+				c.flee = true
+				c.t = 0
+				if away.Magnitude > 0.01 then
+					c.yaw = math.atan2(-away.X, -away.Z)
+				end
+			end
+			if c.flee and c.t > 3 then
+				remove(i)
+				continue
+			end
+			c.step = (c.step or 0) + dt
+			if c.step >= 0.2 then
+				local speed = c.flee and 7 or spec.speed
+				local forward = Vector3.new(-math.sin(c.yaw), 0, -math.cos(c.yaw))
+				local nextPos = c.pos + forward * speed * math.min(c.step, 0.3)
+				local hit, material = ground(nextPos.X, nextPos.Z, c.pos.Y)
+				if hit and material ~= Enum.Material.Water and math.abs(hit.Y - c.pos.Y) < 1.5 then
+					c.pos = hit + Vector3.new(0, spec.size.Y / 2, 0)
+				else
+					c.yaw += math.pi
+				end
+				c.step = 0
+			end
+			c.model:PivotTo(CFrame.new(c.pos) * CFrame.Angles(0, c.yaw, 0))
 		elseif c.kind == "canard" then
 			local a = c.t * 0.4 + c.phase
 			local offset = Vector3.new(math.cos(a) * DUCK_RADIUS, 0.2 + math.sin(a * 5) * 0.05, math.sin(a) * DUCK_RADIUS)

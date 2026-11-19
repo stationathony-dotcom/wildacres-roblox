@@ -15,6 +15,8 @@ Branche de travail `mission/wildacres`, créée depuis `d30b9ea`. La racine du p
 
 ## Journal et problèmes
 
+- 19/11. Ajout des hérissons et des blaireaux au lot de faune passive. Test Studio Edit réussi sur un terrain simulé pour les apparitions nocturnes, les plafonds, le refus de l’eau, la fuite et le retrait au jour. Build Rojo réussi.
+
 - `530204e` ajoute une commande par période de deux jours à chaque tableau, avec quatre commandes en rotation et des identifiants distincts. Banc Studio Edit réussi sur les sources de travail et sur les sources indexées. Build Rojo réussi.
 - `3b6813d` ajoute les canards sauvages à la faune locale. Test Studio Edit réussi avec un sol simulé, un plan d’eau simulé, un plafond de deux canards et un passage à la nuit. Build Rojo réussi.
 - L’essai d’ajout d’une étagère a mis en évidence un doublon avec la recette existante. Le changement local a été remplacé par un coffret avec son propre modèle. Test Studio Edit de l’objet, de la recette d’établi et du modèle réussi. Build Rojo réussi.
