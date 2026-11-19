@@ -39,7 +39,7 @@ local G = {
 	Gear = Gear,
 	world = { day = 1, id = "w" },
 	Util = { toast = function(_, t) table.insert(toasts, t) end, root = function() return nil end },
-	Social = { checkTitles = function() end, titlesOf = function() return {} end, count = function() return 0 end },
+	Social = { checkTitles = function() end, bump = function() end, titlesOf = function() return {} end, count = function() return 0 end },
 	remotes = { Inventory = { FireClient = function() end } },
 	Interact = { onAction = function() end, onPrompt = function() end },
 }

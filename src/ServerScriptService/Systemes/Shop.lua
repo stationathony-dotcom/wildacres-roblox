@@ -372,6 +372,7 @@ function Shop.sell(player: Player, item: string, n: number)
 		G.Util.toast(player, "+" .. total .. " 💰", "gain")
 		G.Joueurs.addSkillXp(player, "commerce", 1 + math.floor(total / 25))
 		if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "vendre", "boutique", sold) end
+		G.Social.bump(player, "soldGold", total)
 		if total >= 20 and e.root then
 			G.Reputation.addAt(player, e.root.Position, 1, "commerce")
 		end
@@ -582,7 +583,7 @@ function Shop.craft(player: Player, index: number?, times: number?)
 			G.Util.sfx(r.station == "furnace" and "forge" or "hache", root.Position)
 		end
 		local prof = G.Joueurs.get(player)
-		prof.stats.crafted = (prof.stats.crafted or 0) + made
+		G.Social.bump(player, "crafted", made)
 		if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "fabriquer", r.item, made * (r.count or 1)) end
 	end
 	G.Joueurs.sync(player)

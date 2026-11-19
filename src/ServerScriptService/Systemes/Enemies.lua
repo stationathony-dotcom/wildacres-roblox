@@ -758,6 +758,12 @@ local function dieInner(en, player: Player)
 	end
 	G.Social.collect(player, "creatures", en.kind)
 	if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "tuer", en.kind) end
+	if not k.passive then
+		G.Social.bump(player, "kills")
+		if en.boss then
+			G.Social.bump(player, "bosses")
+		end
+	end
 	if not k.passive and en.pos then
 		-- un monstre de moins autour du village : ses gens s'en souviennent
 		G.Reputation.addAt(player, en.pos, (en.boss and 5) or (k.elite and 2) or 1, "chasse")

@@ -68,6 +68,7 @@ function Fishing.use(player: Player)
 			G.Util.finds(player, "fish")
 			G.Joueurs.addSkillXp(player, "peche", 5 + math.floor(Config.FISH[i].price / 10))
 			G.Social.collect(player, "fish", tostring(i))
+			G.Social.bump(player, "fished")
 			if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "pecher", "fish_" .. i) end
 			if G.Activites.note then
 				G.Activites.note(player, "peche")

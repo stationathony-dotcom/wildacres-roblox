@@ -86,6 +86,10 @@ function Fauche.harvest(player: Player, id: string)
 		end)
 		G.Joueurs.addSkillXp(player, "agriculture", 1)
 	end
+	local S = G.Social and rawget(G.Social, "bump")
+	if S then
+		S(player, "fauche")
+	end
 end
 
 -- chaque matin : l'herbe fauchée la veille a repoussé

@@ -57,7 +57,7 @@ local G = {
 	world = { day = 1, seed = 1 },
 	Config = Config,
 	Interact = { onPrompt = function() end, onAction = function() end },
-	Util = {
+	Util = { geste = function() end,
 		clone = function(n) local m = SS.Modeles:FindFirstChild(n) return m and m:Clone() end,
 		groundY = function() return 0 end,
 		root = function() return { Position = Vector3.new(0, 3, 0), CFrame = CFrame.new(0, 3, 0) } end,
@@ -77,7 +77,7 @@ local G = {
 		talent = function() return 0 end,
 	},
 	Clock = { seasonize = function() end, biomeAt = function() return "prairie" end },
-	Quetes = {}, Social = { collect = function() end }, Activites = {}, Law = { crime = function() end }, Npcs = { remember = function() end },
+	Quetes = {}, Social = { collect = function() end, bump = function() end }, Activites = {}, Law = { crime = function() end }, Npcs = { remember = function() end },
 	Journal = {},
 	World = { loaded = {}, place = function(m, x, y, z, yaw, parent) m:PivotTo(CFrame.new(x, y, z)) m.Parent = parent return m end },
 }

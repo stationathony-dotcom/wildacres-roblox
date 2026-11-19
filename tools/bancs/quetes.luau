@@ -279,7 +279,7 @@ do
 		G.Meteo = { biteMult = function() return biteMult end }
 		G.Clock = { biomeAt = function() return "prairie" end }
 		G.Props = { swing = function() end }
-		G.Social = { collect = function() end }
+		G.Social = { collect = function() end, bump = function() end }
 		G.Activites = {}
 		G.Util.root = function() return { Position = pos, CFrame = CFrame.new(pos) } end
 		G.Util.isWater = function() return true end

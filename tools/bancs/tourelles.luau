@@ -62,7 +62,7 @@ local G = {
 		sfx = function() end,
 	},
 	Clans = { clanOfUid = function() return nil end },
-	Social = { groupOf = function() return nil end },
+	Social = { groupOf = function() return nil end, bump = function() end },
 	Parcelles = { at = function(pos) return inPlot(pos) and "u1" or nil end, HALF = 24 },
 	Combat = { hurtPlayer = function(p, dmg) table.insert(hits, { p.Name, dmg }) end },
 	Protection = { log = function(_, t) table.insert(logs, t) end },

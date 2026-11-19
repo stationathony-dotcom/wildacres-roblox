@@ -845,7 +845,7 @@ function Mondes.travel(player: Player, dest: string)
 			id, entry = createWorld(player)
 			local lp = G.Joueurs.get(player)
 			if lp and id then
-				lp.stats.discovered = (lp.stats.discovered or 0) + 1
+				G.Social.bump(player, "discovered") -- île nouvelle (succès Cartographe)
 			end
 			if not id then
 				G.Util.toast(player, "La mer est mauvaise, réessaie plus tard.")

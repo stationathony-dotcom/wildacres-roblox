@@ -124,6 +124,10 @@ function Reputation.add(player: Player, v, delta: number, kind: string?)
 	local new = math.clamp(old + delta, -100, 100)
 	r.rep[v.key] = new ~= 0 and new or nil
 	pcall(publish, player)
+	local bump = G.Social and rawget(G.Social, "bump")
+	if bump and new > 0 then
+		bump(player, "repBest", new, true)
+	end
 	local t0, t1 = tierOf(old), tierOf(new)
 	if t0 ~= t1 then
 		local up = new > old

@@ -783,7 +783,7 @@ local function harvest(player: Player, id: string, mode: string)
 		remove(entry)
 	end
 	if prof then
-		prof.stats.harvested = (prof.stats.harvested or 0) + 1
+		G.Social.bump(player, "harvested")
 		if G.Activites.note then
 			G.Activites.note(player, "recolte")
 		end

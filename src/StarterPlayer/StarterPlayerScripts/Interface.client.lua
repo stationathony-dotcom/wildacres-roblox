@@ -1617,7 +1617,9 @@ local function game_()
 		else
 			for k, t in inv.titles or {} do
 				local r = row(k)
-				local b = new("TextButton", { Text = (t.owned and (t.on and "✅ " or "") or "🔒 ") .. t.name, Font = BOLD, TextSize = 13, TextColor3 = t.owned and C.text or C.dim,
+				-- succès pas encore atteint : sa progression (ex. « 🔒 Loup de mer  57/200 »)
+				local prog = (not t.owned and t.need) and string.format("  %d/%d", t.got or 0, t.need) or ""
+				local b = new("TextButton", { Text = (t.owned and (t.on and "✅ " or "") or "🔒 ") .. t.name .. prog, Font = BOLD, TextSize = 13, TextColor3 = t.owned and C.text or C.dim,
 					BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), Parent = r, ZIndex = 9 })
 				if t.on then
 					stroke(C.gold, 1.5).Parent = r

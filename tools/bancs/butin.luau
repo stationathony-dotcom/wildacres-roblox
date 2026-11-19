@@ -29,7 +29,7 @@ G.Interact = {
 	onPrompt = function(a, fn) prompts[a] = fn end,
 	onAction = function(a, fn) actions[a] = fn end,
 }
-G.Social = { groupOf = function(p) return groups[p] end }
+G.Social = { groupOf = function(p) return groups[p] end, bump = function() end }
 G.Util = {
 	root = function(p) return { Position = p.pos } end,
 	toast = function(p, t) table.insert(toasts, p.Name .. ":" .. t) end,

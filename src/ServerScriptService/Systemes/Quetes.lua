@@ -538,6 +538,7 @@ function Quetes.turnIn(player: Player, id: string)
 	G.Joueurs.add(player, "gold", q.gold)
 	-- le village où on la rend t'en sait gré (Systemes/Reputation)
 	G.Reputation.add(player, here, math.clamp(3 + math.floor((q.gold or 0) / 40), 3, 10))
+	if G.Social and rawget(G.Social, "bump") then G.Social.bump(player, "quests") end
 	if q.item then
 		G.Joueurs.add(player, q.item, 1)
 	end

@@ -87,7 +87,38 @@ local TITLES = {
 		return (p.stats.noblesse or 0) >= 3
 	end },
 }
+-- Succès (19/11, « à ne pas oublier » : défis et accomplissements) : un compteur de p.stats et un
+-- seuil ; atteint, il donne un titre à porter. Les compteurs montent par Social.bump (pas de scan).
+local FEATS = {
+	{ "serviable", "Serviable", "quests", 10 },
+	{ "pilier", "Pilier de la communauté", "quests", 50 },
+	{ "apprenti", "Apprenti", "crafted", 50 },
+	{ "mille_ouvrages", "Mille ouvrages", "crafted", 1000 },
+	{ "main_verte", "Main verte", "harvested", 500 },
+	{ "cartographe", "Cartographe", "discovered", 10 },
+	{ "tueur_betes", "Fléau des bêtes", "kills", 250 },
+	{ "tueur_boss", "Tueur de géants", "bosses", 1 },
+	{ "legende", "Légende vivante", "bosses", 5 },
+	{ "loup_de_mer", "Loup de mer", "fished", 200 },
+	{ "marchand", "Marchand prospère", "soldGold", 10000 },
+	{ "batisseur", "Bâtisseur", "built", 500 },
+	{ "marin", "Marin au long cours", "voyages", 20 },
+	{ "faucheur", "Faucheur", "fauche", 300 },
+	{ "bien_vu", "Bien vu au village", "repBest", 50 },
+	{ "heros", "Héros du peuple", "repBest", 85 },
+}
+for _, f in FEATS do
+	local stat, need = f[3], f[4]
+	table.insert(TITLES, { id = f[1], name = f[2], stat = stat, need = need, test = function(p)
+		return (tonumber(p.stats[stat]) or 0) >= need
+	end })
+end
 Social.TITLES = TITLES
+local WATCH = {} -- compteur -> seuils qui donnent un titre
+for _, f in FEATS do
+	WATCH[f[3]] = WATCH[f[3]] or {}
+	table.insert(WATCH[f[3]], f[4])
+end
 local TITLE_BY_ID = {}
 for _, t in TITLES do
 	TITLE_BY_ID[t.id] = t
@@ -165,6 +196,39 @@ function Social.checkTitles(player: Player)
 	Social.refreshStats(player)
 end
 
+-- fait monter un compteur de succès (n par défaut 1) ; « max » = garde le plus haut (repBest)
+function Social.bump(player: Player, stat: string, n: number?, max: boolean?)
+	local p = G.Joueurs.get(player)
+	if not p then
+		return
+	end
+	p.stats = p.stats or {}
+	local old = tonumber(p.stats[stat]) or 0
+	local new = max and math.max(old, n or 0) or old + (n or 1)
+	if new == old then
+		return
+	end
+	p.stats[stat] = new
+	G.Joueurs.markDirty(player)
+	for _, need in WATCH[stat] or {} do
+		if old < need and new >= need then
+			Social.checkTitles(player)
+			break
+		end
+	end
+end
+
+-- progression des succès (pour la fiche) : { id, name, got, need, owned }
+function Social.featsOf(player: Player)
+	local p = G.Joueurs.get(player)
+	local out = {}
+	for _, f in FEATS do
+		table.insert(out, { id = f[1], name = f[2], got = p and tonumber(p.stats[f[3]]) or 0, need = f[4],
+			owned = p and p.titles and p.titles[f[1]] == true })
+	end
+	return out
+end
+
 function Social.setTitle(player: Player, id: string)
 	local p = G.Joueurs.get(player)
 	if p and type(id) == "string" and p.titles and p.titles[id] then
@@ -205,7 +269,11 @@ function Social.titlesOf(player: Player)
 	local p = G.Joueurs.get(player)
 	local out = {}
 	for _, t in TITLES do
-		table.insert(out, { id = t.id, name = t.name, owned = p and p.titles and p.titles[t.id] == true, on = p and p.title == t.id })
+		local row = { id = t.id, name = t.name, owned = p and p.titles and p.titles[t.id] == true, on = p and p.title == t.id }
+		if t.stat and p then
+			row.got, row.need = math.min(tonumber(p.stats[t.stat]) or 0, t.need), t.need -- succès : progression
+		end
+		table.insert(out, row)
 	end
 	return out
 end

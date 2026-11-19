@@ -268,6 +268,7 @@ function Barques.step(dt: number)
 						local player = Players:GetPlayerFromCharacter(hum.Parent)
 						if player and G.Util.owns(player, b.data.owner) then
 							G.Quetes.note(player, "naviguer", "bateau")
+							G.Social.bump(player, "voyages")
 						end
 					end
 				end
