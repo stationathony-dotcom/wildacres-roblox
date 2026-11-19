@@ -1108,6 +1108,34 @@ end
 
 local function rumor(e, player: Player): string
 	local reg = e.reg
+	-- rumeur de marché (19/11) : une pénurie dans un des villages les plus proches (Shop.shortage)
+	local Q = G.Quetes and rawget(G.Quetes, "villages")
+	local S = G.Shop and rawget(G.Shop, "shortage")
+	if Q and S and e.root and math.random() < 0.4 then
+		local pos = e.root.Position
+		local near = {}
+		for _, v in Q() do
+			table.insert(near, { v = v, d = Vector2.new(v.x - pos.X, v.z - pos.Z).Magnitude })
+		end
+		table.sort(near, function(a, b)
+			return a.d < b.d
+		end)
+		local hits = {}
+		for i = 1, math.min(4, #near) do
+			local short = S(near[i].v.key)
+			local info = short and Config.ITEMS[short]
+			if info then
+				table.insert(hits, { v = near[i].v, info = info, here = near[i].d < 110 })
+			end
+		end
+		if #hits > 0 then
+			local h = hits[math.random(1, #hits)]
+			if h.here then
+				return "Ici, on manque de " .. h.info.icon .. " " .. h.info.name .. " ces jours-ci. Qui en apporte fera une bonne affaire."
+			end
+			return "On raconte qu'à " .. h.v.name .. ", ils manquent de " .. h.info.icon .. " " .. h.info.name .. " : ils paient cher pour en avoir."
+		end
+	end
 	local places = G.wg:placesAround(reg.rx, reg.rz, 3)
 	if #places == 0 then
 		return "Il n'y a rien à des lieues à la ronde."
