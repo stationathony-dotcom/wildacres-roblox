@@ -648,6 +648,16 @@ function J.eat(player: Player, item: string)
 		if info.meal then
 			J.addBuff(player, info.meal[1], info.meal[2], info.meal[3], info.name)
 		end
+		-- festin (Shared/Equilibre) : l'effet profite aussi aux joueurs autour (25 studs)
+		if info.meal and info.feast then
+			local me = G.Util.root(player)
+			for _, other in G.Game.players() do
+				local r = other ~= player and G.Util.root(other)
+				if me and r and (r.Position - me.Position).Magnitude < 25 then
+					J.addBuff(other, info.meal[1], info.meal[2], info.meal[3], info.name .. " (partagé par " .. player.DisplayName .. ")")
+				end
+			end
+		end
 	end
 end
 

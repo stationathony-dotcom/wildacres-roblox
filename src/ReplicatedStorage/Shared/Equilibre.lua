@@ -202,6 +202,26 @@ E.AMMO_NAME = { stone = "Pierre", javelin = "Javelot", throwing_knife = "Couteau
 E.AMMO_DMG = { arrow = 1, bolt = 1.1, bolt_heavy = 1.3, arrow_iron = 1.25, arrow_barbed = 1.4, javelin = 1.2, stone = 0.8, throwing_knife = 1 }
 E.BOW_AMMO = { "arrow_barbed", "arrow_iron", "arrow", "bolt", "bolt_heavy" } -- arcs et arbalètes : la meilleure d'abord
 
+-- 15. HAUTS NIVEAUX DES MÉTIERS (19/11, AUDIT-CRAFT § 5 : au-delà de 20, les autres métiers ne
+--     débloquaient rien). Plats : { id, nom, icône, prix, soin, { stat, bonus, minutes }, ingrédients,
+--     atelier, compétence, niveau, festin } — un FESTIN partage son effet avec les joueurs à 25 studs.
+E.NEW_FOODS = {
+	{ "aged_cheese", "Fromage affiné", "🧀", 160, 60, { "vie", 3, 15 }, { cheese = 2, salt = 1 }, nil, "elevage", 20 },
+	{ "village_feast", "Grand festin", "🍗", 600, 80, { "vie", 3, 20 }, { roast = 1, bread = 3, pie = 1, ale = 2 }, nil, "cuisine", 30, true },
+	{ "lord_banquet", "Banquet du seigneur", "🍖", 1200, 100, { "force", 3, 25 }, { meat_pie = 2, honey_cake = 1, stew = 1, aged_cheese = 1 }, nil, "cuisine", 40, true },
+}
+-- matières de haut niveau : { id, nom, icône, prix, ingrédients, quantité, atelier, compétence, niveau }
+E.HIGH_MATERIALS = {
+	{ "damascus_steel", "Acier damassé", "🔩", 260, { steel = 2, coal = 2 }, 1, "furnace", "minage", 30 },
+	{ "fine_planks", "Planches de chêne fines", "🪵", 40, { oak_log = 2 }, 3, "bench", "bucheronnage", 25 },
+}
+-- pièces qui les utilisent (même format que E.MASTER)
+E.HIGH_GEAR = {
+	{ "weapon", "Lame damassée", 4, { force = 8, vitesse = 3, chance = 2 }, { damascus_steel = 2, leather = 1, gold_ingot = 1 }, 36, power = 13, visual = "10" },
+	{ "armor", "Cotte damassée", 4, { defense = 10, vie = 3 }, { damascus_steel = 3, soft_leather = 2 }, 38 },
+	{ "weapon", "Arc long de maître", 4, { chance = 8, vitesse = 4, force = 1 }, { fine_planks = 3, linen_thread = 4, resin = 2 }, 34, power = 11, visual = "11" },
+}
+
 -- effets fixés à la main quand le nom du plat dit autre chose que ses ingrédients
 E.MEALS = { vigor_elixir = { "force", 3 } }
 
@@ -324,6 +344,30 @@ function E.apply(C)
 			table.insert(R, { gear = { slot = m[1], name = m[2], rarity = m[3], stats = table.clone(m[4]), power = m.power, visual = m.visual },
 				needs = table.clone(m[5]), station = "bench", cat = "equipement", skill = { "artisanat", m[6] } })
 			note("maître " .. m[2])
+		end
+	end
+	-- 15. hauts niveaux des métiers
+	for _, x in E.HIGH_MATERIALS do
+		local id, name, icon, price, needs, count, station, skill, level = table.unpack(x)
+		if not I[id] and known(C, needs) then
+			I[id] = { name = name, icon = icon, price = price }
+			table.insert(R, { item = id, needs = table.clone(needs), count = count > 1 and count or nil, station = station, cat = "materiaux", skill = { skill, level } })
+			note("matière " .. id)
+		end
+	end
+	for _, x in E.NEW_FOODS do
+		local id, name, icon, price, heal, meal, needs, station, skill, level, feast = table.unpack(x)
+		if not I[id] and known(C, needs) then
+			I[id] = { name = name, icon = icon, price = price, food = heal, meal = { meal[1], meal[2], meal[3] * 60 }, feast = feast or nil }
+			table.insert(R, { item = id, needs = table.clone(needs), station = station, cat = "cuisine", skill = { skill, level } })
+			note("plat " .. id)
+		end
+	end
+	for _, m in E.HIGH_GEAR do
+		if known(C, m[5]) then
+			table.insert(R, { gear = { slot = m[1], name = m[2], rarity = m[3], stats = table.clone(m[4]), power = m.power, visual = m.visual },
+				needs = table.clone(m[5]), station = "anvil", cat = "equipement", skill = { "artisanat", m[6] } })
+			note("haut niveau " .. m[2])
 		end
 	end
 	-- 14. objets neufs (munitions, harnachement)
