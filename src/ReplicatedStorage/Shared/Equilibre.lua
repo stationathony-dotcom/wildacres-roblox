@@ -608,6 +608,53 @@ function E.setText(item): string?
 	return "panoplie " .. (E.SET_NAME[m] or m) .. " (" .. table.concat(parts, ", ") .. " " .. (E.STAT_LABEL[E.MATERIAL_STAT[m]] or E.MATERIAL_STAT[m]) .. ")"
 end
 
+-- 13. PIÈCES DE CRÉATURES (Shared/Prises) : stats selon la FAMILLE de la matière (avant : tirées au
+--     hasard, ex. « talisman d'essence d'assassin » en Force + Charisme). Total gardé. Les bêtes du
+--     froid donnent des pièces qui tiennent chaud (Systemes/Froid lit piece.warm).
+-- { mots de la matière (minuscules), poids }
+E.CREATURE_FAMILY = {
+	{ { "poussière", "pollen", "gelée royale" }, { chance = 1, vie = 0.4 } }, -- avant « gelée »
+	{ { "bois de cerf" }, { force = 0.8, vitesse = 0.8 } },
+	{ { "givre", "glace" }, { vie = 1, defense = 0.6 } },
+	{ { "éclat de pierre" }, { defense = 1, vie = 0.6 } },
+	{ { "paille maudite" }, { discretion = 1, chance = 0.5 } },
+	{ { "fragment de roi" }, { charisme = 1, force = 0.5 } },
+	{ { "venin", "dard", "glande à venin" }, { force = 0.8, discretion = 0.7 } },
+	{ { "essence", "ombre", "spectre", "follet", "revenant", "noyau" }, { discretion = 1, chance = 0.5 } },
+	{ { "écaille", "carapace", "élytre", "pince", "peau" }, { defense = 1, vie = 0.6 } },
+	{ { "plume", "aile" }, { vitesse = 1, chance = 0.5 } },
+	{ { "gelée", "spore", "cœur", "sève" }, { vie = 1, defense = 0.5 } },
+	{ { "os massif" }, { force = 1, vie = 0.6 } },
+	{ { "os maudit", "os " }, { force = 0.8, defense = 0.7 } },
+	{ { "croc", "griffe", "défense", "corne", "faux de mante" }, { force = 1, vitesse = 0.6 } },
+	{ { "queue", "patte" }, { chance = 1, vitesse = 0.5 } },
+	{ { "crin" }, { vitesse = 1, charisme = 0.4 } },
+	{ { "oreille" }, { chance = 0.8, force = 0.6 } },
+	{ { "masque", "crochet", "collet", "cape d'ombre" }, { discretion = 1, chance = 0.5 } },
+	{ { "insigne", "écusson", "écu brisé", "sceau" }, { charisme = 1, defense = 0.5 } },
+	{ { "grimoire", "avis de recherche" }, { chance = 1, charisme = 0.4 } },
+	{ { "carquois" }, { chance = 1, vitesse = 0.5 } },
+	{ { "turban", "bosse" }, { vie = 1, vitesse = 0.4 } },
+	{ { "soie" }, { discretion = 0.8, vitesse = 0.7 } },
+}
+E.COLD_WORDS = { "polaire", "blizzard", "glace", "givre", "yéti", "neige", "hiver", "blanc" }
+
+local function lower(s: string): string
+	return (string.lower((string.gsub(string.gsub(string.gsub(s, "É", "é"), "È", "è"), "Œ", "œ"))))
+end
+
+local function creatureWeights(matName: string)
+	local n = lower(matName)
+	for _, f in E.CREATURE_FAMILY do
+		for _, w in f[1] do
+			if string.find(n, w, 1, true) then
+				return f[2]
+			end
+		end
+	end
+	return nil
+end
+
 function E.finish(C)
 	local okG, Gear = pcall(require, script.Parent.Gear)
 	local SLOTS = okG and Gear.SLOTS or {}
@@ -635,6 +682,37 @@ function E.finish(C)
 			end
 			table.insert(R, { gear = g, needs = table.clone(t[6]), station = "bench", cat = "equipement", skill = t[7] > 0 and { "artisanat", t[7] } or nil })
 			note("métier " .. t[2])
+		end
+	end
+	-- pièces de créatures : stats de leur famille, chaleur des bêtes du froid
+	for _, r in R do
+		local g = r.gear
+		if g and g.stats and not g.design then
+			local mat
+			for id in r.needs do
+				if string.sub(id, 1, 6) == "prise_" or string.sub(id, 1, 4) == "ame_" then
+					mat = C.ITEMS[id]
+					break
+				end
+			end
+			local weights = mat and creatureWeights(mat.name or "")
+			if weights then
+				local total = 0
+				for _, v in g.stats do
+					total += v
+				end
+				g.stats = spread(weights, total, nil)
+				note("créature " .. g.name)
+			end
+			if mat then
+				local n = lower(mat.name or "")
+				for _, w in E.COLD_WORDS do
+					if string.find(n, w, 1, true) then
+						g.warm = true
+						break
+					end
+				end
+			end
 		end
 	end
 	for _, r in R do

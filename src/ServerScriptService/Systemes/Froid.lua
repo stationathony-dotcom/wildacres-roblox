@@ -52,8 +52,17 @@ local function wears(player: Player, words): boolean
 	return false
 end
 local function warmGear(player: Player): boolean
-	-- une couverture dans le sac tient chaud aussi (19/11)
-	return wears(player, WARM_WORDS) or G.Joueurs.has(player, "blanket")
+	-- une couverture dans le sac tient chaud aussi (19/11), comme une pièce tirée d'une bête du froid
+	if wears(player, WARM_WORDS) or G.Joueurs.has(player, "blanket") then
+		return true
+	end
+	local prof = G.Joueurs.get(player)
+	for _, item in (prof and prof.equipped) or {} do
+		if type(item) == "table" and item.warm then
+			return true
+		end
+	end
+	return false
 end
 local function stat(player: Player, k: string): number
 	local ok, s = pcall(G.Joueurs.stats, player)

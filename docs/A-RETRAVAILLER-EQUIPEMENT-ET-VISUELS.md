@@ -25,7 +25,7 @@
    Il faut pour ça des bonus de compétence sur les pièces (par exemple `skill = { peche = 2 }`), lus par les systèmes de métier. C'est le plus gros manque.
 3. **FAIT le 19/11** (`Equilibre.setBonus`, appelé par `Joueurs.stats`) — **Pas de bonus d'ensemble.** Les 12 matières des séries forment des panoplies naturelles. Porter 3 pièces de la même matière (Loup gris, Garde du pont…) pourrait donner un petit bonus. Le système de séries s'y prête déjà.
 4. **Les boucliers sont rangés comme bijoux.** Ils entrent en concurrence avec les anneaux. Il faudrait un emplacement « main gauche » pour le bouclier ou la torche.
-5. **Des pièces de créatures en double.** Il y a 15 « Collier de crocs de [bête] » et 8 « Lame venimeuse de [bête] », avec la même forme et presque les mêmes stats. Deux façons de corriger :
+5. **En partie fait le 19/11** : les stats suivent maintenant la famille de la matière, et les bêtes du froid tiennent chaud. Restent la forme identique (visuel) et l'absence d'effet propre (venin, givre au toucher). — **Des pièces de créatures en double.** Il y a 15 « Collier de crocs de [bête] » et 8 « Lame venimeuse de [bête] », avec la même forme et presque les mêmes stats. Deux façons de corriger :
    - les regrouper par famille et par palier (crocs de petite bête, de grande bête, de bête légendaire) ;
    - ou donner à chacune un effet propre (venin, givre, saignement).
 6. **Armes absentes** : armes de jet (javelots, haches de jet), harpon de pêche, fronde. Il n'y a qu'un type de munition : il manque des flèches de fer ou barbelées.
