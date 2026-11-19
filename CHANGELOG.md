@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Froid** : dans la neige, la nuit, sans feu tout près (feu de camp, cheminée, braséro, torche), sans toit au-dessus de la tête ni vêtement chaud (fourrure, laine, peau, manteau, cape…), on avance 15 % moins vite et l'endurance revient deux fois moins vite ; rien de mortel (banc `froid`)
 - **Explorer rend plus fort** : chaque lieu découvert entraîne la vitesse et la chance (pour de bon) et compte pour les succès Pisteur (25 lieux) et Grand explorateur (100)
 - **Qualité de façon** : une pièce d'équipement fabriquée peut sortir soignée (+1), excellente (+2, rareté au-dessus) ou chef-d'œuvre (+4, rareté au-dessus) selon la compétence d'artisanat (chef-d'œuvre : ~10 % au niveau 50) ; chaque pièce porte la signature de son artisan (« Façonnée par … »)
 - **Lignées des bêtes de ferme** : chaque bête a son rendement (★ à ★★★★, visible sur l'invite) ; au-dessus de la moyenne elle donne parfois un produit de plus, au-dessous parfois un de moins ; un petit hérite de la moyenne de ses parents (± un peu, l'élevage aide) : on améliore son troupeau en gardant les meilleures ; /animaux montre la lignée moyenne et la meilleure
