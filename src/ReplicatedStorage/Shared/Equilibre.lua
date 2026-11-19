@@ -50,6 +50,8 @@ E.RECIPES = {
 	songbook = { needs = { ink = 1, paper = 6, quill = 1 } },
 	history_book = { needs = { ink = 2, paper = 6, old_page = 1, leather = 1 } },
 	diploma = { needs = { ink = 1, parchment = 1, wax_seal = 1, ribbon = 1 } },
+	-- corde à la gelée : 13 or d'ingrédients pour 2 cordes à 5 or → 3 cordes
+	rope = { needs = { slime_gel = 2, fiber = 1 }, count = 3, from = "slime_gel" },
 	-- l'eau rend le seau (avant : seau ET gobelet perdus pour 2 eaux)
 	water = { needs = { bucket = 1, wood_cup = 1 }, count = 2, back = { bucket_empty = 1 } },
 }
@@ -145,10 +147,10 @@ E.WEAR = {
 }
 -- recettes en plus (matières de créatures, pièces, clés) : { objet, ingrédients, quantité, atelier }
 E.EXTRA = {
-	{ "leather", { raw_hide = 2, bark = 1 }, 1, "tannery" }, { "leather", { deer_hide = 1, bark = 1 }, 1, "tannery" },
+	{ "leather", { raw_hide = 2, bark = 1 }, 2, "tannery" }, { "leather", { deer_hide = 1, bark = 1 }, 2, "tannery" },
 	{ "leather", { wolf_pelt = 1 }, 2, "tannery" },
-	{ "arrow", { branches = 1, tooth = 1, feather = 1 }, 8, "bench" }, { "arrow", { branches = 1, claw = 1, feather = 1 }, 8, "bench" },
-	{ "bait", { pollen = 2 }, 4 }, { "quill", { night_feather = 1 }, 4 },
+	{ "arrow", { branches = 1, tooth = 1, feather = 1 }, 8, "bench" },
+	{ "bait", { pollen = 2 }, 6 },
 	{ "copper_ingot", { copper_coin = 10 }, 1, "furnace" }, { "silver_ingot", { silver_coin = 5 }, 1, "furnace" },
 	{ "gold_ingot", { gold_coin = 3 }, 1, "furnace" }, { "precious_ingot", { ancient_coin = 3 }, 1, "furnace" },
 	{ "lockpick", { rusty_key = 1 }, 2, "anvil" },
@@ -160,9 +162,10 @@ E.ADD = {
 -- pierres, cœurs, fossiles : bijoux et armes (même format que E.MASTER)
 E.JEWELS = {
 	{ "trinket", "Talisman de pierres colorées", 2, { chance = 3, charisme = 2 }, { colored_stone = 3, leather_strap = 1 }, 12 },
+	{ "trinket", "Collier de griffes", 2, { force = 3, vitesse = 2 }, { claw = 3, rope = 1 }, 12 }, -- la griffe vaut 50 or : mieux qu'en flèches
 	{ "trinket", "Collier d'os fossile", 2, { force = 3, vie = 2 }, { fossil_bone = 2, rope = 1 }, 14 },
 	{ "trinket", "Cor de chasse", 3, { force = 4, vitesse = 4 }, { rare_horn = 1, copper_ingot = 1 }, 20 },
-	{ "trinket", "Bague au rubis", 3, { force = 5, vie = 3 }, { ruby = 1, gold_ingot = 1 }, 22 },
+	{ "trinket", "Bague au rubis", 3, { force = 5, vie = 3 }, { ruby = 1, gold_ingot = 1, silver_ingot = 1 }, 22 },
 	{ "trinket", "Amulette d'émeraude", 3, { chance = 5, vie = 3 }, { emerald = 1, silver_ingot = 1 }, 24 },
 	{ "weapon", "Bâton de bois pétrifié", 3, { force = 5, defense = 3 }, { petrified_wood = 2, steel = 1 }, 24, power = 7, visual = "6" },
 	{ "hat", "Diadème de saphir", 3, { charisme = 5, chance = 3 }, { sapphire = 1, silver_ingot = 2 }, 26 },
@@ -599,15 +602,15 @@ end
 --     pas s'équiper). { emplacement, nom, stats, ingrédients } — « laine » dans le nom : tient chaud (Froid).
 E.STARTER_GEAR = {
 	{ "gloves", "Gants de paysan", { vitesse = 1, vie = 1 }, { cloth = 1, fiber = 2 } },
-	{ "gloves", "Mitaines de laine", { vie = 2 }, { wool_cloth = 1 } },
+	{ "gloves", "Mitaines de laine", { vie = 2 }, { wool_cloth = 1, wool_thread = 1 } },
 	{ "boots", "Sabots de bois", { vie = 1, defense = 1 }, { planks = 2, leather_strap = 1 } },
 	{ "boots", "Bottes de toile", { vitesse = 2 }, { cloth = 2, leather = 1 } },
 	{ "legs", "Chausses de toile", { vitesse = 1, discretion = 1 }, { cloth = 2 } },
 	{ "legs", "Pantalon de laine", { vie = 2 }, { wool_cloth = 2 } },
-	{ "cape", "Cape de laine", { vie = 1, discretion = 1 }, { wool_cloth = 2, buckle = 1 } },
+	{ "cape", "Cape de laine", { vie = 1, discretion = 1 }, { wool_cloth = 3, buckle = 1 } },
 	{ "cape", "Pèlerine de toile", { charisme = 1, vie = 1 }, { cloth = 2, rope = 1 } },
 	{ "shoulders", "Épaulières de cuir", { defense = 2 }, { leather = 2, rope = 1 } },
-	{ "shoulders", "Spallières de bois", { defense = 1, vie = 1 }, { planks = 2, leather_strap = 1 } },
+	{ "shoulders", "Spallières de bois", { defense = 1, vie = 1 }, { planks = 3, leather_strap = 1 } },
 }
 
 -- 11. ÉQUIPEMENT DE MÉTIER (19/11) : des niveaux de compétence tant qu'on porte la pièce (Joueurs.skill,
@@ -633,19 +636,19 @@ E.TRADE_GEAR = {
 	{ "hat", "Chapeau de pêcheur", 1, { chance = 1 }, { peche = 1 }, { straw = 3, linen_thread = 1 }, 0 },
 	{ "boots", "Bottes de pêcheur", 2, { vie = 1, vitesse = 1 }, { peche = 2 }, { leather = 2, resin = 2 }, 6 },
 	{ "cape", "Ciré du capitaine", 3, { vie = 2, chance = 2 }, { peche = 4 }, { linen = 3, resin = 3, buckle = 1 }, 16 },
-	{ "hat", "Toque de cuisinier", 1, { charisme = 1 }, { cuisine = 1 }, { linen = 2 }, 0 },
+	{ "hat", "Toque de cuisinier", 1, { charisme = 1 }, { cuisine = 1 }, { linen = 1, linen_thread = 2 }, 0 },
 	{ "armor", "Tablier de cuisinier", 2, { vie = 1, charisme = 1 }, { cuisine = 2 }, { linen = 2, cloth = 1 }, 6 },
 	{ "trinket", "Médaillon du grand chef", 3, { charisme = 3, vie = 1 }, { cuisine = 4 }, { gold_ingot = 1, silver_ingot = 1 }, 16 },
-	{ "armor", "Tablier de forgeron", 1, { defense = 1 }, { artisanat = 1 }, { leather = 2 }, 0 },
+	{ "armor", "Tablier de forgeron", 1, { defense = 1 }, { artisanat = 1 }, { leather = 2, leather_strap = 1 }, 0 },
 	{ "gloves", "Gants d'artisan", 2, { force = 1, chance = 1 }, { artisanat = 2 }, { soft_leather = 1, linen_thread = 1 }, 8 },
 	{ "hat", "Lunettes de maître artisan", 3, { chance = 3, charisme = 1 }, { artisanat = 4 }, { glass = 2, gold_ingot = 1, leather_strap = 1 }, 20 },
-	{ "gloves", "Gants de crocheteur", 1, { discretion = 1 }, { crochetage = 1 }, { soft_leather = 1 }, 0 },
+	{ "gloves", "Gants de crocheteur", 1, { discretion = 1 }, { crochetage = 1 }, { soft_leather = 1, copper_nails = 2 }, 0 },
 	{ "hat", "Cagoule de monte-en-l'air", 2, { discretion = 2, vitesse = 1 }, { crochetage = 2 }, { wool_cloth = 1, dyed_cloth = 1 }, 6 },
 	{ "trinket", "Bague du passe-partout", 3, { discretion = 3, chance = 1 }, { crochetage = 4 }, { silver_ingot = 1, lockpick = 3 }, 16 },
-	{ "gloves", "Gants de dresseur", 1, { vie = 1 }, { dressage = 1 }, { leather = 1, rope = 1 }, 0 },
+	{ "gloves", "Gants de dresseur", 1, { vie = 1 }, { dressage = 1 }, { leather = 1, rope = 1, bone = 1 }, 0 },
 	{ "trinket", "Sifflet en os", 2, { charisme = 1, vitesse = 1 }, { dressage = 2 }, { bone = 2, feather = 1 }, 6 },
 	{ "cape", "Cape du maître des bêtes", 3, { vie = 2, charisme = 2 }, { dressage = 4 }, { fur = 2, horn = 1, buckle = 1 }, 16 },
-	{ "armor", "Blouse de berger", 1, { vie = 1 }, { elevage = 1 }, { cloth = 2 }, 0 },
+	{ "armor", "Blouse de berger", 1, { vie = 1 }, { elevage = 1 }, { cloth = 2, wool = 1 }, 0 },
 	{ "trinket", "Bâton de berger", 2, { vie = 1, vitesse = 1 }, { elevage = 2 }, { oak_log = 1, rope = 1 }, 6 },
 	{ "boots", "Bottes de vacher", 3, { vie = 2, vitesse = 2 }, { elevage = 4 }, { soft_leather = 2, iron_ring = 2, wool_cloth = 1 }, 16 },
 	{ "trinket", "Bourse de colporteur", 1, { charisme = 1 }, { commerce = 1 }, { leather = 1, linen_thread = 1 }, 0 },
@@ -767,18 +770,18 @@ E.SMALL_GEAR = {
 	{ "shoulders", "Épaulières de mailles", 3, { defense = 4, vie = 2 }, { iron_ring = 6, leather = 1 }, 20 },
 	{ "shoulders", "Spallières d'acier", 3, { defense = 5, force = 1 }, { steel = 2, leather_strap = 1 }, 22 },
 	{ "shoulders", "Épaulières d'apparat", 4, { charisme = 5, defense = 3 }, { gold_ingot = 1, silver_ingot = 1, dyed_cloth = 2 }, 32 },
-	{ "legs", "Chausses de cuir souple", 2, { discretion = 3, vitesse = 1 }, { soft_leather = 2 }, 10 },
+	{ "legs", "Chausses de cuir souple", 2, { discretion = 3, vitesse = 1 }, { soft_leather = 2, linen_thread = 1 }, 10 },
 	{ "legs", "Jambières de fourrure", 3, { vie = 4, defense = 2 }, { fur = 3, leather = 1 }, 20 },
 	{ "legs", "Jambières d'acier", 3, { defense = 5, vie = 1 }, { steel = 2, leather_strap = 2 }, 22 },
 	{ "legs", "Chausses de soie du rôdeur", 4, { discretion = 5, vitesse = 3 }, { silk = 3, dyed_cloth = 1 }, 32 },
 	{ "cape", "Cape de fourrure", 2, { vie = 3, discretion = 1 }, { fur = 2, buckle = 1 }, 10 },
 	{ "cape", "Cape teinte du voyageur", 3, { vitesse = 3, charisme = 3 }, { dyed_cloth = 3, buckle = 1 }, 20 },
-	{ "cape", "Cape de soie nocturne", 3, { discretion = 5, chance = 1 }, { silk = 3, buckle = 1 }, 22 },
+	{ "cape", "Cape de soie nocturne", 3, { discretion = 5, chance = 1 }, { silk = 3, buckle = 1, night_feather = 1 }, 22 }, -- plume nocturne (90 or)
 	{ "cape", "Manteau d'apparat", 4, { charisme = 6, vie = 2 }, { dyed_cloth = 3, gold_ingot = 1, pearl = 1 }, 32 },
-	{ "boots", "Bottes fourrées", 2, { vie = 3, vitesse = 1 }, { fur = 2, leather = 1 }, 10 },
+	{ "boots", "Bottes fourrées", 2, { vie = 3, vitesse = 1 }, { fur = 2, leather = 2 }, 10 },
 	{ "boots", "Bottes de marais", 2, { vie = 2, vitesse = 2 }, { leather = 2, resin = 2 }, 10 },
 	{ "boots", "Bottes de coureur", 3, { vitesse = 5, chance = 1 }, { soft_leather = 2, linen_thread = 2 }, 20 },
-	{ "boots", "Solerets d'acier", 3, { defense = 5, vie = 1 }, { steel = 2, leather = 1 }, 22 },
+	{ "boots", "Solerets d'acier", 3, { defense = 5, vie = 1 }, { steel = 2, leather = 1, iron_ring = 1 }, 22 },
 	{ "boots", "Bottes de cavalier émérite", 4, { vitesse = 5, charisme = 3 }, { soft_leather = 3, silver_ingot = 1, buckle = 2 }, 32 },
 }
 

@@ -62,6 +62,8 @@ Points 1 à 4 corrigés en partie : effets de repas, prix plancher, 29 recettes 
 
 **Objets sans usage (19/11)** : 122 objets sur 928 ne servaient qu'à la revente (ni nourriture, ni outil, ni pose, ni équipement, ni recette menant à quelque chose d'utile, ni système). Tous ont reçu une fonction (`Equilibre` : E.USES, E.WEAR, E.EXTRA, E.ADD, E.JEWELS). Contrôle refait : 0 restant. Règle pour la suite : **tout nouvel objet doit avoir un usage** ; relancer ce contrôle avant d'en ajouter.
 
+**Banc à relancer après chaque ajout** : `tools/bancs/equilibre.luau` (Edit, sans Play) — objets sans usage, recettes à perte, plats moins nourrissants que crus, pièces sous le plancher, recettes copiées. Au 19/11 au soir : tout OK (5 copies voulues : poterie, actes écrits).
+
 ## Ce qui mérite d'être ajouté (par ordre de rendement)
 
 1. **Effets de repas.** Chaque plat donne un bonus de quelques minutes, différent selon le plat (ragoût : Force, poisson grillé : Endurance, tarte : Vie, tisane : Chance…). Règle : un plat nourrit toujours plus que ses ingrédients crus. Le moteur existe déjà (`Joueurs.addBuff`). Rendre la cuisine utile serait le plus gros gain.
