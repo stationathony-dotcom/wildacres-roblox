@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Qualité de façon** : une pièce d'équipement fabriquée peut sortir soignée (+1), excellente (+2, rareté au-dessus) ou chef-d'œuvre (+4, rareté au-dessus) selon la compétence d'artisanat (chef-d'œuvre : ~10 % au niveau 50) ; chaque pièce porte la signature de son artisan (« Façonnée par … »)
 - **Lignées des bêtes de ferme** : chaque bête a son rendement (★ à ★★★★, visible sur l'invite) ; au-dessus de la moyenne elle donne parfois un produit de plus, au-dessous parfois un de moins ; un petit hérite de la moyenne de ses parents (± un peu, l'élevage aide) : on améliore son troupeau en gardant les meilleures ; /animaux montre la lignée moyenne et la meilleure
 - **Sélection des semences** : chaque culture récoltée chez soi s'améliore (niveaux 1 à 5 à 10, 40, 90, 160, 250 récoltes) : +6 % de récoltes doubles par niveau, triples dès le niveau 3 ; carnet des cultures : /cultures ou toucher « Cultures » dans la fiche [P] (banc `selection`)
 - **Gestes de loisir** : /danse, /salut, /applaudir, /reverence — animés sans fichier d'animation, vus par tous les joueurs autour

@@ -88,7 +88,8 @@ function G.describe(item): string
 		end
 	end
 	local extra = item.slot == "weapon" and string.format(" (dégâts %d)", item.power) or ""
-	return string.format("%s [%s]%s  %s", item.name, G.RARITIES[item.rarity].name, extra, table.concat(parts, "  "))
+	local made = (item.quality and (" · " .. item.quality) or "") .. (item.maker and (" · par " .. item.maker) or "")
+	return string.format("%s [%s]%s%s  %s", item.name, G.RARITIES[item.rarity].name, extra, made, table.concat(parts, "  "))
 end
 
 -- Somme des stats de tout l'équipement porté.

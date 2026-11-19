@@ -619,6 +619,32 @@ function Shop.craft(player: Player, index: number?, times: number?)
 				piece.stats[best] += 2
 			end
 		end
+		-- qualité de la façon (19/11, « à ne pas oublier » § 7 Artisanat) : la compétence d'artisanat fait
+		-- parfois une pièce soignée, excellente ou un chef-d'œuvre (stats en plus, rareté au-dessus),
+		-- signée du nom de l'artisan (elle se revend, se donne, se reconnaît)
+		local s = G.Joueurs.skill(player, "artisanat") or 0
+		local roll = math.random()
+		local q = (roll < math.max(0, s - 25) * 0.004 and 3) or (roll < s * 0.006 and 2) or (roll < 0.15 + s * 0.008 and 1) or 0
+		if q > 0 then
+			local QUAL = { { "soignée", 1 }, { "excellente", 2 }, { "chef-d'œuvre", 4 } }
+			piece.quality = QUAL[q][1]
+			local best, bv = nil, -1
+			for st, v in piece.stats do
+				if v > bv then
+					best, bv = st, v
+				end
+			end
+			if best then
+				piece.stats[best] += QUAL[q][2]
+			end
+			if q >= 2 then
+				piece.rarity = math.min(#G.Gear.RARITIES, (piece.rarity or 1) + 1)
+			end
+			if q == 3 then
+				G.Util.toast(player, "✨ Un chef-d'œuvre ! « " .. piece.name .. " » portera ton nom.", "big")
+			end
+		end
+		piece.maker = player.DisplayName
 		G.Joueurs.addSkillXp(player, "artisanat", 10 + (r.skill and r.skill[2] or 0))
 		piece.visual = piece.visual or ""
 		piece.power = piece.power or 0
