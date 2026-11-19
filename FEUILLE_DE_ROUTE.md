@@ -147,6 +147,8 @@ banque agrandissable sans fin, champs sans limite.
 - [x] Audit du contenu : 0 trou (objets, créatures, recettes, butins, icônes) ; 3 icônes en carré vide corrigées
 - [x] `liste quetes.txt` comparée au jeu → `docs/QUETES-COUVERTURE.md` (53/560 titres repris, 16 sortes)
 - [x] Quêtes « à un lieu » : retrouver, visiter, escorter, enquêter (`QuetesLieux`, ≈150 idées de la liste) — à voir en Play
+- [x] Équilibre du craft (`Shared/Equilibre`) : effets de repas, prix plancher, recettes distinctes, métiers requis
+- [x] Hôtel des ventes v2 : équipement, enchères, recherche/tri, prix de référence ([F] à la boîte aux lettres)
 - [ ] **TEST en Play** de tout ce qui précède (PC fixe)
 - [ ] Icônes peintes à la place des emojis (il faut mettre des images en ligne avec le compte du joueur)
 - Restes des listes, volontairement laissés : jeux de dés (règles Roblox sur les jeux de hasard), tutoriel (principe « sans indication »), guerres/alliances déclarées (retirées le 17/11), saisons (remplacées par les biomes)

@@ -47,7 +47,7 @@ PhysicsService:CollisionGroupSetCollidable("PNJ", "PNJ", false)
 -- Chargement des systèmes (un système absent est remplacé par un bouchon silencieux)
 local NAMES = { "Util", "Interact", "Clock", "World", "Joueurs", "Save", "Mondes", "Game", "Avatar", "Tools", "Props", "Farm",
 	"Doors", "Npcs", "Law", "Animals", "Horses", "Enemies", "Combat", "Fishing", "Shop", "Bodies", "Parcelles",
-	"Minijeux", "Compagnons", "Protection", "Economie", "Social", "Armee", "Evenements", "Clans", "Poste", "Terraforme", "Batir", "Machines", "Donjons", "Bestiaire", "Demolir", "Villages", "Meteo", "Admin", "Politique", "Barques", "Activites", "Journal", "Avantpostes", "Ilots", "Nasses", "Nids", "Butin", "Quetes", "QuetesLieux", "Tourelles", "Chateaux", "Moissons", "Bosquets", "Canaux", "Herbes", "Metiers", "Hameaux", "Fauche", "Reputation", "Chroniques", "Ouvriers", "Livres", "Froid", "Villes" }
+	"Minijeux", "Compagnons", "Protection", "Economie", "Social", "Armee", "Evenements", "Clans", "Poste", "Terraforme", "Batir", "Machines", "Donjons", "Bestiaire", "Demolir", "Villages", "Meteo", "Admin", "Politique", "Barques", "Activites", "Journal", "Avantpostes", "Ilots", "Nasses", "Nids", "Butin", "Quetes", "QuetesLieux", "Ventes", "Tourelles", "Chateaux", "Moissons", "Bosquets", "Canaux", "Herbes", "Metiers", "Hameaux", "Fauche", "Reputation", "Chroniques", "Ouvriers", "Livres", "Froid", "Villes" }
 local stub = setmetatable({}, { __index = function()
 	return function() end
 end })
@@ -132,7 +132,7 @@ end
 
 -- Boucle de jeu
 local worldAcc, flushAcc, saveAcc = 0, 0, 0
-local STEPPED = { "Clock", "Game", "Npcs", "Metiers", "Animals", "Enemies", "Law", "Horses", "Fishing", "Doors", "Compagnons", "Protection", "Armee", "Evenements", "Donjons", "Meteo", "Barques", "Froid", "QuetesLieux" }
+local STEPPED = { "Clock", "Game", "Npcs", "Metiers", "Animals", "Enemies", "Law", "Horses", "Fishing", "Doors", "Compagnons", "Protection", "Armee", "Evenements", "Donjons", "Meteo", "Barques", "Froid", "QuetesLieux", "Ventes" }
 local perf, errored = {}, {}
 G.perf = perf
 RunService.Heartbeat:Connect(function(dt)

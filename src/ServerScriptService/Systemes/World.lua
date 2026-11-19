@@ -281,6 +281,8 @@ local function buildDeco(d, parent: Instance)
 	-- boîte aux lettres des villages : courrier et hôtel des ventes
 	if d.model == "Boite_Lettres" and model.PrimaryPart then
 		G.Util.prompt(model.PrimaryPart, "mail", "Courrier / ventes", "Boîte aux lettres", { dist = 9 })
+		-- hôtel des ventes v2 (Systemes/Ventes) : équipement, enchères, recherche
+		G.Util.prompt(model.PrimaryPart, "hdv", "Hôtel des ventes", "Boîte aux lettres", { dist = 9, key = Enum.KeyCode.F, pad = Enum.KeyCode.ButtonY })
 	end
 	return model
 end

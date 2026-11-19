@@ -295,6 +295,12 @@ function Poste.collect(player: Player)
 					G.Joueurs.add(player, item, k, true)
 				end
 			end
+			-- pièces d'équipement (Systemes/Ventes : enchère gagnée, invendu) : droit dans le sac
+			for _, piece in p.gear or {} do
+				if type(piece) == "table" and piece.slot and piece.stats then
+					table.insert(prof.gear, piece)
+				end
+			end
 			n += 1
 		end
 	end
