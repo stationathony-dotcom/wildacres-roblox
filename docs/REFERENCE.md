@@ -1,7 +1,7 @@
 # Wild Acres — fiche de référence (générée)
 
 Générée par `tools/bancs/reference.luau` depuis les données du jeu : **ne pas modifier à la main**, relancer le banc.
-Contenu : 664 objets, 536 recettes, 23 cultures, 83 créatures, 11 compétences.
+Contenu : 913 objets, 786 recettes, 23 cultures, 165 créatures, 11 compétences.
 
 Règles : tout objet est **échangeable** (troc, étal, hôtel des ventes, courrier, coffre) — aucun objet lié au
 personnage (décision étape 4B : économie entre joueurs, monde bac à sable). L'équipement porté s'échange une fois retiré.
@@ -15,7 +15,7 @@ Rareté = obtention réelle (`Catalogue.assignRarity`) : prix, et pour ce qui ne
 
 ## Objets
 
-Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 10
+Raretés : commun 662 · peu commun 48 · rare 124 · épique 53 · légendaire 26
 
 ### Graines (23)
 
@@ -56,14 +56,14 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🍇 Baies | `berries` | commun | 4 | code:Npcs | 3 recettes, usage direct |
 | 🧴 Baume d'herboriste | `herbal_salve` | commun | 70 | atelier | usage direct |
 | 🍠 Betterave | `beetroot` | commun | 30 | récolte | 2 recettes, usage direct |
-| 🧈 Beurre | `butter` | commun | 40 | atelier | 2 recettes, usage direct |
+| 🟨 Beurre | `butter` | commun | 40 | atelier | 2 recettes, usage direct |
 | 🍺 Bière d'orge | `ale` | commun | 50 | établi | usage direct |
-| 🌾 Blé | `wheat` | commun | 20 | récolte | 9 recettes, usage direct |
+| 🌾 Blé | `wheat` | commun | 20 | récolte | 10 recettes, usage direct |
 | 🥣 Bouillie | `porridge` | commun | 30 | four | usage direct |
 | 🍲 Bouillon | `broth` | commun | 30 | four | usage direct |
 | 🐟 Brochet | `fish_5` | commun | 60 | code:Npcs | usage direct |
 | 🥕 Carotte | `carrot` | commun | 35 | récolte | 3 recettes, usage direct |
-| 🐟 Carpe | `fish_2` | commun | 25 | code:Npcs | usage direct |
+| 🐟 Carpe | `fish_2` | commun | 25 | code:Metiers | usage direct |
 | 🍄 Champignon | `mushroom` | commun | 12 | boss, butin | 1 recette, usage direct |
 | 🥬 Chou | `cabbage` | commun | 40 | récolte | 3 recettes, usage direct |
 | 🍺 Cidre | `cider` | commun | 60 | établi | 1 recette, usage direct |
@@ -76,7 +76,7 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🧀 Fromage | `cheese` | commun | 70 | four | usage direct |
 | 🍇 Fruits séchés | `dried_fruit` | commun | 30 | atelier | 1 recette, usage direct |
 | 🥞 Galette | `galette` | commun | 40 | four | usage direct |
-| 🐟 Gardon | `fish_1` | commun | 15 | code:Npcs | usage direct |
+| 🐟 Gardon | `fish_1` | commun | 15 | butin | usage direct |
 | 🍰 Gâteau au miel | `honey_cake` | rare | 180 | four | usage direct |
 | 🌰 Haricots | `bean` | commun | 30 | récolte | usage direct |
 | 🌿 Herbes aromatiques | `herbs` | commun | 16 | récolte | 5 recettes, usage direct |
@@ -145,7 +145,7 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🌙 Élixir nocturne | `night_elixir` | rare | 200 | atelier | usage direct |
 | 🥚 Œuf | `egg` | commun | 15 | élevage | 5 recettes, usage direct |
 
-### Objets de valeur et collection (98)
+### Objets de valeur et collection (103)
 
 | Objet | id | Rareté | Valeur | Obtention | Usages |
 |---|---|---|---|---|---|
@@ -157,7 +157,7 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | ⚽ Ballon en cuir | `leather_ball` | peu commun | 20 | atelier | usage direct |
 | 🧶 Ballot de tissu | `cloth_bale` | rare | 200 | atelier | usage direct |
 | 👜 Besace en toile | `canvas_bag` | peu commun | 30 | établi | usage direct |
-| 💍 Bijou ancien | `ancient_jewel` | épique | 240 | événement, trésor, butin, boss | 2 recettes, usage direct |
+| 💍 Bijou ancien | `ancient_jewel` | épique | 240 | événement, trésor, boss, butin | 2 recettes, usage direct |
 | 🎟️ Billet de foire | `fair_ticket` | commun | 10 | atelier | usage direct |
 | 🌲 Bois pétrifié | `petrified_wood` | épique | 120 | abattage, butin | usage direct |
 | 🧭 Boussole | `compass` | peu commun | 70 | établi | usage direct |
@@ -172,6 +172,7 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🗺️ Carte régionale | `map_region` | peu commun | 40 | atelier | 1 recette, usage direct |
 | ⭕ Cerceau | `hoop` | commun | 6 | atelier | usage direct |
 | 🪁 Cerf-volant | `kite` | peu commun | 20 | atelier | usage direct |
+| 📜 Charte de ville | `charter` | épique | 300 | établi | usage direct |
 | 🗝️ Clé ancienne | `ancient_key` | rare | 120 | trésor | usage direct |
 | 🗝️ Clé rouillée | `rusty_key` | rare | 10 | fouille, butin | usage direct |
 | 📦 Coffre de ravitaillement | `supply_chest` | rare | 120 | établi | usage direct |
@@ -183,6 +184,7 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 📯 Corne de bête rare | `rare_horn` | épique | 260 | chasse, butin | usage direct |
 | 👑 Couronne | `crown` | légendaire | 1500 | établi | usage direct |
 | 👑 Couronne oubliée | `lost_crown` | légendaire | 1500 | boss | 1 recette, usage direct |
+| 🍴 Couteau de table | `table_knife` | peu commun | 28 | atelier | usage direct |
 | 🛏️ Couverture | `blanket` | peu commun | 50 | atelier | usage direct |
 | 🏺 Céramique décorée | `decorated_ceramic` | rare | 90 | four | usage direct |
 | 💗 Cœur minéral | `mineral_heart` | épique | 500 | événement, butin | usage direct |
@@ -191,6 +193,7 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🗿 Figurine en bois | `wood_figurine` | peu commun | 40 | atelier | usage direct |
 | 🗿 Figurine en pierre | `stone_figurine` | peu commun | 60 | atelier | usage direct |
 | 🦴 Fossile | `fossil` | rare | 120 | minage, fouille | usage direct |
+| 🍴 Fourchette ancienne | `table_fork` | commun | 18 | atelier | usage direct |
 | ⛰️ Fragment d'inscription | `inscription` | épique | 50 | fouille | usage direct |
 | 🛡️ Insigne de garde | `guard_badge` | peu commun | 60 | établi, butin | usage direct |
 | ⭐ Insigne de shérif | `sheriff_badge` | rare | 200 | événement | usage direct |
@@ -224,6 +227,7 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🟡 Pièce d'or | `gold_coin` | épique | 50 | fouille, trésor | usage direct |
 | 🟠 Pièce de cuivre | `copper_coin` | commun | 1 | fouille, butin | usage direct |
 | ⚖️ Poids de mesure | `weights` | peu commun | 30 | four | usage direct |
+| 📁 Porte-documents | `document_case` | peu commun | 40 | établi | usage direct |
 | 🧸 Poupée de chiffon | `rag_doll` | peu commun | 24 | atelier | usage direct |
 | 📒 Registre de patrouille | `patrol_log` | peu commun | 30 | atelier | usage direct |
 | 🏺 Relique | `relic` | épique | 300 | événement, trésor | usage direct |
@@ -233,12 +237,13 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | ⏳ Sablier | `hourglass` | peu commun | 60 | établi | usage direct |
 | 🛍️ Sac d'épices | `spice_sack` | épique | 220 | atelier | usage direct |
 | 🛍️ Sac de farine | `flour_sack` | peu commun | 60 | atelier | usage direct |
+| 👜 Sac de marchand | `merchant_bag` | rare | 85 | établi | usage direct |
 | 🛍️ Sac de sel | `salt_sack` | peu commun | 60 | atelier | usage direct |
 | 🎒 Sac à dos | `backpack` | rare | 80 | établi | usage direct |
 | 👜 Sacoche en cuir | `satchel` | peu commun | 40 | établi | usage direct |
 | 🔵 Saphir | `sapphire` | épique | 250 | minage, trésor | 1 recette, usage direct |
 | 🔴 Sceau | `seal` | peu commun | 40 | établi | usage direct |
-| 👑 Sceau royal | `royal_seal` | épique | 500 | événement, boss | usage direct |
+| 👑 Sceau royal | `royal_seal` | épique | 500 | événement, boss, butin | usage direct |
 | 🧺 Serviette en lin | `towel` | peu commun | 20 | atelier | usage direct |
 | 🖼️ Tableau | `painting` | rare | 180 | atelier | 1 recette, usage direct |
 | 🧿 Talisman | `talisman` | peu commun | — | événement | usage direct |
@@ -248,11 +253,11 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🟢 Émeraude | `emerald` | épique | 280 | minage, trésor | usage direct |
 | 📜 Étui à parchemins | `scroll_case` | peu commun | 30 | établi | usage direct |
 
-### Objets posés et mobilier (117)
+### Objets posés et mobilier (119)
 
 | Objet | id | Rareté | Valeur | Obtention | Usages |
 |---|---|---|---|---|---|
-| 💧 Abreuvoir | `trough` | commun | — | atelier | usage direct |
+| 💧 Abreuvoir | `trough` | commun | — | établi, atelier | usage direct |
 | ⚗️ Alambic | `alembic` | commun | — | atelier | usage direct |
 | 🏹 Arbalète de garde | `tourelle` | épique | 420 | établi, boutique | usage direct |
 | 🏛️ Arche en bois | `wood_arch` | commun | — | établi | usage direct |
@@ -292,6 +297,7 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 📦 Coffre | `chest` | commun | — | établi | usage direct |
 | 🧳 Coffre de transport | `travel_chest` | commun | — | établi | usage direct |
 | 📦 Coffre renforcé | `reinforced_chest` | commun | — | établi | usage direct |
+| 🎁 Coffret | `keepsake_box` | commun | — | établi | usage direct |
 | 🌲 Comptoir | `counter` | commun | — | établi | usage direct |
 | 💀 Crâne de créature | `creature_skull` | commun | — | atelier | usage direct |
 | 🏳️ Drapeau | `flag` | commun | — | atelier | usage direct |
@@ -317,7 +323,7 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🕹️ Levier | `lever` | commun | — | atelier | usage direct |
 | 🛏️ Lit | `bed` | commun | — | établi | usage direct |
 | 🛏️ Lit double | `double_bed` | commun | — | établi | usage direct |
-| 🌾 Mangeoire | `feeder` | commun | — | atelier | usage direct |
+| 🌾 Mangeoire | `feeder` | commun | — | établi, atelier | usage direct |
 | 🏰 Meurtrière | `arrow_slit` | commun | — | atelier | usage direct |
 | 🌬️ Moulin | `windmill` | commun | — | établi | usage direct |
 | 🧶 Métier à tisser | `loom` | commun | — | établi | usage direct |
@@ -325,6 +331,7 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🌲 Palissade | `palisade` | commun | — | atelier | usage direct |
 | 🚩 Panneau de propriété | `claim` | commun | — | atelier | usage direct |
 | 🖼️ Peinture murale | `painting_wall` | commun | — | atelier | usage direct |
+| 🏺 Pichet | `pitcher` | commun | — | four | usage direct |
 | ⛲ Pompe à eau | `water_pump` | commun | — | établi | usage direct |
 | 🌉 Pont-levis | `drawbridge` | commun | — | établi | usage direct |
 | 🐖 Porcherie | `pigsty` | commun | — | établi | usage direct |
@@ -370,7 +377,7 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🧰 Étagère à outils | `tool_rack` | commun | — | atelier | usage direct |
 | 🏪 Étal de marché | `stall` | commun | — | établi | usage direct |
 
-### Objets utilisables (53)
+### Objets utilisables (55)
 
 | Objet | id | Rareté | Valeur | Obtention | Usages |
 |---|---|---|---|---|---|
@@ -387,6 +394,7 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 📯 Corne d'appel | `horn_call` | commun | 60 | établi | usage direct |
 | 🪔 Encens | `incense` | commun | 20 | atelier | usage direct |
 | 🌱 Engrais d'os | `bonemeal` | commun | 10 | atelier | usage direct |
+| 🧲 Fers à cheval | `horseshoes` | rare | 90 | atelier | usage direct |
 | 🎶 Flûte | `flute` | commun | 40 | établi | usage direct |
 | 🌰 Gland (chêne) | `seed_tree_chene` | commun | 4 | abattage | usage direct |
 | 🏺 Gourde | `gourd` | commun | 14 | atelier | usage direct |
@@ -411,6 +419,7 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🌾 Nourriture animale | `animal_feed` | commun | 6 | atelier | usage direct |
 | 🍒 Noyau de cerise | `seed_tree_cerisier` | commun | 6 | abattage | usage direct |
 | 🏺 Outre en cuir | `waterskin` | commun | 18 | établi | usage direct |
+| 📜 Page ancienne | `old_page` | commun | 15 | minage, événement, fouille, trésor | usage direct |
 | 📐 Plan d'artisan | `craftsman_plan` | commun | — | événement | usage direct |
 | 🌲 Pomme de pin (sapin) | `seed_tree_sapin` | commun | 4 | abattage | usage direct |
 | ✨ Poudre minérale | `mineral_powder` | commun | 14 | four | usage direct |
@@ -447,10 +456,14 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🗡️ Épée de cuivre | `sword` | rare | 150 | atelier, boutique | usage direct |
 | ⚔️ Épée de fer | `sword_fe` | épique | 320 | atelier | usage direct |
 
-### Pièces de construction (111)
+### Pièces de construction (169)
 
 | Objet | id | Rareté | Valeur | Obtention | Usages |
 |---|---|---|---|---|---|
+| 🌉 Arche (Bois) | `blk_arche_bois` | commun | 8 | atelier | usage direct |
+| 🌉 Arche (Brique) | `blk_arche_brique` | commun | 24 | établi | usage direct |
+| 🌉 Arche (Pierre taillée) | `blk_arche_taille` | commun | 24 | établi | usage direct |
+| 🌉 Arche (Pierre) | `blk_arche_pierre` | commun | 16 | établi | usage direct |
 | ➖ Barrière (Bois) | `blk_barriere_bois` | commun | 2 | atelier | usage direct |
 | ➖ Barrière (Fer) | `blk_barriere_fer` | commun | 45 | établi | usage direct |
 | ⬛ Bloc (Bois) | `blk_bloc_bois` | commun | 4 | atelier | usage direct |
@@ -461,6 +474,9 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | ⬛ Bloc (Rondins) | `blk_bloc_rondin` | commun | 8 | atelier | usage direct |
 | ⬛ Bloc (Torchis) | `blk_bloc_torchis` | commun | 8 | atelier | usage direct |
 | ⬛ Bloc (Verre) | `blk_bloc_verre` | commun | 16 | établi | usage direct |
+| 🏛️ Chapiteau (Bois) | `blk_chapiteau_bois` | commun | 4 | atelier | usage direct |
+| 🏛️ Chapiteau (Pierre taillée) | `blk_chapiteau_taille` | commun | 12 | établi | usage direct |
+| 🏛️ Chapiteau (Pierre) | `blk_chapiteau_pierre` | commun | 8 | établi | usage direct |
 | 🧱 Cloison (Bois) | `blk_mince_bois` | commun | 2 | atelier | usage direct |
 | 🧱 Cloison (Torchis) | `blk_mince_torchis` | commun | 4 | atelier | usage direct |
 | 🧱 Cloison (Verre) | `blk_mince_verre` | commun | 8 | établi | usage direct |
@@ -473,6 +489,10 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🏛️ Colonne (Brique) | `blk_colonne_brique` | commun | 24 | établi | usage direct |
 | 🏛️ Colonne (Pierre taillée) | `blk_colonne_taille` | commun | 24 | établi | usage direct |
 | 🏛️ Colonne (Pierre) | `blk_colonne_pierre` | commun | 16 | établi | usage direct |
+| 🏰 Créneaux (Bois) | `blk_creneaux_bois` | commun | 6 | atelier | usage direct |
+| 🏰 Créneaux (Brique) | `blk_creneaux_brique` | commun | 18 | établi | usage direct |
+| 🏰 Créneaux (Pierre taillée) | `blk_creneaux_taille` | commun | 18 | établi | usage direct |
+| 🏰 Créneaux (Pierre) | `blk_creneaux_pierre` | commun | 12 | établi | usage direct |
 | 🟫 Dalle (Ardoise) | `blk_dalle_ardoise` | commun | 4 | établi | usage direct |
 | 🟫 Dalle (Bardeaux) | `blk_dalle_bardeau` | commun | 4 | établi | usage direct |
 | 🟫 Dalle (Bois) | `blk_dalle_bois` | commun | 2 | atelier | usage direct |
@@ -481,7 +501,21 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🟫 Dalle (Pierre) | `blk_dalle_pierre` | commun | 4 | établi | usage direct |
 | 🟫 Dalle (Pisé) | `blk_dalle_pise` | commun | 2 | atelier | usage direct |
 | 🟫 Dalle (Tuiles) | `blk_dalle_tuile` | commun | 6 | établi | usage direct |
+| 🔵 Dôme (Ardoise) | `blk_dome_ardoise` | commun | 20 | établi | usage direct |
+| 🔵 Dôme (Brique) | `blk_dome_brique` | commun | 30 | établi | usage direct |
+| 🔵 Dôme (Fer) | `blk_dome_fer` | épique | 225 | établi | usage direct |
+| 🔵 Dôme (Pierre taillée) | `blk_dome_taille` | commun | 30 | établi | usage direct |
+| 🔵 Dôme (Pierre) | `blk_dome_pierre` | commun | 20 | établi | usage direct |
+| 🔵 Dôme (Tuiles) | `blk_dome_tuile` | commun | 30 | établi | usage direct |
+| 🔵 Dôme (Verre) | `blk_dome_verre` | commun | 40 | établi | usage direct |
 | 🔝 Escalier | `stairs` | commun | — | ? | usage direct |
+| 📐 Escalier droit (Bois) | `blk_escalier_bois` | commun | 8 | atelier | usage direct |
+| 📐 Escalier droit (Brique) | `blk_escalier_brique` | commun | 24 | établi | usage direct |
+| 📐 Escalier droit (Pierre taillée) | `blk_escalier_taille` | commun | 24 | établi | usage direct |
+| 📐 Escalier droit (Pierre) | `blk_escalier_pierre` | commun | 16 | établi | usage direct |
+| 🌀 Escalier en colimaçon (Bois) | `blk_colimacon_bois` | commun | 16 | atelier | usage direct |
+| 🌀 Escalier en colimaçon (Pierre taillée) | `blk_colimacon_taille` | commun | 48 | établi | usage direct |
+| 🌀 Escalier en colimaçon (Pierre) | `blk_colimacon_pierre` | commun | 32 | établi | usage direct |
 | 🧱 Grand mur (Bois) | `blk_grandmur_bois` | commun | 10 | atelier | usage direct |
 | 🧱 Grand mur (Brique) | `blk_grandmur_brique` | commun | 30 | établi | usage direct |
 | 🧱 Grand mur (Pierre taillée) | `blk_grandmur_taille` | commun | 30 | établi | usage direct |
@@ -507,12 +541,34 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 📐 Marche (Pierre taillée) | `blk_marche_taille` | commun | 6 | établi | usage direct |
 | 📐 Marche (Pierre) | `blk_marche_pierre` | commun | 4 | établi | usage direct |
 | 🖼️ Mur avec fenêtre | `wall_window` | commun | — | ? | usage direct |
+| 🔳 Mur avec fenêtre (Bois) | `blk_murfenetre_bois` | commun | 6 | atelier | usage direct |
+| 🔳 Mur avec fenêtre (Brique) | `blk_murfenetre_brique` | commun | 18 | établi | usage direct |
+| 🔳 Mur avec fenêtre (Pierre taillée) | `blk_murfenetre_taille` | commun | 18 | établi | usage direct |
+| 🔳 Mur avec fenêtre (Pierre) | `blk_murfenetre_pierre` | commun | 12 | établi | usage direct |
+| 🔳 Mur avec fenêtre (Pisé) | `blk_murfenetre_pise` | commun | 6 | atelier | usage direct |
+| 🔳 Mur avec fenêtre (Rondins) | `blk_murfenetre_rondin` | commun | 12 | atelier | usage direct |
+| 🔳 Mur avec fenêtre (Torchis) | `blk_murfenetre_torchis` | commun | 12 | atelier | usage direct |
 | 🚪 Mur avec porte | `wall_door` | commun | — | ? | usage direct |
+| 🚪 Mur avec porte (Bois) | `blk_murporte_bois` | commun | 6 | atelier | usage direct |
+| 🚪 Mur avec porte (Brique) | `blk_murporte_brique` | commun | 18 | établi | usage direct |
+| 🚪 Mur avec porte (Pierre taillée) | `blk_murporte_taille` | commun | 18 | établi | usage direct |
+| 🚪 Mur avec porte (Pierre) | `blk_murporte_pierre` | commun | 12 | établi | usage direct |
+| 🚪 Mur avec porte (Pisé) | `blk_murporte_pise` | commun | 6 | atelier | usage direct |
+| 🚪 Mur avec porte (Rondins) | `blk_murporte_rondin` | commun | 12 | atelier | usage direct |
+| 🚪 Mur avec porte (Torchis) | `blk_murporte_torchis` | commun | 12 | atelier | usage direct |
+| 🧱 Mur courbe (Bois) | `blk_murcourbe_bois` | commun | 10 | atelier | usage direct |
+| 🧱 Mur courbe (Brique) | `blk_murcourbe_brique` | commun | 30 | établi | usage direct |
+| 🧱 Mur courbe (Pierre taillée) | `blk_murcourbe_taille` | commun | 30 | établi | usage direct |
+| 🧱 Mur courbe (Pierre) | `blk_murcourbe_pierre` | commun | 20 | établi | usage direct |
+| 🧱 Mur courbe (Torchis) | `blk_murcourbe_torchis` | commun | 20 | atelier | usage direct |
 | 🧱 Mur d'étage | `wall2` | commun | — | ? | usage direct |
 | 🖼️ Mur d'étage avec fenêtre | `wall2_window` | commun | — | ? | usage direct |
 | 🧱 Mur de briques | `wall_brick` | commun | — | ? | usage direct |
 | 🧱 Mur de pierre | `wall_stone` | commun | — | ? | usage direct |
 | 🚪 Mur en planches | `wall` | commun | — | ? | usage direct |
+| 🏰 Mur à meurtrière (Brique) | `blk_meurtriere_brique` | commun | 18 | établi | usage direct |
+| 🏰 Mur à meurtrière (Pierre taillée) | `blk_meurtriere_taille` | commun | 18 | établi | usage direct |
+| 🏰 Mur à meurtrière (Pierre) | `blk_meurtriere_pierre` | commun | 12 | établi | usage direct |
 | 🧱 Muret (Bois) | `blk_demimur_bois` | commun | 4 | atelier | usage direct |
 | 🧱 Muret (Brique) | `blk_demimur_brique` | commun | 12 | établi | usage direct |
 | 🧱 Muret (Pierre taillée) | `blk_demimur_taille` | commun | 12 | établi | usage direct |
@@ -539,6 +595,12 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🔺 Pente raide (Chaume) | `blk_toitpointu_chaume` | commun | 4 | atelier | usage direct |
 | 🔺 Pente raide (Pierre taillée) | `blk_toitpointu_taille` | commun | 12 | établi | usage direct |
 | 🔺 Pente raide (Tuiles) | `blk_toitpointu_tuile` | commun | 12 | établi | usage direct |
+| 🔺 Pignon (mur triangulaire) (Bois) | `blk_pignon_bois` | commun | 4 | atelier | usage direct |
+| 🔺 Pignon (mur triangulaire) (Brique) | `blk_pignon_brique` | commun | 12 | établi | usage direct |
+| 🔺 Pignon (mur triangulaire) (Pierre taillée) | `blk_pignon_taille` | commun | 12 | établi | usage direct |
+| 🔺 Pignon (mur triangulaire) (Pierre) | `blk_pignon_pierre` | commun | 8 | établi | usage direct |
+| 🔺 Pignon (mur triangulaire) (Pisé) | `blk_pignon_pise` | commun | 4 | atelier | usage direct |
+| 🔺 Pignon (mur triangulaire) (Torchis) | `blk_pignon_torchis` | commun | 8 | atelier | usage direct |
 | 🏛️ Pilier rond (Bois) | `blk_pilier_bois` | commun | 4 | atelier | usage direct |
 | 🏛️ Pilier rond (Brique) | `blk_pilier_brique` | commun | 12 | établi | usage direct |
 | 🏛️ Pilier rond (Pierre taillée) | `blk_pilier_taille` | commun | 12 | établi | usage direct |
@@ -557,79 +619,151 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 📐 Rampe / marches (Bois) | `blk_rampe_bois` | commun | 8 | atelier | usage direct |
 | 📐 Rampe / marches (Pierre taillée) | `blk_rampe_taille` | commun | 24 | établi | usage direct |
 | 📐 Rampe / marches (Pierre) | `blk_rampe_pierre` | commun | 16 | établi | usage direct |
+| ⛺ Toit conique (Ardoise) | `blk_toitconique_ardoise` | commun | 20 | établi | usage direct |
+| ⛺ Toit conique (Bardeaux) | `blk_toitconique_bardeau` | commun | 20 | établi | usage direct |
+| ⛺ Toit conique (Bois) | `blk_toitconique_bois` | commun | 10 | atelier | usage direct |
+| ⛺ Toit conique (Chaume) | `blk_toitconique_chaume` | commun | 10 | atelier | usage direct |
+| ⛺ Toit conique (Tuiles) | `blk_toitconique_tuile` | commun | 30 | établi | usage direct |
 | 🏠 Toit d'étage | `roof2` | commun | — | code:Shop | usage direct |
 | 🏠 Toit de chaume | `roof` | commun | — | code:Shop | usage direct |
 | 🧱 Échelle (Bois) | `blk_echelle_bois` | commun | 4 | atelier | usage direct |
 | 🧱 Échelle (Fer) | `blk_echelle_fer` | rare | 90 | établi | usage direct |
 | 🧱 Échelle (Rondins) | `blk_echelle_rondin` | commun | 8 | atelier | usage direct |
 
-### Ressources et matières (153)
+### Ressources et matières (335)
 
 | Objet | id | Rareté | Valeur | Obtention | Usages |
 |---|---|---|---|---|---|
 | 🔩 Acier | `steel` | rare | 90 | four, butin | 19 recettes |
+| 🦇 Aile membraneuse de chauve-souris des cavernes | `prise_cave_bat` | commun | 16 | code:Prises | 1 recette |
+| 🦇 Aile membraneuse de chauve-souris géante | `prise_giant_bat` | commun | 21 | code:Prises | 1 recette |
 | 🏺 Amphore | `amphora` | commun | 40 | four | 3 recettes |
 | ⭕ Anneau métallique | `iron_ring` | commun | 5 | atelier, butin | 10 recettes |
 | 🐛 Appâts | `bait` | commun | 2 | atelier, butin | code:Bestiaire |
-| 🟤 Argile | `clay` | commun | 4 | butin | 8 recettes |
-| 🟤 Argile préparée | `prepared_clay` | commun | 5 | atelier | 6 recettes |
+| 🟤 Argile | `clay` | commun | 4 | butin | 12 recettes |
+| 🟤 Argile préparée | `prepared_clay` | commun | 5 | atelier | 7 recettes |
 | 🍽️ Assiette | `plate` | commun | 10 | four | code:Joueurs |
 | 🍽️ Assiette en bois | `wood_plate` | commun | 2 | atelier | code:Joueurs |
+| 📜 Avis de recherche de chasseur de primes | `prise_bounty_hunter` | commun | 36 | code:Prises | 1 recette |
 | 🦯 Barre de fer | `iron_bar` | commun | 30 | four | 11 recettes |
-| 🌲 Bois | `wood` | commun | 2 | code:Main | 25 recettes |
+| 🌲 Bois | `wood` | commun | 2 | butin | 28 recettes |
 | 🦌 Bois de cerf | `antler` | commun | 24 | butin | 1 recette |
+| 🦌 Bois de cerf | `prise_deer` | commun | 11 | code:Prises | 1 recette |
+| 🦌 Bois de cerf corrompu | `prise_corrupted_stag` | commun | 31 | code:Prises | 1 recette |
+| 🦌 Bois de cerf spectral | `prise_spectral_stag` | commun | 31 | code:Prises | 1 recette |
 | 🥣 Bol | `bowl` | commun | 8 | four | 1 recette |
-| 🔘 Boucle | `buckle` | commun | 6 | atelier | 6 recettes |
+| 🐫 Bosse de graisse de chameau | `prise_camel` | commun | 11 | code:Prises | 1 recette |
+| 🔘 Boucle | `buckle` | commun | 6 | atelier | 8 recettes |
 | 🕯️ Bougie (cire) | `candle_wax` | commun | 10 | atelier | 2 recettes |
 | 🍾 Bouteille en verre | `bottle` | commun | 12 | four | 3 recettes |
 | 🌿 Branches | `branches` | commun | 1 | abattage | 4 recettes |
-| 🧱 Brique | `brick` | commun | 6 | four | 12 recettes |
+| 🧱 Brique | `brick` | commun | 6 | four | 23 recettes |
 | 🌼 Camomille | `chamomile` | commun | 6 | cueillette | 3 recettes |
+| 🌑 Cape d'ombre de rôdeur obscur | `prise_dark_prowler` | commun | 31 | code:Prises | 1 recette |
+| 🐢 Carapace de tortue ancienne | `prise_ancient_turtle` | rare | 96 | code:Prises | 1 recette |
 | 🐞 Carapace dorée (Scarabée royal) | `golden_carapace` | légendaire | 800 | boss | 1 recette |
+| 🏹 Carquois de chasseur de lune | `prise_moon_hunter` | commun | 36 | code:Prises | 1 recette |
+| 🏹 Carquois de chasseur nocturne | `prise_night_stalker` | commun | 31 | code:Prises | 1 recette |
 | 📌 Carreaux | `bolt` | commun | 3 | établi, boutique | revente |
 | 🔱 Carreaux de baliste | `bolt_heavy` | commun | 30 | établi, boutique | revente |
 | 🧟 Chair pourrie | `rotten` | commun | 1 | butin | 2 recettes |
 | 🍄 Champignon phosphorescent | `glow_mushroom` | rare | 80 | cueillette de nuit | revente |
 | 🍄 Champignon rare | `rare_mushroom` | peu commun | 60 | cueillette | revente |
-| ⚫ Charbon | `coal` | commun | 6 | four, boutique | 12 recettes |
-| 🔩 Charnière | `hinge` | commun | 10 | atelier | 8 recettes |
+| ⚫ Charbon | `coal` | commun | 6 | four, boutique, butin | 12 recettes |
+| 🔩 Charnière | `hinge` | commun | 10 | atelier | 9 recettes |
 | ⛓️ Chaîne | `chain` | commun | 24 | atelier | 4 recettes |
 | 🌲 Chevilles en bois | `peg` | commun | 1 | atelier | 1 recette |
 | 🍺 Chope en métal | `tankard` | commun | 26 | établi | 1 recette |
 | 🍺 Chope en terre cuite | `mug` | commun | 10 | four | 3 recettes |
 | 🕯️ Cire d'abeille | `beeswax` | commun | 14 | atelier, butin | 2 recettes |
-| 📌 Clous | `nails` | commun | 3 | atelier | 10 recettes |
+| 📌 Clous | `nails` | commun | 3 | atelier | 11 recettes |
 | 📌 Clous de cuivre | `copper_nails` | commun | 2 | atelier | 1 recette |
+| ➰ Collet de braconnier | `prise_poacher` | commun | 21 | code:Prises | 1 recette |
 | 📿 Collier de chien | `dog_collar` | commun | 30 | établi | code:Compagnons |
-| ➰ Corde | `rope` | commun | 5 | atelier, boutique, butin | 34 recettes |
+| ➰ Corde | `rope` | commun | 5 | atelier, boutique, butin | 131 recettes |
 | ➰ Corde tressée | `braided_rope` | commun | 14 | établi | 2 recettes |
 | 📯 Corne | `horn` | commun | 20 | chasse, butin | 1 recette |
-| 💎 Cristal ancien | `ancient_crystal` | épique | 260 | minage, butin | code:Bestiaire |
+| 🐂 Corne d'homme-taureau | `prise_bull_man` | rare | 111 | code:Prises | 1 recette |
+| 🐴 Crin de kelpie | `prise_kelpie` | commun | 36 | code:Prises | 1 recette |
+| 💎 Cristal ancien | `ancient_crystal` | épique | 260 | minage, butin | code:Chroniques |
 | ❄️ Cristal de givre (Brumeglace) | `frost_crystal` | légendaire | 800 | boss | 1 recette |
 | 🧊 Cristal de glace | `ice_crystal` | commun | 40 | butin, boss | 2 recettes |
+| 🦴 Croc d'hyène monstrueuse | `prise_hyena` | commun | 31 | code:Prises | 1 recette |
+| 🐺 Croc de Vargor | `prise_vargor` | épique | 276 | code:Prises | 2 recettes |
+| 🦴 Croc de chacal | `prise_jackal` | commun | 16 | code:Prises | 1 recette |
+| 🦴 Croc de chien errant | `prise_stray_dog` | commun | 11 | code:Prises | 1 recette |
+| 🦴 Croc de chien sauvage | `prise_wild_dog` | commun | 16 | code:Prises | 1 recette |
+| 🐺 Croc de hurleur nocturne | `prise_night_howler` | commun | 31 | code:Prises | 1 recette |
+| 🐺 Croc de loup | `prise_wolf` | commun | 16 | code:Prises | 1 recette |
+| 🐺 Croc de loup blanc | `prise_wolf_white` | commun | 26 | code:Prises | 1 recette |
+| 🐺 Croc de loup des ombres | `prise_shadow_wolf` | commun | 31 | code:Prises | 1 recette |
+| 🐺 Croc de loup noir | `prise_black_wolf` | commun | 26 | code:Prises | 1 recette |
+| 🐺 Croc de loup polaire | `prise_polar_wolf` | commun | 26 | code:Prises | 1 recette |
+| 🦴 Croc de lynx | `prise_lynx` | commun | 21 | code:Prises | 1 recette |
 | 🎣 Crochet | `lockpick` | commun | 15 | établi, atelier, butin | 1 recette |
+| 🗝️ Crochet de cambrioleur | `prise_burglar` | commun | 21 | code:Prises | 1 recette |
 | 🏺 Cruche | `jug` | commun | 18 | four | code:Shop |
 | 🥄 Cuillère en bois | `spoon` | commun | 1 | atelier | code:Shop |
-| 🟫 Cuir | `leather` | commun | 14 | butin | 42 recettes |
-| 🟫 Cuir souple | `soft_leather` | commun | 30 | atelier | 6 recettes |
+| 🟫 Cuir | `leather` | commun | 14 | butin | 81 recettes |
+| 🟫 Cuir souple | `soft_leather` | commun | 30 | atelier | 7 recettes |
+| 💠 Cœur d'ent corrompu | `prise_corrupted_ent` | rare | 111 | code:Prises | 1 recette |
+| 💠 Cœur de colosse de pierre | `prise_stone_golem` | rare | 126 | code:Prises | 1 recette |
+| 💠 Cœur de colosse de terre | `prise_earth_colossus` | rare | 126 | code:Prises | 1 recette |
+| 💠 Cœur de gardien de granit | `prise_granite_warden` | rare | 126 | code:Prises | 1 recette |
+| 💠 Cœur de gardien des ruines | `prise_ruin_guardian` | rare | 111 | code:Prises | 1 recette |
+| 💠 Cœur de gardien des tombes | `prise_tomb_warden` | rare | 111 | code:Prises | 1 recette |
+| 💠 Cœur de gardien du lac | `prise_lake_guardian` | rare | 111 | code:Prises | 1 recette |
+| 💠 Cœur de gardien maudit | `prise_cursed_warden` | rare | 111 | code:Prises | 1 recette |
+| 💠 Cœur de golem de bois | `prise_wood_golem` | commun | 36 | code:Prises | 1 recette |
+| 💠 Cœur de golem de glace | `prise_ice_golem` | commun | 36 | code:Prises | 1 recette |
+| 💠 Cœur de golem de grès | `prise_sandstone_golem` | rare | 111 | code:Prises | 1 recette |
+| 💠 Cœur de la Mère des Ronces | `prise_bramble_mother` | épique | 276 | code:Prises | 2 recettes |
+| 💠 Cœur du Colosse de Verre | `prise_glass_colossus` | épique | 276 | code:Prises | 2 recettes |
+| 💠 Cœur du Gardien des Moissons | `prise_harvest_warden` | rare | 216 | code:Prises | 2 recettes |
 | ❄️ Cœur gelé | `frozen_heart` | légendaire | 600 | boss | 1 recette |
+| 🦂 Dard de scorpion | `prise_scorpion` | commun | 26 | code:Prises | 1 recette |
 | 🦂 Dard de scorpion | `stinger` | commun | 25 | butin | 1 recette |
-| 🦷 Dent | `tooth` | commun | 6 | chasse, butin | code:Bestiaire |
+| 🦷 Dent | `tooth` | commun | 6 | chasse, butin, boss | code:Bestiaire |
 | 🦷 Dent de monstre | `monster_tooth` | commun | 60 | chasse, butin | 1 recette |
-| 🖋️ Encre | `ink` | commun | 8 | atelier | 26 recettes |
+| 🐗 Défense de sanglier | `prise_boar` | commun | 16 | code:Prises | 1 recette |
+| 🐗 Défense de sanglier colossal | `prise_colossal_boar` | rare | 96 | code:Prises | 1 recette |
+| 🐗 Défense de sanglier des marécages | `prise_swamp_boar` | commun | 26 | code:Prises | 1 recette |
+| 🐗 Défense de sanglier givré | `prise_frost_boar` | commun | 31 | code:Prises | 1 recette |
+| 🖋️ Encre | `ink` | commun | 8 | atelier | 27 recettes |
 | 🖋️ Encrier | `inkwell` | commun | 16 | établi | 1 recette |
 | ⚙️ Engrenage en bois | `gear_wood` | commun | 12 | établi | 4 recettes |
 | ⚙️ Engrenage en fer | `gear_iron` | commun | 50 | atelier | 3 recettes |
+| 👻 Essence d'assassin de l'ombre | `prise_assassin` | commun | 36 | code:Prises | 1 recette |
+| 👻 Essence d'esprit de l'orage | `prise_storm_wraith` | rare | 111 | code:Prises | 1 recette |
+| 👻 Essence d'esprit des arbres | `prise_tree_spirit` | commun | 31 | code:Prises | 1 recette |
+| 👻 Essence d'esprit des bois | `prise_woods_spirit` | commun | 31 | code:Prises | 1 recette |
+| 👻 Essence d'esprit des eaux | `prise_water_spirit` | commun | 31 | code:Prises | 1 recette |
+| 👻 Essence d'esprit des ruines | `prise_ruin_spirit` | commun | 31 | code:Prises | 1 recette |
+| 👻 Essence d'esprit noyé | `prise_drowned_spirit` | commun | 26 | code:Prises | 1 recette |
+| 👻 Essence d'ombre possédée | `prise_possessed_shade` | commun | 36 | code:Prises | 1 recette |
+| 👻 Essence d'ombre rampante | `prise_creeping_shadow` | commun | 31 | code:Prises | 1 recette |
+| 👻 Essence d'ombre rôdeuse | `prise_shade` | commun | 21 | code:Prises | 1 recette |
+| 👻 Essence de Brumeglace | `prise_brumeglace` | épique | 306 | code:Prises | 2 recettes |
+| 👻 Essence de feu follet | `prise_wisp` | commun | 21 | code:Prises | 1 recette |
+| 👻 Essence de marcheur sans visage | `prise_faceless_walker` | commun | 36 | code:Prises | 1 recette |
+| 👻 Essence de revenant | `prise_revenant` | commun | 26 | code:Prises | 1 recette |
+| 👻 Essence de spectre des dunes | `prise_dune_spectre` | commun | 31 | code:Prises | 1 recette |
+| 👻 Essence de spectre du blizzard | `prise_blizzard_spectre` | commun | 36 | code:Prises | 1 recette |
+| 👻 Essence de spectre errant | `prise_wandering_spectre` | commun | 26 | code:Prises | 1 recette |
+| 👻 Essence du Roi sans couronne | `prise_crownless_king` | épique | 306 | code:Prises | 2 recettes |
 | 🌾 Farine | `flour` | commun | 18 | code:Machines | 2 recettes |
+| 🗡️ Faux de mante religieuse géante | `prise_giant_mantis` | commun | 31 | code:Prises | 1 recette |
+| 🧾 Faux sceau de faux marchand | `prise_fake_merchant` | commun | 21 | code:Prises | 1 recette |
 | 🔩 Ferrure | `fitting` | commun | 8 | atelier | 1 recette |
-| 🌿 Fibre | `fiber` | commun | 1 | butin | 12 recettes |
+| 🌿 Fibre | `fiber` | commun | 1 | butin | 13 recettes |
 | 🧶 Fil de laine | `wool_thread` | commun | 20 | atelier | 1 recette |
 | 🧵 Fil de lin | `linen_thread` | commun | 6 | atelier | 4 recettes |
 | 🧪 Fiole d'extrait | `extract` | commun | 30 | atelier, butin | 3 recettes |
 | 🧪 Fiole vide | `vial` | commun | 10 | four, butin | 3 recettes |
-| 🌼 Fleur | `flower` | commun | 5 | code:RegionPlan | 5 recettes |
+| 🌼 Fleur | `flower` | commun | 5 | butin | 5 recettes |
 | 🌙 Fleur lunaire | `moon_flower` | rare | 180 | cueillette de nuit | revente |
 | 🌙 Fleur nocturne | `night_flower` | commun | 70 | cueillette de nuit, butin | 1 recette |
+| 🏹 Flèche | `arrow` | commun | 2 | établi | code:Combat |
 | 🌾 Foin | `hay` | commun | 3 | atelier | 2 recettes |
 | 🦊 Fourrure | `fur` | commun | 18 | butin | 3 recettes |
 | 🐺 Fourrure royale (Vargor) | `royal_fur` | légendaire | 700 | boss | 1 recette |
@@ -637,53 +771,128 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🧩 Fragment de carte | `map_fragment` | rare | 20 | pêche | 1 recette |
 | ☄️ Fragment de météorite | `meteorite` | épique | 400 | événement | 1 recette |
 | 🧩 Fragment de relique | `relic_fragment` | rare | 40 | fouille, butin | 1 recette |
+| ✨ Fragment de roi déchu | `prise_fallen_king` | rare | 141 | code:Prises | 1 recette |
+| 🟢 Gelée d'homme-boue | `prise_mud_man` | commun | 26 | code:Prises | 1 recette |
+| 🟢 Gelée de golem de vase | `prise_mud_golem` | rare | 96 | code:Prises | 1 recette |
+| 🟢 Gelée de méduse des marais | `prise_freshwater_jellyfish` | commun | 21 | code:Prises | 1 recette |
+| 🟢 Gelée de sangsue géante | `prise_leech` | commun | 21 | code:Prises | 1 recette |
+| 🟢 Gelée de slime | `prise_slime` | commun | 11 | code:Prises | 1 recette |
 | 🟢 Gelée de slime | `slime_gel` | commun | 6 | butin, boss | 1 recette |
+| 🟢 Gelée de slime bleu | `prise_slime_blue` | commun | 16 | code:Prises | 1 recette |
+| 🟢 Gelée du Roi des Slimes | `prise_boss_slime` | rare | 186 | code:Prises | 2 recettes |
+| 🟢 Gelée du Roi des marais | `prise_marsh_king` | épique | 276 | code:Prises | 2 recettes |
+| 🍯 Gelée royale d'essaim d'abeilles sauvages | `prise_bee_swarm` | commun | 16 | code:Prises | 1 recette |
+| ❄️ Givre éternel du Dormeur des Glaces | `prise_ice_sleeper` | épique | 306 | code:Prises | 2 recettes |
+| 🕸️ Glande à soie d'araignée de givre | `prise_frost_spider` | commun | 31 | code:Prises | 1 recette |
+| 🕸️ Glande à soie d'araignée des cavernes | `prise_cave_spider` | commun | 26 | code:Prises | 1 recette |
+| 🕸️ Glande à soie d'araignée des roseaux | `prise_reed_spider` | commun | 26 | code:Prises | 1 recette |
+| 🕸️ Glande à soie d'araignée du désert | `prise_desert_spider` | commun | 26 | code:Prises | 1 recette |
+| 🕸️ Glande à soie d'araignée géante | `prise_spider` | commun | 21 | code:Prises | 1 recette |
+| 🕸️ Glande à soie d'araignée sylvestre | `prise_sylvan_spider` | commun | 26 | code:Prises | 1 recette |
+| 🐸 Glande à venin de crapaud géant | `prise_toad` | commun | 16 | code:Prises | 1 recette |
 | 🥤 Gobelet en bois | `wood_cup` | commun | 2 | atelier | 4 recettes |
 | 🌰 Graine ancienne | `ancient_seed` | rare | 150 | boss | 1 recette |
-| 🧈 Graisse | `fat` | commun | 6 | atelier, butin | 3 recettes |
+| 🥓 Graisse | `fat` | commun | 6 | atelier, butin | 3 recettes |
 | ⛰️ Gravier | `gravel` | commun | 1 | atelier, minage | revente |
+| 🐻 Griffe d'ours | `prise_bear` | commun | 31 | code:Prises | 1 recette |
+| 🐻 Griffe d'ours blanc | `prise_polar_bear` | commun | 36 | code:Prises | 1 recette |
+| 🐻 Griffe d'ours brun | `prise_brown_bear` | commun | 31 | code:Prises | 1 recette |
+| 🐻 Griffe d'ours des cavernes | `prise_cave_bear` | rare | 111 | code:Prises | 1 recette |
 | 🐾 Griffe de créature | `claw` | commun | 50 | chasse, butin | code:Bestiaire |
+| 📜 Grimoire déchiré de moine déchu | `prise_fallen_monk` | commun | 31 | code:Prises | 1 recette |
+| 📜 Grimoire déchiré de sorcier des ronces | `prise_bramble_witch` | commun | 31 | code:Prises | 1 recette |
+| 📜 Grimoire déchiré de sorcière des marais | `prise_swamp_witch` | commun | 36 | code:Prises | 1 recette |
 | 🎣 Hameçon | `hook` | commun | 6 | atelier | 3 recettes |
 | 🌿 Huile | `oil` | commun | 14 | établi | 1 recette |
+| 🎖️ Insigne de chef de bande | `prise_bandit_chief` | rare | 111 | code:Prises | 1 recette |
+| 🎖️ Insigne de garde corrompu | `prise_corrupt_guard` | commun | 31 | code:Prises | 1 recette |
+| 🎖️ Insigne de garde renégat | `prise_renegade_guard` | commun | 31 | code:Prises | 1 recette |
+| 🎖️ Insigne de soldat déserteur | `prise_deserter` | commun | 31 | code:Prises | 1 recette |
 | 🧶 Laine | `wool` | commun | 60 | élevage | 2 recettes |
 | 🔪 Lame brute | `blade` | commun | 40 | atelier | 1 recette |
 | 💜 Lavande | `lavender` | commun | 9 | cueillette | 2 recettes |
 | 🥈 Lingot d'argent | `silver_ingot` | rare | 80 | four | 8 recettes |
-| 🥇 Lingot d'or | `gold_ingot` | rare | 120 | four | 15 recettes |
-| 🥉 Lingot de cuivre | `copper_ingot` | commun | 30 | four | 32 recettes |
-| 🔩 Lingot de fer | `iron_ingot` | commun | 45 | four | 48 recettes |
+| 🥇 Lingot d'or | `gold_ingot` | rare | 120 | four | 31 recettes |
+| 🥉 Lingot de cuivre | `copper_ingot` | commun | 30 | four | 91 recettes |
+| 🔩 Lingot de fer | `iron_ingot` | commun | 45 | four | 86 recettes |
 | 🔒 Loquet en bois | `lock_1` | commun | 20 | atelier | revente |
 | 🥄 Louche | `ladle` | commun | 8 | établi | code:Shop |
 | 🌱 Mandragore | `mandrake` | rare | 120 | cueillette, butin | 1 recette |
+| 🎭 Masque de bandit des routes | `prise_bandit` | commun | 21 | code:Prises | 1 recette |
+| 🎭 Masque de maraudeur | `prise_marauder` | commun | 26 | code:Prises | 1 recette |
+| 🎭 Masque de pillard | `prise_pillager` | commun | 26 | code:Prises | 1 recette |
+| 🎭 Masque de pilleur de ruines | `prise_ruin_looter` | commun | 26 | code:Prises | 1 recette |
+| 🎭 Masque de voleur de grand chemin | `prise_highwayman` | commun | 21 | code:Prises | 1 recette |
 | 🌿 Menthe | `mint` | commun | 6 | cueillette | 1 recette |
 | 🌼 Millepertuis | `st_john` | commun | 12 | cueillette | 1 recette |
 | ⚪ Minerai d'argent | `silver_ore` | commun | 30 | minage | 1 recette |
 | 🟡 Minerai d'or | `gold_ore` | commun | 45 | boss | 1 recette |
 | 🟠 Minerai de cuivre | `copper_ore` | commun | 10 | butin | 1 recette |
 | ⛰️ Minerai de fer | `ore` | commun | 15 | butin | 2 recettes |
+| 🌑 Noyau d'ombre de dévoreur de lumière | `prise_light_eater` | commun | 36 | code:Prises | 1 recette |
 | 💰 Or | `gold` | commun | — | trésor | code:Activites |
+| 👂 Oreille pointue de gobelin | `prise_goblin` | commun | 26 | code:Prises | 1 recette |
+| 👂 Oreille pointue de gobelin archer | `prise_goblin_archer` | commun | 26 | code:Prises | 1 recette |
+| 👂 Oreille pointue de gobelin des bois | `prise_wood_goblin` | commun | 21 | code:Prises | 1 recette |
+| 👂 Oreille pointue de gobelin des marais | `prise_swamp_goblin` | commun | 21 | code:Prises | 1 recette |
+| 👂 Oreille pointue du Chef Gobelin | `prise_boss_goblin` | épique | 306 | code:Prises | 2 recettes |
 | 🌿 Ortie | `nettle` | commun | 3 | cueillette, butin | 2 recettes |
 | 🦴 Os | `bone` | commun | 4 | butin | 9 recettes |
+| 🦴 Os massif d'ogre | `prise_ogre` | rare | 126 | code:Prises | 1 recette |
+| 🦴 Os massif de cyclope | `prise_cyclops` | rare | 126 | code:Prises | 1 recette |
+| 🦴 Os massif de géant de glace | `prise_ice_giant` | rare | 141 | code:Prises | 1 recette |
+| 🦴 Os massif de géant des forêts | `prise_forest_giant` | rare | 126 | code:Prises | 1 recette |
+| 🦴 Os massif de géant des ruines | `prise_ruin_giant` | rare | 141 | code:Prises | 1 recette |
+| 🦴 Os massif de minotaure | `prise_minotaur` | rare | 141 | code:Prises | 1 recette |
+| 🦴 Os massif de troll des cavernes | `prise_cave_troll` | rare | 126 | code:Prises | 1 recette |
+| 🦴 Os massif de troll des glaces | `prise_frost_troll` | rare | 126 | code:Prises | 1 recette |
+| 🦴 Os massif de troll des montagnes | `prise_mountain_troll` | rare | 126 | code:Prises | 1 recette |
+| 🦴 Os massif de troll des racines | `prise_root_troll` | rare | 111 | code:Prises | 1 recette |
+| 🦴 Os massif de yéti | `prise_yeti` | rare | 111 | code:Prises | 1 recette |
+| 🦴 Os massif du Géant des montagnes | `prise_mountain_giant` | épique | 306 | code:Prises | 2 recettes |
+| 💀 Os maudit de goule | `prise_ghoul` | commun | 26 | code:Prises | 1 recette |
+| 💀 Os maudit de momie ancienne | `prise_mummy` | commun | 36 | code:Prises | 1 recette |
+| 💀 Os maudit de squelette ancien | `prise_ancient_skeleton` | commun | 31 | code:Prises | 1 recette |
+| 💀 Os maudit de squelette errant | `prise_skeleton` | commun | 21 | code:Prises | 1 recette |
 | 🌾 Paille | `straw` | commun | 1 | atelier | 10 recettes |
-| 📄 Papier | `paper` | commun | 4 | établi | 19 recettes |
+| 🌾 Paille maudite d'épouvantail maudit | `prise_scarecrow` | commun | 21 | code:Prises | 1 recette |
+| 📄 Papier | `paper` | commun | 4 | établi | 20 recettes |
 | 📜 Parchemin vierge | `parchment` | commun | 8 | établi | 6 recettes |
-| 🟫 Peau brute | `raw_hide` | commun | 10 | chasse, butin | 1 recette |
+| 🐇 Patte de lapin | `prise_rabbit` | commun | 11 | code:Prises | 1 recette |
+| 🟫 Peau brute | `raw_hide` | commun | 10 | chasse, butin, boss | 1 recette |
 | 🦌 Peau de cerf | `deer_hide` | commun | 22 | chasse, butin | code:Bestiaire |
 | 🐺 Peau de loup | `wolf_pelt` | commun | 28 | chasse, boss, butin | code:Bestiaire |
 | 🟫 Peau raclée | `scraped_hide` | commun | 14 | atelier | 1 recette |
-| ⛰️ Pierre | `stone` | commun | 2 | butin | 58 recettes |
+| 🐍 Peau visqueuse d'anguille monstrueuse | `prise_monster_eel` | commun | 31 | code:Prises | 1 recette |
+| ⛰️ Pierre | `stone` | commun | 2 | butin, boss | 84 recettes |
 | ✨ Pierre lumineuse | `glowstone` | rare | 120 | minage, butin | 1 recette |
-| 🌲 Planches | `planks` | commun | 2 | atelier, boutique | 139 recettes |
-| 🐦 Plume | `feather` | commun | 5 | butin | 4 recettes |
+| 🦀 Pince de crabe géant | `prise_giant_crab` | commun | 31 | code:Prises | 1 recette |
+| 🌲 Planches | `planks` | commun | 2 | atelier, boutique | 190 recettes |
+| 🐦 Plume | `feather` | commun | 5 | butin, boss | 5 recettes |
 | 🐦 Plume d'écriture | `quill` | commun | 3 | atelier | code:Joueurs |
+| 🐦 Plume de flamant | `prise_flamingo` | commun | 11 | code:Prises | 1 recette |
+| 🐦 Plume de pingouin | `prise_penguin` | commun | 11 | code:Prises | 1 recette |
 | 🐦 Plume nocturne | `night_feather` | rare | 90 | chasse, butin | code:Bestiaire |
+| 🐦 Plumes d'aigle des montagnes | `prise_mountain_eagle` | commun | 26 | code:Prises | 1 recette |
+| 🐦 Plumes d'aigle géant | `prise_giant_eagle` | commun | 26 | code:Prises | 1 recette |
+| 🐦 Plumes d'hippogriffe | `prise_hippogriff` | commun | 36 | code:Prises | 1 recette |
+| 🐦 Plumes de chouette spectrale | `prise_spectral_owl` | commun | 26 | code:Prises | 1 recette |
+| 🐦 Plumes de corbeau fantôme | `prise_ghost_crow` | commun | 26 | code:Prises | 1 recette |
+| 🐦 Plumes de corbeau géant | `prise_giant_crow` | commun | 21 | code:Prises | 1 recette |
+| 🐦 Plumes de griffon | `prise_griffin` | rare | 111 | code:Prises | 1 recette |
+| 🐦 Plumes de harpie | `prise_harpy` | commun | 31 | code:Prises | 1 recette |
+| 🐦 Plumes de rapace des falaises | `prise_cliff_raptor` | commun | 26 | code:Prises | 1 recette |
 | 🐟 Poisson | `fish` | commun | 0 | code:Evenements | 2 recettes |
 | 🟡 Pollen | `pollen` | commun | 6 | abattage, cueillette, butin | code:Bestiaire |
 | 🏺 Pot | `pot` | commun | 14 | four | 1 recette |
 | ⚙️ Poulie | `pulley` | commun | 20 | établi | 3 recettes |
 | ✨ Poussière de feu follet | `wisp_dust` | commun | 30 | butin | 2 recettes |
+| ✨ Poussière de fée des ronces | `prise_bramble_fairy` | commun | 26 | code:Prises | 1 recette |
 | 🌸 Pétales séchés | `dried_petals` | commun | 8 | atelier | 1 recette |
-| 🌳 Racine ancienne | `ancient_root` | rare | 80 | butin, boss | 1 recette |
+| 🦊 Queue de renard | `prise_fox` | commun | 11 | code:Prises | 1 recette |
+| 🦊 Queue de renard enragé | `prise_rabid_fox` | commun | 16 | code:Prises | 1 recette |
+| 🦊 Queue de renard spectral | `prise_spectral_fox` | commun | 26 | code:Prises | 1 recette |
+| 🌳 Racine ancienne | `ancient_root` | rare | 80 | boss, butin | 1 recette |
 | 🔩 Rivets | `rivet` | commun | 2 | atelier | 2 recettes |
 | 🌿 Romarin | `rosemary` | commun | 8 | cueillette | 2 recettes |
 | 🌲 Rondin de chêne | `oak_log` | commun | 6 | abattage, butin | 12 recettes |
@@ -694,30 +903,70 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 🎗️ Sangles | `leather_strap` | commun | 8 | atelier | 6 recettes |
 | 🌿 Sauge | `sage` | commun | 8 | cueillette | 2 recettes |
 | 🔴 Sceau de cire | `wax_seal` | commun | 10 | atelier | 5 recettes |
+| 🧾 Sceau de contrebande de contrebandier | `prise_smuggler` | commun | 26 | code:Prises | 1 recette |
 | 🧂 Sel | `salt` | commun | 8 | minage, butin | 7 recettes |
 | 🔒 Serrure de cuivre | `lock_2` | commun | 70 | établi | revente |
 | 🔐 Serrure de fer | `lock_3` | rare | 140 | établi | revente |
 | 🔐 Serrure à secret (or) | `lock_4` | épique | 320 | établi | revente |
-| ⛰️ Silex | `flint` | commun | 4 | minage, fouille | 1 recette |
+| ⛰️ Silex | `flint` | commun | 4 | minage, fouille | 2 recettes |
 | 🕸️ Soie d'araignée | `silk` | commun | 12 | butin | 3 recettes |
 | 🟡 Soufre | `sulfur` | commun | 12 | minage | 1 recette |
 | 🍄 Spore royale | `royal_spore` | épique | 300 | boss | 1 recette |
+| 🍄 Spores de myconide | `prise_myconid` | commun | 21 | code:Prises | 1 recette |
+| 🍄 Spores du Myconide Ancien | `prise_boss_myconid` | épique | 246 | code:Prises | 2 recettes |
+| 🍄 Spores du Roi Mycélien | `prise_mycelian_king` | épique | 246 | code:Prises | 2 recettes |
 | 🍬 Sucre | `sugar` | commun | 12 | four | 2 recettes |
-| 🎨 Teinture | `dye` | commun | 10 | atelier | 14 recettes |
-| 🟫 Terre | `dirt` | commun | 1 | butin | 6 recettes |
+| 🎨 Teinture | `dye` | commun | 10 | atelier | 15 recettes |
+| 🟫 Terre | `dirt` | commun | 1 | butin | 9 recettes |
 | 🌿 Thym | `thyme` | commun | 6 | cueillette | 1 recette |
-| 🧵 Tissu | `cloth` | commun | 25 | atelier | 14 recettes |
+| 🧵 Tissu | `cloth` | commun | 25 | atelier | 48 recettes |
 | 🧶 Tissu de laine | `wool_cloth` | commun | 50 | atelier | 8 recettes |
 | 🧵 Tissu de lin | `linen` | commun | 20 | atelier | 16 recettes |
-| ⛵ Toile | `canvas` | commun | 30 | atelier | 4 recettes |
+| ⛵ Toile | `canvas` | commun | 30 | atelier | 5 recettes |
 | 🎐 Toile enchantée | `enchanted_cloth` | épique | 220 | boss | 1 recette |
+| 👳 Turban de pillard du désert | `prise_desert_raider` | commun | 31 | code:Prises | 1 recette |
 | 🌸 Valériane | `valerian` | commun | 14 | cueillette | 2 recettes |
-| 🖼️ Verre | `glass` | commun | 8 | four | 15 recettes |
+| 🐍 Venin de la Bête des profondeurs | `prise_deep_beast` | épique | 306 | code:Prises | 2 recettes |
+| 🐍 Venin de serpent des dunes | `prise_dune_snake` | commun | 26 | code:Prises | 1 recette |
+| 🐍 Venin de serpent des eaux | `prise_water_snake` | commun | 26 | code:Prises | 1 recette |
+| 🐍 Venin de serpent des rivières | `prise_river_serpent` | commun | 26 | code:Prises | 1 recette |
+| 🐍 Venin de serpent venimeux | `prise_snake` | commun | 16 | code:Prises | 1 recette |
+| 🐍 Venin de ver des sables | `prise_sand_worm` | rare | 96 | code:Prises | 1 recette |
+| 🖼️ Verre | `glass` | commun | 8 | four | 16 recettes |
 | 🏺 Vinaigre de pomme | `vinegar` | commun | 20 | atelier | 1 recette |
+| 🔮 Âme de Brumeglace | `ame_brumeglace` | légendaire | 800 | code:Prises | 1 recette |
+| 🔮 Âme de Vargor | `ame_vargor` | légendaire | 760 | code:Prises | 1 recette |
+| 🔮 Âme de la Bête des profondeurs | `ame_deep_beast` | légendaire | 800 | code:Prises | 1 recette |
+| 🔮 Âme de la Mère des Ronces | `ame_bramble_mother` | légendaire | 760 | code:Prises | 1 recette |
+| 🔮 Âme de la Wyverne des neiges | `ame_snow_wyvern` | légendaire | 800 | code:Prises | 1 recette |
+| 🔮 Âme du Chef Gobelin | `ame_boss_goblin` | légendaire | 800 | code:Prises | 1 recette |
+| 🔮 Âme du Colosse de Verre | `ame_glass_colossus` | légendaire | 760 | code:Prises | 1 recette |
+| 🔮 Âme du Dormeur des Glaces | `ame_ice_sleeper` | légendaire | 800 | code:Prises | 1 recette |
+| 🔮 Âme du Gardien des Moissons | `ame_harvest_warden` | légendaire | 680 | code:Prises | 1 recette |
+| 🔮 Âme du Géant des montagnes | `ame_mountain_giant` | légendaire | 800 | code:Prises | 1 recette |
+| 🔮 Âme du Myconide Ancien | `ame_boss_myconid` | légendaire | 720 | code:Prises | 1 recette |
+| 🔮 Âme du Roi Mycélien | `ame_mycelian_king` | légendaire | 720 | code:Prises | 1 recette |
+| 🔮 Âme du Roi des Slimes | `ame_boss_slime` | légendaire | 640 | code:Prises | 1 recette |
+| 🔮 Âme du Roi des marais | `ame_marsh_king` | légendaire | 760 | code:Prises | 1 recette |
+| 🔮 Âme du Roi sans couronne | `ame_crownless_king` | légendaire | 800 | code:Prises | 1 recette |
+| 🔮 Âme du Scarabée royal | `ame_royal_scarab` | légendaire | 800 | code:Prises | 1 recette |
+| 🧜 Écaille chantante de sirène hostile | `prise_hostile_siren` | commun | 36 | code:Prises | 1 recette |
 | 🖤 Écaille noire (Roi des marais) | `black_scale` | légendaire | 700 | boss | 1 recette |
 | 🐉 Écailles | `scales` | commun | 16 | chasse, butin | 1 recette |
+| 🐊 Écailles de basilic des sables | `prise_sand_basilisk` | commun | 36 | code:Prises | 1 recette |
+| 🐊 Écailles de croco | `prise_croc` | commun | 26 | code:Prises | 1 recette |
+| 🐉 Écailles de feu de dragonnet | `prise_drakeling` | rare | 96 | code:Prises | 1 recette |
+| 🐉 Écailles de la Wyverne des neiges | `prise_snow_wyvern` | épique | 306 | code:Prises | 2 recettes |
+| 🐊 Écailles de lézard des tourbières | `prise_bog_lizard` | commun | 21 | code:Prises | 1 recette |
+| 🐉 Écailles de wyverne | `prise_wyvern` | rare | 111 | code:Prises | 1 recette |
+| 🗿 Éclat de pierre de gargouille animée | `prise_gargoyle` | commun | 36 | code:Prises | 1 recette |
 | 💎 Éclat de verre vivant | `glass_shard` | épique | 350 | boss | 1 recette |
 | 🟫 Écorce | `bark` | commun | 2 | abattage | revente |
+| 🛡️ Écu brisé de chevalier oublié | `prise_forgotten_knight` | rare | 126 | code:Prises | 1 recette |
+| 🛡️ Écu brisé de fantôme de chevalier | `prise_ghost_knight` | rare | 96 | code:Prises | 1 recette |
+| 🛡️ Écusson de mercenaire | `prise_mercenary` | commun | 36 | code:Prises | 1 recette |
+| 🐞 Élytre de scarabée cuirassé | `prise_beetle` | commun | 31 | code:Prises | 1 recette |
+| 🐞 Élytre du Scarabée royal | `prise_royal_scarab` | épique | 306 | code:Prises | 2 recettes |
 | 🌶️ Épices | `spice` | commun | 40 | événement | 1 recette |
 | 🎨 Étoffe teinte | `dyed_cloth` | commun | 60 | atelier | 5 recettes |
 
@@ -749,9 +998,10 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 |---|---|---|
 | ⛰️ Silex | 8 % | tous |
 | 🟠 Pièce de cuivre | 5 % | tous |
+| 📜 Page ancienne | 2 % | tous |
 | ⚪ Pièce d'argent | 1.2 % | tous |
-| 💰 Pièce ancienne | 1 % | tous |
 | 🗝️ Clé rouillée | 1 % | tous |
+| 💰 Pièce ancienne | 1 % | tous |
 | 🧩 Fragment de relique | 0.6 % | tous |
 | ⛰️ Fragment d'inscription | 0.4 % | tous |
 | 🦴 Fossile | 0.4 % | tous |
@@ -767,22 +1017,23 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | 👝 Bourse de marchand | 20 % | tous |
 | 🎁 Récompense de festival | 10 % | tous |
 | ⚪ Pièce d'argent | 10 % | tous |
-| 📐 Plan d'artisan | 8 % | tous |
 | 📜 Recette inconnue | 8 % | tous |
-| ✉️ Lettre de recommandation | 5 % | tous |
+| 📐 Plan d'artisan | 8 % | tous |
+| 📜 Page ancienne | 8 % | tous |
 | 🗺️ Carte au trésor | 5 % | tous |
+| ✉️ Lettre de recommandation | 5 % | tous |
 | 📔 Journal d'un voyageur | 5 % | tous |
 | 📃 Lettre de change | 4 % | tous |
 | 🏺 Vase ancien | 3 % | tous |
 | 📚 Livre rare | 3 % | tous |
-| 🏺 Objet d'une ruine | 3 % | tous |
 | 🏆 Ruban de champion | 3 % | tous |
+| 🏺 Objet d'une ruine | 3 % | tous |
 | 💍 Bijou ancien | 2 % | tous |
+| 🧿 Talisman | 2 % | tous |
 | 🏺 Relique | 2 % | tous |
 | ☄️ Fragment de météorite | 2 % | tous |
-| 🧿 Talisman | 2 % | tous |
-| 👑 Sceau royal | 1 % | tous |
 | ⭐ Insigne de shérif | 1 % | tous |
+| 👑 Sceau royal | 1 % | tous |
 | 💗 Cœur minéral | 0.5 % | tous |
 
 ### pêche
@@ -840,14 +1091,15 @@ Raretés : commun 485 · peu commun 46 · rare 86 · épique 37 · légendaire 1
 | ⚪ Minerai d'argent | 8 % | toundra, désert |
 | 🟡 Soufre | 6 % | désert, marais |
 | ✨ Pierre lumineuse | 1 % | tous |
-| 💰 Pièce ancienne | 0.6 % | tous |
 | 🦴 Fossile | 0.6 % | tous |
+| 💰 Pièce ancienne | 0.6 % | tous |
 | 🦴 Os fossilisé | 0.5 % | tous |
 | 💎 Cristal ancien | 0.4 % | tous |
 | ⛰️ Pierre gravée | 0.4 % | tous |
-| 🔴 Rubis | 0.3 % | tous |
-| 🔵 Saphir | 0.3 % | toundra |
+| 📜 Page ancienne | 0.4 % | tous |
 | 🟢 Émeraude | 0.3 % | forêt rousse |
+| 🔵 Saphir | 0.3 % | toundra |
+| 🔴 Rubis | 0.3 % | tous |
 | 💎 Diamant | 0.15 % | tous |
 
 ### abattage
@@ -945,9 +1197,12 @@ laisse de 70 studs puis retour au foyer ; réapparition au bout de 3 jours (boss
 | Pingouin | `penguin` | 1 | 40 | 0 | flee | génération | 🐦 Plume 1–2 (100 %), 🥩 Viande crue 1–1 (60 %) | 0 |
 | Lapin | `rabbit` | 1 | 20 | 0 | flee | génération | 🥩 Viande crue 1–1 (100 %), 🦊 Fourrure 1–1 (30 %) | 0 |
 | Slime | `slime` | 1 | 60 | 10 | hop | génération | 🟢 Gelée de slime 1–2 (70 %), 🌿 Fibre 1–1 (40 %) | 0 |
+| Chien errant | `stray_dog` | 1 | 60 | 10 | charge, meute 2 | prairie (jour) | 🦴 Os 1–1 (60 %) | 0 |
 | Essaim d'abeilles sauvages | `bee_swarm` | 2 | 40 | 8 | charge, neutre, vole | forêt rousse (jour), prairie (jour) | 🍯 Miel 1–2 (80 %), 🕯️ Cire d'abeille 1–2 (80 %), 🟡 Pollen 1–3 (60 %) | 0 |
 | Sanglier | `boar` | 2 | 120 | 16 | charge, neutre | génération | 🥩 Viande crue 2–3 (100 %), 🟫 Cuir 1–2 (80 %) | 0 |
+| Chauve-souris des cavernes | `cave_bat` | 2 | 50 | 10 | charge, nuit, vole | grottes forêt rousse | 🦴 Os 1–1 (30 %) | 0 |
 | Chacal | `jackal` | 2 | 70 | 12 | charge, meute 3 | désert (jour) | 🟫 Peau brute 1–1 (60 %), 🦷 Dent 1–1 (40 %) | 0 |
+| Renard enragé | `rabid_fox` | 2 | 60 | 14 | charge | prairie (jour) | 🦊 Fourrure 1–1 (60 %) | 0 |
 | Slime bleu | `slime_blue` | 2 | 100 | 10 | hop | grottes prairie | 🟢 Gelée de slime 1–3 (80 %) | 0 |
 | Serpent venimeux | `snake` | 2 | 60 | 16 | charge | prairie (jour) | 🐉 Écailles 1–2 (70 %), 🦷 Dent 1–1 (40 %) | 0 |
 | Crapaud géant | `toad` | 2 | 110 | 12 | hop | génération | 🟢 Gelée de slime 1–2 (60 %), 🟫 Cuir 1–1 (40 %) | 0 |
@@ -956,83 +1211,163 @@ laisse de 70 studs puis retour au foyer ; réapparition au bout de 3 jours (boss
 | Bandit des routes | `bandit` | 3 | 150 | 18 | charge | prairie (jour) | 🟠 Pièce de cuivre 2–6 (100 %), 👝 Bourse 1–1 (15 %), ➰ Corde 1–1 (30 %), 🎣 Crochet 1–1 (20 %) | 2 |
 | Lézard des tourbières | `bog_lizard` | 3 | 120 | 16 | charge | marais (jour) | 🐉 Écailles 1–2 (80 %), 🟫 Cuir 1–1 (40 %) | 0 |
 | Cambrioleur | `burglar` | 3 | 120 | 12 | charge | génération | 🎣 Crochet 1–3 (90 %), ➰ Corde 1–2 (50 %) | 3 |
+| Faux marchand | `fake_merchant` | 3 | 120 | 16 | charge, neutre | prairie (jour) | 👝 Bourse 1–1 (60 %), 👝 Bourse de marchand 1–1 (10 %) | 3 |
+| Méduse des marais | `freshwater_jellyfish` | 3 | 80 | 14 | spore | marais (jour) | 🐟 Gardon 1–1 (30 %) | 1 |
 | Chauve-souris géante | `giant_bat` | 3 | 60 | 12 | charge, vole | grottes forêt rousse, grottes marais, grottes désert, grottes toundra, grottes prairie | 🟫 Peau brute 1–1 (50 %), 🦷 Dent 1–1 (40 %) | 0 |
 | Corbeau géant | `giant_crow` | 3 | 80 | 14 | charge, nuit, vole | forêt rousse (nuit), prairie (nuit) | 🐦 Plume 2–4 (100 %), 🐦 Plume nocturne 1–1 (15 %) | 0 |
+| Voleur de grand chemin | `highwayman` | 3 | 130 | 18 | charge | prairie (jour) | 🟠 Pièce de cuivre 2–5 (100 %), 👝 Bourse 1–1 (30 %), 🎣 Crochet 1–1 (30 %) | 2 |
 | Sangsue géante | `leech` | 3 | 90 | 14 | hop | marais (jour), grottes marais | 🟢 Gelée de slime 1–2 (80 %) | 0 |
 | Lynx | `lynx` | 3 | 90 | 16 | charge | forêt rousse (jour) | 🦊 Fourrure 1–2 (90 %), 🐾 Griffe de créature 1–1 (40 %) | 0 |
 | Myconide | `myconid` | 3 | 140 | 10 | spore | grottes forêt rousse | 🍄 Champignon 1–2 (100 %) | 0 |
 | Braconnier | `poacher` | 3 | 120 | 14 | spore | forêt rousse (jour), prairie (jour) | 🦌 Peau de cerf 1–1 (50 %), 🥩 Viande de cerf 1–2 (60 %), 🐛 Appâts 2–4 (50 %) | 0 |
 | Épouvantail maudit | `scarecrow` | 3 | 170 | 20 | charge, nuit | génération | 🌿 Fibre 2–4 (100 %), ✨ Poussière de feu follet 1–1 (30 %), 🌱 Graines (Citrouille) 1–2 (25 %) | 0 |
 | Ombre rôdeuse | `shade` | 3 | 80 | 14 | charge, nuit, lumière | génération | ✨ Poussière de feu follet 1–2 (80 %), 🦴 Os 1–2 (50 %) | 0 |
-| Squelette errant | `skeleton` | 3 | 110 | 16 | charge, nuit | forêt rousse (nuit), désert (nuit), toundra (nuit), prairie (nuit), grottes désert, grottes prairie | 🦴 Os 2–4 (100 %), 🟠 Pièce de cuivre 1–3 (40 %) | 0 |
+| Squelette errant | `skeleton` | 3 | 110 | 16 | charge, nuit | génération | 🦴 Os 2–4 (100 %), 🟠 Pièce de cuivre 1–3 (40 %) | 0 |
 | Araignée géante | `spider` | 3 | 150 | 14 | spore | génération | 🕸️ Soie d'araignée 1–3 (100 %) | 0 |
+| Gobelin des marais | `swamp_goblin` | 3 | 110 | 13 | charge | marais (jour) | 🟠 Pièce de cuivre 1–3 (100 %), 🦴 Os 1–1 (40 %) | 1 |
 | Feu follet | `wisp` | 3 | 70 | 14 | spore | génération | ✨ Poussière de feu follet 1–2 (100 %) | 0 |
+| Gobelin des bois | `wood_goblin` | 3 | 100 | 12 | charge | forêt rousse (jour) | 🟠 Pièce de cuivre 1–3 (100 %), 🍄 Champignon 1–2 (50 %) | 1 |
 | Loup noir | `black_wolf` | 4 | 140 | 18 | charge, meute 3 | forêt rousse (jour), toundra (jour) | 🐺 Peau de loup 1–1 (80 %), 🥩 Viande crue 1–2 (90 %), 🦷 Dent 1–2 (50 %) | 0 |
+| Fée des ronces | `bramble_fairy` | 4 | 80 | 14 | spore, vole | forêt rousse (jour) | 🌼 Fleur 1–2 (80 %) | 1 |
 | Araignée des cavernes | `cave_spider` | 4 | 160 | 16 | spore | grottes forêt rousse, grottes prairie | 🕸️ Soie d'araignée 2–3 (100 %), ✨ Pierre lumineuse 1–1 (8 %) | 0 |
+| Rapace des falaises | `cliff_raptor` | 4 | 140 | 18 | charge, vole | toundra (jour), prairie (jour) | 🐦 Plume 2–3 (100 %) | 0 |
 | Croco | `croc` | 4 | 220 | 22 | charge, neutre | génération | 🟫 Cuir 2–3 (100 %), 🥩 Viande crue 1–2 (80 %) | 0 |
 | Araignée du désert | `desert_spider` | 4 | 150 | 16 | spore | désert (jour), grottes désert | 🕸️ Soie d'araignée 1–2 (90 %) | 0 |
 | Esprit noyé | `drowned_spirit` | 4 | 120 | 18 | charge, nuit, lumière | marais (nuit), grottes marais | ✨ Poussière de feu follet 1–2 (80 %), ⚪ Perle 1–1 (5 %) | 0 |
 | Serpent des dunes | `dune_snake` | 4 | 110 | 20 | charge | désert (jour) | 🐉 Écailles 2–3 (90 %), 🧂 Sel 1–2 (30 %) | 0 |
-| Goule | `ghoul` | 4 | 150 | 20 | charge, nuit | forêt rousse (nuit), marais (nuit), désert (nuit), prairie (nuit) | 🧟 Chair pourrie 2–3 (100 %), 🦴 Os 1–2 (60 %), 🐾 Griffe de créature 1–1 (30 %) | 0 |
+| Corbeau fantôme | `ghost_crow` | 4 | 90 | 14 | charge, nuit, vole | forêt rousse (nuit), prairie (nuit) | 🐦 Plume 1–3 (100 %) | 0 |
+| Goule | `ghoul` | 4 | 150 | 20 | charge, nuit | génération | 🧟 Chair pourrie 2–3 (100 %), 🦴 Os 1–2 (60 %), 🐾 Griffe de créature 1–1 (30 %) | 0 |
+| Aigle géant | `giant_eagle` | 4 | 120 | 18 | charge, vole | toundra (jour) | 🐦 Plume 2–4 (100 %) | 0 |
 | Gobelin | `goblin` | 4 | 180 | 20 | charge | génération | ⛰️ Minerai de fer 1–1 (30 %), 🟠 Minerai de cuivre 1–2 (40 %) | 2 |
 | Gobelin archer | `goblin_archer` | 4 | 120 | 14 | spore | forêt rousse (jour) | 🐦 Plume 1–2 (60 %), 🟠 Minerai de cuivre 1–2 (40 %) | 2 |
+| Maraudeur | `marauder` | 4 | 180 | 22 | charge | prairie (jour) | 🥩 Viande crue 1–2 (60 %), 🟫 Peau brute 1–1 (50 %), 🟠 Pièce de cuivre 1–4 (100 %) | 2 |
+| Aigle des montagnes | `mountain_eagle` | 4 | 130 | 18 | charge, vole | prairie (jour) | 🐦 Plume 2–4 (100 %) | 0 |
 | Homme-boue | `mud_man` | 4 | 220 | 20 | hop | marais (jour), grottes marais | 🟤 Argile 2–4 (100 %), 🟫 Terre 2–3 (100 %), 💰 Pièce ancienne 1–1 (5 %) | 0 |
+| Pillard | `pillager` | 4 | 170 | 20 | charge | prairie (jour) | 🟠 Pièce de cuivre 2–6 (100 %), ➰ Corde 1–2 (40 %), 🎒 Rations 1–1 (30 %) | 2 |
+| Loup polaire | `polar_wolf` | 4 | 150 | 18 | charge, meute 3 | toundra (jour) | 🐺 Peau de loup 1–1 (80 %), 🥩 Viande crue 1–2 (90 %) | 0 |
+| Araignée des roseaux | `reed_spider` | 4 | 130 | 14 | spore | marais (jour) | 🕸️ Soie d'araignée 1–2 (100 %) | 0 |
 | Revenant | `revenant` | 4 | 130 | 20 | charge, nuit, lumière | forêt rousse (nuit), toundra (nuit), prairie (nuit) | ✨ Poussière de feu follet 1–2 (80 %), ❔ Objet perdu 1–1 (20 %) | 0 |
+| Serpent des rivières | `river_serpent` | 4 | 130 | 18 | charge | marais (jour) | 🟫 Peau brute 1–1 (50 %) | 0 |
 | Pilleur de ruines | `ruin_looter` | 4 | 140 | 20 | charge | désert (jour) | 💰 Pièce ancienne 1–2 (40 %), 🧩 Fragment de relique 1–1 (30 %), 🗝️ Clé rouillée 1–1 (30 %) | 2 |
 | Scorpion | `scorpion` | 4 | 160 | 18 | charge | génération | 🦂 Dard de scorpion 1–1 (80 %), 🥩 Viande crue 1–1 (30 %) | 0 |
+| Contrebandier | `smuggler` | 4 | 140 | 16 | charge | marais (jour), désert (jour) | 🧂 Sel 1–3 (60 %), 👝 Bourse 1–1 (30 %), 👝 Bourse de marchand 1–1 (5 %) | 3 |
+| Renard spectral | `spectral_fox` | 4 | 90 | 16 | charge, nuit | toundra (nuit) | 🦊 Fourrure 1–1 (50 %) | 0 |
+| Chouette spectrale | `spectral_owl` | 4 | 110 | 16 | charge, nuit, vole | forêt rousse (nuit) | 🐦 Plume 1–3 (100 %) | 0 |
 | Sanglier des marécages | `swamp_boar` | 4 | 180 | 20 | charge, neutre | marais (jour) | 🥩 Viande de sanglier 2–3 (100 %), 🟫 Cuir 1–2 (80 %) | 0 |
+| Araignée sylvestre | `sylvan_spider` | 4 | 140 | 15 | spore | forêt rousse (jour) | 🕸️ Soie d'araignée 1–3 (100 %) | 0 |
+| Spectre errant | `wandering_spectre` | 4 | 130 | 18 | charge, nuit, lumière | prairie (nuit) | 🦴 Os 1–1 (40 %) | 0 |
 | Serpent des eaux | `water_snake` | 4 | 120 | 18 | charge | marais (jour) | 🐉 Écailles 2–3 (90 %), ⚪ Perle 1–1 (5 %) | 0 |
 | Loup blanc | `wolf_white` | 4 | 130 | 16 | charge, meute 3 | génération | 🦊 Fourrure 1–2 (90 %), 🥩 Viande crue 1–2 (90 %) | 0 |
+| Squelette ancien | `ancient_skeleton` | 5 | 200 | 22 | charge, nuit | génération | 🦴 Os 2–4 (100 %), 💰 Pièce ancienne 1–1 (30 %) | 0 |
 | Ours | `bear` | 5 | 320 | 28 | charge, neutre | génération | 🦊 Fourrure 2–3 (100 %), 🥩 Viande crue 3–4 (100 %), 🍯 Miel 1–2 (50 %) | 0 |
 | Scarabée cuirassé | `beetle` | 5 | 260 | 18 | charge | désert (jour), grottes désert | 🐉 Écailles 1–2 (60 %), 💠 Pierre colorée 1–1 (30 %) | 0 |
 | Sorcier des ronces | `bramble_witch` | 5 | 160 | 20 | spore | forêt rousse (jour) | 🌿 Ortie 2–4 (100 %), 🧪 Fiole d'extrait 1–1 (30 %), 🌱 Mandragore 1–1 (8 %) | 3 |
+| Ours brun | `brown_bear` | 5 | 360 | 28 | charge, neutre | forêt rousse (jour) | 🦊 Fourrure 2–3 (100 %), 🥩 Viande crue 2–3 (100 %), 🐾 Griffe de créature 1–1 (50 %) | 0 |
+| Garde corrompu | `corrupt_guard` | 5 | 230 | 22 | charge, neutre | prairie (jour) | 🛡️ Insigne de garde 1–1 (50 %), 👝 Bourse 1–1 (40 %) | 3 |
+| Cerf corrompu | `corrupted_stag` | 5 | 180 | 20 | charge | toundra (jour) | 🦌 Peau de cerf 1–1 (70 %), 🥩 Viande de cerf 1–2 (70 %) | 0 |
+| Ombre rampante | `creeping_shadow` | 5 | 160 | 20 | hop, nuit, lumière | forêt rousse (nuit), marais (nuit), désert (nuit), toundra (nuit), prairie (nuit) | 🦴 Os 1–2 (50 %) | 0 |
+| Rôdeur obscur | `dark_prowler` | 5 | 170 | 22 | charge, nuit | prairie (nuit) | 🟠 Pièce de cuivre 2–5 (100 %) | 2 |
+| Pillard du désert | `desert_raider` | 5 | 180 | 20 | charge | désert (jour) | 💰 Pièce ancienne 1–1 (30 %), 🟠 Pièce de cuivre 2–6 (100 %) | 3 |
 | Soldat déserteur | `deserter` | 5 | 220 | 22 | charge | prairie (jour) | ⭕ Anneau métallique 2–5 (60 %), 🎒 Rations 1–1 (40 %), 🛡️ Insigne de garde 1–1 (10 %) | 3 |
 | Spectre des dunes | `dune_spectre` | 5 | 140 | 20 | spore, nuit, lumière | désert (nuit) | 💰 Pièce ancienne 1–2 (50 %), ✨ Poussière de feu follet 1–2 (60 %) | 0 |
+| Moine déchu | `fallen_monk` | 5 | 170 | 22 | spore, nuit | marais (nuit), prairie (nuit) | 🧩 Fragment de relique 1–1 (40 %), 🟠 Pièce de cuivre 1–4 (100 %) | 2 |
 | Sanglier givré | `frost_boar` | 5 | 220 | 22 | charge, neutre | toundra (jour) | 🥩 Viande de sanglier 2–3 (100 %), 🧊 Cristal de glace 1–1 (40 %) | 0 |
 | Araignée de givre | `frost_spider` | 5 | 170 | 18 | spore | toundra (jour), grottes toundra | 🕸️ Soie d'araignée 1–3 (100 %), 🧊 Cristal de glace 1–1 (30 %) | 0 |
+| Crabe géant | `giant_crab` | 5 | 240 | 22 | charge | marais (jour) | 🐟 Gardon 1–2 (50 %) | 1 |
+| Mante religieuse géante | `giant_mantis` | 5 | 210 | 26 | charge | forêt rousse (jour) | 🕸️ Soie d'araignée 1–1 (30 %) | 1 |
+| Harpie | `harpy` | 5 | 160 | 20 | charge, vole | forêt rousse (jour) | 🐦 Plume 2–5 (100 %), 🐾 Griffe de créature 1–1 (40 %) | 0 |
 | Hyène monstrueuse | `hyena` | 5 | 200 | 22 | charge, meute 2 | désert (jour) | 🟫 Peau brute 1–2 (80 %), 🦷 Dent de monstre 1–1 (30 %) | 0 |
+| Anguille monstrueuse | `monster_eel` | 5 | 200 | 24 | charge | marais (jour) | 🐟 Gardon 1–2 (60 %) | 1 |
+| Hurleur nocturne | `night_howler` | 5 | 170 | 20 | charge, meute 2, nuit | toundra (nuit), prairie (nuit) | 🐺 Peau de loup 1–1 (60 %) | 0 |
+| Chasseur nocturne | `night_stalker` | 5 | 180 | 20 | spore, nuit | forêt rousse (nuit) | 🦌 Peau de cerf 1–1 (50 %) | 2 |
+| Garde renégat | `renegade_guard` | 5 | 240 | 22 | charge | forêt rousse (jour) | 🛡️ Insigne de garde 1–1 (30 %), ⭕ Anneau métallique 1–3 (60 %) | 3 |
+| Esprit des ruines | `ruin_spirit` | 5 | 150 | 20 | spore, nuit | forêt rousse (nuit), désert (nuit) | 🧩 Fragment de relique 1–1 (50 %) | 2 |
+| Loup des ombres | `shadow_wolf` | 5 | 140 | 18 | charge, meute 3, nuit | forêt rousse (nuit), prairie (nuit) | 🐺 Peau de loup 1–1 (60 %) | 0 |
 | Cerf spectral | `spectral_stag` | 5 | 160 | 18 | charge, nuit | forêt rousse (nuit) | 🦌 Bois de cerf 1–1 (80 %), ✨ Poussière de feu follet 1–2 (80 %), 🐦 Plume nocturne 1–1 (20 %) | 0 |
+| Esprit des arbres | `tree_spirit` | 5 | 140 | 18 | charge, nuit, lumière | forêt rousse (nuit) | 🟧 Résine 1–2 (60 %) | 0 |
+| Esprit des eaux | `water_spirit` | 5 | 150 | 18 | charge, nuit | marais (nuit) | 🐟 Gardon 1–1 (40 %) | 1 |
+| Esprit des bois | `woods_spirit` | 5 | 140 | 18 | charge, nuit, lumière | forêt rousse (nuit) | 🟧 Résine 1–2 (60 %) | 1 |
+| Tortue ancienne | `ancient_turtle` | 6 | 520 | 22 | charge, élite, neutre | marais (jour) | 🦴 Os fossilisé 1–1 (30 %) | 3 |
+| Assassin de l'ombre | `assassin` | 6 | 200 | 34 | charge, nuit | forêt rousse (nuit), prairie (nuit) | 👝 Bourse 1–1 (50 %), 🎣 Crochet 1–2 (40 %) | 4 |
 | Spectre du blizzard | `blizzard_spectre` | 6 | 160 | 22 | charge, nuit | toundra (nuit) | 🧊 Cristal de glace 1–2 (80 %), ✨ Poussière de feu follet 1–1 (50 %) | 0 |
 | Roi des Slimes | `boss_slime` | 6 | 700 | 30 | hop, BOSS | génération | 🟢 Gelée de slime 5–8 (100 %) | 0 |
+| Chasseur de primes | `bounty_hunter` | 6 | 200 | 20 | spore | prairie (jour) | ➰ Corde 1–2 (50 %), 🟠 Pièce de cuivre 3–6 (100 %), 🗺️ Carte au trésor 1–1 (5 %) | 4 |
+| Sanglier colossal | `colossal_boar` | 6 | 420 | 30 | charge, élite | forêt rousse (jour) | 🥩 Viande crue 3–5 (100 %), 🟫 Peau brute 2–3 (100 %), 🦷 Dent 1–2 (60 %) | 2 |
+| Dragonnet | `drakeling` | 6 | 240 | 26 | spore, élite | désert (jour) | 🟫 Peau brute 1–2 (80 %) | 4 |
+| Marcheur sans visage | `faceless_walker` | 6 | 180 | 22 | charge, nuit, lumière | forêt rousse (nuit), marais (nuit), désert (nuit), toundra (nuit), prairie (nuit) | 🧩 Fragment de relique 1–1 (30 %) | 0 |
 | Gargouille animée | `gargoyle` | 6 | 260 | 24 | charge, vole | génération | ⛰️ Pierre 3–5 (100 %), ⛰️ Pierre gravée 1–1 (10 %) | 3 |
 | Fantôme de chevalier | `ghost_knight` | 6 | 320 | 30 | charge, élite, nuit | prairie (nuit) | ✨ Poussière de feu follet 2–3 (100 %), 💍 Bijou ancien 1–1 (10 %), 🗝️ Clé rouillée 1–1 (30 %) | 4 |
+| Hippogriffe | `hippogriff` | 6 | 260 | 26 | charge, neutre, vole | forêt rousse (jour) | 🐦 Plume 2–5 (100 %) | 3 |
+| Sirène hostile | `hostile_siren` | 6 | 180 | 22 | spore | marais (jour) | 🧩 Fragment de relique 1–1 (30 %) | 3 |
 | Golem de glace | `ice_golem` | 6 | 360 | 24 | spore | grottes toundra | 🧊 Cristal de glace 1–3 (100 %), ⛰️ Minerai de fer 1–2 (50 %) | 0 |
-| Ours blanc | `polar_bear` | 6 | 420 | 30 | charge, neutre | toundra (jour) | 🦊 Fourrure 3–4 (100 %), 🧈 Graisse 2–3 (100 %), 🥩 Viande crue 3–4 (100 %) | 0 |
+| Kelpie | `kelpie` | 6 | 260 | 26 | charge, neutre | marais (jour) | 🟫 Peau brute 1–2 (70 %) | 2 |
+| Dévoreur de lumière | `light_eater` | 6 | 260 | 26 | hop, nuit, lumière | désert (nuit) | ⚫ Charbon 2–4 (100 %) | 2 |
+| Mercenaire | `mercenary` | 6 | 260 | 24 | charge | prairie (jour) | ⭕ Anneau métallique 2–4 (70 %), 🔩 Acier 1–1 (20 %), 🟠 Pièce de cuivre 3–8 (100 %) | 4 |
+| Chasseur de lune | `moon_hunter` | 6 | 190 | 20 | spore, nuit | forêt rousse (nuit) | 🐦 Plume 1–3 (70 %) | 3 |
+| Golem de vase | `mud_golem` | 6 | 420 | 26 | charge, élite | marais (jour) | 🟤 Argile 3–6 (100 %) | 2 |
+| Momie ancienne | `mummy` | 6 | 220 | 22 | charge, nuit | désert (nuit) | 💰 Pièce ancienne 1–2 (60 %), 🧩 Fragment de relique 1–1 (30 %) | 3 |
+| Ours blanc | `polar_bear` | 6 | 420 | 30 | charge, neutre | toundra (jour) | 🦊 Fourrure 3–4 (100 %), 🥓 Graisse 2–3 (100 %), 🥩 Viande crue 3–4 (100 %) | 0 |
+| Ombre possédée | `possessed_shade` | 6 | 170 | 24 | charge, nuit, lumière | marais (nuit), toundra (nuit) | 🦴 Os 1–2 (50 %) | 2 |
+| Basilic des sables | `sand_basilisk` | 6 | 220 | 24 | spore | désert (jour) | 🟫 Peau brute 1–2 (80 %), 🦷 Dent 1–1 (50 %) | 0 |
+| Ver des sables | `sand_worm` | 6 | 320 | 26 | charge, élite | désert (jour) | 🦷 Dent 1–3 (80 %), 🟫 Peau brute 1–2 (60 %) | 2 |
 | Sorcière des marais | `swamp_witch` | 6 | 200 | 24 | spore, nuit | marais (nuit) | 🧪 Fiole d'extrait 1–2 (60 %), 🌙 Fleur nocturne 1–1 (30 %), 🧪 Fiole vide 1–2 (60 %) | 4 |
 | Golem de bois | `wood_golem` | 6 | 380 | 26 | charge, neutre | forêt rousse (jour) | 🌲 Rondin de chêne 3–5 (100 %), 🌲 Bois pétrifié 1–1 (15 %) | 2 |
 | Chef de bande | `bandit_chief` | 7 | 520 | 32 | charge, élite | génération | 👝 Bourse de marchand 1–1 (100 %), 🗺️ Carte au trésor 1–1 (30 %), 🔩 Acier 1–2 (50 %) | 6 |
+| Homme-taureau | `bull_man` | 7 | 600 | 36 | charge, élite | prairie (jour) | 🟫 Peau brute 2–3 (100 %) | 4 |
 | Ours des cavernes | `cave_bear` | 7 | 480 | 34 | charge, élite, neutre | toundra (rare), grottes forêt rousse, grottes toundra | 🦊 Fourrure 3–4 (100 %), 🐾 Griffe de créature 1–2 (80 %), 🦴 Os fossilisé 1–1 (10 %) | 3 |
+| Ent corrompu | `corrupted_ent` | 7 | 520 | 30 | charge, élite, neutre | forêt rousse (jour) | 🌲 Bois 4–8 (100 %), 🟧 Résine 1–3 (80 %) | 3 |
+| Gardien maudit | `cursed_warden` | 7 | 300 | 28 | charge, élite, nuit | désert (nuit) | ⭕ Anneau métallique 2–4 (100 %) | 4 |
+| Griffon | `griffin` | 7 | 320 | 30 | charge, élite, vole | forêt rousse (jour) | 🐦 Plume 3–6 (100 %), 🐾 Griffe de créature 1–2 (80 %) | 4 |
 | Gardien des Moissons | `harvest_warden` | 7 | 1400 | 38 | charge, BOSS | génération | 🌰 Graine ancienne 2–4 (100 %), 🎐 Toile enchantée 1–2 (100 %), 🌱 Graines (Citrouille) 3–6 (100 %) | 6 |
+| Gardien du lac | `lake_guardian` | 7 | 520 | 30 | charge, élite | marais (jour) | 🟤 Argile 3–6 (100 %) | 4 |
 | Troll des racines | `root_troll` | 7 | 600 | 36 | charge, élite, neutre | forêt rousse (jour) | 🌳 Racine ancienne 1–1 (50 %), 🌲 Rondin de chêne 2–4 (100 %), 🟧 Résine 2–3 (100 %) | 4 |
+| Gardien des ruines | `ruin_guardian` | 7 | 520 | 30 | charge, élite, neutre | désert (jour) | 🧩 Fragment de relique 1–2 (80 %), 💰 Pièce ancienne 1–3 (60 %) | 4 |
 | Golem de grès | `sandstone_golem` | 7 | 480 | 30 | charge, élite | désert (jour) | 🏜️ Sable 4–8 (100 %), 🔴 Rubis 1–1 (5 %), ⛰️ Pierre gravée 1–1 (15 %) | 4 |
+| Esprit de l'orage | `storm_wraith` | 7 | 420 | 32 | charge, élite | génération | ✨ Pierre lumineuse 1–2 (80 %), 💎 Cristal ancien 1–1 (25 %) | 6 |
+| Gardien des tombes | `tomb_warden` | 7 | 480 | 30 | charge, élite, nuit | prairie (nuit) | 💰 Pièce ancienne 1–3 (80 %) | 4 |
+| Wyverne | `wyvern` | 7 | 340 | 32 | spore, élite, vole | désert (jour) | 🟫 Peau brute 1–2 (80 %) | 4 |
 | Yéti | `yeti` | 7 | 480 | 34 | charge, élite | génération | 🦊 Fourrure 3–5 (100 %), 🧊 Cristal de glace 1–2 (80 %) | 4 |
 | Myconide Ancien | `boss_myconid` | 8 | 900 | 40 | spore, BOSS | génération |  | 0 |
+| Troll des cavernes | `cave_troll` | 8 | 700 | 38 | charge, élite | grottes désert, grottes prairie | ⛰️ Pierre 4–8 (100 %), ⛰️ Minerai de fer 1–3 (60 %) | 5 |
+| Cyclope | `cyclops` | 8 | 850 | 42 | charge, élite | prairie (rare) | 🦷 Dent 2–3 (100 %), 🗺️ Carte au trésor 1–1 (15 %) | 6 |
+| Colosse de terre | `earth_colossus` | 8 | 680 | 34 | charge, élite | marais (jour) | 🟤 Argile 4–8 (100 %) | 4 |
+| Géant des forêts | `forest_giant` | 8 | 820 | 40 | charge, élite, neutre | forêt rousse (jour) | 🌲 Bois 6–10 (100 %) | 5 |
+| Chevalier oublié | `forgotten_knight` | 8 | 360 | 32 | charge, élite, nuit | prairie (nuit) | 🔩 Acier 1–2 (60 %) | 5 |
 | Troll des glaces | `frost_troll` | 8 | 650 | 38 | charge, élite | toundra (jour) | 🧊 Cristal de glace 2–3 (100 %), 🦊 Fourrure 2–3 (100 %), 💎 Cristal ancien 1–1 (10 %) | 5 |
+| Gardien de granit | `granite_warden` | 8 | 720 | 36 | charge, élite, neutre | toundra (jour) | ⛰️ Pierre 6–10 (100 %) | 5 |
+| Troll des montagnes | `mountain_troll` | 8 | 720 | 38 | charge, élite | toundra (jour) | ⛰️ Pierre 4–8 (100 %) | 5 |
 | Roi Mycélien | `mycelian_king` | 8 | 1800 | 42 | spore, BOSS | génération | 🍄 Spore royale 1–2 (100 %), 🍄 Champignon 6–10 (100 %) | 7 |
-| Ogre | `ogre` | 8 | 800 | 40 | charge, élite, neutre | forêt rousse (rare), marais (rare), prairie (rare) | 🥩 Viande crue 4–6 (100 %), 👝 Bourse de marchand 1–1 (40 %), 📯 Corne de bête rare 1–1 (5 %) | 6 |
+| Ogre | `ogre` | 8 | 800 | 40 | charge, élite, neutre | forêt rousse (rare), marais (rare) | 🥩 Viande crue 4–6 (100 %), 👝 Bourse de marchand 1–1 (40 %), 📯 Corne de bête rare 1–1 (5 %) | 6 |
 | Colosse de pierre | `stone_golem` | 8 | 700 | 36 | charge, élite | grottes désert, grottes prairie | ⛰️ Pierre 6–10 (100 %), ⛰️ Pierre gravée 1–1 (30 %), 💗 Cœur minéral 1–1 (3 %) | 5 |
 | Mère des Ronces | `bramble_mother` | 9 | 2200 | 46 | spore, BOSS | errant forêt rousse | 🌰 Graine ancienne 2–3 (100 %), 🌳 Racine ancienne 1–2 (100 %) | 8 |
+| Roi déchu | `fallen_king` | 9 | 900 | 40 | charge, élite, nuit | désert (nuit), prairie (nuit) | 💍 Bijou ancien 1–1 (50 %), 👑 Sceau royal 1–1 (20 %), 💰 Pièce ancienne 2–5 (100 %) | 10 |
 | Colosse de Verre | `glass_colossus` | 9 | 2400 | 50 | charge, BOSS | génération | 💎 Éclat de verre vivant 2–4 (100 %), 🟡 Minerai d'or 4–8 (100 %) | 8 |
+| Géant de glace | `ice_giant` | 9 | 900 | 42 | charge, élite | toundra (jour) | 🧊 Cristal de glace 1–3 (80 %), 🦊 Fourrure 2–4 (100 %) | 6 |
 | Roi des marais | `marsh_king` | 9 | 2200 | 46 | hop, BOSS | gardien de donjon marais, errant marais | 🖤 Écaille noire (Roi des marais) 1–2 (100 %), ⚪ Perle 1–3 (100 %) | 8 |
 | Minotaure | `minotaur` | 9 | 900 | 44 | charge, élite | désert (rare) | 📯 Corne 2–2 (100 %), 📯 Corne de bête rare 1–1 (20 %), 🔩 Acier 1–3 (60 %) | 7 |
+| Géant des ruines | `ruin_giant` | 9 | 860 | 40 | charge, élite | prairie (jour) | 🧩 Fragment de relique 1–3 (80 %) | 6 |
 | Vargor, le Roi des loups | `vargor` | 9 | 2000 | 48 | charge, BOSS | gardien de donjon forêt rousse, errant forêt rousse | 🐺 Fourrure royale (Vargor) 1–1 (100 %), 🐺 Peau de loup 3–5 (100 %) | 8 |
 | Chef Gobelin | `boss_goblin` | 10 | 1200 | 50 | charge, BOSS | génération |  | 0 |
 | Brumeglace | `brumeglace` | 10 | 2600 | 52 | spore, BOSS | gardien de donjon toundra, errant toundra | ❄️ Cristal de givre (Brumeglace) 1–1 (100 %), 🧊 Cristal de glace 4–6 (100 %) | 9 |
 | Le Roi sans couronne | `crownless_king` | 10 | 2800 | 54 | charge, BOSS | gardien de donjon prairie, errant prairie | 👑 Couronne oubliée 1–1 (100 %), 👑 Sceau royal 1–1 (30 %), 💍 Bijou ancien 1–2 (100 %) | 10 |
+| Bête des profondeurs | `deep_beast` | 10 | 2600 | 52 | charge, BOSS | errant marais | 🟫 Peau brute 4–6 (100 %), 🦷 Dent 3–5 (100 %) | 9 |
 | Dormeur des Glaces | `ice_sleeper` | 10 | 3000 | 55 | spore, BOSS | génération | ❄️ Cœur gelé 1–1 (100 %), 🧊 Cristal de glace 4–8 (100 %) | 10 |
+| Géant des montagnes | `mountain_giant` | 10 | 3000 | 56 | charge, BOSS | errant prairie, toundra | ⛰️ Pierre 10–20 (100 %), 🟡 Minerai d'or 2–4 (100 %) | 10 |
 | Scarabée royal | `royal_scarab` | 10 | 2400 | 48 | charge, BOSS | gardien de donjon désert, errant désert | 🐞 Carapace dorée (Scarabée royal) 1–1 (100 %), 🟡 Minerai d'or 3–6 (100 %) | 9 |
+| Wyverne des neiges | `snow_wyvern` | 10 | 2400 | 50 | spore, BOSS, vole | errant toundra | 🧊 Cristal de glace 2–4 (100 %), 🐦 Plume 4–8 (100 %) | 9 |
 
 ## Compétences : ce qui donne de l'XP
 
 Lu dans le code (`addSkillXp` / `addSkillXpCapped`). Les gestes réversibles sont plafonnés par jour (étape 6A).
 
-### 🌾 Agriculture — Cultures plus difficiles, récoltes doubles (6 sources)
+### 🌾 Agriculture — Cultures plus difficiles, récoltes doubles (7 sources)
 
-- `Farm:459` — `G.Joueurs.addSkillXp(player, "agriculture", 3 + (Config.CROPS[st.crop].days or 3))`
+- `Farm:474` — `G.Joueurs.addSkillXp(player, "agriculture", 3 + (Config.CROPS[st.crop].days or 3))`
+- `Fauche:87` — `G.Joueurs.addSkillXp(player, "agriculture", 1)`
 - `Props:362` — `G.Joueurs.addSkillXp(player, "agriculture", 3)`
-- `Props:635` — `G.Joueurs.addSkillXp(player, "agriculture", 2)`
-- `Props:736` — `G.Joueurs.addSkillXp(player, "agriculture", 2 + math.floor((p.skill or 0) / 4))`
-- `Props:764` — `G.Joueurs.addSkillXp(player, "agriculture", 2)`
+- `Props:645` — `G.Joueurs.addSkillXp(player, "agriculture", 2)`
+- `Props:746` — `G.Joueurs.addSkillXp(player, "agriculture", 2 + math.floor((p.skill or 0) / 4))`
+- `Props:781` — `G.Joueurs.addSkillXp(player, "agriculture", 2)`
 - `Terraforme:138` — `G.Joueurs.addSkillXpCapped(player, "agriculture", 1, "terrasse", XP_PER_DAY)`
 
 ### 🪓 Bûcheronnage — Bois en plus, arbres abattus plus vite (1 source)
@@ -1041,9 +1376,9 @@ Lu dans le code (`addSkillXp` / `addSkillXpCapped`). Les gestes réversibles son
 
 ### ⛏️ Minage — Fer au niv. 12, or au niv. 25, minerai en plus (3 sources)
 
-- `Donjons:465` — `G.Joueurs.addSkillXp(player, "minage", 8)`
-- `Evenements:337` — `G.Joueurs.addSkillXp(player, "minage", 4)`
-- `Props:745` — `G.Joueurs.addSkillXp(player, "minage", 4 + math.floor((k.skill or 0) / 2))`
+- `Donjons:531` — `G.Joueurs.addSkillXp(player, "minage", 8)`
+- `Evenements:375` — `G.Joueurs.addSkillXp(player, "minage", 4)`
+- `Props:756` — `G.Joueurs.addSkillXp(player, "minage", 4 + math.floor((k.skill or 0) / 2))`
 
 ### 🎣 Pêche — Poissons rares, touches plus fréquentes (2 sources)
 
@@ -1054,98 +1389,121 @@ Lu dans le code (`addSkillXp` / `addSkillXpCapped`). Les gestes réversibles son
 
 - pas d'appel direct : l'XP vient de la fabrication (`Shop`, compétence de la recette), voir plus bas
 
-### ⚒️ Artisanat — Outils de fer, serrures, équipement (5 sources)
+### ⚒️ Artisanat — Outils de fer, serrures, équipement (6 sources)
 
-- `Batir:164` — `G.Joueurs.addSkillXpCapped(player, "artisanat", 1, "pose", 150)`
+- `Batir:188` — `G.Joueurs.addSkillXpCapped(player, "artisanat", 1, "pose", 150)`
+- `Batir:424` — `G.Joueurs.addSkillXpCapped(player, "artisanat", #todo, "pose", 150)`
 - `Demolir:318` — `G.Joueurs.addSkillXp(player, "artisanat", 4)`
-- `Shop:417` — `G.Joueurs.addSkillXp(player, "artisanat", 10 + (r.skill and r.skill[2] or 0))`
-- `Shop:423` — `G.Joueurs.addSkillXp(player, "artisanat", 8)`
-- `Shop:519` — `G.Joueurs.addSkillXp(player, "artisanat", 3)`
+- `Shop:648` — `G.Joueurs.addSkillXp(player, "artisanat", 10 + (r.skill and r.skill[2] or 0))`
+- `Shop:654` — `G.Joueurs.addSkillXp(player, "artisanat", 8)`
+- `Shop:750` — `G.Joueurs.addSkillXp(player, "artisanat", 3)`
 
-### ⚔️ Combat — +1 % de dégâts par niveau (1 source)
+### ⚔️ Combat — +1 % de dégâts par niveau (3 sources)
 
-- `Enemies:636` — `G.Joueurs.addSkillXp(player, "combat", 4 * k.level)`
+- `Combat:255` — `G.Joueurs.addSkillXp(player, "combat", 1)`
+- `Enemies:781` — `G.Joueurs.addSkillXp(player, "combat", 4 * k.level)`
+- `Enemies:810` — `G.Joueurs.addSkillXp(p, "combat", 4 * en.k.level)`
 
 ### 🎣 Crochetage — Serrures plus dures, crochets qui cassent moins (2 sources)
 
 - `Protection:198` — `G.Joueurs.addSkillXp(player, "crochetage", (practice and 3 or 9) * tier)`
 - `Protection:201` — `G.Joueurs.addSkillXp(player, "crochetage", (practice and 1 or 2) * tier)`
 
-### 🐾 Dressage — Bêtes plus sauvages, mini-jeu plus facile (4 sources)
+### 🐾 Dressage — Bêtes plus sauvages, mini-jeu plus facile (5 sources)
 
-- `Compagnons:196` — `G.Joueurs.addSkillXp(player, "dressage", 12 * t.diff)`
-- `Compagnons:199` — `G.Joueurs.addSkillXp(player, "dressage", 3 * t.diff)`
-- `Horses:251` — `G.Joueurs.addSkillXp(player, "dressage", 3 * diff)`
-- `Horses:255` — `G.Joueurs.addSkillXp(player, "dressage", 12 * diff)`
+- `Compagnons:199` — `G.Joueurs.addSkillXp(player, "dressage", 12 * t.diff)`
+- `Compagnons:203` — `G.Joueurs.addSkillXp(player, "dressage", 3 * t.diff)`
+- `Horses:300` — `G.Joueurs.addSkillXp(player, "dressage", 3 * diff)`
+- `Horses:304` — `G.Joueurs.addSkillXp(player, "dressage", 12 * diff)`
+- `Horses:563` — `G.Joueurs.addSkillXp(player, "dressage", 20)`
 
 ### 🐄 Élevage — Produits des bêtes plus souvent (6 sources)
 
-- `Animals:174` — `G.Joueurs.addSkillXp(player, "elevage", 5)`
-- `Compagnons:253` — `G.Joueurs.addSkillXp(player, "elevage", 6)`
-- `Compagnons:335` — `G.Joueurs.addSkillXp(owner, "elevage", 15)`
-- `Joueurs:646` — `J.addSkillXp(player, "elevage", 2)`
-- `Machines:85` — `G.Joueurs.addSkillXp(player, "elevage", 4)`
+- `Animals:224` — `G.Joueurs.addSkillXp(player, "elevage", 5)`
+- `Compagnons:257` — `G.Joueurs.addSkillXp(player, "elevage", 6)`
+- `Compagnons:342` — `G.Joueurs.addSkillXp(owner, "elevage", 15)`
+- `Joueurs:672` — `J.addSkillXp(player, "elevage", 2)`
+- `Machines:154` — `G.Joueurs.addSkillXp(player, "elevage", 4)`
 - `Nids:143` — `G.Joueurs.addSkillXp(player, "elevage", 2)`
 
-### 💰 Commerce — Ventes et commandes mieux payées (+0,5 % / +1 % par niveau) (7 sources)
+### 💰 Commerce — Ventes et commandes mieux payées (+0,5 % / +1 % par niveau) (9 sources)
 
+- `Admin:585` — `G.Joueurs.addSkillXp(player, "commerce", 3)`
+- `Chroniques:87` — `G.Joueurs.addSkillXp(player, "commerce", 2) -- le savoir se monnaie`
 - `Economie:216` — `G.Joueurs.addSkillXpCapped(p, "commerce", 6, "echange", 5)`
 - `Economie:315` — `G.Joueurs.addSkillXp(player, "commerce", 12 + o.n)`
 - `Economie:593` — `G.Joueurs.addSkillXp(owner, "commerce", 2 + math.floor(cost / 30))`
-- `Joueurs:601` — `J.addSkillXp(player, "commerce", 1)`
+- `Joueurs:620` — `J.addSkillXp(player, "commerce", 1)`
 - `Politique:225` — `G.Joueurs.addSkillXp(player, "commerce", 1)`
-- `Poste:418` — `G.Joueurs.addSkillXp(player, "commerce", 2)`
-- `Shop:257` — `G.Joueurs.addSkillXp(player, "commerce", 1 + math.floor(total / 25))`
+- `Poste:463` — `G.Joueurs.addSkillXp(player, "commerce", 2)`
+- `Shop:457` — `G.Joueurs.addSkillXp(player, "commerce", 1 + math.floor(total / 25))`
 
 ### Compétence choisie à l'exécution
 
-- `Joueurs:329` — `J.addSkillXp(player, skill, amount)`
-- `Moissons:146` — `G.Joueurs.addSkillXp(player, src.skill, 1)`
-- `Shop:451` — `G.Joueurs.addSkillXp(player, skillName, 3 + math.floor((r.skill and r.skill[2] or 0) / 3))`
+- `Joueurs:330` — `J.addSkillXp(player, skill, amount)`
+- `Moissons:154` — `G.Joueurs.addSkillXp(player, src.skill, 1)`
+- `Shop:682` — `G.Joueurs.addSkillXp(player, skillName, 3 + math.floor((r.skill and r.skill[2] or 0) / 3))`
 
 ## Or : entrées et sorties
 
 Lu dans le code : `add(…, "gold", …)` crée de l'or, `take(…, "gold", …)` en détruit (ou le déplace vers un autre joueur).
 Le journal serveur (`Economie`) mesure les flux réels par monde.
 
-### Entrées d'or (15)
+### Entrées d'or (19)
 
+- `Activites:179` — `G.Joueurs.add(player, "gold", prize)`
+- `Admin:460` — `G.Joueurs.add(o.from, "gold", o.price)`
+- `Admin:584` — `G.Joueurs.add(player, "gold", c.price)`
 - `Economie:311` — `G.Joueurs.add(player, "gold", reward, true)`
 - `Economie:551` — `G.Joueurs.add(player, "gold", n, true)`
-- `Enemies:615` — `G.Joueurs.add(player, "gold", math.random(5, 15) * k.level * (k.gold or 1))`
-- `Evenements:361` — `G.Joueurs.add(player, "gold", 40, true)`
-- `Evenements:402` — `G.Joueurs.add(p, "gold", 120, true)`
-- `Game:355` — `G.Joueurs.add(hunter, "gold", bounty, true)`
+- `Enemies:738` — `G.Joueurs.add(player, "gold", math.random(5, 15) * k.level * (k.gold or 1))`
+- `Evenements:399` — `G.Joueurs.add(player, "gold", 40, true)`
+- `Evenements:441` — `G.Joueurs.add(p, "gold", 120, true)`
+- `Game:374` — `G.Joueurs.add(hunter, "gold", bounty, true)`
 - `Ilots:160` — `G.Joueurs.add(player, "gold", math.random(30, 80))`
-- `Joueurs:664` — `J.add(player, "gold", n)`
-- `Journal:172` — `G.Joueurs.add(player, "gold", math.random(80, 200))`
+- `Joueurs:690` — `J.add(player, "gold", n)`
+- `Journal:96` — `G.Joueurs.add(player, "gold", 20 * dec, true)`
+- `Journal:202` — `G.Joueurs.add(player, "gold", math.floor(math.random(80, 200) * (hunter and 1.5 or 1)))`
 - `Mondes:782` — `G.Joueurs.add(p, "gold", t.cost, true)`
-- `Poste:248` — `G.Joueurs.add(player, "gold", p.gold, true)`
-- `Poste:359` — `G.Joueurs.add(player, "gold", POSTAGE, true)`
-- `Quetes:458` — `G.Joueurs.add(player, "gold", q.gold)`
-- `Shop:255` — `G.Joueurs.add(player, "gold", total, true)`
-- `Shop:762` — `G.Joueurs.add(player, "gold", d.stall.till, true)`
+- `Poste:291` — `G.Joueurs.add(player, "gold", p.gold, true)`
+- `Poste:404` — `G.Joueurs.add(player, "gold", POSTAGE, true)`
+- `Quetes:555` — `G.Joueurs.add(player, "gold", q.gold)`
+- `Shop:455` — `G.Joueurs.add(player, "gold", total, true)`
+- `Shop:1041` — `G.Joueurs.add(player, "gold", d.stall.till, true)`
 
-### Sorties d'or (20)
+### Sorties d'or (33)
 
-- `Activites:165` — `if prize > 0 and not G.Joueurs.take(player, "gold", prize) then`
-- `Armee:139` — `if G.Joueurs.take(player, "gold", total) then`
+- `Activites:170` — `if prize > 0 and not G.Joueurs.take(player, "gold", prize) then`
+- `Admin:456` — `if o.price > 0 and not G.Joueurs.take(player, "gold", o.price) then`
+- `Admin:541` — `if not G.Joueurs.take(player, "gold", price) then`
+- `Armee:172` — `if G.Joueurs.take(player, "gold", total) then`
 - `Avatar:258` — `if paidBefore and not G.Joueurs.take(player, "gold", LOOK_COST) then`
 - `Clans:251` — `G.Joueurs.take(player, "gold", FOUND_COST)`
 - `Economie:425` — `if item ~= "gold" and not G.Joueurs.take(player, "gold", 2) then`
 - `Economie:456` — `if not G.Joueurs.take(player, "gold", cost) then`
 - `Economie:569` — `if not G.Joueurs.take(player, "gold", cost) then`
-- `Game:396` — `G.Joueurs.take(player, "gold", lost)`
-- `Game:422` — `G.Joueurs.take(player, "gold", fine)`
-- `Horses:212` — `if not G.Joueurs.take(player, "gold", price) then`
-- `Horses:384` — `if not G.Joueurs.take(player, "gold", Horses.STABLE_FEE) then`
-- `Joueurs:89` — `J.take(player, "gold", cost)`
+- `Game:415` — `G.Joueurs.take(player, "gold", lost)`
+- `Game:441` — `G.Joueurs.take(player, "gold", fine)`
+- `Horses:261` — `if not G.Joueurs.take(player, "gold", price) then`
+- `Horses:440` — `if not G.Joueurs.take(player, "gold", Horses.STABLE_FEE) then`
+- `Horses:472` — `if not G.Joueurs.take(player, "gold", Horses.STABLE_FEE) then`
+- `Horses:548` — `G.Joueurs.take(player, "gold", c.gold)`
+- `Joueurs:90` — `J.take(player, "gold", cost)`
+- `Metiers:1137` — `if not G.Joueurs.take(player, "gold", HEAL_COST) then`
+- `Metiers:1147` — `if not G.Joueurs.take(player, "gold", BLESS_COST) then`
+- `Metiers:1175` — `if not G.Joueurs.take(player, "gold", cost) then`
+- `Metiers:1186` — `if not G.Joueurs.take(player, "gold", ALMS_COST) then`
+- `Metiers:1220` — `if not G.Joueurs.take(player, "gold", nxt.gold) then`
+- `Metiers:1246` — `if not G.Joueurs.take(player, "gold", t.price) then`
 - `Mondes:863` — `if not travelling[p] and G.Joueurs.take(p, "gold", cost) then`
+- `Ouvriers:28` — `if not G.Joueurs.take(player, "gold", cost) then`
 - `Parcelles:141` — `G.Joueurs.take(player, "gold", price)`
 - `Politique:218` — `if not G.Joueurs.take(player, "gold", n) then`
-- `Poste:347` — `G.Joueurs.take(player, "gold", POSTAGE)`
-- `Poste:389` — `G.Joueurs.take(player, "gold", fee)`
-- `Poste:409` — `if not G.Joueurs.take(player, "gold", l.price) then`
-- `Shop:71` — `if not G.Joueurs.take(player, "gold", rent) then`
-- `Shop:215` — `if not G.Joueurs.take(player, "gold", entry.price * n) then`
+- `Poste:392` — `G.Joueurs.take(player, "gold", POSTAGE)`
+- `Poste:434` — `G.Joueurs.take(player, "gold", fee)`
+- `Poste:454` — `if not G.Joueurs.take(player, "gold", l.price) then`
+- `Shop:74` — `if not G.Joueurs.take(player, "gold", rent) then`
+- `Shop:395` — `if not G.Joueurs.take(player, "gold", entry.price * n) then`
+- `Shop:776` — `if not G.Joueurs.take(player, "gold", total) then`
+- `Villages:36` — `if not G.Joueurs.take(player, "gold", 12) then`
 
