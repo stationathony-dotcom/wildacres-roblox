@@ -915,6 +915,9 @@ local function buildPlaced(reg, d)
 	end
 	model.Name = info.place
 	model:SetAttribute("PlacedId", d.id)
+	if d.item == "training_dummy" then
+		model:SetAttribute("Mannequin", true) -- cible du tir (Systemes/Combat)
+	end
 	if info.claim and G.Parcelles then
 		G.Parcelles.decorate(model, d.x, d.z)
 	end

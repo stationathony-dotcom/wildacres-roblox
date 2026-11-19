@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Mannequin d'entraînement** (établi : paille, planches, corde ; à poser) : on s'entraîne au tir dessus (arc, arbalète, armes de jet) — dégâts affichés, un peu d'XP de combat (plafonnée à 150 par jour)
 - **Chantiers de village** (`Systemes/Chantiers`) : chaque village mène un chantier commun ; au tableau des quêtes, une offre « Chantier » demande d'apporter une part (20 à 40 de la matière qui manque le plus), l'avancée est commune à tous ; marché agrandi (planches, pierre, tissu) = on y vend 5 % plus cher ; palissade renforcée (bois, corde, fer) = invasions moins nombreuses ; place éclairée (lanternes, fer, verre) = 4 lampadaires, les ombres rôdeuses n'approchent plus ; musée (antiquités, planches) = étudier une antiquité dans ce village rapporte deux fois plus ; chaque part rapporte or et réputation
 - **Concours de cuisine** (plats et potions préparés) et **concours de chasse** (bêtes et monstres vaincus) au tableau d'affichage, comptés par le jeu comme ceux de pêche ou de minage
 - **Chasse en groupe** : une quête « vaincre N bêtes » avance pour tous ceux qui ont frappé la bête, et pour le groupe du tueur à moins de 60 studs (avant : seul le dernier coup comptait)

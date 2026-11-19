@@ -137,6 +137,10 @@ local function applyHit(player: Player, best, kind: string, dmg: number, root: B
 		G.Animals.hit(best, player)
 	elseif kind == "pet" then
 		G.Compagnons.hit(best, dmg, player)
+	elseif kind == "dummy" then
+		-- mannequin : on voit ses dégâts, un peu d'XP de combat (plafonnée : 150 par jour)
+		Combat.popup(Vector3.new(best.x, G.Util.groundY(best.x, best.z) + 5, best.z), tostring(dmg), Color3.fromRGB(255, 230, 150))
+		G.Joueurs.addSkillXpCapped(player, "combat", 2, "mannequin", 150)
 	elseif kind == "player" then
 		local victim = best :: Player
 		local vprof = G.Joueurs.get(victim)
@@ -293,6 +297,15 @@ function Combat.shoot(player: Player, targetId: string?)
 			local r = other ~= player and G.Util.root(other)
 			if r then
 				consider(r.Position, other, "player", other.Character)
+			end
+		end
+		-- mannequins d'entraînement posés (Shared/Equilibre)
+		for _, reg in G.World.loaded do
+			for _, m in (reg.placedFolder and reg.placedFolder:GetChildren()) or {} do
+				if m:IsA("Model") and m:GetAttribute("Mannequin") then
+					local pos = m:GetPivot().Position + Vector3.new(0, 2.5, 0)
+					consider(pos, { x = pos.X, z = pos.Z }, "dummy", m)
+				end
 			end
 		end
 	end

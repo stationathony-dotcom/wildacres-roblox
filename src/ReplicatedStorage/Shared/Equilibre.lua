@@ -373,6 +373,12 @@ function E.apply(C)
 			note("haut niveau " .. m[2])
 		end
 	end
+	-- mannequin d'entraînement (Combat.shoot : cible ; XP de combat plafonnée par jour)
+	if not I.training_dummy and I.straw and I.planks and I.rope then
+		I.training_dummy = { name = "Mannequin d'entraînement", icon = "🎯", price = 40, place = "Epouvantail", grid = "cell" }
+		table.insert(R, { item = "training_dummy", needs = { straw = 6, planks = 3, rope = 2 }, station = "bench", cat = "loisirs" })
+		note("nouvel objet training_dummy")
+	end
 	-- 14. objets neufs (munitions, harnachement)
 	for _, x in E.NEW_ITEMS do
 		local id, name, icon, price, needs, count, station, level = table.unpack(x)
