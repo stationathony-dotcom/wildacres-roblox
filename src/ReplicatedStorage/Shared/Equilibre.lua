@@ -179,6 +179,12 @@ E.NEW_ITEMS = {
 	{ "saddle_leather", "Selle de cuir", "🐎", 120, { leather = 4, buckle = 2, wool_cloth = 1 }, 1, "tannery", 6 },
 	{ "saddle_race", "Selle de course", "🏇", 320, { soft_leather = 3, silver_ingot = 1, buckle = 2 }, 1, "tannery", 18 },
 	{ "stirrups", "Étriers", "🔗", 80, { iron_ingot = 2, leather_strap = 2 }, 1, "anvil", 8 },
+	-- flèches meilleures (Combat.shoot : AMMO_DMG), tirées en premier
+	{ "arrow_iron", "Flèche à pointe de fer", "🏹", 4, { branches = 1, iron_ingot = 1, feather = 1 }, 8, "anvil", 10 },
+	{ "arrow_barbed", "Flèche barbelée", "🏹", 7, { branches = 1, steel = 1, feather = 2 }, 8, "anvil", 20 },
+	-- équipement de compagnon, dans le sac du maître (Compagnons : damageOf / hurt)
+	{ "spiked_collar", "Collier clouté", "🐕", 90, { leather = 2, copper_nails = 6, buckle = 1 }, 1, "tannery", 8 },
+	{ "pet_harness", "Harnais de cuir", "🦮", 110, { leather = 3, leather_strap = 2, iron_ring = 2 }, 1, "tannery", 10 },
 }
 E.TACK = { saddle_race = 1.15, saddle_leather = 1.08 } -- la meilleure selle compte ; étriers en plus
 E.STIRRUPS = 1.05
@@ -192,6 +198,9 @@ E.RANGED_GEAR = {
 	{ "Baudrier du lanceur de couteaux", 3, { discretion = 6, vitesse = 3 }, 7, "throwing_knife", { soft_leather = 2, steel = 1 }, 22 },
 }
 E.AMMO_NAME = { stone = "Pierre", javelin = "Javelot", throwing_knife = "Couteau de lancer", arrow = "Flèche" }
+-- dégâts selon la munition tirée
+E.AMMO_DMG = { arrow = 1, bolt = 1.1, bolt_heavy = 1.3, arrow_iron = 1.25, arrow_barbed = 1.4, javelin = 1.2, stone = 0.8, throwing_knife = 1 }
+E.BOW_AMMO = { "arrow_barbed", "arrow_iron", "arrow", "bolt", "bolt_heavy" } -- arcs et arbalètes : la meilleure d'abord
 
 -- effets fixés à la main quand le nom du plat dit autre chose que ses ingrédients
 E.MEALS = { vigor_elixir = { "force", 3 } }

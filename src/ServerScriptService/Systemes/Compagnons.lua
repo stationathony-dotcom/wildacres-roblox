@@ -457,6 +457,10 @@ local function damageOf(en): number
 	if en.rec and en.rec.equip then
 		bonus *= 1.25 -- soldat équipé (Armee.equip)
 	end
+	-- collier clouté dans le sac du maître (Shared/Equilibre)
+	if owner and G.Joueurs.has(owner, "spiked_collar") then
+		bonus *= 1.2
+	end
 	return math.max(4, math.floor((en.k.dmg > 0 and en.k.dmg or 6) * bonus))
 end
 
@@ -623,6 +627,11 @@ function Compagnons.hurt(en, dmg: number)
 	end
 	if en.rec and en.rec.equip then
 		dmg = math.max(1, math.floor(dmg * 0.8)) -- armure de cuir et de fer
+	end
+	-- harnais de cuir dans le sac du maître (Shared/Equilibre)
+	local owner = G.Util.playerOf(en.owner)
+	if owner and G.Joueurs.has(owner, "pet_harness") then
+		dmg = math.max(1, math.floor(dmg * 0.8))
 	end
 	en.hp -= dmg
 	en.lastHurt = os.clock()

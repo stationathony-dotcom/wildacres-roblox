@@ -218,12 +218,19 @@ function Combat.shoot(player: Player, targetId: string?)
 	-- arme de jet (Shared/Equilibre) : sa propre munition (pierres, javelots, couteaux) ; sinon flèches puis carreaux
 	local w = rangedWeapon(player)
 	local ammoOf = w and w.ammo
-	local hasAmmo
+	local okE, Eq = pcall(require, game:GetService("ReplicatedStorage").Shared.Equilibre)
+	local ammoUsed
 	if ammoOf then
-		hasAmmo = G.Joueurs.take(player, ammoOf, 1)
+		ammoUsed = G.Joueurs.take(player, ammoOf, 1) and ammoOf or nil
 	else
-		hasAmmo = G.Joueurs.take(player, "arrow", 1) or G.Joueurs.take(player, "bolt", 1) or G.Joueurs.take(player, "bolt_heavy", 1)
+		for _, a in (okE and Eq.BOW_AMMO) or { "arrow", "bolt", "bolt_heavy" } do
+			if G.Joueurs.take(player, a, 1) then
+				ammoUsed = a
+				break
+			end
+		end
 	end
+	local hasAmmo = ammoUsed ~= nil
 	if not hasAmmo then
 		local names = { stone = "🪨 Plus de pierres pour la fronde.", javelin = "🔱 Plus de javelots. (Établi : planche, fer et plume.)", throwing_knife = "🔪 Plus de couteaux de lancer. (Enclume : fer.)" }
 		G.Util.toast(player, names[ammoOf or ""] or "🏹 Plus de flèches. (Établi : bois, silex et plume.)")
@@ -295,7 +302,7 @@ function Combat.shoot(player: Player, targetId: string?)
 		return
 	end
 	arrowFx(from, aim + Vector3.new(0, 0.8, 0))
-	local dmg = Combat.damageOf(player, nil)
+	local dmg = math.floor(Combat.damageOf(player, nil) * ((okE and Eq.AMMO_DMG and Eq.AMMO_DMG[ammoUsed]) or 1))
 	G.Joueurs.addSkillXp(player, "combat", 1)
 	task.delay((aim - from).Magnitude / 140, function()
 		if player.Parent and root.Parent then
