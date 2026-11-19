@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Sélection des semences** : chaque culture récoltée chez soi s'améliore (niveaux 1 à 5 à 10, 40, 90, 160, 250 récoltes) : +6 % de récoltes doubles par niveau, triples dès le niveau 3 ; carnet des cultures : /cultures ou toucher « Cultures » dans la fiche [P] (banc `selection`)
 - **Gestes de loisir** : /danse, /salut, /applaudir, /reverence — animés sans fichier d'animation, vus par tous les joueurs autour
 - **Plus de plafond de 24 bêtes** (principe « limité par ses ressources ») : on loge 8 bêtes sans abri, puis +6 par poulailler, étable ou bergerie, +4 par porcherie, +12 par grange (les bêtes déjà possédées restent toutes) ; **livre de mes bêtes** (bêtes de ferme et produits prêts, compagnons avec confiance et faim, montures, places libres) : /animaux ou toucher « Apprivoisées » dans la fiche [P] (banc `animaux`)
 - **Diligence** : le palefrenier propose la route vers les 4 villages déjà découverts les plus proches (10 or + 1 or par 25 studs) ; voyage en fondu au noir ; refusé aux recherchés ; la monture reste à l'écurie de départ (banc `diligence`)

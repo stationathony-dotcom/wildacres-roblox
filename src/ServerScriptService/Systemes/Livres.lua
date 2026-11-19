@@ -23,6 +23,9 @@ function Livres.init(g)
 	G.Interact.onAction("livre_animaux", function(player)
 		Livres.animaux(player)
 	end)
+	G.Interact.onAction("livre_cultures", function(player)
+		Livres.cultures(player)
+	end)
 end
 
 function Livres.send(player: Player, d)
@@ -164,6 +167,29 @@ function Livres.animaux(player: Player)
 		lines[1] = { t = "Aucune bête", x = "Les fermiers vendent des bêtes ; on apprivoise les animaux sauvages avec un appât." }
 	end
 	Livres.send(player, { titre = "🐾 Mes bêtes", sous = string.format("Ferme : %d / %d places (chaque abri en ajoute)", n, cap), lignes = lines })
+end
+
+-- Carnet des cultures : sélection de chaque culture récoltée (Farm.selectionLevel)
+function Livres.cultures(player: Player)
+	local p = G.Joueurs.get(player)
+	local sel = (p and p.selection) or {}
+	local lines = {}
+	for _, id in G.Config.CROP_ORDER do
+		local n = sel[id]
+		if n then
+			local crop = G.Config.CROPS[id]
+			local lvl = G.Farm.selectionLevel(n)
+			local nextAt = lvl < G.Farm.SEL_MAX and (10 * (lvl + 1) ^ 2) or nil
+			table.insert(lines, {
+				t = string.format("%s %s · sélection %d / %d", crop.icon or "🌱", crop.name, lvl, G.Farm.SEL_MAX),
+				x = string.format("%d récolte(s)%s. +%d %% de récoltes doubles%s.", n, nextAt and (" (niveau suivant à " .. nextAt .. ")") or "", lvl * 6, lvl >= 3 and ", parfois triples" or ""),
+			})
+		end
+	end
+	if #lines == 0 then
+		lines[1] = { t = "Carnet vierge", x = "Chaque culture récoltée chez soi s'améliore avec le temps (sélection des semences)." }
+	end
+	Livres.send(player, { titre = "🌾 Carnet des cultures", sous = "Plus on récolte une culture, plus ses récoltes sont belles", lignes = lines })
 end
 
 return Livres

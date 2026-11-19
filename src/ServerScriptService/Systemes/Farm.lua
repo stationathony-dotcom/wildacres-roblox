@@ -460,13 +460,20 @@ function Farm.harvest(player: Player, key: string)
 	end
 	local n = 1
 	local luck = G.Joueurs.stats(player).chance or 0
-	if math.random() < 0.1 + luck * 0.03 + 0.15 * G.Joueurs.talent(player, "main_verte") + 0.01 * G.Joueurs.skill(player, "agriculture") then
+	local mine = owner == nil or G.Util.owns(player, owner) or owner == "wild"
+	local prof = G.Joueurs.get(player)
+	local sel = mine and Farm.selectionLevel(prof and prof.selection and prof.selection[st.crop]) or 0
+	if math.random() < 0.1 + luck * 0.03 + 0.15 * G.Joueurs.talent(player, "main_verte") + 0.01 * G.Joueurs.skill(player, "agriculture") + 0.06 * sel then
 		n = 2
+		if sel >= 3 and math.random() < 0.05 * sel then
+			n = 3
+		end
 	end
 	G.Joueurs.add(player, st.crop, n)
 	if owner == nil or G.Util.owns(player, owner) or owner == "wild" then
 		G.Joueurs.addSkillXp(player, "agriculture", 3 + (Config.CROPS[st.crop].days or 3))
 		G.Social.collect(player, "crops", st.crop)
+		Farm.noteSelection(player, st.crop)
 		if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "recolter", st.crop, n) end
 		if G.Activites.note then
 			G.Activites.note(player, "recolte", n) -- concours de récolte (pas pour un vol)
@@ -490,6 +497,31 @@ function Farm.harvest(player: Player, key: string)
 		st.stage = 0
 	end
 	render(entry)
+end
+
+-- Sélection des semences (19/11, « à ne pas oublier » § 7 : variétés et amélioration des cultures) :
+-- chaque culture qu'on récolte soi-même (pas un vol) gagne en sélection : niveau = √(récoltes / 10),
+-- jusqu'à 5 (10, 40, 90, 160, 250 récoltes). Chaque niveau : +6 % de récoltes doubles ; dès le
+-- niveau 3, des récoltes triples. Gardé par culture dans le profil (prof.selection).
+Farm.SEL_MAX = 5
+function Farm.selectionLevel(count: number): number
+	return math.min(Farm.SEL_MAX, math.floor(math.sqrt((count or 0) / 10)))
+end
+function Farm.noteSelection(player: Player, cropId: string)
+	local prof = G.Joueurs.get(player)
+	if not prof then
+		return 0
+	end
+	prof.selection = prof.selection or {}
+	local before = Farm.selectionLevel(prof.selection[cropId])
+	prof.selection[cropId] = (prof.selection[cropId] or 0) + 1
+	local after = Farm.selectionLevel(prof.selection[cropId])
+	if after > before then
+		local crop = Config.CROPS[cropId]
+		G.Util.toast(player, string.format("🌾 Tes %s sont plus beaux : sélection niveau %d (+%d %% de récoltes doubles%s).",
+			string.lower(crop and crop.name or cropId), after, after * 6, after >= 3 and ", parfois triples" or ""), "gain")
+	end
+	return after
 end
 
 -- Nuit : les cultures arrosées poussent (toutes les régions, même déchargées)
