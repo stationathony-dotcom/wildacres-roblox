@@ -20,6 +20,9 @@ function Livres.init(g)
 	G.Interact.onAction("livre_bestiaire", function(player)
 		Livres.bestiaire(player)
 	end)
+	G.Interact.onAction("livre_animaux", function(player)
+		Livres.animaux(player)
+	end)
 end
 
 function Livres.send(player: Player, d)
@@ -107,6 +110,60 @@ function Livres.bestiaire(player: Player)
 		lines = { { t = "Pages blanches", x = "Aucune créature vaincue pour l'instant. Chaque bête abattue y laisse sa fiche." } }
 	end
 	Livres.send(player, { titre = "📕 Bestiaire", sous = string.format("%d créature(s) sur %d · %d encore à découvrir", n, total, total - n), lignes = lines })
+end
+
+-- Mes bêtes (19/11, « listes ennemi.txt » § interface : menu des animaux) : bêtes de ferme (où,
+-- produit prêt), compagnons (confiance, faim), montures (écurie) ; places libres dans les abris.
+function Livres.animaux(player: Player)
+	local pid = G.Util.pid(player)
+	local lines = {}
+	local farm, n = {}, 0
+	for key, rs in G.world.regions do
+		for id, st in rs.animals or {} do
+			if st.owner == pid and not st.gone then
+				n += 1
+				local kind
+				for _, d in rs.myAnimals or {} do
+					if d.id == id then
+						kind = d.kind
+						break
+					end
+				end
+				local a = kind and G.Config.ANIMALS[kind]
+				local name = a and a.name or "Bête"
+				farm[name] = farm[name] or { n = 0, ready = 0, where = {} }
+				local f = farm[name]
+				f.n += 1
+				if st.product then
+					f.ready += 1
+				end
+				f.where[key] = true
+			end
+		end
+	end
+	local cap = G.Animals and rawget(G.Animals, "capacity") and G.Animals.capacity(pid) or n
+	for name, f in farm do
+		local regions = 0
+		for _ in f.where do
+			regions += 1
+		end
+		table.insert(lines, { t = string.format("🐄 %s × %d", name, f.n), x = string.format("%s · %d région(s).", f.ready > 0 and (f.ready .. " produit(s) à récolter") or "rien à récolter pour l'instant", regions) })
+	end
+	local C = G.Compagnons and rawget(G.Compagnons, "recordsOf")
+	for _, rec in (C and C(pid)) or {} do
+		if not (G.Config.UNITS and G.Config.UNITS[rec.kind]) then
+			local k = G.Enemies.KINDS[rec.kind]
+			table.insert(lines, { t = "🐾 " .. ((k and k.name) or rec.kind) .. " (compagnon)", x = string.format("Confiance %d / 100%s · %s.", rec.trust or 0,
+				(rec.hungry or 0) > 0 and (" · affamé depuis " .. rec.hungry .. " jour(s)") or " · nourri", rec.mode == "guard" and "garde son poste" or "te suit") })
+		end
+	end
+	for _, l in G.Horses.describe(player) do
+		table.insert(lines, { t = "🐎 Monture", x = l })
+	end
+	if #lines == 0 then
+		lines[1] = { t = "Aucune bête", x = "Les fermiers vendent des bêtes ; on apprivoise les animaux sauvages avec un appât." }
+	end
+	Livres.send(player, { titre = "🐾 Mes bêtes", sous = string.format("Ferme : %d / %d places (chaque abri en ajoute)", n, cap), lignes = lines })
 end
 
 return Livres

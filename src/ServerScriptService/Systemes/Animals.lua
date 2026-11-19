@@ -107,7 +107,6 @@ end
 
 -- Plafond d'élevage par éleveur et par monde : de quoi tenir une vraie ferme, pas de quoi noyer le
 -- serveur (chaque bête = un modèle animé + une ligne de sauvegarde du secteur).
-Animals.OWN_CAP = 24
 local BREED_CHANCE = 0.35 -- par couple nourri la veille, chaque matin
 
 function Animals.ownedBy(owner: string): number
@@ -122,9 +121,27 @@ function Animals.ownedBy(owner: string): number
 	return n
 end
 
+-- Pas de plafond arbitraire (19/11, principe « limité par ses ressources ») : on loge autant de bêtes
+-- qu'on a construit d'abris. Sans abri, de quoi démarrer (OWN_BASE) ; chaque abri posé en ajoute.
+Animals.OWN_BASE = 8
+Animals.SHELTER_ROOM = { henhouse = 6, stable = 6, sheepfold = 6, pigsty = 4, barn = 12 }
+function Animals.capacity(owner: string): number
+	local n = Animals.OWN_BASE
+	for _, rs in G.world.regions do
+		for _, d in rs.placed or {} do
+			if d.owner == owner and Animals.SHELTER_ROOM[d.item] then
+				n += Animals.SHELTER_ROOM[d.item]
+			end
+		end
+	end
+	return n
+end
+
 function Animals.canOwnMore(player: Player): boolean
-	if Animals.ownedBy(G.Util.pid(player)) >= Animals.OWN_CAP then
-		G.Util.toast(player, "Ta ferme est pleine (" .. Animals.OWN_CAP .. " bêtes). Vends-en ou abats-en avant d'en avoir d'autres.")
+	local pid = G.Util.pid(player)
+	local cap = Animals.capacity(pid)
+	if Animals.ownedBy(pid) >= cap then
+		G.Util.toast(player, "Tes abris sont pleins (" .. cap .. " places). Construis un poulailler, une étable, une bergerie ou une grange pour loger plus de bêtes.")
 		return false
 	end
 	return true
@@ -199,7 +216,7 @@ function Animals.lead(player: Player, id: string)
 		-- (on l'a menée jusque chez lui : le geste vaut consentement ; lui ne paie rien)
 		local landOwner = G.Parcelles.at(a.pos)
 		if landOwner and landOwner ~= a.owner and G.Util.owns(player, a.owner) then
-			if Animals.ownedBy(landOwner) >= Animals.OWN_CAP then
+			if Animals.ownedBy(landOwner) >= Animals.capacity(landOwner) then
 				G.Util.toast(player, "Sa ferme est déjà pleine : il ne peut pas recevoir d'autre bête.")
 			else
 				a.owner = landOwner
@@ -410,7 +427,7 @@ local function breed()
 	for _, list in groups do
 		for i = 1, #list - 1, 2 do
 			local parent = list[i]
-			if math.random() < BREED_CHANCE and Animals.ownedBy(parent.owner) < Animals.OWN_CAP then
+			if math.random() < BREED_CHANCE and Animals.ownedBy(parent.owner) < Animals.capacity(parent.owner) then
 				local pos = parent.pos + Vector3.new(math.random(-3, 3), 0, math.random(-3, 3))
 				if addOwned(parent.reg, parent.kind, pos, parent.owner, parent.pen) then
 					born += 1

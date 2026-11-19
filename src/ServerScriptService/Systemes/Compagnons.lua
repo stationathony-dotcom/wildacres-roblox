@@ -56,6 +56,8 @@ local function petsOf(uid: string)
 	return rec.pets
 end
 
+Compagnons.recordsOf = petsOf -- lu par le livre des animaux (Livres)
+
 -- bêtes seulement (les soldats ont leur propre plafond, voir Armee)
 function Compagnons.count(player: Player): number
 	local n = 0

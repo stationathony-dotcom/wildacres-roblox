@@ -616,7 +616,7 @@ local function onCommand(player: Player, text: string)
 	if cmd == "/aide" then
 		say(player, "💬 /coince · /signaler <pseudo> <motif> · /bloquer · /debloquer · /bloques")
 		say(player, "🔑 /autoriser <pseudo> [coffres|batir] · /retirer · /autorises · /ceder <pseudo> · /louer <pseudo> <jours> <prix> · /accepter")
-		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques · 🐴 /ecurie · 👨‍🌾 /ouvriers · 📕 /bestiaire")
+		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques · 🐴 /ecurie · 👨‍🌾 /ouvriers · 📕 /bestiaire · 🐾 /animaux")
 	elseif cmd == "/reputation" then
 		say(player, "🏘️ Ta réputation dans les villages de cette île :")
 		for _, line in G.Reputation.describe(player) do
@@ -624,6 +624,8 @@ local function onCommand(player: Player, text: string)
 		end
 	elseif cmd == "/bestiaire" then
 		G.Livres.bestiaire(player)
+	elseif cmd == "/animaux" then
+		G.Livres.animaux(player)
 	elseif cmd == "/ouvriers" then
 		say(player, G.Ouvriers.describe(player))
 	elseif cmd == "/ecurie" then
@@ -770,7 +772,7 @@ function Admin.init(g)
 	local folder = TextChatService:FindFirstChild("CommandesWA") or Instance.new("Folder")
 	folder.Name = "CommandesWA"
 	folder.Parent = TextChatService
-	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques", "/ecurie", "/ouvriers", "/bestiaire" } do
+	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques", "/ecurie", "/ouvriers", "/bestiaire", "/animaux" } do
 		local c = folder:FindFirstChild(alias) or Instance.new("TextChatCommand")
 		c.Name = alias
 		c.PrimaryAlias = alias

@@ -1545,11 +1545,12 @@ local function game_()
 				label({ Text = e[2], Font = BOLD, TextSize = 14, Size = UDim2.new(1, -120, 1, 0), Position = UDim2.fromOffset(38, 0), Parent = r, ZIndex = 9 })
 				label({ Text = tostring(e[3] or 0) .. (e[4] and ("/" .. e[4]) or ""), Font = BOLD, TextSize = 16, TextColor3 = C.gold, TextXAlignment = Enum.TextXAlignment.Right,
 					Size = UDim2.fromOffset(70, 34), Position = UDim2.new(1, -78, 0, 0), Parent = r, ZIndex = 9 })
-				if e[2] == "Créatures" then
-					-- ouvre le bestiaire (Systemes/Livres)
+				if e[2] == "Créatures" or e[2] == "Apprivoisées" then
+					-- ouvre le bestiaire ou le livre de ses bêtes (Systemes/Livres)
+					local action = e[2] == "Créatures" and "livre_bestiaire" or "livre_animaux"
 					local open = new("TextButton", { Text = "", BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), Parent = r, ZIndex = 10 })
 					open.Activated:Connect(function()
-						send("livre_bestiaire")
+						send(action)
 					end)
 					label({ Text = "📕", TextSize = 14, Size = UDim2.fromOffset(20, 34), Position = UDim2.new(1, -100, 0, 0), Parent = r, ZIndex = 9 })
 				end
