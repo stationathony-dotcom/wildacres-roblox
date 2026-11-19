@@ -219,6 +219,8 @@ banniere|Bannière de clan|🚩|80|u:banniere|planks4 cloth3 rope1 @bench|commer
 # ---------- Rangement et quotidien (de valeur, troqués, commandés par les villages)
 satchel|Sacoche en cuir|👜|40|v|leather3 buckle1 @bench|metiers
 canvas_bag|Besace en toile|👜|30|v|canvas1 rope1 @bench|metiers
+document_case|Porte-documents|📁|40|v|leather2 paper1 buckle1 @bench|savoir
+merchant_bag|Sac de marchand|👜|85|v|canvas2 soft_leather1 buckle2 @bench|commerce
 wicker_basket|Panier en osier|🧺|16|v|reeds4|metiers
 flour_sack|Sac de farine|🛍️|60|v|flour3 linen1|commerce
 seed_sack|Sac de graines|🛍️|40|u:graines|linen1 seed_wheat4|ferme

@@ -706,49 +706,49 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### 1. Inventaire et rangement
 
-- [ ] (854) Sacoche en cuir
-- [ ] (855) Besace en toile
+- [x] (854) Sacoche en cuir
+- [x] (855) Besace en toile
 - [ ] (856) Sac de voyage
-- [ ] (857) Panier en osier
+- [x] (857) Panier en osier
 - [ ] (858) Panier à récolte
-- [ ] (859) Sac de farine
-- [ ] (860) Sac de graines
-- [ ] (861) Sac de provisions
-- [ ] (862) Bourse
-- [ ] (863) Porte-documents
-- [ ] (864) Étui à parchemins
-- [ ] (865) Boîte à bijoux
+- [x] (859) Sac de farine
+- [x] (860) Sac de graines
+- [x] (861) Sac de provisions
+- [x] (862) Bourse
+- [x] (863) Porte-documents
+- [x] (864) Étui à parchemins
+- [x] (865) Boîte à bijoux
 - [x] (866) Coffret
-- [ ] (867) Trousse d'artisan
-- [ ] (868) Sacoche de selle
-- [ ] (869) Sac de marchand
+- [x] (867) Trousse d'artisan
+- [x] (868) Sacoche de selle
+- [x] (869) Sac de marchand
 
 ### 2. Objets du quotidien
 
-- [ ] (873) Gobelet en bois
-- [ ] (874) Chope en terre cuite
-- [ ] (875) Chope en métal
-- [ ] (876) Assiette en bois
-- [ ] (877) Assiette en céramique
-- [ ] (878) Bol
-- [ ] (879) Cuillère en bois
-- [ ] (880) Louche
+- [x] (873) Gobelet en bois
+- [x] (874) Chope en terre cuite
+- [x] (875) Chope en métal
+- [x] (876) Assiette en bois
+- [x] (877) Assiette en céramique
+- [x] (878) Bol
+- [x] (879) Cuillère en bois
+- [x] (880) Louche
 - [x] (881) Fourchette ancienne
 - [x] (882) Couteau de table
-- [ ] (883) Cruche
+- [x] (883) Cruche
 - [x] (884) Pichet
-- [ ] (885) Bouteille en verre
-- [ ] (886) Gourde
-- [ ] (887) Outre en cuir
-- [ ] (888) Seau
-- [ ] (889) Bassine
-- [ ] (890) Savon
-- [ ] (891) Peigne
-- [ ] (892) Brosse
-- [ ] (893) Miroir de poche
-- [ ] (894) Serviette en lin
-- [ ] (895) Couverture
-- [ ] (896) Oreiller
+- [x] (885) Bouteille en verre
+- [x] (886) Gourde
+- [x] (887) Outre en cuir
+- [x] (888) Seau
+- [x] (889) Bassine
+- [x] (890) Savon
+- [x] (891) Peigne
+- [x] (892) Brosse
+- [x] (893) Miroir de poche
+- [x] (894) Serviette en lin
+- [x] (895) Couverture
+- [x] (896) Oreiller
 
 ### 3. Boissons
 

@@ -17,6 +17,8 @@ Branche de travail `mission/wildacres`, créée depuis `d30b9ea`. La racine du p
 
 ## Journal et problèmes
 
+- 19/11. Porte-documents et sac de marchand ajoutés comme marchandises fabricables à l’établi. Studio Edit a vérifié les deux recettes et confirmé la présence de 31 objets voisins dans le catalogue chargé. Build Rojo réussi.
+
 - 19/11. Abeilles passives au-dessus de l’herbe des prairies, de jour et par temps sec. Build Rojo et vérifications Studio Edit du modèle, du vol, du plafond et de la météo réussis.
 
 - 19/11. Pigeons diurnes près des villages, qui s’envolent à l’approche du joueur. Build Rojo et essai Studio Edit réussi avec le générateur de villages et un sol simulé.
