@@ -117,3 +117,26 @@ banque agrandissable sans fin, champs sans limite.
 - [x] **Monde fini** : arbres, rochers, filons, cactus ne repoussent plus tout seuls (on nettoie une zone pour de bon) ; seuls les buissons à baies se regarnissent
 - [x] **Reboiser** : abattre un arbre donne souvent sa graine (gland, pomme de pin, graine de bouleau, noyau de cerise, bouture de saule) ; on la plante devant soi (hors villages, pas collée à un arbre ou un rocher) ; pousse 3 jours puis vrai arbre (à couper à son tour)
 - [x] Villages : taverne, forge, chapelle, marché ajoutés autour de la place (destructibles, portes fonctionnelles)
+
+## Session du 19/11 (« à ne pas oublier.txt », listes .txt) — fait, testé en bancs Edit, PAS encore en Play
+
+- [x] Herbe haute fauchable (prairie, roseaux, oyats) — `HerbeHaute`, `Fauche`
+- [x] Réputation par village (prix, refus de commerce, palier affiché, /reputation) — `Reputation`
+- [x] Succès à compteurs (16) + rangs de maîtrise et 11 titres de grand maître — `Social.bump`
+- [x] Chroniques des îles : 6 récits en 24 pages anciennes à retrouver (/chroniques) — `Chroniques`
+- [x] Écurie multi-montures, allure héritable, poulinage (mulet stérile), /ecurie — `Horses`
+- [x] Commerce entre régions : 3 produits recherchés par village (+50 %) — `Shop.wanted`
+- [x] Tir à l'arc et arbalète à distance, flèches — `Combat.shoot`
+- [x] Ouvriers agricoles à louer (arrosage quotidien) — `Ouvriers`
+- [x] Courses entre villages au tableau d'affichage — `Activites` (« course »)
+- [x] Livres : bestiaire (/bestiaire) et mes bêtes (/animaux) — `Livres`, `Livre.client`
+- [x] 10 formes de construction (escaliers, colimaçon, dôme, toit conique, murs percés, pignon, créneaux, chapiteau)
+- [x] Pont-levis et trappe fonctionnels (serrure possible), roue à eau qui alimente le moulin — `Machines`
+- [x] Créatures : assassin, roi déchu, méduse des marais, esprit de l'orage ; événements orage et colosse
+- [x] Diligence entre villages découverts (palefrenier)
+- [x] Plafond de 24 bêtes remplacé par la place des abris construits
+- [x] Gestes de loisir : /danse /salut /applaudir /reverence
+- [x] Correctifs de la nuit intégrés (sommeil, sauvegarde, relations PNJ, courrier, chasse au trésor)
+- [ ] **TEST en Play** de tout ce qui précède (PC fixe)
+- [ ] Icônes peintes à la place des emojis (il faut mettre des images en ligne avec le compte du joueur)
+- Restes des listes, volontairement laissés : jeux de dés (règles Roblox sur les jeux de hasard), tutoriel (principe « sans indication »), guerres/alliances déclarées (retirées le 17/11), saisons (remplacées par les biomes)
