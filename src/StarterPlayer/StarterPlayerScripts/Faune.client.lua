@@ -11,6 +11,7 @@
 --   · hérissons et blaireaux nocturnes qui se réfugient quand on les approche.
 --   · marmottes actives le jour dans la toundra.
 --   · grenouilles qui bondissent dans les marais.
+--   · libellules en vol bas sur les eaux du marais.
 -- Rien n'est sauvegardé, rien ne se chasse : c'est le décor qui vit.
 
 local Players = game:GetService("Players")
@@ -192,6 +193,23 @@ local function duckRoute(center: Vector3): boolean
 	return true
 end
 
+local function makeDragonfly(): Model
+	local m = Instance.new("Model")
+	m.Name = "Libellule"
+	local body = part(Vector3.new(0.08, 0.09, 0.75), Color3.fromRGB(56, 160, 150), nil, m)
+	body.Shape = Enum.PartType.Ball
+	m.PrimaryPart = body
+	for _, side in { -1, 1 } do
+		for _, offset in { -0.14, 0.05 } do
+			local wing = part(Vector3.new(0.42, 0.025, 0.15), Color3.fromRGB(188, 232, 235), nil, m)
+			wing.Transparency = 0.3
+			wing.CFrame = CFrame.new(side * 0.22, 0.035, offset)
+				* CFrame.Angles(0, side * (offset < 0 and 0.22 or -0.22), 0)
+		end
+	end
+	return m
+end
+
 local function makeButterfly(color: Color3): Model
 	local m = Instance.new("Model")
 	local body = part(Vector3.new(0.05, 0.05, 0.25), Color3.fromRGB(40, 30, 20), nil, m)
@@ -248,7 +266,7 @@ end
 
 -- ---------------------------------------------------------------- Population
 local critters = {} -- { kind, model, pos, vel, state, t, ... }
-local MAX = { sol = 5, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3, canard = 2, herisson = 2, blaireau = 1, marmotte = 2, grenouille = 3 }
+local MAX = { sol = 5, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3, canard = 2, herisson = 2, blaireau = 1, marmotte = 2, grenouille = 3, libellule = 3 }
 local counts = {}
 for kind in MAX do
 	counts[kind] = 0
@@ -266,7 +284,8 @@ local function spawn(kind: string, root: Vector3, biome: string)
 	local d = kind == "ciel" and rng:NextNumber(10, 60) or rng:NextNumber(18, 45)
 	local x, z = root.X + math.cos(a) * d, root.Z + math.sin(a) * d
 	local g, mat = ground(x, z, root.Y)
-	if not g or (mat == Enum.Material.Water) ~= (kind == "canard") then
+	local water = kind == "canard" or kind == "libellule"
+	if not g or (mat == Enum.Material.Water) ~= water then
 		return
 	end
 	local c = { kind = kind, t = 0, phase = rng:NextNumber(0, 6) }
@@ -276,6 +295,11 @@ local function spawn(kind: string, root: Vector3, biome: string)
 		end
 		c.model = makeDuck()
 		c.center = g
+	elseif kind == "libellule" then
+		c.model = makeDragonfly()
+		c.center = g
+		c.model:PivotTo(CFrame.new(g + Vector3.new(0, 2, 0)))
+		c.model.Parent = folder
 	elseif BURROWERS[kind] then
 		c.model = makeBurrower(kind)
 		c.pos = g + Vector3.new(0, BURROWERS[kind].size.Y / 2, 0)
@@ -345,6 +369,7 @@ RunService.Heartbeat:Connect(function(dt)
 			blaireau = (not day and not wet and biome == "foret") and MAX.blaireau or 0,
 			marmotte = (day and not wet and biome == "neige") and MAX.marmotte or 0,
 			grenouille = biome == "marais" and MAX.grenouille or 0,
+			libellule = (day and not wet and biome == "marais") and MAX.libellule or 0,
 		}
 		-- trop loin, ou hors de saison/heure : on retire en douceur
 		for i = #critters, 1, -1 do
@@ -464,6 +489,11 @@ RunService.Heartbeat:Connect(function(dt)
 			c.pos = c.center + offset
 			local tangent = Vector3.new(-math.sin(a), 0, math.cos(a))
 			poseDuck(c.model, CFrame.lookAt(c.pos, c.pos + tangent))
+		elseif c.kind == "libellule" then
+			local a = c.t * 1.6 + c.phase
+			c.pos = c.center + Vector3.new(math.cos(a) * 2, 1.9 + math.sin(a * 3) * 0.35, math.sin(a) * 2)
+			local tangent = Vector3.new(-math.sin(a), 0, math.cos(a))
+			c.model:PivotTo(CFrame.lookAt(c.pos, c.pos + tangent) * CFrame.Angles(0, 0, math.sin(a * 4) * 0.12))
 		elseif c.kind == "ciel" then
 			local a = now * c.speed + c.phase
 			local p = c.center + Vector3.new(math.cos(a) * c.radius, math.sin(a * 0.7) * 3, math.sin(a) * c.radius)

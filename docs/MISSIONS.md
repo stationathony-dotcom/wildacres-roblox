@@ -17,6 +17,8 @@ Branche de travail `mission/wildacres`, créée depuis `d30b9ea`. La racine du p
 
 ## Journal et problèmes
 
+- 19/11. Libellules en vol bas au-dessus des eaux du marais. Build Rojo et test Studio Edit avec sol et météo simulés réussis.
+
 - 19/11. Fourchette ancienne en cuivre et couteau de table en fer, produits à l’enclume par deux et échangeables. Build Rojo et contrôle Studio Edit de la reconnaissance des deux recettes dans la grille réussis.
 
 - 19/11. Ajout des grenouilles qui bondissent dans les marais. Test Studio Edit réussi sur un sol simulé pour la limite de population, l’exclusion de l’eau, l’animation et le retrait hors du biome. Build Rojo réussi.
