@@ -17,6 +17,8 @@ Branche de travail `mission/wildacres`, créée depuis `d30b9ea`. La racine du p
 
 ## Journal et problèmes
 
+- 19/11. Pigeons diurnes près des villages, qui s’envolent à l’approche du joueur. Build Rojo et essai Studio Edit réussi avec le générateur de villages et un sol simulé.
+
 - 19/11. Lièvres en prairie et tortues terrestres au marais, visibles le jour. Le lièvre bondit et fuit, la tortue s’aplatit et reste sur place à l’approche du joueur. Build Rojo et essais Studio Edit sur terrain simulé réussis.
 
 - 19/11. Libellules en vol bas au-dessus des eaux du marais. Build Rojo et test Studio Edit avec sol et météo simulés réussis.

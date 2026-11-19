@@ -1906,7 +1906,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [ ] (405) Poissons
 - [ ] (406) Oiseaux
 - [ ] (407) Corbeaux
-- [ ] (408) Pigeons
+- [x] (408) Pigeons
 - [x] (409) Canards sauvages
 
 ### 3. Les activités et métiers

@@ -13,6 +13,7 @@
 --   · grenouilles qui bondissent dans les marais.
 --   · libellules en vol bas sur les eaux du marais.
 --   · lièvres en prairie et tortues terrestres au marais.
+--   · pigeons qui picorent à proximité des villages.
 -- Rien n'est sauvegardé, rien ne se chasse : c'est le décor qui vit.
 
 local Players = game:GetService("Players")
@@ -48,6 +49,27 @@ local function biomeAt(pos: Vector3): string
 	local CELL, REGION = Config.CELL, Config.REGION
 	local ok, b = pcall(WG.regionBiome, WG, math.floor(pos.X / CELL / REGION), math.floor(pos.Z / CELL / REGION))
 	return ok and b or "prairie"
+end
+
+local function nearVillage(pos: Vector3): boolean
+	if not WG then
+		return false
+	end
+	local x, z = pos.X / Config.CELL, pos.Z / Config.CELL
+	local rx, rz = math.floor(x / Config.REGION), math.floor(z / Config.REGION)
+	local margin = 24 / Config.CELL
+	for dz = -1, 1 do
+		for dx = -1, 1 do
+			local poi = WG:poiOf(rx + dx, rz + dz)
+			if poi and poi.kind == "village"
+				and x >= poi.x0 - margin and x <= poi.x0 + poi.w + margin
+				and z >= poi.z0 - margin and z <= poi.z0 + poi.d + margin
+			then
+				return true
+			end
+		end
+	end
+	return false
 end
 
 local params = RaycastParams.new()
@@ -290,7 +312,7 @@ end
 -- ---------------------------------------------------------------- Population
 local critters = {} -- { kind, model, pos, vel, state, t, ... }
 local MAX = {
-	sol = 5, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3, canard = 2,
+	sol = 5, pigeon = 3, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3, canard = 2,
 	herisson = 2, blaireau = 1, marmotte = 2, grenouille = 3, libellule = 3, lievre = 2, tortue = 2,
 }
 local counts = {}
@@ -332,10 +354,19 @@ local function spawn(kind: string, root: Vector3, biome: string)
 		c.yaw = rng:NextNumber(0, math.pi * 2)
 		c.model:PivotTo(CFrame.new(c.pos) * CFrame.Angles(0, c.yaw, 0))
 		c.model.Parent = folder
-	elseif kind == "sol" then
+	elseif kind == "sol" or kind == "pigeon" then
+		local pigeon = kind == "pigeon"
 		local col = biome == "neige" and Color3.fromRGB(230, 230, 235) or Color3.fromRGB(130, 95, 70)
-		c.scale = 1
+		if pigeon then
+			col = Color3.fromRGB(122, 130, 149)
+		end
+		c.scale = pigeon and 1.4 or 1
 		c.model = makeBird(col, c.scale)
+		if pigeon then
+			c.model.Name = "Pigeon"
+			c.model.Tete.Color = Color3.fromRGB(70, 106, 107)
+			c.model.Bec.Color = Color3.fromRGB(74, 67, 70)
+		end
 		c.pos = g + Vector3.new(0, 0.2, 0)
 		c.yaw = rng:NextNumber(0, 6.28)
 		c.state = "picore"
@@ -386,6 +417,7 @@ RunService.Heartbeat:Connect(function(dt)
 		local biome = biomeAt(root)
 		local want = {
 			sol = (day and not wet and biome ~= "desert") and MAX.sol or 0,
+			pigeon = (day and not wet and nearVillage(root)) and MAX.pigeon or 0,
 			ciel = (day and workspace:GetAttribute("Weather") ~= "orage") and MAX.ciel or 1,
 			papillon = (day and not wet and (biome == "prairie" or biome == "foret" or biome == "marais")) and MAX.papillon or 0,
 			luciole = (not day and not wet and (biome == "marais" or biome == "prairie" or biome == "foret")) and MAX.luciole or 0,
@@ -404,11 +436,11 @@ RunService.Heartbeat:Connect(function(dt)
 			local c = critters[i]
 			local p = c.pos or c.center
 			if (p - root).Magnitude > 110 or counts[c.kind] > want[c.kind] then
-				if c.kind == "sol" and c.state ~= "envol" then
+				if c.state == "picore" then
 					c.state = "envol"
 					c.t = 0
 					c.vel = Vector3.new(rng:NextNumber(-1, 1), 1.4, rng:NextNumber(-1, 1)).Unit * 22
-				elseif c.kind ~= "sol" then
+				elseif c.state ~= "envol" then
 					remove(i)
 				end
 			end
@@ -423,7 +455,7 @@ RunService.Heartbeat:Connect(function(dt)
 	for i = #critters, 1, -1 do
 		local c = critters[i]
 		c.t += dt
-		if c.kind == "sol" then
+		if c.kind == "sol" or c.kind == "pigeon" then
 			if c.state == "picore" then
 				-- tout près ? il s'envole (bruit d'ailes visuel : battement rapide)
 				if (c.pos - root).Magnitude < 11 then
