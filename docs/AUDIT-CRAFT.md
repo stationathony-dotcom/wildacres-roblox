@@ -70,6 +70,6 @@ Points 1 à 4 corrigés en partie : effets de repas, prix plancher, 29 recettes 
 4. **Paliers hauts (30–50) dans chaque métier.** Outils en acier (palier 4), pièces de maître, et des recettes réservées à chaque métier : fonte de l'acier (minage), planches fines (bûcheronnage), filets (pêche), fromages affinés (élevage).
 5. **Commandes de fabrication entre joueurs** (idee.txt : « contrats de fabrication »). Un joueur affiche au tableau « je veux X, je paie Y » avec l'or mis de côté. N'importe quel artisan fabrique et livre. Ça reste organique : pas d'arbitre.
 6. **Livre de recettes** (/recettes, « à ne pas oublier.txt ») : recettes connues par atelier, ce qui manque pour chacune.
-7. **Renom d'artisan.** La signature existe déjà. Les pièces signées par un artisan qui a beaucoup vendu se revendent mieux.
+7. **FAIT le 19/11** (`Ventes` : renom, `/renom`). **Renom d'artisan.** La signature existe déjà. Les pièces signées par un artisan qui a beaucoup vendu se revendent mieux.
 
 Pas proposé ici : la qualité des ingrédients (idee.txt). Elle contredit « pas de qualité séparée » (AUDIT.md), c'est à trancher avant.

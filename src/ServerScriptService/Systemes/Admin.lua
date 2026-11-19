@@ -616,7 +616,7 @@ local function onCommand(player: Player, text: string)
 	if cmd == "/aide" then
 		say(player, "💬 /coince · /signaler <pseudo> <motif> · /bloquer · /debloquer · /bloques")
 		say(player, "🔑 /autoriser <pseudo> [coffres|batir] · /retirer · /autorises · /ceder <pseudo> · /louer <pseudo> <jours> <prix> · /accepter")
-		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques · 🐴 /ecurie · 👨‍🌾 /ouvriers · 📕 /bestiaire · 🐾 /animaux · 🌾 /cultures · 🏰 /fonder <nom> · /villes · 🏆 /classement")
+		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques · 🐴 /ecurie · 👨‍🌾 /ouvriers · 📕 /bestiaire · 🐾 /animaux · 🌾 /cultures · 🏰 /fonder <nom> · /villes · 🏆 /classement · ⚒️ /renom")
 		say(player, "💃 /danse · 👋 /salut · 👏 /applaudir · 🙇 /reverence")
 	elseif cmd == "/reputation" then
 		say(player, "🏘️ Ta réputation dans les villages de cette île :")
@@ -630,6 +630,19 @@ local function onCommand(player: Player, text: string)
 		G.Livres.bestiaire(player)
 	elseif cmd == "/animaux" then
 		G.Livres.animaux(player)
+	elseif cmd == "/renom" then
+		-- renom d'artisan (Systemes/Ventes) : pièces signées achetées par d'autres joueurs, sur ce monde
+		local n = G.Ventes.renown(player.UserId)
+		local _, name = G.Ventes.renownTier(player.UserId)
+		local nextStep
+		for _, t in G.Ventes.RENOWN do
+			if n < t[1] then
+				nextStep = t
+				break
+			end
+		end
+		say(player, "⚒️ Renom d'artisan : " .. n .. " pièce(s) signée(s) achetée(s) par d'autres" .. (name and (" — artisan " .. name) or "")
+			.. (nextStep and (" ; prochain palier : " .. nextStep[2] .. " à " .. nextStep[1]) or " ; palier le plus haut atteint") .. ".")
 	elseif cmd == "/classement" then
 		-- classements de métiers (idee.txt § vie sociale) : les joueurs de ce monde, par compétence
 		local want = args[1] and string.lower(args[1]) or nil
@@ -818,7 +831,7 @@ function Admin.init(g)
 	local folder = TextChatService:FindFirstChild("CommandesWA") or Instance.new("Folder")
 	folder.Name = "CommandesWA"
 	folder.Parent = TextChatService
-	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques", "/ecurie", "/ouvriers", "/bestiaire", "/animaux", "/cultures", "/fonder", "/villes", "/classement", "/danse", "/salut", "/applaudir", "/reverence" } do
+	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques", "/ecurie", "/ouvriers", "/bestiaire", "/animaux", "/cultures", "/fonder", "/villes", "/classement", "/renom", "/danse", "/salut", "/applaudir", "/reverence" } do
 		local c = folder:FindFirstChild(alias) or Instance.new("TextChatCommand")
 		c.Name = alias
 		c.PrimaryAlias = alias

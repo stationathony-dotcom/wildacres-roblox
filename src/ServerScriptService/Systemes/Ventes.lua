@@ -83,6 +83,56 @@ local function giveBack(uid: number, l, from: string, tag: string)
 	G.Poste.deliverSystem(uid, parcel)
 end
 
+-- ---------------------------------------------------------------- renom d'artisan
+-- Une pièce SIGNÉE (Shop.craft : makerId) achetée par un autre joueur, ici, fait monter le renom de son
+-- artisan (par monde : G.world.renom). Paliers : titre affiché à l'hôtel des ventes, et la qualité de
+-- façon s'améliore un peu (Shop.craft : Ventes.renownBonus).
+Ventes.RENOWN = { { 5, "connu" }, { 15, "réputé" }, { 40, "maître reconnu" }, { 100, "illustre" } }
+
+function Ventes.renown(uid: number?): number
+	return uid and G.world and G.world.renom and G.world.renom[tostring(uid)] or 0
+end
+
+function Ventes.renownTier(uid: number?): (number, string?)
+	local n = Ventes.renown(uid)
+	local tier, name = 0, nil
+	for i, t in Ventes.RENOWN do
+		if n >= t[1] then
+			tier, name = i, t[2]
+		end
+	end
+	return tier, name
+end
+
+-- bonus de compétence pour la QUALITÉ de façon seulement (3 par palier)
+function Ventes.renownBonus(player: Player): number
+	return 3 * (Ventes.renownTier(player.UserId))
+end
+
+local function addRenown(piece, buyerId: number)
+	local maker = type(piece) == "table" and piece.makerId
+	if not maker or maker == buyerId then
+		return
+	end
+	G.world.renom = G.world.renom or {}
+	local key = tostring(maker)
+	local before = Ventes.renownTier(maker)
+	G.world.renom[key] = (G.world.renom[key] or 0) + 1
+	local after, name = Ventes.renownTier(maker)
+	local p = game:GetService("Players"):GetPlayerByUserId(maker)
+	if p then
+		G.Util.toast(p, "⚒️ Une pièce signée de ta main a trouvé preneur (renom " .. G.world.renom[key] .. ").")
+		if after > before then
+			G.Util.toast(p, "⚒️ Te voilà artisan " .. tostring(name) .. " : on recherche tes pièces.", "big")
+		end
+	end
+end
+
+local function makerTag(g): string
+	local _, name = Ventes.renownTier(type(g) == "table" and g.makerId)
+	return name and (" — artisan " .. name) or ""
+end
+
 -- ---------------------------------------------------------------- fenêtre
 
 function Ventes.open(player: Player)
@@ -107,7 +157,7 @@ function Ventes.open(player: Player)
 			bid = l.bid, bidder = l.bidderName, mineBid = l.bidder == player.UserId, left = l.ends and math.max(0, l.ends - now) or nil,
 		}
 		if l.gear then
-			row.name, row.icon, row.label, row.rarity = l.gear.name or "?", "🛡️", gearLabel(l.gear), l.gear.rarity
+			row.name, row.icon, row.label, row.rarity = l.gear.name or "?", "🛡️", gearLabel(l.gear) .. makerTag(l.gear), l.gear.rarity
 		else
 			local info = Config.ITEMS[l.item] or { name = l.item, icon = "?" }
 			row.item, row.name, row.icon, row.ref = l.item, info.name, info.icon or "", reference(l.item)
@@ -279,6 +329,9 @@ function Ventes.buy(player: Player, data)
 	if l.gear and prof then
 		table.insert(prof.gear, l.gear) -- directement dans le sac (pas de butin au sol)
 		G.Joueurs.markDirty(player)
+		if l.seller ~= player.UserId then
+			addRenown(l.gear, player.UserId)
+		end
 	elseif l.item then
 		G.Joueurs.add(player, l.item, l.n, true)
 		if l.seller ~= player.UserId then
@@ -374,6 +427,9 @@ function Ventes.resolve()
 			table.remove(L, i)
 			if l.bidder then
 				giveBack(l.bidder, l, "Hôtel des ventes (enchère gagnée)", "win")
+				if l.gear then
+					addRenown(l.gear, l.bidder)
+				end
 				G.Poste.deliverSystem(l.seller, { id = "pay_" .. l.id, from = "Hôtel des ventes (" .. tostring(l.bidderName) .. ")", gold = l.bid })
 				if l.item then
 					record(l.item, l.bid / math.max(1, l.n or 1))
