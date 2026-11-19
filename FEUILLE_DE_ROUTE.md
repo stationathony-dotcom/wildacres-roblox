@@ -149,6 +149,12 @@ banque agrandissable sans fin, champs sans limite.
 - [x] Quêtes « à un lieu » : retrouver, visiter, escorter, enquêter (`QuetesLieux`, ≈150 idées de la liste) — à voir en Play
 - [x] Équilibre du craft (`Shared/Equilibre`) : effets de repas, prix plancher, recettes distinctes, métiers requis
 - [x] Hôtel des ventes v2 : équipement, enchères, recherche/tri, prix de référence ([F] à la boîte aux lettres)
+- [x] Rien sans usage (122 objets → 0), exigences de caractéristiques, séries d'équipement cohérentes, équipement de métier (30), panoplies, pièces de créatures par famille, armes à effet (venin, givre), armes de jet, harnachement, flèches de fer et barbelées, équipement de compagnon, 21 pièces pour les petits emplacements
+- [x] Alchimie (10 potions), festins partagés, recettes de haut niveau par métier, renom d'artisan, hôtel des ventes v2
+- [x] Pénuries de village + rumeurs des habitants, fouilles archéologiques, chantiers de village, chasse en groupe, concours de cuisine et de chasse, fuite du gibier, 4 titres de collection
+- [x] Banc `tools/bancs/equilibre.luau` (à relancer après chaque ajout) ; `docs/REFERENCE.md` régénéré
+- [ ] Harpon (attend le commit de Codex sur `Tools.lua`), emplacement main gauche (attend ses emplacements)
+- [ ] À trancher : les SAISONS tournent encore dans `Meteo.lua` (hiver = cultures un jour sur deux), alors qu'elles devaient être remplacées par les biomes
 - [ ] **TEST en Play** de tout ce qui précède (PC fixe)
 - [ ] Icônes peintes à la place des emojis (il faut mettre des images en ligne avec le compte du joueur)
 - Restes des listes, volontairement laissés : jeux de dés (règles Roblox sur les jeux de hasard), tutoriel (principe « sans indication »), guerres/alliances déclarées (retirées le 17/11), saisons (remplacées par les biomes)
