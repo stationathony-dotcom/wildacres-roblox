@@ -143,6 +143,9 @@ function Ventes.open(player: Player)
 	local r = G.Util.root(player)
 	G.Poste.at[player] = r and r.Position or nil
 	Ventes.resolve()
+	if rawget(G.Poste, "expire") then
+		G.Poste.expire() -- annonces de la poste trop vieilles : rendues avant d'afficher
+	end
 	local now = os.time()
 	local rows = {}
 	for _, l in G.world.market or {} do

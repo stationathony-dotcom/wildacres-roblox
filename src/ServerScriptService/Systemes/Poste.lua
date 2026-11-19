@@ -204,6 +204,8 @@ local function expire()
 	end
 end
 
+Poste.expire = expire -- aussi appelé par l'hôtel des ventes v2 (Systemes/Ventes)
+
 function Poste.open(player: Player)
 	expire()
 	local mail, pending = inbox(player)
