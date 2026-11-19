@@ -35,7 +35,7 @@ Sur 358 recettes dont on connaît tous les prix :
 - chaise = tabouret = cerceau.
 
 ### 4. Les matières ramassées ne servent presque à rien
-**216 des 284 matières brutes n'entrent que dans une seule recette.** On les ramasse sans débouché.
+**216 des 284 matières brutes n'entrent que dans une seule recette.** *Correction après vérification : environ 180 d'entre elles sont des prises de créatures et des âmes de boss, faites exprès pour une seule pièce. Le vrai problème se limite à une trentaine de matières courantes (silex, corne, bois de cerf, menthe, thym, gravier…).*
 Ailleurs, deux matières bloquent tout : la **corde** entre dans 95 des 251 pièces d'équipement, le **cuir** dans 81 recettes.
 
 ### 5. La progression s'arrête à mi-chemin
@@ -53,6 +53,10 @@ Ailleurs, deux matières bloquent tout : la **corde** entre dans 95 des 251 piè
 ### 7. Petits trous
 - L'alambic n'a que 8 recettes alors que l'Alchimie a son propre onglet.
 - Le gravier ne sert à rien : aucune recette, aucun système.
+
+## Fait le 19/11 (`Shared/Equilibre.lua`)
+
+Points 1 à 4 corrigés en partie : effets de repas, prix plancher, 29 recettes copiées, eau, figurines, arcs, métiers requis. Restent : poterie (pot, assiette, bol, chope) et actes écrits (contrat, recommandation), laissés exprès car c'est la même matière en plusieurs formes. Outils en acier et en diamant : faits par Codex le même jour. Rareté 4 trop chère et breloques trop nombreuses : pas encore touchés.
 
 ## Ce qui mérite d'être ajouté (par ordre de rendement)
 

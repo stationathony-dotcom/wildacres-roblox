@@ -594,6 +594,10 @@ function J.eat(player: Player, item: string)
 		hum.Health = math.min(hum.MaxHealth, hum.Health + heal)
 		G.Util.geste(player, "manger")
 		G.Util.toast(player, "Miam ! " .. info.icon .. " (+" .. heal .. " vie)")
+		-- effet de repas (Shared/Equilibre) : un plat cuisiné donne un bonus de quelques minutes
+		if info.meal then
+			J.addBuff(player, info.meal[1], info.meal[2], info.meal[3], info.name)
+		end
 	end
 end
 

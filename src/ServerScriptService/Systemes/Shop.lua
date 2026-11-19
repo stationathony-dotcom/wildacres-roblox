@@ -679,6 +679,10 @@ function Shop.craft(player: Player, index: number?, times: number?)
 			out += 1
 		end
 		G.Joueurs.add(player, r.item, out, true)
+		-- récipient rendu (Shared/Equilibre : l'eau rend le seau vide)
+		for id, n in r.back or {} do
+			G.Joueurs.add(player, id, n, true)
+		end
 		G.Joueurs.addSkillXp(player, skillName, 3 + math.floor((r.skill and r.skill[2] or 0) / 3))
 		made += out
 		if info.tool then

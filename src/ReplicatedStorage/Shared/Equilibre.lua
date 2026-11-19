@@ -1,0 +1,247 @@
+-- Équilibre de la fabrication (19/11, docs/AUDIT-CRAFT.md). Appliqué à la fin de Config, juste avant
+-- Catalogue.assignRarity (la rareté suit donc les prix corrigés). Fichier à part pour ne pas mélanger
+-- les règles d'équilibre aux données des objets (Catalogue / Config) : ici, on CORRIGE.
+--   1. Recettes copiées : une trentaine d'objets avaient exactement les mêmes ingrédients qu'un autre.
+--      Chacun reçoit sa matière propre (souvent une matière qui ne servait qu'une fois : silex, corne…).
+--   2. Paliers des métiers : quelques recettes demandent désormais le métier qui va avec (minage pour
+--      l'acier, pêche pour l'hameçon, élevage pour le fromage, bûcheronnage pour le bois dur).
+--   3. Prix plancher : un objet fabriqué vaut au moins 1,1 × ses ingrédients (avant, 50 recettes
+--      faisaient perdre de l'or : paille, huile, sucre, barre de fer, bière…).
+--   4. Cuisine : un plat nourrit toujours plus que ses ingrédients crus, et donne un EFFET DE REPAS
+--      (bonus d'une caractéristique quelques minutes) selon ce qu'il contient. Les aliments crus n'en
+--      donnent pas : c'est ce qui rend la cuisine utile.
+-- Toute matière inconnue dans une correction la fait ignorer (avertissement), jamais d'objet cassé.
+
+local E = {}
+
+-- 1. nouvelles recettes : item -> { needs = …, count = …, station = …, back = …, price = … } (champs
+--    remplacés) ; from = matière : ne corrige que la recette de l'objet qui en contient (objets à plusieurs recettes)
+E.RECIPES = {
+	-- petites pièces de fer (toutes « 1 lingot de fer » avant)
+	hinge = { needs = { iron_ingot = 1, fat = 1 }, count = 3 },
+	hook = { needs = { iron_ingot = 1, flint = 1 }, count = 4 },
+	iron_ring = { needs = { iron_ingot = 1 }, count = 4, station = "furnace" },
+	fitting = { needs = { iron_ingot = 1, nails = 2 }, count = 3 },
+	-- cuivre
+	buckle = { needs = { copper_ingot = 1, horn = 1 }, count = 4 },
+	table_fork = { needs = { copper_ingot = 1, antler = 1 }, count = 2 },
+	tankard = { needs = { copper_ingot = 2 }, station = "anvil" },
+	-- bois
+	wood_cup = { needs = { planks = 1, resin = 1 }, count = 2 },
+	wood_plate = { needs = { planks = 1 }, count = 2, station = "bench" },
+	spoon = { needs = { branches = 1 }, count = 3 },
+	hoop = { needs = { planks = 1, iron_ring = 1 } },
+	stool = { needs = { planks = 1, peg = 2 } },
+	ladder = { needs = { planks = 2, branches = 2 }, count = 2 },
+	comb = { needs = { bone = 1 }, count = 2, station = "bench" },
+	-- pierre (la figurine rapportait 60 or pour 4 pierres, sans établi)
+	stone_figurine = { needs = { stone = 6, flint = 1 }, station = "bench", price = 30 },
+	wood_figurine = { needs = { oak_log = 2 }, station = "bench", price = 25 },
+	irrigation = { needs = { stone = 4, gravel = 4 }, count = 2 },
+	pedestal = { needs = { stone = 6 }, station = "bench" },
+	arrow_slit = { needs = { stone = 6, iron_ring = 1 } },
+	-- verre, tissu, métal
+	vial = { needs = { glass = 1 }, count = 2, station = "alembic" },
+	cloth = { needs = { wool = 2 }, count = 4, from = "wool" }, -- seulement la recette à la laine (lin, soie : à part)
+	gear_iron = { needs = { iron_ingot = 3 }, station = "anvil" },
+	barn_door = { needs = { hinge = 3, planks = 8, nails = 4 } },
+	scroll_case = { needs = { leather = 1, planks = 1, copper_nails = 2 } },
+	-- écrits
+	songbook = { needs = { ink = 1, paper = 6, quill = 1 } },
+	history_book = { needs = { ink = 2, paper = 6, old_page = 1, leather = 1 } },
+	diploma = { needs = { ink = 1, parchment = 1, wax_seal = 1, ribbon = 1 } },
+	-- l'eau rend le seau (avant : seau ET gobelet perdus pour 2 eaux)
+	water = { needs = { bucket = 1, wood_cup = 1 }, count = 2, back = { bucket_empty = 1 } },
+}
+
+-- équipement : nom de la pièce -> ingrédients remplacés (needs) ou ajoutés (add)
+E.GEAR = {
+	["Marteau de forgeron"] = { needs = { iron_ingot = 3, oak_log = 1 } },
+	["Faucille"] = { needs = { iron_ingot = 1, planks = 1, flint = 1 } },
+	["Faux"] = { needs = { steel = 1, pine_log = 1, leather_strap = 1 } },
+	["Sacoche de selle"] = { needs = { buckle = 2, leather = 3, rope = 1 } },
+	-- les arcs étaient de loin les pièces les moins chères du jeu pour leurs stats
+	["Arc court"] = { add = { rope = 1, leather = 1 } },
+	["Arc long"] = { add = { leather = 1, linen_thread = 2 } },
+	["Turban de lin"] = { add = { linen_thread = 1 } }, -- même recette que la Tunique
+}
+
+-- 2. métier requis : item -> { compétence, niveau } (seulement si la recette n'en demande pas déjà)
+E.GATES = {
+	steel = { "minage", 15 },
+	silver_ingot = { "minage", 12 },
+	gold_ingot = { "minage", 20 },
+	hook = { "peche", 4 },
+	bait = { "peche", 1 },
+	cheese = { "elevage", 8 },
+	butter = { "elevage", 4 },
+	wool_thread = { "elevage", 3 },
+}
+E.HARDWOOD = { oak_log = true, pine_log = true } -- recette sans palier qui en contient : bûcheronnage
+E.HARDWOOD_LEVEL = 6
+
+-- 4. effets de repas : mots des ingrédients -> caractéristique
+E.MEAL_STATS = {
+	{ "discretion", { "night" } }, -- en premier : à égalité, la fleur nocturne donne la discrétion
+	{ "force", { "meat", "steak", "venison", "boar", "rabbit", "bacon", "sausage", "game" } }, -- pas « ham » : il attraperait « chamomile »
+	{ "vitesse", { "fish", "crab", "shellfish", "eel", "trout", "salmon" } },
+	{ "charisme", { "honey", "sugar", "cake", "syrup", "jam", "pie" } },
+	{ "chance", { "herb", "mint", "thyme", "chamomile", "st_john", "mandrake", "spice", "mushroom", "flower" } },
+	{ "defense", { "ale", "cider", "wine", "mead", "hops", "barley", "rye" } },
+	{ "vie", { "carrot", "cabbage", "tomato", "pumpkin", "potato", "apple", "berr", "pear", "plum", "grape", "bean", "pea", "onion", "garlic", "wheat", "flour", "bread", "milk", "cheese", "butter" } },
+}
+
+E.changes = {} -- journal des corrections (lu par le banc tools/bancs/equilibre.luau)
+
+local function note(s: string)
+	table.insert(E.changes, s)
+end
+
+local function known(C, needs): boolean
+	for id in needs do
+		if not C.ITEMS[id] then
+			warn("[Equilibre] matière inconnue : " .. tostring(id))
+			return false
+		end
+	end
+	return true
+end
+
+local function mealStat(needs): string
+	local score = {}
+	for id, n in needs do
+		for _, row in E.MEAL_STATS do
+			for _, word in row[2] do
+				if string.find(id, word, 1, true) then
+					score[row[1]] = (score[row[1]] or 0) + n
+					break
+				end
+			end
+		end
+	end
+	local best, bv = "vie", 0
+	for _, row in E.MEAL_STATS do
+		local v = score[row[1]] or 0
+		if v > bv then
+			best, bv = row[1], v
+		end
+	end
+	return best
+end
+
+function E.apply(C)
+	local I, R = C.ITEMS, C.RECIPES
+	-- 1. recettes copiées
+	for _, r in R do
+		local fix = r.item and E.RECIPES[r.item]
+		if fix and fix.from and not r.needs[fix.from] then
+			fix = nil
+		end
+		if fix and known(C, fix.needs) and (not fix.back or known(C, fix.back)) then
+			r.needs = table.clone(fix.needs)
+			if fix.count then
+				r.count = fix.count > 1 and fix.count or nil
+			end
+			if fix.station then
+				r.station = fix.station
+			end
+			r.back = fix.back
+			if fix.price and C.ITEMS[r.item] then
+				C.ITEMS[r.item].price = fix.price
+			end
+			note("recette " .. r.item)
+		end
+		local g = r.gear and E.GEAR[r.gear.name]
+		if g then
+			local add = g.add or {}
+			if (not g.needs or known(C, g.needs)) and known(C, add) then
+				if g.needs then
+					r.needs = table.clone(g.needs)
+				end
+				for id, n in add do
+					r.needs[id] = (r.needs[id] or 0) + n
+				end
+				note("équipement " .. r.gear.name)
+			end
+		end
+	end
+	-- 2. métiers
+	for _, r in R do
+		if r.item and not r.skill then
+			local gate = E.GATES[r.item]
+			if gate then
+				r.skill = { gate[1], gate[2] }
+				note("palier " .. r.item .. " " .. gate[1] .. " " .. gate[2])
+			elseif r.cat ~= "construction" then
+				for id in r.needs do
+					if E.HARDWOOD[id] then
+						r.skill = { "bucheronnage", E.HARDWOOD_LEVEL }
+						note("palier " .. r.item .. " bucheronnage")
+						break
+					end
+				end
+			end
+		end
+	end
+	-- 3. prix plancher (plusieurs passes : une matière revalorisée revalorise ce qu'on en tire)
+	for _ = 1, 8 do
+		local moved = false
+		local cheapest = {}
+		for _, r in R do
+			local out = r.item and I[r.item]
+			if out and out.price and out.price > 0 then
+				local cost, ok = 0, true
+				for id, n in r.needs do
+					local p = I[id] and I[id].price
+					if not p or p <= 0 then
+						ok = false
+						break
+					end
+					cost += p * n
+				end
+				for id, n in r.back or {} do
+					cost -= (I[id] and I[id].price or 0) * n
+				end
+				if ok then
+					local per = math.max(0, cost) / (r.count or 1)
+					if not cheapest[r.item] or per < cheapest[r.item] then
+						cheapest[r.item] = per
+					end
+				end
+			end
+		end
+		for id, per in cheapest do
+			local floor = math.ceil(per * 1.1)
+			if I[id].price < floor then
+				I[id].price = floor
+				moved = true
+			end
+		end
+		if not moved then
+			break
+		end
+	end
+	-- 4. cuisine : plus nourrissant que cru, et un effet de repas
+	for _, r in R do
+		local out = r.item and I[r.item]
+		if out and out.food then
+			local raw = 0
+			for id, n in r.needs do
+				raw += ((I[id] and I[id].food) or 0) * n
+			end
+			local per = raw / (r.count or 1)
+			if per > 0 and out.food < per * 1.2 then
+				out.food = math.ceil(per * 1.2)
+				note("nourriture " .. r.item .. " " .. out.food)
+			end
+			if not out.meal then
+				local stat = mealStat(r.needs)
+				local v = math.clamp(1 + math.floor(out.food / 30), 1, 3)
+				local minutes = math.clamp(5 + math.floor(out.food / 6), 5, 15)
+				out.meal = { stat, v, minutes * 60 }
+			end
+		end
+	end
+end
+
+return E
