@@ -86,6 +86,11 @@ function Journal.check(player: Player)
 		local name = poi.name ~= "" and poi.name or nil
 		local label = (G.WG.PLACE_NAMES[poi.kind] or KIND_NAME[poi.kind] or "un lieu"):gsub("{name}", name or "?")
 		G.Util.toast(player, "📍 Découverte : " .. label, "big")
+		-- récompense permanente (19/11) : chaque lieu trouvé compte pour les succès d'explorateur et
+		-- endurcit le voyageur (vitesse et chance, par la pratique)
+		G.Social.bump(player, "lieux")
+		G.Joueurs.addStatXp(player, "vitesse", 25)
+		G.Joueurs.addStatXp(player, "chance", 10)
 		if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "decouvrir", poi.kind) end
 		G.Util.sfx("pieces", Vector3.zero, player)
 	end
