@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- Bestiaire : **assassin de l'ombre** (nuit, prairie et forêt : rapide, frappe fort, bourse et crochets), **roi déchu** (élite de nuit, prairie et désert : bijou ancien, sceau royal), **méduse des marais** ; chacun avec sa prise et sa pièce d'équipement (164 créatures)
 - **Roue à eau** : posée au bord de l'eau à moins de 16 studs d'un moulin, elle le fait moudre tout le blé (1 pour 1 au lieu de 2 pour 3) ; le moulin le dit quand on le remplit (banc `roue_eau`)
 - **Mécanismes** : le pont-levis se lève et s'abaisse, la trappe s'ouvre (on tombe dedans) et se referme, animés ; l'état est gardé ; on peut y poser une serrure comme sur une porte (crochetable, effraction notée) (banc `mecanismes`)
 - **Construction, 10 formes de plus** (« liste items.txt ») : escalier droit, escalier en colimaçon, dôme, toit conique, mur avec fenêtre, mur avec porte, mur à meurtrière, pignon (mur triangulaire), créneaux, chapiteau — dans les matériaux qui leur vont (49 pièces fabricables) ; les sous-pièces peuvent être des cylindres ou des coins (banc `formes`)

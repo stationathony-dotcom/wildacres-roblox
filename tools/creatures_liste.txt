@@ -159,3 +159,6 @@ Bestiaire:woods_spirit=Esprit des bois|spectre||5
 Bestiaire:snow_wyvern=Wyverne des neiges|volant|B|10
 Bestiaire:mountain_giant=Géant des montagnes|humain|B|10
 Bestiaire:deep_beast=Bête des profondeurs|serpent|B|10
+Bestiaire:assassin=Assassin de l'ombre|humain||6
+Bestiaire:fallen_king=Roi déchu|spectre|E|9
+Bestiaire:freshwater_jellyfish=Méduse des marais|masse||3

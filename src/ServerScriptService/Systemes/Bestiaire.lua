@@ -258,6 +258,13 @@ local KINDS = {
 		loot = { { "fish_1", 1, 2, 0.5 } }, gold = 1 },
 	hostile_siren = { name = "Sirène hostile", form = "spectre", look = { "BL", "V" }, hp = 180, dmg = 22, speed = 12, level = 6, style = "spore", radius = 1.3, proj = { color = Color3.fromRGB(200, 200, 230), size = 0.8 },
 		loot = { { "relic_fragment", 1, 1, 0.3 } }, gold = 3 },
+	-- 19/11 (« listes ennemi.txt », reste) : assassin, roi déchu, méduse des marais
+	assassin = { name = "Assassin de l'ombre", form = "humain", look = { "N", "N", weapon = "epee", hood = true }, hp = 200, dmg = 34, speed = 17, level = 6, style = "charge", radius = 1.2, night = true,
+		loot = { { "coin_purse", 1, 1, 0.5 }, { "lockpick", 1, 2, 0.4 } }, gold = 4 },
+	fallen_king = { name = "Roi déchu", form = "spectre", look = { "PC", "BL", weapon = "epee", helmet = true, scale = 1.4 }, hp = 900, dmg = 40, speed = 11, level = 9, style = "charge", radius = 1.8, night = true, elite = true,
+		loot = { { "ancient_jewel", 1, 1, 0.5 }, { "royal_seal", 1, 1, 0.2 }, { "ancient_coin", 2, 5, 1 } }, gold = 10 },
+	freshwater_jellyfish = { name = "Méduse des marais", form = "masse", look = { "BL", "W" }, hp = 80, dmg = 14, speed = 8, level = 3, style = "spore", radius = 1,
+		loot = { { "fish_1", 1, 1, 0.3 } }, gold = 1 },
 	water_spirit = { name = "Esprit des eaux", form = "spectre", look = { "BL", "W" }, hp = 150, dmg = 18, speed = 13, level = 5, style = "charge", radius = 1.2, night = true,
 		loot = { { "fish_1", 1, 1, 0.4 } }, gold = 1 },
 	kelpie = { name = "Kelpie", form = "quadrupede", look = { "N", "BL", tete = 1.2, criniere = "V" }, hp = 260, dmg = 26, speed = 17, level = 6, style = "charge", radius = 1.6, neutral = true,
@@ -298,12 +305,12 @@ local DAY = {
 	foret = { "black_wolf", "lynx", "goblin_archer", "goblin_archer", "bramble_witch", "wood_golem", "root_troll", "bee_swarm", "poacher", "wood_goblin", "sylvan_spider", "brown_bear", "colossal_boar", "corrupted_ent", "renegade_guard", "harpy", "griffin", "hippogriff", "bramble_fairy", "giant_mantis", "forest_giant" },
 	desert = { "jackal", "jackal", "dune_snake", "beetle", "desert_spider", "hyena", "sandstone_golem", "ruin_looter", "desert_raider", "sand_worm", "ruin_guardian", "sand_basilisk", "smuggler", "drakeling", "wyvern" },
 	neige = { "polar_bear", "frost_boar", "frost_spider", "frost_spider", "frost_troll", "black_wolf", "polar_wolf", "ice_giant", "corrupted_stag", "giant_eagle", "mountain_troll", "granite_warden", "cliff_raptor" },
-	marais = { "leech", "leech", "bog_lizard", "swamp_boar", "mud_man", "water_snake", "swamp_goblin", "reed_spider", "mud_golem", "smuggler", "river_serpent", "monster_eel", "ancient_turtle", "giant_crab", "hostile_siren", "kelpie", "lake_guardian", "earth_colossus" },
+	marais = { "freshwater_jellyfish", "leech", "leech", "bog_lizard", "swamp_boar", "mud_man", "water_snake", "swamp_goblin", "reed_spider", "mud_golem", "smuggler", "river_serpent", "monster_eel", "ancient_turtle", "giant_crab", "hostile_siren", "kelpie", "lake_guardian", "earth_colossus" },
 }
 local NIGHT = {
-	prairie = { "skeleton", "skeleton", "ghoul", "revenant", "giant_crow", "ghost_knight", "shadow_wolf", "faceless_walker", "ghost_crow", "creeping_shadow", "fallen_monk", "dark_prowler", "wandering_spectre", "night_howler", "tomb_warden", "forgotten_knight" },
-	foret = { "skeleton", "ghoul", "spectral_stag", "giant_crow", "revenant", "tree_spirit", "shadow_wolf", "ancient_skeleton", "ghost_crow", "moon_hunter", "night_stalker", "woods_spirit", "spectral_owl" },
-	desert = { "skeleton", "dune_spectre", "dune_spectre", "ghoul", "mummy", "ancient_skeleton", "creeping_shadow", "ruin_spirit", "cursed_warden", "light_eater" },
+	prairie = { "assassin", "fallen_king", "skeleton", "skeleton", "ghoul", "revenant", "giant_crow", "ghost_knight", "shadow_wolf", "faceless_walker", "ghost_crow", "creeping_shadow", "fallen_monk", "dark_prowler", "wandering_spectre", "night_howler", "tomb_warden", "forgotten_knight" },
+	foret = { "assassin", "skeleton", "ghoul", "spectral_stag", "giant_crow", "revenant", "tree_spirit", "shadow_wolf", "ancient_skeleton", "ghost_crow", "moon_hunter", "night_stalker", "woods_spirit", "spectral_owl" },
+	desert = { "fallen_king", "skeleton", "dune_spectre", "dune_spectre", "ghoul", "mummy", "ancient_skeleton", "creeping_shadow", "ruin_spirit", "cursed_warden", "light_eater" },
 	neige = { "blizzard_spectre", "skeleton", "revenant", "spectral_fox", "faceless_walker", "possessed_shade", "night_howler" },
 	marais = { "swamp_witch", "drowned_spirit", "drowned_spirit", "ghoul", "creeping_shadow", "fallen_monk", "water_spirit", "possessed_shade" },
 }
