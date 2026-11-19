@@ -115,7 +115,10 @@ function Machines.mill(player: Player, id: string)
 	n -= n % 3
 	G.Joueurs.take(player, "wheat", n)
 	d.mill.wheat += n
-	G.Util.toast(player, "🌾 " .. n .. " blé au moulin : la farine sera prête demain.")
+	local _, reg = G.Protection.findPlaced(id)
+	local rs = reg and reg.state -- état de la région (même table que G.world.regions[clé])
+	local wheel = Machines.waterPowered(rs, d)
+	G.Util.toast(player, "🌾 " .. n .. " blé au moulin : la farine sera prête demain" .. (wheel and " (roue à eau : tout est moulu, 1 pour 1)." or " (2 pour 3 ; une roue à eau au bord de l'eau, tout près, fait mieux)."))
 	G.Joueurs.sync(player)
 end
 
@@ -153,6 +156,21 @@ function Machines.hive(player: Player, id: string)
 end
 
 -- Chaque matin (après la pousse des cultures) : moulins, arroseurs, ruches
+-- Roue à eau (19/11) : posée au bord de l'eau (eau à moins de 4 studs), à moins de 16 studs d'un moulin
+Machines.WHEEL_REACH = 16
+function Machines.waterPowered(rs, mill): boolean
+	for _, o in (rs and rs.placed) or {} do
+		if o.item == "water_wheel" and math.abs(o.x - mill.x) <= Machines.WHEEL_REACH and math.abs(o.z - mill.z) <= Machines.WHEEL_REACH then
+			for _, off in { { 0, 0 }, { 4, 0 }, { -4, 0 }, { 0, 4 }, { 0, -4 } } do
+				if G.Util.isWater(o.x + off[1], o.z + off[2]) then
+					return true
+				end
+			end
+		end
+	end
+	return false
+end
+
 function Machines.newDay()
 	if not G.world then
 		return
@@ -160,7 +178,8 @@ function Machines.newDay()
 	for _, rs in G.world.regions do
 		for _, d in rs.placed or {} do
 			if d.item == "windmill" and d.mill and d.mill.wheat > 0 then
-				d.mill.flour += math.floor(d.mill.wheat * 2 / 3)
+				-- une roue à eau au bord de l'eau, tout près : le moulin moud tout (1 pour 1 au lieu de 2 pour 3)
+				d.mill.flour += Machines.waterPowered(rs, d) and d.mill.wheat or math.floor(d.mill.wheat * 2 / 3)
 				d.mill.wheat = 0
 			elseif d.item == "sprinkler" and (d.water or 0) > 0 then
 				d.water -= 1
