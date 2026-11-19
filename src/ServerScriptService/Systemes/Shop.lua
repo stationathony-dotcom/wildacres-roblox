@@ -101,6 +101,75 @@ local function demandFactor(regKey: string, item: string): number
 	return math.max(0.5, 0.94 ^ n)
 end
 
+-- Commerce entre régions (19/11, « à ne pas oublier » § 10) : chaque village RECHERCHE quelques
+-- produits qui ne poussent pas chez lui (cultures et plantes d'autres biomes) et les paie
+-- WANTED_MULT fois plus cher. La liste change tous les WANTED_DAYS jours (même pour tout le monde) :
+-- de quoi donner envie de voyager avec une charrette pleine. Pas d'arbitrage possible : ce sont des
+-- objets qu'aucun PNJ ne vend ici (et le plafond des objets vendus ailleurs reste appliqué).
+Shop.WANTED_MULT = 1.5
+Shop.WANTED_DAYS = 3
+Shop.WANTED_N = 3
+local wantedCache = {}
+function Shop.wanted(villageKey: string, biome: string)
+	local period = math.floor((G.world.day or 1) / Shop.WANTED_DAYS)
+	local ck = villageKey .. "|" .. period
+	if wantedCache[ck] then
+		return wantedCache[ck]
+	end
+	local here = {}
+	for _, id in (Config.BIOME_CROPS[biome] or {}) do
+		here[id] = true
+	end
+	local H = G.Herbes and rawget(G.Herbes, "POOLS")
+	for _, h in (H and H[biome]) or {} do
+		here[h[1]] = true
+	end
+	local pool, seen = {}, {}
+	for b, crops in Config.BIOME_CROPS do
+		if b ~= biome then
+			for _, id in crops do
+				if not here[id] and not seen[id] and Config.ITEMS[id] then
+					seen[id] = true
+					table.insert(pool, id)
+				end
+			end
+		end
+	end
+	for b, herbs in (H or {}) do
+		if b ~= biome then
+			for _, h in herbs do
+				if not here[h[1]] and not seen[h[1]] and Config.ITEMS[h[1]] then
+					seen[h[1]] = true
+					table.insert(pool, h[1])
+				end
+			end
+		end
+	end
+	table.sort(pool)
+	local rng = Random.new(G.WG.hash(G.world.seed or 0, "demande", villageKey, period))
+	local list = {}
+	for _ = 1, math.min(Shop.WANTED_N, #pool) do
+		table.insert(list, table.remove(pool, rng:NextInteger(1, #pool)))
+	end
+	local set = {}
+	for _, id in list do
+		set[id] = true
+	end
+	wantedCache[ck] = { list = list, set = set }
+	return wantedCache[ck]
+end
+
+-- ce que le village de ce comptoir recherche (nil si le comptoir n'est pas dans un village)
+local function wantedAt(e)
+	local R = G.Reputation and rawget(G.Reputation, "villageAt")
+	local v = R and e.root and R(e.root.Position)
+	if not v then
+		return nil
+	end
+	return Shop.wanted(v.key, v.biome or (G.Clock.biomeAt(e.root.Position) or "prairie"))
+end
+Shop.wantedAt = wantedAt
+
 function Shop.sellPrice(player: Player, e, item: string): number
 	local info = Config.ITEMS[item]
 	if not info or not info.price or info.price <= 0 or info.tool then
@@ -126,6 +195,11 @@ function Shop.sellPrice(player: Player, e, item: string): number
 	-- un artisan paie mieux SES matières (boulanger : le grain…), par-dessus le plafond du comptoir
 	if e.data.metier then
 		price = math.floor(price * G.Metiers.bonus(e, item))
+	end
+	-- produit d'une autre région recherché par ce village : payé bien plus cher
+	local w = wantedAt(e)
+	if w and w.set[item] then
+		price = math.floor(math.max(price, info.price * 0.8) * Shop.WANTED_MULT)
 	end
 	-- objet qu'un PNJ VEND quelque part : jamais plus de 80 % du prix le plus bas auquel on peut
 	-- l'acheter (sinon : acheter chez un PNJ peu gourmand, revendre chez un radin ou un artisan)
@@ -246,6 +320,16 @@ local function refresh(player: Player)
 	if e.data.metier then
 		title = G.Metiers.shopTitle(e)
 		greeting = G.Metiers.greeting(e, buy) -- étal vide : il dit ce qui lui manque
+	end
+	local w = wantedAt(e)
+	if w and #w.list > 0 and not e.data.metier then
+		local names = {}
+		for _, id in w.list do
+			local info = Config.ITEMS[id]
+			table.insert(names, info.icon .. " " .. info.name)
+		end
+		local extra = "On cherche ici : " .. table.concat(names, ", ") .. " (payés +" .. math.floor((Shop.WANTED_MULT - 1) * 100) .. " %)."
+		greeting = (greeting and (greeting .. " ") or (D.line(e.data.persona, "trade", { titre = D.title_for(G.Joueurs.get(player).honor) }) .. " ")) .. extra
 	end
 	G.remotes.Menu:FireClient(player, { kind = "shop", title = title, buy = buy, sell = sell, gold = G.Joueurs.count(player, "gold"),
 		greeting = greeting or D.line(e.data.persona, "trade", { titre = D.title_for(G.Joueurs.get(player).honor) }) })
