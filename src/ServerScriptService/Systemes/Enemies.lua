@@ -489,12 +489,23 @@ local function thinkPassive(en, dt: number)
 	local player, pd = G.Util.nearestPlayer(en.pos, 40)
 	local proot = player and G.Util.root(player)
 	local scared = proot and (pd < (player:GetAttribute("Crouch") and 7 or 15) or en.state == "hurt" or en.state == "flee")
-	if scared and proot then
+	local threat = proot and proot.Position
+	-- un prédateur le prend en chasse (19/11, idee.txt § 9 E) : il le fuit aussi, s'il le voit venir
+	local hunter = en.huntedBy
+	if hunter and not hunter.dead and hunter.state == "hunt" and hunter.prey == en and (hunter.pos - en.pos).Magnitude < 25 then
+		scared, threat = true, hunter.pos
+		pd = math.min(pd or math.huge, (hunter.pos - en.pos).Magnitude)
+	else
+		hunter = nil
+	end
+	-- poursuivi, il s'essouffle un peu (sinon aucun prédateur n'attraperait jamais rien)
+	local fleeSpeed = hunter and k.speed * 0.9 or k.speed
+	if scared and threat then
 		if en.state ~= "flee" then
 			en.state = "flee"
 			en.t = 0
 		end
-		local away = en.pos - proot.Position
+		local away = en.pos - threat
 		away = Vector3.new(away.X, 0, away.Z)
 		if away.Magnitude < 0.1 then
 			away = Vector3.new(1, 0, 0)
@@ -512,7 +523,7 @@ local function thinkPassive(en, dt: number)
 				return
 			end
 		else
-			moveToward(en, en.pos + away.Unit * 8, k.speed, dt)
+			moveToward(en, en.pos + away.Unit * 8, fleeSpeed, dt)
 		end
 		en.hop += dt * 10
 		if en.t > 4 and pd > 20 then
@@ -597,6 +608,7 @@ local function think(en, dt: number)
 			for _, other in Enemies.list do
 				if other.k.passive and not other.dead and PREDATORS[en.kind][other.kind] and (other.pos - en.pos).Magnitude < 30 then
 					en.prey = other
+					other.huntedBy = en
 					en.state = "hunt"
 					en.t = 0
 					break

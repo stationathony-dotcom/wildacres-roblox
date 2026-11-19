@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Faune** : le gibier pris en chasse par un prédateur le fuit (et file au terrier s'il en a un), un peu moins vite que devant un joueur — le loup a une vraie chance, pas la certitude
 - **Titres de collection** : Herboriste (8 plantes sauvages), Antiquaire (6 antiquités étudiées), Conservateur de musée (10), Encyclopédiste (150 recettes connues)
 - **Découverte archéologique** (événement de jour, rien d'annoncé : seuls les joueurs proches le remarquent) : 6 tertres apparaissent ; on les fouille avec une pelle (vase ancien, fossile, inscription, fragment de relique, pièces anciennes, page ancienne, rarement un artefact ou une relique) ; le talent Archéologue donne parfois une trouvaille de plus ; Chance en hausse
 - **Pénuries** : tous les 2 jours, environ un village sur deux manque d'une denrée de base (blé, planches, fer, lait, poisson grillé, cuir…) et la paie +80 % ; aucune annonce, le marchand le dit au comptoir ; seulement des objets qu'aucun PNJ ne vend (pas de pompe à or)
