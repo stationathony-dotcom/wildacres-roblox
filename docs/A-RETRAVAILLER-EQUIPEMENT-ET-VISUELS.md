@@ -15,7 +15,7 @@
 
 ## Ce qui manque en équipement
 
-1. **Les petits emplacements sont vides par rapport aux autres.** Il y a 13 à 15 pièces par emplacement pour les gants, épaulières, pantalons, capes et bottes, contre 145 armes et 151 bijoux. Il n'y a que 2 pièces de rareté 4 par petit emplacement. Il faudrait des pièces de zone (marais, désert, neige) et des pièces de créatures pour ces emplacements.
+1. **FAIT le 19/11** (21 pièces, `Equilibre` E.SMALL_GEAR : 22 à 27 pièces par emplacement). **Les petits emplacements sont vides par rapport aux autres.** Il y a 13 à 15 pièces par emplacement pour les gants, épaulières, pantalons, capes et bottes, contre 145 armes et 151 bijoux. Il n'y a que 2 pièces de rareté 4 par petit emplacement. Il faudrait des pièces de zone (marais, désert, neige) et des pièces de créatures pour ces emplacements.
 2. **FAIT le 19/11** (`Equilibre` E.TRADE_GEAR, `Joueurs.skill` / `skillRaw`) — **Aucun équipement de métier.** Les stats sont toutes de combat ou sociales. Dans un jeu centré sur l'artisanat, il manque :
    - un tablier de forgeron, qui augmenterait les chances de qualité ;
    - des bottes de pêcheur ;

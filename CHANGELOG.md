@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Petits emplacements** : 21 pièces de rareté 2 à 4 pour les gants, épaulières, pantalons, capes et bottes (gants fourrés, gantelets de forge, épaulières de mailles, jambières d'acier, chausses de soie du rôdeur, cape de soie nocturne, manteau d'apparat, bottes de marais, de coureur, de cavalier émérite…) ; les pièces fourrées et les capes tiennent chaud, toutes les bottes évitent l'enlisement
 - **Rumeurs de marché** : quand on demande des nouvelles à un habitant, il parle parfois d'une pénurie dans un des villages proches (ou du sien) — l'information circule sans annonce
 - **Faune** : le gibier pris en chasse par un prédateur le fuit (et file au terrier s'il en a un), un peu moins vite que devant un joueur — le loup a une vraie chance, pas la certitude
 - **Titres de collection** : Herboriste (8 plantes sauvages), Antiquaire (6 antiquités étudiées), Conservateur de musée (10), Encyclopédiste (150 recettes connues)

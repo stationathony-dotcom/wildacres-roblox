@@ -755,6 +755,33 @@ local function creatureWeights(matName: string)
 	return nil
 end
 
+-- 16. PETITS EMPLACEMENTS (19/11) : il n'y avait que 13 à 15 pièces par emplacement, presque rien en
+--     rareté 2 à 4. { emplacement, nom, rareté, stats, ingrédients, niveau d'artisanat }
+--     « fourrure » dans le nom : tient chaud (Froid) ; « Bottes » : on ne s'enlise pas dans la boue.
+E.SMALL_GEAR = {
+	{ "gloves", "Gants fourrés", 2, { vie = 3, defense = 1 }, { fur = 2, leather = 1 }, 10 },
+	{ "gloves", "Gants de soie de l'archer", 3, { chance = 4, vitesse = 2 }, { silk = 2, soft_leather = 1 }, 20 },
+	{ "gloves", "Gantelets de forge", 3, { force = 4, defense = 2 }, { steel = 1, iron_ring = 2, leather = 1 }, 22 },
+	{ "gloves", "Gantelets dorés du capitaine", 4, { force = 4, charisme = 4 }, { gold_ingot = 2, steel = 1, soft_leather = 1 }, 32 },
+	{ "shoulders", "Épaulières de fourrure", 2, { vie = 3, defense = 1 }, { fur = 2, leather_strap = 1 }, 10 },
+	{ "shoulders", "Épaulières de mailles", 3, { defense = 4, vie = 2 }, { iron_ring = 6, leather = 1 }, 20 },
+	{ "shoulders", "Spallières d'acier", 3, { defense = 5, force = 1 }, { steel = 2, leather_strap = 1 }, 22 },
+	{ "shoulders", "Épaulières d'apparat", 4, { charisme = 5, defense = 3 }, { gold_ingot = 1, silver_ingot = 1, dyed_cloth = 2 }, 32 },
+	{ "legs", "Chausses de cuir souple", 2, { discretion = 3, vitesse = 1 }, { soft_leather = 2 }, 10 },
+	{ "legs", "Jambières de fourrure", 3, { vie = 4, defense = 2 }, { fur = 3, leather = 1 }, 20 },
+	{ "legs", "Jambières d'acier", 3, { defense = 5, vie = 1 }, { steel = 2, leather_strap = 2 }, 22 },
+	{ "legs", "Chausses de soie du rôdeur", 4, { discretion = 5, vitesse = 3 }, { silk = 3, dyed_cloth = 1 }, 32 },
+	{ "cape", "Cape de fourrure", 2, { vie = 3, discretion = 1 }, { fur = 2, buckle = 1 }, 10 },
+	{ "cape", "Cape teinte du voyageur", 3, { vitesse = 3, charisme = 3 }, { dyed_cloth = 3, buckle = 1 }, 20 },
+	{ "cape", "Cape de soie nocturne", 3, { discretion = 5, chance = 1 }, { silk = 3, buckle = 1 }, 22 },
+	{ "cape", "Manteau d'apparat", 4, { charisme = 6, vie = 2 }, { dyed_cloth = 3, gold_ingot = 1, pearl = 1 }, 32 },
+	{ "boots", "Bottes fourrées", 2, { vie = 3, vitesse = 1 }, { fur = 2, leather = 1 }, 10 },
+	{ "boots", "Bottes de marais", 2, { vie = 2, vitesse = 2 }, { leather = 2, resin = 2 }, 10 },
+	{ "boots", "Bottes de coureur", 3, { vitesse = 5, chance = 1 }, { soft_leather = 2, linen_thread = 2 }, 20 },
+	{ "boots", "Solerets d'acier", 3, { defense = 5, vie = 1 }, { steel = 2, leather = 1 }, 22 },
+	{ "boots", "Bottes de cavalier émérite", 4, { vitesse = 5, charisme = 3 }, { soft_leather = 3, silver_ingot = 1, buckle = 2 }, 32 },
+}
+
 function E.finish(C)
 	local okG, Gear = pcall(require, script.Parent.Gear)
 	local SLOTS = okG and Gear.SLOTS or {}
@@ -771,6 +798,14 @@ function E.finish(C)
 			table.insert(R, { gear = { slot = g[1], name = g[2], rarity = 1, stats = table.clone(g[3]), power = 0, visual = "" },
 				needs = table.clone(g[4]), station = "bench", cat = "equipement" })
 			note("départ " .. g[2])
+		end
+	end
+	for _, g in E.SMALL_GEAR do
+		if SLOTS[g[1]] and not have[g[2]] and known(C, g[5]) then
+			table.insert(R, { gear = { slot = g[1], name = g[2], rarity = g[3], stats = table.clone(g[4]), power = 0, visual = "" },
+				needs = table.clone(g[5]), station = "bench", cat = "equipement", skill = { "artisanat", g[6] } })
+			have[g[2]] = true
+			note("petit emplacement " .. g[2])
 		end
 	end
 	for _, t in E.TRADE_GEAR do
