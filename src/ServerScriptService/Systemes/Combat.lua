@@ -94,10 +94,185 @@ function Combat.swoosh(player: Player)
 	G.remotes.Fx:FireAllClients("swing", root.Position + root.CFrame.LookVector * 3)
 end
 
+-- applique un coup (corps à corps ou flèche) à la cible choisie
+local function applyHit(player: Player, best, kind: string, dmg: number, root: BasePart)
+	if kind == "enemy" then
+		G.Enemies.hit(best, dmg, player)
+	elseif kind == "npc" then
+		G.Npcs.hit(best, dmg, player)
+	elseif kind == "animal" then
+		G.Animals.hit(best, player)
+	elseif kind == "pet" then
+		G.Compagnons.hit(best, dmg, player)
+	elseif kind == "player" then
+		local victim = best :: Player
+		local vprof = G.Joueurs.get(victim)
+		local vroot = G.Util.root(victim)
+		if not vprof or not vroot then
+			return
+		end
+		if not G.Config.LIBRE.bouclierArrivee then
+			-- monde libre : pas de bouclier d'arrivée
+		elseif os.clock() < (victim:GetAttribute("SpawnShield") or 0) or os.clock() < (player:GetAttribute("SpawnShield") or 0) then
+			G.Util.toast(player, "Protection d'arrivée : pas de combat entre joueurs pendant 20 s.")
+			return
+		end
+		-- zone sûre : l'arrivée du monde (pas d'embuscade sur ceux qui débarquent)
+		if G.Config.LIBRE.zoneSureArrivee and (vroot.Position - G.Game.spawnPos()).Magnitude < SAFE_SPAWN_R then
+			G.Util.toast(player, "On ne se bat pas sur le lieu d'arrivée.")
+			return
+		end
+		-- anti-acharnement : celui qui t'a mis K.O. ne peut plus te frapper pendant 10 minutes
+		local k = koBy[victim.UserId]
+		if G.Config.LIBRE.graceApresKO and k and k[player.UserId] and os.clock() - k[player.UserId] < KO_GRACE then
+			G.Util.toast(player, victim.DisplayName .. " vient de se relever : laisse-le tranquille un moment.")
+			return
+		end
+		if (vprof.stars or 0) <= 0 then
+			G.Law.crime(player, "assault", vroot.Position, G.Util.pid(victim))
+		end
+		victim:SetAttribute("LastHitBy", player.UserId)
+		victim:SetAttribute("LastHitAt", os.clock())
+		Combat.hurtPlayer(victim, dmg, root.Position)
+		Combat.popup(vroot.Position + Vector3.new(0, 3, 0), tostring(dmg), Color3.fromRGB(255, 120, 100))
+	end
+end
+
+-- Tir à l'arc (19/11) : un arc ou une arbalète équipés tirent à distance (RANGE studs) une FLÈCHE
+-- (objet « arrow », fabriqué à l'établi) ; il faut voir sa cible (rien entre les deux). La cible
+-- choisie (clic) passe en priorité, sinon ce qui est le plus en face. Une flèche part même dans le
+-- vide (et se perd). Cadence plus lente qu'à l'épée.
+Combat.RANGE = 48
+Combat.BOW_COOLDOWN = 0.9
+local function rangedWeapon(player: Player)
+	local prof = G.Joueurs.get(player)
+	local w = prof and prof.equipped and prof.equipped.weapon
+	local n = w and w.name or ""
+	if w and (w.ranged or string.find(n, "^Arc") or string.find(n, "Arbal")) then
+		return w
+	end
+	return nil
+end
+Combat.rangedWeapon = rangedWeapon
+
+local function arrowFx(from: Vector3, to: Vector3)
+	local d = to - from
+	if d.Magnitude < 1 then
+		return
+	end
+	local a = Instance.new("Part")
+	a.Name = "Fleche"
+	a.Anchored = true
+	a.CanCollide = false
+	a.CanQuery = false
+	a.CanTouch = false
+	a.CastShadow = false
+	a.Size = Vector3.new(0.15, 0.15, 2.4)
+	a.Color = Color3.fromRGB(120, 84, 50)
+	a.Material = Enum.Material.Wood
+	a.CFrame = CFrame.lookAt(from, to)
+	a.Parent = workspace
+	game:GetService("TweenService"):Create(a, TweenInfo.new(d.Magnitude / 140, Enum.EasingStyle.Linear), { CFrame = CFrame.lookAt(to, to + d.Unit) }):Play()
+	game:GetService("Debris"):AddItem(a, d.Magnitude / 140 + 1.5)
+end
+
+function Combat.shoot(player: Player, targetId: string?)
+	local root = G.Util.root(player)
+	if not root or player:GetAttribute("Carrying") then
+		return
+	end
+	if not G.Joueurs.take(player, "arrow", 1) then
+		G.Util.toast(player, "🏹 Plus de flèches. (Établi : bois, silex et plume.)")
+		return
+	end
+	local char = player.Character
+	local from = root.Position + Vector3.new(0, 1.2, 0) + root.CFrame.LookVector * 1.5
+	local look = root.CFrame.LookVector
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	local function visible(pos: Vector3, model: Instance?): boolean
+		params.FilterDescendantsInstances = { char, model }
+		local r = workspace:Raycast(from, pos - from, params)
+		return r == nil
+	end
+	local best, bestScore, kind, aim = nil, -math.huge, nil, nil
+	local function consider(pos: Vector3, target, k: string, model: Instance?)
+		local d = pos - root.Position
+		local dist = d.Magnitude
+		if dist > Combat.RANGE or dist < 0.5 then
+			return
+		end
+		local dot = look:Dot(d.Unit)
+		if dot < 0.9 then
+			return
+		end
+		local score = dot * 2 - dist / Combat.RANGE
+		if score > bestScore and visible(pos, model) then
+			best, bestScore, kind, aim = target, score, k, pos
+		end
+	end
+	local chosen = targetId and G.Enemies.byId(targetId)
+	if chosen and not chosen.dead and chosen.model.Parent then
+		local d = chosen.pos - root.Position
+		if d.Magnitude <= Combat.RANGE and visible(chosen.pos, chosen.model) then
+			best, kind, aim = chosen, "enemy", chosen.pos
+			local flat = Vector3.new(d.X, 0, d.Z)
+			if flat.Magnitude > 0.1 then
+				root.CFrame = CFrame.lookAt(root.Position, root.Position + flat)
+			end
+		end
+	end
+	if not best then
+		for _, en in G.Enemies.list do
+			if not en.dead and en.model.Parent then
+				consider(en.pos, en, "enemy", en.model)
+			end
+		end
+		for _, a in G.Animals.list or {} do
+			if a.model.Parent then
+				consider(a.pos, a, "animal", a.model)
+			end
+		end
+		for _, e in G.Npcs.list do
+			if e.model.Parent and e.state ~= "ko" and e.state ~= "carried" and e.state ~= "gone" and not e.data.child then
+				consider(e.root.Position, e, "npc", e.model)
+			end
+		end
+		for _, other in G.Game.players() do
+			local r = other ~= player and G.Util.root(other)
+			if r then
+				consider(r.Position, other, "player", other.Character)
+			end
+		end
+	end
+	G.Util.sfx("coup", root.Position)
+	if not best then
+		arrowFx(from, from + look * Combat.RANGE)
+		return
+	end
+	arrowFx(from, aim + Vector3.new(0, 0.8, 0))
+	local dmg = Combat.damageOf(player, nil)
+	G.Joueurs.addSkillXp(player, "combat", 1)
+	task.delay((aim - from).Magnitude / 140, function()
+		if player.Parent and root.Parent then
+			applyHit(player, best, kind, dmg, root)
+		end
+	end)
+end
+
 function Combat.attack(player: Player, itemId: string?, targetId: string?)
 	local now = os.clock()
 	if cooldown[player] and now - cooldown[player] < 0.45 then
 		return
+	end
+	-- arc équipé et rien d'autre en main (une épée ou un outil tenus frappent au corps à corps)
+	local held = itemId and G.Config.ITEMS[itemId]
+	if rangedWeapon(player) and (held == nil or not (held.weapon or held.tool)) then
+		if cooldown[player] and now - cooldown[player] < Combat.BOW_COOLDOWN then
+			return
+		end
+		cooldown[player] = now
+		return Combat.shoot(player, targetId)
 	end
 	cooldown[player] = now
 	local root = G.Util.root(player)
@@ -167,46 +342,7 @@ function Combat.attack(player: Player, itemId: string?, targetId: string?)
 			G.Joueurs.wearTool(player, base)
 		end
 	end
-	if kind == "enemy" then
-		G.Enemies.hit(best, dmg, player)
-	elseif kind == "npc" then
-		G.Npcs.hit(best, dmg, player)
-	elseif kind == "animal" then
-		G.Animals.hit(best, player)
-	elseif kind == "pet" then
-		G.Compagnons.hit(best, dmg, player)
-	elseif kind == "player" then
-		local victim = best :: Player
-		local vprof = G.Joueurs.get(victim)
-		local vroot = G.Util.root(victim)
-		if not vprof or not vroot then
-			return
-		end
-		if not G.Config.LIBRE.bouclierArrivee then
-			-- monde libre : pas de bouclier d'arrivée
-		elseif os.clock() < (victim:GetAttribute("SpawnShield") or 0) or os.clock() < (player:GetAttribute("SpawnShield") or 0) then
-			G.Util.toast(player, "Protection d'arrivée : pas de combat entre joueurs pendant 20 s.")
-			return
-		end
-		-- zone sûre : l'arrivée du monde (pas d'embuscade sur ceux qui débarquent)
-		if G.Config.LIBRE.zoneSureArrivee and (vroot.Position - G.Game.spawnPos()).Magnitude < SAFE_SPAWN_R then
-			G.Util.toast(player, "On ne se bat pas sur le lieu d'arrivée.")
-			return
-		end
-		-- anti-acharnement : celui qui t'a mis K.O. ne peut plus te frapper pendant 10 minutes
-		local k = koBy[victim.UserId]
-		if G.Config.LIBRE.graceApresKO and k and k[player.UserId] and os.clock() - k[player.UserId] < KO_GRACE then
-			G.Util.toast(player, victim.DisplayName .. " vient de se relever : laisse-le tranquille un moment.")
-			return
-		end
-		if (vprof.stars or 0) <= 0 then
-			G.Law.crime(player, "assault", vroot.Position, G.Util.pid(victim))
-		end
-		victim:SetAttribute("LastHitBy", player.UserId)
-		victim:SetAttribute("LastHitAt", os.clock())
-		Combat.hurtPlayer(victim, dmg, root.Position)
-		Combat.popup(vroot.Position + Vector3.new(0, 3, 0), tostring(dmg), Color3.fromRGB(255, 120, 100))
-	end
+	applyHit(player, best, kind, dmg, root)
 end
 
 -- Appelé par Game.onDeath quand un joueur est mis K.O. par un autre

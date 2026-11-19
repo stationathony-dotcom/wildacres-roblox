@@ -52,6 +52,7 @@ bark|Écorce|🟫|2|m|-|
 straw|Paille|🌾|1|m|wheat1 >3|materiaux
 reeds|Roseaux|🎋|2|m|-|
 flint|Silex|⛰️|4|m|-|
+arrow|Flèche|🏹|2|m|wood1 flint1 feather1 >8 @bench|equipement
 gravel|Gravier|⛰️|1|m|stone1 >2|materiaux
 silver_ore|Minerai d'argent|⚪|30|m|-|
 sulfur|Soufre|🟡|12|m|-|
