@@ -9,6 +9,7 @@
 --     grimpent quand on approche (18/11) ;
 --   · canards sauvages qui nagent sur les eaux calmes le jour.
 --   · hérissons et blaireaux nocturnes qui se réfugient quand on les approche.
+--   · marmottes actives le jour dans la toundra.
 -- Rien n'est sauvegardé, rien ne se chasse : c'est le décor qui vit.
 
 local Players = game:GetService("Players")
@@ -115,6 +116,7 @@ end
 local BURROWERS = {
 	herisson = { name = "Hérisson", size = Vector3.new(0.6, 0.5, 0.9), coat = Color3.fromRGB(87, 64, 48), face = Color3.fromRGB(183, 148, 111), speed = 1.4 },
 	blaireau = { name = "Blaireau", size = Vector3.new(0.85, 0.7, 1.5), coat = Color3.fromRGB(100, 101, 105), face = Color3.fromRGB(224, 220, 206), speed = 2.2 },
+	marmotte = { name = "Marmotte", size = Vector3.new(0.72, 0.64, 1.1), coat = Color3.fromRGB(137, 100, 61), face = Color3.fromRGB(182, 150, 108), speed = 1.8 },
 }
 
 local function makeBurrower(kind: string): Model
@@ -137,11 +139,20 @@ local function makeBurrower(kind: string): Model
 			stripe.Shape = Enum.PartType.Ball
 			stripe.Position = face.Position + Vector3.new(side * 0.15, 0.07, 0)
 		end
-	else
+	elseif kind == "herisson" then
 		for i = -2, 2 do
 			local spine = part(Vector3.new(0.11, 0.16, 0.5), spec.coat:Lerp(spec.face, 0.35), nil, m)
 			spine.Position = Vector3.new(i * 0.1, 0.22 - math.abs(i) * 0.026, 0.08)
 		end
+	else
+		for _, side in { -1, 1 } do
+			local ear = part(Vector3.new(0.15, 0.17, 0.11), spec.coat, nil, m)
+			ear.Shape = Enum.PartType.Ball
+			ear.Position = face.Position + Vector3.new(side * 0.14, 0.15, 0)
+		end
+		local tail = part(Vector3.new(0.27, 0.2, 0.62), spec.coat, Enum.Material.Fabric, m)
+		tail.Shape = Enum.PartType.Ball
+		tail.Position = Vector3.new(0, -0.16, 0.57)
 	end
 	return m
 end
@@ -224,7 +235,7 @@ end
 
 -- ---------------------------------------------------------------- Population
 local critters = {} -- { kind, model, pos, vel, state, t, ... }
-local MAX = { sol = 5, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3, canard = 2, herisson = 2, blaireau = 1 }
+local MAX = { sol = 5, ciel = 3, papillon = 6, luciole = 14, ecureuil = 3, canard = 2, herisson = 2, blaireau = 1, marmotte = 2 }
 local counts = {}
 for kind in MAX do
 	counts[kind] = 0
@@ -319,6 +330,7 @@ RunService.Heartbeat:Connect(function(dt)
 			canard = (day and not wet and biome ~= "neige" and biome ~= "desert") and MAX.canard or 0,
 			herisson = (not day and not wet and (biome == "prairie" or biome == "foret")) and MAX.herisson or 0,
 			blaireau = (not day and not wet and biome == "foret") and MAX.blaireau or 0,
+			marmotte = (day and not wet and biome == "neige") and MAX.marmotte or 0,
 		}
 		-- trop loin, ou hors de saison/heure : on retire en douceur
 		for i = #critters, 1, -1 do
