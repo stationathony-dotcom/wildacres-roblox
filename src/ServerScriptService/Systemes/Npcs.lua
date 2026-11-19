@@ -1034,6 +1034,9 @@ local function options(e, player: Player)
 	if e.data.metier ~= "peddler" and G.Quetes and G.Quetes.isVillage and G.Quetes.isVillage(e.reg and e.reg.key) then
 		table.insert(opts, 2, { id = "quetes", text = "📜 Tu as du travail pour moi ?" })
 	end
+	if role == "farmer" and G.Ouvriers and rawget(G.Ouvriers, "hire") then
+		table.insert(opts, { id = "ouvrier", text = "👨‍🌾 Louer un ouvrier (" .. G.Ouvriers.WAGE .. " or / jour, " .. G.Ouvriers.DAYS .. " jours)" })
+	end
 	if role == "merchant" then
 		table.insert(opts, { id = "orders", text = "Les commandes du village" })
 		table.insert(opts, { id = "bank", text = "La banque (coffre sûr)" })
@@ -1191,6 +1194,8 @@ function Npcs.choice(player: Player, choice: string)
 			e.stateTime = 0
 		end
 		G.Quetes.openNpc(player, e)
+	elseif choice == "ouvrier" and e.data.role == "farmer" and G.Ouvriers and rawget(G.Ouvriers, "hire") then
+		send(player, e, G.Ouvriers.hire(player, e), options(e, player))
 	elseif choice == "orders" or choice == "bank" then
 		G.remotes.Dialog:FireClient(player, nil)
 		talking[player] = nil
