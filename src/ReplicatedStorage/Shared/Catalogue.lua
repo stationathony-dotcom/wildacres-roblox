@@ -121,6 +121,8 @@ tankard|Chope en métal|🍺|26|m|copper_ingot1 @bench|metiers
 wood_plate|Assiette en bois|🍽️|2|m|planks1 >2|metiers
 spoon|Cuillère en bois|🥄|1|m|planks1 >3|metiers
 ladle|Louche|🥄|8|m|planks1 copper_ingot1 >2 @bench|metiers
+table_fork|Fourchette ancienne|🍴|18|v|copper_ingot1 >2 @anvil|metiers
+table_knife|Couteau de table|🍴|28|v|iron_ingot1 planks1 >2 @anvil|metiers
 gourd|Gourde|🏺|14|u:boire:25|leather1 rope1|metiers
 waterskin|Outre en cuir|🏺|18|u:boire:40|leather2 @bench|metiers
 paper|Papier|📄|4|m|wood1 >3 @bench|savoir

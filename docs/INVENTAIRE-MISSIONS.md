@@ -733,8 +733,8 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [ ] (878) Bol
 - [ ] (879) Cuillère en bois
 - [ ] (880) Louche
-- [ ] (881) Fourchette ancienne
-- [ ] (882) Couteau de table
+- [x] (881) Fourchette ancienne
+- [x] (882) Couteau de table
 - [ ] (883) Cruche
 - [x] (884) Pichet
 - [ ] (885) Bouteille en verre
