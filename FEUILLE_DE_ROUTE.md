@@ -142,6 +142,11 @@ banque agrandissable sans fin, champs sans limite.
 - [x] Talents de maître à choix exclusifs (palier 4, un sur deux par voie)
 - [x] Villes de joueurs : Charte de ville + /fonder <nom>, un habitant PNJ par lit posé (/villes)
 - [x] Quêtes bâtir / apprivoiser / prime (16 sortes) — 30 bancs Edit au vert en fin de session
+- [x] Zones exigeantes : sommets, désert, boue des marais, grottes sombres + 4 tenues (banc `froid`)
+- [x] Création du personnage à l'arrivée (plus de skin Roblox), barbier et tailleur au marché (banc `apparence`)
+- [x] Audit du contenu : 0 trou (objets, créatures, recettes, butins, icônes) ; 3 icônes en carré vide corrigées
+- [x] `liste quetes.txt` comparée au jeu → `docs/QUETES-COUVERTURE.md` (53/560 titres repris, 16 sortes)
+- [ ] Quêtes « à un lieu » : retrouver, visiter, escorter, enquêter (≈150 idées de la liste)
 - [ ] **TEST en Play** de tout ce qui précède (PC fixe)
 - [ ] Icônes peintes à la place des emojis (il faut mettre des images en ligne avec le compte du joueur)
 - Restes des listes, volontairement laissés : jeux de dés (règles Roblox sur les jeux de hasard), tutoriel (principe « sans indication »), guerres/alliances déclarées (retirées le 17/11), saisons (remplacées par les biomes)
