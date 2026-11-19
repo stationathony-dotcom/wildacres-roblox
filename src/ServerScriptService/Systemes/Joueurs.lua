@@ -621,6 +621,7 @@ function J.useCatalogue(player: Player, item: string, info)
 		lastTune[player] = now
 		local maxSt = player:GetAttribute("MaxStamina") or G.Config.MAX_STAMINA
 		player:SetAttribute("Stamina", math.min(maxSt, (player:GetAttribute("Stamina") or 0) + (tonumber(arg) or 25)))
+		player:SetAttribute("Desaltere", os.clock() + 300) -- la chaleur du désert ne pèse plus 5 min (Froid)
 		G.Util.toast(player, info.icon .. " Une bonne gorgée : endurance retrouvée.")
 		return
 	elseif use == "nourrir" then

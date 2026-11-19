@@ -62,5 +62,18 @@ check("step : attribut Froid posé + message", attrs.Froid == true and toasts[#t
 night = false
 F.step(3.1)
 check("le jour revient : attribut retiré", attrs.Froid == nil and toasts[#toasts]:find("réchauffes") ~= nil)
+-- chaleur du désert
+biome, night = "desert", false
+G.Clock.hour = function() return 13 end
+check("désert, 13 h, sans ombre ni eau : soif", F.isHot(P, pos) == true)
+G.Clock.hour = function() return 9 end
+check("désert, 9 h : pas encore chaud", F.isHot(P, pos) == false)
+G.Clock.hour = function() return 13 end
+attrs.Desaltere = os.clock() + 300
+c, why = F.isHot(P, pos)
+check("a bu : désaltéré", c == false and why == "désaltéré")
+attrs.Desaltere = nil
+F.step(3.1)
+check("step : attribut Soif posé + message", attrs.Soif == true and toasts[#toasts]:find("chaleur") ~= nil)
 mod:Destroy()
 return fails .. " échec(s)\n" .. table.concat(out, "\n")

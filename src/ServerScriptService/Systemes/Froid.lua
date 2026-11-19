@@ -5,6 +5,9 @@
 --   · un vêtement chaud porté (fourrure, laine, peau, manteau, pelisse, cape : selon le nom de la pièce).
 -- Avoir froid : on marche et on court moins vite (Game.step lit l'attribut « Froid ») et l'endurance
 -- revient deux fois moins vite. Rien de mortel : c'est une difficulté du biome, pas une punition.
+-- Chaleur (même module) : dans le désert, en plein jour (HEAT_FROM h à HEAT_TO h), sans toit ni
+-- ombre au-dessus de la tête, on a soif — mêmes effets — sauf si l'on a bu (gourde, outre) depuis
+-- moins de DRINK_S secondes (attribut « Desaltere » posé par Joueurs).
 
 local Froid = {}
 local G
@@ -68,6 +71,25 @@ function Froid.isCold(player: Player, pos: Vector3): (boolean, string?)
 	return true, nil
 end
 
+Froid.HEAT_FROM, Froid.HEAT_TO = 11, 17
+Froid.DRINK_S = 300
+function Froid.isHot(player: Player, pos: Vector3): (boolean, string?)
+	if G.Clock.biomeAt(pos) ~= "desert" or G.Clock.isNight() then
+		return false, "pas de chaleur ici"
+	end
+	local h = G.Clock.hour and G.Clock.hour() or 12
+	if h < Froid.HEAT_FROM or h >= Froid.HEAT_TO then
+		return false, "heure fraîche"
+	end
+	if (player:GetAttribute("Desaltere") or 0) > os.clock() then
+		return false, "désaltéré"
+	end
+	if underRoof(player, pos) then
+		return false, "ombre"
+	end
+	return true, nil
+end
+
 function Froid.step(dt: number)
 	acc += dt
 	if acc < 3 then
@@ -78,11 +100,17 @@ function Froid.step(dt: number)
 		local root = G.Util.root(p)
 		if root then
 			local cold = Froid.isCold(p, root.Position)
+			local hot = not cold and Froid.isHot(p, root.Position)
 			local was = p:GetAttribute("Froid") == true
+			local wasHot = p:GetAttribute("Soif") == true
 			if cold ~= was then
-				p:SetAttribute("Froid", cold or nil)
 				G.Util.toast(p, cold and "🥶 Il gèle : sans feu, abri ni vêtement chaud, tu avances moins vite." or "Tu te réchauffes.", cold and "danger" or nil)
 			end
+			if hot ~= wasHot then
+				G.Util.toast(p, hot and "🥵 Quelle chaleur : sans ombre ni eau (gourde, outre), tu avances moins vite." or "Tu reprends ton souffle.", hot and "danger" or nil)
+			end
+			p:SetAttribute("Froid", cold or nil)
+			p:SetAttribute("Soif", hot or nil)
 		end
 	end
 end

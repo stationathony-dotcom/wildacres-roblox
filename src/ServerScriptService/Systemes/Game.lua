@@ -581,7 +581,8 @@ function Game.step(dt: number)
 				local moving = last and Vector3.new(pos.X - last.X, 0, pos.Z - last.Z).Magnitude > 0.5
 				local riding = p:GetAttribute("Riding")
 				local running = sprinting[p] and not riding and moving and st > 0.05
-				local cold = p:GetAttribute("Froid") == true -- Systemes/Froid : neige la nuit, sans chaleur
+				-- Systemes/Froid : neige la nuit sans chaleur, ou désert en plein jour sans ombre ni eau
+				local cold = p:GetAttribute("Froid") == true or p:GetAttribute("Soif") == true
 				if running then
 					st = math.max(0, st - step * G.Config.SPRINT_DRAIN)
 				else
