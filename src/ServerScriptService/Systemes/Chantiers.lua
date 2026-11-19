@@ -5,7 +5,8 @@
 -- terminé = bénéfice durable pour le village, puis le chantier suivant commence.
 --   · marche : on vend 5 % plus cher dans ce village (Shop.sellPrice) ;
 --   · palissade : les invasions de nuit y arrivent moins nombreuses (Evenements.startInvasion) ;
---   · lanternes : des lampadaires autour de la place ; les ombres rôdeuses (fearsLight) n'approchent plus.
+--   · lanternes : des lampadaires autour de la place ; les ombres rôdeuses (fearsLight) n'approchent plus ;
+--   · musee : étudier une antiquité dans ce village rapporte deux fois plus (Joueurs.useCatalogue).
 -- État : G.world.chantiers[clé du village] = { i = n° du chantier, have = { [matière] = n }, done = { [id] = jour } }.
 
 local Chantiers = {}
@@ -15,6 +16,7 @@ Chantiers.PROJECTS = {
 	{ id = "marche", name = "agrandir le marché", needs = { planks = 300, stone = 200, cloth = 60 }, done = "Le marché est agrandi : on y vend 5 % plus cher." },
 	{ id = "palissade", name = "renforcer la palissade", needs = { wood = 400, rope = 80, iron_ingot = 40 }, done = "La palissade est renforcée : les assaillants y seront moins nombreux." },
 	{ id = "lanternes", name = "éclairer la place", needs = { lantern = 12, iron_ingot = 20, glass = 10 }, done = "La place est éclairée : les ombres n'osent plus s'en approcher." },
+	{ id = "musee", name = "ouvrir un musée", needs = { old_vase = 4, fossil = 4, inscription = 4, relic_fragment = 6, planks = 60 }, done = "Le musée ouvre ses portes : on y étudie les antiquités deux fois mieux." },
 }
 
 local CollectionService = game:GetService("CollectionService")

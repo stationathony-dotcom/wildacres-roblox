@@ -773,8 +773,11 @@ function J.useCatalogue(player: Player, item: string, info)
 		if G.Social and rawget(G.Social, "collect") then
 			G.Social.collect(player, "trouvailles", item)
 		end
-		J.addStatXp(player, "chance", 40)
-		J.addSkillXp(player, "commerce", 10)
+		-- au musée d'un village (Systemes/Chantiers), l'étude rapporte deux fois plus
+		local here = G.Quetes and rawget(G.Quetes, "nearVillage") and G.Quetes.nearVillage(player)
+		local mult = (here and G.Chantiers and rawget(G.Chantiers, "built") and G.Chantiers.built(here.key, "musee")) and 2 or 1
+		J.addStatXp(player, "chance", 40 * mult)
+		J.addSkillXp(player, "commerce", 10 * mult)
 		G.Util.toast(player, info.icon .. " Tu étudies " .. info.name .. " : ta connaissance du monde grandit.", "gain")
 	elseif use == "deballer" then
 		for part in string.gmatch(arg or "", "[^,]+") do
