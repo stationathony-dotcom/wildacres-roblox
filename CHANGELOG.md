@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Rangs de maîtrise** : chaque compétence a son rang (Novice, Apprenti 10, Compagnon 25, Maître 40, Grand maître 50), annoncé au passage et affiché dans la fiche [P] ; au niveau 50, un titre de maîtrise par compétence (Maître pêcheur, Grand chef, Maître d'armes, Roi des serrures…) ; les titres liés aux compétences se débloquent désormais dès le passage de niveau
 - **Ouvriers agricoles** : les fermiers de village louent des ouvriers (15 or par jour, contrat de 3 jours payé d'avance) qui arrosent chaque matin jusqu'à 40 cases semées chacun, où qu'elles soient sur l'île, même hors connexion ; on en loue autant qu'on veut (c'est l'or qui limite) ; /ouvriers (banc `ouvriers`)
 - **Tir à l'arc** : un arc ou une arbalète équipés tirent vraiment à distance (48 studs) des **flèches** (établi : bois + silex + plume → 8) ; il faut voir sa cible (un mur arrête la flèche), la cible cliquée passe en priorité, sinon ce qui est en face ; flèche visible en vol ; cadence 0,9 s ; une épée ou un outil en main frappent toujours au corps à corps (banc `arc`)
 - **Commerce entre régions** : chaque village recherche 3 produits qui ne poussent pas chez lui (cultures et plantes d'autres biomes) et les paie +50 % ; la liste change tous les 3 jours, le marchand la dit en ouvrant sa boutique (`Shop.wanted`, banc `demandes`)

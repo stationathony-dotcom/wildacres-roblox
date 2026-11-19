@@ -225,6 +225,17 @@ C.SKILLS = {
 }
 C.SKILL_ORDER = { "agriculture", "bucheronnage", "minage", "peche", "cuisine", "artisanat", "combat", "crochetage", "dressage", "elevage", "commerce" }
 C.SKILL_MAX = 50
+-- rangs de maîtrise (19/11) : { niveau minimal, nom } — annoncés au passage, affichés dans la fiche
+C.SKILL_RANKS = { { 0, "Novice" }, { 10, "Apprenti" }, { 25, "Compagnon" }, { 40, "Maître" }, { 50, "Grand maître" } }
+function C.skillRank(level: number): string
+	local name = C.SKILL_RANKS[1][2]
+	for _, r in C.SKILL_RANKS do
+		if level >= r[1] then
+			name = r[2]
+		end
+	end
+	return name
+end
 function C.skillLevel(xp: number): number
 	return math.min(C.SKILL_MAX, math.floor(math.sqrt((xp or 0) / 4)))
 end

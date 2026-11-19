@@ -115,6 +115,21 @@ for _, f in FEATS do
 		return (tonumber(p.stats[stat]) or 0) >= need
 	end })
 end
+-- titres de maîtrise : niveau maximal d'une compétence (Grand maître)
+local MASTERY = {
+	agriculture = "Maître cultivateur", bucheronnage = "Maître bûcheron", minage = "Maître mineur", peche = "Maître pêcheur",
+	cuisine = "Grand chef", artisanat = "Grand artisan", combat = "Maître d'armes", crochetage = "Roi des serrures",
+	dressage = "Maître dresseur", elevage = "Maître éleveur", commerce = "Grand négociant",
+}
+local SKILL_ORDER = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Config")).SKILL_ORDER
+for _, sk in SKILL_ORDER do
+	local name = MASTERY[sk]
+	if name then
+		table.insert(TITLES, { id = "maitrise_" .. sk, name = name, test = function(p)
+			return Config.skillLevel((p.skills or {})[sk] or 0) >= Config.SKILL_MAX
+		end })
+	end
+end
 Social.TITLES = TITLES
 local WATCH = {} -- compteur -> seuils qui donnent un titre
 for _, f in FEATS do

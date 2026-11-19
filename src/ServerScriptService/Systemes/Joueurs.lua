@@ -354,7 +354,13 @@ function J.addSkillXp(player: Player, skill: string, amount: number)
 	local after = G.Config.skillLevel(p.skills[skill])
 	player:SetAttribute("Comp_" .. skill, after) -- lu par le client (repérage des filons…)
 	if after > before then
-		G.Util.toast(player, info.icon .. " " .. info.name .. " niveau " .. after .. " !", "gain")
+		local rank = G.Config.skillRank(after)
+		if rank ~= G.Config.skillRank(before) then
+			G.Util.toast(player, info.icon .. " " .. info.name .. " niveau " .. after .. " : te voilà " .. string.lower(rank) .. " !", "big")
+		else
+			G.Util.toast(player, info.icon .. " " .. info.name .. " niveau " .. after .. " !", "gain")
+		end
+		G.Social.checkTitles(player) -- titres de maîtrise (Social)
 		local freeBefore = G.Config.talentPoints(J.totalSkills(p) - (after - before))
 		if G.Config.talentPoints(J.totalSkills(p)) > freeBefore then
 			G.Util.toast(player, "✨ Un point de talent à placer ([K]).", "big")
