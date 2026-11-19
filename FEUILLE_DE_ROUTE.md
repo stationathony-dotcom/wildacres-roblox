@@ -137,6 +137,11 @@ banque agrandissable sans fin, champs sans limite.
 - [x] Plafond de 24 bêtes remplacé par la place des abris construits
 - [x] Gestes de loisir : /danse /salut /applaudir /reverence
 - [x] Correctifs de la nuit intégrés (sommeil, sauvegarde, relations PNJ, courrier, chasse au trésor)
+- [x] Sélection des semences (/cultures), lignées des bêtes de ferme, qualité de façon + signature des pièces
+- [x] Lieux découverts → vitesse/chance + succès ; froid (neige la nuit) et chaleur (désert le jour, boire protège)
+- [x] Talents de maître à choix exclusifs (palier 4, un sur deux par voie)
+- [x] Villes de joueurs : Charte de ville + /fonder <nom>, un habitant PNJ par lit posé (/villes)
+- [x] Quêtes bâtir / apprivoiser / prime (16 sortes) — 30 bancs Edit au vert en fin de session
 - [ ] **TEST en Play** de tout ce qui précède (PC fixe)
 - [ ] Icônes peintes à la place des emojis (il faut mettre des images en ligne avec le compte du joueur)
 - Restes des listes, volontairement laissés : jeux de dés (règles Roblox sur les jeux de hasard), tutoriel (principe « sans indication »), guerres/alliances déclarées (retirées le 17/11), saisons (remplacées par les biomes)
