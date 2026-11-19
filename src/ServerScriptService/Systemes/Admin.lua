@@ -617,11 +617,15 @@ local function onCommand(player: Player, text: string)
 		say(player, "💬 /coince · /signaler <pseudo> <motif> · /bloquer · /debloquer · /bloques")
 		say(player, "🔑 /autoriser <pseudo> [coffres|batir] · /retirer · /autorises · /ceder <pseudo> · /louer <pseudo> <jours> <prix> · /accepter")
 		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques · 🐴 /ecurie · 👨‍🌾 /ouvriers · 📕 /bestiaire · 🐾 /animaux")
+		say(player, "💃 /danse · 👋 /salut · 👏 /applaudir · 🙇 /reverence")
 	elseif cmd == "/reputation" then
 		say(player, "🏘️ Ta réputation dans les villages de cette île :")
 		for _, line in G.Reputation.describe(player) do
 			say(player, "  " .. line)
 		end
+	elseif cmd == "/danse" or cmd == "/salut" or cmd == "/applaudir" or cmd == "/reverence" then
+		-- gestes de loisir (Gestes.client) : vus par tous les joueurs autour
+		G.Util.geste(player, string.sub(cmd, 2))
 	elseif cmd == "/bestiaire" then
 		G.Livres.bestiaire(player)
 	elseif cmd == "/animaux" then
@@ -772,7 +776,7 @@ function Admin.init(g)
 	local folder = TextChatService:FindFirstChild("CommandesWA") or Instance.new("Folder")
 	folder.Name = "CommandesWA"
 	folder.Parent = TextChatService
-	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques", "/ecurie", "/ouvriers", "/bestiaire", "/animaux" } do
+	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques", "/ecurie", "/ouvriers", "/bestiaire", "/animaux", "/danse", "/salut", "/applaudir", "/reverence" } do
 		local c = folder:FindFirstChild(alias) or Instance.new("TextChatCommand")
 		c.Name = alias
 		c.PrimaryAlias = alias

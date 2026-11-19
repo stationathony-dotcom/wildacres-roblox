@@ -63,6 +63,36 @@ local POSES = {
 	commerce = { dur = 0.7, p = function(t, w)
 		return { RightShoulder = X(55 * w), RightElbow = X(-35 * w), Neck = X(-8 * w) }
 	end },
+	-- 19/11 : gestes de loisir (commandes /danse, /salut, /applaudir, /reverence)
+	danse = { dur = 6, p = function(t, w)
+		local s = sin(t * pi * 2.2)
+		local c = math.cos(t * pi * 2.2)
+		return {
+			Waist = CFrame.Angles(0, rad(18 * s * w), rad(6 * c * w)), Neck = X(8 * c * w),
+			RightShoulder = XZ((95 + 35 * s) * w, 25 * w), LeftShoulder = XZ((95 - 35 * s) * w, -25 * w),
+			RightElbow = X(-50 * w), LeftElbow = X(-50 * w),
+			RightHip = X(20 * math.max(0, s) * w), RightKnee = X(-35 * math.max(0, s) * w),
+			LeftHip = X(20 * math.max(0, -s) * w), LeftKnee = X(-35 * math.max(0, -s) * w),
+		}
+	end },
+	salut = { dur = 1.8, p = function(t, w)
+		local wave = sin(t * pi * 5) * 22
+		return { RightShoulder = XZ(150 * w, (20 + wave) * w), RightElbow = X(-20 * w), Neck = X(6 * w) }
+	end },
+	applaudir = { dur = 2.4, p = function(t, w)
+		local clap = (sin(t * pi * 8) + 1) / 2
+		return {
+			RightShoulder = XZ(70 * w, (-25 - clap * 15) * w), LeftShoulder = XZ(70 * w, (25 + clap * 15) * w),
+			RightElbow = X(-45 * w), LeftElbow = X(-45 * w),
+		}
+	end },
+	reverence = { dur = 1.8, p = function(t, w)
+		local bow = sin(math.min(1, t / 1.6) * pi)
+		return {
+			Waist = X(-45 * bow * w), Neck = X(-15 * bow * w), RightShoulder = XZ(35 * bow * w, -40 * bow * w),
+			RightElbow = X(-70 * bow * w), RightHip = X(-10 * bow * w), LeftHip = X(15 * bow * w), LeftKnee = X(-20 * bow * w),
+		}
+	end },
 }
 
 -- états continus : attribut du joueur -> pose(w)
