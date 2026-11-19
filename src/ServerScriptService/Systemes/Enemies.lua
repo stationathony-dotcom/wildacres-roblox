@@ -773,6 +773,9 @@ local function dieInner(en, player: Player)
 		end
 	end
 	G.Social.collect(player, "creatures", en.kind)
+	if G.Activites and rawget(G.Activites, "note") then
+		G.Activites.note(player, "chasse") -- concours de chasse
+	end
 	if G.Quetes and rawget(G.Quetes, "note") then
 		G.Quetes.note(player, "tuer", en.kind)
 		-- coopération (19/11, liste quetes.txt § 31) : la quête de chasse avance aussi pour ceux qui ont

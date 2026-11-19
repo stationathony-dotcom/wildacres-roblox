@@ -115,7 +115,7 @@ end
 
 local current
 local form = { kind = "peche", delay = 60, dur = 60, prize = 100 }
-local KIND_LIST = { { "peche", "🎣 Pêche" }, { "recolte", "🌾 Récolte" }, { "minage", "⛏️ Minage" }, { "bucheronnage", "🪓 Bûcheronnage" }, { "construction", "🏠 Construction" }, { "libre", "🎪 Rassemblement" }, { "course", "🏇 Course" } }
+local KIND_LIST = { { "peche", "🎣 Pêche" }, { "recolte", "🌾 Récolte" }, { "minage", "⛏️ Minage" }, { "bucheronnage", "🪓 Bûcheronnage" }, { "construction", "🏠 Construction" }, { "libre", "🎪 Rassemblement" }, { "course", "🏇 Course" }, { "cuisine", "🍲 Cuisine" }, { "chasse", "🏹 Chasse" } }
 
 local function act(kind, data)
 	data.v = current.village

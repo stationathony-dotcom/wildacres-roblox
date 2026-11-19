@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.1 — 2026-11-19
+- **Concours de cuisine** (plats et potions préparés) et **concours de chasse** (bêtes et monstres vaincus) au tableau d'affichage, comptés par le jeu comme ceux de pêche ou de minage
 - **Chasse en groupe** : une quête « vaincre N bêtes » avance pour tous ceux qui ont frappé la bête, et pour le groupe du tueur à moins de 60 studs (avant : seul le dernier coup comptait)
 - **Petits emplacements** : 21 pièces de rareté 2 à 4 pour les gants, épaulières, pantalons, capes et bottes (gants fourrés, gantelets de forge, épaulières de mailles, jambières d'acier, chausses de soie du rôdeur, cape de soie nocturne, manteau d'apparat, bottes de marais, de coureur, de cavalier émérite…) ; les pièces fourrées et les capes tiennent chaud, toutes les bottes évitent l'enlisement
 - **Rumeurs de marché** : quand on demande des nouvelles à un habitant, il parle parfois d'une pénurie dans un des villages proches (ou du sien) — l'information circule sans annonce

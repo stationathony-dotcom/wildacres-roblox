@@ -757,6 +757,9 @@ function Shop.craft(player: Player, index: number?, times: number?)
 		end
 		local prof = G.Joueurs.get(player)
 		G.Social.bump(player, "crafted", made)
+		if (r.cat == "cuisine" or r.cat == "alchimie") and G.Activites and rawget(G.Activites, "note") then
+			G.Activites.note(player, "cuisine", made) -- concours de cuisine
+		end
 		if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "fabriquer", r.item, made * (r.count or 1)) end
 	end
 	G.Joueurs.sync(player)

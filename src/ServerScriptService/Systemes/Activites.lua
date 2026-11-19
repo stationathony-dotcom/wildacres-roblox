@@ -23,6 +23,9 @@ local KINDS = {
 	libre = { name = "Rassemblement", icon = "🎪", auto = false },
 	-- 19/11 : course (à cheval ou à pied) du tableau jusqu'au village voisin ; le premier arrivé gagne
 	course = { name = "Course", icon = "🏇", auto = true, race = true },
+	-- 19/11 (« à ne pas oublier » § 5) : plats et potions préparés ; bêtes et monstres vaincus
+	cuisine = { name = "Concours de cuisine", icon = "🍲", auto = true },
+	chasse = { name = "Concours de chasse", icon = "🏹", auto = true },
 }
 local RACE_MIN = 250 -- studs : l'arrivée est le village le plus proche au-delà de cette distance
 local RACE_FINISH = 30 -- studs autour du centre du village d'arrivée
