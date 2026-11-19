@@ -395,6 +395,7 @@ shop_sign|Enseigne de boutique|🚩|0|p:enseigne:B|planks3 chain1 @bench|decorat
 statue|Statue|🗿|0|p:statue:PC|stone30 #artisanat:12|decoration
 sculpture|Sculpture|🗿|0|p:sculpture:PC|stone15 #artisanat:8|decoration
 vase_deco|Vase|🏺|0|p:vase:T|amphora1|decoration
+pitcher|Pichet|🏺|0|p:pichet:BL|prepared_clay2 dye1 @furnace|decoration
 clay_pot|Pot en terre cuite|🏺|0|p:pot:T|pot1|decoration
 planter|Jardinière|🌷|0|p:jardiniere:B|planks4 dirt4 flower3|decoration
 wall_torch|Torche murale|🔥|0|p:torche:BF|branches2 resin1 iron_ring1|decoration
@@ -972,6 +973,14 @@ end
 ARCH.vase = function(m, c)
 	P(m, V(1.4, 1.6, 1.4), V(0, 0.9, 0), c, Mat.Sand, "ball")
 	P(m, V(0.8, 0.7, 0.7), V(0, 1.9, 0), c, Mat.Sand, "cyl", UP)
+end
+ARCH.pichet = function(m, c)
+	P(m, V(1.12, 0.86, 0.86), V(0, 0.56, 0), c, Mat.CeramicTiles, "cyl", UP)
+	P(m, V(0.16, 0.56, 0.56), V(0, 1.16, 0), c, Mat.CeramicTiles, "cyl", UP)
+	P(m, V(0.52, 0.06, 0.18), V(-0.25, 1.24, 0), c, Mat.CeramicTiles)
+	P(m, V(0.4, 0.11, 0.14), V(0.47, 0.98, 0), c, Mat.CeramicTiles)
+	P(m, V(0.12, 0.47, 0.14), V(0.63, 0.8, 0), c, Mat.CeramicTiles)
+	P(m, V(0.29, 0.11, 0.14), V(0.5, 0.58, 0), c, Mat.CeramicTiles)
 end
 ARCH.pot = function(m, c)
 	P(m, V(1.1, 1.2, 1.2), V(0, 0.55, 0), c, Mat.Sand, "cyl", UP)

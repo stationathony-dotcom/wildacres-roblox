@@ -15,6 +15,8 @@ Branche de travail `mission/wildacres`, créée depuis `d30b9ea`. La racine du p
 
 ## Journal et problèmes
 
+- 19/11. Ajout du pichet en céramique dans les décorations fabricables au four. Vérification Studio Edit de la recette unique et du modèle plaçable réussie. Build Rojo réussi.
+
 - 19/11. Ajout des hérissons et des blaireaux au lot de faune passive. Test Studio Edit réussi sur un terrain simulé pour les apparitions nocturnes, les plafonds, le refus de l’eau, la fuite et le retrait au jour. Build Rojo réussi.
 
 - `530204e` ajoute une commande par période de deux jours à chaque tableau, avec quatre commandes en rotation et des identifiants distincts. Banc Studio Edit réussi sur les sources de travail et sur les sources indexées. Build Rojo réussi.
