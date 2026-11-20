@@ -53,18 +53,35 @@ local function topY(m)
 	end
 	return hi - 40
 end
+-- attend la fin d'une animation : la hauteur ne bouge plus pendant 0,5 s (au plus 10 s, PC chargé)
+local function settle(m)
+	local last, still, t = topY(m), 0, os.clock()
+	while os.clock() - t < 10 do
+		task.wait(0.1)
+		local y = topY(m)
+		if math.abs(y - last) < 0.01 then
+			still += 0.1
+			if still >= 0.5 and os.clock() - t > 0.4 then
+				return
+			end
+		else
+			still = 0
+		end
+		last = y
+	end
+end
 local y0 = topY(bm)
 M.lever({}, bridge.id)
-task.wait(3) -- animation de 1,2 s ; marge pour un PC chargé (ratait à 1,5 s)
+settle(bm)
 check(string.format("pont-levis levé : il se dresse (haut %.1f → %.1f)", y0, topY(bm)), bridge.up == true and topY(bm) > y0 + 3) -- centre du tablier vers 4 studs (pointe vers 8)
 M.lever({}, bridge.id)
-task.wait(3) -- animation de 1,2 s ; marge pour un PC chargé (ratait à 1,5 s)
+settle(bm)
 check(string.format("pont-levis baissé : revenu à plat (%.1f)", topY(bm)), not bridge.up and math.abs(topY(bm) - y0) < 0.05)
 -- trappe : s'ouvre (le dessus libère le passage), se referme
 local t0 = topY(tm)
 root.Position = Vector3.new(8020, 40, 8002)
 M.lever({}, trap.id)
-task.wait(3) -- animation de 1,2 s ; marge pour un PC chargé (ratait à 1,5 s)
+settle(tm)
 check("trappe ouverte : panneau relevé", trap.up == true and topY(tm) > t0 + 1)
 -- l'état est gardé : un modèle neuf (rechargement de région) est remis tel quel
 local fresh = K.build(Config.ITEMS.trapdoor.place)
