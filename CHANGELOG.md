@@ -5,6 +5,11 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
+## 0.2.2 — 2026-11-20
+- **Quêtes à domicile** (tableau ou habitant, toujours facultatives) : **livraison à domicile** (un colis à porter à la porte d'un habitant nommé, souvent dans un village voisin), **réparation** (trois endroits abîmés autour d'une maison du village, 4 planches + 2 clous chacun, [E] maintenu), **étal sur la place** (poser son étal près de la place et y mettre une marchandise) — 38 % des quêtes « à un lieu »
+- **Sécurité** : les nombres non finis écrits en texte (« nan », « inf », « 1e999 ») sont retirés des actions et des commandes de chat (location gratuite, annonces à prix NaN…) ; la fondation de clan prend l'or avant d'attendre le DataStore (plus de clan gratuit)
+- **Bancs** : `tools/bancs/tout.luau` lance les 39 bancs Edit d'un coup (vert / rouge) ; banc `securite` (14 abus rejoués)
+
 ## 0.2.1 — 2026-11-19
 - **Expéditions** : un lieu découvert avec un membre du groupe à moins de 60 studs rapporte 50 % d'expérience de plus (Vitesse, Chance)
 - **Mannequin d'entraînement** (établi : paille, planches, corde ; à poser) : on s'entraîne au tir dessus (arc, arbalète, armes de jet) — dégâts affichés, un peu d'XP de combat (plafonnée à 150 par jour)

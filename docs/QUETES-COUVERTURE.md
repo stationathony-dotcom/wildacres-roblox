@@ -48,3 +48,10 @@ Les quêtes d'aujourd'hui sont toutes du type **« fais N fois X »**. Les idée
 4. **Enquêter** : deux ou trois indices à la suite. On réutilise les chroniques.
 
 Ces 4 sortes couvrent environ 150 idées de plus. Le 19/11 au soir s'y ajoutent les **chantiers de village** (§ 7, 25, 31 : contribution commune, bénéfice durable) et la **chasse en groupe** (une quête de chasse avance pour tous ceux qui ont combattu). **Faites le 19/11** (`Systemes/QuetesLieux`), pas encore vues en Play.
+
+## 20/11 — livraison à domicile, réparation, étal (lot C4)
+
+Les trois manques notés dans `docs/MISSIONS.md` sont dans `Systemes/QuetesLieux` (38 % des offres « à un lieu ») :
+- **Livrer** : un colis (panier de pains, remède, poteries…) à la porte d'un habitant nommé, tiré du plan du village (souvent un village voisin).
+- **Réparer** : trois endroits autour d'une maison du village ; chacun coûte 4 planches et 2 clous, [E] maintenu 2,5 s.
+- **Étal** : poser son étal à moins de 45 studs de la place et y mettre au moins une marchandise.

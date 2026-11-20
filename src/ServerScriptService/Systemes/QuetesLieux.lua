@@ -4,6 +4,11 @@
 --   visiter   : aller voir un lieu de la carte (ruine, ferme isolée, antre d'une bête) ;
 --   enqueter  : trois indices à la suite, chacun mène au suivant ;
 --   escorter  : un voyageur te suit jusqu'à un autre village (on rend la quête là-bas).
+-- 20/11 (lot C4, MISSIONS.md) :
+--   livrer    : livraison à domicile, un colis à porter à la porte d'un habitant d'un village voisin ;
+--   reparer   : trois endroits abîmés d'une maison du village, chacun coûte 4 planches et 2 clous
+--               (on maintient [E] : ça se répare, ça ne se clique pas) ;
+--   etal      : installer son étal sur la place du village et y mettre au moins une marchandise.
 -- Toujours facultatives, tirées par le générateur de Quetes (même île + même village + même période =
 -- même offre). Les points précis sont tirés à la prise de la quête (propres à chaque joueur).
 -- Repères : posés seulement quand le joueur approche (moins de 150 studs), visibles de tous mais
@@ -17,8 +22,11 @@ local ServerStorage = game:GetService("ServerStorage")
 local Players = game:GetService("Players")
 
 QuetesLieux.SHARE = 0.22 -- part des offres du tableau qui sont « à un lieu »
-QuetesLieux.ICON = { retrouver = "🔍", visiter = "🗺️", enqueter = "🔎", escorter = "🚶" }
-QuetesLieux.SKILL = { retrouver = "commerce", visiter = "commerce", enqueter = "commerce", escorter = "combat" }
+QuetesLieux.ICON = { retrouver = "🔍", visiter = "🗺️", enqueter = "🔎", escorter = "🚶", livrer = "🎁", reparer = "🔨", etal = "🏪" }
+QuetesLieux.SKILL = { retrouver = "commerce", visiter = "commerce", enqueter = "commerce", escorter = "combat",
+	livrer = "commerce", reparer = "artisanat", etal = "commerce" }
+QuetesLieux.REPAIR = { planks = 4, nails = 2 } -- par endroit réparé
+local MARKET_R = 45 -- studs autour de la place : l'étal doit y être
 
 local SHOW = 150 -- studs : le repère apparaît
 local HIDE = 220 -- studs : il disparaît (on s'est éloigné)
@@ -49,6 +57,15 @@ local VISIT = {
 	lair = { "Le territoire de la bête", "Repérer l'antre" },
 }
 local ESCORT = { "Un voyageur à escorter", "Le marchand prudent", "Une pèlerine sur la route", "Le neveu du maire" }
+local PARCELS = {
+	{ "Livraison à domicile", "un colis ficelé" },
+	{ "Le panier de la boulangère", "un panier de pains encore chauds" },
+	{ "Un paquet fragile", "une caisse de poteries" },
+	{ "Le remède attendu", "un flacon de remède bien bouché" },
+	{ "Les outils réparés", "un sac d'outils réparés" },
+}
+local REPAIRS = { "Une maison à réparer", "Le toit qui fuit", "Les volets arrachés", "Après la tempête" }
+local STALLS = { "Le marché du dimanche", "Un étal sur la place", "Les marchands manquent" }
 local DIRS = { "au nord", "au nord-est", "à l'est", "au sud-est", "au sud", "au sud-ouest", "à l'ouest", "au nord-ouest" }
 
 local folder: Folder
@@ -115,7 +132,7 @@ local function target(q): (number?, number?)
 	if (q.got or 0) >= q.need then
 		return nil, nil
 	end
-	if q.kind == "enqueter" then
+	if q.kind == "enqueter" or q.kind == "reparer" then
 		local p = q.pts and q.pts[(q.got or 0) + 1]
 		if p then
 			return p[1], p[2]
@@ -140,12 +157,15 @@ end
 -- Remplit q (titre, sorte, or…) et rend true, ou false si rien ne convient ici.
 function QuetesLieux.offer(v, r: Random, q, reward, villages): boolean
 	local roll = r:NextNumber()
-	if roll < 0.32 then
+	-- retrouver 18 %, visiter 18 %, enquêter 14 %, escorter 12 %, livrer / réparer / étal 38 % (offerHome)
+	if roll >= 0.62 then
+		return QuetesLieux.offerHome(v, r, q, reward, villages, roll)
+	elseif roll < 0.18 then
 		local l = pick(r, LOST)
 		q.kind, q.key, q.need, q.title, q.label = "retrouver", "objet", 1, l[1], l[2]
 		q.gold = reward(r, 55)
 		return true
-	elseif roll < 0.6 then
+	elseif roll < 0.36 then
 		local rx, rz = string.match(v.key, "^(-?%d+),(-?%d+)$")
 		rx, rz = tonumber(rx), tonumber(rz)
 		local places = {}
@@ -164,7 +184,7 @@ function QuetesLieux.offer(v, r: Random, q, reward, villages): boolean
 		q.label = G.WG.placeLabel(p)
 		q.gold = reward(r, 30 + flat(Vector3.new(q.px, 0, q.pz), v.x, v.z) / 5 + (p.kind == "lair" and 60 or 0))
 		return true
-	elseif roll < 0.82 then
+	elseif roll < 0.5 then
 		local c = pick(r, CASES)
 		q.kind, q.key, q.need, q.title = "enqueter", "indices", 3, c[1]
 		q.clues = c[2]
@@ -191,6 +211,84 @@ function QuetesLieux.offer(v, r: Random, q, reward, villages): boolean
 	return true
 end
 
+-- livrer / réparer / étal (roll entre 0,62 et 1)
+function QuetesLieux.offerHome(v, r: Random, q, reward, villages, roll: number): boolean
+	if roll < 0.74 then
+		-- le plus souvent un village voisin ; sinon une maison du village même
+		local others = {}
+		for _, o in villages() do
+			if o.key ~= v.key then
+				table.insert(others, o)
+			end
+		end
+		table.sort(others, function(a, b)
+			return flat(Vector3.new(a.x, 0, a.z), v.x, v.z) < flat(Vector3.new(b.x, 0, b.z), v.x, v.z)
+		end)
+		local t = #others > 0 and others[r:NextInteger(1, math.min(3, #others))] or v
+		local p = pick(r, PARCELS)
+		q.kind, q.key, q.need, q.title = "livrer", t.key, 1, p[1]
+		q.parcel, q.label = p[2], t.name
+		q.gold = reward(r, 35 + flat(Vector3.new(t.x, 0, t.z), v.x, v.z) / 5)
+		return true
+	elseif roll < 0.86 then
+		q.kind, q.key, q.need, q.title = "reparer", "maison", 3, pick(r, REPAIRS)
+		-- le village paie les matériaux au-dessus de leur prix : 3 × (4 planches + 2 clous)
+		q.gold = reward(r, 70)
+		return true
+	end
+	q.kind, q.key, q.need, q.title = "etal", "place", 1, pick(r, STALLS)
+	q.gold = reward(r, 45)
+	return true
+end
+
+-- maisons habitées d'un village (plan déterministe de la région) : { x, z, yaw, who }
+local function homesOf(vkey: string)
+	local rx, rz = string.match(vkey, "^(-?%d+),(-?%d+)$")
+	rx, rz = tonumber(rx), tonumber(rz)
+	if not rx then
+		return {}
+	end
+	local ok, plan = pcall(G.wg.plan, G.wg, rx, rz)
+	if not ok or not plan then
+		return {}
+	end
+	local names = {}
+	for _, n in plan.npcs or {} do
+		names[n.id] = n.name
+	end
+	local list = {}
+	for _, h in plan.houses or {} do
+		if h.owner and names[h.owner] then
+			table.insert(list, { x = h.x, z = h.z, yaw = h.yaw or 0, who = names[h.owner] })
+		end
+	end
+	table.sort(list, function(a, b)
+		return a.x + a.z * 1e-3 < b.x + b.z * 1e-3
+	end)
+	return list
+end
+QuetesLieux.homesOf = homesOf
+
+-- devant la façade (+Z du modèle, tournée de yaw degrés)
+local function frontOf(h, d: number): (number, number)
+	local a = math.rad(h.yaw)
+	return h.x + math.sin(a) * d, h.z + math.cos(a) * d
+end
+
+-- l'étal du joueur sur la place (posé à moins de MARKET_R, avec au moins une marchandise) ?
+local function stallOnSquare(player: Player, v): boolean
+	local reg = G.World.loaded and G.World.loaded[v.key]
+	for _, d in (reg and reg.state and reg.state.placed) or {} do
+		if d.item == "stall" and G.Util.owns(player, d.owner) and flat(Vector3.new(d.x, 0, d.z), v.x, v.z) < MARKET_R then
+			if d.stall and d.stall.items and next(d.stall.items) then
+				return true
+			end
+		end
+	end
+	return false
+end
+QuetesLieux.stallOnSquare = stallOnSquare
+
 function QuetesLieux.what(q): string?
 	if q.kind == "retrouver" then
 		if q.px then
@@ -208,6 +306,18 @@ function QuetesLieux.what(q): string?
 		return string.format("Enquête (%d/3) : chercher %s%s", n, clue, q.where and (" — " .. q.where) or "")
 	elseif q.kind == "escorter" then
 		return "Escorter un voyageur jusqu'à " .. (q.label or "?") .. " (il te suit)"
+	elseif q.kind == "livrer" then
+		if (q.got or 0) >= q.need then
+			return "Colis livré à " .. (q.who or "son destinataire")
+		end
+		return "Porter " .. (q.parcel or "un colis") .. " à " .. (q.who or "un habitant") .. ", à " .. (q.label or "?")
+			.. (q.where and (" — " .. q.where) or "")
+	elseif q.kind == "reparer" then
+		local R = QuetesLieux.REPAIR
+		return string.format("Réparer une maison (%d/3) — %d planches et %d clous par endroit%s", math.min(q.got or 0, 3), R.planks,
+			R.nails, q.where and (" — " .. q.where) or "")
+	elseif q.kind == "etal" then
+		return "Poser ton étal sur la place de " .. (q.vname or "ce village") .. " et y mettre une marchandise"
 	end
 	return nil
 end
@@ -236,6 +346,35 @@ function QuetesLieux.onTake(player: Player, q, here)
 		G.Util.toast(player, "🔎 Un habitant a vu quelque chose " .. q.where .. ".")
 	elseif q.kind == "escorter" then
 		G.Util.toast(player, "🚶 Le voyageur te suivra jusqu'à " .. (q.label or "?") .. ". Ne va pas trop vite.")
+	elseif q.kind == "livrer" then
+		local homes = homesOf(q.key)
+		local t = villageByKey(q.key)
+		local tx, tz = t and t.x or vx, t and t.z or vz
+		if #homes > 0 then
+			local h = homes[r:NextInteger(1, #homes)]
+			q.px, q.pz = frontOf(h, 6)
+			q.who = h.who
+		else
+			q.px, q.pz = tx + 4, tz + 4
+			q.who = "l'aubergiste"
+		end
+		q.where = hint(tx, tz, q.px, q.pz) .. " de la place"
+		G.Util.toast(player, "🎁 Tu prends " .. (q.parcel or "le colis") .. ". Pour " .. q.who .. ", à " .. (q.label or "?") .. ".")
+	elseif q.kind == "reparer" then
+		local homes = homesOf(q.v)
+		local h = #homes > 0 and homes[r:NextInteger(1, #homes)] or { x = vx + 20, z = vz, yaw = 0, who = "un habitant" }
+		-- trois endroits autour de la maison : façade, côté, arrière
+		local a = math.rad(h.yaw)
+		local pts = {}
+		for _, off in { { 0, 6 }, { 6, 0 }, { 0, -6 } } do
+			local ox, oz = off[1], off[2]
+			table.insert(pts, { h.x + ox * math.cos(a) + oz * math.sin(a), h.z - ox * math.sin(a) + oz * math.cos(a) })
+		end
+		q.pts, q.who = pts, h.who
+		q.where = "la maison de " .. h.who .. ", " .. hint(vx, vz, h.x, h.z) .. " de la place"
+		G.Util.toast(player, "🔨 La maison de " .. h.who .. " a souffert. Prévois 12 planches et 6 clous.")
+	elseif q.kind == "etal" then
+		G.Util.toast(player, "🏪 Un étal se fabrique à l'atelier. Pose-le près de la place et mets-y quelque chose à vendre.")
 	end
 end
 
@@ -268,6 +407,8 @@ end
 local LOOK = {
 	retrouver = { size = Vector3.new(1.6, 1.1, 1.3), color = Color3.fromRGB(122, 88, 54), mat = Enum.Material.Fabric, text = "Ramasser" },
 	enqueter = { size = Vector3.new(1.4, 0.5, 1.4), color = Color3.fromRGB(150, 140, 120), mat = Enum.Material.Slate, text = "Examiner" },
+	livrer = { size = Vector3.new(1.2, 1.6, 0.25), color = Color3.fromRGB(110, 74, 44), mat = Enum.Material.WoodPlanks, text = "Livrer" },
+	reparer = { size = Vector3.new(2.2, 1.2, 0.3), color = Color3.fromRGB(96, 78, 58), mat = Enum.Material.WoodPlanks, text = "Réparer", hold = 2.5 },
 }
 
 local function makeMarker(player: Player, q, x: number, z: number): Model
@@ -296,8 +437,10 @@ local function makeMarker(player: Player, q, x: number, z: number): Model
 	fx.Color = ColorSequence.new(Color3.fromRGB(255, 230, 160))
 	fx.Parent = att
 	model.PrimaryPart = p
-	G.Util.prompt(p, "quete_lieu", look.text, q.kind == "enqueter" and "Indice" or q.label, {
-		dist = 8, data = { Quete = q.id, Owner = tostring(player.UserId) },
+	local object = q.kind == "enqueter" and "Indice" or q.kind == "livrer" and ("Porte de " .. (q.who or "?"))
+		or q.kind == "reparer" and "Planches arrachées" or q.label
+	G.Util.prompt(p, "quete_lieu", look.text, object, {
+		dist = 8, hold = look.hold, data = { Quete = q.id, Owner = tostring(player.UserId) },
 	})
 	model.Parent = folder
 	return model
@@ -331,9 +474,29 @@ local function onSearch(player: Player, prompt: ProximityPrompt)
 	if not tx or not root or flat(root.Position, tx, tz) > 14 then
 		return
 	end
+	if q.kind == "reparer" then
+		local R = QuetesLieux.REPAIR
+		if G.Joueurs.count(player, "planks") < R.planks or G.Joueurs.count(player, "nails") < R.nails then
+			G.Util.toast(player, "🔨 Il te faut " .. R.planks .. " planches et " .. R.nails .. " clous pour cet endroit.")
+			return
+		end
+		G.Joueurs.take(player, "planks", R.planks)
+		G.Joueurs.take(player, "nails", R.nails)
+		G.Joueurs.sync(player)
+		dropMarker(player, id)
+		G.Util.sfx("coup", root.Position, player)
+		G.Joueurs.addSkillXp(player, "artisanat", 3)
+		local n = (q.got or 0) + 1
+		local nxt = q.pts[n + 1]
+		advance(player, q, nxt and ("🔨 Réparé (" .. n .. "/3). Encore " .. (3 - n) .. " endroit(s) autour de la maison.") or nil)
+		return
+	end
 	dropMarker(player, id)
 	G.Util.sfx("ramasser", root.Position, player)
-	if q.kind == "retrouver" then
+	if q.kind == "livrer" then
+		G.Util.toast(player, "🎁 « Ah, enfin ! Merci bien. » — " .. (q.who or "l'habitant"))
+		advance(player, q)
+	elseif q.kind == "retrouver" then
 		advance(player, q)
 	elseif q.kind == "enqueter" then
 		local n = (q.got or 0) + 1
@@ -477,7 +640,7 @@ function QuetesLieux.step(dt: number)
 		if act and root then
 			markers[player] = markers[player] or {}
 			for id, q in act do
-				if q.kind == "retrouver" or q.kind == "enqueter" then
+				if q.kind == "retrouver" or q.kind == "enqueter" or q.kind == "livrer" or q.kind == "reparer" then
 					local tx, tz = target(q)
 					local m = markers[player][id]
 					if not tx then
@@ -498,6 +661,11 @@ function QuetesLieux.step(dt: number)
 					end
 				elseif q.kind == "escorter" then
 					stepEscort(player, q, root)
+				elseif q.kind == "etal" then
+					local v = (q.got or 0) < q.need and villageByKey(q.v)
+					if v and flat(root.Position, v.x, v.z) < 120 and stallOnSquare(player, v) then
+						advance(player, q, nil)
+					end
 				end
 			end
 			-- repères de quêtes qui n'existent plus
