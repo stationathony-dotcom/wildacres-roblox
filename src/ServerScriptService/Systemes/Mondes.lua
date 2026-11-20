@@ -40,6 +40,7 @@ local sectorJson = {} -- sk -> dernier JSON écrit (évite de réécrire l'ident
 local regionJson = {} -- clé de région -> dernier JSON écrit (secteurs découpés)
 local SPLIT_BYTES = 3200000 -- au-delà, un secteur est découpé en une clé par région
 local metaJson = nil
+local lastSaveT = nil -- os.time() de la dernière sauvegarde réussie de l'état global (/wa etat)
 
 local function getStore(name: string)
 	local ok, ds = pcall(function()
@@ -234,6 +235,34 @@ local function createWorld(discoverer: Player?)
 	end)
 	listCache = nil
 	return id, entry
+end
+
+-- État pour le tableau de bord des admins (/wa etat) : ce serveur + les mondes en ligne (sans créer de monde)
+function Mondes.status()
+	local st = {
+		mode = Mondes.mode, id = Mondes.id, name = G and G.world and G.world.name or nil, lastSave = lastSaveT,
+		size = metaJson and #metaJson or 0, lockLost = worldLockLost, sectorsFailed = 0, worlds = 0, online = {},
+	}
+	for _, state in sectorState do
+		if state == "failed" then
+			st.sectorsFailed += 1
+		end
+	end
+	local okR, reg = pcall(readRegistry)
+	local okC, counts = pcall(onlineCounts)
+	if okR and reg then
+		for id, m in reg.mondes do
+			st.worlds += 1
+			local n = okC and counts[id] or 0
+			if n > 0 then
+				table.insert(st.online, { name = m.name, n = n })
+			end
+		end
+	end
+	table.sort(st.online, function(a, b)
+		return a.n > b.n
+	end)
+	return st
 end
 
 -- Liste pour l'écran d'accueil (ouvre un monde de plus si tous sont presque pleins)
@@ -704,6 +733,7 @@ function saveWorldInner(release: boolean?)
 		return
 	end
 	metaJson = json
+	lastSaveT = os.time()
 	-- secteurs : regroupe l'état des régions
 	local sectors = {}
 	for key, rs in w.regions do

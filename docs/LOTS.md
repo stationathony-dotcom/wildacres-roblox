@@ -108,11 +108,14 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       rend une activité inutile.
 - [x] **C9 · Armée façon Warcraft v2** — FAIT 20/11 (banc `armee` 15/15, voir commit) ; : recrues entraînées à la caserne, ordres (suivre, tenir,
       attaquer, patrouiller), dure et sans triche, limitée par la solde et les vivres seulement.
-- [ ] **C11 · Plusieurs serveurs sur un même monde** (étape 25) : vérifier secteurs, verrous,
+- [x] **C11 · Plusieurs serveurs sur un même monde** — vérifié 20/11 par lecture : un code réservé par monde,
+      verrou de serveur sur l'état global (400 s, rafraîchi à chaque sauvegarde), le nouveau serveur attend
+      45 s (> 30 s de fermeture) avant de reprendre, l'ancien cesse alors toute écriture ; secteurs écrits
+      après l'état global. Test réel : P4 de `docs/TEST-PLAY.md`. (étape 25) : vérifier secteurs, verrous,
       registre ; banc de concurrence.
-- [ ] **C12 · Performance** (étape 25) : budgets écrits, coût de la carte complète, des aperçus 3D,
+- [~] **C12 · Performance** — mesures à faire en Play (P7 de `docs/TEST-PLAY.md`), puis corriger ; (étape 25) : budgets écrits, coût de la carte complète, des aperçus 3D,
       d'un village chargé ; dégradation gracieuse.
-- [ ] **C13 · Administration** (étape 24) : tableau de bord `/wa` (serveurs, mondes, erreurs,
+- [x] **C13 · Administration** — FAIT 20/11 : `/wa etat` (le reste existait : journal, perf, joueur, coupe…) ; (étape 24) : tableau de bord `/wa` (serveurs, mondes, erreurs,
       sauvegardes), lecture des journaux d'économie et de clan.
 
 ## Pour le propriétaire (personne d'autre ne peut le faire)

@@ -165,7 +165,41 @@ end
 
 local ADMIN = {}
 ADMIN.aide = function(player)
-	say(player, "/wa meteo · coupe · rallume · annonce · sauver · ferme · versions · restaurer · donner · journal · perf · terrain · joueur · avertir · muet · expulser · bannir")
+	say(player, "/wa etat · meteo · coupe · rallume · annonce · sauver · ferme · versions · restaurer · donner · journal · perf · terrain · joueur · avertir · muet · expulser · bannir")
+end
+
+-- erreurs du serveur depuis son démarrage (tableau de bord /wa etat)
+local errors = { n = 0, last = {} }
+local startedAt = os.time()
+game:GetService("LogService").MessageOut:Connect(function(msg, kind)
+	if kind == Enum.MessageType.MessageError then
+		errors.n += 1
+		table.insert(errors.last, 1, os.date("!%H:%M", os.time()) .. " " .. string.sub(msg, 1, 140))
+		errors.last[4] = nil
+	end
+end)
+
+-- Tableau de bord : ce serveur, sa sauvegarde, ses erreurs, les mondes en ligne
+ADMIN.etat = function(player)
+	local st = G.Mondes.status()
+	local Stats = game:GetService("Stats")
+	local up = os.time() - startedAt
+	say(player, string.format("🖥️ %s « %s » (%s) · serveur %s · en ligne depuis %dh%02d · %d joueur(s)", st.mode, tostring(st.name or "-"),
+		tostring(st.id or "-"), string.sub(game.JobId, 1, 8), up // 3600, (up % 3600) // 60, #Players:GetPlayers()))
+	say(player, string.format("⚙️ %d Mo de mémoire · physique %.0f img/s · %d Ko Lua", math.floor(Stats:GetTotalMemoryUsageMb()),
+		workspace:GetRealPhysicsFPS(), math.floor(collectgarbage("count"))))
+	local ago = st.lastSave and (os.time() - st.lastSave) or nil
+	say(player, "💾 Sauvegarde du monde : " .. (ago and ("il y a " .. ago .. " s") or "aucune encore") .. string.format(" · %d Ko", st.size // 1024)
+		.. (st.lockLost and " · ⚠️ VERROU PERDU (un autre serveur tient ce monde, plus d'écriture ici)" or "")
+		.. (st.sectorsFailed > 0 and (" · ⚠️ " .. st.sectorsFailed .. " secteur(s) illisible(s)") or ""))
+	say(player, "🧯 Erreurs depuis le démarrage : " .. errors.n .. (errors.last[1] and (" · dernière : " .. errors.last[1]) or ""))
+	local parts = {}
+	for i, w in st.online do
+		if i <= 8 then
+			table.insert(parts, w.name .. " " .. w.n)
+		end
+	end
+	say(player, "🌍 " .. st.worlds .. " monde(s) enregistrés, " .. #st.online .. " en ligne" .. (#parts > 0 and (" : " .. table.concat(parts, " · ")) or ""))
 end
 ADMIN.meteo = function(player, args)
 	say(player, G.Meteo.force(args[1] or "", 180) and ("Météo : " .. args[1]) or "États : clair, nuageux, pluie, orage, brouillard")
