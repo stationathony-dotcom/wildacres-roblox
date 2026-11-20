@@ -1,5 +1,5 @@
 -- Ambiance (client) : dessine la météo décidée par le serveur (attributs du Workspace Weather,
--- WeatherT, Season) et joue les sons d'ambiance. Séparé d'Interface (limite de 200 locales).
+-- WeatherT) et joue les sons d'ambiance. Séparé d'Interface (limite de 200 locales).
 --   pluie : averse autour de la caméra (neige dans la toundra), sol plus sombre, son de pluie
 --   orage : idem + éclairs (Fx "lightning") : trait de foudre, flash, tonnerre retardé par la distance
 --   brouillard : brume dense ; nuageux : nuages bas
@@ -150,7 +150,7 @@ RunService.RenderStepped:Connect(function(dt)
 	params.FilterDescendantsInstances = { player.Character, cam }
 	local covered = workspace:Raycast(camPos, Vector3.new(0, 60, 0), params) ~= nil
 	emitterPart.CFrame = CFrame.new(camPos + Vector3.new(0, 35, 0) + cam.CFrame.LookVector * 20)
-	local snowy = biome == "neige" or workspace:GetAttribute("Season") == "hiver" and biome ~= "desert"
+	local snowy = biome == "neige"
 	local dry = biome == "desert"
 	local amount = (covered or dry) and 0 or cur.rain
 	rain.Rate = snowy and 0 or amount * 900
