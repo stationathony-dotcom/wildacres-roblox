@@ -216,6 +216,9 @@ function J.take(player: Player, item: string, n: number?): boolean
 	if p.inv[item] <= 0 and item ~= "gold" then
 		p.inv[item] = nil
 	end
+	if item == "gold" and G.Economie and G.Economie.goldSpent then
+		G.Economie.goldSpent(player, amount) -- flux d'or du monde (/wa or)
+	end
 	J.markDirty(player)
 	return true
 end

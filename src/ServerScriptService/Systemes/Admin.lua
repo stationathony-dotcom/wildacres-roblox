@@ -165,7 +165,7 @@ end
 
 local ADMIN = {}
 ADMIN.aide = function(player)
-	say(player, "/wa etat · demandes · repondre · clore · meteo · coupe · rallume · annonce · sauver · ferme · versions · restaurer · donner · journal · perf · terrain · joueur · avertir · muet · expulser · bannir · debannir")
+	say(player, "/wa etat · or · demandes · repondre · clore · meteo · coupe · rallume · annonce · sauver · ferme · versions · restaurer · donner · journal · perf · terrain · joueur · avertir · muet · expulser · bannir · debannir")
 end
 
 -- erreurs du serveur depuis son démarrage (tableau de bord /wa etat)
@@ -365,6 +365,29 @@ ADMIN.debannir = function(player, args)
 	G.Demandes.unban(uid)
 	G.Economie.record(player, "sanction", "débanni " .. uid)
 	say(player, "Bannissement levé pour " .. uid .. ".")
+end
+-- flux d'or du monde (Economie.fluxSummary) : aujourd'hui et les 2 jours d'avant
+ADMIN["or"] = function(player)
+	local day = G.world and G.world.day or 0
+	local any = false
+	for d = day, math.max(0, day - 2), -1 do
+		local s = G.Economie.fluxSummary(d)
+		if s then
+			any = true
+			local function top(list)
+				local parts = {}
+				for i = 1, math.min(4, #list) do
+					table.insert(parts, list[i][1] .. " " .. list[i][2])
+				end
+				return table.concat(parts, ", ")
+			end
+			say(player, string.format("💰 Jour %d : +%d créés, -%d détruits, solde %+d", d, s.gain, s.spend, s.net))
+			say(player, "   sources : " .. top(s.sources) .. " · puits : " .. top(s.sinks))
+		end
+	end
+	if not any then
+		say(player, "Aucun mouvement d'or compté pour l'instant.")
+	end
 end
 -- file des demandes, bugs et appels (Systemes/Demandes)
 ADMIN.demandes = function(player, args)

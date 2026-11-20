@@ -76,8 +76,97 @@ function Economie.record(player: Player?, kind: string, detail: string)
 	end
 end
 
+-- ----------------------------------------------------------------- Flux d'or du monde (étape 12, 20/11)
+-- Chaque gain et chaque dépense d'or est compté par jour de jeu et par SYSTÈME qui paie ou encaisse
+-- (Shop, Quetes, Butin, Armee…), gardé 7 jours avec le monde (G.world.extra.orFlux). Les échanges entre
+-- joueurs (Economie, Ventes, Poste, Clans) apparaissent des deux côtés et s'annulent. Lu par /wa or.
+Economie.TRANSFERS = { Economie = true, Ventes = true, Poste = true, Clans = true }
+
+local function fluxDay()
+	if not G.world then
+		return nil
+	end
+	G.world.extra = G.world.extra or {}
+	local f = G.world.extra.orFlux
+	if type(f) ~= "table" then
+		f = {}
+		G.world.extra.orFlux = f
+	end
+	local d = tostring(G.world.day or 0)
+	if not f[d] then
+		f[d] = { gain = {}, spend = {} }
+		local days = {}
+		for k in f do
+			table.insert(days, tonumber(k) or 0)
+		end
+		table.sort(days)
+		while #days > 7 do
+			f[tostring(table.remove(days, 1))] = nil
+		end
+	end
+	return f[d]
+end
+
+-- le système qui a appelé Joueurs.add / Joueurs.take : le premier de la pile qui n'est ni Economie ni
+-- Joueurs (pas de niveau fixe : le compilateur peut fusionner de petites fonctions).
+-- « ServerScriptService.Systemes.Shop » en jeu, « [string "Shop"] » dans un banc.
+local function payer(): string
+	for level = 2, 12 do
+		local ok, src = pcall(debug.info, level, "s")
+		if not ok or not src then
+			break
+		end
+		local name = string.match(src, "([%w_]+)[^%w_]*$")
+		if name and name ~= "Economie" and name ~= "Joueurs" and src ~= "[C]" then
+			return name
+		end
+	end
+	return "?"
+end
+
+local function count(side: string, n: number)
+	if type(n) ~= "number" or n <= 0 or n ~= n then
+		return
+	end
+	local d = fluxDay()
+	if d then
+		local who = payer()
+		d[side][who] = (d[side][who] or 0) + math.floor(n)
+	end
+end
+
+function Economie.goldSpent(_player: Player, n: number)
+	count("spend", n)
+end
+
+-- résumé d'un jour : total gagné, total dépensé (hors échanges entre joueurs), principaux postes
+function Economie.fluxSummary(day: number?)
+	local f = G.world and G.world.extra and G.world.extra.orFlux
+	local d = f and f[tostring(day or G.world.day or 0)]
+	if not d then
+		return nil
+	end
+	local function total(t)
+		local n, list = 0, {}
+		for who, v in t do
+			if not Economie.TRANSFERS[who] then
+				n += v
+				table.insert(list, { who, v })
+			end
+		end
+		table.sort(list, function(a, b)
+			return a[2] > b[2]
+		end)
+		return n, list
+	end
+	local gIn, inList = total(d.gain)
+	local gOut, outList = total(d.spend)
+	return { gain = gIn, spend = gOut, net = gIn - gOut, sources = inList, sinks = outList }
+end
+
 -- Appelé à chaque gain d'or : repère les gains anormaux (sans sanction automatique)
 function Economie.goldGained(player: Player, n: number)
+	count("gain", n)
 	local w = goldWindow[player]
 	local now = os.clock()
 	if not w or now - w[2] > 300 then
