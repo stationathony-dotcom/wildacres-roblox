@@ -1,6 +1,7 @@
 -- Retour et focus partagés par les fenêtres du joueur.
 local ContextActionService = game:GetService("ContextActionService")
 local GuiService = game:GetService("GuiService")
+local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 
 local WindowNav = {}
@@ -49,6 +50,9 @@ function WindowNav.watch(panel, closeButton, close, screen)
 			if index then return end
 			entry.previous = GuiService.SelectedObject
 			table.insert(open, entry)
+			local player = Players.LocalPlayer
+			local sound = player and player:FindFirstChild("SonInterface")
+			if sound and sound:IsA("BindableEvent") then sound:Fire() end
 			focusTop()
 		elseif index then
 			local wasTop = topWindow() == entry

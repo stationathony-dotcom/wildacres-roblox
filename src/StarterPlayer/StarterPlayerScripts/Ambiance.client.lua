@@ -226,6 +226,13 @@ local SFX = {
 	pieces = { id = "rbxassetid://9113849492", len = 0.8, vol = 0.5 },
 	forge = { id = "rbxassetid://9116652836", len = 0.7, vol = 0.6 },
 	porte = { id = "rbxassetid://9114493937", len = 0.7, vol = 0.6 },
+	coffre = { id = "rbxassetid://9114493937", len = 0.45, vol = 0.46 },
+	ramasser = { id = "rbxassetid://9114193047", len = 0.26, vol = 0.22 },
+	interface = { id = "rbxassetid://9114193047", len = 0.28, vol = 0.18 },
+	recu = { id = "rbxassetid://9113502506", len = 0.39, vol = 0.51 },
+	decouverte = { id = "rbxassetid://9113585009", len = 1.33, vol = 0.33 },
+	vache = { id = "rbxassetid://9113636724", len = 1.1, vol = 0.38 },
+	mouton = { id = "rbxassetid://9119067510", len = 0.77, vol = 0.32 },
 }
 local lastSfx = {}
 
@@ -276,6 +283,7 @@ local function playSfx(name: string, pos: Vector3)
 	end
 	lastSfx[name] = now
 	local cam = workspace.CurrentCamera
+	if pos.Magnitude >= 1 and cam and (cam.CFrame.Position - pos).Magnitude > 90 then return end
 	local s = Instance.new("Sound")
 	s.SoundId = d.id
 	s.Volume = d.vol * vol() * 1.4
@@ -283,9 +291,6 @@ local function playSfx(name: string, pos: Vector3)
 	if pos.Magnitude < 1 then
 		s.Parent = SoundService -- son « dans la tête » (pièces)
 	else
-		if cam and (cam.CFrame.Position - pos).Magnitude > 90 then
-			return
-		end
 		local a = Instance.new("Part")
 		a.Anchored = true
 		a.CanCollide = false
@@ -311,7 +316,44 @@ local function playSfx(name: string, pos: Vector3)
 	end)
 end
 
+do
+	local trigger = Instance.new("BindableEvent")
+	trigger.Name = "SonInterface"
+	trigger.Event:Connect(function() playSfx("interface", Vector3.zero) end)
+	trigger.Parent = player
+	Remotes:WaitForChild("Notify").OnClientEvent:Connect(function(message, kind)
+		if kind == "big" and type(message) == "string" and message:find("📍 Découverte : ", 1, true) == 1 then
+			playSfx("decouverte", Vector3.zero)
+		end
+	end)
+	if workspace:GetAttribute("Mode") ~= "accueil" then
+		task.spawn(function()
+			local tags = game:GetService("CollectionService")
+			local voices = { Vache = "vache", Mouton = "mouton" }
+			while player.Parent do
+				task.wait(math.random(17, 27))
+				local cam = workspace.CurrentCamera
+				if not cam then continue end
+				local best, key, nearest = nil, nil, 38
+				for _, model in tags:GetTagged("Bete") do
+					local voice = voices[model.Name]
+					if voice and model:GetAttribute("AnimalId") and model:IsA("Model") then
+						local here = model:GetPivot().Position
+						local distance = (cam.CFrame.Position - here).Magnitude
+						if distance < nearest then best, key, nearest = here, voice, distance end
+					end
+				end
+				if best then playSfx(key, best) end
+			end
+		end)
+	end
+end
+
 Remotes:WaitForChild("Fx").OnClientEvent:Connect(function(kind: string, pos, p3)
+	if kind == "hurt" then
+		playSfx("recu", Vector3.zero)
+		return
+	end
 	if kind == "sfx" then
 		if type(pos) == "string" and typeof(p3) == "Vector3" then
 			playSfx(pos, p3)
