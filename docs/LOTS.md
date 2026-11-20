@@ -105,13 +105,13 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       ont toutes la même forme : une silhouette par famille (crocs, écailles, plumes, glace…).
 - [x] **X10 · Atelier : recherche + fiche de recette unique.** FAIT 20/11 (9f9d802, 2bd382f). Ingrédients possédés, station,
       compétence et raison du verrouillage sur une seule fiche (`AUDIT-PRODUIT.md`, ordre 5).
-- [ ] **X11 · Paramètres.** Caméra, sensibilité, qualité graphique, taille du texte (étape 20).
+- [x] **X11 · Paramètres.** FAIT 20/11 (17761a9). Caméra, sensibilité, qualité graphique, taille du texte (étape 20).
 - [ ] **X12 · Style médiéval uniforme.** Lumière, matériaux, proportions, couleurs saturées et
       chaudes comme l'image cible ; retirer les modèles, sons et icônes temporaires (étape 21).
 - [ ] **X13 · Sons manquants.** Outils, forge, portes, animaux, interface, coup reçu, vente,
       découverte ; uniquement des sons autorisés (bibliothèque Roblox sous licence). Trouver l'appel qui
-      charge l'asset `203785492` (type incompatible en console).
-- [ ] **X14 · `docs/INTERFACE.md` à jour** après X1–X4 (raccourcis, boutons, manette).
+      charge l'asset `203785492` (type incompatible en console). Effets ajoutés (dd27096). Le journal confirme une demande de texture pour un asset audio, appelant introuvable dans le projet.
+- [x] **X14 · `docs/INTERFACE.md` à jour** FAIT 20/11 (b9c85af). après X1–X4 (raccourcis, boutons, manette).
 
 ## Couloir Claude — les règles et le monde
 
@@ -170,8 +170,10 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
   villageois qui fuient les bêtes, se rendre au shérif, duels /defi, trésors /enterrer, amis sur l'accueil (passage
   Codex), 3 créatures sur les modèles de Codex. 48 bancs verts. Reste : C6 (décor), C12 (mesures en Play).
 
-- 20/11 · Codex : en Play sur le PC fixe, ouvrir et fermer Sac, Carte, Journal, Personnage et Paramètres au clavier, au tactile et à la manette.
-  Vérifier le retour Livre → Carte → Sac, la gâchette et la pose derrière les panneaux, puis une livraison avec sac vide, partiel, complet et vidé.
+- 20/11 · Codex : en Play sur le PC fixe, tester les cinq menus clavier/tactile/manette et le retour Livre → Carte → Sac.
+  Tester les coups et les poses derrière une fenêtre, les quatre états de stock d’une livraison et le clavier tactile.
+  Vérifier aussi le harpon, la torche et le bouclier, la recette bloquée, le formulaire d’appel et les réglages après reconnexion.
+  Atelier et atlas prêts. Relecture visuelle du catalogue et source Studio de 203785492 à poursuivre.
 
 - 20/11 · Claude : fiche `AGENTS.md` + ces lots. Codex a du travail non commité sur HUD, Interface,
   Avatar, Gear, Combat, Quetes, Tools, Config, Catalogue, `GearDesign.lua` (à commiter par Codex).
