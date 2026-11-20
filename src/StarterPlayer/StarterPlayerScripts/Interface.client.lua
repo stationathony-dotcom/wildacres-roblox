@@ -266,6 +266,7 @@ local function lobby()
 		BackgroundColor3 = C.panel, BackgroundTransparency = 0.05, Parent = bg,
 	}, { corner(14), stroke(C.line, 2.5) })
 	label({ Text = "Choisis ton monde", Font = TITLE, TextSize = 24, TextColor3 = C.gold, Size = UDim2.new(1, -32, 0, 36), Position = UDim2.fromOffset(16, 10), Parent = box })
+	MiseEnPage.bind(box, uiScale)
 	local status = label({ Text = "Recherche des mondes…", TextSize = 14, TextColor3 = C.dim, Size = UDim2.new(1, -32, 0, 20), Position = UDim2.fromOffset(16, 44), Parent = box })
 	local list = new("ScrollingFrame", {
 		Size = UDim2.new(1, -24, 1, -140), Position = UDim2.fromOffset(12, 70), BackgroundTransparency = 1, BorderSizePixel = 0,
@@ -344,7 +345,27 @@ local function lobby()
 			return
 		end
 		if player:GetAttribute("Banni") ~= nil then return end
+		local friendsOK, friends = pcall(function()
+			return Remotes.Mondes:InvokeServer("friends")
+		end)
+		if player:GetAttribute("Banni") ~= nil then return end
 		clear(list)
+		label({ Text = "Mes amis en jeu", Font = TITLE, TextSize = 18, TextColor3 = C.gold,
+			Size = UDim2.new(1, -8, 0, 24), LayoutOrder = -1000, Parent = list })
+		if friendsOK and type(friends) == "table" and #friends > 0 then
+			for i, friend in friends do
+				local row = new("Frame", { Size = UDim2.new(1, -8, 0, 48), BackgroundColor3 = C.panel2, LayoutOrder = i - 999, Parent = list }, { corner(8) })
+				label({ Text = friend.name, Font = BOLD, TextSize = 16, TextTruncate = Enum.TextTruncate.AtEnd, Size = UDim2.new(1, -138, 0, 22), Position = UDim2.fromOffset(10, 2), Parent = row })
+				label({ Text = friend.worldName or friend.worldId, TextSize = 13, TextTruncate = Enum.TextTruncate.AtEnd, TextColor3 = C.dim, Size = UDim2.new(1, -138, 0, 18), Position = UDim2.fromOffset(10, 25), Parent = row })
+				local join = button("Rejoindre", C.blue, function() go("join", friend.worldId) end)
+				join.Size, join.Position, join.Parent = UDim2.fromOffset(112, 36), UDim2.new(1, -118, 0, 6), row
+			end
+		else
+			label({ Text = friendsOK and "Aucun ami dans un monde pour le moment." or "Liste des amis momentanément indisponible.", TextColor3 = C.dim,
+				TextSize = 13, Size = UDim2.new(1, -8, 0, 24), LayoutOrder = -999, Parent = list })
+		end
+		label({ Text = "Mondes ouverts", Font = TITLE, TextSize = 18, TextColor3 = C.gold,
+			Size = UDim2.new(1, -8, 0, 24), LayoutOrder = 0, Parent = list })
 		local total = 0
 		for i, w in worlds do
 			total += w.n
