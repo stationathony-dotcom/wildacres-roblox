@@ -27,7 +27,7 @@ Ne pas toucher à ces sujets avant la réponse. Écrire la réponse ici quand el
 Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; cocher avec le hash du commit.
 
 - [ ] Claude → Codex · `Tools.lua` · brancher le **harpon** comme outil (mis en main, clic) puis
-      appeler `G.Fishing.harpoon(player)` (Claude écrit la fonction) · arme/outil de pêche demandé dans
+      appeler `G.Fishing.harpoon(player)` (FONCTION PRÊTE le 20/11, banc `harpon` ; objet `harpoon` à créer comme outil) · arme/outil de pêche demandé dans
       `A-RETRAVAILLER-EQUIPEMENT-ET-VISUELS.md`.
 - [ ] Claude → Codex · `Gear.lua` + fiche Personnage · emplacement **main gauche** (bouclier, torche),
       les boucliers quittent les bijoux · Claude branchera ensuite la défense dans `Joueurs.stats` /

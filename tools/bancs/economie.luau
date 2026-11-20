@@ -31,7 +31,7 @@ local function tableOf(name)
 end
 local KINDS = tableOf("KINDS")
 local TOUGH = tableOf("TOUGH")
-local POWER = { [0] = 0.35, [1] = 1, [2] = 1.6, [3] = 2.3 }
+local POWER = { [0] = 0.35, [1] = 1, [2] = 1.6, [3] = 2.3, [4] = 3, [5] = 3.8 }
 local SEARCH = { ore_coal = 30, ore_copper = 30, ore_iron = 30, ore_gold = 40, rock = 10, clay = 12, mushroom = 12, flower = 10,
 	log = 8, stump = 8, cactus = 8, stick = 5, stone = 5, tuft = 4 }
 local TIER_NAME = { [0] = "mains", [1] = "pierre", [2] = "cuivre", [3] = "fer" }

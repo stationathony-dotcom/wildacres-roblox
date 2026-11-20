@@ -154,6 +154,65 @@ function Fishing.use(player: Player)
 	player:SetAttribute("Fishing", true)
 end
 
+-- Pêche au HARPON (20/11, « liste items.txt » + A-RETRAVAILLER) : pas d'attente ni de bouchon, on lance
+-- dans l'eau devant soi (3 à 10 studs) ; touché ou raté selon la compétence de pêche (entraînée) et la
+-- Chance ; vise plutôt les gros poissons. Un lancer toutes les HARPOON.cooldown s. Appelé par Tools.use
+-- quand le harpon est en main (Codex). Renvoie true si un lancer a eu lieu.
+Fishing.HARPOON = { cooldown = 2.5, base = 0.25, perSkill = 0.015, perLuck = 0.01, max = 0.7, near = 3, far = 10 }
+Fishing.roll = math.random -- remplaçable par les bancs
+local lastThrow = setmetatable({}, { __mode = "k" }) -- joueur -> dernier lancer
+function Fishing.harpoon(player: Player): boolean
+	local H = Fishing.HARPOON
+	local root = G.Util.root(player)
+	if not root then
+		return false
+	end
+	local now = os.clock()
+	if lastThrow[player] and now - lastThrow[player] < H.cooldown then
+		return false
+	end
+	local flat = Vector3.new(root.CFrame.LookVector.X, 0, root.CFrame.LookVector.Z)
+	if flat.Magnitude < 0.1 then
+		return false
+	end
+	flat = flat.Unit
+	local spot
+	for d = H.near, H.far do
+		local p = root.Position + flat * d
+		if G.Util.isWater(p.X, p.Z) then
+			spot = Vector3.new(p.X, Config.WATER_Y, p.Z)
+			break
+		end
+	end
+	if not spot then
+		G.Util.toast(player, "🔱 Vise l'eau, de près : le harpon ne porte pas loin.")
+		return false
+	end
+	lastThrow[player] = now
+	G.Props.swing(player, "rod")
+	local skill = G.Joueurs.skillRaw and G.Joueurs.skillRaw(player, "peche") or 0
+	local luck = G.Joueurs.stats(player).chance or 0
+	local chance = math.min(H.max, H.base + skill * H.perSkill + luck * H.perLuck)
+	G.Joueurs.addSkillXp(player, "peche", 2)
+	if Fishing.roll() >= chance then
+		G.Util.toast(player, "🔱 Raté… l'eau se trouble.")
+		return true
+	end
+	local i = pickFish(player, true, spot) -- les gros poissons ressortent plus (comme avec un appât)
+	G.Joueurs.add(player, "fish_" .. i, 1)
+	G.Util.finds(player, "fish")
+	G.Joueurs.addSkillXp(player, "peche", 4 + math.floor(Config.FISH[i].price / 10))
+	G.Social.collect(player, "fish", tostring(i))
+	G.Social.bump(player, "fished")
+	if G.Quetes and rawget(G.Quetes, "note") then
+		G.Quetes.note(player, "pecher", "fish_" .. i)
+	end
+	if G.Activites.note then
+		G.Activites.note(player, "peche")
+	end
+	return true
+end
+
 function Fishing.step(dt: number)
 	local now = os.clock()
 	for player, l in lines do

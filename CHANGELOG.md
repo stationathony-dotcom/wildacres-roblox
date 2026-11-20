@@ -6,6 +6,8 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Correctif** : les haches et pioches d'acier et au diamant tapaient comme celles de pierre (force inconnue) → acier ×3, diamant ×3,8
+- **Pêche au harpon** (côté serveur, `Fishing.harpoon`) : lancer dans l'eau à 3-10 studs, touché 25 % à 70 % selon la pêche entraînée et la Chance, gros poissons plus fréquents, un lancer toutes les 2,5 s — l'outil en main est à brancher par Codex
 - **Registre des mondes** (`/wa mondes`) : nom, identifiant, graine, version du générateur, danger, dernière activité (notée toutes les 30 min), record de joueurs, joueurs en ligne
 - **Flux d'or du monde** (`/wa or`) : or créé et détruit chaque jour, par système (boutique, quêtes, butin, solde…), les échanges entre joueurs à part ; 7 jours gardés avec le monde
 - **Retirés** (décision du 20/11) : les **saisons** (météo tirée pareil toute l'année, les cultures poussent tous les jours), le **froid et la chaleur** (plus d'état « Froid » ni « Soif » ; la boue des marais et l'obscurité des grottes restent ; talent Survivaliste = ni boue ni obscurité ; la couverture devient une couverture de cheval, +3 % d'allure), la **qualité de façon et la signature** des pièces

@@ -41,7 +41,7 @@ local KINDS = {
 }
 Props.KINDS = KINDS
 local TOOL_NAMES = { axe = "une hache", pickaxe = "une pioche", shovel = "une pelle" }
-local TIER_NAMES = { [2] = "de cuivre", [3] = "de fer" }
+local TIER_NAMES = { [2] = "de cuivre", [3] = "de fer", [4] = "d'acier", [5] = "au diamant" }
 local TOOL_HINT = { axe = "(atelier : 3 bois + 2 pierres)", pickaxe = "(atelier : 2 bois + 4 pierres)", shovel = "(atelier : 2 bois + 3 pierres)" }
 local FLOWER_COLORS = { Color3.fromRGB(240, 220, 80), Color3.fromRGB(240, 120, 160), Color3.fromRGB(150, 120, 230), Color3.fromRGB(250, 250, 250), Color3.fromRGB(240, 110, 60) }
 -- Monde fini : ce qu'on coupe ou mine ne revient pas tout seul (on peut nettoyer une zone pour de bon ;
@@ -430,7 +430,7 @@ local TOUGH = {
 	stone = 1, stick = 1, tuft = 1.5, flower = 1, mushroom = 1, herb = 1.5,
 }
 local MODE_TOUGH = { stump = 5, berries = 2, dig = 4 }
-local POWER = { [1] = 1, [2] = 1.6, [3] = 2.3 } -- pierre, cuivre, fer
+local POWER = { [1] = 1, [2] = 1.6, [3] = 2.3, [4] = 3, [5] = 3.8 } -- pierre, cuivre, fer, acier, diamant (20/11 : acier et diamant tapaient comme la pierre)
 local HANDS = 0.35 -- bois à mains nues : très lent (« taper un arbre » de Minecraft)
 local HAND_OK = { axe = true } -- outils qu'on peut remplacer par ses poings (bois seulement)
 local HIT_GAP = 0.25 -- s entre deux coups d'un même joueur (clic maintenu ou pas, même cadence)
