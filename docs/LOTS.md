@@ -107,10 +107,10 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       compétence et raison du verrouillage sur une seule fiche (`AUDIT-PRODUIT.md`, ordre 5).
 - [x] **X11 · Paramètres.** FAIT 20/11 (17761a9). Caméra, sensibilité, qualité graphique, taille du texte (étape 20).
 - [ ] **X12 · Style médiéval uniforme.** Lumière, matériaux, proportions, couleurs saturées et
-      chaudes comme l'image cible ; retirer les modèles, sons et icônes temporaires (étape 21).
-- [ ] **X13 · Sons manquants.** Outils, forge, portes, animaux, interface, coup reçu, vente,
+      chaudes comme l'image cible ; retirer les modèles, sons et icônes temporaires (étape 21). Palette appliquée (fb36497), relecture en jeu à faire.
+- [x] **X13 · Sons manquants.** FAIT 20/11 (dd27096, 266139e). Outils, forge, portes, animaux, interface, coup reçu, vente,
       découverte ; uniquement des sons autorisés (bibliothèque Roblox sous licence). Trouver l'appel qui
-      charge l'asset `203785492` (type incompatible en console). Effets ajoutés (dd27096). Le journal confirme une demande de texture pour un asset audio, appelant introuvable dans le projet.
+      charge l'asset `203785492` (type incompatible en console). Effets ajoutés (dd27096). Rojo précharge son son de notification avec les URI d’images. Six effets du jeu préchargés en Edit.
 - [x] **X14 · `docs/INTERFACE.md` à jour** FAIT 20/11 (b9c85af). après X1–X4 (raccourcis, boutons, manette).
 
 ## Couloir Claude — les règles et le monde
@@ -173,7 +173,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - 20/11 · Codex : en Play sur le PC fixe, tester les cinq menus clavier/tactile/manette et le retour Livre → Carte → Sac.
   Tester les coups et les poses derrière une fenêtre, les quatre états de stock d’une livraison et le clavier tactile.
   Vérifier aussi le harpon, la torche et le bouclier, la recette bloquée, le formulaire d’appel et les réglages après reconnexion.
-  Atelier et atlas prêts. Relecture visuelle du catalogue et source Studio de 203785492 à poursuivre.
+  Atelier et atlas prêts. L’identifiant 203785492 vient du préchargement des notifications du plugin Rojo.
 
 - 20/11 · Claude : fiche `AGENTS.md` + ces lots. Codex a du travail non commité sur HUD, Interface,
   Avatar, Gear, Combat, Quetes, Tools, Config, Catalogue, `GearDesign.lua` (à commiter par Codex).
