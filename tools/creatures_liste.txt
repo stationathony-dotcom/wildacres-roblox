@@ -163,3 +163,6 @@ Bestiaire:assassin=Assassin de l'ombre|humain||6
 Bestiaire:fallen_king=Roi déchu|spectre|E|9
 Bestiaire:freshwater_jellyfish=Méduse des marais|masse||3
 Bestiaire:storm_wraith=Esprit de l'orage|spectre|E|7
+Bestiaire:highway_rider=Brigand à cheval|humain||6
+Bestiaire:giant_pike=Brochet géant|serpent||5
+Bestiaire:sea_serpent=Serpent marin|serpent|E|7

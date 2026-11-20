@@ -299,16 +299,23 @@ local KINDS = {
 		loot = { { "raw_hide", 4, 6, 1 }, { "tooth", 3, 5, 1 } }, gold = 9 },
 	cave_troll = { name = "Troll des cavernes", form = "humain", look = { "P", "BF", weapon = "massue", scale = 1.8, peau = "P" }, hp = 700, dmg = 38, speed = 9, level = 8, style = "charge", radius = 2.4, elite = true,
 		loot = { { "stone", 4, 8, 1 }, { "ore", 1, 3, 0.6 } }, gold = 5 },
+	-- 20/11 : les trois dernières de « listes ennemi.txt », modèles faits par Codex (ServerStorage.Modeles)
+	highway_rider = { name = "Brigand à cheval", form = "humain", model = "Cavalier", look = { "R", "BF", weapon = "epee" }, hp = 230, dmg = 22, speed = 21, level = 6,
+		style = "charge", radius = 1.8, loot = { { "copper_coin", 3, 8, 1 }, { "leather", 1, 2, 0.5 }, { "coin_purse", 1, 1, 0.2 } }, gold = 2 },
+	giant_pike = { name = "Brochet géant", form = "serpent", model = "Poisson_Carnassier", look = { "V", "BL", long = true }, hp = 170, dmg = 20, speed = 12, level = 5,
+		style = "charge", radius = 1.4, loot = { { "fish_5", 1, 2, 0.8 }, { "raw_hide", 1, 1, 0.3 } } },
+	sea_serpent = { name = "Serpent marin", form = "serpent", model = "Serpent_Marin", look = { "BL", "V", long = true, scale = 1.5 }, hp = 380, dmg = 28, speed = 14, level = 7,
+		style = "charge", radius = 1.9, elite = true, loot = { { "fish_3", 1, 3, 0.7 }, { "relic_fragment", 1, 1, 0.15 } }, gold = 2 },
 }
 Bestiaire.KINDS = KINDS
 
 -- Où vit quoi (en plus des créatures d'origine). Poids : plus il y a d'entrées, plus c'est courant.
 local DAY = {
-	prairie = { "bandit", "bandit", "wild_dog", "snake", "bee_swarm", "poacher", "deserter", "highwayman", "pillager", "marauder", "fake_merchant", "corrupt_guard", "stray_dog", "rabid_fox", "mercenary", "bounty_hunter", "mountain_eagle", "cliff_raptor", "bull_man", "ruin_giant" },
-	foret = { "black_wolf", "lynx", "goblin_archer", "goblin_archer", "bramble_witch", "wood_golem", "root_troll", "bee_swarm", "poacher", "wood_goblin", "sylvan_spider", "brown_bear", "colossal_boar", "corrupted_ent", "renegade_guard", "harpy", "griffin", "hippogriff", "bramble_fairy", "giant_mantis", "forest_giant" },
-	desert = { "jackal", "jackal", "dune_snake", "beetle", "desert_spider", "hyena", "sandstone_golem", "ruin_looter", "desert_raider", "sand_worm", "ruin_guardian", "sand_basilisk", "smuggler", "drakeling", "wyvern" },
+	prairie = { "bandit", "bandit", "wild_dog", "snake", "bee_swarm", "poacher", "deserter", "highwayman", "pillager", "marauder", "fake_merchant", "corrupt_guard", "stray_dog", "rabid_fox", "mercenary", "bounty_hunter", "mountain_eagle", "cliff_raptor", "bull_man", "ruin_giant" , "highway_rider" },
+	foret = { "black_wolf", "lynx", "goblin_archer", "goblin_archer", "bramble_witch", "wood_golem", "root_troll", "bee_swarm", "poacher", "wood_goblin", "sylvan_spider", "brown_bear", "colossal_boar", "corrupted_ent", "renegade_guard", "harpy", "griffin", "hippogriff", "bramble_fairy", "giant_mantis", "forest_giant" , "giant_pike" },
+	desert = { "jackal", "jackal", "dune_snake", "beetle", "desert_spider", "hyena", "sandstone_golem", "ruin_looter", "desert_raider", "sand_worm", "ruin_guardian", "sand_basilisk", "smuggler", "drakeling", "wyvern" , "highway_rider" },
 	neige = { "polar_bear", "frost_boar", "frost_spider", "frost_spider", "frost_troll", "black_wolf", "polar_wolf", "ice_giant", "corrupted_stag", "giant_eagle", "mountain_troll", "granite_warden", "cliff_raptor" },
-	marais = { "freshwater_jellyfish", "leech", "leech", "bog_lizard", "swamp_boar", "mud_man", "water_snake", "swamp_goblin", "reed_spider", "mud_golem", "smuggler", "river_serpent", "monster_eel", "ancient_turtle", "giant_crab", "hostile_siren", "kelpie", "lake_guardian", "earth_colossus" },
+	marais = { "freshwater_jellyfish", "leech", "leech", "bog_lizard", "swamp_boar", "mud_man", "water_snake", "swamp_goblin", "reed_spider", "mud_golem", "smuggler", "river_serpent", "monster_eel", "ancient_turtle", "giant_crab", "hostile_siren", "kelpie", "lake_guardian", "earth_colossus" , "giant_pike", "sea_serpent" },
 }
 local NIGHT = {
 	prairie = { "assassin", "fallen_king", "creeping_shadow", "creeping_shadow", "faceless_walker", "revenant", "giant_crow", "ghost_knight", "shadow_wolf", "faceless_walker", "ghost_crow", "creeping_shadow", "fallen_monk", "dark_prowler", "wandering_spectre", "night_howler", "tomb_warden", "forgotten_knight" },
@@ -808,7 +815,7 @@ function Bestiaire.init(g)
 	Config = G.Config
 	local E = G.Enemies.KINDS
 	for id, k in KINDS do
-		k.model = "Bete_" .. id
+		k.model = k.model or ("Bete_" .. id) -- un modèle fait à la main (Modeles) l'emporte
 		E[id] = k
 	end
 	Bestiaire.normalizeLoot(E, Config)
