@@ -386,7 +386,7 @@ local function weapon(d,c,form,long,short,style)
 	local trim=style and style.trim or brass
 	if form=="bow" or form=="crossbow" then
 		local span=long and 0.91 or 0.74
-		local bend=mark=="leaf" and 0.48 or mark=="frost" and 0.23 or 0.35
+		local bend=mark=="leaf" and 0.52 or mark=="frost" and 0.31 or 0.47
 		local curve={v(-0.12,-span,0),v(bend*0.65,-span*0.63,0),v(bend,0,0),v(bend*0.65,span*0.63,0),v(-0.12,span,0)}
 		if form=="crossbow" then
 			for i,p in ipairs(curve) do curve[i]=v(-p.Y,p.X,0) end
@@ -420,7 +420,15 @@ local function weapon(d,c,form,long,short,style)
 	if form=="hammer" then
 		d.box("Tête",0.93,0.41,0.46,0,0.45,0,blade,0,metal)
 		d.box("Face de frappe",0.15,0.44,0.48,-0.43,0.45,0,steel,0,metal)
-	elseif form=="axe" or form=="halberd" or form=="scythe" or form=="sickle" then
+	elseif form=="sickle" or form=="scythe" then
+		local sickle = form=="sickle"
+		local first = v(0,sickle and 0.34 or 0.80,0)
+		local curve = sickle and {first,v(0.17,0.56,0),v(0.44,0.61,0),v(0.65,0.48,0),v(0.68,0.24,0),v(0.54,0.04,0)}
+			or {first,v(0.32,0.93,0),v(0.63,0.90,0),v(0.88,0.80,0),v(1.03,0.62,0)}
+		for i=1,#curve-1 do
+			d.line("Lame courbe",curve[i],curve[i+1],0.22-(i-1)*0.032,blade,metal)
+		end
+	elseif form=="axe" or form=="halberd" then
 		local long=form=="scythe" or form=="sickle"
 		d.box("Œil",0.31,0.24,0.22,0,0.44,0,steel,0,metal)
 		d.part("Lame latérale",v(long and 0.81 or 0.59,long and 0.30 or 0.57,0.13),cf(0.38,0.53,0)*CFrame.Angles(0,0,long and 0.25 or -0.16),blade,"wedge",metal)

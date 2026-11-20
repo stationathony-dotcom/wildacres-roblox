@@ -91,7 +91,22 @@ function D.formOf(it): string?
 		if n:match("^torche") then return "torch" end
 		return n:find("rond", 1, true) and "roundshield" or "shield"
 	end
-	if s=="armor" then
+	if s=="weapon" then
+		if n:match("^arbalète") then return "crossbow" end
+		if n:match("^arc ") then return "bow" end
+		if n:match("^hallebarde") then return "halberd" end
+		if n:match("^lance") or n:match("^pique") then return "pike" end
+		if n:match("^faux") or n:match("^fauchard") then return "scythe" end
+		if n:match("^faucille") or n:match("^serpe") then return "sickle" end
+		if n:match("^hache") then return "axe" end
+		if n:match("^marteau") then return "hammer" end
+		if n:match("^gantelet") then return "gauntlet" end
+		if n:match("^masse%-pince") then return "claw" end
+		if n:match("^masse") or n:match("^massue") or n:match("^gourdin") then return "mace" end
+		if n:match("^dague") then return "dagger" end
+		if n:match("^sabre") then return "saber" end
+		if n:match("^espadon") then return "greatsword" end
+	elseif s=="armor" then
 		if n:find("écaille",1,true) then return "scale" end
 		if n:find("élytre",1,true) then return "beetle" end
 		if n:find("maille",1,true) then return "mail" end
@@ -102,6 +117,7 @@ function D.formOf(it): string?
 		return "plate"
 	elseif s=="hat" then
 		if n:match("^heaume") then return "closedhelm" end
+		if n:match("^casque nasal") then return "nasalhelm" end
 		if n:match("^casque") then return "helmet" end
 		if n:match("^bandeau") then return "headband" end
 		if n:match("^béret") then return "beret" end
@@ -110,6 +126,7 @@ function D.formOf(it): string?
 		if n:match("^haut%-de%-forme") then return "tophat" end
 		if n:find("de mage",1,true) then return "magehat" end
 	elseif s=="trinket" then
+		if n:match("^faucille") then return "sickle" end
 		if n:match("^plume") then return "feather" end
 		if n:match("^trèfle") then return "clover" end
 		if n:match("^broche") then return "brooch" end
