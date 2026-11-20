@@ -379,7 +379,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 ### 12A. Monnaie et équilibre
 - [x] Lister toutes les sources d'or : ventes PNJ, commandes, événements, butin, récompenses, courrier, etc.
 - [x] Lister toutes les sorties d'or : frais, taxes, réparations, services, construction, entretien, améliorations, etc.
-- [ ] Mesurer régulièrement création/destruction d'or par monde et par joueur.
+- [x] Mesurer régulièrement création/destruction d'or par monde et par joueur. _(20/11 : `/wa or` par monde et par système, 7 jours ; par joueur : `/wa journal` et l'alerte de gain anormal)_
 - [ ] Mesurer la production et la consommation de chaque ressource importante.
 - [x] Définir les dépenses facultatives des joueurs très riches sans leur imposer une connexion quotidienne. _(terrains de plus en plus chers (100 × n²), agrandissement de banque, clans (1000), armée et sa solde, équipement légendaire, voiliers, cagnottes de concours)_
 - [ ] Vérifier qu'aucun métier ou événement ne domine économiquement tous les autres.

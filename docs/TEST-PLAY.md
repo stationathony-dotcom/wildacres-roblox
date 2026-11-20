@@ -97,7 +97,7 @@ La téléportation ne marche pas dans Studio : il faut la version publiée.
 1. [ ] Avec 3 soldats ou plus (caserne sur ta parcelle) : `/armee suivre` (ils se rangent en colonne
        derrière toi), `/armee tenir` (en ligne devant toi), `/armee patrouiller`, puis `/armee attaquer`
        face à une bête. Un soldat à plus de 60 studs ne doit PAS obéir.
-2. [ ] En admin : `/wa etat` (serveur, mémoire, dernière sauvegarde, erreurs, mondes en ligne) et
+2. [ ] En admin : `/wa or` après avoir vendu et acheté au marchand (les deux doivent apparaître), `/wa etat` (serveur, mémoire, dernière sauvegarde, erreurs, mondes en ligne) et
        `/wa perf` au village de départ, puis au milieu d'un grand village et pendant un combat. Noter les
        chiffres dans `retours.txt` (boucle en ms/image, mémoire en Mo).
 3. [ ] Ouvrir la carte [M] la première fois : combien de temps avant qu'elle s'affiche ?

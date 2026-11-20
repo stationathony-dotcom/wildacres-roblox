@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Flux d'or du monde** (`/wa or`) : or créé et détruit chaque jour, par système (boutique, quêtes, butin, solde…), les échanges entre joueurs à part ; 7 jours gardés avec le monde
 - **Retirés** (décision du 20/11) : les **saisons** (météo tirée pareil toute l'année, les cultures poussent tous les jours), le **froid et la chaleur** (plus d'état « Froid » ni « Soif » ; la boue des marais et l'obscurité des grottes restent ; talent Survivaliste = ni boue ni obscurité ; la couverture devient une couverture de cheval, +3 % d'allure), la **qualité de façon et la signature** des pièces
 - **Demandes à l'équipe** (`Systemes/Demandes`) : `/demande`, `/bug` (position, biome, monde, jour joints), `/appel` — 3 par jour, texte filtré, réponse des admins livrée tout de suite ou à la prochaine connexion ; admins : `/wa demandes`, `/wa repondre`, `/wa clore`, `/wa debannir`
 - **Bannissement maison** : un banni n'entre dans aucun monde mais garde l'écran d'accueil (ses messages ne sont remis à personne) pour faire appel
