@@ -54,7 +54,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [x] Claude → Codex · `Tools.lua` · brancher le **harpon** comme outil (mis en main, clic) puis (b405756)
       appeler `G.Fishing.harpoon(player)` (FONCTION PRÊTE le 20/11, banc `harpon` ; objet `harpoon` à créer comme outil) · arme/outil de pêche demandé dans
       `A-RETRAVAILLER-EQUIPEMENT-ET-VISUELS.md`.
-- [ ] Claude → Codex · `Gear.lua` + fiche Personnage · emplacement **main gauche** (bouclier, torche),
+- [x] Claude → Codex · `Gear.lua` + fiche Personnage · emplacement **main gauche** (bouclier, torche), (a23919e)
       les boucliers quittent les bijoux · Claude branchera ensuite la défense dans `Joueurs.stats` /
       `Combat` (lot C7).
 - [x] Claude → Codex · interface · 4 boutons d'ordres d'armée (suivre, tenir, patrouiller, attaquer) quand (b65ef70)
@@ -88,7 +88,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       ouverte n'envoie pas de coup ni de pose derrière elle ; ordre de retour prévisible.
 - [ ] **X4 · Petits écrans et mobile.** Disposition étroite par famille de fenêtres, zones sûres,
       défilement vertical, boutons assez grands, chat / clavier ouverts. Garder les proportions du HUD.
-- [ ] **X5 · Emplacement main gauche** (passage ci-dessus) : emplacement, poupée de la fiche, modèle
+- [x] **X5 · Emplacement main gauche** (passage ci-dessus) : emplacement, poupée de la fiche, modèle FAIT 20/11 (a23919e).
       porté par l'avatar.
 - [ ] **X6 · Harpon** (passage ci-dessus) : modèle, outil en main, animation de lancer. Modèle, prise en main et lancer faits (b405756) · acquisition en attente.
 - [ ] **X7 · Modèles faux.** Corriger la liste « Visuels à retravailler » de
