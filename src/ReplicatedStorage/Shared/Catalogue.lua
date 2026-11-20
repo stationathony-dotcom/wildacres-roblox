@@ -500,12 +500,12 @@ K.GEAR = {
 	{ "weapon", "Arbalète au diamant", 4, { force = 7, chance = 4 }, { steel = 3, diamond = 2, gear_iron = 2, braided_rope = 2 }, 37, power = 12, visual = "11" },
 	{ "armor", "Plastron serti de diamant", 4, { defense = 9, vie = 4 }, { steel = 5, diamond = 2, leather = 3 }, 38 },
 	{ "hat", "Heaume serti de diamant", 4, { defense = 7, vie = 4 }, { steel = 3, diamond = 1, soft_leather = 2 }, 34 },
-	{ "trinket", "Bouclier renforcé au diamant", 4, { defense = 8, force = 3 }, { oak_log = 3, steel = 2, diamond = 1 }, 34 },
+	{ "offhand", "Bouclier renforcé au diamant", 4, { defense = 8, force = 3 }, { oak_log = 3, steel = 2, diamond = 1 }, 34 },
 	{ "trinket", "Anneau serti de diamant", 4, { chance = 7, charisme = 4 }, { gold_ingot = 2, diamond = 1, silver_ingot = 1 }, 36 },
-	-- boucliers (portés comme breloque)
-	{ "trinket", "Bouclier rond", 1, { defense = 3 }, { planks = 4, iron_ring = 2 }, 4 },
-	{ "trinket", "Bouclier rectangulaire", 2, { defense = 5 }, { planks = 6, fitting = 4, leather = 1 }, 12 },
-	{ "trinket", "Bouclier héraldique", 3, { defense = 5, charisme = 3 }, { steel = 2, dye = 2, leather = 1 }, 20 },
+	-- boucliers portés en main gauche
+	{ "offhand", "Bouclier rond", 1, { defense = 3 }, { planks = 4, iron_ring = 2 }, 4 },
+	{ "offhand", "Bouclier rectangulaire", 2, { defense = 5 }, { planks = 6, fitting = 4, leather = 1 }, 12 },
+	{ "offhand", "Bouclier héraldique", 3, { defense = 5, charisme = 3 }, { steel = 2, dye = 2, leather = 1 }, 20 },
 	-- vêtements
 	{ "armor", "Tunique", 1, { vitesse = 1, charisme = 1 }, { linen = 2 }, 1 },
 	{ "armor", "Chemise en lin", 1, { charisme = 1, vie = 1 }, { linen = 2, linen_thread = 1 }, 1 },
@@ -548,7 +548,7 @@ K.GEAR = {
 	{ "trinket", "Couteau de chasse", 1, { force = 1, discretion = 1 }, { blade = 1, leather = 1 }, 8 },
 	{ "trinket", "Filet de pêche", 1, { chance = 2 }, { rope = 6 }, 2 },
 	{ "trinket", "Panier de récolte", 1, { vie = 1, chance = 1 }, { wicker_basket = 1 }, 0 },
-	{ "trinket", "Torche", 1, { discretion = -1, vie = 1, chance = 1 }, { branches = 2, resin = 1 }, 0 },
+	{ "offhand", "Torche", 1, { discretion = -1, vie = 1, chance = 1 }, { branches = 2, resin = 1 }, 0 },
 	-- harnais (le cheval suit : portés comme breloque, vitesse)
 	{ "trinket", "Selle de voyage", 2, { vitesse = 3, vie = 1 }, { soft_leather = 4, buckle = 2 }, 8 },
 	{ "trinket", "Selle de guerre", 3, { vitesse = 2, defense = 3 }, { soft_leather = 4, steel = 1, buckle = 2 }, 18 },

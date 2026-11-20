@@ -5,10 +5,10 @@ local G = {}
 local Design = require(script.Parent.GearDesign)
 
 G.SLOTS = { weapon = "Arme", hat = "Casque", armor = "Torse", trinket = "Bijou", gloves = "Gants",
-	shoulders = "Épaulières", legs = "Pantalon", cape = "Cape", boots = "Bottes" }
-G.SLOT_ORDER = { "weapon", "hat", "armor", "shoulders", "gloves", "legs", "cape", "boots", "trinket" }
+	shoulders = "Épaulières", legs = "Pantalon", cape = "Cape", boots = "Bottes", offhand = "Main gauche" }
+G.SLOT_ORDER = { "weapon", "hat", "armor", "shoulders", "gloves", "legs", "cape", "boots", "trinket", "offhand" }
 G.SLOT_ICONS = { weapon = "🗡️", hat = "🪖", armor = "🥋", trinket = "💍", gloves = "🧤",
-	shoulders = "🛡️", legs = "👖", cape = "🧥", boots = "🥾" }
+	shoulders = "🛡️", legs = "👖", cape = "🧥", boots = "🥾", offhand = "🛡️" }
 G.slotOf = Design.slotOf
 G.STATS = {
 	force = "Force", defense = "Défense", vie = "Vie", vitesse = "Vitesse",
@@ -73,6 +73,7 @@ function G.expandRecipes(config)
 		local before = counts[slot] or 0
 		local target = slot=="weapon" and before or math.max(12,math.ceil(before/2))
 		local forms = Design.FORMS[slot]
+		if not forms then continue end
 		local countMaterials = #Design.MATERIALS
 		assert(target <= #forms*countMaterials, slot)
 		for i=0,target-1 do
@@ -136,7 +137,8 @@ end
 
 -- Tire un objet. `level` 1-10 : plus il est haut, plus les raretés et paliers montent.
 function G.roll(rng: Random, level: number, slot: string?)
-	local s = slot or G.SLOT_ORDER[rng:NextInteger(1, #G.SLOT_ORDER)]
+	-- La main gauche correspond à des recettes dédiées. Les tirages existants restent stables.
+	local s = slot or G.SLOT_ORDER[rng:NextInteger(1, #G.SLOT_ORDER - 1)]
 	local ri = rarity(rng, level)
 	local r = G.RARITIES[ri]
 	local item = { slot = s, rarity = ri, stats = {}, visual = "", power = 0, name = "" }
@@ -153,6 +155,8 @@ function G.roll(rng: Random, level: number, slot: string?)
 	elseif s == "armor" then
 		local a = G.ARMORS[rng:NextInteger(1, #G.ARMORS)]
 		item.name, favorite = a[1], a[2]
+	elseif s == "offhand" then
+		item.name, favorite = "Bouclier rond", "defense"
 	elseif s == "trinket" then
 		local t = G.TRINKETS[rng:NextInteger(1, #G.TRINKETS)]
 		item.name, favorite = t[1], t[2]

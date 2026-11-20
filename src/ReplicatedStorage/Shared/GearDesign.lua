@@ -69,6 +69,7 @@ function D.slotOf(it): string
 		return slot
 	end
 	local n = D.lower(it.name or "")
+	if n:match("^bouclier") or n:match("^torche") then return "offhand" end
 	if n:match("^cape") or n:match("^pèlerine") or n:match("^mantelet") then return "cape" end
 	if n:match("^botte") or n:match("^soleret") then return "boots" end
 	if n:match("^gant") or n:match("^brassard") then return "gloves" end
@@ -86,8 +87,11 @@ function D.formOf(it): string?
 	if s=="legs" then return n:match("^jambière") and "greaves" or "pants" end
 	if s=="cape" then return "cape" end
 	if s=="boots" then return n:find("marais",1,true) and "tallboots" or "boots" end
+	if s=="offhand" then
+		if n:match("^torche") then return "torch" end
+		return n:find("rond", 1, true) and "roundshield" or "shield"
+	end
 	if s=="armor" then
-		if n:match("^bouclier") then return "shield" end
 		if n:find("écaille",1,true) then return "scale" end
 		if n:find("élytre",1,true) then return "beetle" end
 		if n:find("maille",1,true) then return "mail" end

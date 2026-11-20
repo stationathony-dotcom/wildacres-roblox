@@ -1511,7 +1511,7 @@ local function game_()
 		local spots = {
 			hat = Vector2.new(6, 0), armor = Vector2.new(6, 52), gloves = Vector2.new(6, 104), legs = Vector2.new(6, 156),
 			cape = Vector2.new(230, 0), shoulders = Vector2.new(230, 52), trinket = Vector2.new(230, 104), boots = Vector2.new(230, 156),
-			weapon = Vector2.new(118, 169),
+			weapon = Vector2.new(91, 169), offhand = Vector2.new(151, 169),
 		}
 		for _, slot in ipairs(Gear.SLOT_ORDER) do
 			local pos = spots[slot]

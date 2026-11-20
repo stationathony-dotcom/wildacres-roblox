@@ -591,6 +591,26 @@ function Avatar.applyExtraGear(player: Player)
 	holder.Name="Equipement_WA"
 	holder.Parent=char
 	local worn=prof.equipped or {}
+	local hand = char:FindFirstChild("LeftHand") or char:FindFirstChild("Left Arm")
+	if worn.offhand and hand and hand:IsA("BasePart") then
+		local form = Design.formOf(worn.offhand)
+		local style = Design.style(worn.offhand)
+		local metal = Enum.Material.Metal
+		if form == "torch" then
+			weld(holder, hand, "Manche de torche", V(0.17, 1.1, 0.17), C(0, 0.25, -0.27), style.color, Enum.Material.Wood)
+			local flame = weld(holder, hand, "Braise", V(0.23, 0.26, 0.23), C(0, 0.88, -0.27), Color3.fromRGB(255, 144, 48), Enum.Material.Neon, Enum.PartType.Ball)
+			local glow = Instance.new("PointLight")
+			glow.Color, glow.Brightness, glow.Range = Color3.fromRGB(255, 174, 82), 1.3, 13
+			glow.Parent = flame
+		else
+			local shape = form == "roundshield" and Enum.PartType.Cylinder or Enum.PartType.Block
+			local pose = C(-0.36, 0.28, 0) * CFrame.Angles(0, 0, math.rad(12))
+			local height = form == "roundshield" and 1.4 or 1.8
+			weld(holder, hand, "Bouclier", V(0.14, height, 1.35), pose, style.trim, metal, shape)
+			weld(holder, hand, "Face du bouclier", V(0.16, height - 0.16, 1.19), pose, style.color, Enum.Material.WoodPlanks, shape)
+			weld(holder, hand, "Ombilic", V(0.25, 0.33, 0.33), pose * C(-0.12, 0, 0), style.trim, metal, Enum.PartType.Ball)
+		end
+	end
 	wearable(char,worn.gloves,"LeftHand","RightHand",function(p,s,form)
 		local z=p.Size
 		local material=form=="gauntlets" and Enum.Material.Metal or Enum.Material.Leather
