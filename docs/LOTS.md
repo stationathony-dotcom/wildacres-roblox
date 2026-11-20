@@ -57,7 +57,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] Claude → Codex · `Gear.lua` + fiche Personnage · emplacement **main gauche** (bouclier, torche),
       les boucliers quittent les bijoux · Claude branchera ensuite la défense dans `Joueurs.stats` /
       `Combat` (lot C7).
-- [ ] Claude → Codex · interface · 4 boutons d'ordres d'armée (suivre, tenir, patrouiller, attaquer) quand
+- [x] Claude → Codex · interface · 4 boutons d'ordres d'armée (suivre, tenir, patrouiller, attaquer) quand (b65ef70)
       on a des soldats : `Action:FireServer("armee_ordre", { o = "suivre" | "tenir" | "patrouiller" |
       "attaquer", target = <id de la cible WoW> })` · aujourd'hui seulement par `/armee <ordre>` (lot C9).
 - [x] Claude → Codex · interface · formulaire « Écrire à l'équipe » (Paramètres [O] et écran d'accueil) : choix (8a0b67f)
