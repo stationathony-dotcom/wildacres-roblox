@@ -165,7 +165,7 @@ end
 
 local ADMIN = {}
 ADMIN.aide = function(player)
-	say(player, "/wa etat · or · demandes · repondre · clore · meteo · coupe · rallume · annonce · sauver · ferme · versions · restaurer · donner · journal · perf · terrain · joueur · avertir · muet · expulser · bannir · debannir")
+	say(player, "/wa etat · mondes · or · demandes · repondre · clore · meteo · coupe · rallume · annonce · sauver · ferme · versions · restaurer · donner · journal · perf · terrain · joueur · avertir · muet · expulser · bannir · debannir")
 end
 
 -- erreurs du serveur depuis son démarrage (tableau de bord /wa etat)
@@ -365,6 +365,20 @@ ADMIN.debannir = function(player, args)
 	G.Demandes.unban(uid)
 	G.Economie.record(player, "sanction", "débanni " .. uid)
 	say(player, "Bannissement levé pour " .. uid .. ".")
+end
+-- registre des mondes (Mondes.registry) : les 10 plus récemment actifs
+ADMIN.mondes = function(player)
+	local list = G.Mondes.registry()
+	if #list == 0 then
+		return say(player, "Registre vide (Studio : pas de registre).")
+	end
+	say(player, #list .. " monde(s) — nom · id · graine · générateur · danger · dernière activité · record · en ligne")
+	for i = 1, math.min(10, #list) do
+		local m = list[i]
+		local ago = m.last and math.floor((os.time() - m.last) / 3600) or nil
+		say(player, string.format("%s · %s · %s · gen %s · danger %s · %s · %d max · %d", tostring(m.name), tostring(m.id), tostring(m.seed),
+			tostring(m.gen), tostring(m.danger), ago and ("il y a " .. ago .. " h") or ("créé " .. os.date("!%d/%m", m.created)), m.peak, m.online))
+	end
 end
 -- flux d'or du monde (Economie.fluxSummary) : aujourd'hui et les 2 jours d'avant
 ADMIN["or"] = function(player)

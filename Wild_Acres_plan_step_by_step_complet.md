@@ -468,7 +468,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [x] Carte maritime des mondes connus, découverte de mondes, graine et voyage en groupe indiqués comme présents.
 
 ### 16A. Registre et persistance des mondes
-- [ ] Vérifier identifiant unique, graine, version du générateur, statut et dernière activité de chaque monde.
+- [x] Vérifier identifiant unique, graine, version du générateur, statut et dernière activité de chaque monde. _(20/11 : `/wa mondes`)_
 - [x] Garantir qu'un monde découvert conserve sa graine et ses modifications. _(registre WA_Registre {name, seed, code}, état par secteurs de 4×4 régions)_
 - [x] Gérer les créations simultanées de mondes sans doublons involontaires. _(création atomique : UpdateAsync sur le registre, identifiant unique par monde, un serveur réservé par monde)_
 - [x] Gérer population, serveurs multiples et regroupement de joueurs. _(un monde = un serveur réservé ; l'accueil compte les présents (MemoryStore), montre les plus peuplés d'abord et ouvre un monde de plus quand tous sont presque pleins)_

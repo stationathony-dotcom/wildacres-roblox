@@ -41,6 +41,7 @@ local regionJson = {} -- clé de région -> dernier JSON écrit (secteurs décou
 local SPLIT_BYTES = 3200000 -- au-delà, un secteur est découpé en une clé par région
 local metaJson = nil
 local lastSaveT = nil -- os.time() de la dernière sauvegarde réussie de l'état global (/wa etat)
+local lastRegistryT = 0 -- dernière mise à jour de « last » dans le registre (Mondes.registry)
 
 local function getStore(name: string)
 	local ok, ds = pcall(function()
@@ -263,6 +264,22 @@ function Mondes.status()
 		return a.n > b.n
 	end)
 	return st
+end
+
+-- Registre complet pour les admins (/wa mondes) : identifiant, nom, graine, version du générateur,
+-- danger, création, dernière activité, record de joueurs, joueurs en ligne
+function Mondes.registry()
+	local reg = readRegistry()
+	local okC, counts = pcall(onlineCounts)
+	local out = {}
+	for id, m in reg.mondes do
+		table.insert(out, { id = id, name = m.name, seed = m.seed, gen = m.gen or 1, danger = m.danger or 1, created = m.created or 0,
+			last = m.last, peak = m.peak or 0, online = okC and counts[id] or 0 })
+	end
+	table.sort(out, function(a, b)
+		return (a.last or a.created) > (b.last or b.created)
+	end)
+	return out
 end
 
 -- Liste pour l'écran d'accueil (ouvre un monde de plus si tous sont presque pleins)
@@ -739,6 +756,23 @@ function saveWorldInner(release: boolean?)
 	end
 	metaJson = json
 	lastSaveT = os.time()
+	-- dernière activité dans le registre (au plus toutes les 30 min : une seule clé pour tous les mondes)
+	if registre and Mondes.mode == "monde" and os.time() - lastRegistryT > 1800 then
+		lastRegistryT = os.time()
+		local n = #Players:GetPlayers()
+		try(function()
+			registre:UpdateAsync("liste", function(raw)
+				local reg = decode(raw)
+				local m = reg and reg.mondes and reg.mondes[Mondes.id]
+				if not m then
+					return nil
+				end
+				m.last = os.time()
+				m.peak = math.max(m.peak or 0, n)
+				return HttpService:JSONEncode(reg)
+			end)
+		end)
+	end
 	-- secteurs : regroupe l'état des régions
 	local sectors = {}
 	for key, rs in w.regions do
