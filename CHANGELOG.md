@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Catalogue** : planche de contrôle des miniatures prioritaires après reconstruction dans Studio.
 - **Villageois et bêtes** : une bête hostile à moins de 22 studs fait fuir les villageois (cri de peur), qui reprennent leur routine ensuite ; le shérif et les gardes tiennent leur poste
 - **Visuels** : noyau, fragment de ruine, laine, couronnes, turban, carreaux, insignes, talisman, chair et oreilles ont des silhouettes et des matières dédiées.
 - **Performance des armées** : soldats et compagnons loin de tout joueur (sans combat) pensent à 6 Hz puis 1 Hz, comme les monstres — une grande armée en garde ne coûte presque plus rien

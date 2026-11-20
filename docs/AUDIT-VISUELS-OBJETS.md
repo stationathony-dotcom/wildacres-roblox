@@ -54,3 +54,7 @@ Le style peut rester simple et compatible avec le jeu. Un petit nombre de volume
 4. **Reprendre plantes, matériaux, bijoux et butins par familles.** Traiter en priorité les collisions de sens, puis les séries où un joueur hésite entre deux objets. Les matières réellement similaires, comme des minerais ou des essences, peuvent garder une structure commune et gagner un accent distinctif.
 
 Pour valider un lot, afficher les objets sans leur nom à la taille d’une case du sac et de la barre rapide. Faire identifier leur type et leur état avec une planche mélangée. Vérifier également le contour en niveaux de gris, le contraste sur fond sombre et la stabilité du cadrage quand la quantité apparaît. Les détails fins peuvent venir ensuite, sur les objets que le joueur inspecte en grand.
+
+## Miniatures prioritaires corrigées
+
+La planche présente, de gauche à droite et du haut vers le bas, le noyau de cerise, le fragment de ruine, la laine, les deux couronnes, le turban, les deux carreaux, les trois insignes, le talisman, la chair pourrie et l’oreille de gobelin. [Planche Studio Edit](../images/catalogue/09-identites-corrigees.jpg)
