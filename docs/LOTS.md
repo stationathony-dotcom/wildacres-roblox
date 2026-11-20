@@ -68,7 +68,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       posé : rien ne casse, c'est du code mort) et l'écran assombri reste pour « Obscur ».
 - [x] Claude → Codex · `Interface.client` / `Gear.lua` · plus de « Façonnée par » ni de qualité sur les (27934fe)
       nouvelles pièces (les champs ne sont plus posés ; les anciennes pièces les gardent).
-- [ ] Claude → Codex · `ConstruireModeles` (créatures) · 3 formes neuves pour finir `listes ennemi.txt` :
+- [x] Claude → Codex · `ConstruireModeles` (créatures) · 3 formes neuves pour finir `listes ennemi.txt` : (ed00ed3)
       **cavalier** (brigand à cheval), **poisson** (poisson carnassier géant), **serpent marin** (long, crête)
       · Claude ajoutera les créatures au Bestiaire dès que les formes existent (lot C5).
 
