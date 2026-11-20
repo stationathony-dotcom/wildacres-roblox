@@ -508,7 +508,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [x] Faire en sorte que les événements soient découverts dans le monde, selon le principe du jeu. _(rien n'est annoncé : seuls ceux qui sont dans le coin voient ou entendent)_
 - [ ] Vérifier événements avec serveur vide, peu de joueurs et serveur plein.
 - [x] Définir ce qui se passe quand personne ne répond à un événement.
-- [ ] Vérifier que les récompenses ne créent pas d'inflation ou de farm.
+- [~] Vérifier que les récompenses ne créent pas d'inflation ou de farm. _(20/11 : invasion payée aux seuls combattants, or des créatures plafonné ; à suivre en ligne avec `/wa or`)_
 
 ## ÉTAPE 18 — TERMINER LES DONJONS, SECRETS ET EXPLORATION À PIED
 

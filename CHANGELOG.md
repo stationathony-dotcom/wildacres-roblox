@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Invasion** : les 120 or de remerciement vont à ceux qui ont frappé au moins un assaillant (soldats et bêtes comptent pour leur maître), plus à quiconque se tenait à moins de 160 studs
 - **Or des créatures plafonné** : l'or d'une mise à mort ne dépasse plus 25 + 12 % de la vie de la bête (les élites de niveau 6 à 9 donnaient 150 à 650 or chacune, 5 à 15 fois les autres métiers) ; butin des créatures ramené dans la norme de leur niveau (`Bestiaire.normalizeLoot`, banc `butin_creatures`)
 - **Harpon** : outil pris en main depuis le sac ou la barre rapide. Un lancer valide déclenche l’animation et le résultat de pêche.
 - **Fenêtres** : retour clavier et manette commun aux panneaux, aux livres et à l’hôtel des ventes. Les coups, récoltes visées et poses sont suspendus pendant leur ouverture.

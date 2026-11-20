@@ -507,10 +507,17 @@ function Evenements.step(dt: number)
 			end
 			if alive == 0 then
 				table.remove(active, i)
-				-- les villageois remercient ceux qui étaient là
+				-- les villageois remercient ceux qui se sont battus (au moins un coup porté à un assaillant ;
+				-- 20/11 : avant, il suffisait d'être à moins de 160 studs, même sans rien faire)
+				local fought = {}
+				for _, en in e.wave do
+					for p in en.hitters or {} do
+						fought[p] = true
+					end
+				end
 				for _, p in G.Game.players() do
 					local r = G.Util.root(p)
-					if r and e.center and (r.Position - e.center).Magnitude < 160 then
+					if r and fought[p] and e.center and (r.Position - e.center).Magnitude < 160 then
 						G.Joueurs.add(p, "gold", 120, true)
 						G.Util.finds(p, "event")
 						G.Law.addHonor(p, 5)
