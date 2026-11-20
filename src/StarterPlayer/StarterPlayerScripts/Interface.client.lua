@@ -1432,10 +1432,7 @@ local function game_()
 
 	local function gearLines(it)
 		local r = Gear.RARITIES[it.rarity] or Gear.RARITIES[1]
-		local lines = { { it.name, r.color, 16 }, { (Gear.SLOTS[it.slot] or it.slot) .. " · " .. r.name .. (it.quality and (" · " .. it.quality) or ""), C.dim, 12 } }
-		if it.maker then
-			table.insert(lines, { "Façonnée par " .. tostring(it.maker), C.gold, 12 }) -- signature de l'artisan
-		end
+		local lines = { { it.name, r.color, 16 }, { (Gear.SLOTS[it.slot] or it.slot) .. " · " .. r.name, C.dim, 12 } }
 		if it.power and it.power > 0 then
 			table.insert(lines, { "⚔️ " .. it.power, C.text, 15 })
 		end

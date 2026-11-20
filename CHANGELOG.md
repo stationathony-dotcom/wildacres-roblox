@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Équipement** : les fiches anciennes et nouvelles masquent la qualité de façon et le nom du fabricant.
 - **Météo** : la neige dépend du biome. L’obscurité des grottes garde son traitement visuel.
 - **Armée** : la caserne permet d’ordonner Suivre, Tenir, Patrouiller et Attaquer. L’attaque reprend la cible sélectionnée.
 - **Plantes sauvages** : 5 par biome partout (désert : épices sauvages, fleur lunaire ; neige : herbes aromatiques, fleur lunaire ; marais : champignons, champignon phosphorescent)

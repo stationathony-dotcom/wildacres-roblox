@@ -183,30 +183,30 @@ function G.describe(item): string
 		end
 	end
 	local extra = item.slot == "weapon" and string.format(" (dégâts %d)", item.power) or ""
-	local made = (item.quality and (" · " .. item.quality) or "") .. (item.maker and (" · par " .. item.maker) or "")
+	local details = ""
 	-- exigence de caractéristique (Shared/Equilibre)
 	local okE, Eq = pcall(function()
 		return require(script.Parent.Equilibre)
 	end)
 	local req = okE and Eq.requirement(item)
 	if req then
-		made ..= " · requiert " .. (req[4] or G.STATS[req[1]] or req[1]) .. " " .. req[2]
+		details ..= " · requiert " .. (req[4] or G.STATS[req[1]] or req[1]) .. " " .. req[2]
 	end
 	if item.ammo and okE and Eq.AMMO_NAME then
-		made ..= " · arme de jet (" .. (Eq.AMMO_NAME[item.ammo] or item.ammo) .. ")"
+		details ..= " · arme de jet (" .. (Eq.AMMO_NAME[item.ammo] or item.ammo) .. ")"
 	end
 	if item.effect and okE and Eq.EFFECT_TEXT then
-		made ..= " · " .. (Eq.EFFECT_TEXT[item.effect] or item.effect)
+		details ..= " · " .. (Eq.EFFECT_TEXT[item.effect] or item.effect)
 	end
 	local set = okE and Eq.setText(item)
 	if set then
-		made ..= " · " .. set
+		details ..= " · " .. set
 	end
 	-- bonus de métier (équipement de métier)
 	for k, v in item.skills or {} do
 		table.insert(parts, string.format("+%d %s", v, (okE and Eq.SKILL_LABEL[k]) or k))
 	end
-	return string.format("%s [%s]%s%s  %s", item.name, G.RARITIES[item.rarity].name, extra, made, table.concat(parts, "  "))
+	return string.format("%s [%s]%s%s  %s", item.name, G.RARITIES[item.rarity].name, extra, details, table.concat(parts, "  "))
 end
 
 -- Somme des stats de tout l'équipement porté.
