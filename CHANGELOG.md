@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Audio** : six effets préchargés avec succès. L’erreur 203785492 provient du préchargement du son de notification par le plugin Rojo.
 - **Miniatures** : la fiche utilise la forme de l’objet et conserve un pictogramme correspondant lorsque le modèle manque. Les bancs régénèrent aussi les formes de main gauche.
 - **Accueil** : affiche les amis présents dans les mondes de Wild Acres et utilise le même bouton Rejoindre que la liste générale.
 - **Interface** : la fiche de référence décrit le menu commun, le retour manette, la disposition mobile et les réglages.

@@ -65,4 +65,4 @@ Sur téléphone, le sac fait défiler ses catégories horizontalement. La fiche 
 Les nouveaux sons utilisent les effets gratuits de Pro Sound Effects distribués par le Creator Store.
 [Documentation des assets audio Roblox](https://create.roblox.com/docs/audio/assets).
 
-L’asset 203785492 est « Pop Close Sound » de Zyleak, de type audio. Le journal Studio montre une demande en format texture KTX2. La recherche dans les scripts, les sources ouvertes dans Studio et leurs propriétés d’assets n’a retrouvé aucun appel dans Wild Acres.
+Le plugin Rojo déclare 203785492 comme son de notification. Son module de préchargement rassemble les URI des images et des sons dans la même liste et les passe à ContentProvider:PreloadAsync. Studio envoie alors une requête de texture pour « Pop Close Sound ». Cette déclaration est dans le plugin installé. [Table des assets de Rojo](https://github.com/rojo-rbx/rojo/blob/master/plugin/src/Assets.lua).
