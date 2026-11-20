@@ -30,4 +30,29 @@ function Fiche.etat(config, recipe, inventory, stations, count)
 	}
 end
 
+function Fiche.grille(config, recipe, inventory)
+	local keys = {}
+	for id in recipe.needs do table.insert(keys, id) end
+	table.sort(keys, function(a, b)
+		local ag, bg = config.ITEM_GROUPS[a] ~= nil, config.ITEM_GROUPS[b] ~= nil
+		if ag ~= bg then return not ag end
+		return a < b
+	end)
+	local grid, used = {}, {}
+	for _, id in keys do
+		local left = recipe.needs[id]
+		for _, member in config.ITEM_GROUPS[id] or {id} do
+			local number = math.min(left, math.max(0, (inventory.inv[member] or 0) - (used[member] or 0)))
+			if number > 0 then
+				table.insert(grid, { id = member, n = number })
+				used[member] = (used[member] or 0) + number
+				left -= number
+			end
+			if left == 0 then break end
+		end
+		if left > 0 then return nil end
+	end
+	return grid
+end
+
 return Fiche

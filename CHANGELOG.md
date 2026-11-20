@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Atelier** : la grille automatique utilise plusieurs variantes quand le stock d’une même famille est réparti.
 - **Bestiaire complet** (`listes ennemi.txt`) : brigand à cheval (prairie, désert), brochet géant (marais, forêt) et serpent marin (marais, élite), sur les modèles faits par Codex, avec leur matière et leur pièce d'équipement — 168 créatures
 - **Atelier** : le carnet et le résultat ouvrent une fiche commune. Elle indique le stock, les conditions et la cause d’un verrouillage avant de préparer ou fabriquer.
 - **Chantiers de village** : 2 de plus après le musée — **atelier commun** (fabriquer au village donne +20 % d'expérience d'artisanat) et **grand-rue pavée** (on y marche 10 % plus vite)

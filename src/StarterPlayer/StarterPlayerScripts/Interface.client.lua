@@ -2143,19 +2143,12 @@ local function game_()
 				cell.MouseLeave:Connect(hideTip)
 				cell.Activated:Connect(function()
 					fiche.open(r, 1, "Préparer la grille", function()
-						grid = {}
-						local slot = 0
-						for id, n in r.needs do
-							local pick = id
-							for _, it in Config.ITEM_GROUPS[id] or {} do
-								if (inv.inv[it] or 0) >= n then
-									pick = it
-									break
-								end
-							end
-							slot += 1
-							grid[slot] = { id = pick, n = n }
+						local preparation = fiche.model.grille(Config, r, inv)
+						if not preparation or #preparation > 9 then
+							toast("Ce mélange ne tient pas dans la grille avec ton stock actuel.", "danger")
+							return
 						end
+						grid = preparation
 						renderCraft()
 					end)
 				end)
