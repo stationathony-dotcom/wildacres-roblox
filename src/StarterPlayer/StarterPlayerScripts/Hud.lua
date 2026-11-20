@@ -118,28 +118,33 @@ local BLADE_TINTS = {
 	Color3.fromRGB(219, 72, 92), Color3.fromRGB(69, 178, 117), Color3.fromRGB(68, 126, 221), Color3.fromRGB(189, 141, 228),
 }
 
+local FORM_ICONS = { bow = "🏹", crossbow = "🏹", pike = "🔱", halberd = "🔱", spear = "🔱",
+	staff = "🪄", scythe = "🌾", reaper = "🌾", sickle = "🌾", dagger = "🗡️", axe = "🪓",
+	hammer = "🔨", mace = "🔨", shield = "🛡️", roundshield = "🛡️", torch = "🔥" }
+
+function Hud.gearIcon(it)
+	local shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
+	local gear = require(shared:WaitForChild("Gear"))
+	local design = require(shared:WaitForChild("GearDesign"))
+	return FORM_ICONS[design.formOf(it)] or gear.SLOT_ICONS[gear.slotOf(it)] or "✨"
+end
+
 function Hud.gearViewport(it, dim: boolean?): ViewportFrame?
 	local rs = game:GetService("ReplicatedStorage")
 	local equipment = rs:FindFirstChild("IconesEquipement")
 	local tools = rs:FindFirstChild("IconesOutils")
-	local template = equipment and ((it.name and (equipment:FindFirstChild(it.slot .. ":" .. it.name)
-		or equipment:FindFirstChild(it.name))) or equipment:FindFirstChild(it.slot))
+	local design = require(rs.Shared:WaitForChild("GearDesign"))
+	local slot, form = design.slotOf(it), design.formOf(it)
+	local template = equipment and it.name and (equipment:FindFirstChild(slot .. ":" .. it.name) or equipment:FindFirstChild(it.name))
 	local hue
-	if it.slot == "weapon" and not template and tools then
-		local name = string.lower(it.name or "")
-		local key = if name:find("hache", 1, true) then "Hache"
-			elseif name:find("mass", 1, true) or name:find("gourdin", 1, true) then "Gourdin"
-			else "Épée"
-		template = tools:FindFirstChild(key)
+	if slot == "weapon" and not template and tools then
+		local key = if form == "axe" then "Hache" elseif form == "mace" then "Gourdin" elseif form == "sword" then "Épée" else nil
+		template = key and tools:FindFirstChild(key)
 		hue = BLADE_TINTS[math.clamp(tonumber(it.visual) or 3, 1, #BLADE_TINTS)]
 	end
-	if not (template and template:IsA("Model")) then
-		return nil
-	end
+	if not (template and template:IsA("Model")) then return nil end
 	return Hud.objectViewport(template, dim, hue and function(p)
-		if p.Material == Enum.Material.Metal then
-			p.Color = hue
-		end
+		if p.Material == Enum.Material.Metal then p.Color = hue end
 	end or nil)
 end
 

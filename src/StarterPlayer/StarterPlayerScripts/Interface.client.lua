@@ -1501,7 +1501,7 @@ local function game_()
 	local function gearCell(parent, size: number, it, slot: string?)
 		local r = it and (Gear.RARITIES[it.rarity] or Gear.RARITIES[1])
 		local cell = new("TextButton", {
-			Text = it and (SLOT_ICON[it.slot] or "✨") or (SLOT_ICON[slot] or ""), TextSize = math.floor(size * 0.5), Font = BOLD, TextTransparency = it and 0 or 0.75,
+			Text = it and Hud.gearIcon(it) or (SLOT_ICON[slot] or ""), TextSize = math.floor(size * 0.5), Font = BOLD, TextTransparency = it and 0 or 0.75,
 			AutoButtonColor = it ~= nil, BackgroundColor3 = Color3.fromRGB(30, 26, 22), Size = UDim2.fromOffset(size, size), Parent = parent, ZIndex = 8,
 		}, { corner(4) })
 		stroke(r and r.color or Color3.fromRGB(70, 60, 50), r and 2 or 1).Parent = cell
@@ -1963,7 +1963,7 @@ local function game_()
 	end
 	local function recipeInfo(r)
 		if r.gear then
-			return { name = r.gear.name, icon = Gear.SLOT_ICONS[r.gear.slot] or "✨", gear = r.gear }
+			return { name = r.gear.name, icon = Hud.gearIcon(r.gear), gear = r.gear }
 		end
 		return itemInfo(r.item)
 	end

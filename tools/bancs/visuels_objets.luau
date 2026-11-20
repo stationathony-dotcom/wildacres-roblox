@@ -3,8 +3,8 @@ local RS = game:GetService("ReplicatedStorage")
 local SS = game:GetService("ServerStorage")
 local configCopy = RS.Shared:Clone()
 configCopy.Parent = SS
-local ok, C, catalogue = pcall(function()
-	return require(configCopy.Config), require(configCopy.Catalogue)
+local ok, C, catalogue, Gear = pcall(function()
+	return require(configCopy.Config), require(configCopy.Catalogue), require(configCopy.Gear)
 end)
 configCopy:Destroy()
 assert(ok, tostring(C))
@@ -732,10 +732,6 @@ for id,info in C.ITEMS do
 end
 
 local gearIcons=folder("IconesEquipement")
-local gearCopy=RS.Shared.Gear:Clone()
-gearCopy.Parent=SS
-local Gear=require(gearCopy)
-gearCopy:Destroy()
 local function gearIcon(name,family,color,variant)
 	local m=Instance.new("Model")
 	m.Name=name

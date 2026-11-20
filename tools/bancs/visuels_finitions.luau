@@ -1816,6 +1816,7 @@ local function stage(parent,id,kind,build)
 	assert(model:FindFirstChildWhichIsA("BasePart"),id)
 	pending[#pending+1]={parent=parent,model=model}
 	result[id]=kind
+	if #pending%60==0 then task.wait() end
 end
 for id,kind in itemForms do
 	local info=assert(config.ITEMS[id],id)
@@ -1842,6 +1843,13 @@ for key,entry in gearEntries do
 		elseif entry.slot=="armor" then
 			armor(d,c,kind=="brigandine" and "leather" or kind,lower)
 			if kind=="brigandine" then for i=-1,1 do bolt(d,i*0.27,0.31,-0.31,s.trim) end end
+		elseif entry.slot=="offhand" then
+			if kind == "torch" then
+				d.box("Manche",0.18,1.43,0.18,0,-0.21,0,wood,-0.15)
+				d.part("Flamme",v(0.38,0.61,0.33),cf(0.14,0.66,0),rgb(243,144,44),"wedge",Enum.Material.Neon)
+			else
+				shield(d,c,kind == "roundshield" and "round" or "shell")
+			end
 		elseif entry.slot=="hat" then headShape(d,c,kind,s.trim)
 		elseif entry.slot~="trinket" then armorSlot(d,c,kind,s.trim)
 		elseif kind=="heart" then core(d,lower,true)
