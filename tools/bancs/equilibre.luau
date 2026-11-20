@@ -34,7 +34,7 @@ local function line(ok, title, detail)
 end
 
 -- 1. usages
-local DIRECT = { "food", "tool", "place", "use", "seed", "weapon", "lock", "drink", "wear", "block", "meal" }
+local DIRECT = { "food", "tool", "place", "use", "seed", "weapon", "lock", "drink", "wear", "block", "meal", "bagSkill" }
 local useful, outputs = {}, {}
 for id, i in I do
 	local u = USED_BY_CODE[id] == true

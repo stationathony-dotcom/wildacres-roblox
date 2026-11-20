@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Outils de métier du sac** (17, tirés de `liste items.txt`) : marteau d'artisan, aiguille, fuseau, scie à main, faucille, râteau, ciseau de tailleur, piolet, mortier et pilon, rouleau à pâtisserie, tamis, filet de pêche (+2), flotteur, licol, laisse, fourche à foin, étiquettes de prix — gardés dans le sac, ils donnent +1 dans leur métier (au plus +3 par métier, ne débloquent rien)
 - **Tableau de bord admin** `/wa etat` : ce serveur (monde, durée, joueurs, mémoire, physique), dernière sauvegarde du monde et sa taille, verrou perdu ou secteurs illisibles, erreurs depuis le démarrage, mondes en ligne
 - **Équilibre économique** : banc `economie` (or par minute de chaque activité avec les vraies données → `docs/EQUILIBRE-ECONOMIE.md`) ; la pêche rapportait 2,5 à 4 fois la médiane sans risque → poisson cru revendu 40 % moins cher (`Equilibre.FISH_PRICE`, le poisson cuisiné garde sa valeur) ; les créatures de niveau 7 à 9 restent au-dessus (prix du danger)
 - **Armée v2 (ordres de groupe)** : `/armee suivre` (en colonne, rangs de 4 derrière soi), `tenir` (en ligne là où l'on est), `patrouiller` (carré autour de soi, chacun part d'un coin), `attaquer` (la cible choisie, sinon le monstre le plus proche devant) ; seuls les soldats à moins de 60 studs entendent l'ordre ; `/armee` seul = état et solde

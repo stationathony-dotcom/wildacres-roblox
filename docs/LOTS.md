@@ -97,7 +97,8 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [x] **C5 · Fin du bestiaire** — 20/11 : il ne manque que 3 créatures qui demandent des formes neuves
       (passage à Codex ci-dessus) ; le reste existe (Enemies + Bestiaire, 165 créatures). (`listes ennemi.txt`) : aquatiques, dragonnets, griffons, PNJ civils
       restants, faune passive restante — avec les formes existantes ; une forme neuve = passage à Codex.
-- [ ] **C6 · Fin du catalogue** (`liste items.txt`, ~300 entrées) : rapprocher entrée par entrée de
+- [~] **C6 · Fin du catalogue** — 20/11 : 532 / 812 entrées déjà là (souvent sous un autre nom) ; ajouté 17 outils de
+      métier du sac ; reste surtout de la construction (formes × matières, couloir Codex) et du décor ; (`liste items.txt`, ~300 entrées) : rapprocher entrée par entrée de
       `docs/REFERENCE.md` (déjà là sous un autre nom ?), ajouter le reste par lots dans `Equilibre`
       avec un usage ; formes neuves = passage à Codex.
 - [ ] **C7 · Harpon côté pêche** (`Fishing.harpoon`) **et main gauche côté stats** (`Joueurs.stats`,

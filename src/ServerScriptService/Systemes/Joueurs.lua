@@ -334,6 +334,11 @@ function J.skill(player: Player, skill: string): number
 			bonus += s[skill]
 		end
 	end
+	-- outils de métier gardés dans le sac (Shared/Equilibre : BAG_TOOLS, 20/11)
+	local okE, Eq = pcall(require, game:GetService("ReplicatedStorage").Shared.Equilibre)
+	if okE and Eq.bagToolBonus then
+		bonus += Eq.bagToolBonus(p.inv, skill)
+	end
 	return G.Config.skillLevel(p.skills[skill] or 0) + math.min(10, bonus)
 end
 

@@ -188,7 +188,49 @@ E.NEW_ITEMS = {
 	-- équipement de compagnon, dans le sac du maître (Compagnons : damageOf / hurt)
 	{ "spiked_collar", "Collier clouté", "🐕", 90, { leather = 2, copper_nails = 6, buckle = 1 }, 1, "tannery", 8 },
 	{ "pet_harness", "Harnais de cuir", "🦮", 110, { leather = 3, leather_strap = 2, iron_ring = 2 }, 1, "tannery", 10 },
+	-- outils de métier du sac (« liste items.txt », objets de métiers, 20/11) : E.BAG_TOOLS
+	{ "artisan_hammer", "Marteau d'artisan", "🔨", 70, { iron_ingot = 1, planks = 1 }, 1, "anvil", 4 },
+	{ "sewing_needle", "Aiguille à coudre", "📌", 60, { iron_ingot = 1 }, 1, "anvil", 6 },
+	{ "spindle", "Fuseau", "🧵", 25, { planks = 2, stone = 2 }, 1, "bench", 2 },
+	{ "hand_saw", "Scie à main", "🔧", 75, { iron_ingot = 1, oak_log = 1 }, 1, "anvil", 6 },
+	{ "sickle", "Faucille", "🌙", 65, { iron_ingot = 1, branches = 2 }, 1, "anvil", 4 },
+	{ "rake", "Râteau", "🧹", 20, { planks = 3, stone = 1 }, 1, "bench", 2 },
+	{ "chisel", "Ciseau de tailleur", "🗡️", 60, { iron_ingot = 1, stone = 2 }, 1, "anvil", 6 },
+	{ "ice_pick", "Piolet", "⛏️", 110, { iron_ingot = 2, planks = 1 }, 1, "anvil", 10 },
+	{ "mortar_pestle", "Mortier et pilon", "🥣", 15, { stone = 5 }, 1, "bench", 2 },
+	{ "rolling_pin", "Rouleau à pâtisserie", "🥖", 10, { planks = 3 }, 1, "bench", 0 },
+	{ "sieve", "Tamis", "🍽️", 50, { planks = 2, linen_thread = 1 }, 1, "bench", 4 },
+	{ "fishing_net", "Filet de pêche", "🕸️", 120, { rope = 6, linen_thread = 2 }, 1, "bench", 8 },
+	{ "cork_float", "Flotteur", "🎈", 12, { wood = 2, feather = 1 }, 1, "bench", 0 },
+	{ "halter", "Licol", "🐴", 50, { leather = 2, rope = 1 }, 1, "tannery", 4 },
+	{ "leash", "Laisse", "🐕", 30, { leather = 1, iron_ring = 1 }, 1, "tannery", 2 },
+	{ "pitchfork", "Fourche à foin", "🍴", 70, { iron_ingot = 1, planks = 1, rope = 1 }, 1, "anvil", 4 },
+	{ "price_tags", "Étiquettes de prix", "🏷️", 20, { paper = 3, ink = 1 }, 1, "bench", 0 },
 }
+-- Outils de métier gardés dans le SAC : + niveaux de compétence tant qu'on les a (Joueurs.skill), au plus
+-- E.BAG_CAP par compétence. Ils ne débloquent rien (les déblocages lisent Joueurs.skillRaw).
+E.BAG_TOOLS = {
+	artisan_hammer = { "artisanat", 1 }, sewing_needle = { "artisanat", 1 }, spindle = { "artisanat", 1 },
+	hand_saw = { "bucheronnage", 1 }, sickle = { "agriculture", 1 }, rake = { "agriculture", 1 },
+	chisel = { "minage", 1 }, ice_pick = { "minage", 1 }, mortar_pestle = { "cuisine", 1 }, rolling_pin = { "cuisine", 1 },
+	sieve = { "cuisine", 1 }, fishing_net = { "peche", 2 }, cork_float = { "peche", 1 }, halter = { "dressage", 1 },
+	leash = { "dressage", 1 }, pitchfork = { "elevage", 1 }, price_tags = { "commerce", 1 },
+}
+E.BAG_CAP = 3
+
+-- bonus des outils de métier présents dans le sac (inv = profil.inv)
+function E.bagToolBonus(inv, skill: string): number
+	if type(inv) ~= "table" then
+		return 0
+	end
+	local n = 0
+	for id, b in E.BAG_TOOLS do
+		if b[1] == skill and (inv[id] or 0) > 0 then
+			n += b[2]
+		end
+	end
+	return math.min(E.BAG_CAP, n)
+end
 E.TACK = { saddle_race = 1.15, saddle_leather = 1.08 } -- la meilleure selle compte ; étriers en plus
 E.STIRRUPS = 1.05
 -- armes de jet (emplacement Arme, tir à distance) : { nom, rareté, stats, dégâts, munition, ingrédients, niveau }
@@ -397,6 +439,13 @@ function E.apply(C)
 			I[id] = { name = name, icon = icon, price = price }
 			table.insert(R, { item = id, needs = table.clone(needs), count = count > 1 and count or nil, station = station, cat = "outils", skill = level > 0 and { "artisanat", level } or nil })
 			note("nouvel objet " .. id)
+		end
+	end
+	for id, b in E.BAG_TOOLS do
+		if I[id] then
+			I[id].bagSkill = b
+			local sk = C.SKILLS and C.SKILLS[b[1]]
+			I[id].desc = "Dans le sac : +" .. b[2] .. " en " .. (sk and sk.name or b[1]) .. " (au plus +" .. E.BAG_CAP .. " par métier)"
 		end
 	end
 	for _, x in E.RANGED_GEAR do
