@@ -436,30 +436,35 @@ function Game.onDeath(player: Player)
 	G.Util.toast(player, "Tu te réveilles chez toi, courbatu." .. (lost > 0 and (" Il te manque " .. lost .. " or.") or ""))
 end
 
--- Le shérif t'attrape : amende, un moment en cellule, étoiles effacées
+-- Le shérif t'attrape : amende, un moment en cellule, étoiles effacées.
+-- surrender = on s'est rendu de soi-même : amende moitié, moins d'honneur perdu, cellule plus courte.
 local JAIL_TIME = 45
-function Game.arrest(player: Player, sheriff)
+function Game.arrest(player: Player, sheriff, surrender: boolean?)
 	local prof = G.Joueurs.get(player)
 	if not prof or prof.stars <= 0 or player:GetAttribute("Jailed") then
 		return
 	end
 	wake(player, nil)
-	local fine = math.min(prof.inv.gold or 0, G.Config.FINE_PER_STAR * prof.stars)
+	local fine = math.min(prof.inv.gold or 0, math.floor(G.Config.FINE_PER_STAR * prof.stars * (surrender and 0.5 or 1)))
 	if fine > 0 then
 		G.Joueurs.take(player, "gold", fine)
 	end
 	prof.stars = 0
 	prof.bounty = 0
-	prof.honor = math.clamp(prof.honor - 5, -100, 100)
+	prof.honor = math.clamp(prof.honor - (surrender and 2 or 5), -100, 100)
 	G.Joueurs.markDirty(player)
 	G.Law.cleared(player)
 	local office = sheriff and G.Npcs.officeOf(sheriff)
 	local cell = office and office.cell or Game.homePos(player)
 	local exit = office and office.exit or Game.homePos(player)
-	G.Util.toast(player, "« Je te tiens. Direction la cellule. » Amende : " .. fine .. " or.", "big")
+	G.Util.toast(player, surrender and ("« Tu as bien fait de venir. Une nuit au frais et c'est réglé. » Amende : " .. fine .. " or.")
+		or ("« Je te tiens. Direction la cellule. » Amende : " .. fine .. " or."), "big")
+	if surrender then
+		G.Economie.record(player, "reddition", fine .. " or")
+	end
 	Game.teleport(player, cell)
 	player:SetAttribute("Jailed", true)
-	task.delay(JAIL_TIME, function()
+	task.delay(surrender and JAIL_TIME / 2 or JAIL_TIME, function()
 		if player.Parent then
 			player:SetAttribute("Jailed", nil)
 			Game.teleport(player, exit)

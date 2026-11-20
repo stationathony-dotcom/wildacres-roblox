@@ -1063,6 +1063,10 @@ local function options(e, player: Player)
 		end
 	end
 	local role = e.data.role
+	-- se rendre (20/11, étape 14 : on doit toujours pouvoir revenir au jeu) : amende moitié, honneur épargné
+	if role == "sheriff" and (prof.stars or 0) > 0 then
+		table.insert(opts, 1, { id = "surrender", text = "⚖️ Je me rends (amende réduite de moitié)" })
+	end
 	if role == "merchant" or role == "farmer" or e.data.persona == "filou" then
 		table.insert(opts, { id = "trade", text = role == "merchant" and "Voir la boutique" or (role == "farmer" and "Acheter des bêtes / vendre" or "Revendre (sans questions)") })
 	end
@@ -1104,10 +1108,16 @@ function Npcs.talk(player: Player, id: string)
 		return
 	end
 	local s = e.state
+	local prof = G.Joueurs.get(player)
+	-- poursuivi par le shérif : on peut encore se rendre (seul choix)
+	if (s == "fight" or s == "chase") and e.data.role == "sheriff" and e.target == player and prof and (prof.stars or 0) > 0 then
+		talking[player] = id
+		send(player, e, "« Halte ! Tu te rends, ou je dois venir te chercher ? »", { { id = "surrender", text = "⚖️ Je me rends (amende réduite de moitié)" }, { id = "bye", text = "…" } })
+		return
+	end
 	if s == "ko" or s == "carried" or s == "gone" or s == "fight" or s == "chase" then
 		return
 	end
-	local prof = G.Joueurs.get(player)
 	if asleep(e) then
 		e.woken = true
 		getUp(e)
@@ -1260,6 +1270,12 @@ function Npcs.choice(player: Player, choice: string)
 		G.Quetes.openNpc(player, e)
 	elseif choice == "ouvrier" and e.data.role == "farmer" and G.Ouvriers and rawget(G.Ouvriers, "hire") then
 		send(player, e, G.Ouvriers.hire(player, e), options(e, player))
+	elseif choice == "surrender" and e.data.role == "sheriff" then
+		G.remotes.Dialog:FireClient(player, nil)
+		talking[player] = nil
+		G.Game.arrest(player, e, true)
+		e.target = nil
+		setState(e, "routine")
 	elseif choice == "orders" or choice == "bank" then
 		G.remotes.Dialog:FireClient(player, nil)
 		talking[player] = nil

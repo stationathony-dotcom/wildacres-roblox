@@ -103,6 +103,12 @@ La téléportation ne marche pas dans Studio : il faut la version publiée.
 3. [ ] Ouvrir la carte [M] la première fois : combien de temps avant qu'elle s'affiche ?
 4. [ ] Traverser l'île à cheval au galop : des trous dans le sol, des régions qui arrivent en retard ?
 
+## P9. Justice (5 min)
+
+1. [ ] Voler quelque chose devant un témoin (étoiles), aller parler au shérif : « Je me rends » → amende moitié,
+       courte cellule. Recommencer en se faisant poursuivre : le choix apparaît aussi pendant la poursuite.
+2. [ ] Une bête hostile près d'un village : les habitants s'enfuient puis reviennent.
+
 ## P8. Demandes, bugs, appel (5 min)
 
 1. [ ] `/bug Je teste le signalement de bug` → message « 🐞 Bug n°… reçue ».
