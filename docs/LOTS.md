@@ -33,6 +33,12 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] Claude → Codex · `Gear.lua` + fiche Personnage · emplacement **main gauche** (bouclier, torche),
       les boucliers quittent les bijoux · Claude branchera ensuite la défense dans `Joueurs.stats` /
       `Combat` (lot C7).
+- [ ] Claude → Codex · interface · 4 boutons d'ordres d'armée (suivre, tenir, patrouiller, attaquer) quand
+      on a des soldats : `Action:FireServer("armee_ordre", { o = "suivre" | "tenir" | "patrouiller" |
+      "attaquer", target = <id de la cible WoW> })` · aujourd'hui seulement par `/armee <ordre>` (lot C9).
+- [ ] Claude → Codex · `ConstruireModeles` (créatures) · 3 formes neuves pour finir `listes ennemi.txt` :
+      **cavalier** (brigand à cheval), **poisson** (poisson carnassier géant), **serpent marin** (long, crête)
+      · Claude ajoutera les créatures au Bestiaire dès que les formes existent (lot C5).
 
 ---
 
@@ -84,10 +90,12 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       référence (mains vides → outil → vente ; panneau → parcelle → protection ; découverte → grotte →
       retour ; accueil → voyage → reconnexion) + un parcours à deux joueurs, avec ce qu'il faut
       regarder et où noter les bugs (`retours.txt` à la racine). FAIT 20/11 (6290f5e).
-- [ ] **C4 · Quêtes manquantes** — en cours, Claude, 20/11. (`MISSIONS.md`) : livraison à domicile, réparation effective,
+- [x] **C4 · Quêtes manquantes** — FAIT 20/11 (aef971b) : livrer, réparer, étal (banc `quetes_lieux` 23/23) ;
+      métiers / justice / navigation / coopération existaient déjà (fabriquer, prime, naviguer, chasse en groupe). (`MISSIONS.md`) : livraison à domicile, réparation effective,
       installation d'étals ; puis métiers, justice, navigation, coopération — toujours facultatives,
       toujours données sur place.
-- [ ] **C5 · Fin du bestiaire** (`listes ennemi.txt`) : aquatiques, dragonnets, griffons, PNJ civils
+- [x] **C5 · Fin du bestiaire** — 20/11 : il ne manque que 3 créatures qui demandent des formes neuves
+      (passage à Codex ci-dessus) ; le reste existe (Enemies + Bestiaire, 165 créatures). (`listes ennemi.txt`) : aquatiques, dragonnets, griffons, PNJ civils
       restants, faune passive restante — avec les formes existantes ; une forme neuve = passage à Codex.
 - [ ] **C6 · Fin du catalogue** (`liste items.txt`, ~300 entrées) : rapprocher entrée par entrée de
       `docs/REFERENCE.md` (déjà là sous un autre nom ?), ajouter le reste par lots dans `Equilibre`
@@ -97,7 +105,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] **C8 · Équilibrage global** (étape 26B) : banc qui mesure, pour chaque métier, le temps pour
       gagner 100 or et les sources / dépenses d'or ; `docs/EQUILIBRE-ECONOMIE.md` ; corriger ce qui
       rend une activité inutile.
-- [ ] **C9 · Armée façon Warcraft v2** : recrues entraînées à la caserne, ordres (suivre, tenir,
+- [x] **C9 · Armée façon Warcraft v2** — FAIT 20/11 (banc `armee` 15/15, voir commit) ; : recrues entraînées à la caserne, ordres (suivre, tenir,
       attaquer, patrouiller), dure et sans triche, limitée par la solde et les vivres seulement.
 - [ ] **C11 · Plusieurs serveurs sur un même monde** (étape 25) : vérifier secteurs, verrous,
       registre ; banc de concurrence.

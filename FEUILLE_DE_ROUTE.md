@@ -72,6 +72,7 @@ banque agrandissable sans fin, champs sans limite.
 ## Phase 5 — MMORPG complet
 
 - [x] Armée v1 : caserne sur sa parcelle, milicien / archer / garde, solde quotidienne, désertion, morts définitives
+- [x] Armée v2 (20/11) : ordres de groupe à la voix (60 studs) — suivre en colonne, tenir en ligne, patrouiller, attaquer une cible (`/armee`, banc `armee` 15/15) — à voir en Play ; boutons d'ordres = passage à Codex
 - [x] Territoires de clan v1 : les membres bâtissent sur les parcelles les uns des autres — [x] avant-postes contestables (bannière, vivres, déclin, abattable)
 - [x] ~~Guerres de clans annoncées~~ RETIRÉES (volontairement absent) : tout doit être organique, les conflits naissent des joueurs avec les règles normales
 - [x] Politique de village (maire élu par les habitants, trésor, taxe du marché, projets publics, registre)

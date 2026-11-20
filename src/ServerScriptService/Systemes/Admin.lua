@@ -622,7 +622,7 @@ local function onCommand(player: Player, text: string)
 	if cmd == "/aide" then
 		say(player, "💬 /coince · /signaler <pseudo> <motif> · /bloquer · /debloquer · /bloques")
 		say(player, "🔑 /autoriser <pseudo> [coffres|batir] · /retirer · /autorises · /ceder <pseudo> · /louer <pseudo> <jours> <prix> · /accepter")
-		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques · 🐴 /ecurie · 👨‍🌾 /ouvriers · 📕 /bestiaire · 🐾 /animaux · 🌾 /cultures · 🏰 /fonder <nom> · /villes · 🏆 /classement · ⚒️ /renom")
+		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques · 🐴 /ecurie · ⚔️ /armee · 👨‍🌾 /ouvriers · 📕 /bestiaire · 🐾 /animaux · 🌾 /cultures · 🏰 /fonder <nom> · /villes · 🏆 /classement · ⚒️ /renom")
 		say(player, "💃 /danse · 👋 /salut · 👏 /applaudir · 🙇 /reverence")
 	elseif cmd == "/reputation" then
 		say(player, "🏘️ Ta réputation dans les villages de cette île :")
@@ -693,6 +693,15 @@ local function onCommand(player: Player, text: string)
 		G.Livres.cultures(player)
 	elseif cmd == "/ouvriers" then
 		say(player, G.Ouvriers.describe(player))
+	elseif cmd == "/armee" then
+		local o = string.lower(args[1] or "")
+		if G.Armee.ORDERS[o] then
+			G.Armee.order(player, o, nil)
+			return
+		end
+		for _, line in G.Armee.describe(player) do
+			say(player, line)
+		end
 	elseif cmd == "/ecurie" then
 		say(player, "🐴 Tes montures (la première est celle du moment ; le palefrenier les échange) :")
 		for _, line in G.Horses.describe(player) do

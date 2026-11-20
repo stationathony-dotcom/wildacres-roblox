@@ -18,6 +18,12 @@ local function traits(kind: string)
 end
 Compagnons.traits = traits
 
+-- poste fixe (garde / tenir, patrouille) : présent avec sa région, pas avec son maître
+local function stationed(rec): boolean
+	return rec.mode == "guard" or rec.mode == "patrol"
+end
+Compagnons.stationed = stationed
+
 function Compagnons.init(g)
 	G = g
 	Config = G.Config
@@ -109,9 +115,11 @@ local function setPrompt(en)
 	end
 	local ownerP = G.Util.playerOf(en.owner)
 	local who = ownerP and (" de " .. ownerP.DisplayName) or ""
-	local text = en.rec.ready and "Récolter" or (en.rec.mode == "guard" and "Me suivre" or "Garder ici")
+	local text = en.rec.ready and "Récolter" or (stationed(en.rec) and "Me suivre" or "Garder ici")
 	en.prompt = G.Util.prompt(en.model.PrimaryPart, "pet", text, label(en.kind) .. who, { data = { Pet = en.petId }, dist = 9 })
 end
+
+Compagnons.refreshPrompt = setPrompt
 
 local function spawnPet(id: string, rec, uid: string)
 	if live[id] then
@@ -259,8 +267,9 @@ function Compagnons.use(player: Player, id: string)
 		setPrompt(en)
 		return
 	end
-	if rec.mode == "guard" then
+	if stationed(rec) then
 		rec.mode = "follow"
+		rec.route = nil
 		G.Util.toast(player, en.k.name .. " te suit.")
 	else
 		rec.mode = "guard"
@@ -373,7 +382,7 @@ end
 function Compagnons.onRegionLoad(reg)
 	for uidNum, prec in G.world.players do
 		for id, rec in prec.pets or {} do
-			if rec.mode == "guard" and not live[id] and inRegion(reg, rec.hx or rec.x, rec.hz or rec.z) then
+			if stationed(rec) and not live[id] and inRegion(reg, rec.hx or rec.x, rec.hz or rec.z) then
 				spawnPet(id, rec, "u" .. uidNum)
 			end
 		end
@@ -382,7 +391,7 @@ end
 
 function Compagnons.onRegionUnload(reg)
 	for id, en in live do
-		if en.rec.mode == "guard" and inRegion(reg, en.home.X, en.home.Z) then
+		if stationed(en.rec) and inRegion(reg, en.home.X, en.home.Z) then
 			despawn(id)
 		end
 	end
@@ -498,6 +507,49 @@ local function bite(en, target, isPlayer: boolean)
 	end
 end
 
+-- Ordres d'armée (Armee.order, 20/11) ------------------------------------------------------------
+-- « attaquer » : en.order = { kind = "attack", id } (non sauvegardé) : la cible jusqu'à sa chute, puis
+--   retour à l'ordre d'avant ; « patrouiller » : rec.mode = "patrol", rec.route = { {x, z}, … } en boucle,
+--   on se bat en chemin sans s'écarter de plus de 25 studs de la route ; « suivre » : en formation
+--   (en.slot, rangs de 4 derrière le maître) ; « tenir » = garde au point donné (mode "guard").
+local function closeIn(en, target, speed: number, reach: number?, dt: number)
+	local d = (target.pos - en.pos).Magnitude
+	if d > (reach or (en.radius + (target.radius or 1.5) + 1.2)) then
+		G.Enemies.move(en, target.pos, speed * 1.15, dt)
+	else
+		bite(en, target, false)
+	end
+end
+
+local function patrol(en, speed: number, reach: number?, dt: number)
+	local route = en.rec.route
+	if type(route) ~= "table" or #route == 0 then
+		en.rec.mode = "guard"
+		return
+	end
+	local i = math.clamp(en.rec.wp or 1, 1, #route)
+	local wp = route[i]
+	local goal = Vector3.new(wp[1], en.pos.Y, wp[2])
+	local foe = nearestHostile(en.pos, 18)
+	if foe and Vector2.new(foe.pos.X - goal.X, foe.pos.Z - goal.Z).Magnitude < 25 + 18 then
+		closeIn(en, foe, speed, reach, dt)
+		return
+	end
+	if Vector2.new(en.pos.X - goal.X, en.pos.Z - goal.Z).Magnitude < 3 then
+		en.rec.wp = i % #route + 1
+	end
+	G.Enemies.move(en, goal, speed * 0.6, dt)
+end
+
+-- place dans la colonne : rangs de 4, à 3 studs d'écart, derrière le maître
+local function formationSpot(en, oroot: BasePart): Vector3
+	local slot = en.slot or 0
+	local row, col = math.floor(slot / 4), slot % 4
+	local cf = oroot.CFrame
+	local p = cf.Position - cf.LookVector * (5 + row * 3) + cf.RightVector * ((col - 1.5) * 3)
+	return Vector3.new(p.X, en.pos.Y, p.Z)
+end
+
 local function think(en, dt: number)
 	en.cd -= dt
 	local t = traits(en.kind)
@@ -509,6 +561,20 @@ local function think(en, dt: number)
 	local reach = t.ranged and 16 or nil
 	local owner = G.Util.playerOf(en.owner)
 	local oroot = owner and G.Util.root(owner)
+	if en.order and en.order.kind == "attack" then
+		local target = G.Enemies.byId and G.Enemies.byId(en.order.id)
+		if target and not target.dead and target.model.Parent and (target.pos - en.pos).Magnitude < 120 then
+			closeIn(en, target, speed, reach, dt)
+			en.hop = (en.hop or 0) + dt * 6
+			return
+		end
+		en.order = nil -- cible tombée ou perdue : on reprend l'ordre d'avant
+	end
+	if en.rec.mode == "patrol" then
+		patrol(en, speed, reach, dt)
+		en.hop = (en.hop or 0) + dt * 6
+		return
+	end
 	if en.rec.mode == "follow" then
 		if not oroot then
 			return
@@ -525,6 +591,12 @@ local function think(en, dt: number)
 			local d = (oroot.Position - en.pos).Magnitude
 			if d > 70 then
 				en.pos = oroot.Position + Vector3.new(4, 0, 4)
+			elseif en.slot and en.rec.unit then
+				local spot = formationSpot(en, oroot)
+				local ds = (spot - en.pos).Magnitude
+				if ds > 1.5 then
+					G.Enemies.move(en, spot, speed * (ds > 15 and 1.4 or 1), dt)
+				end
 			elseif d > 6 then
 				G.Enemies.move(en, oroot.Position, speed * (d > 20 and 1.4 or 1), dt)
 			end
@@ -608,7 +680,7 @@ function Compagnons.recall(player: Player): number
 	end
 	local n = 0
 	for _, en in Compagnons.list do
-		if not en.dead and en.model.Parent and G.Util.owns(player, en.owner) and en.rec and en.rec.mode ~= "guard" then
+		if not en.dead and en.model.Parent and G.Util.owns(player, en.owner) and en.rec and not stationed(en.rec) then
 			if (en.pos - root.Position).Magnitude > 30 then
 				local a = math.random() * math.pi * 2
 				local x, z = root.Position.X + math.cos(a) * 4, root.Position.Z + math.sin(a) * 4
@@ -675,6 +747,17 @@ function Compagnons.dismissOne(player: Player): string?
 		end
 	end
 	return nil
+end
+
+-- Soldats vivants d'un maître (pour les ordres d'armée)
+function Compagnons.unitsOf(uid: string)
+	local list = {}
+	for _, en in Compagnons.list do
+		if en.owner == uid and not en.dead and en.model.Parent and en.rec and en.rec.unit then
+			table.insert(list, en)
+		end
+	end
+	return list
 end
 
 -- Positions à jour avant une sauvegarde
