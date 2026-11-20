@@ -2876,6 +2876,7 @@ local function game_()
 		end
 	end)
 
+	local cibleApi = {}
 	-- ---------------------------------------------------------------- Caserne
 	local barP, barBody, barTitle = makePanel("Caserne", "🏰 Caserne", UDim2.fromOffset(640, 480))
 	Remotes:WaitForChild("Menu").OnClientEvent:Connect(function(data)
@@ -2889,6 +2890,19 @@ local function game_()
 		clear(barBody)
 		barTitle.Text = string.format("🏰 Caserne · %d soldat(s) · solde %d 💰/jour", data.count, data.wages)
 		label({ Text = "Pas d'effectif maximum : ta limite, c'est la solde payée chaque matin (2 jours impayés = un déserteur). Une recrue après l'autre par caserne. Un soldat mort ne revient pas. Ordres : approche-toi d'un soldat.", TextSize = 13, TextColor3 = C.dim, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 0, Parent = barBody })
+		if data.count > 0 then
+			local orders = new("Frame", { Name = "Ordres", Size = UDim2.new(1, -8, 0, 42), BackgroundTransparency = 1, LayoutOrder = 0, Parent = barBody },
+				{ new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 6) }) })
+			for _, order in { { "suivre", "Suivre" }, { "tenir", "Tenir" }, { "patrouiller", "Patrouiller" }, { "attaquer", "Attaquer" } } do
+				local command = button(order[2], C.blue, function()
+					local target = cibleApi.get()
+					local id = order[1] == "attaquer" and target and target:GetAttribute("EnemyId") or nil
+					send("armee_ordre", { o = order[1], target = id })
+				end)
+				command.Size = UDim2.new(0.25, -5, 1, 0)
+				command.Parent = orders
+			end
+		end
 		for i, u in data.units or {} do
 			local row = new("Frame", { Size = UDim2.new(1, -8, 0, 58), BackgroundColor3 = C.panel2, LayoutOrder = i, Parent = barBody }, { corner(8) })
 			label({ Text = u.name .. "  ·  ❤️ " .. u.hp .. "  ⚔️ " .. u.dmg .. "  ·  " .. u.desc, Font = BOLD, TextSize = 14, Size = UDim2.new(1, -150, 0, 24), Position = UDim2.fromOffset(10, 3), Parent = row })
@@ -3670,7 +3684,6 @@ local function game_()
 	end)
 
 	-- ---------------------------------------------------------------- Cible (façon WoW)
-	local cibleApi = {}
 	do
 	-- Clic droit sur une créature (ou un PNJ, un joueur) : cadre avec nom, niveau et vie.
 	-- Échap ou clic droit dans le vide : plus de cible. Le toucher garde sa sélection directe.

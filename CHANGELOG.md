@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Armée** : la caserne permet d’ordonner Suivre, Tenir, Patrouiller et Attaquer. L’attaque reprend la cible sélectionnée.
 - **Plantes sauvages** : 5 par biome partout (désert : épices sauvages, fleur lunaire ; neige : herbes aromatiques, fleur lunaire ; marais : champignons, champignon phosphorescent)
 - **Écrire à l’équipe** : demande, bug ou appel depuis les paramètres et l’accueil. Quand l’accès est suspendu, l’accueil ouvre directement l’appel.
 - **Invasion** : les 120 or de remerciement vont à ceux qui ont frappé au moins un assaillant (soldats et bêtes comptent pour leur maître), plus à quiconque se tenait à moins de 160 studs
