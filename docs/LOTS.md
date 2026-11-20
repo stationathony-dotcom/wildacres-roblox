@@ -73,16 +73,18 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 
 ## Couloir Claude — les règles et le monde
 
-- [ ] **C1 · Banc de régression unique.** `tools/bancs/tout.luau` lance tous les bancs Edit et rend un
+- [x] **C1 · Banc de régression unique.** FAIT 20/11 (edef686) : 39 bancs, ~2 min, ménage des restes. `tools/bancs/tout.luau` lance tous les bancs Edit et rend un
       résumé (vert / rouge par banc). *Fini quand* : un seul appel suffit avant chaque fin de lot.
-- [ ] **C2 · Revue sécurité des actions ajoutées les 18-19/11** (Ventes, Chantiers, QuetesLieux,
+- [x] **C2 · Revue sécurité des actions ajoutées les 18-19/11** (Ventes, Chantiers, QuetesLieux,
       Ouvriers, Villes, Ecurie, Fouilles, Concours…) : distance, possession, répétition, double
-      paiement, déconnexion au milieu. Un banc qui rejoue les abus. (Plan étape 1B / 26A.)
-- [ ] **C3 · Fiche de test en Play pour le propriétaire.** `docs/TEST-PLAY.md` : les 4 parcours de
+      paiement, déconnexion au milieu. Un banc qui rejoue les abus. (Plan étape 1B / 26A.) FAIT 20/11 :
+      « nan »/« inf » en texte bloqués (3c5295d, banc `securite` 14/14), clan fondé gratuitement en
+      dépensant l'or pendant l'attente du DataStore (f2385ef). Ventes, Activites, Chantiers, Villes : RAS.
+- [x] **C3 · Fiche de test en Play pour le propriétaire.** `docs/TEST-PLAY.md` : les 4 parcours de
       référence (mains vides → outil → vente ; panneau → parcelle → protection ; découverte → grotte →
       retour ; accueil → voyage → reconnexion) + un parcours à deux joueurs, avec ce qu'il faut
-      regarder et où noter les bugs (`retours.txt` à la racine).
-- [ ] **C4 · Quêtes manquantes** (`MISSIONS.md`) : livraison à domicile, réparation effective,
+      regarder et où noter les bugs (`retours.txt` à la racine). FAIT 20/11 (6290f5e).
+- [ ] **C4 · Quêtes manquantes** — en cours, Claude, 20/11. (`MISSIONS.md`) : livraison à domicile, réparation effective,
       installation d'étals ; puis métiers, justice, navigation, coopération — toujours facultatives,
       toujours données sur place.
 - [ ] **C5 · Fin du bestiaire** (`listes ennemi.txt`) : aquatiques, dragonnets, griffons, PNJ civils
