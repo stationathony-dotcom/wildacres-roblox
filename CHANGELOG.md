@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Bestiaire** : formes Cavalier, Poisson_Carnassier et Serpent_Marin, avec pivot et pièces reconnaissables.
 - **Personnage** : la main gauche a sa propre case. Les anciens boucliers et torches sont déplacés depuis les bijoux, et leur modèle se fixe à la main.
 - **Équipement** : les fiches anciennes et nouvelles masquent la qualité de façon et le nom du fabricant.
 - **Météo** : la neige dépend du biome. L’obscurité des grottes garde son traitement visuel.

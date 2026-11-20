@@ -594,6 +594,78 @@ function M.creatures()
 end
 
 -- Sécurité de la maison et créatures de la nuit (originales)
+
+-- Trois silhouettes employ\u00e9es par le bestiaire, avec le pivot au niveau du sol ou de l\u2019eau.
+function M.formesBestiaire()
+	dossier = dossierModeles()
+	local V = Vector3.new
+	local function part(model, name, size, position, color, material, options)
+		local opts: Opts = options or {}
+		opts.collide = false
+		return P(model, name, size, position, color, material, opts)
+	end
+	do
+		local m = nouveau("Cavalier")
+		local coat, mane = rgb(111, 72, 48), rgb(55, 36, 28)
+		part(m, "Corps du cheval", V(2.1, 2, 3.5), V(0, 2.45, 0), coat, Mat.SmoothPlastic)
+		for _, x in { -0.7, 0.7 } do
+			for _, z in { -1.17, 1.14 } do
+				part(m, "Jambe", V(0.52, 1.68, 0.5), V(x, 1.03, z), coat, Mat.SmoothPlastic)
+				part(m, "Sabot", V(0.62, 0.37, 0.6), V(x, 0.25, z - 0.1), mane, Mat.Slate)
+			end
+		end
+		part(m, "Encolure", V(1.1, 1.9, 1.1), V(0, 3.3, -1.6), coat, Mat.SmoothPlastic, { rot = CFrame.Angles(-0.28, 0, 0) })
+		part(m, "T\u00eate du cheval", V(1.04, 0.87, 1.42), V(0, 4.12, -2.19), coat, Mat.SmoothPlastic)
+		part(m, "Museau", V(0.86, 0.5, 0.68), V(0, 3.89, -2.79), mane, Mat.SmoothPlastic)
+		part(m, "Crini\u00e8re", V(0.31, 1.61, 0.53), V(0, 3.54, -1.14), mane, Mat.SmoothPlastic)
+		part(m, "Queue", V(0.4, 1.6, 0.43), V(0, 1.86, 1.96), mane, Mat.SmoothPlastic, { rot = CFrame.Angles(-0.28, 0, 0) })
+		part(m, "Selle", V(2.24, 0.22, 1.52), V(0, 3.47, 0.48), mane, Mat.Leather)
+		for _, x in { -0.9, 0.9 } do
+			part(m, "Botte", V(0.45, 1.2, 0.46), V(x, 2.91, 0.48), mane, Mat.Leather, { rot = CFrame.Angles(0, 0, x * -0.15) })
+		end
+		part(m, "Manteau du cavalier", V(1.44, 1.42, 0.77), V(0, 4.23, 0.32), rgb(122, 40, 41), Mat.Fabric)
+		part(m, "Capuche", V(0.85, 0.96, 0.86), V(0, 5.28, 0.22), rgb(57, 46, 47), Mat.Fabric)
+		part(m, "Visage", V(0.48, 0.39, 0.07), V(0, 5.22, -0.25), rgb(184, 133, 97), Mat.SmoothPlastic)
+		fini(m)
+	end
+	do
+		local m = nouveau("Poisson_Carnassier")
+		local back, belly = rgb(40, 107, 112), rgb(141, 176, 158)
+		part(m, "Dos", V(1.72, 1.63, 3.45), V(0, 1, 0.1), back, Mat.SmoothPlastic)
+		part(m, "Ventre", V(1.38, 0.53, 3.19), V(0, 0.41, 0.15), belly, Mat.SmoothPlastic)
+		part(m, "M\u00e2choire", V(1.42, 0.53, 1.28), V(0, 0.63, -1.75), rgb(57, 131, 127), Mat.SmoothPlastic)
+		part(m, "Nageoire dorsale", V(0.18, 1.04, 1.5), V(0, 2.0, 0.1), rgb(34, 80, 94), Mat.SmoothPlastic, { forme = "Wedge" })
+		for _, x in { -1, 1 } do
+			part(m, "Nageoire pectorale", V(1.06, 0.15, 0.86), V(x, 0.67, 0.25), back, Mat.SmoothPlastic, { forme = "Wedge", rot = CFrame.Angles(0, x * 0.35, 0) })
+			part(m, "\u0152il", V(0.16, 0.32, 0.32), V(x * 0.83, 1.37, -1.28), rgb(247, 190, 86), Mat.SmoothPlastic, { forme = "Ball" })
+			part(m, "Lobe de queue", V(0.24, 0.81, 1.34), V(0, 1.0 + x * 0.37, 2.22), back, Mat.SmoothPlastic,
+				{ forme = "Wedge", rot = CFrame.Angles(0, math.pi, x < 0 and math.pi or 0) })
+			for i = 1, 3 do
+				part(m, "Dent", V(0.18, 0.23, 0.16), V(x * (0.21 + 0.16 * i), 0.97, -2.1), rgb(229, 221, 186), Mat.SmoothPlastic, { forme = "Wedge" })
+			end
+		end
+		fini(m)
+	end
+	do
+		local m = nouveau("Serpent_Marin")
+		local back, crest = rgb(41, 96, 100), rgb(58, 176, 160)
+		for i = 0, 8 do
+			local extent = 1.72 - i * 0.14
+			local x, y, z = math.sin(i * 0.66) * 0.77, 0.66 + (extent - 0.6) * 0.5, -1.75 + i * 0.9
+			part(m, "Anneau", V(extent, extent * 0.84, 1.19), V(x, y, z), back, Mat.SmoothPlastic, { rot = CFrame.Angles(0, math.cos(i * 0.66) * 0.45, 0) })
+			part(m, "Cr\u00eate", V(0.23, extent * 0.43, 0.65), V(x, y + extent * 0.54, z + 0.11), crest, Mat.SmoothPlastic, { forme = "Wedge" })
+		end
+		part(m, "Cr\u00e2ne", V(1.64, 1.35, 1.75), V(0, 1.63, -2.6), back, Mat.SmoothPlastic)
+		part(m, "Mufle", V(1.23, 0.51, 1.15), V(0, 1.30, -3.40), rgb(123, 168, 140), Mat.SmoothPlastic)
+		for _, x in { -1, 1 } do
+			part(m, "\u0152il", V(0.15, 0.3, 0.33), V(x * 0.81, 1.92, -2.69), rgb(244, 184, 79), Mat.SmoothPlastic, { forme = "Ball" })
+			part(m, "Cr\u00eate lat\u00e9rale", V(0.24, 0.69, 0.73), V(x * 0.81, 2.22, -2.33), crest, Mat.SmoothPlastic,
+				{ forme = "Wedge", rot = CFrame.Angles(0, 0, x * -0.46) })
+		end
+		fini(m)
+	end
+end
+
 function M.securite()
 	dossier = dossierModeles()
 	local function Q(m: Instance, nom: string, taille: Vector3, pos: Vector3, couleur: Color3, mat: Enum.Material?, o: Opts?): BasePart
@@ -2273,6 +2345,7 @@ function M.tout()
 	M.biomes()
 	M.artisanat()
 	M.creatures()
+	M.formesBestiaire()
 	M.securite()
 	dossier = dossierModeles()
 	sol()
