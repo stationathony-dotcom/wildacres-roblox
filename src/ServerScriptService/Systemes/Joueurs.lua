@@ -12,6 +12,7 @@ local recent = {} -- anti-farm : joueur -> { [compétence] = {xp gagnée, début
 
 function J.init(g)
 	G = g
+	J.TOOL_LIFE = G.Config.TOOL_LIFE
 	Players.PlayerRemoving:Connect(function(p)
 		-- l'ordre des écouteurs de PlayerRemoving n'est pas garanti : on laisse le temps à Game
 		-- (et aux autres systèmes) de rendre les objets et de prendre l'instantané de sauvegarde
@@ -122,6 +123,7 @@ function J.set(player: Player, profile)
 	profile.inv = profile.inv or { gold = 0 }
 	profile.gear = profile.gear or {}
 	profile.equipped = profile.equipped or {}
+	G.Gear.migrateEquipment(profile)
 	profile.honor = profile.honor or 0
 	profile.stars = profile.stars or 0 -- les étoiles te suivent (déconnexion, autre monde)
 	profile.bounty = profile.bounty or 0
@@ -543,6 +545,10 @@ function J.equip(player: Player, id: number)
 	end
 	for i, item in p.gear do
 		if item.id == id then
+			local slot = G.Gear.slotOf(item)
+			if not G.Gear.SLOTS[slot] then
+				return
+			end
 			-- exigence de caractéristique (Shared/Equilibre) : la stat principale ENTRAÎNÉE (sans équipement)
 			local okE, Eq = pcall(require, game:GetService("ReplicatedStorage").Shared.Equilibre)
 			local req = okE and Eq.requirement(item)
@@ -553,6 +559,7 @@ function J.equip(player: Player, id: number)
 					return
 				end
 			end
+			item.slot = slot
 			table.remove(p.gear, i)
 			local old = p.equipped[item.slot]
 			if old then
@@ -877,12 +884,10 @@ end
 local TOOL_TEMPLATE = { hoe = "Houe", can = "Arrosoir", shovel = "Pelle", axe = "Hache", pickaxe = "Pioche", rod = "Canne à pêche", club = "Gourdin", sword = "Épée", spade = "Pelle" }
 -- barre d'outils : une case par famille (le meilleur outil possédé de la famille)
 J.TOOL_ORDER = { "hoe", "can", "axe", "pickaxe", "shovel", "rod", "sword", "spade" }
-local TIER_COLORS = { [2] = Color3.fromRGB(206, 120, 70), [3] = Color3.fromRGB(196, 198, 206) }
 
 -- Meilleur outil possédé d'une famille : id, palier (nil si aucun)
 -- Usure des outils (18/11, Minecraft + grind) : chaque coup donné avec un outil l'use ; à bout, il
 -- casse (un exemplaire en moins) et il faut en refaire un. Pierre < cuivre < fer.
-J.TOOL_LIFE = { [1] = 150, [2] = 350, [3] = 700 }
 function J.wearTool(player: Player, base: string, amount: number?)
 	local p = J.profiles[player]
 	local id, tier = J.bestTool(player, base)
@@ -980,14 +985,16 @@ function J.refreshTools(player: Player)
 	for _, id in order do
 		if want[id] and not have[id] then
 			local seed = G.Config.ITEMS[id] and G.Config.ITEMS[id].seed
-			local tpl = ServerStorage.Outils:FindFirstChild(seed and "Graines" or (TOOL_TEMPLATE[id] or TOOL_TEMPLATE[G.Config.baseOf(id)]))
+			local tpl = ServerStorage.Outils:FindFirstChild(id)
+				or ServerStorage.Outils:FindFirstChild(seed and "Graines" or (TOOL_TEMPLATE[id] or TOOL_TEMPLATE[G.Config.baseOf(id)]))
 			if tpl then
 				local t = tpl:Clone()
 				t:SetAttribute("ItemId", id)
+				t.ManualActivationOnly = true
 				if not seed then
 					local info = G.Config.ITEMS[id]
 					t.Name = info and info.name or t.Name
-					local tint = TIER_COLORS[G.Config.tierOf(id)]
+					local tint = not t:GetAttribute("PaletteDediee") and G.Config.TOOL_TINTS[G.Config.tierOf(id)]
 					if tint and info and info.base then
 						for _, d in t:GetDescendants() do
 							if d:IsA("BasePart") and d.Material ~= Enum.Material.Wood and d.Material ~= Enum.Material.WoodPlanks and d.Name ~= "Handle" then

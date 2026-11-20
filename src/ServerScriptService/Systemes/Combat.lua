@@ -17,12 +17,8 @@ function Combat.init(g)
 	G.Interact.onAction("hit", function(player, data)
 		local char = player.Character
 		local tool = char and char:FindFirstChildOfClass("Tool")
-		local id = tool and tool:GetAttribute("ItemId")
-		local base = id and G.Config.baseOf(id)
 		local target = type(data) == "table" and type(data.target) == "string" and data.target or nil
-		if base == "club" or base == "sword" or base == "axe" or base == "pickaxe" then
-			Combat.attack(player, id, target)
-		else
+		if not (tool and G.Tools.use(player, tool, target)) then
 			Combat.attack(player, nil, target)
 		end
 	end)

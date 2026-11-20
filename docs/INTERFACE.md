@@ -42,8 +42,9 @@ Relevé dans le code (`StarterPlayerScripts`), pour l'étape 20 du plan. Tout es
 | Mini-jeux (apprivoiser, crocheter…) | selon l'action | Interface |
 
 ## Autres commandes
-- Clavier : F frapper (et clic gauche / maintenu), E interagir, R action secondaire, Q tout ramasser,
+- Souris : clic gauche pour attaquer ou utiliser l’outil, clic droit pour sélectionner une cible. Maintenir le clic gauche prolonge la récolte visée.
+- Clavier : E interagir, R action secondaire, Q tout ramasser,
   G lâcher ce qu'on porte, X descendre de cheval, H siffler sa monture, Maj courir, 1-9 barre rapide.
-- Manette : stick gauche cliqué = courir ; ButtonX / ButtonY = invites.
+- Manette : stick gauche cliqué = courir, gâchette droite = attaquer ou utiliser l’outil, ButtonX / ButtonY = invites.
 - Chat : `/aide` liste les commandes des joueurs (`/coince`, `/signaler`, `/ceder`, `/louer`,
   `/commande`, `/livrer`, `/demonter`, `/autoriser`, `/bloquer`…).

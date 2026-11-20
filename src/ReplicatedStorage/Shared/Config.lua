@@ -107,9 +107,13 @@ C.ITEMS = {
 	axe = { name = "Hache de pierre", icon = "🪓", tool = true, price = 60, base = "axe", tier = 1 },
 	axe_cu = { name = "Hache de cuivre", icon = "🪓", tool = true, price = 140, base = "axe", tier = 2 },
 	axe_fe = { name = "Hache de fer", icon = "🪓", tool = true, price = 260, base = "axe", tier = 3 },
+	axe_steel = { name = "Hache d’acier", icon = "🪓", tool = true, price = 440, base = "axe", tier = 4 },
+	axe_diamond = { name = "Hache au diamant", icon = "💎", tool = true, price = 1700, base = "axe", tier = 5 },
 	pickaxe = { name = "Pioche de pierre", icon = "⛏️", tool = true, price = 60, base = "pickaxe", tier = 1 },
 	pickaxe_cu = { name = "Pioche de cuivre", icon = "⛏️", tool = true, price = 140, base = "pickaxe", tier = 2 },
 	pickaxe_fe = { name = "Pioche de fer", icon = "⛏️", tool = true, price = 260, base = "pickaxe", tier = 3 },
+	pickaxe_steel = { name = "Pioche d’acier", icon = "⛏️", tool = true, price = 460, base = "pickaxe", tier = 4 },
+	pickaxe_diamond = { name = "Pioche au diamant", icon = "💎", tool = true, price = 1850, base = "pickaxe", tier = 5 },
 	rod = { name = "Canne à pêche", icon = "🎣", tool = true, price = 50 },
 	spade = { name = "Bêche de terrassier", icon = "⛏", tool = true, price = 90 },
 	dirt = { name = "Terre", icon = "🟫", price = 1 },
@@ -125,6 +129,8 @@ C.ITEMS = {
 	club = { name = "Gourdin", icon = "🏏", tool = true, weapon = 2, price = 20, base = "club", tier = 1 },
 	sword = { name = "Épée de cuivre", icon = "🗡️", tool = true, weapon = 4, price = 150, base = "sword", tier = 2 },
 	sword_fe = { name = "Épée de fer", icon = "⚔️", tool = true, weapon = 6, price = 320, base = "sword", tier = 3 },
+	sword_steel = { name = "Épée forgée en acier", icon = "⚔️", tool = true, weapon = 8, price = 530, base = "sword", tier = 4 },
+	sword_diamond = { name = "Épée sertie de diamant", icon = "💎", tool = true, weapon = 11, price = 2300, base = "sword", tier = 5 },
 	-- objets posés (grid = posé sur la grille de 4 studs ; wall = sur le bord de la case où l'on se tient)
 	fence = { name = "Clôture", icon = "🌲", place = "Cloture", grid = "edge" },
 	campfire = { name = "Feu de camp", icon = "🔥", place = "Feu_Camp" },
@@ -339,9 +345,14 @@ C.ITEMS.grilled_fish.price = 60
 
 -- Familles d'outils : du meilleur au moins bon
 C.TOOL_FAMILIES = {
-	axe = { "axe_fe", "axe_cu", "axe" },
-	pickaxe = { "pickaxe_fe", "pickaxe_cu", "pickaxe" },
-	sword = { "sword_fe", "sword", "club" },
+	axe = { "axe_diamond", "axe_steel", "axe_fe", "axe_cu", "axe" },
+	pickaxe = { "pickaxe_diamond", "pickaxe_steel", "pickaxe_fe", "pickaxe_cu", "pickaxe" },
+	sword = { "sword_diamond", "sword_steel", "sword_fe", "sword", "club" },
+}
+C.TOOL_LIFE = { 150, 350, 700, 1050, 1750 }
+C.TOOL_TINTS = {
+	[2] = Color3.fromRGB(206,120,70), [3] = Color3.fromRGB(196,198,206),
+	[4] = Color3.fromRGB(110,143,165), [5] = Color3.fromRGB(111,215,225),
 }
 function C.baseOf(id: string): string
 	local info = C.ITEMS[id]
@@ -395,6 +406,12 @@ C.RECIPES = {
 	{ item = "axe_fe", needs = { planks = 2, iron_ingot = 2 }, station = "anvil", cat = "outils", skill = { "artisanat", 12 } },
 	{ item = "pickaxe_fe", needs = { planks = 2, iron_ingot = 3 }, station = "anvil", cat = "outils", skill = { "artisanat", 12 } },
 	{ item = "sword_fe", needs = { planks = 1, iron_ingot = 3, rope = 1 }, station = "anvil", cat = "outils", skill = { "artisanat", 15 } },
+	{ item = "axe_steel", needs = { planks = 2, steel = 2, leather = 1 }, station = "anvil", cat = "outils", skill = { "artisanat", 20 } },
+	{ item = "pickaxe_steel", needs = { planks = 2, steel = 3, leather = 1 }, station = "anvil", cat = "outils", skill = { "artisanat", 21 } },
+	{ item = "sword_steel", needs = { planks = 1, steel = 3, leather = 1 }, station = "anvil", cat = "outils", skill = { "artisanat", 23 } },
+	{ item = "axe_diamond", needs = { axe_steel = 1, diamond = 1, silver_ingot = 1 }, station = "anvil", cat = "outils", skill = { "artisanat", 30 } },
+	{ item = "pickaxe_diamond", needs = { pickaxe_steel = 1, diamond = 2, silver_ingot = 1 }, station = "anvil", cat = "outils", skill = { "artisanat", 32 } },
+	{ item = "sword_diamond", needs = { sword_steel = 1, diamond = 2, gold_ingot = 1 }, station = "anvil", cat = "outils", skill = { "artisanat", 34 } },
 	-- matériaux
 	{ item = "planks", needs = { wood = 1 }, count = 2, cat = "materiaux" },
 	{ item = "rope", needs = { fiber = 3 }, cat = "materiaux" },
@@ -957,7 +974,8 @@ C.SHOD_BONUS = 1.12
 -- Rareté de chaque objet (une fois que tous les objets existent)
 -- corrections d'équilibre de la fabrication (docs/AUDIT-CRAFT.md), avant la rareté qui suit les prix
 require(script.Parent.Equilibre).apply(C)
--- exigences de caractéristiques (Shared/Equilibre)
+require(script.Parent.Gear).expandRecipes(C)
+-- stats cohérentes des séries générées, pièces de départ, exigences de caractéristiques (Shared/Equilibre)
 require(script.Parent.Equilibre).finish(C)
 Catalogue.assignRarity(C)
 

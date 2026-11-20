@@ -3,6 +3,7 @@
 
 local Avatar = {}
 local G
+local Design = require(game:GetService("ReplicatedStorage").Shared.GearDesign)
 
 local LOOK_COST = 20 -- le premier choix est gratuit ; ensuite barbier / tailleur payants (l'or sort de l'économie)
 
@@ -446,7 +447,8 @@ function Avatar.applyLook(player: Player)
 		-- pas de cheveux sous une capuche ou une toque (ils traverseraient)
 		local hat = prof.equipped and prof.equipped.hat
 		local fn = HAIRS[look.hair]
-		if fn and not (hat and (hat.visual == "capuche" or hat.visual == "toque")) then
+		local form = hat and Design.formOf(hat)
+		if fn and not (hat and (hat.visual == "capuche" or hat.visual == "toque" or form == "hood" or (form and form:find("helm",1,true)))) then
 			fn(hairModel, head, WG.HAIR_COLORS[look.hairColor] or WG.HAIR_COLORS[1])
 		end
 	end
@@ -454,6 +456,7 @@ end
 
 -- Armure portée : visible sur le corps (cuir, mailles, plastron, cape, tunique…)
 local ARMOR_LOOKS = {
+	{ "diamant", Color3.fromRGB(101, 145, 165), Enum.Material.Metal },
 	{ "cuir", Color3.fromRGB(120, 78, 44), Enum.Material.Leather },
 	{ "maille", Color3.fromRGB(150, 155, 160), Enum.Material.DiamondPlate },
 	{ "cuivre", Color3.fromRGB(184, 115, 60), Enum.Material.Metal },
@@ -489,29 +492,216 @@ function Avatar.applyArmor(player: Player)
 	m.Parent = char
 	local col, mat = look[2], look[3]
 	local ts = torso.Size
+	local style = Design.style(armor)
+	local form = Design.formOf(armor)
+	if armor.design or form=="scale" or form=="beetle" then
+		col = style.color
+		mat = (form=="tunic" or form=="coat") and Enum.Material.Fabric
+			or (form=="leather" or form=="brigandine") and Enum.Material.Leather
+			or form=="mail" and Enum.Material.DiamondPlate or Enum.Material.Metal
+	end
+	local trim = armor.design and style.trim or col:Lerp(Color3.fromRGB(239, 209, 156), 0.36)
+	local bronze = Color3.fromRGB(177, 130, 70)
 	if look[1] == "cape" then
 		weld(m, torso, "Cape", V(ts.X * 1.05, ts.Y * 2.1, 0.12), C(0, -ts.Y * 0.5, ts.Z / 2 + 0.08), col, mat)
 		weld(m, torso, "Col", V(ts.X * 1.1, 0.25, ts.Z * 1.15), C(0, ts.Y / 2, 0), col, mat)
+		for _, side in ipairs({ -1, 1 }) do
+			weld(m, torso, "Ourlet de cape", V(ts.X * 0.055, ts.Y * 1.97, 0.035),
+				C(side * ts.X * 0.49, -ts.Y * 0.47, ts.Z / 2 + 0.149), trim, mat)
+		end
+		weld(m, torso, "Agrafe", V(0.17, 0.17, 0.10), C(0, ts.Y * 0.32, -ts.Z / 2 - 0.07), bronze, Enum.Material.Metal, Enum.PartType.Ball)
 		return
 	end
 	weld(m, torso, "Plastron", V(ts.X * 1.08, ts.Y * 1.02, ts.Z * 1.12), C(0, 0, 0), col, mat)
+	local front = -ts.Z * 0.57
+	if form=="scale" or form=="mail" then
+		for row=0,2 do
+			for column=-1,1 do
+				local x=(column*0.24+(row%2)*0.047)*ts.X
+				local y=(0.31-row*0.23)*ts.Y
+				weld(m,torso,form=="mail" and "Mailles en rang" or "Écaille",
+					V(ts.X*0.22,ts.Y*0.165,0.062),C(x,y,front-0.024)*CFrame.Angles(0,0,column*0.08),trim:Lerp(col,(row+column+1)%2*0.43),mat)
+			end
+		end
+	elseif form=="plate" or form=="beetle" then
+		for s=-1,1,2 do
+			weld(m,torso,form=="beetle" and "Élytre" or "Plaque de torse",V(ts.X*0.43,ts.Y*0.62,0.11),
+				C(s*ts.X*0.23,ts.Y*0.14,front-0.038)*CFrame.Angles(0,-s*0.11,s*0.07),col:Lerp(trim,0.28),mat)
+		end
+	end
+	local cloth = mat == Enum.Material.Fabric
+	local fastening = cloth and Enum.Material.Fabric or Enum.Material.Leather
+	for _, side in ipairs({ -1, 1 }) do
+		weld(m, torso, cloth and "Galon" or "Sangle", V(ts.X * 0.08, ts.Y * 0.82, 0.043),
+			C(side * ts.X * 0.30, 0.02, front - 0.025) * CFrame.Angles(0, 0, side * 0.13), trim, fastening)
+		if not cloth then
+			for _, y in ipairs({-0.21, 0.22}) do
+				weld(m, torso, "Rivet", V(0.086, 0.086, 0.054), C(side * ts.X * 0.30, y * ts.Y, front - 0.06),
+					bronze, Enum.Material.Metal, Enum.PartType.Ball)
+			end
+		end
+	end
+	weld(m, torso, "Ceinture", V(ts.X * 1.10, ts.Y * 0.135, ts.Z * 1.15),
+		C(0, -ts.Y * 0.36, 0), Color3.fromRGB(68, 43, 30), Enum.Material.Leather)
+	weld(m, torso, "Boucle", V(ts.X * 0.19, ts.Y * 0.14, 0.08),
+		C(0, -ts.Y * 0.36, front - 0.04), bronze, Enum.Material.Metal)
+	if look[1] == "diamant" then
+		weld(m, torso, "Sertissage", V(ts.X * 0.25, ts.X * 0.25, 0.13),
+			C(0, ts.Y * 0.14, front - 0.053) * CFrame.Angles(0, 0, math.pi / 4), bronze, Enum.Material.Metal)
+		weld(m, torso, "Diamant", V(ts.X * 0.17, ts.X * 0.17, 0.16),
+			C(0, ts.Y * 0.14, front - 0.116) * CFrame.Angles(0, 0, math.pi / 4), Color3.fromRGB(131, 225, 234), Enum.Material.Glass)
+	end
 	local lower = char:FindFirstChild("LowerTorso") :: BasePart?
 	if lower then
 		local ls = lower.Size
 		weld(m, lower, "Jupe", V(ls.X * 1.12, ls.Y * 1.3, ls.Z * 1.16), C(0, -ls.Y * 0.2, 0), col, mat)
 	end
-	if look[1] ~= "tunique" and look[1] ~= "robe" then
+	if not prof.equipped.shoulders and look[1] ~= "tunique" and look[1] ~= "robe" and form~="tunic" then
 		for _, side in { "LeftUpperArm", "RightUpperArm" } do
 			local arm = char:FindFirstChild(side) :: BasePart?
 			if arm then
-				weld(m, arm, "Epauliere", V(arm.Size.X * 1.25, arm.Size.Y * 0.45, arm.Size.Z * 1.25), C(0, arm.Size.Y * 0.28, 0), col, mat)
+				weld(m, arm, "Epauliere", V(arm.Size.X * 1.26, arm.Size.Y * 0.47, arm.Size.Z * 1.25), C(0, arm.Size.Y * 0.28, 0), col, mat)
+				weld(m, arm, "Bord d’épaule", V(arm.Size.X * 1.27, arm.Size.Y * 0.075, arm.Size.Z * 1.27),
+					C(0, arm.Size.Y * 0.095, 0), trim, mat)
 			end
 		end
 	end
 	-- liseré de rareté (lisible de loin)
 	local r = G.Gear.RARITIES[armor.rarity or 1]
 	if r and (armor.rarity or 1) >= 2 then
-		weld(m, torso, "Lisere", V(ts.X * 1.1, 0.12, ts.Z * 1.14), C(0, -ts.Y * 0.45, 0), r.color, Enum.Material.Neon)
+		weld(m, torso, "Lisere", V(ts.X * 1.1, 0.06, ts.Z * 1.14), C(0, -ts.Y * 0.45, 0), r.color:Lerp(bronze, 0.40), mat)
+	end
+end
+
+local function wearable(char, item, left, right, build)
+	if not item then return end
+	local style,form = Design.style(item),Design.formOf(item)
+	for _, side in ipairs({{left,-1},{right,1}}) do
+		local part=char:FindFirstChild(side[1])
+		if part and part:IsA("BasePart") then build(part,style,form,side[2]) end
+	end
+end
+
+function Avatar.applyExtraGear(player: Player)
+	local char=player.Character
+	local prof=G.Joueurs.get(player)
+	if not char or not prof then return end
+	clearFolder(char,"Equipement_WA")
+	local holder=Instance.new("Model")
+	holder.Name="Equipement_WA"
+	holder.Parent=char
+	local worn=prof.equipped or {}
+	wearable(char,worn.gloves,"LeftHand","RightHand",function(p,s,form)
+		local z=p.Size
+		local material=form=="gauntlets" and Enum.Material.Metal or Enum.Material.Leather
+		weld(holder,p,"Gant",V(z.X*1.14,z.Y*(form=="fingerless" and 0.61 or 1.06),z.Z*1.17),C(0,form=="fingerless" and z.Y*0.19 or 0,0),s.color,material)
+		weld(holder,p,"Manchette",V(z.X*1.20,z.Y*0.26,z.Z*1.22),C(0,z.Y*0.37,0),s.trim,material)
+	end)
+	wearable(char,worn.shoulders,"LeftUpperArm","RightUpperArm",function(p,s,form,sign)
+		local z=p.Size
+		weld(holder,p,"Épaulière",V(z.X*1.41,z.Y*0.43,z.Z*1.37),C(sign*z.X*0.09,z.Y*0.30,0)*CFrame.Angles(0,0,sign*0.13),s.color,Enum.Material.Metal)
+		for i=0,form=="lamellar" and 2 or 1 do
+			weld(holder,p,"Lame d’épaule",V(z.X*(1.37-i*0.06),z.Y*0.07,z.Z*1.38),C(0,z.Y*(0.22-i*0.13),0),s.trim,Enum.Material.Metal)
+		end
+		if form=="hornshoulder" then
+			weld(holder,p,"Corne",V(z.X*0.23,z.Y*0.34,z.Z*0.25),C(sign*z.X*0.52,z.Y*0.55,0)*CFrame.Angles(0,0,-sign*0.32),s.trim,Enum.Material.SmoothPlastic)
+		end
+	end)
+	local pants=worn.legs
+	if pants then
+		local form=Design.formOf(pants)
+		local pair=form=="greaves" and {"LeftLowerLeg","RightLowerLeg"} or {"LeftUpperLeg","RightUpperLeg"}
+		wearable(char,pants,pair[1],pair[2],function(p,s,kind)
+			local z=p.Size
+			local material=kind=="greaves" and Enum.Material.Metal or Enum.Material.Fabric
+			weld(holder,p,kind=="greaves" and "Jambière" or "Jambe de pantalon",V(z.X*1.08,z.Y*0.97,z.Z*1.10),C(),s.color,material)
+			weld(holder,p,"Galon",V(z.X*0.08,z.Y*0.82,0.047),C(z.X*0.25,0,-z.Z*0.57),s.trim,material)
+		end)
+		if form~="greaves" then
+			wearable(char,pants,"LeftLowerLeg","RightLowerLeg",function(p,s)
+				local z=p.Size
+				weld(holder,p,"Bas de pantalon",V(z.X*1.08,z.Y*0.96,z.Z*1.10),C(),s.color,Enum.Material.Fabric)
+			end)
+		end
+	end
+	wearable(char,worn.boots,"LeftFoot","RightFoot",function(p,s,form)
+		local z=p.Size
+		local material=form=="sabatons" and Enum.Material.Metal or Enum.Material.Leather
+		weld(holder,p,"Botte",V(z.X*1.11,z.Y*1.26,z.Z*1.13),C(0,z.Y*0.06,-z.Z*0.021),s.color,material)
+		weld(holder,p,"Semelle",V(z.X*1.12,z.Y*0.19,z.Z*1.14),C(0,-z.Y*0.44,0),s.trim,Enum.Material.Leather)
+	end)
+	if worn.boots and Design.formOf(worn.boots)=="tallboots" then
+		wearable(char,worn.boots,"LeftLowerLeg","RightLowerLeg",function(p,s)
+			local z=p.Size
+			weld(holder,p,"Tige de botte",V(z.X*1.15,z.Y*0.41,z.Z*1.16),C(0,-z.Y*0.30,0),s.color,Enum.Material.Leather)
+			weld(holder,p,"Revers",V(z.X*1.17,z.Y*0.07,z.Z*1.18),C(0,-z.Y*0.09,0),s.trim,Enum.Material.Leather)
+		end)
+	end
+	local jewel,torso=worn.trinket,char:FindFirstChild("UpperTorso")
+	local jewelForm=jewel and Design.formOf(jewel)
+	if jewel and torso and torso:IsA("BasePart") then
+		local n=Design.lower(jewel.name)
+		local s=Design.style(jewel)
+		if jewelForm=="ring" or jewelForm=="bracelet" or n:match("^anneau") or n:match("^bague") then
+			local hand=char:FindFirstChild("RightHand")
+			if hand and hand:IsA("BasePart") then
+				local z=hand.Size
+				weld(holder,hand,"Bijou",V(z.X*0.27,z.Y*0.18,0.09),C(z.X*0.23,-z.Y*0.22,-z.Z*0.56),s.trim,Enum.Material.Metal)
+			end
+		elseif jewelForm=="necklace" or jewelForm=="pendant" or jewelForm=="medallion" or jewelForm=="brooch"
+			or n:match("^amulette") or n:match("^collier") or n:match("^pendentif") or n:match("^talisman") then
+			local z=torso.Size
+			local x=jewelForm=="brooch" and z.X*0.29 or 0
+			local front=-z.Z*0.63
+			if jewelForm~="brooch" then
+				for sign=-1,1,2 do
+					weld(holder,torso,"Chaînette",V(0.05,z.Y*0.33,0.05),C(sign*z.X*0.13,z.Y*0.30,front)*CFrame.Angles(0,0,-sign*0.50),s.trim,Enum.Material.Metal)
+				end
+			end
+			weld(holder,torso,"Serti",V(z.X*0.19,z.Y*0.22,0.12),C(x,z.Y*0.14,front)*CFrame.Angles(0,0,math.pi/4),s.trim,Enum.Material.Metal)
+			weld(holder,torso,"Pierre",V(z.X*0.13,z.Y*0.15,0.13),C(x,z.Y*0.14,front-0.064)*CFrame.Angles(0,0,math.pi/4),s.color,Enum.Material.Glass)
+		end
+	end
+	local weapon=worn.weapon
+	local hip=char:FindFirstChild("LowerTorso") or torso
+	local folder=game:GetService("ReplicatedStorage"):FindFirstChild("IconesEquipement")
+	local preview=weapon and folder and folder:FindFirstChild("weapon:"..weapon.name)
+	if preview and hip and hip:IsA("BasePart") then
+		local display=preview:Clone()
+		display.Name="Arme à la ceinture"
+		local _,size=display:GetBoundingBox()
+		local scale=math.min(1,hip.Size.Y*1.7 / math.max(size.X,size.Y,size.Z))
+		display:ScaleTo(scale)
+		local bounds=display:GetBoundingBox()
+		local target=hip.CFrame*C(-hip.Size.X*0.68,-hip.Size.Y*0.34,hip.Size.Z*0.26)*CFrame.Angles(0,0,-0.38)
+		display:PivotTo(target * bounds:ToObjectSpace(display:GetPivot()))
+		for _,piece in display:GetDescendants() do
+			if piece:IsA("BasePart") then
+				piece.Massless,piece.Anchored,piece.CanCollide,piece.CanQuery,piece.CanTouch=true,false,false,false,false
+				local mount=Instance.new("WeldConstraint")
+				mount.Part0,mount.Part1,mount.Parent=hip,piece,piece
+			end
+		end
+		display.Parent=holder
+	end
+end
+
+local function fittedHelmet(folder,head,hat)
+	local form=Design.formOf(hat)
+	local s=Design.style(hat)
+	local z=head.Size
+	local fabric=form=="hood"
+	local material=fabric and Enum.Material.Fabric or Enum.Material.Metal
+	weld(folder,head,"Calotte",V(z.X*1.13,z.Y*0.66,z.Z*1.15),C(0,z.Y*0.27,0),s.color,material,Enum.PartType.Ball)
+	for sign=-1,1,2 do
+		weld(folder,head,"Joue",V(z.X*0.17,z.Y*0.79,z.Z*0.64),C(sign*z.X*0.48,-z.Y*0.02,-z.Z*0.10),s.color,material)
+	end
+	if form=="closedhelm" then
+		weld(folder,head,"Visière",V(z.X*0.91,z.Y*0.29,0.13),C(0,-z.Y*0.18,-z.Z*0.57),s.trim,Enum.Material.Metal)
+	elseif form=="nasalhelm" then
+		weld(folder,head,"Nasal",V(z.X*0.11,z.Y*0.50,0.12),C(0,-z.Y*0.04,-z.Z*0.62),s.trim,Enum.Material.Metal)
+	elseif form=="cresthelm" then
+		weld(folder,head,"Crête",V(z.X*0.13,z.Y*0.39,z.Z*0.76),C(0,z.Y*0.68,0),s.trim,Enum.Material.Metal)
 	end
 end
 
@@ -523,14 +713,17 @@ function Avatar.refresh(player: Player)
 	end
 	Avatar.applyLook(player)
 	Avatar.applyArmor(player)
+	Avatar.applyExtraGear(player)
 	local old = char:FindFirstChild("Chapeau_WA")
 	if old then
 		old:Destroy()
 	end
 	local prof = G.Joueurs.get(player)
 	local hat = prof and prof.equipped.hat
+	local form=hat and Design.formOf(hat)
+	local fitted=hat and (form=="hood" or (form and form:find("helm",1,true)))
 	local head = char:FindFirstChild("Head") :: BasePart?
-	if hat and head and HATS[hat.visual] then
+	if hat and head and (fitted or HATS[hat.visual] or hat.design) then
 		local folder = Instance.new("Model")
 		folder.Name = "Chapeau_WA"
 		folder.Parent = char
@@ -543,7 +736,11 @@ function Avatar.refresh(player: Player)
 				end
 			end
 		end
-		HATS[hat.visual](folder, head)
+		if fitted then
+			fittedHelmet(folder,head,hat)
+		else
+			(HATS[hat.visual] or HATS.paille)(folder, head)
+		end
 	else
 		for _, a in char:GetChildren() do
 			if a:IsA("Accessory") and (a.AccessoryType == Enum.AccessoryType.Hat) then
@@ -577,6 +774,10 @@ function Avatar.applyCape(player: Player)
 	local prof = G.Joueurs.get(player)
 	local rank = prof and prof.stats and prof.stats.noblesse or 0
 	local c = CAPES[math.clamp(rank, 0, #CAPES)]
+	local cape = prof and prof.equipped and prof.equipped.cape
+	local style = cape and Design.style(cape)
+	local form = cape and Design.formOf(cape)
+	if style then c = {cloth=style.color,trim=(c and c.trim) or style.trim} end
 	if not c then
 		return
 	end
@@ -584,10 +785,18 @@ function Avatar.applyCape(player: Player)
 	folder.Name = "Cape_WA"
 	folder.Parent = char
 	local h = torso.Size.Y
-	weld(folder, torso, "Cape", V(torso.Size.X * 1.05, h * 2.15, 0.12), C(0, -h * 0.55, torso.Size.Z / 2 + 0.08), c.cloth, Enum.Material.Fabric)
+	local length=form=="mantle" and 1.25 or 2.15
+	local z=torso.Size.Z/2+0.13
+	if form=="splitcape" then
+		for sign=-1,1,2 do
+			weld(folder,torso,"Pan de mantelet",V(torso.Size.X*0.48,h*1.76,0.11),C(sign*torso.Size.X*0.26,-h*0.51,z),c.cloth,Enum.Material.Fabric)
+		end
+	else
+		weld(folder, torso, "Cape", V(torso.Size.X * 1.05, h * length, 0.12), C(0, -h * (length/2-0.50), z), c.cloth, Enum.Material.Fabric)
+	end
 	weld(folder, torso, "Agrafe", V(torso.Size.X * 1.1, 0.28, torso.Size.Z * 1.05), C(0, h / 2 - 0.1, 0), c.trim or c.cloth:Lerp(Color3.new(0, 0, 0), 0.3), Enum.Material.Fabric)
 	if c.trim then
-		weld(folder, torso, "Bordure", V(torso.Size.X * 1.06, 0.14, 0.14), C(0, -h * 1.6 + 0.05, torso.Size.Z / 2 + 0.1), c.trim, Enum.Material.Metal)
+		weld(folder, torso, "Bordure", V(torso.Size.X * 1.06, 0.11, 0.14), C(0, -h * ((form=="splitcape" and 1.39 or length-0.50)-0.06), z), c.trim, Enum.Material.Fabric)
 	end
 end
 

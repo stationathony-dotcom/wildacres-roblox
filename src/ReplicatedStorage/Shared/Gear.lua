@@ -2,9 +2,14 @@
 -- Les stats touchent aussi le côté « GTA » : charisme = prix et opinion, discrétion = vue des PNJ.
 
 local G = {}
+local Design = require(script.Parent.GearDesign)
 
-G.SLOTS = { weapon = "Arme", hat = "Chapeau", armor = "Armure", trinket = "Bijou" }
-G.SLOT_ORDER = { "weapon", "hat", "armor", "trinket" }
+G.SLOTS = { weapon = "Arme", hat = "Casque", armor = "Torse", trinket = "Bijou", gloves = "Gants",
+	shoulders = "Épaulières", legs = "Pantalon", cape = "Cape", boots = "Bottes" }
+G.SLOT_ORDER = { "weapon", "hat", "armor", "shoulders", "gloves", "legs", "cape", "boots", "trinket" }
+G.SLOT_ICONS = { weapon = "🗡️", hat = "🪖", armor = "🥋", trinket = "💍", gloves = "🧤",
+	shoulders = "🛡️", legs = "👖", cape = "🧥", boots = "🥾" }
+G.slotOf = Design.slotOf
 G.STATS = {
 	force = "Force", defense = "Défense", vie = "Vie", vitesse = "Vitesse",
 	chance = "Chance", charisme = "Charisme", discretion = "Discrétion",
@@ -17,7 +22,7 @@ G.RARITIES = {
 	{ name = "Légendaire", color = Color3.fromRGB(255, 178, 51), points = 11, weight = 2 },
 }
 G.WEAPON_NAMES = { "Épée de bois", "Épée de cuivre", "Épée de fer", "Épée d'acier", "Épée d'argent",
-	"Épée d'or", "Lame de rubis", "Lame d'émeraude", "Lame de saphir", "Lame des anciens" }
+	"Épée d'or", "Lame de rubis", "Lame d'émeraude", "Lame de saphir", "Lame des anciens", "Lame de diamant" }
 G.HATS = {
 	{ "Chapeau de paille", "paille", "vie" }, { "Béret", "beret", "charisme" }, { "Toque", "toque", "chance" },
 	{ "Tricorne", "tricorne", "force" }, { "Chapeau de mage", "mage", "chance" }, { "Bonnet rouge", "bonnet", "charisme" },
@@ -28,6 +33,88 @@ G.ARMORS = { { "Gilet de cuir", "defense" }, { "Cotte de mailles", "defense" }, 
 	{ "Cape sombre", "discretion" }, { "Plastron de cuivre", "vie" } }
 G.TRINKETS = { { "Anneau de fer", "force" }, { "Trèfle porte-bonheur", "chance" }, { "Amulette dorée", "charisme" },
 	{ "Plume de corbeau", "discretion" }, { "Pendentif de jade", "vie" } }
+
+local secondary={weapon="force",hat="vie",armor="vie",trinket="chance",gloves="defense",
+	shoulders="defense",legs="discretion",cape="charisme",boots="vitesse"}
+local function craftedItem(slot, form, dye)
+	local rank=dye.rank
+	local name=form[1].." "..dye.suffix
+	local favorite=form[3]
+	local helper=secondary[slot]
+	if helper==favorite then helper=favorite=="vie" and "defense" or "vie" end
+	local ranged=form[2]=="bow" or form[2]=="crossbow"
+	local power=slot=="weapon" and (rank==4 and 12 or rank*2+2) or nil
+	return {slot=slot, name=name, rarity=rank, stats={[favorite]=rank+1,[helper]=math.max(1,rank-1)},
+		power=power, ranged=ranged or nil, design={form=form[2],material=dye.key}}
+end
+
+function G.expandRecipes(config)
+	local counts, known = {}, {}
+	local function count(item)
+		local key = G.slotOf(item) .. ":" .. item.name
+		if not known[key] then
+			known[key] = true
+			local slot = G.slotOf(item)
+			counts[slot] = (counts[slot] or 0) + 1
+		end
+	end
+	for _, r in ipairs(config.RECIPES) do
+		if r.gear then
+			r.gear.slot = G.slotOf(r.gear)
+			count(r.gear)
+		end
+	end
+	for _, n in ipairs(G.WEAPON_NAMES) do count({slot="weapon",name=n}) end
+	for _, h in ipairs(G.HATS) do count({slot="hat",name=h[1]}) end
+	for _, a in ipairs(G.ARMORS) do count({slot="armor",name=a[1]}) end
+	for _, t in ipairs(G.TRINKETS) do count({slot="trinket",name=t[1]}) end
+	local totals = {}
+	for _, slot in ipairs(G.SLOT_ORDER) do
+		local before = counts[slot] or 0
+		local target = slot=="weapon" and before or math.max(12,math.ceil(before/2))
+		local forms = Design.FORMS[slot]
+		local countMaterials = #Design.MATERIALS
+		assert(target <= #forms*countMaterials, slot)
+		for i=0,target-1 do
+			local dye = Design.MATERIALS[i%countMaterials+1]
+			-- Décale les formes entre les séries de matières pour couvrir toutes les familles.
+			local form = forms[(i%countMaterials+math.floor(i/countMaterials))%#forms+1]
+			local item = craftedItem(slot,form,dye)
+			assert(not known[slot..":"..item.name],item.name)
+			local soft = slot=="cape" or form[2]=="hood" or form[2]=="tunic" or form[2]=="pants" or form[2]=="mantle"
+			local needs = { [dye.cloth]=soft and 2+dye.rank or 1+math.floor(dye.rank/2), [dye.hard]=soft and 1 or 1+dye.rank }
+			if dye.gem then needs[dye.gem]=1 end
+			-- Les signatures supplémentaires empêchent les recettes d’une même série
+			-- de toutes sortir du même mélange et de dépasser les six résultats de l’atelier.
+			local signatures={"rope","copper_nails","iron_ring","resin","linen_thread","braided_rope","ink","bone","glass","leather_strap","wool_thread","iron_bar"}
+			local signature=signatures[(i%countMaterials+table.find(G.SLOT_ORDER,slot)-1)%#signatures+1]
+			needs[signature]=(needs[signature] or 0)+1+math.floor(i/countMaterials)
+			local skill = {3,11,21,32}
+			table.insert(config.RECIPES, {gear=item, needs=needs, station=soft and "bench" or "anvil",
+				cat="equipement", skill={"artisanat",skill[dye.rank]+math.floor(i/countMaterials)}})
+		end
+		totals[slot] = {before=before,added=target}
+	end
+	config.EQUIPMENT_EXPANSION = totals
+end
+
+function G.migrateEquipment(profile)
+	local equipped, bag = profile.equipped, profile.gear
+	-- Réserve la place aux véritables occupants d’abord, puis déplace le legacy.
+	local moved = {}
+	for slot, item in pairs(equipped) do
+		local target = G.slotOf(item)
+		if target~=slot and G.SLOTS[target] then
+			equipped[slot]=nil
+			item.slot=target
+			moved[#moved+1]=item
+		end
+	end
+	for _, item in ipairs(moved) do
+		if equipped[item.slot] then bag[#bag+1]=item else equipped[item.slot]=item end
+	end
+	for _, item in ipairs(bag) do item.slot=G.slotOf(item) end
+end
 
 local function rarity(rng: Random, level: number): number
 	local total = 0
@@ -49,13 +136,13 @@ end
 
 -- Tire un objet. `level` 1-10 : plus il est haut, plus les raretés et paliers montent.
 function G.roll(rng: Random, level: number, slot: string?)
-	local s = slot or G.SLOT_ORDER[rng:NextInteger(1, 4)]
+	local s = slot or G.SLOT_ORDER[rng:NextInteger(1, #G.SLOT_ORDER)]
 	local ri = rarity(rng, level)
 	local r = G.RARITIES[ri]
 	local item = { slot = s, rarity = ri, stats = {}, visual = "", power = 0, name = "" }
 	local favorite = "force"
 	if s == "weapon" then
-		local tier = math.clamp(level + rng:NextInteger(-1, 1) + ri - 1, 1, 10)
+		local tier = math.clamp(level + rng:NextInteger(-1, 1) + ri - 1, 1, #G.WEAPON_NAMES)
 		item.visual = tostring(tier)
 		item.power = 1 + tier
 		item.name = G.WEAPON_NAMES[tier]
@@ -66,10 +153,18 @@ function G.roll(rng: Random, level: number, slot: string?)
 	elseif s == "armor" then
 		local a = G.ARMORS[rng:NextInteger(1, #G.ARMORS)]
 		item.name, favorite = a[1], a[2]
-	else
+	elseif s == "trinket" then
 		local t = G.TRINKETS[rng:NextInteger(1, #G.TRINKETS)]
 		item.name, favorite = t[1], t[2]
+	else
+		local forms = Design.FORMS[s]
+		local index = rng:NextInteger(1,math.clamp(math.floor(level*0.9)+ri-1,2,8))
+		local form = forms[(index-1)%#forms+1]
+		local dye = Design.MATERIALS[index]
+		local preset=craftedItem(s,form,dye)
+		item.name,item.design,favorite=preset.name,preset.design,form[3]
 	end
+	item.slot = G.slotOf(item)
 	local points = r.points + math.floor(level / 2)
 	item.stats[favorite] = math.floor(points / 2) + 1
 	for _ = 1, points - math.floor(points / 2) do

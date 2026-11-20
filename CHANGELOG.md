@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Équipement** : emplacements et silhouettes supplémentaires, récupération des anciennes pièces dans les emplacements adaptés, outils d’acier et au diamant. Le clic active l’outil en main ou attaque.
 - **Journal** : les livraisons affichent les quantités réellement disponibles dans le sac, et la remise se valide au tableau ou auprès d’un habitant.
 - **Menus** : le même registre ouvre le Sac, le Personnage, les Compétences, le Journal, la Carte, le Clan, l’Atelier et les Paramètres sur les trois modes de commande.
 - **Correctif** : les haches et pioches d'acier et au diamant tapaient comme celles de pierre (force inconnue) → acier ×3, diamant ×3,8
