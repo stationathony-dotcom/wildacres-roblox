@@ -161,7 +161,8 @@ local function applyHit(player: Player, best, kind: string, dmg: number, root: B
 			G.Util.toast(player, victim.DisplayName .. " vient de se relever : laisse-le tranquille un moment.")
 			return
 		end
-		if (vprof.stars or 0) <= 0 then
+		-- duel consenti (Systemes/Duels) : pas de crime entre les deux duellistes
+		if (vprof.stars or 0) <= 0 and not (G.Duels and rawget(G.Duels, "paired") and G.Duels.paired(player, victim)) then
 			G.Law.crime(player, "assault", vroot.Position, G.Util.pid(victim))
 		end
 		victim:SetAttribute("LastHitBy", player.UserId)

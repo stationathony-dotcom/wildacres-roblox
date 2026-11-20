@@ -108,6 +108,7 @@ La téléportation ne marche pas dans Studio : il faut la version publiée.
 1. [ ] Voler quelque chose devant un témoin (étoiles), aller parler au shérif : « Je me rends » → amende moitié,
        courte cellule. Recommencer en se faisant poursuivre : le choix apparaît aussi pendant la poursuite.
 2. [ ] Une bête hostile près d'un village : les habitants s'enfuient puis reviennent.
+3. [ ] À deux : `/defi <pseudo> 20`, l'autre `/defi oui` ; se battre : aucune étoile ; le perdant à terre, le gagnant reçoit 40 or.
 
 ## P8. Demandes, bugs, appel (5 min)
 

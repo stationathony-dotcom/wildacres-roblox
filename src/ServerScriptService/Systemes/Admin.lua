@@ -728,7 +728,7 @@ local function onCommand(player: Player, text: string)
 	if cmd == "/aide" then
 		say(player, "💬 /coince · /signaler <pseudo> <motif> · /bloquer · /debloquer · /bloques · 📨 /demande · 🐞 /bug · ⚖️ /appel <message>")
 		say(player, "🔑 /autoriser <pseudo> [coffres|batir] · /retirer · /autorises · /ceder <pseudo> · /louer <pseudo> <jours> <prix> · /accepter")
-		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques · 🐴 /ecurie · ⚔️ /armee · 👨‍🌾 /ouvriers · 📕 /bestiaire · 🐾 /animaux · 🌾 /cultures · 🏰 /fonder <nom> · /villes · 🏆 /classement · ⚒️ /renom")
+		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques · 🐴 /ecurie · ⚔️ /armee · 🤺 /defi <pseudo> [mise] · 👨‍🌾 /ouvriers · 📕 /bestiaire · 🐾 /animaux · 🌾 /cultures · 🏰 /fonder <nom> · /villes · 🏆 /classement · ⚒️ /renom")
 		say(player, "💃 /danse · 👋 /salut · 👏 /applaudir · 🙇 /reverence")
 	elseif cmd == "/reputation" then
 		say(player, "🏘️ Ta réputation dans les villages de cette île :")
@@ -799,6 +799,16 @@ local function onCommand(player: Player, text: string)
 		G.Livres.cultures(player)
 	elseif cmd == "/ouvriers" then
 		say(player, G.Ouvriers.describe(player))
+	elseif cmd == "/defi" then
+		-- duel consenti (Systemes/Duels) : /defi <pseudo> [mise] · /defi oui · /defi non
+		local a = string.lower(args[1] or "")
+		local ok, msg
+		if a == "oui" or a == "non" then
+			ok, msg = G.Duels.answer(player, a == "oui")
+		else
+			ok, msg = G.Duels.challenge(player, findPlayer(args[1]), args[2])
+		end
+		say(player, msg, ok and nil or "danger")
 	elseif cmd == "/demande" or cmd == "/bug" or cmd == "/appel" then
 		-- texte brut (les mots ne passent pas par le filtre des nombres des autres commandes)
 		local raw = string.match(text, "^%S+%s+(.+)$") or ""
@@ -961,7 +971,7 @@ function Admin.init(g)
 	local folder = TextChatService:FindFirstChild("CommandesWA") or Instance.new("Folder")
 	folder.Name = "CommandesWA"
 	folder.Parent = TextChatService
-	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques", "/ecurie", "/ouvriers", "/bestiaire", "/animaux", "/cultures", "/fonder", "/villes", "/classement", "/renom", "/danse", "/salut", "/applaudir", "/reverence", "/armee", "/demande", "/bug", "/appel" } do
+	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques", "/ecurie", "/ouvriers", "/bestiaire", "/animaux", "/cultures", "/fonder", "/villes", "/classement", "/renom", "/danse", "/salut", "/applaudir", "/reverence", "/armee", "/demande", "/bug", "/appel", "/defi" } do
 		local c = folder:FindFirstChild(alias) or Instance.new("TextChatCommand")
 		c.Name = alias
 		c.PrimaryAlias = alias

@@ -530,7 +530,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [x] Expositions de bâtiments et concours de décoration. _(« Concours de construction » au tableau d'affichage, jugé par l'organisateur (18/11))_
 - [~] Chasses au trésor créées par les joueurs.
 - [~] Marchés temporaires, foires et ventes publiques.
-- [~] Tournois et défis de compétences de jeu, avec règles sûres et non graphiques.
+- [x] Tournois et défis de compétences de jeu, avec règles sûres et non graphiques. _(20/11 : duels consentis à mise, `/defi` ; concours au tableau d'affichage)_
 - [x] Outil d'organisation : lieu, heure, règles, inscriptions, équipes et récompenses.
 - [x] Permissions d'organisateur et possibilité d'annuler un événement.
 - [x] Protection contre les événements utilisés pour piéger ou harceler.

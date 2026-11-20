@@ -367,10 +367,12 @@ function Game.onDeath(player: Player)
 	local hunterId = player:GetAttribute("LastHitBy")
 	local hitAt = player:GetAttribute("LastHitAt") or 0
 	local hunter = hunterId and game:GetService("Players"):GetPlayerByUserId(hunterId)
-	if hunterId and os.clock() - hitAt < 10 and G.Combat.noteKO then
+	-- fin d'un duel (Systemes/Duels) : ni prime ni « acharnement », c'était consenti
+	local duel = G.Duels and rawget(G.Duels, "onKO") and G.Duels.onKO(player, hunter)
+	if not duel and hunterId and os.clock() - hitAt < 10 and G.Combat.noteKO then
 		G.Combat.noteKO(player, hunterId)
 	end
-	if hunter and os.clock() - hitAt < 10 and (prof.stars or 0) > 0 then
+	if not duel and hunter and os.clock() - hitAt < 10 and (prof.stars or 0) > 0 then
 		local bounty = math.floor((prof.bounty or 0) * (1 + 0.4 * G.Joueurs.talent(hunter, "primes") + 0.6 * G.Joueurs.talent(hunter, "traqueur")))
 		local hp = G.Joueurs.get(hunter)
 		if hp then
