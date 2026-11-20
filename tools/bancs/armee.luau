@@ -104,5 +104,27 @@ local spot = moves.a
 check(string.format("colonne : place derrière, rang 2 (%.1f, %.1f)", spot and spot.X or 0, spot and spot.Z or 0),
 	spot and math.abs(spot.Z - 8) < 0.01 and math.abs(spot.X - (-1.5)) < 0.01)
 
+-- 7. niveau de détail : un soldat loin de tout joueur, sans combat, pense 1 fois par seconde
+local thinks = 0
+local move0 = G.Enemies.move
+G.Enemies.move = function(...)
+	thinks += 1
+	return move0(...)
+end
+s1.rec.mode, s1.slot, s1.order = "follow", 0, nil
+s1.lastHurt = nil
+s1.pos = Vector3.new(40, 10, 40)
+G.Util.playerDist = function() return 500 end
+for _ = 1, 10 do
+	Comp.step(0.1)
+end
+check("loin de tout joueur : 1 calcul par seconde au lieu de 10 (" .. thinks .. ")", thinks <= 2)
+thinks = 0
+G.Util.playerDist = function() return 20 end
+for _ = 1, 10 do
+	Comp.step(0.1)
+end
+check("près d'un joueur : chaque pas (" .. thinks .. ")", thinks >= 9)
+G.Enemies.move = move0
 table.clear(Comp.list)
 return fails .. " échec(s)\n" .. table.concat(out, "\n")

@@ -650,6 +650,7 @@ local function think(en, dt: number)
 end
 
 local acc = 0
+Compagnons.LOD_NEAR, Compagnons.LOD_FAR = 160, 350 -- comme les monstres (Enemies)
 function Compagnons.step(dt: number)
 	acc += dt
 	if acc < 1 / 15 then
@@ -662,11 +663,23 @@ function Compagnons.step(dt: number)
 		if en.dead or not en.model.Parent then
 			table.remove(Compagnons.list, i)
 		else
-			local ok, err = pcall(think, en, step)
-			if not ok then
-				warn("[WildAcres] compagnon : " .. tostring(err))
+			-- niveau de détail (20/11 : armées sans effectif maximum) : près d'un joueur, en attaque ou
+			-- blessé depuis peu → chaque pas ; plus loin, 6 Hz puis 1 Hz avec le temps cumulé
+			local interval = 0
+			if not (en.order or os.clock() - (en.lastHurt or 0) < 8) then
+				local d = G.Util.playerDist and G.Util.playerDist(en.pos) or 0
+				interval = d < Compagnons.LOD_NEAR and 0 or (d < Compagnons.LOD_FAR and 1 / 6 or 1)
 			end
-			G.Enemies.render(en)
+			en.lodAcc = (en.lodAcc or 0) + step
+			if en.lodAcc >= interval then
+				local dt2 = math.min(en.lodAcc, 1.5)
+				en.lodAcc = 0
+				local ok, err = pcall(think, en, dt2)
+				if not ok then
+					warn("[WildAcres] compagnon : " .. tostring(err))
+				end
+				G.Enemies.render(en)
+			end
 		end
 	end
 end

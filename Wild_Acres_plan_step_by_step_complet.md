@@ -453,7 +453,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [x] Définir recrutement, équipement, formation, moral, disponibilité et ordres. _(caserne sur sa parcelle, une recrue après l'autre, or + nourriture, ordres suivre / garder, désertion si solde impayée, équipement fer + cuir à la caserne (+25 % dégâts, −20 % reçus) (18/11))_
 - [~] Définir déplacement, défense, retour et récupération des unités. _(ordres « me suivre » / « garder ici », défense des terres ; mort définitive)_
 - [x] Définir entretien et ravitaillement, sans plafond numérique arbitraire visible. _(solde de toute l'armée chaque matin, 2 jours impayés = un déserteur, mort définitive)_
-- [ ] Tester l'impact de grandes armées sur le serveur.
+- [~] Tester l'impact de grandes armées sur le serveur. _(20/11 : niveau de détail des soldats et compagnons comme les monstres ; mesure réelle en Play : `/wa perf`)_
 - [x] Définir règles de conflit organique et de défense des joueurs isolés. _(aucune guerre déclarée ; règles normales (étoiles, primes) ; défense : serrures, chiens de garde, alarmes, tourelles à munitions même hors ligne)_
 
 ### 15D. Politique de village

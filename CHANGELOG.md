@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Performance des armées** : soldats et compagnons loin de tout joueur (sans combat) pensent à 6 Hz puis 1 Hz, comme les monstres — une grande armée en garde ne coûte presque plus rien
 - **Mobile** : sac avec catégories défilantes, fiche et atelier en colonnes empilées, journal ajusté à la zone sûre. Les fenêtres remontent lorsque le clavier tactile s’ouvre.
 - **Bestiaire** : accents et caractères des noms de pièces enregistrés en UTF-8.
 - **Bestiaire** : formes Cavalier, Poisson_Carnassier et Serpent_Marin, avec pivot et pièces reconnaissables.
