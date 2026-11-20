@@ -90,7 +90,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       défilement vertical, boutons assez grands, chat / clavier ouverts. Garder les proportions du HUD.
 - [x] **X5 · Emplacement main gauche** (passage ci-dessus) : emplacement, poupée de la fiche, modèle FAIT 20/11 (a23919e).
       porté par l'avatar.
-- [ ] **X6 · Harpon** (passage ci-dessus) : modèle, outil en main, animation de lancer. Modèle, prise en main et lancer faits (b405756) · acquisition en attente.
+- [x] **X6 · Harpon** (passage ci-dessus) : modèle, outil en main, animation de lancer. Modèle, prise en main et lancer faits (b405756) · recette ajoutée côté équilibre, lancer à voir en Play.
 - [ ] **X7 · Modèles faux.** Corriger la liste « Visuels à retravailler » de
       `A-RETRAVAILLER-EQUIPEMENT-ET-VISUELS.md` et `AUDIT-VISUELS-OBJETS.md` (noyau de cerise, laine,
       couronnes, turban, carreaux, insignes…). *Fini quand* : chaque objet de la liste ressemble à son
