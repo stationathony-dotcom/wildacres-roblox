@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Trésors cachés par les joueurs** : `/enterrer <objet> <n>` là où l'on est, `/cartes`, `/carte <n°> <pseudo>` pour donner l'indice (« à 120 pas au nord de Valdor ») ; 3 coups de pelle au bon endroit et le contenu est au chercheur
 - **Duels** (`/defi <pseudo> [mise]`, réponse `/defi oui` ou `/defi non`) : combat consenti sans crime ni étoile, mises gardées par le jeu, le premier à terre perd et le vainqueur prend tout ; 3 min sans vainqueur ou trop d'écart : match nul, mises rendues — de quoi organiser ses propres tournois
 - **Direction visuelle** : bois et pierre plus chauds, chemins et pavés plus clairs et reflets adoucis.
 - **Paramètres** : quatre réglages persistants pour le champ de vision, la sensibilité, la densité graphique et le texte des fenêtres.

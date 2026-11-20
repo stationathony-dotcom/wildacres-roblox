@@ -21,7 +21,7 @@ local RAPIDES = {
 	"chasse_au_tresor", "chroniques", "courrier_reprise", "course", "demandes", "demandes_joueurs", "diligence", "donjons_groupe", "duels", "ecurie", "economie",
 	"equilibre", "flux_or", "fauche", "formes", "froid", "harpon", "herbes", "mecanismes", "moissons", "ouvriers", "pnj_danger", "quetes",
 	"quetes_lieux", "relations_pnj", "reputation", "resistance", "roue_eau", "save_instantane",
-	"securite", "selection", "sommeil_collectif", "stats", "talents", "tourelles", "usure", "ventes", "villes",
+	"securite", "selection", "sommeil_collectif", "stats", "talents", "tourelles", "tresors", "usure", "ventes", "villes",
 }
 local LOURDS = { "generation", "chateaux", "secteurs", "save_concurrence" }
 

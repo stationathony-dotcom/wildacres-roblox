@@ -180,6 +180,10 @@ end
 
 -- Coup de pelle : près de la croix (8 studs) ? 3 coups et le coffre sort de terre
 function Journal.digTreasure(player: Player): boolean
+	-- caches enterrées par les joueurs (Systemes/Tresors)
+	if G.Tresors and rawget(G.Tresors, "dig") and G.Tresors.dig(player) then
+		return true
+	end
 	local prof = G.Joueurs.get(player)
 	local t = prof and type(prof.treasures) == "table" and G.world and prof.treasures[G.world.id]
 	local root = G.Util.root(player)

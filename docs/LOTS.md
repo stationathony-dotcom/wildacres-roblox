@@ -166,6 +166,10 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 
 ## Journal (5 lignes maximum par session)
 
+- 20/11 (3) · Claude : grottes en groupe, or des créatures plafonné, invasion aux combattants, LOD des armées,
+  villageois qui fuient les bêtes, se rendre au shérif, duels /defi, trésors /enterrer, amis sur l'accueil (passage
+  Codex), 3 créatures sur les modèles de Codex. 48 bancs verts. Reste : C6 (décor), C12 (mesures en Play).
+
 - 20/11 · Codex : en Play sur le PC fixe, ouvrir et fermer Sac, Carte, Journal, Personnage et Paramètres au clavier, au tactile et à la manette.
   Vérifier le retour Livre → Carte → Sac, la gâchette et la pose derrière les panneaux, puis une livraison avec sac vide, partiel, complet et vidé.
 

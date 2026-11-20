@@ -528,7 +528,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [~] Courses de montures et parcours. _(rassemblement libre au tableau ; la vitesse des montures compte enfin depuis le 18/11)_
 - [x] Concours de pêche, agriculture, élevage et artisanat. _(+ minage et bûcheronnage le 18/11)_
 - [x] Expositions de bâtiments et concours de décoration. _(« Concours de construction » au tableau d'affichage, jugé par l'organisateur (18/11))_
-- [~] Chasses au trésor créées par les joueurs.
+- [x] Chasses au trésor créées par les joueurs. _(20/11 : `Systemes/Tresors`, /enterrer, /cartes, /carte)_
 - [~] Marchés temporaires, foires et ventes publiques.
 - [x] Tournois et défis de compétences de jeu, avec règles sûres et non graphiques. _(20/11 : duels consentis à mise, `/defi` ; concours au tableau d'affichage)_
 - [x] Outil d'organisation : lieu, heure, règles, inscriptions, équipes et récompenses.
