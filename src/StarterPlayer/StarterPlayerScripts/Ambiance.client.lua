@@ -342,7 +342,6 @@ end)
 -- Volume de l'ambiance, flashs d'éclair, secousses de caméra. Sauvegardés avec le perso
 -- (action "settings") et réappliqués à chaque connexion (payload Inventory.settings).
 do
-	local UserInputService = game:GetService("UserInputService")
 	local settings = { vol = 0.6, music = 0.5, flash = false, shake = false }
 	local function apply()
 		player:SetAttribute("VolAmbiance", settings.vol)
@@ -418,7 +417,7 @@ do
 			Remotes.Action:FireServer("settings", settings)
 		end
 	end
-	btn(panel, "X", UDim2.fromOffset(28, 28), UDim2.new(1, -36, 0, 8), Color3.fromRGB(190, 60, 50), close)
+	local closeButton = btn(panel, "X", UDim2.fromOffset(28, 28), UDim2.new(1, -36, 0, 8), Color3.fromRGB(190, 60, 50), close)
 	txt(panel, "🔊 Ambiance (pluie, vent, tonnerre)", UDim2.new(1, -28, 0, 20), UDim2.fromOffset(14, 48), 13)
 	local volRow = Instance.new("Frame")
 	volRow.BackgroundTransparency = 1
@@ -477,18 +476,6 @@ do
 		end
 	end
 	render()
-	local open = btn(gui, "⚙️", UDim2.fromOffset(40, 40), UDim2.new(1, -52, 0, 222), Color3.fromRGB(40, 32, 24), function()
-		if panel.Visible then
-			close()
-		else
-			render()
-			panel.Visible = true
-		end
-	end)
-	open.Name = "BoutonParametres"
-	open.TextSize = 20
-	-- sur PC, le bouton « Paramètres » du HUD (Interface) remplace ce petit bouton
-	open.Visible = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 	local function toggleParams()
 		if panel.Visible then
 			close()
@@ -501,11 +488,7 @@ do
 	ouvrir.Name = "OuvrirParametres"
 	ouvrir.Event:Connect(toggleParams)
 	ouvrir.Parent = player
-	UserInputService.InputBegan:Connect(function(input, processed)
-		if not processed and input.KeyCode == Enum.KeyCode.O then
-			toggleParams()
-		end
-	end)
+	require(script.Parent:WaitForChild("WindowNav")).watch(panel, closeButton, close)
 	Remotes:WaitForChild("Inventory").OnClientEvent:Connect(function(data)
 		if type(data) == "table" and type(data.settings) == "table" and not panel.Visible then
 			settings.vol = tonumber(data.settings.vol) or settings.vol

@@ -6,7 +6,6 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 
 if workspace:GetAttribute("Mode") == "accueil" then
@@ -225,24 +224,7 @@ local function toggle()
 	TweenService:Create(scale, TweenInfo.new(0.18, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = target }):Play()
 end
 close.Activated:Connect(toggle)
-UserInputService.InputBegan:Connect(function(input, processed)
-	if not processed and input.KeyCode == Enum.KeyCode.M then
-		toggle()
-	end
-end)
--- bouton tactile (sous les Paramètres)
-local btn = Instance.new("TextButton")
-btn.Name = "BoutonCarte"
-btn.Text = "🗺️"
-btn.TextSize = 20
-btn.BackgroundColor3 = Color3.fromRGB(40, 32, 24)
-btn.Size = UDim2.fromOffset(40, 40)
-btn.Position = UDim2.new(1, -52, 0, 270) -- sous la minicarte
-btn.Parent = gui
-Instance.new("UICorner", btn)
-btn.Activated:Connect(toggle)
--- sur PC, le bouton « Carte » du HUD (Interface) remplace ce petit bouton
-btn.Visible = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+require(script.Parent:WaitForChild("WindowNav")).watch(panel, close, toggle)
 local ouvrir = Instance.new("BindableEvent")
 ouvrir.Name = "OuvrirCarte"
 ouvrir.Event:Connect(toggle)

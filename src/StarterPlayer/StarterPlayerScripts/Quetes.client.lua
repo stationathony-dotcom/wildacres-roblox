@@ -5,7 +5,6 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 
 if workspace:GetAttribute("Mode") == "accueil" then
@@ -79,9 +78,10 @@ local scale = Instance.new("UIScale")
 scale.Parent = panel
 label(panel, "📜  Quêtes", UDim2.new(1, -60, 0, 32), 22, GOLD, true).Position = UDim2.fromOffset(16, 8)
 label(panel, "Toutes facultatives : prends-en, lâche-les, rien n'est obligatoire.", UDim2.new(1, -60, 0, 18), 12, DIM).Position = UDim2.fromOffset(16, 38)
-button(panel, "X", UDim2.fromOffset(30, 30), Color3.fromRGB(190, 60, 50), function()
+local close = button(panel, "X", UDim2.fromOffset(30, 30), Color3.fromRGB(190, 60, 50), function()
 	panel.Visible = false
-end).Position = UDim2.new(1, -40, 0, 10)
+end)
+close.Position = UDim2.new(1, -40, 0, 10)
 
 local body = Instance.new("ScrollingFrame")
 body.BackgroundTransparency = 1
@@ -224,21 +224,8 @@ ouvrir.Name = "OuvrirQuetes"
 ouvrir.Event:Connect(toggle)
 ouvrir.Parent = player
 
--- tactile : petit bouton sous ceux de la carte et des paramètres (sur PC : bouton « Quêtes » du HUD)
-if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
-	local hud = Instance.new("ScreenGui")
-	hud.Name = "QuetesBouton"
-	hud.ResetOnSpawn = false
-	hud.Parent = player.PlayerGui
-	local b = button(hud, "📜", UDim2.fromOffset(40, 40), Color3.fromRGB(40, 32, 24), toggle)
-	b.TextSize = 20
-	b.Position = UDim2.new(1, -52, 0, 318)
-end
-
-UserInputService.InputBegan:Connect(function(input, processed)
-	if not processed and input.KeyCode == Enum.KeyCode.J then
-		toggle()
-	end
+require(script.Parent:WaitForChild("WindowNav")).watch(panel, close, function()
+	panel.Visible = false
 end)
 
 -- panneau ouvert : se met à jour (on s'éloigne du tableau / de l'habitant → les offres disparaissent)

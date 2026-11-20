@@ -18,15 +18,15 @@ function Hud.scaleFor(v: Vector2): number
 	return math.clamp(math.min(v.X / Hud.REF.X, v.Y / Hud.REF.Y), 0.42, 1.15)
 end
 
-local DARK = Color3.fromRGB(30, 34, 42)
-local DARK2 = Color3.fromRGB(44, 48, 58)
-local EDGE = Color3.fromRGB(176, 140, 72)
-local EDGE_DIM = Color3.fromRGB(96, 80, 52)
+local DARK = Color3.fromRGB(27, 22, 18)
+local DARK2 = Color3.fromRGB(48, 37, 28)
+local EDGE = Color3.fromRGB(183, 149, 101)
+local EDGE_DIM = Color3.fromRGB(108, 82, 58)
 local TEXT = Color3.fromRGB(248, 242, 228)
 local DIM = Color3.fromRGB(196, 188, 170)
 local GOLD = Color3.fromRGB(246, 200, 70)
 local NAVY = Color3.fromRGB(34, 52, 86)
-local TITLE = Enum.Font.FredokaOne
+local TITLE = Enum.Font.GothamBold
 local BOLD = Enum.Font.GothamBold
 local BODY = Enum.Font.GothamMedium
 
@@ -85,6 +85,16 @@ function Hud.objectViewport(tpl: Model, dim: boolean?, tint: ((BasePart) -> ())?
 	end
 	m.Parent = vf
 	local cf, size = m:GetBoundingBox()
+	if tpl:GetAttribute("ApercuDroit") then
+		local camera = Instance.new("Camera")
+		camera.FieldOfView = 30
+		local direction = Vector3.new(0.78, 0.56, -1).Unit
+		local distance = size.Magnitude * 0.52 / math.tan(math.rad(15))
+		camera.CFrame = CFrame.lookAt(cf.Position + direction * distance, cf.Position)
+		camera.Parent = vf
+		vf.CurrentCamera = camera
+		return vf
+	end
 	local axes = { { cf.RightVector, size.X }, { cf.UpVector, size.Y }, { cf.LookVector, size.Z } }
 	table.sort(axes, function(a, b)
 		return a[2] > b[2]
@@ -99,6 +109,71 @@ function Hud.objectViewport(tpl: Model, dim: boolean?, tint: ((BasePart) -> ())?
 	cam.CFrame = CFrame.lookAt(cf.Position + back * dist, cf.Position, up)
 	cam.Parent = vf
 	vf.CurrentCamera = cam
+	return vf
+end
+
+local BLADE_TINTS = {
+	Color3.fromRGB(145, 97, 59), Color3.fromRGB(200, 119, 73), Color3.fromRGB(164, 178, 188),
+	Color3.fromRGB(150, 182, 208), Color3.fromRGB(217, 226, 234), Color3.fromRGB(238, 182, 70),
+	Color3.fromRGB(219, 72, 92), Color3.fromRGB(69, 178, 117), Color3.fromRGB(68, 126, 221), Color3.fromRGB(189, 141, 228),
+}
+
+function Hud.gearViewport(it, dim: boolean?): ViewportFrame?
+	local rs = game:GetService("ReplicatedStorage")
+	local equipment = rs:FindFirstChild("IconesEquipement")
+	local tools = rs:FindFirstChild("IconesOutils")
+	local template = equipment and ((it.name and (equipment:FindFirstChild(it.slot .. ":" .. it.name)
+		or equipment:FindFirstChild(it.name))) or equipment:FindFirstChild(it.slot))
+	local hue
+	if it.slot == "weapon" and not template and tools then
+		local name = string.lower(it.name or "")
+		local key = if name:find("hache", 1, true) then "Hache"
+			elseif name:find("mass", 1, true) or name:find("gourdin", 1, true) then "Gourdin"
+			else "Épée"
+		template = tools:FindFirstChild(key)
+		hue = BLADE_TINTS[math.clamp(tonumber(it.visual) or 3, 1, #BLADE_TINTS)]
+	end
+	if not (template and template:IsA("Model")) then
+		return nil
+	end
+	return Hud.objectViewport(template, dim, hue and function(p)
+		if p.Material == Enum.Material.Metal then
+			p.Color = hue
+		end
+	end or nil)
+end
+
+function Hud.avatarViewport(character: Model): ViewportFrame?
+	local old = character.Archivable
+	character.Archivable = true
+	local copy = character:Clone()
+	character.Archivable = old
+	if not copy then
+		return nil
+	end
+	for _, node in copy:GetDescendants() do
+		if node:IsA("LuaSourceContainer") or node:IsA("Tool") or node:IsA("BillboardGui")
+			or node:IsA("ParticleEmitter") or node:IsA("Sound") or node:IsA("Highlight") then
+			node:Destroy()
+		end
+	end
+	local pivot = copy:FindFirstChild("HumanoidRootPart")
+	if not (pivot and pivot:IsA("BasePart")) then
+		copy:Destroy()
+		return nil
+	end
+	local vf = new("ViewportFrame", {
+		BackgroundTransparency = 1, Size = UDim2.fromScale(0.72, 0.92), Position = UDim2.fromScale(0.14, 0.04),
+		Ambient = Color3.fromRGB(197, 183, 163), LightColor = TEXT, LightDirection = Vector3.new(-1, -1, 1),
+	})
+	local world = new("WorldModel", { Parent = vf })
+	copy:PivotTo(CFrame.new())
+	copy.Parent = world
+	local at, size = copy:GetBoundingBox()
+	local camera = new("Camera", { FieldOfView = 28, Parent = vf })
+	local offset = pivot.CFrame:VectorToWorldSpace(Vector3.new(0.20, 0.07, -1)).Unit
+	camera.CFrame = CFrame.lookAt(at.Position + offset * (math.max(size.Y, size.X) * 2.25), at.Position)
+	vf.CurrentCamera = camera
 	return vf
 end
 
@@ -121,7 +196,7 @@ function Hud.build(parent: Instance, opts)
 	self.root = root
 
 	-- carte du joueur
-	local card = new("Frame", { Name = "Joueur", Size = UDim2.fromOffset(420, 150), Position = UDim2.fromOffset(14, 12), BackgroundTransparency = 1, Parent = root })
+	local card = new("Frame", { Name = "Joueur", Size = UDim2.fromOffset(420, 150), Position = UDim2.fromOffset(20, 31), BackgroundTransparency = 1, Parent = root })
 	new("Frame", { Size = UDim2.fromOffset(300, 108), Position = UDim2.fromOffset(110, 14), BackgroundColor3 = DARK, BackgroundTransparency = 0.3, Parent = card },
 		{ corner(10), new("UIGradient", { Transparency = NumberSequence.new(0, 1) }) })
 	local ring = new("Frame", { Size = UDim2.fromOffset(128, 128), Position = UDim2.fromOffset(0, 4), BackgroundColor3 = Color3.fromRGB(70, 56, 40), Parent = card, ZIndex = 2 },
@@ -131,7 +206,7 @@ function Hud.build(parent: Instance, opts)
 	local badge = new("Frame", { Size = UDim2.fromOffset(46, 52), Position = UDim2.fromOffset(92, 92), BackgroundColor3 = NAVY, Parent = card, ZIndex = 5 },
 		{ corner(UDim.new(0.3, 0)), stroke(GOLD, 2.5), grad(Color3.fromRGB(60, 84, 130), Color3.fromRGB(26, 36, 62)) })
 	self.badge = text({ Text = "😇", TextSize = 24, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), Parent = badge, ZIndex = 6 })
-	self.name = text({ Text = "Joueur", Font = TITLE, TextSize = 24, TextStrokeTransparency = 0.5, Size = UDim2.fromOffset(260, 30), Position = UDim2.fromOffset(150, 14), Parent = card, ZIndex = 3 })
+	self.name = text({ Text = "Joueur", Font = TITLE, TextSize = 24, TextStrokeTransparency = 0.5, TextTruncate = Enum.TextTruncate.AtEnd, Size = UDim2.fromOffset(260, 30), Position = UDim2.fromOffset(150, 14), Parent = card, ZIndex = 3 })
 	self.hp = bar(card, 48, Color3.fromRGB(206, 44, 44), "❤️")
 	self.st = bar(card, 78, Color3.fromRGB(44, 120, 220), "⚡")
 	local goldPill = new("Frame", { Size = UDim2.fromOffset(0, 26), AutomaticSize = Enum.AutomaticSize.X, Position = UDim2.fromOffset(164, 110), BackgroundColor3 = DARK, BackgroundTransparency = 0.2, Parent = card },
@@ -140,8 +215,8 @@ function Hud.build(parent: Instance, opts)
 	self.stars = text({ Text = "", TextSize = 20, TextColor3 = GOLD, TextStrokeTransparency = 0.4, Size = UDim2.fromOffset(240, 26), Position = UDim2.fromOffset(290, 110), Parent = card })
 
 	-- boussole + lieu (haut-centre)
-	local comp = new("Frame", { Name = "Boussole", Size = UDim2.fromOffset(460, 40), Position = UDim2.new(0.5, 0, 0, 14), AnchorPoint = Vector2.new(0.5, 0),
-		BackgroundColor3 = NAVY, BackgroundTransparency = 0.12, ClipsDescendants = true, Parent = root },
+	local comp = new("Frame", { Name = "Boussole", Size = UDim2.fromOffset(448, 36), Position = UDim2.new(0.5, 0, 0, 27), AnchorPoint = Vector2.new(0.5, 0),
+		BackgroundColor3 = NAVY, BackgroundTransparency = 0.12, ClipsDescendants = true, Visible = not opts.compact, Parent = root },
 		{ corner(6), stroke(EDGE, 2.5), grad(Color3.fromRGB(56, 78, 120), Color3.fromRGB(24, 34, 58)) })
 	local strip = new("Frame", { Size = UDim2.fromOffset(0, 40), BackgroundTransparency = 1, Parent = comp })
 	self.strip = strip
@@ -159,8 +234,9 @@ function Hud.build(parent: Instance, opts)
 			end
 		end
 	end
-	new("Frame", { Size = UDim2.fromOffset(12, 12), Position = UDim2.new(0.5, 0, 1, -2), AnchorPoint = Vector2.new(0.5, 0.5), Rotation = 45, BackgroundColor3 = GOLD, Parent = comp, ZIndex = 3 })
-	local place = new("Frame", { Name = "Lieu", Size = UDim2.fromOffset(0, 34), AutomaticSize = Enum.AutomaticSize.X, Position = UDim2.new(0.5, 0, 0, 60), AnchorPoint = Vector2.new(0.5, 0),
+	new("Frame", { Size = UDim2.fromOffset(34, 34), Position = UDim2.new(0.5, 0, 0, 45), AnchorPoint = Vector2.new(0.5, 0.5), Rotation = 45, BackgroundColor3 = NAVY, Visible = not opts.compact, Parent = root, ZIndex = 3 }, { stroke(EDGE, 2.5) })
+	self.heading = text({ Text = "N", Font = BOLD, TextSize = 19, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(46, 36), Position = UDim2.new(0.5, 0, 0, 45), AnchorPoint = Vector2.new(0.5, 0.5), Visible = not opts.compact, Parent = root, ZIndex = 4 })
+	local place = new("Frame", { Name = "Lieu", Size = UDim2.fromOffset(0, 34), AutomaticSize = Enum.AutomaticSize.X, Position = UDim2.new(0.5, 0, 0, 73), AnchorPoint = Vector2.new(0.5, 0),
 		BackgroundColor3 = DARK, BackgroundTransparency = 0.35, Parent = root },
 		{ corner(8), new("UIPadding", { PaddingLeft = UDim.new(0, 14), PaddingRight = UDim.new(0, 18) }),
 			new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 8), VerticalAlignment = Enum.VerticalAlignment.Center }) })
@@ -168,7 +244,7 @@ function Hud.build(parent: Instance, opts)
 	self.placeName = text({ Text = "", Font = TITLE, TextSize = 22, TextStrokeTransparency = 0.5, AutomaticSize = Enum.AutomaticSize.X, Size = UDim2.fromOffset(0, 34), LayoutOrder = 2, Parent = place })
 
 	-- horloge / météo + minicarte (haut-droite)
-	local clock = new("Frame", { Name = "Horloge", Size = UDim2.fromOffset(240, 66), Position = UDim2.new(1, -220, 0, 22), AnchorPoint = Vector2.new(1, 0),
+	local clock = new("Frame", { Name = "Horloge", Size = UDim2.fromOffset(240, 66), Position = opts.compact and UDim2.new(1, -12, 0, 220) or UDim2.new(1, -220, 0, 27), AnchorPoint = Vector2.new(1, 0),
 		BackgroundColor3 = NAVY, BackgroundTransparency = 0.15, Parent = root }, { corner(10), stroke(EDGE, 2), grad(Color3.fromRGB(56, 78, 120), Color3.fromRGB(24, 34, 58)) })
 	self.sky = text({ Text = "☀️", TextSize = 36, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(56, 66), Parent = clock })
 	self.day = text({ Text = "", Font = TITLE, TextSize = 21, Size = UDim2.new(1, -62, 0, 30), Position = UDim2.fromOffset(58, 6), Parent = clock })
@@ -204,20 +280,81 @@ function Hud.build(parent: Instance, opts)
 	self.zoomBtn = roundBtn("+", UDim2.new(0.88, 0, 0.1, 0), opts.onZoom)
 
 	-- colonne de boutons (gauche)
-	local menu = new("Frame", { Name = "Menu", Size = UDim2.fromOffset(212, 0), AutomaticSize = Enum.AutomaticSize.Y, Position = UDim2.new(0, 14, 0, 176), BackgroundTransparency = 1, Parent = root },
-		{ new("UIListLayout", { Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder }) })
+	local menu = new("Frame", { Name = "Menu", Size = UDim2.fromOffset(216, 0), AutomaticSize = Enum.AutomaticSize.Y, Position = UDim2.new(0, 16, 0, opts.compact and 211 or 252), BackgroundTransparency = 1, Visible = not opts.compact, Parent = root },
+		{ new("UIListLayout", { Padding = UDim.new(0, 4), SortOrder = Enum.SortOrder.LayoutOrder }) })
 	self.menu = menu
+	local GuiService = game:GetService("GuiService")
+	local menuToggle
+	local firstButton
+	local lastButton
+	local function closeMenu()
+		if opts.compact then
+			menu.Visible = false
+			menuToggle.Text = "☰  Menu"
+		end
+		if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(menu) then
+			GuiService.SelectedObject = nil
+		end
+	end
+	if opts.compact then
+		menuToggle = new("TextButton", { Name = "OuvrirMenu", Text = "☰  Menu", Font = BOLD, TextSize = 30, TextColor3 = TEXT, BackgroundColor3 = DARK, Size = UDim2.fromOffset(190, 66), Position = UDim2.fromOffset(16, 145), Parent = root }, { corner(9), stroke(EDGE, 2) })
+		menuToggle.Activated:Connect(function()
+			if menu.Visible then
+				closeMenu()
+			else
+				menu.Visible = true
+				menuToggle.Text = "×  Fermer"
+			end
+		end)
+	end
 	for i, m in opts.menu or {} do
-		local b = new("TextButton", { Name = m.id or m.label, Text = "", AutoButtonColor = true, BackgroundColor3 = DARK2, BackgroundTransparency = 0.08, Size = UDim2.fromOffset(212, 50), LayoutOrder = i, Parent = menu },
-			{ corner(8), stroke(Color3.fromRGB(110, 84, 56), 2.5), grad(Color3.fromRGB(62, 64, 72), Color3.fromRGB(34, 36, 42)) })
-		text({ Text = m.icon, TextSize = 28, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(52, 50), Parent = b })
-		text({ Text = m.label, Font = BOLD, TextSize = 18, TextStrokeTransparency = 0.6, Size = UDim2.new(1, -96, 1, 0), Position = UDim2.fromOffset(56, 0), Parent = b })
-		if m.key then
-			text({ Text = m.key, Font = BOLD, TextSize = 13, TextColor3 = DIM, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(28, 50), Position = UDim2.new(1, -32, 0, 0), Parent = b })
+		local b = new("TextButton", { Name = m.id or m.label, Text = "", AutoButtonColor = true, BackgroundColor3 = DARK2, BackgroundTransparency = 0.10, Size = UDim2.fromOffset(216, 52), LayoutOrder = i, Parent = menu },
+			{ corner(10), stroke(EDGE, 1.5), grad(Color3.fromRGB(76, 58, 42), Color3.fromRGB(28, 23, 19)) })
+		b.Selectable = true
+		firstButton = firstButton or b
+		if lastButton then
+			lastButton.NextSelectionDown = b
+			b.NextSelectionUp = lastButton
+		end
+		lastButton = b
+		local icons = game:GetService("ReplicatedStorage"):FindFirstChild("IconesObjets")
+		local model = m.model and icons and icons:FindFirstChild(m.model)
+		if model and model:IsA("Model") then
+			local holder = new("Frame", { Size = UDim2.fromOffset(56, 49), Position = UDim2.fromOffset(5, 1), BackgroundTransparency = 1, Parent = b })
+			Hud.objectViewport(model).Parent = holder
+		else
+			text({ Text = m.icon, TextSize = 35, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(65, 52), Parent = b })
+		end
+		text({ Text = m.label, Font = BOLD, TextSize = opts.compact and 23 or 18, TextStrokeTransparency = 0.6, Size = UDim2.new(1, opts.compact and -70 or -96, 1, 0), Position = UDim2.fromOffset(68, 0), Parent = b })
+		if m.key and not opts.compact then
+			text({ Text = typeof(m.key) == "EnumItem" and m.key.Name or m.key, Font = BOLD, TextSize = 13, TextColor3 = DIM, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(28, 50), Position = UDim2.new(1, -32, 0, 0), Parent = b })
 		end
 		if m.fn then
-			b.Activated:Connect(m.fn)
+			b.Activated:Connect(function()
+				closeMenu()
+				m.fn()
+			end)
 		end
+	end
+
+	if firstButton then
+		firstButton.NextSelectionUp = lastButton
+		lastButton.NextSelectionDown = firstButton
+	end
+	if firstButton and opts.gamepad then
+		local WindowNav = require(script.Parent:WaitForChild("WindowNav"))
+		WindowNav.bindMenu(menu, function()
+			local selected = GuiService.SelectedObject
+			if selected and selected:IsDescendantOf(menu) then
+				closeMenu()
+			elseif not WindowNav.isOpen() then
+				menu.Visible = true
+				if menuToggle then
+					menuToggle.Text = "×  Fermer"
+				end
+				GuiService.SelectedObject = firstButton
+			end
+		end, closeMenu)
 	end
 
 	-- notifications (bas-droite)
@@ -265,12 +402,11 @@ function Hud:setStars(stars: number, max: number, bounty: number?)
 end
 
 -- cap de la caméra en degrés (0 = nord, 90 = est)
+local DIRECTIONS = { "N", "NE", "E", "SE", "S", "SO", "O", "NO" }
+
 function Hud:setHeading(deg: number)
-	local w = self.strip.Parent.AbsoluteSize.X
-	if w <= 0 then
-		w = 460
-	end
-	self.strip.Position = UDim2.fromOffset(w / 2 - (deg % 360) * self.PX_PER_DEG, 0)
+	self.strip.Position = UDim2.new(0.5, -(deg % 360) * self.PX_PER_DEG, 0, -2)
+	self.heading.Text = DIRECTIONS[math.floor((deg + 22.5) / 45) % #DIRECTIONS + 1]
 	self.arrow.Rotation = deg
 end
 

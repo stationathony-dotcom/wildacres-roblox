@@ -98,21 +98,21 @@ pcall(function()
 		w.VerticalAlignment = Enum.VerticalAlignment.Bottom
 		w.WidthScale = 0.85
 		w.HeightScale = 0.7
-		w.BackgroundColor3 = Color3.fromRGB(30, 34, 42)
+		w.BackgroundColor3 = Color3.fromRGB(32, 25, 20)
 		w.BackgroundTransparency = 0.35
 		w.TextColor3 = Color3.fromRGB(248, 242, 228)
 		w.TextSize = 15
 	end
 	local bar = TCS:FindFirstChildOfClass("ChatInputBarConfiguration")
 	if bar then
-		bar.BackgroundColor3 = Color3.fromRGB(30, 34, 42)
+		bar.BackgroundColor3 = Color3.fromRGB(28, 22, 18)
 		bar.BackgroundTransparency = 0.25
 		bar.PlaceholderColor3 = Color3.fromRGB(196, 188, 170)
 	end
 	local tabs = TCS:FindFirstChildOfClass("ChannelTabsConfiguration")
 	if tabs then
 		tabs.Enabled = true
-		tabs.BackgroundColor3 = Color3.fromRGB(44, 48, 58)
+		tabs.BackgroundColor3 = Color3.fromRGB(55, 42, 31)
 		tabs.SelectedTabTextColor3 = Color3.fromRGB(246, 200, 70)
 	end
 end)
@@ -145,6 +145,7 @@ local function send(kind: string, data)
 end
 
 -- Panneau générique (titre + bouton fermer + zone défilante)
+local WindowNav = require(script.Parent:WaitForChild("WindowNav"))
 local panels = {}
 local function makePanel(name: string, title: string, size: UDim2, onClose: (() -> ())?)
 	local f = new("Frame", {
@@ -162,6 +163,12 @@ local function makePanel(name: string, title: string, size: UDim2, onClose: (() 
 	close.Position = UDim2.new(1, -46, 0, 10)
 	close.ZIndex = 6
 	close.Parent = f
+	WindowNav.watch(f, close, function()
+		f.Visible = false
+		if onClose then
+			onClose()
+		end
+	end)
 	local body = new("ScrollingFrame", {
 		Size = UDim2.new(1, -24, 1, -64), Position = UDim2.fromOffset(12, 54), BackgroundTransparency = 1,
 		ScrollBarThickness = 6, ScrollBarImageColor3 = C.line, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y,
@@ -385,19 +392,21 @@ local function game_()
 		hudScale.Scale = Hud.scaleFor(cam and cam.ViewportSize or Vector2.new(1280, 720))
 	end
 	hudScaleUpdate()
-	local hud = Hud.build(hudGui, {
-		menu = (not MOBILE) and {
-			{ icon = "🎒", label = "Inventaire", key = "B", fn = act("sac") },
-			{ icon = "🧍", label = "Personnage", key = "P", fn = act("perso") },
-			{ icon = "⭐", label = "Compétences", key = "K", fn = act("talents") },
-			{ icon = "📜", label = "Quêtes", key = "J", fn = act("quetes") },
-			{ icon = "🗺️", label = "Carte", key = "M", fn = fireLocal("OuvrirCarte") },
-			{ icon = "🛡️", label = "Clan", key = "L", fn = act("clan") },
-			{ icon = "🛠️", label = "Atelier", key = "C", fn = act("atelier") },
-			{ icon = "⚙️", label = "Paramètres", key = "O", fn = fireLocal("OuvrirParametres") },
-		} or nil,
-		onMap = fireLocal("OuvrirCarte"),
-	})
+	local menu = {
+		{ id = "sac", icon = "🎒", model = "backpack", label = "Sac", key = Enum.KeyCode.B, fn = act("sac") },
+		{ id = "perso", icon = "🧍", label = "Personnage", key = Enum.KeyCode.P, fn = act("perso") },
+		{ id = "talents", icon = "⭐", model = "skill_book", label = "Compétences", key = Enum.KeyCode.K, fn = act("talents") },
+		{ id = "quetes", icon = "📜", model = "parchment", label = "Journal", key = Enum.KeyCode.J, fn = fireLocal("OuvrirQuetes") },
+		{ id = "carte", icon = "🗺️", model = "map_world", label = "Carte", key = Enum.KeyCode.M, fn = fireLocal("OuvrirCarte") },
+		{ id = "clan", icon = "🛡️", label = "Clan", key = Enum.KeyCode.L, fn = act("clan") },
+		{ id = "atelier", icon = "🛠️", model = "workbench", label = "Atelier", key = Enum.KeyCode.C, fn = act("atelier") },
+		{ id = "parametres", icon = "⚙️", label = "Paramètres", key = Enum.KeyCode.O, fn = fireLocal("OuvrirParametres") },
+	}
+	local menuKeys = { [Enum.KeyCode.Tab] = menu[1].fn }
+	for _, entry in menu do
+		menuKeys[entry.key] = entry.fn
+	end
+	local hud = Hud.build(hudGui, { compact = MOBILE, menu = menu, onMap = menu[5].fn, gamepad = true })
 	hudNotify = function(text: string, kind: string?)
 		local n, icon, name = string.match(text, "^%+(%d+) (%S+) (.+)$")
 		if n then
@@ -742,7 +751,7 @@ local function game_()
 		table.insert(lines, { kind, C.dim, 12 })
 		-- état de l'outil (usure, cf. Joueurs.TOOL_LIFE : pierre 150, cuivre 350, fer 700 coups)
 		if info.tool then
-			local life = ({ 150, 350, 700 })[Config.tierOf and Config.tierOf(id) or 1] or 150
+			local life = Config.TOOL_LIFE[Config.tierOf(id)]
 			-- l'usure suivie est celle du MEILLEUR outil de la famille (celui qu'on utilise)
 			local base = Config.baseOf and Config.baseOf(id) or id
 			local best = nil
@@ -807,7 +816,6 @@ local function game_()
 	-- icône 3D d'un outil (maquette de ReplicatedStorage.IconesOutils dans un ViewportFrame), façon
 	-- image cible ; faux si l'objet n'a pas de maquette (on garde alors l'emoji)
 	local TOOL_ICON = { hoe = "Houe", can = "Arrosoir", shovel = "Pelle", axe = "Hache", pickaxe = "Pioche", rod = "Canne à pêche", club = "Gourdin", sword = "Épée", spade = "Pelle" }
-	local TIER_TINT = { [2] = Color3.fromRGB(206, 120, 70), [3] = Color3.fromRGB(196, 198, 206) }
 	local iconFolder = ReplicatedStorage:FindFirstChild("IconesOutils")
 	local objFolder = ReplicatedStorage:FindFirstChild("IconesObjets") -- ressources (bois, pierre…)
 	function toolIcon(id: string, cell: Instance, zi: number, dim: boolean): boolean
@@ -818,7 +826,7 @@ local function game_()
 		local tpl = nil
 		if info.tool and iconFolder then
 			local name = TOOL_ICON[id] or TOOL_ICON[info.base or ""] or (Config.baseOf and TOOL_ICON[Config.baseOf(id)])
-			tpl = name and iconFolder:FindFirstChild(name)
+			tpl = iconFolder:FindFirstChild(id) or (name and iconFolder:FindFirstChild(name))
 		elseif objFolder then
 			tpl = objFolder:FindFirstChild(id)
 		end
@@ -826,7 +834,7 @@ local function game_()
 			return false
 		end
 		local tier = Config.tierOf and Config.tierOf(id) or 0
-		local tint = TIER_TINT[tier]
+		local tint = not tpl:GetAttribute("PaletteDediee") and Config.TOOL_TINTS[tier]
 		local vf = Hud.objectViewport(tpl, dim, tint and function(d: BasePart)
 			-- outils de cuivre / fer : la partie métallique prend la couleur du palier
 			if d.Material == Enum.Material.Metal or d.Material == Enum.Material.Slate or d.Material == Enum.Material.Rock then
@@ -948,9 +956,9 @@ local function game_()
 	end
 
 	local hotbar = new("Frame", {
-		Name = "BarreRapide", Size = UDim2.fromOffset(HOT * 70 + 12, 80), Position = UDim2.new(0.5, 0, 1, MOBILE and -96 or -30), AnchorPoint = Vector2.new(0.5, 1),
+		Name = "BarreRapide", Size = UDim2.fromOffset(HOT * 72 + 8, 80), Position = UDim2.new(0.5, 0, 1, MOBILE and -96 or -18), AnchorPoint = Vector2.new(0.5, 1),
 		BackgroundTransparency = 1, Parent = gui, ZIndex = 4,
-	}, { pad(6), new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 6), VerticalAlignment = Enum.VerticalAlignment.Center }) })
+	}, { pad(6), new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 3), VerticalAlignment = Enum.VerticalAlignment.Center, SortOrder = Enum.SortOrder.LayoutOrder }) })
 	hotScale = new("UIScale", { Parent = hotbar })
 	rescale()
 	local hotCells = {}
@@ -1064,25 +1072,34 @@ local function game_()
 	end)
 
 	renderHotbar = function()
-		clear(hotbar)
+		for _, child in hotbar:GetChildren() do
+			if child:IsA("TextButton") then
+				child:Destroy()
+			end
+		end
 		hotCells = {}
 		for i = 1, HOT do
 			local id = hotSlots[i] or ""
 			local n = id ~= "" and ownedCount(id) or nil
 			local shown = id ~= "" and shownId(id) or nil
 			local tool = id ~= "" and itemInfo(id).tool
-			local cell = slotCell(hotbar, 64, shown, (not tool) and n or (n == 0 and 0 or nil), 5)
+			local cell = slotCell(hotbar, 69, shown, (not tool) and n or (n == 0 and 0 or nil), 5)
 			cell.Name = "Barre" .. i
 			cell.LayoutOrder = i
-			cell.BackgroundColor3 = Color3.fromRGB(28, 30, 36)
+			cell.BackgroundColor3 = i == selected and Color3.fromRGB(46, 57, 72) or Color3.fromRGB(50, 40, 32)
 			cell.BackgroundTransparency = 0.08
 			cell:FindFirstChildOfClass("UICorner").CornerRadius = UDim.new(0, 8)
+			new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(137, 119, 103)), Parent = cell })
 			label({ Text = tostring(i), Font = BOLD, TextSize = 14, TextColor3 = C.text, TextStrokeTransparency = 0.3, Size = UDim2.fromOffset(16, 16), Position = UDim2.fromOffset(5, 3), Parent = cell, ZIndex = 8 })
 			local s = cell:FindFirstChildOfClass("UIStroke")
 			if i == selected then
 				s.Color = C.gold
 				s.Thickness = 3.5
+				new("Frame", { Size = UDim2.new(1, -8, 1, -8), Position = UDim2.fromOffset(4, 4), BackgroundTransparency = 1, Parent = cell }, { corner(5), stroke(Color3.fromRGB(168, 109, 32), 1.5) })
 			else
+				if not shown then
+					s.Color = C.line
+				end
 				s.Thickness = math.max(s.Thickness, 2)
 			end
 			cell.MouseButton1Down:Connect(function()
@@ -1149,14 +1166,16 @@ local function game_()
 	}, { corner(6), stroke(Color3.fromRGB(176, 140, 72), 2.5) })
 	panels.SacWoW = wbag
 	label({ Text = "🎒  Sac", Font = TITLE, TextSize = 20, TextColor3 = C.gold, Size = UDim2.new(1, -60, 0, 30), Position = UDim2.fromOffset(12, 6), Parent = wbag, ZIndex = 6 })
-	local wclose = button("X", C.red, function()
+	local function closeWbag()
 		wbag.Visible = false
 		hideTip()
-	end)
+	end
+	local wclose = button("X", C.red, closeWbag)
 	wclose.Size = UDim2.fromOffset(28, 28)
 	wclose.Position = UDim2.new(1, -36, 0, 7)
 	wclose.ZIndex = 6
 	wclose.Parent = wbag
+	WindowNav.watch(wbag, wclose, closeWbag)
 	local wtabs = new("Frame", { Size = UDim2.new(1, -20, 0, 30), Position = UDim2.fromOffset(10, 40), BackgroundTransparency = 1, Parent = wbag, ZIndex = 6 },
 		{ new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 3) }) })
 	local wgrid = new("ScrollingFrame", {
@@ -1359,7 +1378,7 @@ local function game_()
 	do
 	-- Gauche : l'équipement porté autour du personnage + l'équipement dans le sac.
 	-- Droite : onglets Caractéristiques / Compétences / Collections / Titres.
-	local SLOT_ICON = { hat = "🎩", armor = "🥋", weapon = "🗡️", trinket = "💍" }
+	local SLOT_ICON = Gear.SLOT_ICONS
 	local STAT_ICON = { force = "💪", defense = "🛡️", vie = "❤️", vitesse = "👟", chance = "🍀", charisme = "😊", discretion = "👤" }
 	local STAT_HELP = { force = "Dégâts", defense = "Moins de dégâts reçus", vie = "+10 vie max par point", vitesse = "Course, endurance",
 		chance = "Butin, pêche, trouvailles", charisme = "Prix, avis des PNJ", discretion = "Moins vu des témoins" }
@@ -1373,14 +1392,16 @@ local function game_()
 	}, { corner(6), stroke(Color3.fromRGB(176, 140, 72), 2.5) })
 	panels.Perso = bag
 	local charTitle = label({ Text = "", Font = TITLE, TextSize = 20, TextColor3 = C.gold, Size = UDim2.new(1, -60, 0, 30), Position = UDim2.fromOffset(14, 6), Parent = bag, ZIndex = 6 })
-	local pclose = button("X", C.red, function()
+	local function closeBag()
 		bag.Visible = false
 		hideTip()
-	end)
+	end
+	local pclose = button("X", C.red, closeBag)
 	pclose.Size = UDim2.fromOffset(28, 28)
 	pclose.Position = UDim2.new(1, -36, 0, 8)
 	pclose.ZIndex = 6
 	pclose.Parent = bag
+	WindowNav.watch(bag, pclose, closeBag)
 	local left = new("Frame", { Size = UDim2.new(0, 300, 1, -54), Position = UDim2.fromOffset(12, 42), BackgroundColor3 = Color3.fromRGB(32, 26, 20), Parent = bag, ZIndex = 6 },
 		{ corner(6), stroke(Color3.fromRGB(80, 64, 44), 1) })
 	local right = new("Frame", { Size = UDim2.new(1, -336, 1, -54), Position = UDim2.fromOffset(322, 42), BackgroundColor3 = Color3.fromRGB(32, 26, 20), Parent = bag, ZIndex = 6 },
@@ -1407,6 +1428,22 @@ local function game_()
 				table.insert(lines, { (STAT_ICON[st] or "") .. " +" .. v .. " " .. Gear.STATS[st], Color3.fromRGB(30, 255, 0) })
 			end
 		end
+		local worn = inv.equipped[it.slot]
+		if worn and worn.id ~= it.id then
+			table.insert(lines, { "Par rapport à " .. worn.name, C.dim, 12 })
+			if it.slot == "weapon" then
+				local delta = (it.power or 0) - (worn.power or 0)
+				if delta ~= 0 then
+					table.insert(lines, { string.format("%+d dégâts", delta), delta > 0 and C.green or C.red, 12 })
+				end
+			end
+			for _, stat in Gear.STAT_ORDER do
+				local delta = ((it.stats or {})[stat] or 0) - ((worn.stats or {})[stat] or 0)
+				if delta ~= 0 then
+					table.insert(lines, { string.format("%+d %s", delta, Gear.STATS[stat]), delta > 0 and C.green or C.red, 12 })
+				end
+			end
+		end
 		return lines
 	end
 	local function gearCell(parent, size: number, it, slot: string?)
@@ -1417,6 +1454,11 @@ local function game_()
 		}, { corner(4) })
 		stroke(r and r.color or Color3.fromRGB(70, 60, 50), r and 2 or 1).Parent = cell
 		if it then
+			local preview = Hud.gearViewport(it)
+			if preview then
+				cell.Text = ""
+				preview.ZIndex, preview.Parent = 9, cell
+			end
 			cell.MouseEnter:Connect(function()
 				if not tipActions then
 					showTip(gearLines(it))
@@ -1444,14 +1486,27 @@ local function game_()
 		charTitle.Text = "🧍 " .. player.DisplayName .. "   ·   🎓 " .. mastery
 		-- gauche : poupée d'équipement
 		clear(left)
-		local doll = new("Frame", { Size = UDim2.fromOffset(200, 200), Position = UDim2.new(0.5, -100, 0, 10), BackgroundTransparency = 1, Parent = left, ZIndex = 7 })
-		label({ Text = "🧍", TextSize = 110, TextXAlignment = Enum.TextXAlignment.Center, TextTransparency = 0.55, Size = UDim2.fromScale(1, 1), Parent = doll, ZIndex = 7 })
-		local spots = { hat = UDim2.fromOffset(72, 0), armor = UDim2.fromOffset(0, 74), weapon = UDim2.fromOffset(72, 144), trinket = UDim2.fromOffset(144, 74) }
-		for slot, pos in spots do
+		local doll = new("Frame", { Size = UDim2.fromOffset(276, 218), Position = UDim2.new(0.5, -138, 0, 8), BackgroundTransparency = 1, Parent = left, ZIndex = 7 })
+		local portrait = player.Character and Hud.avatarViewport(player.Character)
+		if portrait then
+			portrait.Size, portrait.Position = UDim2.fromOffset(163, 174), UDim2.fromOffset(56, 1)
+			portrait.ZIndex, portrait.Parent = 7, doll
+		else
+			label({ Text = "🧍", TextSize = 110, TextXAlignment = Enum.TextXAlignment.Center, TextTransparency = 0.55, Size = UDim2.fromScale(1, 1), Parent = doll, ZIndex = 7 })
+		end
+		local spots = {
+			hat = Vector2.new(6, 0), armor = Vector2.new(6, 52), gloves = Vector2.new(6, 104), legs = Vector2.new(6, 156),
+			cape = Vector2.new(230, 0), shoulders = Vector2.new(230, 52), trinket = Vector2.new(230, 104), boots = Vector2.new(230, 156),
+			weapon = Vector2.new(118, 169),
+		}
+		for _, slot in ipairs(Gear.SLOT_ORDER) do
+			local pos = spots[slot]
 			local it = inv.equipped[slot]
-			local c = gearCell(doll, 56, it, slot)
+			local c = gearCell(doll, 40, it, slot)
 			c.Name = "Porte_" .. slot
-			c.Position = pos
+			c.Position = UDim2.fromOffset(pos.X, pos.Y)
+			label({ Text = Gear.SLOTS[slot], TextSize = 9, TextColor3 = C.dim, TextXAlignment = Enum.TextXAlignment.Center,
+				TextWrapped = false, Size = UDim2.fromOffset(54, 11), Position = UDim2.fromOffset(pos.X-7,pos.Y+40), Parent = doll, ZIndex = 8 })
 			if it then
 				c.Activated:Connect(function()
 					showTip(gearLines(it), { { "Retirer", function()
@@ -1462,11 +1517,11 @@ local function game_()
 		end
 		-- pas de niveau : la maîtrise = somme des rangs de compétence (donne les points de talent)
 		label({ Text = "🎓 Maîtrise " .. mastery .. "   ·   ✨ talents : 1 point / 15", TextSize = 12, TextColor3 = C.dim, TextXAlignment = Enum.TextXAlignment.Center,
-			Size = UDim2.new(1, -24, 0, 16), Position = UDim2.fromOffset(12, 216), Parent = left, ZIndex = 7 })
+			Size = UDim2.new(1, -24, 0, 16), Position = UDim2.fromOffset(12, 233), Parent = left, ZIndex = 7 })
 		-- équipement dans le sac
-		label({ Text = "🎒", TextSize = 16, Size = UDim2.fromOffset(24, 20), Position = UDim2.fromOffset(12, 240), Parent = left, ZIndex = 7 })
+		label({ Text = "Équipement du sac", Font = BOLD, TextSize = 13, Size = UDim2.fromOffset(170, 20), Position = UDim2.fromOffset(12, 254), Parent = left, ZIndex = 7 })
 		local gg = new("ScrollingFrame", {
-			Size = UDim2.new(1, -24, 1, -268), Position = UDim2.fromOffset(12, 262), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 4,
+			Size = UDim2.new(1, -24, 1, -278), Position = UDim2.fromOffset(12, 274), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 4,
 			ScrollBarImageColor3 = C.line, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y, Parent = left, ZIndex = 7,
 		}, { new("UIGridLayout", { CellSize = UDim2.fromOffset(44, 44), CellPadding = UDim2.fromOffset(4, 4) }) })
 		for _, it in inv.gear do
@@ -1732,14 +1787,16 @@ local function game_()
 	panels.Atelier = craft
 	label({ Text = "🛠️", TextSize = 26, Size = UDim2.fromOffset(36, 34), Position = UDim2.fromOffset(12, 6), Parent = craft, ZIndex = 6 })
 	local stationIcons = label({ Text = "", TextSize = 22, Size = UDim2.fromOffset(200, 34), Position = UDim2.fromOffset(52, 6), Parent = craft, ZIndex = 6 })
-	local cclose = button("X", C.red, function()
+	local function closeCraft()
 		craft.Visible = false
 		hideTip()
-	end)
+	end
+	local cclose = button("X", C.red, closeCraft)
 	cclose.Size = UDim2.fromOffset(28, 28)
 	cclose.Position = UDim2.new(1, -36, 0, 8)
 	cclose.ZIndex = 6
 	cclose.Parent = craft
+	WindowNav.watch(craft, cclose, closeCraft)
 
 	-- colonnes : sac (gauche), grille + résultat (milieu), carnet (droite)
 	local function column(x: number, w: number, icon: string)
@@ -1748,18 +1805,56 @@ local function game_()
 		label({ Text = icon, TextSize = 18, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.new(1, 0, 0, 24), Position = UDim2.fromOffset(0, 4), Parent = f, ZIndex = 7 })
 		return f
 	end
-	local colBag = column(12, 300, "🎒")
+	local colBag = column(12, 300, "Matériaux")
 	local colGrid = column(322, 236, "")
-	local colBook = column(568, 240, "📖")
+	local colBook = column(568, 240, "Recettes")
 	local bagScroll = new("ScrollingFrame", {
 		Size = UDim2.new(1, -12, 1, -36), Position = UDim2.fromOffset(6, 30), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 4,
 		ScrollBarImageColor3 = C.line, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y, Parent = colBag, ZIndex = 7,
 	}, { pad(3), new("UIGridLayout", { CellSize = UDim2.fromOffset(44, 44), CellPadding = UDim2.fromOffset(4, 4), SortOrder = Enum.SortOrder.LayoutOrder }) })
 	local bookScroll = new("ScrollingFrame", {
-		Size = UDim2.new(1, -12, 1, -36), Position = UDim2.fromOffset(6, 30), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 4,
+		Size = UDim2.new(1, -12, 1, -68), Position = UDim2.fromOffset(6, 61), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 4,
 		ScrollBarImageColor3 = C.line, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y, Parent = colBook, ZIndex = 7,
 	}, { pad(3), new("UIGridLayout", { CellSize = UDim2.fromOffset(42, 42), CellPadding = UDim2.fromOffset(4, 4), SortOrder = Enum.SortOrder.LayoutOrder }) })
 	local bookCount = label({ Text = "", TextSize = 12, TextColor3 = C.dim, TextXAlignment = Enum.TextXAlignment.Right, Size = UDim2.new(1, -10, 0, 20), Position = UDim2.fromOffset(0, 6), Parent = colBook, ZIndex = 7 })
+	local search = new("TextBox", { Text = "", PlaceholderText = "Chercher une recette", ClearTextOnFocus = false,
+		Font = BODY, TextSize = 13, TextColor3 = C.text, PlaceholderColor3 = C.dim, BackgroundColor3 = C.panel,
+		Size = UDim2.new(1, -16, 0, 27), Position = UDim2.fromOffset(8, 30), Parent = colBook, ZIndex = 8 },
+		{ corner(5), stroke(C.line, 1) })
+	local emptyRecipes = label({ Text = "Aucune recette trouvée", Visible = false, TextColor3 = C.dim, TextSize = 13,
+		TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.new(1, 0, 0, 30), Position = UDim2.fromOffset(0, 66), Parent = colBook, ZIndex = 8 })
+	local recipeCells = {}
+	local function refreshRecipeIcons()
+		if not craft.Visible then
+			return
+		end
+		local top = bookScroll.AbsolutePosition.Y
+		local bottom = top + bookScroll.AbsoluteWindowSize.Y
+		for _, entry in ipairs(recipeCells) do
+			local cell = entry.cell
+			local y = cell.AbsolutePosition.Y
+			local visible = y < bottom and y + cell.AbsoluteSize.Y > top
+			if visible and not entry.preview then
+				if entry.recipe.item then
+					toolIcon(entry.recipe.item, cell, 9, not entry.available)
+				elseif entry.recipe.gear then
+					local vf = Hud.gearViewport(entry.recipe.gear, not entry.available)
+					if vf then vf.ZIndex, vf.Parent = 9, cell end
+				end
+				entry.preview = cell:FindFirstChildOfClass("ViewportFrame")
+				if entry.preview then cell.Text = "" end
+			elseif not visible and entry.preview then
+				-- Retire aussi les éventuels éléments d’usure créés par l’aperçu.
+				for _, child in cell:GetChildren() do
+					if child:IsA("GuiObject") then child:Destroy() end
+				end
+				entry.preview = nil
+				cell.Text = entry.icon
+			end
+		end
+	end
+	bookScroll:GetPropertyChangedSignal("CanvasPosition"):Connect(refreshRecipeIcons)
+	bookScroll:GetPropertyChangedSignal("AbsoluteWindowSize"):Connect(refreshRecipeIcons)
 	local gridFrame = new("Frame", { Size = UDim2.fromOffset(3 * 60 + 8, 3 * 60 + 8), Position = UDim2.new(0.5, 0, 0, 14), AnchorPoint = Vector2.new(0.5, 0), BackgroundTransparency = 1, Parent = colGrid, ZIndex = 7 },
 		{ new("UIGridLayout", { CellSize = UDim2.fromOffset(56, 56), CellPadding = UDim2.fromOffset(4, 4), SortOrder = Enum.SortOrder.LayoutOrder }) })
 	label({ Text = "⬇", TextSize = 26, TextColor3 = C.gold, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.new(1, 0, 0, 28), Position = UDim2.fromOffset(0, 206), Parent = colGrid, ZIndex = 7 })
@@ -1815,7 +1910,7 @@ local function game_()
 	end
 	local function recipeInfo(r)
 		if r.gear then
-			return { name = r.gear.name, icon = ({ weapon = "🗡️", hat = "🎩", armor = "🥋", trinket = "💍" })[r.gear.slot] or "✨", gear = r.gear }
+			return { name = r.gear.name, icon = Gear.SLOT_ICONS[r.gear.slot] or "✨", gear = r.gear }
 		end
 		return itemInfo(r.item)
 	end
@@ -1880,14 +1975,23 @@ local function game_()
 			local stationOk = not r.station or craftStations[r.station]
 			local out = new("TextButton", { Name = "Resultat" .. mi, Text = info.icon, TextSize = 30, Font = BOLD, AutoButtonColor = stationOk, BackgroundColor3 = Color3.fromRGB(36, 30, 22),
 				LayoutOrder = mi, Parent = resultHolder, ZIndex = 8 }, { corner(6) })
+			if r.item and toolIcon(r.item, out, 9, not stationOk) then
+				out.Text = ""
+			elseif r.gear then
+				local preview = Hud.gearViewport(r.gear, not stationOk)
+				if preview then
+					out.Text = ""
+					preview.ZIndex, preview.Parent = 9, out
+				end
+			end
 			stroke(stationOk and C.gold or C.red, 2.5).Parent = out
 			local total = (r.count or 1) * (r.gear and 1 or k)
 			if total > 1 then
 				label({ Text = tostring(total), Font = BOLD, TextSize = 14, TextXAlignment = Enum.TextXAlignment.Right, TextYAlignment = Enum.TextYAlignment.Bottom,
-					TextStrokeTransparency = 0.2, Size = UDim2.new(1, -4, 1, -2), Parent = out, ZIndex = 9 })
+					TextStrokeTransparency = 0.2, Size = UDim2.new(1, -4, 1, -2), Parent = out, ZIndex = 12 })
 			end
 			if r.station and not stationOk then
-				label({ Text = Config.STATIONS[r.station].icon, TextSize = 16, Size = UDim2.fromOffset(22, 22), Position = UDim2.fromOffset(-6, -8), Parent = out, ZIndex = 9 })
+				label({ Text = Config.STATIONS[r.station].icon, TextSize = 16, Size = UDim2.fromOffset(22, 22), Position = UDim2.fromOffset(-6, -8), Parent = out, ZIndex = 12 })
 			end
 			out.Activated:Connect(function()
 				if stationOk then
@@ -1953,14 +2057,20 @@ local function game_()
 			cell.MouseLeave:Connect(hideTip)
 		end
 		-- carnet : seulement les recettes connues ; clic = remplir la grille
+		table.clear(recipeCells)
 		clear(bookScroll)
-		local known, total = 0, 0
+		local known, total, matches = 0, 0, 0
+		local query = string.lower(search.Text):match("^%s*(.-)%s*$") or ""
 		for i, r in Config.RECIPES do
 			total += 1
 			local key = Config.recipeKey(r)
 			if knows(key) then
 				known += 1
 				local info = recipeInfo(r)
+				if query ~= "" and not string.find(string.lower(info.name), query, 1, true) then
+					continue
+				end
+				matches += 1
 				local can = true
 				for id, n in r.needs do
 					local have = 0
@@ -1973,7 +2083,8 @@ local function game_()
 				end
 				local cell = new("TextButton", { Text = info.icon, TextSize = 24, Font = BOLD, AutoButtonColor = true, TextTransparency = can and 0 or 0.55,
 					BackgroundColor3 = Color3.fromRGB(30, 26, 22), LayoutOrder = (can and 0 or 10000) + i, Parent = bookScroll, ZIndex = 8 }, { corner(4) })
-				stroke(can and Color3.fromRGB(30, 200, 0) or Color3.fromRGB(70, 60, 50), 1.5).Parent = cell
+				recipeCells[#recipeCells + 1] = { cell = cell, recipe = r, available = can, icon = info.icon }
+				stroke(can and C.green or Color3.fromRGB(70, 60, 50), 1.5).Parent = cell
 				cell.MouseEnter:Connect(function()
 					showTip(recipeLines(r))
 				end)
@@ -1997,8 +2108,21 @@ local function game_()
 			end
 		end
 		bookCount.Text = known .. "/" .. total
+		emptyRecipes.Visible = matches == 0
 		renderCraftGrid()
+		task.defer(refreshRecipeIcons)
 	end
+	local searchRevision = 0
+	search:GetPropertyChangedSignal("Text"):Connect(function()
+		searchRevision += 1
+		local revision = searchRevision
+		task.delay(0.18, function()
+			if revision == searchRevision and craft.Visible then
+				bookScroll.CanvasPosition = Vector2.zero
+				renderCraft()
+			end
+		end)
+	end)
 	showCraft = function(stations)
 		closeAll()
 		hideTip()
@@ -2290,14 +2414,16 @@ local function game_()
 	}, { corner(6), stroke(Color3.fromRGB(176, 140, 72), 2.5) })
 	panels.Talents = tal
 	local talTitle = label({ Text = "✨ Talents", Font = TITLE, TextSize = 22, TextColor3 = C.gold, Size = UDim2.new(1, -60, 0, 32), Position = UDim2.fromOffset(14, 6), Parent = tal, ZIndex = 6 })
-	local tclose = button("X", C.red, function()
+	local function closeTal()
 		tal.Visible = false
 		hideTip()
-	end)
+	end
+	local tclose = button("X", C.red, closeTal)
 	tclose.Size = UDim2.fromOffset(28, 28)
 	tclose.Position = UDim2.new(1, -36, 0, 8)
 	tclose.ZIndex = 6
 	tclose.Parent = tal
+	WindowNav.watch(tal, tclose, closeTal)
 	local tcols = new("Frame", { Size = UDim2.new(1, -24, 1, -96), Position = UDim2.fromOffset(12, 44), BackgroundTransparency = 1, Parent = tal, ZIndex = 6 },
 		{ new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 8) }) })
 	local tfoot = new("Frame", { Size = UDim2.new(1, -24, 0, 36), Position = UDim2.new(0, 12, 1, -46), BackgroundTransparency = 1, Parent = tal, ZIndex = 6 })
@@ -3529,8 +3655,8 @@ local function game_()
 	-- ---------------------------------------------------------------- Cible (façon WoW)
 	local cibleApi = {}
 	do
-	-- Clic sur une créature (ou un PNJ, un joueur) : cadre de cible en haut avec nom, niveau, vie.
-	-- [F] frappe la cible si elle est à portée. Échap ou clic dans le vide : plus de cible.
+	-- Clic droit sur une créature (ou un PNJ, un joueur) : cadre avec nom, niveau et vie.
+	-- Échap ou clic droit dans le vide : plus de cible. Le toucher garde sa sélection directe.
 	local target = nil -- Model
 	cibleApi.get = function()
 		return target
@@ -3595,26 +3721,44 @@ local function game_()
 			setTarget(nil)
 		end
 	end)
+	local rightStart: Vector2? = nil
+	local function selectAt(pos: Vector2)
+		local cam = workspace.CurrentCamera
+		if not cam then
+			return
+		end
+		local ray = cam:ViewportPointToRay(pos.X, pos.Y)
+		local params = RaycastParams.new()
+		params.FilterType = Enum.RaycastFilterType.Exclude
+		params.FilterDescendantsInstances = { player.Character }
+		local result = workspace:Raycast(ray.Origin, ray.Direction * 150, params)
+		setTarget(result and targetOf(result.Instance) or nil)
+	end
 	UserInputService.InputBegan:Connect(function(input, processed)
 		if processed or building then
 			return
 		end
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			local cam = workspace.CurrentCamera
-			local pos = input.UserInputType == Enum.UserInputType.Touch and Vector2.new(input.Position.X, input.Position.Y) or UserInputService:GetMouseLocation()
-			local ray = cam:ViewportPointToRay(pos.X, pos.Y)
-			local params = RaycastParams.new()
-			params.FilterType = Enum.RaycastFilterType.Exclude
-			params.FilterDescendantsInstances = { player.Character }
-			local hitRes = workspace:Raycast(ray.Origin, ray.Direction * 150, params)
-			local m = hitRes and targetOf(hitRes.Instance)
-			if m then
-				setTarget(m)
-			elseif input.UserInputType == Enum.UserInputType.MouseButton1 and not (player.Character and player.Character:FindFirstChildOfClass("Tool")) then
-				setTarget(nil)
-			end
+		if input.UserInputType == Enum.UserInputType.MouseButton2 then
+			rightStart = UserInputService:GetMouseLocation()
+		elseif input.UserInputType == Enum.UserInputType.Touch then
+			selectAt(Vector2.new(input.Position.X, input.Position.Y))
 		elseif input.KeyCode == Enum.KeyCode.Escape then
 			setTarget(nil)
+		end
+	end)
+	UserInputService.InputChanged:Connect(function(input)
+		if rightStart and input.UserInputType == Enum.UserInputType.MouseMovement and input.Delta.Magnitude > 2 then
+			rightStart = nil
+		end
+	end)
+	UserInputService.InputEnded:Connect(function(input, processed)
+		if input.UserInputType == Enum.UserInputType.MouseButton2 then
+			local start = rightStart
+			rightStart = nil
+			local pos = UserInputService:GetMouseLocation()
+			if start and not processed and not building and (pos - start).Magnitude <= 5 then
+				selectAt(pos)
+			end
 		end
 	end)
 
@@ -3782,11 +3926,21 @@ local function game_()
 		showWear(m)
 		return true
 	end
-	-- clic gauche / toucher : on frappe ce qu'on vise ; MAINTENIR = frapper en continu (Minecraft).
+	local function hit()
+		local t = cibleApi.get()
+		send("hit", { target = t and t:GetAttribute("EnemyId") or nil })
+	end
+	-- Clic gauche : récolte visée, usage de l’outil ou attaque. Maintenir répète la récolte.
 	-- Le serveur fixe la cadence (un coup / 0,25 s) : cliquer vite ne va pas plus vite.
 	local holding = 0
 	UserInputService.InputBegan:Connect(function(input, processed)
-		if processed then
+		if processed or building then
+			return
+		end
+		if input.KeyCode == Enum.KeyCode.ButtonR2 then
+			if not strikeAim() then
+				hit()
+			end
 			return
 		end
 		local touch = input.UserInputType == Enum.UserInputType.Touch
@@ -3797,7 +3951,7 @@ local function game_()
 			if strikeAim(tp) then
 				task.spawn(function()
 					task.wait(0.3)
-					while holding == me and (touch or UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)) do
+					while holding == me and not building and (touch or UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)) do
 						if input.UserInputState == Enum.UserInputState.End then
 							break
 						end
@@ -3805,6 +3959,8 @@ local function game_()
 						task.wait(0.27)
 					end
 				end)
+			elseif not touch or (player.Character and player.Character:FindFirstChildOfClass("Tool")) then
+				hit()
 			end
 		end
 	end)
@@ -3813,15 +3969,6 @@ local function game_()
 			holding += 1
 		end
 	end)
-	local function hit()
-		local rid = recolteVisee()
-		if rid then
-			send("recolter_clic", { id = rid })
-			return
-		end
-		local t = cibleApi.get()
-		send("hit", { target = t and t:GetAttribute("EnemyId") or nil })
-	end
 	local crouch = false
 	local function toggleCrouch()
 		crouch = not crouch
@@ -3877,53 +4024,35 @@ local function game_()
 			[Enum.KeyCode.Six] = 6, [Enum.KeyCode.Seven] = 7, [Enum.KeyCode.Eight] = 8, [Enum.KeyCode.Nine] = 9 }
 		if HOTKEYS[k] then
 			selectSlot(HOTKEYS[k])
-		elseif k == Enum.KeyCode.B or k == Enum.KeyCode.Tab then
-			toggleBag()
-		elseif k == Enum.KeyCode.P then
-			toggleChar()
-		elseif k == Enum.KeyCode.C then
-			toggleCraft()
-		elseif k == Enum.KeyCode.K then
-			toggleTalents()
-		elseif k == Enum.KeyCode.L then
-			toggleClan()
+		elseif menuKeys[k] and not UserInputService:GetFocusedTextBox() then
+			menuKeys[k]()
 		elseif k == Enum.KeyCode.V then
 			toggleBuild()
 		elseif k == Enum.KeyCode.Space and mgState then
 			send("mg_press")
-		elseif k == Enum.KeyCode.F then
-			hit()
 		elseif k == Enum.KeyCode.H then
 			send("whistle")
 		elseif k == Enum.KeyCode.G or k == Enum.KeyCode.X then
 			context()
 		elseif k == Enum.KeyCode.LeftControl then
 			toggleCrouch()
-		elseif k == Enum.KeyCode.Escape then
-			closeAll()
 		end
 	end)
 
 	-- boutons du HUD (colonne de gauche) : branchés maintenant que les panneaux existent
 	menuActions.sac, menuActions.perso, menuActions.talents = toggleBag, toggleChar, toggleTalents
 	menuActions.clan, menuActions.atelier = toggleClan, toggleCraft
-	menuActions.quetes = function()
-		local q = player:FindFirstChild("OuvrirQuetes")
-		if q then
-			q:Fire()
-		end
-	end
 
 	-- aide clavier (PC) / boutons (mobile)
 	if not MOBILE then
 		-- raccourcis : touche + icône (on comprend à la vue)
 		local keys = new("Frame", { Size = UDim2.fromOffset(0, 24), AutomaticSize = Enum.AutomaticSize.X, Position = UDim2.new(0.5, 0, 1, -2), AnchorPoint = Vector2.new(0.5, 1),
 			BackgroundTransparency = 1, Parent = gui }, { new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 12), VerticalAlignment = Enum.VerticalAlignment.Center }) })
-		for _, kk in { { "V", "🧱", "Construire" }, { "F", "👊", "Frapper" }, { "H", "🐴", "Cheval" }, { "G", "🙌", "Lâcher / descendre" }, { "Q", "✋", "Ramasser tout autour" }, { "Ctrl", "🤫", "S'accroupir" } } do
+		for _, kk in { { "V", "🧱", "Construire" }, { "Gauche", "👊", "Clic gauche : attaquer ou utiliser l’outil" }, { "Droit", "◎", "Clic droit : sélectionner une cible" }, { "H", "🐴", "Cheval" }, { "G", "🙌", "Lâcher / descendre" }, { "Q", "✋", "Ramasser tout autour" }, { "Ctrl", "🤫", "S'accroupir" } } do
 			local f = new("TextButton", { Text = "", Size = UDim2.fromOffset(0, 22), AutomaticSize = Enum.AutomaticSize.X, BackgroundTransparency = 1, Parent = keys },
 				{ new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 3), VerticalAlignment = Enum.VerticalAlignment.Center }) })
 			new("TextLabel", { Text = kk[1], Font = BOLD, TextSize = 11, TextColor3 = Color3.fromRGB(20, 16, 12), BackgroundColor3 = Color3.fromRGB(225, 215, 195),
-				Size = UDim2.fromOffset(kk[1] == "Ctrl" and 30 or 18, 18), Parent = f }, { corner(4) })
+				Size = UDim2.fromOffset(math.max(18, #kk[1] * 7 + 6), 18), Parent = f }, { corner(4) })
 			label({ Text = kk[2], TextSize = 15, Size = UDim2.fromOffset(20, 20), Parent = f })
 			f.MouseEnter:Connect(function()
 				showTip({ { kk[3], C.text, 14 } })
@@ -3941,12 +4070,7 @@ local function game_()
 			return b
 		end
 		round("👊", 132, 132, C.red, hit)
-		round("🎒", 60, 136, C.panel2, toggleBag)
-		round("🧍", 136, 0, C.panel2, toggleChar)
 		round("🤫", 136, 60, C.panel2, toggleCrouch)
-		round("🛠️", 64, 64, C.panel2, toggleCraft)
-		round("✨", 0, 64, C.panel2, toggleTalents)
-		round("🛡️", 0, 0, C.panel2, toggleClan)
 		round("🧱", 68, 0, C.panel2, toggleBuild)
 		round("🐴", 0, 136, C.panel2, function()
 			if player:GetAttribute("Riding") or player:GetAttribute("Carrying") then
