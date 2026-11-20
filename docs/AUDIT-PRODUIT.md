@@ -76,3 +76,7 @@ Je commencerais le travail visuel par la colonne de menus et la barre rapide. Ce
 4. **Contenu.** Reprendre les listes par petits lots et consigner pour chaque entrée l’identifiant, le parcours, le résultat et le niveau de validation. Commencer par ce que les parcours mettent en échec ou laissent sans débouché.
 
 Les scripts permettent de confirmer les accès, conditions et états décrits. La lisibilité réelle, la difficulté, l’équilibre des prix, la capacité et le comportement multijoueur restent à établir en jeu. Le rapprochement des longues listes est fait ici par famille et priorité. Une correspondance entrée par entrée reste à consigner dans l’inventaire des missions.
+
+## Palette du village en mode Edit
+
+La passe du 20/11 réchauffe les façades, les pavés et la prairie sur la lumière de jour. Le ciel bleu, les ombres des bâtiments et les proportions du HUD restent les repères de l’image cible. [Capture de la palette](../images/valdor-palette-20-11.jpg).

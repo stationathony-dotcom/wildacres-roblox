@@ -30,3 +30,9 @@ Les 46 planches 16:9 rassemblent 930 objets et 576 équipements nommés. Les ape
 | Capes | 17 |
 | Bottes | 16 |
 | Bijoux et accessoires | 156 |
+
+## Planches de contrôle du 20 novembre
+
+- [Objets prioritaires](09-identites-corrigees.jpg). Noyau, fragment de ruine, laine, couronnes, turban, carreaux, insignes, talisman, chair et oreille.
+- [Matières et cuisine](10-matieres-et-cuisine.jpg). Les rangées présentent les viandes crues, les quatre préparations, les poissons et engrenages, puis le lingot, la lampe et les plantes.
+- [Équipements](11-equipements-corriges.jpg). Armes et faucille, torses, coiffes et bottes, puis bouclier, torche, collier et lame venimeuse.

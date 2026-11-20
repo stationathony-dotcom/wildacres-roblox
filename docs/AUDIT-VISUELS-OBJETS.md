@@ -58,3 +58,5 @@ Pour valider un lot, afficher les objets sans leur nom à la taille d’une case
 ## Miniatures prioritaires corrigées
 
 La planche présente, de gauche à droite et du haut vers le bas, le noyau de cerise, le fragment de ruine, la laine, les deux couronnes, le turban, les deux carreaux, les trois insignes, le talisman, la chair pourrie et l’oreille de gobelin. [Planche Studio Edit](../images/catalogue/09-identites-corrigees.jpg)
+
+En mode Edit, la régénération a reconstruit 963 miniatures du catalogue, suivies de 48 miniatures de pièces de créatures. Les planches comparent les principaux cas signalés, dont les viandes crues et préparées, les coiffes et les torses. [Matières et cuisine](../images/catalogue/10-matieres-et-cuisine.jpg) · [Équipements](../images/catalogue/11-equipements-corriges.jpg).
