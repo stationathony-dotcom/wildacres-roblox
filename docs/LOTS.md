@@ -91,8 +91,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       ouverte n'envoie pas de coup ni de pose derrière elle ; ordre de retour prévisible.
 - [x] **X4 · Petits écrans et mobile.** FAIT 20/11 (5ffb22d, 752e439) · à voir en Play avec le clavier tactile. Disposition étroite par famille de fenêtres, zones sûres,
       défilement vertical, boutons assez grands, chat / clavier ouverts. Garder les proportions du HUD.
-- [x] **X5 · Emplacement main gauche** (passage ci-dessus) : emplacement, poupée de la fiche, modèle FAIT 20/11 (a23919e).
-      porté par l'avatar.
+- [x] **X5 · Emplacement main gauche.** FAIT 20/11 (a23919e). Bouclier et torche visibles sur la poupée et portés par l’avatar.
 - [x] **X6 · Harpon** (passage ci-dessus) : modèle, outil en main, animation de lancer. Modèle, prise en main et lancer faits (b405756) · recette ajoutée côté équilibre, lancer à voir en Play.
 - [x] **X7 · Modèles faux.** FAIT 20/11 (28b395e, c46bcff, 7130dcb, 3cef209). Corriger la liste « Visuels à retravailler » de
       `A-RETRAVAILLER-EQUIPEMENT-ET-VISUELS.md` et `AUDIT-VISUELS-OBJETS.md` (noyau de cerise, laine,
@@ -173,7 +172,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - 20/11 · Codex : en Play sur le PC fixe, tester les cinq menus clavier/tactile/manette et le retour Livre → Carte → Sac.
   Tester les coups et les poses derrière une fenêtre, les quatre états de stock d’une livraison et le clavier tactile.
   Vérifier aussi le harpon, la torche et le bouclier, la recette bloquée, le formulaire d’appel et les réglages après reconnexion.
-  Atelier et atlas prêts. L’identifiant 203785492 vient du préchargement des notifications du plugin Rojo.
+  53/53 bancs Edit verts, bancs lourds compris. Atlas prêt à publier. L’identifiant 203785492 vient du préchargement du plugin Rojo.
 
 - 20/11 · Claude : fiche `AGENTS.md` + ces lots. Codex a du travail non commité sur HUD, Interface,
   Avatar, Gear, Combat, Quetes, Tools, Config, Catalogue, `GearDesign.lua` (à commiter par Codex).
