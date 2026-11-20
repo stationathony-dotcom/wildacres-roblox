@@ -1944,6 +1944,8 @@ local function game_()
 		end
 		return itemInfo(r.item)
 	end
+	local fiche = { model = require(script.Parent:WaitForChild("FicheRecette")) }
+	fiche.panel, fiche.body, fiche.title = makePanel("FicheRecette", "Recette", UDim2.fromOffset(465, 408))
 	local function recipeLines(r, k: number?)
 		local info = recipeInfo(r)
 		local lines = { { info.icon .. " " .. info.name .. ((r.count or 1) * (k or 1) > 1 and (" ×" .. (r.count or 1) * (k or 1)) or ""),
@@ -1955,20 +1957,49 @@ local function game_()
 				end
 			end
 		end
-		local need = {}
-		for id, n in r.needs do
-			local ni = Config.needInfo(id)
-			table.insert(need, ni.icon .. "×" .. n * (k or 1))
+		local etat = fiche.model.etat(Config, r, inv, craftStations, k or 1)
+		for _, item in etat.ingredients do
+			table.insert(lines, { string.format("%s — %d / %d en stock", item.name, item.have, item.need), item.have >= item.need and C.text or C.red, 14 })
 		end
-		table.insert(lines, { table.concat(need, "   "), C.text, 15 })
-		if r.station then
-			local st = Config.STATIONS[r.station]
-			table.insert(lines, { st.icon .. (craftStations[r.station] and " ✅" or " ❌"), craftStations[r.station] and Color3.fromRGB(30, 255, 0) or C.red, 15 })
+		if etat.station then
+			table.insert(lines, { etat.station.name .. (etat.stationOK and " — à portée" or " — approche-toi de la station"), etat.stationOK and C.green or C.red, 14 })
+		else
+			table.insert(lines, { "Aucune station nécessaire", C.dim, 14 })
 		end
-		if r.skill then
-			table.insert(lines, { (Config.SKILLS[r.skill[1]] and Config.SKILLS[r.skill[1]].icon or "★") .. " " .. r.skill[2], C.dim, 13 })
+		if etat.level then
+			local skill = etat.skill and etat.skill.name or r.skill[1]
+			table.insert(lines, { string.format("%s — %d / %d requis", skill, etat.current, etat.level), etat.skillOK and C.green or C.red, 14 })
 		end
+		if etat.missing then table.insert(lines, { "Il manque des ingrédients.", C.red, 14 }) end
 		return lines
+	end
+
+	function fiche.render()
+		local r, batches = fiche.recipe, fiche.batches
+		if not r then return end
+		clear(fiche.body)
+		local lines = recipeLines(r, batches)
+		local etat = fiche.model.etat(Config, r, inv, craftStations, batches)
+		for index, line in lines do
+			label({ Text = line[1], TextColor3 = line[2], TextSize = line[3] or 14, TextWrapped = true,
+				Size = UDim2.new(1, -8, 0, 24), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = index, Parent = fiche.body, ZIndex = 7 })
+		end
+		local action = button(fiche.label, etat.ready and C.green or C.panel2, function()
+			if fiche.model.etat(Config, r, inv, craftStations, batches).ready then
+				fiche.panel.Visible = false
+				fiche.action()
+			end
+		end)
+		action.Interactable = etat.ready
+		action.Size = UDim2.new(1, -8, 0, 40)
+		action.LayoutOrder, action.ZIndex, action.Parent = #lines + 1, 8, fiche.body
+	end
+	function fiche.open(r, batches, actionLabel, action)
+		hideTip()
+		fiche.recipe, fiche.batches, fiche.label, fiche.action = r, batches, actionLabel, action
+		fiche.body.CanvasPosition = Vector2.zero
+		fiche.panel.Visible = true
+		fiche.render()
 	end
 
 	renderCraftGrid = function()
@@ -2024,7 +2055,7 @@ local function game_()
 				label({ Text = Config.STATIONS[r.station].icon, TextSize = 16, Size = UDim2.fromOffset(22, 22), Position = UDim2.fromOffset(-6, -8), Parent = out, ZIndex = 12 })
 			end
 			out.Activated:Connect(function()
-				if stationOk then
+				fiche.open(r, r.gear and 1 or k, "Fabriquer", function()
 					local slots = {}
 					for i = 1, 9 do
 						slots[i] = grid[i] and { id = grid[i].id, n = grid[i].n } or false
@@ -2033,7 +2064,7 @@ local function game_()
 					grid = {}
 					hideTip()
 					task.defer(renderCraftGrid)
-				end
+				end)
 			end)
 			out.MouseEnter:Connect(function()
 				showTip(recipeLines(r, r.gear and 1 or k))
@@ -2101,16 +2132,7 @@ local function game_()
 					continue
 				end
 				matches += 1
-				local can = true
-				for id, n in r.needs do
-					local have = 0
-					for _, it in Config.ITEM_GROUPS[id] or { id } do
-						have += inv.inv[it] or 0
-					end
-					if have < n then
-						can = false
-					end
-				end
+				local can = fiche.model.etat(Config, r, inv, craftStations, 1).ready
 				local cell = new("TextButton", { Text = info.icon, TextSize = 24, Font = BOLD, AutoButtonColor = true, TextTransparency = can and 0 or 0.55,
 					BackgroundColor3 = Color3.fromRGB(30, 26, 22), LayoutOrder = (can and 0 or 10000) + i, Parent = bookScroll, ZIndex = 8 }, { corner(4) })
 				recipeCells[#recipeCells + 1] = { cell = cell, recipe = r, available = can, icon = info.icon }
@@ -2120,20 +2142,22 @@ local function game_()
 				end)
 				cell.MouseLeave:Connect(hideTip)
 				cell.Activated:Connect(function()
-					grid = {}
-					local slot = 0
-					for id, n in r.needs do
-						local pick = id
-						for _, it in Config.ITEM_GROUPS[id] or {} do
-							if (inv.inv[it] or 0) >= n then
-								pick = it
-								break
+					fiche.open(r, 1, "Préparer la grille", function()
+						grid = {}
+						local slot = 0
+						for id, n in r.needs do
+							local pick = id
+							for _, it in Config.ITEM_GROUPS[id] or {} do
+								if (inv.inv[it] or 0) >= n then
+									pick = it
+									break
+								end
 							end
+							slot += 1
+							grid[slot] = { id = pick, n = n }
 						end
-						slot += 1
-						grid[slot] = { id = pick, n = n }
-					end
-					renderCraft()
+						renderCraft()
+					end)
 				end)
 			end
 		end
@@ -2172,6 +2196,7 @@ local function game_()
 		if craft.Visible then
 			task.defer(renderCraft)
 		end
+		if fiche.panel.Visible then task.defer(fiche.render) end
 	end)
 	end
 
