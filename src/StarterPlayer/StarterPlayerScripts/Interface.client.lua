@@ -88,6 +88,7 @@ local gui = new("ScreenGui", { Name = "WildAcres", ResetOnSpawn = false, IgnoreG
 local uiScale = new("UIScale", { Parent = gui })
 local Hud = require(script.Parent:WaitForChild("Hud"))
 local MiseEnPage = require(script.Parent:WaitForChild("MiseEnPage"))
+local IconesPeintes = require(script.Parent:WaitForChild("IconesPeintes"))
 local toolIcon: (string, Instance, number, boolean) -> boolean
 
 -- Chat en bas à gauche comme l'image cible (par défaut Roblox le met en haut à gauche, sur le portrait)
@@ -843,6 +844,7 @@ local function game_()
 		if not info then
 			return false
 		end
+		if IconesPeintes.add(id, cell, UDim2.fromScale(0.9, 0.9), zi, dim) then return true end
 		local tpl = nil
 		if info.tool and iconFolder then
 			local name = TOOL_ICON[id] or TOOL_ICON[info.base or ""] or (Config.baseOf and TOOL_ICON[Config.baseOf(id)])

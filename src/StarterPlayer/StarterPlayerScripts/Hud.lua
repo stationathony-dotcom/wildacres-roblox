@@ -319,7 +319,10 @@ function Hud.build(parent: Instance, opts)
 		lastButton = b
 		local icons = game:GetService("ReplicatedStorage"):FindFirstChild("IconesObjets")
 		local model = m.model and icons and icons:FindFirstChild(m.model)
-		if model and model:IsA("Model") then
+		local painted = m.id and require(script.Parent:WaitForChild("IconesPeintes"))
+		local holder = new("Frame", { Size = UDim2.fromOffset(56, 49), Position = UDim2.fromOffset(5, 1), BackgroundTransparency = 1, Parent = b })
+		if painted and painted.add("menu:" .. m.id, holder, UDim2.fromScale(0.9, 0.9), 2, false) then
+		elseif model and model:IsA("Model") then
 			local holder = new("Frame", { Size = UDim2.fromOffset(56, 49), Position = UDim2.fromOffset(5, 1), BackgroundTransparency = 1, Parent = b })
 			Hud.objectViewport(model).Parent = holder
 		else
