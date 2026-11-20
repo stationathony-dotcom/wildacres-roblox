@@ -266,6 +266,8 @@ local function mealStat(needs): string
 	return best
 end
 
+E.FISH_PRICE = 0.6 -- revente du poisson cru (banc economie)
+
 function E.apply(C)
 	-- potions de l'alambic (Shared/Alchimie) : ajoutées d'abord, pour passer par le prix plancher
 	local okA, Alchimie = pcall(require, script.Parent.Alchimie)
@@ -273,6 +275,15 @@ function E.apply(C)
 		Alchimie.apply(C)
 	end
 	local I, R = C.ITEMS, C.RECIPES
+	-- 0. pêche (banc economie, 20/11) : 2,5 à 4 fois l'or par minute médian des autres activités, sans
+	-- risque ni outil cher → poisson cru revendu E.FISH_PRICE fois son ancien prix (le poisson cuisiné
+	-- garde sa valeur : c'est la cuisine qui paie, pas la revente brute)
+	for i, f in C.FISH or {} do
+		f.price = math.max(4, math.floor(f.price * E.FISH_PRICE + 0.5))
+		if I["fish_" .. i] then
+			I["fish_" .. i].price = f.price
+		end
+	end
 	-- 1. recettes copiées
 	for _, r in R do
 		local fix = r.item and E.RECIPES[r.item]

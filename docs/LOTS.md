@@ -102,7 +102,8 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       avec un usage ; formes neuves = passage à Codex.
 - [ ] **C7 · Harpon côté pêche** (`Fishing.harpoon`) **et main gauche côté stats** (`Joueurs.stats`,
       `Combat`), dès que les deux passages sont faits.
-- [ ] **C8 · Équilibrage global** (étape 26B) : banc qui mesure, pour chaque métier, le temps pour
+- [x] **C8 · Équilibrage global** — FAIT 20/11 : banc `economie` + `docs/EQUILIBRE-ECONOMIE.md` (médiane 43 or/min) ;
+      pêche ×0,6 à la revente ; à confirmer en Play (les hypothèses de temps sont en tête du banc). (étape 26B) : banc qui mesure, pour chaque métier, le temps pour
       gagner 100 or et les sources / dépenses d'or ; `docs/EQUILIBRE-ECONOMIE.md` ; corriger ce qui
       rend une activité inutile.
 - [x] **C9 · Armée façon Warcraft v2** — FAIT 20/11 (banc `armee` 15/15, voir commit) ; : recrues entraînées à la caserne, ordres (suivre, tenir,
