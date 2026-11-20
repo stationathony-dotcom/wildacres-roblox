@@ -132,7 +132,7 @@ local function questRow(q, offer: boolean)
 			send("quete_prendre", { id = q.id })
 		end).Position = UDim2.new(1, -118, 0.5, -16)
 	else
-		if q.kind ~= "apporter" and q.kind ~= "lettre" then
+		if q.kind ~= "lettre" then
 			local back = Instance.new("Frame")
 			back.Size = UDim2.fromOffset(110, 8)
 			back.Position = UDim2.new(1, -118, 0, 10)
@@ -144,7 +144,7 @@ local function questRow(q, offer: boolean)
 			fill.BackgroundColor3 = q.got >= q.need and GREEN or GOLD
 			fill.Parent = back
 			corner(fill, 4)
-			label(r, q.got .. " / " .. q.need, UDim2.fromOffset(110, 14), 11, DIM).Position = UDim2.new(1, -118, 0, 20)
+			label(r, q.got .. " / " .. q.need, UDim2.fromOffset(110, 14), 12, q.ready and GREEN or DIM).Position = UDim2.new(1, -118, 0, 20)
 		else
 			label(r, "→ " .. tostring(q.where), UDim2.fromOffset(110, 28), 11, DIM).Position = UDim2.new(1, -118, 0, 6)
 		end
@@ -152,8 +152,8 @@ local function questRow(q, offer: boolean)
 			button(r, q.transferred and "Rendre ici" or "Rendre", UDim2.fromOffset(52, 26), BLUE, function()
 				send("quete_rendre", { id = q.id })
 			end).Position = UDim2.new(1, -118, 1, -32)
-		elseif not q.canTurnIn and q.ready and q.kind ~= "apporter" then
-			label(r, "Retourne à " .. tostring(q.where), UDim2.fromOffset(110, 26), 10, GREEN).Position = UDim2.new(1, -118, 1, -32)
+		elseif not q.canTurnIn and q.ready and q.kind ~= "lettre" then
+			label(r, "→ " .. tostring(q.where), UDim2.fromOffset(54, 26), 10, GREEN).Position = UDim2.new(1, -118, 1, -32)
 		end
 		button(r, "Lâcher", UDim2.fromOffset(52, 26), RED, function()
 			send("quete_lacher", { id = q.id })

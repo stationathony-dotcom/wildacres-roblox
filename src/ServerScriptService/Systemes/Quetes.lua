@@ -445,11 +445,15 @@ local function what(q): string
 end
 Quetes.what = what
 
-local function view(q, here)
+local function view(q, here, player: Player?)
 	local giver = giverOf(q)
+	local got = q.got or 0
+	if q.kind == "apporter" and player then
+		got = math.min(q.need, G.Joueurs.count(player, q.key))
+	end
 	return {
-		id = q.id, kind = q.kind, icon = ICON[q.kind], title = q.title, what = what(q), need = q.need, got = q.got or 0,
-		gold = q.gold, item = q.item, skill = SKILL_OF[q.kind], ready = (q.got or 0) >= q.need or q.kind == "apporter",
+		id = q.id, kind = q.kind, icon = ICON[q.kind], title = q.title, what = what(q), need = q.need, got = got,
+		gold = q.gold, item = q.item, skill = SKILL_OF[q.kind], ready = got >= q.need or q.kind == "lettre",
 		where = giverOf(q) ~= q.v and q.label or q.vname, canTurnIn = (receivable(q, here)), transferred = here ~= nil and here.key ~= giver and deserted(giver),
 	}
 end
@@ -459,7 +463,7 @@ function Quetes.send(player: Player)
 	local here = session(player)
 	local data = { actives = {}, village = nil }
 	for _, q in st.act do
-		table.insert(data.actives, view(q, here))
+		table.insert(data.actives, view(q, here, player))
 	end
 	table.sort(data.actives, function(a, b)
 		return a.id < b.id
