@@ -51,7 +51,7 @@ Ne pas toucher à ces sujets avant la réponse. Écrire la réponse ici quand el
 
 Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; cocher avec le hash du commit.
 
-- [ ] Claude → Codex · `Tools.lua` · brancher le **harpon** comme outil (mis en main, clic) puis
+- [x] Claude → Codex · `Tools.lua` · brancher le **harpon** comme outil (mis en main, clic) puis (b405756)
       appeler `G.Fishing.harpoon(player)` (FONCTION PRÊTE le 20/11, banc `harpon` ; objet `harpoon` à créer comme outil) · arme/outil de pêche demandé dans
       `A-RETRAVAILLER-EQUIPEMENT-ET-VISUELS.md`.
 - [ ] Claude → Codex · `Gear.lua` + fiche Personnage · emplacement **main gauche** (bouclier, torche),
@@ -72,6 +72,8 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       **cavalier** (brigand à cheval), **poisson** (poisson carnassier géant), **serpent marin** (long, crête)
       · Claude ajoutera les créatures au Bestiaire dès que les formes existent (lot C5).
 
+- [ ] Codex → Claude · Equilibre.lua · ajouter une recette d’acquisition et un prix au harpon (id harpoon, déjà enregistré comme outil dans Config) · X6 doit être accessible dans une partie normale.
+
 ---
 
 ## Couloir Codex — ce qu'on voit et ce qu'on touche
@@ -88,7 +90,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       défilement vertical, boutons assez grands, chat / clavier ouverts. Garder les proportions du HUD.
 - [ ] **X5 · Emplacement main gauche** (passage ci-dessus) : emplacement, poupée de la fiche, modèle
       porté par l'avatar.
-- [ ] **X6 · Harpon** (passage ci-dessus) : modèle, outil en main, animation de lancer.
+- [ ] **X6 · Harpon** (passage ci-dessus) : modèle, outil en main, animation de lancer. Modèle, prise en main et lancer faits (b405756) · acquisition en attente.
 - [ ] **X7 · Modèles faux.** Corriger la liste « Visuels à retravailler » de
       `A-RETRAVAILLER-EQUIPEMENT-ET-VISUELS.md` et `AUDIT-VISUELS-OBJETS.md` (noyau de cerise, laine,
       couronnes, turban, carreaux, insignes…). *Fini quand* : chaque objet de la liste ressemble à son
