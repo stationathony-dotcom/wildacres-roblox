@@ -609,8 +609,14 @@ local function onCommand(player: Player, text: string)
 	local cmd = string.lower(words[1] or "")
 	local args = {}
 	for i = 2, #words do
-		if words[i] ~= "" then
-			table.insert(args, words[i])
+		local w = words[i]
+		-- "nan", "inf", "1e999" : tonumber() en ferait un nombre non fini (prix NaN qui passe les contrôles)
+		local asNum = tonumber(w)
+		if asNum and (asNum ~= asNum or asNum == math.huge or asNum == -math.huge) then
+			w = "0"
+		end
+		if w ~= "" then
+			table.insert(args, w)
 		end
 	end
 	if cmd == "/aide" then

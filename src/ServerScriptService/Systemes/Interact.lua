@@ -2,8 +2,8 @@
 -- messages du client (frapper, dialogue, menus…) vers les systèmes qui les gèrent.
 --
 -- Garde-fous communs (étape 1B) — aucun système n'a à les refaire :
---  · données nettoyées : seules les tables plates/peu profondes passent, nombres NaN/infinis retirés,
---    chaînes tronquées ;
+--  · données nettoyées : seules les tables plates/peu profondes passent, nombres NaN/infinis retirés
+--    (y compris écrits en texte : "nan", "inf", "1e999"), chaînes tronquées ;
 --  · anti-répétition par sorte d'action (0,12 s) + budget global par joueur (seau à jetons) ;
 --  · anti-réentrée : tant qu'une action d'une sorte n'est pas finie (elle peut attendre un
 --    DataStore), une nouvelle demande de la même sorte est ignorée → pas de double achat / retrait ;
@@ -39,6 +39,12 @@ local function clean(v, depth: number)
 		end
 		return v
 	elseif t == "string" then
+		-- "nan", "inf", "1e999"… : les systèmes font tonumber(data.x), qui en tirerait un nombre non fini
+		-- (prix NaN qui passe les comparaisons, quantité infinie). Une telle chaîne n'est jamais un nom utile.
+		local asNum = tonumber(v)
+		if asNum and (asNum ~= asNum or asNum == math.huge or asNum == -math.huge) then
+			return nil
+		end
 		return #v > MAX_STR and string.sub(v, 1, MAX_STR) or v
 	elseif t == "boolean" then
 		return v
