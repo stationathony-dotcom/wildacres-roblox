@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Atlas** : la mise à jour des aperçus reconnaît les icônes peintes et les retire hors écran.
 - **Icônes** : seize illustrations peintes, un atlas transparent et la correspondance Roblox. Les miniatures et emojis existants restent disponibles.
 - **Rejoindre ses amis** (serveur) : l'écran d'accueil peut demander quels amis Roblox jouent à Wild Acres et dans quel monde (`Mondes.friends`, action « friends »), puis les rejoindre — la liste à l'écran est à faire par Codex
 - **Atelier** : la grille automatique utilise plusieurs variantes quand le stock d’une même famille est réparti.

@@ -321,11 +321,10 @@ function Hud.build(parent: Instance, opts)
 		local model = m.model and icons and icons:FindFirstChild(m.model)
 		local painted = m.id and require(script.Parent:WaitForChild("IconesPeintes"))
 		local holder = new("Frame", { Size = UDim2.fromOffset(56, 49), Position = UDim2.fromOffset(5, 1), BackgroundTransparency = 1, Parent = b })
-		if painted and painted.add("menu:" .. m.id, holder, UDim2.fromScale(0.9, 0.9), 2, false) then
-		elseif model and model:IsA("Model") then
-			local holder = new("Frame", { Size = UDim2.fromOffset(56, 49), Position = UDim2.fromOffset(5, 1), BackgroundTransparency = 1, Parent = b })
+		local hasPainted = painted and painted.add("menu:" .. m.id, holder, UDim2.fromScale(0.9, 0.9), 2, false)
+		if not hasPainted and model and model:IsA("Model") then
 			Hud.objectViewport(model).Parent = holder
-		else
+		elseif not hasPainted then
 			text({ Text = m.icon, TextSize = 35, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(65, 52), Parent = b })
 		end
 		text({ Text = m.label, Font = BOLD, TextSize = opts.compact and 23 or 18, TextStrokeTransparency = 0.6, Size = UDim2.new(1, opts.compact and -70 or -96, 1, 0), Position = UDim2.fromOffset(68, 0), Parent = b })

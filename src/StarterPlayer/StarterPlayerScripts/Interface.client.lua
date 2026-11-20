@@ -1873,7 +1873,7 @@ local function game_()
 					local vf = Hud.gearViewport(entry.recipe.gear, not entry.available)
 					if vf then vf.ZIndex, vf.Parent = 9, cell end
 				end
-				entry.preview = cell:FindFirstChildOfClass("ViewportFrame")
+				entry.preview = cell:FindFirstChild("IconePeinte") or cell:FindFirstChildOfClass("ViewportFrame")
 				if entry.preview then cell.Text = "" end
 			elseif not visible and entry.preview then
 				-- Retire aussi les éventuels éléments d’usure créés par l’aperçu.
