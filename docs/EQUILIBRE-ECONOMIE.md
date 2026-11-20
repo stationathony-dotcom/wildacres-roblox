@@ -6,15 +6,15 @@ estimé avec les vraies données ; hypothèses en tête du banc. Médiane de tou
 
 | Activité | Catégorie | Or / min | Repère | Note |
 |---|---|---|---|---|
-| créatures niveau 9 (4) | combat | 303 | TROP | butin vendu + or |
-| créatures niveau 7 (13) | combat | 180 | TROP | butin vendu + or |
-| créatures niveau 6 (23) | combat | 116 |  | butin vendu + or |
-| créatures niveau 8 (10) | combat | 113 |  | butin vendu + or |
-| créatures niveau 5 (28) | combat | 94 |  | butin vendu + or |
-| créatures niveau 4 (27) | combat | 80 |  | butin vendu + or |
-| créatures niveau 2 (6) | combat | 72 |  | butin vendu + or |
-| créatures niveau 3 (13) | combat | 62 |  | butin vendu + or |
-| créatures niveau 1 (1) | combat | 9 | faible | butin vendu + or |
+| créatures niveau 9 (4) | combat | 250 | TROP | butin vendu + or |
+| créatures niveau 7 (13) | combat | 142 | TROP | butin vendu + or |
+| créatures niveau 8 (10) | combat | 128 |  | butin vendu + or |
+| créatures niveau 6 (23) | combat | 95 |  | butin vendu + or |
+| créatures niveau 5 (28) | combat | 83 |  | butin vendu + or |
+| créatures niveau 4 (27) | combat | 73 |  | butin vendu + or |
+| créatures niveau 3 (13) | combat | 55 |  | butin vendu + or |
+| créatures niveau 2 (6) | combat | 47 |  | butin vendu + or |
+| créatures niveau 1 (1) | combat | 15 |  | butin vendu + or |
 | pumpkin (40 cases) | ferme | 85 |  | 64 or par case et par pousse ; on joue à autre chose 5 min sur 6 |
 | melon (40 cases) | ferme | 68 |  | 51 or par case et par pousse ; on joue à autre chose 5 min sur 6 |
 | squash (40 cases) | ferme | 55 |  | 41 or par case et par pousse ; on joue à autre chose 5 min sur 6 |

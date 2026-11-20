@@ -17,7 +17,7 @@ local H = game:GetService("HttpService")
 local URL = "http://127.0.0.1:34873/banc?f="
 
 local RAPIDES = {
-	"animaux", "apparence", "arc", "armee", "audit_contenu", "bestiaire_livre", "bosquets", "butin", "chantiers",
+	"animaux", "apparence", "arc", "armee", "audit_contenu", "bestiaire_livre", "bosquets", "butin", "butin_creatures", "chantiers",
 	"chasse_au_tresor", "chroniques", "courrier_reprise", "course", "demandes", "demandes_joueurs", "diligence", "donjons_groupe", "ecurie", "economie",
 	"equilibre", "flux_or", "fauche", "formes", "froid", "harpon", "herbes", "mecanismes", "moissons", "ouvriers", "quetes",
 	"quetes_lieux", "relations_pnj", "reputation", "resistance", "roue_eau", "save_instantane",

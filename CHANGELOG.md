@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Or des créatures plafonné** : l'or d'une mise à mort ne dépasse plus 25 + 12 % de la vie de la bête (les élites de niveau 6 à 9 donnaient 150 à 650 or chacune, 5 à 15 fois les autres métiers) ; butin des créatures ramené dans la norme de leur niveau (`Bestiaire.normalizeLoot`, banc `butin_creatures`)
 - **Harpon** : outil pris en main depuis le sac ou la barre rapide. Un lancer valide déclenche l’animation et le résultat de pêche.
 - **Fenêtres** : retour clavier et manette commun aux panneaux, aux livres et à l’hôtel des ventes. Les coups, récoltes visées et poses sont suspendus pendant leur ouverture.
 - **Grottes en groupe** : les créatures d'une grotte gagnent +60 % de vie par joueur en plus dans les galeries (sans jamais redescendre si quelqu'un repart) ; le coffre ancien donne sa part à CHAQUE joueur, une fois par remplissage (avant : le premier arrivé raflait tout)

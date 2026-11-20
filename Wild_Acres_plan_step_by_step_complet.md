@@ -283,7 +283,7 @@ La feuille actuelle parle de l'accueil et du personnage global, mais plusieurs f
 - [x] Définir les réactions : passive, méfiante, territoriale, agressive, fuite, défense, poursuite limitée et appel d'alliés. _(Enemies : passif / neutre (s'énerve si on le frappe) / hostile, fuite (plus loin si on court, moins si accroupi), meutes, prédateurs qui chassent les proies, laisse et retour au territoire)_
 - [x] Vérifier les créatures nocturnes et leur retour à l'état diurne.
 - [x] Vérifier la réapparition et les zones de retour.
-- [ ] Vérifier le butin, les taux et les récompenses d'XP.
+- [x] Vérifier le butin, les taux et les récompenses d'XP. _(20/11 : bancs `butin_creatures` et `economie`, or de mise à mort plafonné ; XP = 4 × niveau, comparable aux métiers)_
 - [ ] Tester toutes les créatures en solo et en groupe.
 - [x] Vérifier que les boss ne peuvent pas être exploités pour obtenir indéfiniment des récompenses rares.
 

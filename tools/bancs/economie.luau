@@ -8,7 +8,8 @@
 --   · ferme : une case rapporte (prix × 0,9 − graine) par pousse ; 1 jour = 6 min ; une ferme de 40 cases
 --     demande ~1 min d'arrosage par jour ;
 --   · pêche : 5 s d'attente moyenne + 3 s de lancer / ferrage, 1 prise ratée sur 6 (≈ 9,6 s par poisson) ;
---   · combat : arme de fer ≈ 25 dégâts/s, 12 s pour trouver la bête suivante ; butin moyen + or.
+--   · combat : arme de fer ≈ 25 dégâts/s, 45 s pour trouver la bête suivante (dispersées, réapparition en jours,
+--     soins entre deux combats) ; butin moyen + or de la mise à mort (random(5, 15) × niveau).
 -- Renvoie un résumé ; le détail est dans le document.
 local H = game:GetService("HttpService")
 local sh = game.ReplicatedStorage.Shared:Clone()
@@ -98,11 +99,12 @@ add("pêche", "pêche (compétence 15)", vsum / wsum / CATCH * 60, string.format
 local byLevel = {}
 for id, k in B.KINDS do
 	if not k.boss and not k.passive and (k.hp or 0) > 0 then
-		local value = (k.gold or 0) * 5
+		-- or d'une mise à mort : random(5, 15) × niveau × gold, plafonné à 25 + 12 % de la vie (Enemies)
+		local value = math.min(10 * (k.level or 1) * (k.gold or 1), 25 + k.hp * 0.12)
 		for _, l in k.loot or {} do
 			value += (l[2] + l[3]) / 2 * (l[4] or 1) * price(l[1])
 		end
-		local secs = k.hp / 25 + 12
+		local secs = k.hp / 25 + 45
 		local lv = k.level or 1
 		byLevel[lv] = byLevel[lv] or { n = 0, gpm = 0 }
 		byLevel[lv].n += 1

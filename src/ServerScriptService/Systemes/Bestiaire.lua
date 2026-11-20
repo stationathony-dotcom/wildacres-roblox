@@ -749,6 +749,60 @@ end
 
 -- ----------------------------------------------------------------- Installation
 
+-- Butin ramené dans la norme de son niveau (étape 9, banc butin_creatures, 20/11) : la valeur moyenne du
+-- butin (prix × quantité × chance + or) PAR POINT DE VIE reste entre 1/3 et 3 fois la médiane des créatures
+-- du même niveau. Trop riche : chances (et or) réduites ; trop pauvre : un peu d'or en plus. Les boss, les
+-- bêtes passives et les niveaux de moins de 3 créatures ne sont pas touchés. Une seule fois par table.
+function Bestiaire.normalizeLoot(kinds, C): number
+	-- or d'une mise à mort (Enemies) : random(5, 15) × niveau × (gold ou 1), en moyenne 10 × niveau × gold
+	local function value(k)
+		local v = math.min(10 * (k.level or 1) * (k.gold or 1), 25 + k.hp * 0.12) -- plafond d'Enemies
+		for _, l in k.loot or {} do
+			local info = C.ITEMS[l[1]]
+			v += info and (l[2] + (l[3] or l[2])) / 2 * (l[4] or 1) * (info.price or 0) or 0
+		end
+		return v
+	end
+	local byLevel = {}
+	for _, k in kinds do
+		if not k.passive and not k.boss and (k.hp or 0) > 0 then
+			local lv = k.level or 1
+			byLevel[lv] = byLevel[lv] or {}
+			table.insert(byLevel[lv], value(k) / k.hp)
+		end
+	end
+	local med = {}
+	for lv, list in byLevel do
+		if #list >= 3 then
+			table.sort(list)
+			med[lv] = list[math.floor(#list / 2) + 1]
+		end
+	end
+	local changed = 0
+	for _, k in kinds do
+		local m = med[k.level or 1]
+		if m and m > 0 and not k.passive and not k.boss and not k.lootNormalized and (k.hp or 0) > 0 then
+			k.lootNormalized = true
+			local v = value(k)
+			local perHp = v / k.hp
+			if perHp > m * 3 then
+				local f = m * 3 * k.hp / v
+				local loot = {}
+				for _, l in k.loot or {} do
+					table.insert(loot, { l[1], l[2], l[3], (l[4] or 1) * f })
+				end
+				k.loot = loot
+				k.gold = math.floor((k.gold or 1) * f) -- entier : l'or gagné reste un nombre entier
+				changed += 1
+			elseif v > 0 and perHp < m / 3 then
+				k.gold = (k.gold or 1) + math.ceil((m / 3 * k.hp - v) / (10 * (k.level or 1)))
+				changed += 1
+			end
+		end
+	end
+	return changed
+end
+
 function Bestiaire.init(g)
 	G = g
 	Config = G.Config
@@ -757,6 +811,7 @@ function Bestiaire.init(g)
 		k.model = "Bete_" .. id
 		E[id] = k
 	end
+	Bestiaire.normalizeLoot(E, Config)
 	G.Interact.onPrompt("camp_chest", function(player, prompt)
 		Bestiaire.lootCamp(player, prompt)
 	end)

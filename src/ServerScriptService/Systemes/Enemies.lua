@@ -282,6 +282,9 @@ function Enemies.spawnFree(kind: string, pos: Vector3, parent: Instance)
 	return spawn(nil, { id = "free#" .. math.random(1, 1e9), kind = kind, x = pos.X, z = pos.Z, free = true }, parent)
 end
 
+Enemies.KILL_GOLD_BASE = 25 -- or de la mise à mort : au plus 25 + 12 % de la vie de la bête (± 40 %)
+Enemies.KILL_GOLD_PER_HP = 0.12
+
 function Enemies.byId(id: string)
 	for _, en in Enemies.list do
 		if en.id == id and not en.dead then
@@ -751,7 +754,11 @@ local function dieInner(en, player: Player)
 	local k = en.k
 	local luck = G.Joueurs.stats(player).chance or 0
 	if not k.passive then
-		G.Joueurs.add(player, "gold", math.random(5, 15) * k.level * (k.gold or 1))
+		-- or de la mise à mort, plafonné selon la vie de la bête (banc economie, 20/11 : les élites de
+		-- niveau 6 à 9 rapportaient 150 à 650 or chacune, 5 à 15 fois les autres métiers)
+		local gold = math.random(5, 15) * k.level * (k.gold or 1)
+		local cap = math.floor(Enemies.KILL_GOLD_BASE + (en.maxHp or k.hp or 0) * Enemies.KILL_GOLD_PER_HP)
+		G.Joueurs.add(player, "gold", math.max(1, math.min(gold, math.random(math.floor(cap * 0.6), math.ceil(cap * 1.4)))))
 	end
 	local rng = Random.new()
 	for _, l in k.loot or {} do
