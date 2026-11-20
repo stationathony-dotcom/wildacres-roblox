@@ -6,22 +6,22 @@ local E = {}
 
 -- couleurs fixes des matières (une matière = un biome)
 E.TERRAIN = {
-	[Enum.Material.Grass] = Color3.fromRGB(74, 134, 50), -- prairie, vert franc
+	[Enum.Material.Grass] = Color3.fromRGB(80, 139, 53), -- prairie, vert franc
 	[Enum.Material.LeafyGrass] = Color3.fromRGB(198, 132, 62), -- forêt rousse (tapis de feuilles)
-	[Enum.Material.Ground] = Color3.fromRGB(164, 124, 82), -- chemins de terre chauds
+	[Enum.Material.Ground] = Color3.fromRGB(173, 132, 92), -- chemins de terre chauds
 	[Enum.Material.Sand] = Color3.fromRGB(228, 206, 146),
 	[Enum.Material.Sandstone] = Color3.fromRGB(212, 156, 104), -- désert : pistes et falaises
 	[Enum.Material.Snow] = Color3.fromRGB(236, 242, 248),
 	[Enum.Material.Slate] = Color3.fromRGB(110, 118, 128),
 	[Enum.Material.Mud] = Color3.fromRGB(96, 84, 58), -- marais
 	[Enum.Material.Rock] = Color3.fromRGB(132, 126, 118),
-	[Enum.Material.Cobblestone] = Color3.fromRGB(156, 140, 120), -- pavés beiges des places
+	[Enum.Material.Cobblestone] = Color3.fromRGB(166, 150, 126), -- pavés beiges des places
 }
 
 -- jour / nuit (Clock interpole)
-E.OUTDOOR_DAY = Color3.fromRGB(150, 146, 140)
+E.OUTDOOR_DAY = Color3.fromRGB(161, 151, 136)
 E.OUTDOOR_NIGHT = Color3.fromRGB(70, 80, 120)
-E.AMBIENT_DAY = Color3.fromRGB(78, 74, 72)
+E.AMBIENT_DAY = Color3.fromRGB(86, 79, 72)
 E.AMBIENT_NIGHT = Color3.fromRGB(40, 45, 70)
 -- densité d'atmosphère par beau temps (Ambiance.client la fait varier avec la météo)
 E.DENSITY_CLEAR = 0.27
@@ -29,11 +29,11 @@ E.DENSITY_CLEAR = 0.27
 function E.apply(Lighting: Lighting, terrain: Terrain)
 	Lighting.Brightness = 3
 	Lighting.EnvironmentDiffuseScale = 1
-	Lighting.EnvironmentSpecularScale = 0.4
+	Lighting.EnvironmentSpecularScale = 0.34
 	Lighting.GlobalShadows = true
 	Lighting.OutdoorAmbient = E.OUTDOOR_DAY
 	Lighting.Ambient = E.AMBIENT_DAY
-	Lighting.ShadowSoftness = 0.25
+	Lighting.ShadowSoftness = 0.30
 	Lighting.GeographicLatitude = 30
 	local atm = Lighting:FindFirstChildOfClass("Atmosphere") or Instance.new("Atmosphere")
 	atm.Density = E.DENSITY_CLEAR
@@ -43,15 +43,15 @@ function E.apply(Lighting: Lighting, terrain: Terrain)
 	atm.Glare = 0.35
 	atm.Haze = 0.7
 	atm.Parent = Lighting
-	local cc = Lighting:FindFirstChild("Couleurs") or Lighting:FindFirstChildOfClass("ColorCorrectionEffect") or Instance.new("ColorCorrectionEffect")
+	local cc = Lighting:FindFirstChild("Couleurs") or Instance.new("ColorCorrectionEffect")
 	cc.Name = "Couleurs"
 	cc.Saturation = 0.16
 	cc.Contrast = 0.08
 	cc.Brightness = 0.02
-	cc.TintColor = Color3.fromRGB(255, 249, 238)
+	cc.TintColor = Color3.fromRGB(255, 246, 232)
 	cc.Parent = Lighting
 	local bloom = Lighting:FindFirstChildOfClass("BloomEffect") or Instance.new("BloomEffect")
-	bloom.Intensity = 0.45
+	bloom.Intensity = 0.32
 	bloom.Size = 28
 	bloom.Threshold = 1.4
 	bloom.Parent = Lighting

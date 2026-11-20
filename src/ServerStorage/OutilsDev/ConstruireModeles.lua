@@ -14,12 +14,12 @@ local function rgb(r: number, g: number, b: number): Color3
 	return Color3.fromRGB(r, g, b)
 end
 
-local BOIS = rgb(122, 84, 52)
-local BOIS_FONCE = rgb(84, 56, 36)
+local BOIS = rgb(122, 79, 46)
+local BOIS_FONCE = rgb(78, 50, 34)
 local BOIS_CLAIR = rgb(170, 125, 80)
-local PIERRE = rgb(128, 128, 134)
-local PIERRE_CLAIRE = rgb(160, 158, 150)
-local CREPI = rgb(238, 224, 196)
+local PIERRE = rgb(128, 125, 117)
+local PIERRE_CLAIRE = rgb(169, 158, 139)
+local CREPI = rgb(240, 224, 190)
 local FER = rgb(70, 70, 76)
 local OR = rgb(232, 186, 60)
 

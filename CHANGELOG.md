@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Direction visuelle** : bois et pierre plus chauds, chemins et pavés plus clairs et reflets adoucis.
 - **Paramètres** : quatre réglages persistants pour le champ de vision, la sensibilité, la densité graphique et le texte des fenêtres.
 - **Se rendre au shérif** : recherché, on peut lui parler (même en pleine poursuite) et choisir « Je me rends » — amende divisée par deux, 2 d'honneur perdus au lieu de 5, cellule deux fois plus courte
 - **Atlas** : la mise à jour des aperçus reconnaît les icônes peintes et les retire hors écran.
