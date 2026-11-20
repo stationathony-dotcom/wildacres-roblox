@@ -86,7 +86,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       complet / retiré met l'état à jour, la remise reste validée par le serveur.
 - [x] **X3 · Fenêtres cohérentes.** FAIT 20/11 (894842c). Titre, fermeture, retour, état vide, focus manette ; une fenêtre
       ouverte n'envoie pas de coup ni de pose derrière elle ; ordre de retour prévisible.
-- [ ] **X4 · Petits écrans et mobile.** Disposition étroite par famille de fenêtres, zones sûres,
+- [x] **X4 · Petits écrans et mobile.** FAIT 20/11 (5ffb22d) · à voir en Play avec le clavier tactile. Disposition étroite par famille de fenêtres, zones sûres,
       défilement vertical, boutons assez grands, chat / clavier ouverts. Garder les proportions du HUD.
 - [x] **X5 · Emplacement main gauche** (passage ci-dessus) : emplacement, poupée de la fiche, modèle FAIT 20/11 (a23919e).
       porté par l'avatar.
@@ -94,7 +94,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] **X7 · Modèles faux.** Corriger la liste « Visuels à retravailler » de
       `A-RETRAVAILLER-EQUIPEMENT-ET-VISUELS.md` et `AUDIT-VISUELS-OBJETS.md` (noyau de cerise, laine,
       couronnes, turban, carreaux, insignes…). *Fini quand* : chaque objet de la liste ressemble à son
-      nom sur la planche de `images/catalogue`.
+      nom sur la planche de `images/catalogue`. Priorités de la liste corrigées (28b395e, planche 09). Autres familles de l’audit encore à relire.
 - [ ] **X8 · Icônes peintes.** Préparer les images (barre rapide, sac, menus) dans `images/icones/` +
       une table `id → image` prête à remplir avec les identifiants Roblox ; garder l'emoji en secours
       tant que l'image n'est pas en ligne.
