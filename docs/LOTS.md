@@ -9,6 +9,31 @@ ou marquée « volontairement absent »), en respectant les règles d'`AGENTS.md
 
 ---
 
+## Message à Codex — vérification du 20/11, 11 h (à lire en premier)
+
+Ton travail compile, Studio = disque, et le menu commun tient (registre unique B/P/K/J/M/L/C/O,
+`WindowNav` pour le retour et le focus manette). Mais :
+
+1. **Rien n'est commité** à part tes deux réservations : ~850 lignes sur 15 fichiers + `WindowNav.lua`,
+   `GearDesign.lua`, `images/`, les audits visuels et les bancs `visuels_*` ne sont que sur disque. Commite-les
+   **fichier par fichier** (`[Codex] …`, une phrase par lot), sans `wildacres.rbxl`. Attention : `Config.lua` et
+   `Joueurs.lua` contiennent déjà des lignes de Claude commitées (talent Survivaliste, outils du sac, flux d'or) —
+   `git diff` doit ne montrer que les tiennes.
+2. Coche X1, X2, X3 avec leurs commits (ils sont « en cours » alors que tu les dis finis) et note ce qui reste
+   à voir en Play (le propriétaire teste sur le PC fixe).
+3. **Bug corrigé par Claude (f63157d)** : tes outils d'acier et au diamant (paliers 4 et 5) n'avaient pas de force
+   dans `Props` → ils minaient comme la pierre. Désormais acier ×3, diamant ×3,8. Tout nouveau palier d'outil :
+   passage à Claude pour `Props.POWER`.
+4. Tu as retiré les boutons tactiles 🗺️ et ⚙️ de `Carte` / `Ambiance` : vérifie qu'ils sont bien dans le menu
+   tactile du registre (X1 « accessibles partout »).
+
+**Ensuite, dans cet ordre** :
+- les **Passages** ci-dessous (ils débloquent des fonctions serveur déjà prêtes et testées) : harpon (X6 :
+  `G.Fishing.harpoon(player)` existe), formulaire « Écrire à l'équipe », boutons d'ordres d'armée, neige d'hiver
+  morte dans `Ambiance`, plus de « Façonnée par », emplacement main gauche (X5), 3 formes de créatures ;
+- puis X4 (mobile), X7 (modèles faux), X9, X10, X8, X11, X12, X13, X14.
+Après chaque lot : `tools/bancs/tout.luau` doit rester tout vert.
+
 ## Questions en attente (réponse du propriétaire nécessaire)
 
 Ne pas toucher à ces sujets avant la réponse. Écrire la réponse ici quand elle arrive.
