@@ -98,9 +98,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] **X8 · Icônes peintes.** Préparer les images (barre rapide, sac, menus) dans `images/icones/` +
       une table `id → image` prête à remplir avec les identifiants Roblox ; garder l'emoji en secours
       tant que l'image n'est pas en ligne.
-- [ ] **X9 · Pièces de créatures distinctes.** Les « Collier de crocs de … » / « Lame venimeuse de … »
+- [x] **X9 · Pièces de créatures distinctes.** FAIT 20/11 (19bed72). Les « Collier de crocs de … » / « Lame venimeuse de … »
       ont toutes la même forme : une silhouette par famille (crocs, écailles, plumes, glace…).
-- [ ] **X10 · Atelier : recherche + fiche de recette unique.** Ingrédients possédés, station,
+- [x] **X10 · Atelier : recherche + fiche de recette unique.** FAIT 20/11 (9f9d802, 2bd382f). Ingrédients possédés, station,
       compétence et raison du verrouillage sur une seule fiche (`AUDIT-PRODUIT.md`, ordre 5).
 - [ ] **X11 · Paramètres.** Caméra, sensibilité, qualité graphique, taille du texte (étape 20).
 - [ ] **X12 · Style médiéval uniforme.** Lumière, matériaux, proportions, couleurs saturées et
