@@ -98,7 +98,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       `A-RETRAVAILLER-EQUIPEMENT-ET-VISUELS.md` et `AUDIT-VISUELS-OBJETS.md` (noyau de cerise, laine,
       couronnes, turban, carreaux, insignes…). *Fini quand* : chaque objet de la liste ressemble à son
       nom sur la planche de `images/catalogue`. Priorités de la liste corrigées (28b395e, planche 09). Autres familles de l’audit encore à relire.
-- [ ] **X8 · Icônes peintes.** Préparer les images (barre rapide, sac, menus) dans `images/icones/` +
+- [x] **X8 · Icônes peintes.** FAIT 20/11 (d28d1f0) · publication au propriétaire. Préparer les images (barre rapide, sac, menus) dans `images/icones/` +
       une table `id → image` prête à remplir avec les identifiants Roblox ; garder l'emoji en secours
       tant que l'image n'est pas en ligne.
 - [x] **X9 · Pièces de créatures distinctes.** FAIT 20/11 (19bed72). Les « Collier de crocs de … » / « Lame venimeuse de … »
