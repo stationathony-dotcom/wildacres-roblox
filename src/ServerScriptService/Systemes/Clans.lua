@@ -204,12 +204,22 @@ function Clans.create(player: Player, name: string, tag: string)
 		G.Util.toast(player, "Nom (3 à 24 lettres) et tag (2 à 4 lettres) obligatoires.")
 		return
 	end
-	if not G.Joueurs.has(player, "gold", FOUND_COST) then
+	-- l'or est pris AVANT les attentes (filtre, DataStore) : sinon on pouvait le dépenser entre-temps
+	-- et fonder gratuitement ; il est rendu si la fondation échoue
+	if not G.Joueurs.take(player, "gold", FOUND_COST) then
 		G.Util.toast(player, "Fonder un clan coûte " .. FOUND_COST .. " 💰.")
 		return
 	end
+	local function refund()
+		if player.Parent then
+			G.Joueurs.add(player, "gold", FOUND_COST, true)
+		else
+			G.Poste.deliverSystem(player.UserId, { id = "clan_rembourse_" .. HttpService:GenerateGUID(false), from = "Fondation de clan (échouée)", gold = FOUND_COST })
+		end
+	end
 	local fname, ftag = filter(player, name), filter(player, tag)
 	if not fname or not ftag then
+		refund()
 		G.Util.toast(player, "Ce nom n'est pas accepté. Essaie autre chose.")
 		return
 	end
@@ -227,6 +237,7 @@ function Clans.create(player: Player, name: string, tag: string)
 			end)
 		end)
 		if not ok or taken then
+			refund()
 			G.Util.toast(player, "Ce nom de clan est déjà pris.")
 			return
 		end
@@ -242,13 +253,13 @@ function Clans.create(player: Player, name: string, tag: string)
 			store:SetAsync("c_" .. id, HttpService:JSONEncode(data))
 		end)
 		if not ok then
+			refund()
 			G.Util.toast(player, "La fondation a échoué, réessaie.")
 			return
 		end
 	else
 		memory[id] = data
 	end
-	G.Joueurs.take(player, "gold", FOUND_COST)
 	cache[id] = { data = data, t = os.clock() }
 	p.clan = id
 	G.Joueurs.markDirty(player)
