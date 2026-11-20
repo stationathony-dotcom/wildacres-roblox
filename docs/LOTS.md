@@ -58,7 +58,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] **X2 · Journal des livraisons juste.** En cours — Codex, 19/11 (non commité : `Quetes.view`
       compte le sac, `Quetes.client`). *Fini quand* : accepter à vide affiche 0/N, le stock partiel /
       complet / retiré met l'état à jour, la remise reste validée par le serveur.
-- [ ] **X3 · Fenêtres cohérentes.** Titre, fermeture, retour, état vide, focus manette ; une fenêtre
+- [ ] **X3 · Fenêtres cohérentes.** En cours - Codex, 20/11. Titre, fermeture, retour, état vide, focus manette ; une fenêtre
       ouverte n'envoie pas de coup ni de pose derrière elle ; ordre de retour prévisible.
 - [ ] **X4 · Petits écrans et mobile.** Disposition étroite par famille de fenêtres, zones sûres,
       défilement vertical, boutons assez grands, chat / clavier ouverts. Garder les proportions du HUD.
