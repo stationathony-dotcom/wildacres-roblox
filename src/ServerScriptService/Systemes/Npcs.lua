@@ -418,6 +418,17 @@ local function perceive(e)
 			law.bodyFound(body, e)
 		end
 	end
+	-- une bête hostile approche : on fuit (sauf le shérif et les gardes)
+	if e.state == "routine" and e.data.role ~= "sheriff" and e.data.role ~= "guard" then
+		local beast = Npcs.threatNear(e)
+		if beast then
+			e.target = nil
+			e.threatPos = beast.pos
+			setState(e, "flee")
+			Npcs.react(e, "flee")
+			return
+		end
+	end
 	local seen = false
 	for _, player in G.Game.players() do
 		if seePlayer(e, player) then
@@ -539,12 +550,14 @@ local function routine(e)
 end
 
 local function flee(e)
+	-- on fuit un joueur (e.target) ou une bête (e.threatPos, Npcs.threatNear)
 	local root = e.target and G.Util.root(e.target)
-	if not root then
+	local from = root and root.Position or e.threatPos
+	if not from then
 		setState(e, "routine")
 		return
 	end
-	local away = e.root.Position - root.Position
+	local away = e.root.Position - from
 	away = Vector3.new(away.X, 0, away.Z)
 	if away.Magnitude < 0.1 then
 		away = Vector3.new(1, 0, 0)
@@ -554,9 +567,32 @@ local function flee(e)
 		goal = e.root.Position + Vector3.new(-away.Z, 0, away.X).Unit * 16
 	end
 	moveTo(e, goal, e.data.run or Config.NPC_RUN)
-	if e.stateTime > 6 and away.Magnitude > Config.SIGHT then
+	if e.stateTime > 6 and (away.Magnitude > Config.SIGHT or (not root and e.stateTime > 10)) then
+		e.threatPos = nil
 		setState(e, "routine")
 	end
+end
+
+-- Une bête hostile tout près (20/11, étape 10 « réactions aux dangers ») : un villageois s'enfuit en criant,
+-- puis reprend sa routine. Pas les gardes ni le shérif (ils tiennent leur poste). Contrôlé une fois par
+-- seconde au plus par villageois.
+Npcs.THREAT_R = 22
+function Npcs.threatNear(e)
+	local now = os.clock()
+	if (e.threatCheck or 0) > now then
+		return nil
+	end
+	e.threatCheck = now + 1
+	local best, bd = nil, Npcs.THREAT_R
+	for _, en in G.Enemies.list do
+		if not en.dead and not en.pet and not en.k.passive and not en.k.neutral and en.model.Parent then
+			local d = (en.pos - e.root.Position).Magnitude
+			if d < bd then
+				best, bd = en, d
+			end
+		end
+	end
+	return best
 end
 
 local function fight(e)

@@ -318,7 +318,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [x] Créer les rôles : fermier, éleveur, forgeron, boulanger, cuisinier, marchand, aubergiste, garde, shérif, messager, artisan, voyageur, dirigeant. _(fermiers, marchands, shérifs, habitants, maire élu ; services : forgeron (réparation), palefrenier (écurie), aubergiste (lits), poste ; aubergiste qui sert un repas chaud (18/11) ; 18/11 `Metiers` : boulanger, cuisinier, forgeron, guérisseur, prêtre, palefrenier, enfants et colporteur en vrais PNJ (testés en Play) ; seigneur / dame et gardes de château (18/11) ; messager = Poste ; dirigeant = maire élu + seigneur)_
 - [~] Définir pour chaque PNJ : domicile, métier, horaires, déplacements, interactions et réactions. _(domicile et lieu de travail générés, horaires jour / nuit, repas à la taverne, abri sous l'orage, réactions aux crimes)_
 - [x] Faire travailler, se reposer, manger et circuler les habitants.
-- [~] Ajouter réactions aux dangers, intempéries, événements et crimes.
+- [x] Ajouter réactions aux dangers, intempéries, événements et crimes. _(20/11 : fuite devant les bêtes hostiles ; abri sous l'orage ; crimes et témoins déjà là)_
 - [~] Ajouter fuite, alerte, refuge et retour à la routine. _(fuite devant un recherché, alerte, retour à la routine après le dialogue ; refuge à la maison la nuit)_
 - [x] Prévoir la récupération d'un PNJ coincé ou disparu.
 - [x] Optimiser la simulation loin des joueurs. _(18/11 : PNJ calmes à plus de 300 studs de tout joueur : 1 réflexion/s au lieu de 4)_
