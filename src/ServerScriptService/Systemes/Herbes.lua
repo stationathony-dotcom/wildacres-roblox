@@ -14,9 +14,12 @@ local POOLS = {
 		{ "st_john", 5, 2, Color3.fromRGB(250, 210, 40) }, { "valerian", 10, 1, Color3.fromRGB(250, 190, 210) } },
 	foret = { { "sage", 0, 4, Color3.fromRGB(150, 170, 200) }, { "nettle", 0, 5, Color3.fromRGB(90, 150, 70) }, { "rosemary", 3, 3, Color3.fromRGB(160, 170, 240) },
 		{ "valerian", 8, 2, Color3.fromRGB(250, 190, 210) }, { "mandrake", 18, 0.6, Color3.fromRGB(150, 90, 170) } },
-	desert = { { "thyme", 0, 4, Color3.fromRGB(200, 160, 220) }, { "lavender", 2, 4, Color3.fromRGB(170, 120, 230) }, { "rosemary", 4, 2, Color3.fromRGB(160, 170, 240) } },
-	neige = { { "mint", 0, 4, Color3.fromRGB(120, 200, 120) }, { "sage", 3, 3, Color3.fromRGB(150, 170, 200) }, { "ancient_root", 20, 0.5, Color3.fromRGB(170, 120, 80) } },
-	marais = { { "nettle", 0, 5, Color3.fromRGB(90, 150, 70) }, { "valerian", 5, 3, Color3.fromRGB(250, 190, 210) }, { "night_flower", 15, 0.7, Color3.fromRGB(110, 120, 250) } },
+	desert = { { "thyme", 0, 4, Color3.fromRGB(200, 160, 220) }, { "lavender", 2, 4, Color3.fromRGB(170, 120, 230) }, { "rosemary", 4, 2, Color3.fromRGB(160, 170, 240) },
+		{ "spice", 6, 2, Color3.fromRGB(200, 110, 50) }, { "moon_flower", 14, 0.6, Color3.fromRGB(220, 225, 255) } }, -- 20/11 : 5 par biome
+	neige = { { "mint", 0, 4, Color3.fromRGB(120, 200, 120) }, { "sage", 3, 3, Color3.fromRGB(150, 170, 200) }, { "ancient_root", 20, 0.5, Color3.fromRGB(170, 120, 80) },
+		{ "herbs", 0, 3, Color3.fromRGB(140, 180, 110) }, { "moon_flower", 10, 1, Color3.fromRGB(220, 225, 255) } },
+	marais = { { "nettle", 0, 5, Color3.fromRGB(90, 150, 70) }, { "valerian", 5, 3, Color3.fromRGB(250, 190, 210) }, { "night_flower", 15, 0.7, Color3.fromRGB(110, 120, 250) },
+		{ "mushroom", 0, 3, Color3.fromRGB(180, 120, 90) }, { "glow_mushroom", 12, 0.6, Color3.fromRGB(120, 230, 200) } },
 }
 Herbes.POOLS = POOLS
 

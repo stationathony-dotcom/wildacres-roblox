@@ -188,8 +188,7 @@ function Fishing.harpoon(player: Player): boolean
 		G.Util.toast(player, "🔱 Vise l'eau, de près : le harpon ne porte pas loin.")
 		return false
 	end
-	lastThrow[player] = now
-	G.Props.swing(player, "rod")
+	lastThrow[player] = now -- le geste du lancer est joué par Tools (harpon en main)
 	local skill = G.Joueurs.skillRaw and G.Joueurs.skillRaw(player, "peche") or 0
 	local luck = G.Joueurs.stats(player).chance or 0
 	local chance = math.min(H.max, H.base + skill * H.perSkill + luck * H.perLuck)

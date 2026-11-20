@@ -207,6 +207,9 @@ E.NEW_ITEMS = {
 	{ "pitchfork", "Fourche à foin", "🍴", 70, { iron_ingot = 1, planks = 1, rope = 1 }, 1, "anvil", 4 },
 	{ "price_tags", "Étiquettes de prix", "🏷️", 20, { paper = 3, ink = 1 }, 1, "bench", 0 },
 }
+-- Harpon de pêche (outil déclaré par Codex dans Config sans prix ni recette, passage du 20/11)
+E.HARPOON = { price = 85, needs = { iron_ingot = 1, planks = 2, rope = 1 }, station = "anvil", level = 6 }
+
 -- Outils de métier gardés dans le SAC : + niveaux de compétence tant qu'on les a (Joueurs.skill), au plus
 -- E.BAG_CAP par compétence. Ils ne débloquent rien (les déblocages lisent Joueurs.skillRaw).
 E.BAG_TOOLS = {
@@ -441,6 +444,12 @@ function E.apply(C)
 			table.insert(R, { item = id, needs = table.clone(needs), count = count > 1 and count or nil, station = station, cat = "outils", skill = level > 0 and { "artisanat", level } or nil })
 			note("nouvel objet " .. id)
 		end
+	end
+	if I.harpoon and not I.harpoon.price then
+		local h = E.HARPOON
+		I.harpoon.price = h.price
+		table.insert(R, { item = "harpoon", needs = table.clone(h.needs), station = h.station, cat = "outils", skill = { "artisanat", h.level } })
+		note("harpon : prix et recette")
 	end
 	for id, b in E.BAG_TOOLS do
 		if I[id] then
