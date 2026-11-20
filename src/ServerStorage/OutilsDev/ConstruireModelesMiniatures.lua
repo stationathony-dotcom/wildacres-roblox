@@ -169,6 +169,12 @@ local function trophy(part, category, slot, legendary)
 		end
 	elseif category == "cailles" then
 		part("Cuir", V(1.17, 1.27, 0.39), C(), wood, "Ball")
+		if slot == "armor" then
+			for _, side in {-1, 1} do
+				part("Épaule", V(0.45, 0.44, 0.44), C(side * 0.59, 0.43, 0), teal, "Wedge", Enum.Material.Metal)
+			end
+			part("Ceinture", V(1.08, 0.12, 0.45), C(0, -0.55, -0.08), wood)
+		end
 		for row = 0, 2 do
 			for col = -1, 1 do
 				part("Écaille", V(0.36, 0.41, 0.16), C(col * 0.31, 0.39 - row * 0.34, -0.24)
