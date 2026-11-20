@@ -132,7 +132,7 @@ end
 
 -- Boucle de jeu
 local worldAcc, flushAcc, saveAcc = 0, 0, 0
-local STEPPED = { "Clock", "Game", "Npcs", "Metiers", "Animals", "Enemies", "Law", "Horses", "Fishing", "Doors", "Compagnons", "Protection", "Armee", "Evenements", "Donjons", "Meteo", "Barques", "Froid", "QuetesLieux", "Ventes" }
+local STEPPED = { "Clock", "Game", "Npcs", "Metiers", "Animals", "Enemies", "Law", "Horses", "Fishing", "Doors", "Compagnons", "Protection", "Armee", "Evenements", "Donjons", "Meteo", "Barques", "Froid", "QuetesLieux", "Ventes", "Chantiers" }
 local perf, errored = {}, {}
 G.perf = perf
 RunService.Heartbeat:Connect(function(dt)

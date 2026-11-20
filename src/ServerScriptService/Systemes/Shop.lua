@@ -686,13 +686,13 @@ function Shop.craft(player: Player, index: number?, times: number?)
 		-- pas de qualité de façon ni de signature visible (décision du 20/11) ; l'artisan est noté
 		-- (non affiché) pour son renom à l'hôtel des ventes
 		piece.makerId = player.UserId -- renom d'artisan (Systemes/Ventes)
-		G.Joueurs.addSkillXp(player, "artisanat", 10 + (r.skill and r.skill[2] or 0))
+		G.Joueurs.addSkillXp(player, "artisanat", G.Chantiers.craftXp(player, 10 + (r.skill and r.skill[2] or 0)))
 		piece.visual = piece.visual or ""
 		piece.power = piece.power or 0
 		piece.id = math.random(1, 2 ^ 30)
 		piece.crafted = true
 		G.Joueurs.addGear(player, piece)
-		G.Joueurs.addSkillXp(player, "artisanat", 8)
+		G.Joueurs.addSkillXp(player, "artisanat", G.Chantiers.craftXp(player, 8))
 		G.Joueurs.sync(player)
 		return true
 	end
@@ -795,7 +795,7 @@ function Shop.repair(player: Player, id: string)
 	if G.Joueurs.bestTool(player, base) == id then
 		player:SetAttribute("Usure_" .. base, 0)
 	end
-	G.Joueurs.addSkillXp(player, "artisanat", 3)
+	G.Joueurs.addSkillXp(player, "artisanat", G.Chantiers.craftXp(player, 3))
 	G.Util.toast(player, "🔧 " .. info.name .. " réparée.")
 	G.Joueurs.sync(player)
 end

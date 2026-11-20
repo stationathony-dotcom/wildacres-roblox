@@ -6,7 +6,10 @@
 --   · marche : on vend 5 % plus cher dans ce village (Shop.sellPrice) ;
 --   · palissade : les invasions de nuit y arrivent moins nombreuses (Evenements.startInvasion) ;
 --   · lanternes : des lampadaires autour de la place ; les ombres rôdeuses (fearsLight) n'approchent plus ;
---   · musee : étudier une antiquité dans ce village rapporte deux fois plus (Joueurs.useCatalogue).
+--   · musee : étudier une antiquité dans ce village rapporte deux fois plus (Joueurs.useCatalogue) ;
+--   · atelier (20/11) : fabriquer dans ce village donne 20 % d'expérience d'artisanat en plus (Shop.craft) ;
+--   · route (20/11) : la grand-rue pavée, on marche 10 % plus vite dans le village (attribut « Pave », Game.step).
+-- (les nouveaux chantiers s'ajoutent À LA FIN : l'avancée des villages déjà commencée ne bouge pas)
 -- État : G.world.chantiers[clé du village] = { i = n° du chantier, have = { [matière] = n }, done = { [id] = jour } }.
 
 local Chantiers = {}
@@ -17,7 +20,11 @@ Chantiers.PROJECTS = {
 	{ id = "palissade", name = "renforcer la palissade", needs = { wood = 400, rope = 80, iron_ingot = 40 }, done = "La palissade est renforcée : les assaillants y seront moins nombreux." },
 	{ id = "lanternes", name = "éclairer la place", needs = { lantern = 12, iron_ingot = 20, glass = 10 }, done = "La place est éclairée : les ombres n'osent plus s'en approcher." },
 	{ id = "musee", name = "ouvrir un musée", needs = { old_vase = 4, fossil = 4, inscription = 4, relic_fragment = 6, planks = 60 }, done = "Le musée ouvre ses portes : on y étudie les antiquités deux fois mieux." },
+	{ id = "atelier", name = "ouvrir un atelier commun", needs = { planks = 250, iron_ingot = 40, stone = 150, rope = 40 }, done = "L'atelier commun ouvre : on y apprend mieux en fabriquant (+20 % d'artisanat)." },
+	{ id = "route", name = "paver la grand-rue", needs = { stone = 600, clay = 120, planks = 80 }, done = "La grand-rue est pavée : on y marche plus vite." },
 }
+Chantiers.CRAFT_XP = 1.2
+Chantiers.PAVED_SPEED = 1.1
 
 local CollectionService = game:GetService("CollectionService")
 
@@ -155,6 +162,34 @@ function Chantiers.contribute(player: Player, q, here)
 		local r = G.Util.root(other)
 		if r and v and Vector2.new(r.Position.X - v.x, r.Position.Z - v.z).Magnitude < 200 then
 			G.Util.toast(other, "🏗️ " .. (v.name or "Le village") .. " : " .. p.done, "big")
+		end
+	end
+end
+
+-- village où se tient le joueur (Reputation.villageAt), ou nil
+local function villageOf(player: Player): string?
+	local r = G.Util.root(player)
+	local v = r and G.Reputation and G.Reputation.villageAt and G.Reputation.villageAt(r.Position)
+	return v and v.key or nil
+end
+
+-- expérience d'artisanat gagnée en fabriquant ici (Shop.craft)
+function Chantiers.craftXp(player: Player, xp: number): number
+	return Chantiers.built(villageOf(player), "atelier") and math.floor(xp * Chantiers.CRAFT_XP + 0.5) or xp
+end
+
+-- grand-rue pavée : attribut « Pave » des joueurs dans un tel village (lu par Game.step), toutes les 2 s
+local paveAcc = 0
+function Chantiers.step(dt: number)
+	paveAcc += dt
+	if paveAcc < 2 then
+		return
+	end
+	paveAcc = 0
+	for _, p in G.Game.players() do
+		local paved = Chantiers.built(villageOf(p), "route")
+		if (p:GetAttribute("Pave") == true) ~= paved then
+			p:SetAttribute("Pave", paved or nil)
 		end
 	end
 end

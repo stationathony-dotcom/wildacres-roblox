@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Chantiers de village** : 2 de plus après le musée — **atelier commun** (fabriquer au village donne +20 % d'expérience d'artisanat) et **grand-rue pavée** (on y marche 10 % plus vite)
 - **Pièces de créature** : crocs et glace, trois lames de venin, écailles et plumes disposent de miniatures dédiées.
 - **Catalogue** : planche de contrôle des miniatures prioritaires après reconstruction dans Studio.
 - **Villageois et bêtes** : une bête hostile à moins de 22 studs fait fuir les villageois (cri de peur), qui reprennent leur routine ensuite ; le shérif et les gardes tiennent leur poste

@@ -605,6 +605,9 @@ function Game.step(dt: number)
 					if (p:GetAttribute("SlowUntil") or 0) > os.clock() then
 						target *= 0.6 -- poison / toile (Enemies)
 					end
+					if p:GetAttribute("Pave") and not riding then
+						target *= G.Chantiers and G.Chantiers.PAVED_SPEED or 1.1 -- grand-rue pavée (Chantiers « route »)
+					end
 					if p:GetAttribute("Enlise") then
 						target *= 0.8 -- boue des marais (Froid.isStuck)
 					end
