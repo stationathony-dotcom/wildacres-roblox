@@ -128,6 +128,8 @@ function Mondes.init(g)
 			return Mondes.join(player, arg)
 		elseif action == "play" then
 			return Mondes.join(player, Mondes.best(player))
+		elseif action == "friends" then
+			return Mondes.friends(player)
 		end
 		return nil
 	end
@@ -162,6 +164,47 @@ local function onlineCounts(): { [string]: number }
 			out[it.key] = type(v) == "table" and (v.n or 0) or 0
 		end
 	end
+	return out
+end
+
+-- serveur Roblox (JobId) -> monde qu'il fait tourner (pour retrouver ses amis, Mondes.friends)
+local function onlineJobs(): { [string]: { id: string, name: string } }
+	local out = {}
+	if not online then
+		return out
+	end
+	local ok, items = pcall(function()
+		return online:GetRangeAsync(Enum.SortDirection.Ascending, 200)
+	end)
+	if ok and items then
+		for _, it in items do
+			local v = it.value
+			if type(v) == "table" and type(v.job) == "string" then
+				out[v.job] = { id = it.key, name = v.name or "?" }
+			end
+		end
+	end
+	return out
+end
+
+-- Amis Roblox en jeu dans Wild Acres, et le monde où ils sont (écran d'accueil, action « friends ») :
+-- { { name, worldId, worldName } } ; rejoindre = action « join » avec worldId
+function Mondes.friends(player: Player)
+	local ok, list = pcall(player.GetFriendsOnline, player, 50)
+	if not ok or type(list) ~= "table" then
+		return {}
+	end
+	local jobs = onlineJobs()
+	local out = {}
+	for _, f in list do
+		local w = f.PlaceId == game.PlaceId and jobs[f.GameId or ""]
+		if w then
+			table.insert(out, { name = f.UserName, worldId = w.id, worldName = w.name })
+		end
+	end
+	table.sort(out, function(a, b)
+		return a.name < b.name
+	end)
 	return out
 end
 
@@ -589,7 +632,7 @@ function Mondes.heartbeat()
 		return
 	end
 	pcall(function()
-		online:SetAsync(Mondes.id, { n = #Players:GetPlayers(), name = G.world and G.world.name or "" }, 45)
+		online:SetAsync(Mondes.id, { n = #Players:GetPlayers(), name = G.world and G.world.name or "", job = game.JobId }, 45)
 	end)
 end
 
