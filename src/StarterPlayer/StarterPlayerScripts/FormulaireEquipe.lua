@@ -20,12 +20,12 @@ function Formulaire.mount(gui, action)
 	local panel = Instance.new("Frame")
 	panel.AnchorPoint = Vector2.new(0.5, 0.5)
 	panel.Position = UDim2.fromScale(0.5, 0.5)
-	panel.Size = UDim2.new(0.94, 0, 0, 284)
+	panel.Size = UDim2.fromOffset(450, 284)
 	panel.BackgroundColor3 = DARK
 	panel.ZIndex = 17
 	panel.Parent = cover
 	Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 12)
-	Instance.new("UISizeConstraint", panel).MaxSize = Vector2.new(450, 284)
+
 
 	local function text(class, name, size, pos)
 		local item = Instance.new(class)
@@ -97,6 +97,20 @@ function Formulaire.mount(gui, action)
 			note.Text = "Envoi demandé. Le jeu affiche la réponse du serveur."
 		end
 	end)
+
+	local body = Instance.new("ScrollingFrame")
+	body.Size, body.Position = UDim2.new(1, 0, 1, -47), UDim2.fromOffset(0, 44)
+	body.BackgroundTransparency, body.BorderSizePixel = 1, 0
+	body.CanvasSize, body.ScrollBarThickness = UDim2.fromOffset(0, 232), 4
+	body.ScrollingDirection, body.ZIndex = Enum.ScrollingDirection.Y, 17
+	for _, field in panel:GetChildren() do
+		if field:IsA("GuiObject") and field ~= title and field ~= close then
+			field.Position -= UDim2.fromOffset(0, 44)
+			field.Parent = body
+		end
+	end
+	body.Parent = panel
+	require(script.Parent:WaitForChild("MiseEnPage")).bind(panel)
 
 	return function(appealOnly)
 		for id, tab in tabs do

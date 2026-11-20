@@ -285,8 +285,22 @@ function Hud.build(parent: Instance, opts)
 	self.zoomBtn = roundBtn("+", UDim2.new(0.88, 0, 0.1, 0), opts.onZoom)
 
 	-- colonne de boutons (gauche)
-	local menu = new("Frame", { Name = "Menu", Size = UDim2.fromOffset(216, 0), AutomaticSize = Enum.AutomaticSize.Y, Position = UDim2.new(0, 16, 0, opts.compact and 211 or 252), BackgroundTransparency = 1, Visible = not opts.compact, Parent = root },
+	local touchLayer
+	if opts.compact then
+		touchLayer = new("ScreenGui", { Name = "MenuTactile", ResetOnSpawn = false, ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets,
+			DisplayOrder = parent.DisplayOrder, Parent = parent.Parent })
+	end
+	local menu = new(opts.compact and "ScrollingFrame" or "Frame", { Name = "Menu",
+		Size = opts.compact and UDim2.new(0, 206, 0.78, -52) or UDim2.fromOffset(216, 0),
+		AutomaticSize = opts.compact and Enum.AutomaticSize.None or Enum.AutomaticSize.Y,
+		Position = UDim2.fromOffset(opts.compact and 12 or 16, opts.compact and 116 or 252),
+		BackgroundTransparency = 1, Visible = not opts.compact, Parent = touchLayer or root },
 		{ new("UIListLayout", { Padding = UDim.new(0, 4), SortOrder = Enum.SortOrder.LayoutOrder }) })
+	if opts.compact then
+		menu.CanvasSize = UDim2.new()
+		menu.AutomaticCanvasSize, menu.ScrollingDirection = Enum.AutomaticSize.Y, Enum.ScrollingDirection.Y
+		menu.BorderSizePixel, menu.ScrollBarThickness = 0, 4
+	end
 	self.menu = menu
 	local GuiService = game:GetService("GuiService")
 	local menuToggle
@@ -302,7 +316,7 @@ function Hud.build(parent: Instance, opts)
 		end
 	end
 	if opts.compact then
-		menuToggle = new("TextButton", { Name = "OuvrirMenu", Text = "☰  Menu", Font = BOLD, TextSize = 30, TextColor3 = TEXT, BackgroundColor3 = DARK, Size = UDim2.fromOffset(190, 66), Position = UDim2.fromOffset(16, 145), Parent = root }, { corner(9), stroke(EDGE, 2) })
+		menuToggle = new("TextButton", { Name = "OuvrirMenu", Text = "☰  Menu", Font = BOLD, TextSize = 18, TextColor3 = TEXT, BackgroundColor3 = DARK, Size = UDim2.fromOffset(132, 44), Position = UDim2.fromOffset(12, 66), Parent = touchLayer }, { corner(9), stroke(EDGE, 2) })
 		menuToggle.Activated:Connect(function()
 			if menu.Visible then
 				closeMenu()
@@ -313,7 +327,7 @@ function Hud.build(parent: Instance, opts)
 		end)
 	end
 	for i, m in opts.menu or {} do
-		local b = new("TextButton", { Name = m.id or m.label, Text = "", AutoButtonColor = true, BackgroundColor3 = DARK2, BackgroundTransparency = 0.10, Size = UDim2.fromOffset(216, 52), LayoutOrder = i, Parent = menu },
+		local b = new("TextButton", { Name = m.id or m.label, Text = "", AutoButtonColor = true, BackgroundColor3 = DARK2, BackgroundTransparency = 0.10, Size = opts.compact and UDim2.new(1, -6, 0, 44) or UDim2.fromOffset(216, 52), LayoutOrder = i, Parent = menu },
 			{ corner(10), stroke(EDGE, 1.5), grad(Color3.fromRGB(76, 58, 42), Color3.fromRGB(28, 23, 19)) })
 		b.Selectable = true
 		firstButton = firstButton or b
@@ -325,14 +339,14 @@ function Hud.build(parent: Instance, opts)
 		local icons = game:GetService("ReplicatedStorage"):FindFirstChild("IconesObjets")
 		local model = m.model and icons and icons:FindFirstChild(m.model)
 		local painted = m.id and require(script.Parent:WaitForChild("IconesPeintes"))
-		local holder = new("Frame", { Size = UDim2.fromOffset(56, 49), Position = UDim2.fromOffset(5, 1), BackgroundTransparency = 1, Parent = b })
+		local holder = new("Frame", { Size = opts.compact and UDim2.fromOffset(44, 42) or UDim2.fromOffset(56, 49), Position = UDim2.fromOffset(5, 1), BackgroundTransparency = 1, Parent = b })
 		local hasPainted = painted and painted.add("menu:" .. m.id, holder, UDim2.fromScale(0.9, 0.9), 2, false)
 		if not hasPainted and model and model:IsA("Model") then
 			Hud.objectViewport(model).Parent = holder
 		elseif not hasPainted then
-			text({ Text = m.icon, TextSize = 35, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(65, 52), Parent = b })
+			text({ Text = m.icon, TextSize = opts.compact and 25 or 35, TextXAlignment = Enum.TextXAlignment.Center, Size = opts.compact and UDim2.fromOffset(54, 44) or UDim2.fromOffset(65, 52), Parent = b })
 		end
-		text({ Text = m.label, Font = BOLD, TextSize = opts.compact and 23 or 18, TextStrokeTransparency = 0.6, Size = UDim2.new(1, opts.compact and -70 or -96, 1, 0), Position = UDim2.fromOffset(68, 0), Parent = b })
+		text({ Text = m.label, Font = BOLD, TextSize = opts.compact and 17 or 18, TextStrokeTransparency = 0.6, Size = UDim2.new(1, opts.compact and -70 or -96, 1, 0), Position = UDim2.fromOffset(68, 0), Parent = b })
 		if m.key and not opts.compact then
 			text({ Text = typeof(m.key) == "EnumItem" and m.key.Name or m.key, Font = BOLD, TextSize = 13, TextColor3 = DIM, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(28, 50), Position = UDim2.new(1, -32, 0, 0), Parent = b })
 		end

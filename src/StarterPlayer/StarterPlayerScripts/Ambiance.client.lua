@@ -517,7 +517,7 @@ do
 		for i = 0, 5 do
 			local v = i / 5
 			local on = math.abs(settings.vol - v) < 0.05
-			btn(volRow, i == 0 and "🔇" or tostring(i * 20), UDim2.fromOffset(46, 30), UDim2.fromOffset(i * 50, 2),
+			btn(volRow, i == 0 and "🔇" or tostring(i * 20), UDim2.new(1/6, -4, 0, 30), UDim2.new(i/6, 0, 0, 2),
 				on and GOLD or Color3.fromRGB(60, 50, 40), function()
 					settings.vol = v
 					dirty = true
@@ -529,7 +529,7 @@ do
 		for i = 0, 5 do
 			local v = i / 5
 			local on = math.abs(settings.music - v) < 0.05
-			btn(musicRow, i == 0 and "🔇" or tostring(i * 20), UDim2.fromOffset(46, 30), UDim2.fromOffset(i * 50, 2),
+			btn(musicRow, i == 0 and "🔇" or tostring(i * 20), UDim2.new(1/6, -4, 0, 30), UDim2.new(i/6, 0, 0, 2),
 				on and GOLD or Color3.fromRGB(60, 50, 40), function()
 					settings.music = v
 					dirty = true
