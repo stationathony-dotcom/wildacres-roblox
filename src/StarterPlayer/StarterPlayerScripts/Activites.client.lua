@@ -79,9 +79,12 @@ local function fit()
 	scale.Scale = math.min(1, (vp.X - 32) / 520, (vp.Y - 40) / 470)
 end
 label(panel, "📜  Tableau d'affichage", UDim2.new(1, -60, 0, 30), 20, GOLD, true).Position = UDim2.fromOffset(14, 8)
-button(panel, "X", UDim2.fromOffset(28, 28), Color3.fromRGB(190, 60, 50), function()
+local function dismiss()
 	panel.Visible = false
-end).Position = UDim2.new(1, -36, 0, 8)
+end
+local close = button(panel, "×", UDim2.fromOffset(28, 28), Color3.fromRGB(190, 60, 50), dismiss)
+close.Position = UDim2.new(1, -36, 0, 8)
+require(script.Parent:WaitForChild("WindowNav")).watch(panel, close, dismiss)
 
 local body = Instance.new("ScrollingFrame")
 body.BackgroundTransparency = 1

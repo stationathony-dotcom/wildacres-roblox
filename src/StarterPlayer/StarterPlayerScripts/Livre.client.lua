@@ -4,7 +4,6 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local UserInputService = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
 local remote = ReplicatedStorage:WaitForChild("Livre", 60)
@@ -90,11 +89,7 @@ local function hide()
 	gui.Enabled = false
 end
 close.Activated:Connect(hide)
-UserInputService.InputBegan:Connect(function(input)
-	if gui.Enabled and (input.KeyCode == Enum.KeyCode.Escape or input.KeyCode == Enum.KeyCode.ButtonB) then
-		hide()
-	end
-end)
+require(script.Parent:WaitForChild("WindowNav")).watch(frame, close, hide, gui)
 
 remote.OnClientEvent:Connect(function(d)
 	if type(d) ~= "table" or type(d.lignes) ~= "table" then

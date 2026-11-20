@@ -87,10 +87,12 @@ workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(fit)
 
 local title = label(panel, "", UDim2.new(1, -60, 0, 30), 20, GOLD, true)
 title.Position = UDim2.fromOffset(14, 8)
-local close = button(panel, "X", UDim2.fromOffset(28, 28), Color3.fromRGB(190, 60, 50), function()
+local function dismiss()
 	panel.Visible = false
-end)
+end
+local close = button(panel, "×", UDim2.fromOffset(28, 28), Color3.fromRGB(190, 60, 50), dismiss)
 close.Position = UDim2.new(1, -36, 0, 8)
+require(script.Parent:WaitForChild("WindowNav")).watch(panel, close, dismiss)
 
 local body = Instance.new("ScrollingFrame")
 body.BackgroundTransparency = 1

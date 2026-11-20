@@ -153,22 +153,16 @@ local function makePanel(name: string, title: string, size: UDim2, onClose: (() 
 		BackgroundColor3 = C.panel, BackgroundTransparency = 0.04, Visible = false, Parent = gui, ZIndex = 5,
 	}, { corner(14), stroke(C.line, 2.5) })
 	local t = label({ Text = title, Font = TITLE, TextSize = 24, TextColor3 = C.gold, Size = UDim2.new(1, -60, 0, 40), Position = UDim2.fromOffset(16, 8), Parent = f, ZIndex = 6 })
-	local close = button("X", C.red, function()
+	local function dismiss()
 		f.Visible = false
-		if onClose then
-			onClose()
-		end
-	end)
+		if onClose then onClose() end
+	end
+	local close = button("×", C.red, dismiss)
 	close.Size = UDim2.fromOffset(36, 36)
 	close.Position = UDim2.new(1, -46, 0, 10)
 	close.ZIndex = 6
 	close.Parent = f
-	WindowNav.watch(f, close, function()
-		f.Visible = false
-		if onClose then
-			onClose()
-		end
-	end)
+	WindowNav.watch(f, close, dismiss)
 	local body = new("ScrollingFrame", {
 		Size = UDim2.new(1, -24, 1, -64), Position = UDim2.fromOffset(12, 54), BackgroundTransparency = 1,
 		ScrollBarThickness = 6, ScrollBarImageColor3 = C.line, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y,
@@ -3560,14 +3554,14 @@ local function game_()
 	end)
 
 	local function placeNow()
-		if not building or not buildBlock or not ghostCF then
+		if WindowNav.isOpen() or not building or not buildBlock or not ghostCF then
 			return
 		end
 		local p = ghostCF.Position
 		send("build_place", { b = buildBlock, x = p.X, y = p.Y, z = p.Z, r = buildRot, f = buildFlip })
 	end
 	local function removeNow()
-		if not building then
+		if WindowNav.isOpen() or not building then
 			return
 		end
 		local hit = aim()
@@ -3927,6 +3921,7 @@ local function game_()
 		return true
 	end
 	local function hit()
+		if WindowNav.isOpen() then return end
 		local t = cibleApi.get()
 		send("hit", { target = t and t:GetAttribute("EnemyId") or nil })
 	end
@@ -3934,7 +3929,7 @@ local function game_()
 	-- Le serveur fixe la cadence (un coup / 0,25 s) : cliquer vite ne va pas plus vite.
 	local holding = 0
 	UserInputService.InputBegan:Connect(function(input, processed)
-		if processed or building then
+		if processed or building or WindowNav.isOpen() then
 			return
 		end
 		if input.KeyCode == Enum.KeyCode.ButtonR2 then
@@ -3951,7 +3946,7 @@ local function game_()
 			if strikeAim(tp) then
 				task.spawn(function()
 					task.wait(0.3)
-					while holding == me and not building and (touch or UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)) do
+					while holding == me and not building and not WindowNav.isOpen() and (touch or UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)) do
 						if input.UserInputState == Enum.UserInputState.End then
 							break
 						end

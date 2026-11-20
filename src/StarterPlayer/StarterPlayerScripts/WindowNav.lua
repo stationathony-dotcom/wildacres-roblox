@@ -10,12 +10,31 @@ local function usesGamepad()
 	return UserInputService:GetLastInputType().Name:match("^Gamepad") ~= nil
 end
 
+local function topWindow()
+	local top
+	for _, entry in open do
+		if not top or entry.layer.DisplayOrder >= top.layer.DisplayOrder then
+			top = entry
+		end
+	end
+	return top
+end
+
 function WindowNav.isOpen()
 	return #open > 0
 end
 
-function WindowNav.watch(panel, closeButton, close)
-	local entry = { panel = panel, focus = closeButton, close = close }
+local function focusTop()
+	local top = topWindow()
+	if top and usesGamepad() then
+		GuiService.SelectedObject = top.focus
+	end
+end
+
+function WindowNav.watch(panel, closeButton, close, screen)
+	local layer = panel:FindFirstAncestorWhichIsA("ScreenGui")
+	local source, property = screen or panel, screen and "Enabled" or "Visible"
+	local entry = { focus = closeButton, close = close, layer = layer }
 	closeButton.Text = "×"
 	closeButton.Selectable = true
 	panel.Active = true
@@ -24,32 +43,44 @@ function WindowNav.watch(panel, closeButton, close)
 	panel.SelectionBehaviorDown = Enum.SelectionBehavior.Stop
 	panel.SelectionBehaviorLeft = Enum.SelectionBehavior.Stop
 	panel.SelectionBehaviorRight = Enum.SelectionBehavior.Stop
-	panel:GetPropertyChangedSignal("Visible"):Connect(function()
-		if panel.Visible then
+	local function sync()
+		local index = table.find(open, entry)
+		if source[property] then
+			if index then return end
 			entry.previous = GuiService.SelectedObject
 			table.insert(open, entry)
-			if usesGamepad() then
-				GuiService.SelectedObject = closeButton
+			focusTop()
+		elseif index then
+			local wasTop = topWindow() == entry
+			table.remove(open, index)
+			if wasTop and usesGamepad() then
+				if topWindow() then
+					focusTop()
+				else
+					GuiService.SelectedObject = entry.previous
+				end
 			end
-			return
 		end
+	end
+	source:GetPropertyChangedSignal(property):Connect(sync)
+	source.Destroying:Connect(function()
 		local index = table.find(open, entry)
-		if not index then return end
-		table.remove(open, index)
-		if usesGamepad() and index > #open then
-			local previous = open[#open]
-			GuiService.SelectedObject = previous and previous.focus or entry.previous
+		if index then
+			table.remove(open, index)
+			focusTop()
 		end
 	end)
+	sync()
 end
 
 function WindowNav.bindMenu(menu, toggle, close)
+	UserInputService.LastInputTypeChanged:Connect(focusTop)
 	ContextActionService:BindActionAtPriority("WildAcresMenu", function(_, state)
 		if state == Enum.UserInputState.Begin then toggle() end
 		return Enum.ContextActionResult.Sink
 	end, false, Enum.ContextActionPriority.High.Value, Enum.KeyCode.ButtonSelect)
 	ContextActionService:BindActionAtPriority("WildAcresRetour", function(_, state)
-		local entry = open[#open]
+		local entry = topWindow()
 		local selected = GuiService.SelectedObject
 		if not entry and not (selected and selected:IsDescendantOf(menu)) then
 			return Enum.ContextActionResult.Pass
@@ -60,7 +91,7 @@ function WindowNav.bindMenu(menu, toggle, close)
 		return Enum.ContextActionResult.Sink
 	end, false, Enum.ContextActionPriority.High.Value, Enum.KeyCode.ButtonB)
 	UserInputService.InputBegan:Connect(function(input)
-		local entry = open[#open]
+		local entry = topWindow()
 		if entry and input.KeyCode == Enum.KeyCode.Escape and not UserInputService:GetFocusedTextBox() then
 			entry.close()
 		end
