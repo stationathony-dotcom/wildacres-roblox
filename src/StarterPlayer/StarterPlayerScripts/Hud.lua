@@ -303,6 +303,7 @@ function Hud.build(parent: Instance, opts)
 	end
 	self.menu = menu
 	local GuiService = game:GetService("GuiService")
+	local nav = opts.gamepad and require(script.Parent:WaitForChild("WindowNav"))
 	local menuToggle
 	local firstButton
 	local lastButton
@@ -352,6 +353,13 @@ function Hud.build(parent: Instance, opts)
 		end
 		if m.fn then
 			b.Activated:Connect(function()
+				if nav and GuiService.SelectedObject == b then
+					nav.rememberMenu(function()
+						menu.Visible = true
+						if menuToggle then menuToggle.Text = "×  Fermer" end
+						GuiService.SelectedObject = b
+					end)
+				end
 				closeMenu()
 				m.fn()
 			end)
@@ -362,13 +370,12 @@ function Hud.build(parent: Instance, opts)
 		firstButton.NextSelectionUp = lastButton
 		lastButton.NextSelectionDown = firstButton
 	end
-	if firstButton and opts.gamepad then
-		local WindowNav = require(script.Parent:WaitForChild("WindowNav"))
-		WindowNav.bindMenu(menu, function()
+	if firstButton and nav then
+		nav.bindMenu(menu, function()
 			local selected = GuiService.SelectedObject
 			if selected and selected:IsDescendantOf(menu) then
 				closeMenu()
-			elseif not WindowNav.isOpen() then
+			elseif not nav.isOpen() then
 				menu.Visible = true
 				if menuToggle then
 					menuToggle.Text = "×  Fermer"

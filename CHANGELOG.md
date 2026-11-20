@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Manette** : revenir ferme la fenêtre au premier plan puis sélectionne à nouveau le bouton depuis lequel elle a été ouverte.
 - **Silhouettes** : la forme des armes et du casque nasal sert aussi de secours hors des miniatures générées. Les lames de récolte ont un profil courbe.
 - **Tactile** : menu défilant avec lignes de 44 px, formulaire au-dessus du clavier et six niveaux audio dans la largeur disponible.
 - **Audio** : six effets préchargés avec succès. L’erreur 203785492 provient du préchargement du son de notification par le plugin Rojo.

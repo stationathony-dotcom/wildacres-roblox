@@ -6,6 +6,7 @@ local UserInputService = game:GetService("UserInputService")
 
 local WindowNav = {}
 local open = {}
+local menuReturn
 
 local function usesGamepad()
 	return UserInputService:GetLastInputType().Name:match("^Gamepad") ~= nil
@@ -32,10 +33,17 @@ local function focusTop()
 	end
 end
 
+function WindowNav.rememberMenu(restore)
+	menuReturn = restore
+	task.delay(3, function()
+		if menuReturn == restore then menuReturn = nil end
+	end)
+end
+
 function WindowNav.watch(panel, closeButton, close, screen)
 	local layer = panel:FindFirstAncestorWhichIsA("ScreenGui")
 	local source, property = screen or panel, screen and "Enabled" or "Visible"
-	local entry = { focus = closeButton, close = close, layer = layer }
+	local entry = { panel = panel, focus = closeButton, close = close, layer = layer }
 	closeButton.Text = "×"
 	closeButton.Selectable = true
 	panel.Active = true
@@ -48,7 +56,8 @@ function WindowNav.watch(panel, closeButton, close, screen)
 		local index = table.find(open, entry)
 		if source[property] then
 			if index then return end
-			entry.previous = GuiService.SelectedObject
+			entry.previous, entry.restoreMenu = GuiService.SelectedObject, menuReturn
+			menuReturn = nil
 			table.insert(open, entry)
 			local player = Players.LocalPlayer
 			local sound = player and player:FindFirstChild("SonInterface")
@@ -58,10 +67,16 @@ function WindowNav.watch(panel, closeButton, close, screen)
 			local wasTop = topWindow() == entry
 			table.remove(open, index)
 			if wasTop and usesGamepad() then
-				if topWindow() then
+				local parentWindow = topWindow()
+				local prior = entry.previous
+				if parentWindow and prior and prior:IsDescendantOf(parentWindow.panel) then
+					GuiService.SelectedObject = prior
+				elseif parentWindow then
 					focusTop()
+				elseif entry.restoreMenu then
+					entry.restoreMenu()
 				else
-					GuiService.SelectedObject = entry.previous
+					GuiService.SelectedObject = prior and prior.Parent and prior or nil
 				end
 			end
 		end
