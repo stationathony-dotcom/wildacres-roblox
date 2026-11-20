@@ -590,12 +590,10 @@ function Game.step(dt: number)
 				local moving = last and Vector3.new(pos.X - last.X, 0, pos.Z - last.Z).Magnitude > 0.5
 				local riding = p:GetAttribute("Riding")
 				local running = sprinting[p] and not riding and moving and st > 0.05
-				-- Systemes/Froid : neige la nuit sans chaleur, ou désert en plein jour sans ombre ni eau
-				local cold = p:GetAttribute("Froid") == true or p:GetAttribute("Soif") == true
 				if running then
 					st = math.max(0, st - step * G.Config.SPRINT_DRAIN)
 				else
-					st = math.min(maxSt, st + step * (cold and 1 or 2))
+					st = math.min(maxSt, st + step * 2)
 				end
 				if not sleepers[p] then
 					local target = base
@@ -606,9 +604,6 @@ function Game.step(dt: number)
 					end
 					if (p:GetAttribute("SlowUntil") or 0) > os.clock() then
 						target *= 0.6 -- poison / toile (Enemies)
-					end
-					if cold and not riding then
-						target *= 0.85 -- engourdi par le froid
 					end
 					if p:GetAttribute("Enlise") then
 						target *= 0.8 -- boue des marais (Froid.isStuck)

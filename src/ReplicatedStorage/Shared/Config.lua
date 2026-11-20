@@ -558,7 +558,7 @@ C.TALENTS = {
 	{ id = "cartographe", tree = "explorateur", name = "Cartographe", max = 2, req = 0, desc = "Entrer dans une région dévoile aussi les régions voisines sur ta carte (rang 2 : deux régions autour)." },
 	{ id = "prospecteur", tree = "explorateur", name = "Prospecteur", max = 2, req = 1, desc = "Plus de trouvailles en minant et en fouillant (+2 de chance par rang)." },
 	{ id = "archeologue", tree = "explorateur", name = "Archéologue", max = 1, req = 2, desc = "En minant et en fouillant, tu tombes parfois sur une page ancienne (3 %)." },
-	{ id = "survivaliste", tree = "explorateur", name = "Survivaliste", max = 1, req = 2, desc = "Ni le froid de la neige ni la chaleur du désert ne te ralentissent." },
+	{ id = "survivaliste", tree = "explorateur", name = "Survivaliste", max = 1, req = 2, desc = "La boue des marais ne t'enlise plus et tu y vois dans le noir des grottes." },
 	{ id = "decouvreur", tree = "explorateur", name = "Découvreur", max = 2, req = 3, desc = "Chaque lieu découvert rapporte 20 or par rang et entraîne deux fois plus tes caractéristiques." },
 	{ id = "aventurier", tree = "explorateur", name = "Aventurier", max = 1, req = 4, excl = "explorateur_maitre", desc = "La diligence te coûte moitié prix. Exclusif avec Chasseur de trésors." },
 	{ id = "chasseur_tresor", tree = "explorateur", name = "Chasseur de trésors", max = 1, req = 4, excl = "explorateur_maitre", desc = "Les trésors des cartes rapportent 50 % d'or et un objet de plus. Exclusif avec Aventurier." },

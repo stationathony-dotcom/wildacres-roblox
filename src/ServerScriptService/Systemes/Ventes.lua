@@ -86,7 +86,7 @@ end
 -- ---------------------------------------------------------------- renom d'artisan
 -- Une pièce SIGNÉE (Shop.craft : makerId) achetée par un autre joueur, ici, fait monter le renom de son
 -- artisan (par monde : G.world.renom). Paliers : titre affiché à l'hôtel des ventes, et la qualité de
--- façon s'améliore un peu (Shop.craft : Ventes.renownBonus).
+-- titre affiché à l'hôtel des ventes (plus de qualité de façon depuis le 20/11).
 Ventes.RENOWN = { { 5, "connu" }, { 15, "réputé" }, { 40, "maître reconnu" }, { 100, "illustre" } }
 
 function Ventes.renown(uid: number?): number
@@ -102,11 +102,6 @@ function Ventes.renownTier(uid: number?): (number, string?)
 		end
 	end
 	return tier, name
-end
-
--- bonus de compétence pour la QUALITÉ de façon seulement (3 par palier)
-function Ventes.renownBonus(player: Player): number
-	return 3 * (Ventes.renownTier(player.UserId))
 end
 
 local function addRenown(piece, buyerId: number)

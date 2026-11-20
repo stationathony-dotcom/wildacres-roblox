@@ -1,29 +1,21 @@
--- Météo et saisons (étape 17). Un état pour tout le monde, qui change toutes les 1 h 30 à 5 h de jeu :
+-- Météo (étape 17). Un état pour tout le monde, qui change toutes les 1 h 30 à 5 h de jeu :
 --   clair · nuageux · pluie · orage · brouillard  (+ vent qui accompagne nuageux / orage)
--- Les saisons tournent tous les 7 jours (printemps, été, automne, hiver) et pèsent sur le tirage.
+-- PAS DE SAISONS (décision du 20/11, confirmée : les biomes les remplacent) : un seul tirage pour tout l'an.
 -- Rien n'est annoncé (principe du jeu) : on VOIT la pluie, on ENTEND l'orage. Le client dessine
--- (script Ambiance) d'après les attributs du Workspace : Weather, WeatherT (0-1), Season.
+-- (script Ambiance) d'après les attributs du Workspace : Weather, WeatherT (0-1).
 --
 -- Effets réels :
 --  · pluie / orage : arrosent toutes les cultures plantées (même dans les régions sans joueur) ;
 --  · orage : la foudre tombe près des joueurs dehors (dégâts si on est dessous, à découvert) ;
 --  · brouillard : les témoins voient deux fois moins loin (Meteo.sightMult), la nuit aussi ;
---  · pluie : les poissons mordent plus vite (Meteo.biteMult) ;
---  · hiver : les cultures poussent un jour sur deux (sauf sous serre, plus tard) ; été : rien de plus.
+--  · pluie : les poissons mordent plus vite (Meteo.biteMult).
 -- L'état est sauvegardé avec le monde (G.world.extra.meteo) : un serveur qui redémarre le reprend.
 
 local Meteo = {}
 local G, Config
 
-local SEASONS = { "printemps", "ete", "automne", "hiver" }
-local SEASON_DAYS = 7
--- poids de tirage par saison
-local WEIGHTS = {
-	printemps = { clair = 4, nuageux = 3, pluie = 3, orage = 1, brouillard = 1 },
-	ete = { clair = 7, nuageux = 2, pluie = 1, orage = 1.5, brouillard = 0.3 },
-	automne = { clair = 2, nuageux = 3, pluie = 4, orage = 1, brouillard = 2.5 },
-	hiver = { clair = 3, nuageux = 3, pluie = 2.5, orage = 0.3, brouillard = 3 },
-}
+-- poids du tirage (moyenne des anciennes saisons)
+local WEIGHTS = { clair = 4, nuageux = 2.75, pluie = 2.6, orage = 0.95, brouillard = 1.7 }
 local WATER_EVERY = 30 -- minutes de jeu entre deux « arrosages » sous la pluie
 local STRIKE_MIN, STRIKE_MAX = 25, 70 -- secondes réelles entre deux éclairs
 local STRIKE_DAMAGE = 35
@@ -40,10 +32,6 @@ local function state()
 		G.world.extra.meteo = m
 	end
 	return m
-end
-
-function Meteo.season(): string
-	return SEASONS[(math.floor(((G.world.day or 1) - 1) / SEASON_DAYS) % 4) + 1]
 end
 
 function Meteo.kind(): string
@@ -73,24 +61,21 @@ function Meteo.biteMult(): number
 	return Meteo.isWet() and 0.65 or 1
 end
 
--- Hiver : une poussée de culture sur deux
+-- Les cultures poussent tous les jours (plus d'hiver)
 function Meteo.cropGrows(): boolean
-	if Meteo.season() == "hiver" then
-		return (G.world.day or 1) % 2 == 0
-	end
 	return true
 end
 
 local function publish()
 	local m = state()
 	workspace:SetAttribute("Weather", m.kind)
-	workspace:SetAttribute("Season", Meteo.season())
+	workspace:SetAttribute("Season", nil)
 	workspace:SetAttribute("WeatherT", m.intensity or 1)
 end
 
 local function roll()
 	local m = state()
-	local w = WEIGHTS[Meteo.season()]
+	local w = WEIGHTS
 	local total = 0
 	for _, v in w do
 		total += v
@@ -211,12 +196,12 @@ function Meteo.step(dt: number)
 end
 
 function Meteo.newDay()
-	publish() -- la saison a pu changer
+	publish()
 end
 
 -- Outil de test / admin : forcer un temps (ex. DbgAppel "Meteo.force", "orage")
 function Meteo.force(kind: string, minutes: number?)
-	if not WEIGHTS.printemps[kind] then
+	if not WEIGHTS[kind] then
 		return false
 	end
 	local m = state()

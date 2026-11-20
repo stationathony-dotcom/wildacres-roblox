@@ -233,6 +233,7 @@ function E.bagToolBonus(inv, skill: string): number
 end
 E.TACK = { saddle_race = 1.15, saddle_leather = 1.08 } -- la meilleure selle compte ; étriers en plus
 E.STIRRUPS = 1.05
+E.HORSE_BLANKET = 1.03 -- couverture dans le sac : la monture garde mieux son allure (Horses)
 -- armes de jet (emplacement Arme, tir à distance) : { nom, rareté, stats, dégâts, munition, ingrédients, niveau }
 E.RANGED_GEAR = {
 	{ "Fronde", 1, { chance = 2, vitesse = 1 }, 3, "stone", { leather = 1, rope = 1 }, 0 },
@@ -771,8 +772,7 @@ function E.setText(item): string?
 end
 
 -- 13. PIÈCES DE CRÉATURES (Shared/Prises) : stats selon la FAMILLE de la matière (avant : tirées au
---     hasard, ex. « talisman d'essence d'assassin » en Force + Charisme). Total gardé. Les bêtes du
---     froid donnent des pièces qui tiennent chaud (Systemes/Froid lit piece.warm).
+--     hasard, ex. « talisman d'essence d'assassin » en Force + Charisme). Total gardé.
 -- { mots de la matière (minuscules), poids }
 E.CREATURE_FAMILY = {
 	{ { "poussière", "pollen", "gelée royale" }, { chance = 1, vie = 0.4 } }, -- avant « gelée »
@@ -799,7 +799,6 @@ E.CREATURE_FAMILY = {
 	{ { "turban", "bosse" }, { vie = 1, vitesse = 0.4 } },
 	{ { "soie" }, { discretion = 0.8, vitesse = 0.7 } },
 }
-E.COLD_WORDS = { "polaire", "blizzard", "glace", "givre", "yéti", "neige", "hiver", "blanc" }
 -- effet au toucher des ARMES de créatures (Systemes/Combat) : { mots de la matière, effet }
 E.WEAPON_EFFECT = {
 	{ { "venin", "dard", "glande à venin" }, "venin" },
@@ -915,15 +914,6 @@ function E.finish(C)
 						if not g.effect and string.find(n, w, 1, true) then
 							g.effect = fx[2]
 						end
-					end
-				end
-			end
-			if mat then
-				local n = lower(mat.name or "")
-				for _, w in E.COLD_WORDS do
-					if string.find(n, w, 1, true) then
-						g.warm = true
-						break
 					end
 				end
 			end

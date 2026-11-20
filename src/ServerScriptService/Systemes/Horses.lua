@@ -379,6 +379,10 @@ function Horses.mount(player: Player, h)
 		if G.Joueurs.has(player, "stirrups") then
 			tack *= Eq.STIRRUPS or 1
 		end
+		-- couverture de cheval dans le sac (« liste items.txt » ; elle tenait chaud au cavalier avant le 20/11)
+		if G.Joueurs.has(player, "blanket") then
+			tack *= Eq.HORSE_BLANKET or 1
+		end
 	end
 	player:SetAttribute("MountSpeed", (Config.MOUNTS[h.species] or Config.MOUNTS.cheval).speed * (shod and (Config.SHOD_BONUS or 1) or 1) * (h.allure or 1) * (1 + 0.12 * G.Joueurs.talent(player, "cavalier")) * tack) -- allure (Game)
 	player:SetAttribute("Riding", true)

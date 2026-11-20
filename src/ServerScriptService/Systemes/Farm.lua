@@ -1,5 +1,5 @@
 -- Cultures : bêcher (houe), semer (graines de saison), arroser (arrosoir), récolter.
--- Une culture arrosée gagne un stade par nuit ; hors saison elle flétrit ; l'hiver rien ne pousse.
+-- Une culture arrosée gagne un stade par nuit (pas de saisons : les biomes décident des cultures).
 -- Les champs des fermiers et les plants sauvages suivent les mêmes règles (récolter ceux d'un
 -- fermier = vol).
 
@@ -562,7 +562,7 @@ function Farm.refreshAll()
 end
 
 function Farm.newDay()
-	-- la pluie arrose désormais en direct (Meteo) ; l'hiver, on ne pousse qu'un jour sur deux
+	-- la pluie arrose désormais en direct (Meteo)
 	local grows = not G.Meteo or not G.Meteo.cropGrows or G.Meteo.cropGrows()
 	for _, rs in G.world.regions do
 		for _, st in rs.tilled or {} do

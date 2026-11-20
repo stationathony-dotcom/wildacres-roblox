@@ -40,9 +40,9 @@ respecte. En cas de doute : ne pas le faire, le noter dans `docs/LOTS.md` § « 
    puis posées depuis la main.
 9. **Créatures originales.** Pas de zombies ni de squelettes « classiques » (jugés « plagiat »).
    Violence adoucie : on assomme, on cache le corps.
-10. **Volontairement absents** (ne pas les ajouter) : saisons (remplacées par les biomes — un reste
-    tourne dans `Meteo.lua`, décision en attente), tutoriel, guerres déclarées, jeux de dés / casino,
-    achats en Robux.
+10. **Volontairement absents** (ne pas les ajouter) : saisons (remplacées par les biomes), froid / chaleur /
+    soif (pas de survie), qualité de façon et signature des pièces (tranché le 20/11), tutoriel, guerres
+    déclarées, jeux de dés / casino, achats en Robux.
 11. **Interface = image cible** (`images/hud-village-16-9.png`, `Aventure à Valdor dans Wild Acres.png`) :
     HUD MMO aux proportions de l'image (`Hud.scaleFor`, réf. 1672×941). Ne pas le regrossir.
     Icônes plutôt que lettres.
