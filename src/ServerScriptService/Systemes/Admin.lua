@@ -165,7 +165,7 @@ end
 
 local ADMIN = {}
 ADMIN.aide = function(player)
-	say(player, "/wa etat · meteo · coupe · rallume · annonce · sauver · ferme · versions · restaurer · donner · journal · perf · terrain · joueur · avertir · muet · expulser · bannir")
+	say(player, "/wa etat · demandes · repondre · clore · meteo · coupe · rallume · annonce · sauver · ferme · versions · restaurer · donner · journal · perf · terrain · joueur · avertir · muet · expulser · bannir · debannir")
 end
 
 -- erreurs du serveur depuis son démarrage (tableau de bord /wa etat)
@@ -351,16 +351,51 @@ ADMIN.bannir = function(player, args)
 	end
 	G.Economie.record(t, "sanction", "banni " .. days .. " j : " .. why)
 	G.Save.save(t, true)
-	local ok, err = pcall(function()
-		Players:BanAsync({ UserIds = { t.UserId }, ApplyToUniverse = true, Duration = days * 86400,
-			DisplayReason = "Banni " .. days .. " jour(s) : " .. (why ~= "" and why or "comportement"), PrivateReason = "par " .. player.UserId .. " : " .. why })
-	end)
-	if not ok then
-		t:Kick("Banni " .. days .. " jour(s) : " .. (why ~= "" and why or "comportement"))
-		say(player, "Bannissement Roblox indisponible (" .. tostring(err) .. ") : expulsé à la place.")
-	else
-		say(player, "Banni " .. days .. " jour(s).")
+	-- bannissement du jeu (Systemes/Demandes), pas celui de Roblox : le banni garde l'écran d'accueil
+	-- pour faire appel (/appel), sans pouvoir entrer dans un monde ni parler aux autres
+	local info = G.Demandes.ban(t.UserId, days, why, player.Name)
+	t:Kick(G.Demandes.banText(info) .. ". Pour contester, rejoins l'écran d'accueil du jeu et tape /appel <ton explication>.")
+	say(player, "Banni " .. days .. " jour(s). (/wa debannir " .. t.UserId .. " pour lever)")
+end
+ADMIN.debannir = function(player, args)
+	local uid = tonumber(args[1])
+	if not uid then
+		return say(player, "/wa debannir <userId>")
 	end
+	G.Demandes.unban(uid)
+	G.Economie.record(player, "sanction", "débanni " .. uid)
+	say(player, "Bannissement levé pour " .. uid .. ".")
+end
+-- file des demandes, bugs et appels (Systemes/Demandes)
+ADMIN.demandes = function(player, args)
+	local kind = args[1] and G.Demandes.KINDS[args[1]] and args[1] or nil
+	local list = G.Demandes.list(kind, args[2] == "tout")
+	if #list == 0 then
+		return say(player, "Aucune demande ouverte" .. (kind and (" (" .. kind .. ")") or "") .. ".")
+	end
+	say(player, #list .. " ouverte(s) — /wa repondre <n°> <texte> · /wa clore <n°>")
+	for i = 1, math.min(8, #list) do
+		local e = list[i]
+		say(player, string.format("%s n°%d · %s · %s : %s  [%s]", G.Demandes.KINDS[e.kind] or e.kind, e.id, e.name, os.date("!%d/%m %H:%M", e.t),
+			string.sub(e.text, 1, 140), e.ctx or ""))
+	end
+end
+ADMIN.repondre = function(player, args)
+	local id = tonumber(args[1])
+	local text = table.concat(args, " ", 2)
+	if not id or text == "" then
+		return say(player, "/wa repondre <n°> <texte>")
+	end
+	local _, msg = G.Demandes.reply(player, id, text)
+	say(player, msg)
+end
+ADMIN.clore = function(player, args)
+	local id = tonumber(args[1])
+	if not id then
+		return say(player, "/wa clore <n°>")
+	end
+	local _, msg = G.Demandes.reply(player, id, "", true)
+	say(player, msg)
 end
 ADMIN.terrain = function(player, args)
 	local root = G.Util.root(player)
@@ -654,7 +689,7 @@ local function onCommand(player: Player, text: string)
 		end
 	end
 	if cmd == "/aide" then
-		say(player, "💬 /coince · /signaler <pseudo> <motif> · /bloquer · /debloquer · /bloques")
+		say(player, "💬 /coince · /signaler <pseudo> <motif> · /bloquer · /debloquer · /bloques · 📨 /demande · 🐞 /bug · ⚖️ /appel <message>")
 		say(player, "🔑 /autoriser <pseudo> [coffres|batir] · /retirer · /autorises · /ceder <pseudo> · /louer <pseudo> <jours> <prix> · /accepter")
 		say(player, "📦 /commande <objet> <n> <prix> · /commandes · /livrer <n°> · /annuler <n°> · 🧱 /demonter <rayon> · 📐 /plan · 🏘️ /reputation · 📜 /chroniques · 🐴 /ecurie · ⚔️ /armee · 👨‍🌾 /ouvriers · 📕 /bestiaire · 🐾 /animaux · 🌾 /cultures · 🏰 /fonder <nom> · /villes · 🏆 /classement · ⚒️ /renom")
 		say(player, "💃 /danse · 👋 /salut · 👏 /applaudir · 🙇 /reverence")
@@ -727,6 +762,15 @@ local function onCommand(player: Player, text: string)
 		G.Livres.cultures(player)
 	elseif cmd == "/ouvriers" then
 		say(player, G.Ouvriers.describe(player))
+	elseif cmd == "/demande" or cmd == "/bug" or cmd == "/appel" then
+		-- texte brut (les mots ne passent pas par le filtre des nombres des autres commandes)
+		local raw = string.match(text, "^%S+%s+(.+)$") or ""
+		local kind = string.sub(cmd, 2)
+		local ok, msg = G.Demandes.submit(player, kind, raw)
+		if not ok and raw == "" then
+			msg = "/" .. kind .. " <ton message>  (au moins 10 lettres ; l'équipe te répond ici)"
+		end
+		say(player, msg, ok and "gain" or "danger")
 	elseif cmd == "/armee" then
 		local o = string.lower(args[1] or "")
 		if G.Armee.ORDERS[o] then
@@ -880,7 +924,7 @@ function Admin.init(g)
 	local folder = TextChatService:FindFirstChild("CommandesWA") or Instance.new("Folder")
 	folder.Name = "CommandesWA"
 	folder.Parent = TextChatService
-	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques", "/ecurie", "/ouvriers", "/bestiaire", "/animaux", "/cultures", "/fonder", "/villes", "/classement", "/renom", "/danse", "/salut", "/applaudir", "/reverence" } do
+	for _, alias in { "/wa", "/bloquer", "/debloquer", "/bloques", "/autoriser", "/retirer", "/autorises", "/coince", "/signaler", "/ceder", "/accepter", "/louer", "/commande", "/commandes", "/livrer", "/annuler", "/aide", "/demonter", "/plan", "/reputation", "/chroniques", "/ecurie", "/ouvriers", "/bestiaire", "/animaux", "/cultures", "/fonder", "/villes", "/classement", "/renom", "/danse", "/salut", "/applaudir", "/reverence", "/armee", "/demande", "/bug", "/appel" } do
 		local c = folder:FindFirstChild(alias) or Instance.new("TextChatCommand")
 		c.Name = alias
 		c.PrimaryAlias = alias

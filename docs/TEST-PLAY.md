@@ -103,6 +103,14 @@ La téléportation ne marche pas dans Studio : il faut la version publiée.
 3. [ ] Ouvrir la carte [M] la première fois : combien de temps avant qu'elle s'affiche ?
 4. [ ] Traverser l'île à cheval au galop : des trous dans le sol, des régions qui arrivent en retard ?
 
+## P8. Demandes, bugs, appel (5 min)
+
+1. [ ] `/bug Je teste le signalement de bug` → message « 🐞 Bug n°… reçue ».
+2. [ ] En admin : `/wa demandes bug` montre ta demande avec la position et le monde ; `/wa repondre <n°> Merci`
+       → la réponse s'affiche. Refaire en se déconnectant avant la réponse : elle arrive à la reconnexion.
+3. [ ] Avec un 2e compte : `/wa bannir <pseudo> 1 test` → il est expulsé avec le message d'appel ; en revenant,
+       il arrive sur l'accueil, ne peut pas entrer dans un monde, et `/appel …` marche. `/wa debannir <userId>`.
+
 ## Ce qu'il faut aussi noter (même si « ça marche »)
 
 - Ce que tu n'as **pas compris** tout seul (sans tutoriel, il faut que le monde le fasse comprendre).

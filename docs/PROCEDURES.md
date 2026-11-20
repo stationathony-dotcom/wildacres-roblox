@@ -38,7 +38,12 @@
   prévenus. `/bloquer <pseudo>` coupe invitations, échanges, courrier et annonces de ce joueur.
 - Traitement : un admin lit `/wa journal`, regarde `/wa joueur`, sanctionne si besoin (section 2.4).
 
-## 4. Appel d'une sanction (À DÉCIDER)
-- Il faut un canal de contact hors jeu (groupe Roblox, serveur communautaire…) : **à choisir**.
-- Une sanction injustifiée se lève : bannissement → `Players:UnbanAsync` (console de l'expérience),
-  avertissement → remettre `warnings` à zéro via restauration ou correction admin.
+## 4. Demandes, bugs et appel d'une sanction (décidé le 20/11 : dans le jeu)
+- Le joueur écrit `/demande <texte>`, `/bug <texte>` ou `/appel <texte>` (3 par jour). Pour un bug, la position,
+  le biome, le monde, le jour et le serveur sont joints tout seuls. Les admins présents sont prévenus.
+- Un **banni** ne peut entrer dans aucun monde, mais il peut rester sur l'écran d'accueil (muet pour les autres)
+  et y taper `/appel`. Le bannissement n'est plus celui de Roblox (qui fermait toute porte) : `Systemes/Demandes`.
+- Traitement : `/wa demandes [bug|appel|demande]` (les 8 plus récentes ouvertes), `/wa repondre <n°> <texte>`
+  (réponse tout de suite, ou à la prochaine connexion du joueur, sur n'importe quel serveur), `/wa clore <n°>`.
+- Sanction injustifiée : `/wa debannir <userId>` ; avertissement → remettre `warnings` à zéro (restauration ou
+  correction admin) ; répondre à l'appel pour le dire au joueur.

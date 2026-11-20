@@ -6,6 +6,10 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Retirés** (décision du 20/11) : les **saisons** (météo tirée pareil toute l'année, les cultures poussent tous les jours), le **froid et la chaleur** (plus d'état « Froid » ni « Soif » ; la boue des marais et l'obscurité des grottes restent ; talent Survivaliste = ni boue ni obscurité ; la couverture devient une couverture de cheval, +3 % d'allure), la **qualité de façon et la signature** des pièces
+- **Demandes à l'équipe** (`Systemes/Demandes`) : `/demande`, `/bug` (position, biome, monde, jour joints), `/appel` — 3 par jour, texte filtré, réponse des admins livrée tout de suite ou à la prochaine connexion ; admins : `/wa demandes`, `/wa repondre`, `/wa clore`, `/wa debannir`
+- **Bannissement maison** : un banni n'entre dans aucun monde mais garde l'écran d'accueil (ses messages ne sont remis à personne) pour faire appel
+- **Correctif** : `/armee` n'était pas enregistrée comme commande de chat
 - **Outils de métier du sac** (17, tirés de `liste items.txt`) : marteau d'artisan, aiguille, fuseau, scie à main, faucille, râteau, ciseau de tailleur, piolet, mortier et pilon, rouleau à pâtisserie, tamis, filet de pêche (+2), flotteur, licol, laisse, fourche à foin, étiquettes de prix — gardés dans le sac, ils donnent +1 dans leur métier (au plus +3 par métier, ne débloquent rien)
 - **Tableau de bord admin** `/wa etat` : ce serveur (monde, durée, joueurs, mémoire, physique), dernière sauvegarde du monde et sa taille, verrou perdu ou secteurs illisibles, erreurs depuis le démarrage, mondes en ligne
 - **Équilibre économique** : banc `economie` (or par minute de chaque activité avec les vraies données → `docs/EQUILIBRE-ECONOMIE.md`) ; la pêche rapportait 2,5 à 4 fois la médiane sans risque → poisson cru revendu 40 % moins cher (`Equilibre.FISH_PRICE`, le poisson cuisiné garde sa valeur) ; les créatures de niveau 7 à 9 restent au-dessus (prix du danger)

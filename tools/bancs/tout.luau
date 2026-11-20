@@ -18,7 +18,7 @@ local URL = "http://127.0.0.1:34873/banc?f="
 
 local RAPIDES = {
 	"animaux", "apparence", "arc", "armee", "audit_contenu", "bestiaire_livre", "bosquets", "butin", "chantiers",
-	"chasse_au_tresor", "chroniques", "courrier_reprise", "course", "demandes", "diligence", "ecurie", "economie",
+	"chasse_au_tresor", "chroniques", "courrier_reprise", "course", "demandes", "demandes_joueurs", "diligence", "ecurie", "economie",
 	"equilibre", "fauche", "formes", "froid", "herbes", "mecanismes", "moissons", "ouvriers", "quetes",
 	"quetes_lieux", "relations_pnj", "reputation", "resistance", "roue_eau", "save_instantane",
 	"securite", "selection", "sommeil_collectif", "stats", "talents", "tourelles", "usure", "ventes", "villes",

@@ -13,13 +13,12 @@ ou marquée « volontairement absent »), en respectant les règles d'`AGENTS.md
 
 Ne pas toucher à ces sujets avant la réponse. Écrire la réponse ici quand elle arrive.
 
-- [ ] **Saisons** : `Meteo.lua` fait encore tourner des saisons (hiver = cultures un jour sur deux)
-      alors qu'elles devaient être remplacées par les biomes. Les retirer, ou les garder ?
-- [ ] **Froid / chaleur** (`Systemes/Froid`, 19/11) : `AUDIT.md` disait « survie volontairement
-      absente ». On garde ?
-- [ ] **Qualité de façon** (pièces de meilleure qualité + signature, 19/11) : `AUDIT.md` disait « pas de
-      qualité séparée ». On garde ?
-- [ ] **Canal d'appel des sanctions** (groupe Roblox, serveur communautaire…) : lequel ?
+- [x] **Saisons** — RÉPONSE 20/11 : non → retirées (`Meteo` : un seul tirage, les cultures poussent tous les jours).
+- [x] **Froid / chaleur** — RÉPONSE 20/11 : non → retirés ; la boue des marais et l'obscurité des grottes restent
+      (il les avait demandées le 19/11) ; talent Survivaliste = ni boue ni obscurité ; couverture = couverture de cheval.
+- [x] **Qualité de façon + signature** — RÉPONSE 20/11 : non → retirées ; l'artisan reste noté (caché) pour son renom.
+- [x] **Canal d'appel des sanctions** — RÉPONSE 20/11 : « un truc de demandes + un report bug » → `Systemes/Demandes`
+      (`/demande`, `/bug`, `/appel`), bannissement maison qui laisse l'accueil pour faire appel.
 - [ ] **Icônes peintes** : il faut mettre les images en ligne avec le compte Roblox du propriétaire
       (lot X8 prépare les fichiers, le propriétaire les envoie).
 
@@ -36,6 +35,14 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] Claude → Codex · interface · 4 boutons d'ordres d'armée (suivre, tenir, patrouiller, attaquer) quand
       on a des soldats : `Action:FireServer("armee_ordre", { o = "suivre" | "tenir" | "patrouiller" |
       "attaquer", target = <id de la cible WoW> })` · aujourd'hui seulement par `/armee <ordre>` (lot C9).
+- [ ] Claude → Codex · interface · formulaire « Écrire à l'équipe » (Paramètres [O] et écran d'accueil) : choix
+      Demande / Bug / Appel + texte (10 à 300 lettres) → `Action:FireServer("demande", { kind = "demande" | "bug" |
+      "appel", text = … })` ; sur l'accueil, si l'attribut joueur `Banni` existe : bouton Jouer grisé + le formulaire
+      d'appel bien visible · aujourd'hui seulement par `/demande`, `/bug`, `/appel` (Systemes/Demandes).
+- [ ] Claude → Codex · `Ambiance.client` · retirer la neige d'hiver (`Season == "hiver"`, l'attribut n'est plus
+      posé : rien ne casse, c'est du code mort) et l'écran assombri reste pour « Obscur ».
+- [ ] Claude → Codex · `Interface.client` / `Gear.lua` · plus de « Façonnée par » ni de qualité sur les
+      nouvelles pièces (les champs ne sont plus posés ; les anciennes pièces les gardent).
 - [ ] Claude → Codex · `ConstruireModeles` (créatures) · 3 formes neuves pour finir `listes ennemi.txt` :
       **cavalier** (brigand à cheval), **poisson** (poisson carnassier géant), **serpent marin** (long, crête)
       · Claude ajoutera les créatures au Bestiaire dès que les formes existent (lot C5).

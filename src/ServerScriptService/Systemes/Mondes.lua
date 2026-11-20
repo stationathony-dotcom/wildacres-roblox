@@ -343,6 +343,11 @@ function Mondes.join(player: Player, id: string?)
 	if type(id) ~= "string" then
 		return { ok = false, msg = "Monde introuvable." }
 	end
+	-- banni (Systemes/Demandes) : il reste sur l'accueil et peut faire /appel
+	local ban = G.Demandes and G.Demandes.banInfo and G.Demandes.banInfo(player.UserId)
+	if ban then
+		return { ok = false, msg = G.Demandes.banText(ban) .. ". Pour contester : /appel <ton explication>." }
+	end
 	local reg = readRegistry()
 	local m = reg.mondes[id]
 	if not m then

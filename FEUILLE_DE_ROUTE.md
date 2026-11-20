@@ -155,7 +155,8 @@ banque agrandissable sans fin, champs sans limite.
 - [x] Pénuries de village + rumeurs des habitants, fouilles archéologiques, chantiers de village, chasse en groupe, concours de cuisine et de chasse, fuite du gibier, 4 titres de collection
 - [x] Banc `tools/bancs/equilibre.luau` (à relancer après chaque ajout) ; `docs/REFERENCE.md` régénéré
 - [ ] Harpon (attend le commit de Codex sur `Tools.lua`), emplacement main gauche (attend ses emplacements)
-- [ ] À trancher : les SAISONS tournent encore dans `Meteo.lua` (hiver = cultures un jour sur deux), alors qu'elles devaient être remplacées par les biomes
+- [x] Tranché le 20/11 : saisons, froid/chaleur et qualité de façon RETIRÉS (boue des marais et obscurité des grottes gardées)
+- [x] Demandes à l'équipe (20/11) : `/demande`, `/bug`, `/appel` (file des admins `/wa demandes`, réponse au joueur même hors ligne), bannissement maison qui laisse l'écran d'accueil pour faire appel — à voir en Play ; formulaire = passage à Codex
 - [ ] **TEST en Play** de tout ce qui précède (PC fixe)
 - [ ] Icônes peintes à la place des emojis (il faut mettre des images en ligne avec le compte du joueur)
 - Restes des listes, volontairement laissés : jeux de dés (règles Roblox sur les jeux de hasard), tutoriel (principe « sans indication »), guerres/alliances déclarées (retirées le 17/11), saisons (remplacées par les biomes)
