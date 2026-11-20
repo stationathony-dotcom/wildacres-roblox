@@ -25,7 +25,7 @@ local toasts = {}
 local G = {
 	Clock = { biomeAt = function() return biome end, isNight = function() return night end },
 	World = { loaded = { { state = { placed = placed } } } },
-	Joueurs = { get = function() return prof end, stats = function() return statsT end, count = function(_, i) return bagT[i] or 0 end },
+	Joueurs = { get = function() return prof end, stats = function() return statsT end, count = function(_, i) return bagT[i] or 0 end, has = function(_, i) return (bagT[i] or 0) > 0 end },
 	Game = { players = function() return { P } end },
 	Util = { root = function() return root end, toast = function(_, t) table.insert(toasts, t) end },
 }

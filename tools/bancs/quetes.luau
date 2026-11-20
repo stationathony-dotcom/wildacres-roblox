@@ -37,6 +37,7 @@ local G = {
 	Joueurs = {
 		add = function(_, i, n) bag[i] = (bag[i] or 0) + n end,
 		has = function(_, i, n) return (bag[i] or 0) >= (n or 1) end,
+		count = function(_, i) return bag[i] or 0 end,
 		take = function(_, i, n) if (bag[i] or 0) < n then return false end bag[i] -= n return true end,
 		addSkillXp = function() end,
 		sync = function() end,
@@ -46,6 +47,10 @@ local G = {
 	remotes = { Fx = { FireClient = function(_, _, kind, data) sent = data end } },
 	Interact = { onAction = function() end, onPrompt = function() end },
 	World = { loaded = {} },
+	QuetesLieux = { SHARE = 0, ICON = {}, offer = function() return false end, what = function() return nil end,
+		onTake = function() end, clear = function() end },
+	Chantiers = { offer = function() return nil end, contribute = function() return false end },
+	Economie = { record = function() end },
 }
 local standing = {} -- clé village -> habitants debout (simulé)
 local npcs = {}

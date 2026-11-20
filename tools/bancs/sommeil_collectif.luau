@@ -1,4 +1,5 @@
 -- Banc Studio Edit. Charger le Game.lua du worktree comme chaîne gameSource avant ce bloc.
+local gameSource = gameSource or game.ServerScriptService.Systemes.Game.Source
 -- Horloge, joueurs et sauvegardes factices : aucun monde ou profil réel n'est modifié.
 local function scenario()
 	local now, hour = 0, 22

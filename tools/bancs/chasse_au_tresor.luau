@@ -23,6 +23,7 @@ local G = {
 	Joueurs = {
 		get = function() return profile end,
 		has = function() return false end,
+		talent = function() return 0 end,
 		take = function() spent += 1 end,
 		add = function() rewards += 1 end,
 		markDirty = function()

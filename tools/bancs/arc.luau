@@ -10,6 +10,12 @@ local function check(name, ok)
 end
 
 local O = Vector3.new(7000, 50, 7000)
+-- restes d'un essai précédent interrompu : ils masqueraient les cibles
+for _, old in workspace:GetChildren() do
+	if old.Name == "BancArc" then
+		old:Destroy()
+	end
+end
 local folder = Instance.new("Folder")
 folder.Name = "BancArc"
 folder.Parent = workspace
@@ -37,7 +43,7 @@ local hits = {}
 local bag = { arrow = 0 }
 local toasts = {}
 local prof = { equipped = { weapon = { name = "Arc court", power = 3 } } }
-local P = { Parent = true }
+local P = { Parent = true, Character = Instance.new("Model") } -- un vrai joueur a toujours un Character (filtre du raycast)
 function P:GetAttribute()
 	return nil
 end
@@ -52,6 +58,7 @@ local G = {
 		addSkillXp = function() end,
 	},
 	Enemies = { list = { near, far, side }, byId = function() return nil end, hit = function(en) table.insert(hits, en.id) end },
+	World = { loaded = {} },
 	Animals = { list = {} }, Npcs = { list = {} }, Game = { players = function() return {} end }, Compagnons = { list = {} },
 	Props = { swing = function() end },
 	remotes = { Fx = { FireAllClients = function() end, FireClient = function() end } },

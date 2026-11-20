@@ -25,6 +25,7 @@ local G = {
 	Joueurs = {
 		get = function() return { honor = 0, inv = {} } end,
 		stats = function() return {} end, talent = function() return 0 end, skill = function() return 0 end,
+		has = function() return false end,
 	},
 	Evenements = { priceBonus = function() return 1 end },
 	Npcs = { op = function() return 0 end },
