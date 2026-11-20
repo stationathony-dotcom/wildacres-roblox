@@ -87,27 +87,27 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       se ferment sur les trois modes de commande (`AUDIT-PRODUIT.md`, ordre 1).
 - [x] **X2 · Journal des livraisons juste.** FAIT 20/11 (9a82c27). *Fini quand* : accepter à vide affiche 0/N, le stock partiel /
       complet / retiré met l'état à jour, la remise reste validée par le serveur.
-- [x] **X3 · Fenêtres cohérentes.** FAIT 20/11 (894842c). Titre, fermeture, retour, état vide, focus manette ; une fenêtre
+- [x] **X3 · Fenêtres cohérentes.** FAIT 20/11 (894842c, e1bdc6f). Titre, fermeture, retour, état vide, focus manette ; une fenêtre
       ouverte n'envoie pas de coup ni de pose derrière elle ; ordre de retour prévisible.
-- [x] **X4 · Petits écrans et mobile.** FAIT 20/11 (5ffb22d) · à voir en Play avec le clavier tactile. Disposition étroite par famille de fenêtres, zones sûres,
+- [x] **X4 · Petits écrans et mobile.** FAIT 20/11 (5ffb22d, 752e439) · à voir en Play avec le clavier tactile. Disposition étroite par famille de fenêtres, zones sûres,
       défilement vertical, boutons assez grands, chat / clavier ouverts. Garder les proportions du HUD.
 - [x] **X5 · Emplacement main gauche** (passage ci-dessus) : emplacement, poupée de la fiche, modèle FAIT 20/11 (a23919e).
       porté par l'avatar.
 - [x] **X6 · Harpon** (passage ci-dessus) : modèle, outil en main, animation de lancer. Modèle, prise en main et lancer faits (b405756) · recette ajoutée côté équilibre, lancer à voir en Play.
-- [ ] **X7 · Modèles faux.** Corriger la liste « Visuels à retravailler » de
+- [x] **X7 · Modèles faux.** FAIT 20/11 (28b395e, c46bcff, 7130dcb, 3cef209). Corriger la liste « Visuels à retravailler » de
       `A-RETRAVAILLER-EQUIPEMENT-ET-VISUELS.md` et `AUDIT-VISUELS-OBJETS.md` (noyau de cerise, laine,
       couronnes, turban, carreaux, insignes…). *Fini quand* : chaque objet de la liste ressemble à son
-      nom sur la planche de `images/catalogue`. Priorités de la liste corrigées (28b395e, planche 09). Autres familles de l’audit encore à relire.
+      nom sur la planche de `images/catalogue`. Modèles prioritaires et familles revus sur les planches 09 à 11. Vérifier leurs aperçus en Play.
 - [x] **X8 · Icônes peintes.** FAIT 20/11 (d28d1f0) · publication au propriétaire. Préparer les images (barre rapide, sac, menus) dans `images/icones/` +
       une table `id → image` prête à remplir avec les identifiants Roblox ; garder l'emoji en secours
       tant que l'image n'est pas en ligne.
-- [x] **X9 · Pièces de créatures distinctes.** FAIT 20/11 (19bed72). Les « Collier de crocs de … » / « Lame venimeuse de … »
+- [x] **X9 · Pièces de créatures distinctes.** FAIT 20/11 (19bed72, 597afba). Les « Collier de crocs de … » / « Lame venimeuse de … »
       ont toutes la même forme : une silhouette par famille (crocs, écailles, plumes, glace…).
 - [x] **X10 · Atelier : recherche + fiche de recette unique.** FAIT 20/11 (9f9d802, 2bd382f). Ingrédients possédés, station,
       compétence et raison du verrouillage sur une seule fiche (`AUDIT-PRODUIT.md`, ordre 5).
 - [x] **X11 · Paramètres.** FAIT 20/11 (17761a9). Caméra, sensibilité, qualité graphique, taille du texte (étape 20).
-- [ ] **X12 · Style médiéval uniforme.** Lumière, matériaux, proportions, couleurs saturées et
-      chaudes comme l'image cible ; retirer les modèles, sons et icônes temporaires (étape 21). Palette appliquée (fb36497), relecture en jeu à faire.
+- [x] **X12 · Style médiéval uniforme.** FAIT 20/11 (fb36497, 3cef209). Lumière, matériaux, proportions, couleurs saturées et
+      chaudes comme l'image cible ; retirer les modèles, sons et icônes temporaires (étape 21). Palette appliquée et capturée en Edit, relecture en jeu à faire.
 - [x] **X13 · Sons manquants.** FAIT 20/11 (dd27096, 266139e). Outils, forge, portes, animaux, interface, coup reçu, vente,
       découverte ; uniquement des sons autorisés (bibliothèque Roblox sous licence). Trouver l'appel qui
       charge l'asset `203785492` (type incompatible en console). Effets ajoutés (dd27096). Rojo précharge son son de notification avec les URI d’images. Six effets du jeu préchargés en Edit.
