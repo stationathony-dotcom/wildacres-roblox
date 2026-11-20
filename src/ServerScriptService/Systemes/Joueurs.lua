@@ -53,6 +53,10 @@ function J.init(g)
 			flash = data.flash == true,
 			shake = data.shake == true,
 			names = data.names ~= false,
+			camera = (data.camera == 1 or data.camera == 3) and data.camera or 2,
+			sensitivity = (data.sensitivity == 1 or data.sensitivity == 3) and data.sensitivity or 2,
+			graphics = (data.graphics == 1 or data.graphics == 3) and data.graphics or 2,
+			textSize = (data.textSize == 1 or data.textSize == 3) and data.textSize or 2,
 		}
 		J.markDirty(player)
 	end)

@@ -152,7 +152,9 @@ RunService.RenderStepped:Connect(function(dt)
 	emitterPart.CFrame = CFrame.new(camPos + Vector3.new(0, 35, 0) + cam.CFrame.LookVector * 20)
 	local snowy = biome == "neige"
 	local dry = biome == "desert"
-	local amount = (covered or dry) and 0 or cur.rain
+	local graphics = player:GetAttribute("GraphicsProfile") or 2
+	local density = graphics == 1 and 0.4 or graphics == 3 and 1.18 or 1
+	local amount = (covered or dry) and 0 or cur.rain * density
 	rain.Rate = snowy and 0 or amount * 900
 	snow.Rate = snowy and amount * 260 or 0
 	clouds.Cover = cur.cover
@@ -342,12 +344,15 @@ end)
 -- Volume de l'ambiance, flashs d'éclair, secousses de caméra. Sauvegardés avec le perso
 -- (action "settings") et réappliqués à chaque connexion (payload Inventory.settings).
 do
-	local settings = { vol = 0.6, music = 0.5, flash = false, shake = false }
+	local settings = { vol = 0.6, music = 0.5, flash = false, shake = false, names = true, camera = 2, sensitivity = 2, graphics = 2, textSize = 2 }
+	local Preferences = require(script.Parent:WaitForChild("Preferences"))
+	local applyPreferences = Preferences.mount(player)
 	local function apply()
 		player:SetAttribute("VolAmbiance", settings.vol)
 		player:SetAttribute("VolMusique", settings.music) -- lu par Musique.client
 		player:SetAttribute("ReduceFlash", settings.flash or nil)
 		player:SetAttribute("ReduceShake", settings.shake or nil)
+		applyPreferences(settings)
 	end
 	apply()
 	local gui = Instance.new("ScreenGui")
@@ -396,7 +401,7 @@ do
 	end
 	local panel = Instance.new("Frame")
 	panel.Name = "Panneau"
-	panel.Size = UDim2.fromOffset(330, 352)
+	panel.Size = UDim2.fromOffset(390, 544)
 	panel.Position = UDim2.fromScale(0.5, 0.5)
 	panel.AnchorPoint = Vector2.new(0.5, 0.5)
 	panel.BackgroundColor3 = Color3.fromRGB(24, 19, 15)
@@ -417,33 +422,53 @@ do
 			Remotes.Action:FireServer("settings", settings)
 		end
 	end
-	local closeButton = btn(panel, "X", UDim2.fromOffset(28, 28), UDim2.new(1, -36, 0, 8), Color3.fromRGB(190, 60, 50), close)
-	txt(panel, "🔊 Ambiance (pluie, vent, tonnerre)", UDim2.new(1, -28, 0, 20), UDim2.fromOffset(14, 48), 13)
+	local closeButton = btn(panel, "X", UDim2.fromOffset(38, 36), UDim2.new(1, -46, 0, 5), Color3.fromRGB(190, 60, 50), close)
+	local body = Instance.new("ScrollingFrame")
+	body.Name = "Réglages"
+	body.Size, body.Position = UDim2.new(1, 0, 1, -50), UDim2.fromOffset(0, 42)
+	body.BackgroundTransparency, body.BorderSizePixel = 1, 0
+	body.CanvasSize, body.ScrollBarThickness = UDim2.fromOffset(0, 482), 4
+	body.ScrollingDirection = Enum.ScrollingDirection.Y
+	body.Parent = panel
+	require(script.Parent:WaitForChild("MiseEnPage")).bind(panel)
+	txt(body, "🔊 Ambiance (pluie, vent, tonnerre)", UDim2.new(1, -28, 0, 20), UDim2.fromOffset(14, 6), 13)
 	local volRow = Instance.new("Frame")
 	volRow.BackgroundTransparency = 1
 	volRow.Size = UDim2.new(1, -28, 0, 34)
-	volRow.Position = UDim2.fromOffset(14, 70)
-	volRow.Parent = panel
-	txt(panel, "🎵 Musique (discrète, selon le lieu et l'heure)", UDim2.new(1, -28, 0, 20), UDim2.fromOffset(14, 108), 13)
+	volRow.Position = UDim2.fromOffset(14, 28)
+	volRow.Parent = body
+	txt(body, "🎵 Musique (discrète, selon le lieu et l'heure)", UDim2.new(1, -28, 0, 20), UDim2.fromOffset(14, 66), 13)
 	local musicRow = Instance.new("Frame")
 	musicRow.BackgroundTransparency = 1
 	musicRow.Size = UDim2.new(1, -28, 0, 34)
-	musicRow.Position = UDim2.fromOffset(14, 130)
-	musicRow.Parent = panel
+	musicRow.Position = UDim2.fromOffset(14, 88)
+	musicRow.Parent = body
 	local toggles = {}
 	local function toggle(y, label, key)
-		txt(panel, label, UDim2.new(1, -110, 0, 30), UDim2.fromOffset(14, y), 13)
-		toggles[key] = btn(panel, "", UDim2.fromOffset(80, 28), UDim2.new(1, -94, 0, y + 1), Color3.fromRGB(60, 50, 40), function()
+		txt(body, label, UDim2.new(1, -110, 0, 30), UDim2.fromOffset(14, y), 13)
+		toggles[key] = btn(body, "", UDim2.fromOffset(80, 28), UDim2.new(1, -94, 0, y + 1), Color3.fromRGB(60, 50, 40), function()
 			settings[key] = not settings[key]
 			dirty = true
 			apply()
 			render()
 		end)
 	end
-	toggle(176, "⚡ Réduire les flashs (éclairs)", "flash")
-	toggle(212, "📳 Réduire les secousses", "shake")
-	local help = txt(panel, "Dans le chat : /bloquer <pseudo> · /debloquer · /autoriser <pseudo> coffres|batir · /retirer <pseudo> · /autorises\n[O] Paramètres · [M] Carte",
-		UDim2.new(1, -28, 0, 44), UDim2.fromOffset(14, 252), 11, Color3.fromRGB(150, 140, 120))
+	toggle(130, "⚡ Réduire les flashs (éclairs)", "flash")
+	toggle(163, "📳 Réduire les secousses", "shake")
+	local choices = {}
+	for i, option in {{"camera","Caméra"}, {"sensitivity","Sensibilité de la souris"}, {"graphics","Graphismes"}, {"textSize","Taille du texte"}} do
+		local key, label = option[1], option[2]
+		local y = 198 + (i - 1) * 38
+		txt(body, label, UDim2.new(0.53, -14, 0, 34), UDim2.fromOffset(14, y), 13)
+		choices[key] = btn(body, "", UDim2.new(0.40, 0, 0, 34), UDim2.new(0.56, 0, 0, y), Color3.fromRGB(59, 86, 116), function()
+			settings[key] = Preferences.option(settings[key]) % 3 + 1
+			dirty = true
+			apply()
+			render()
+		end)
+	end
+	local help = txt(body, "Dans le chat : /bloquer <pseudo> · /debloquer · /autoriser <pseudo> coffres|batir · /retirer <pseudo> · /autorises\n[O] Paramètres · [M] Carte",
+		UDim2.new(1, -28, 0, 44), UDim2.fromOffset(14, 394), 11, Color3.fromRGB(150, 140, 120))
 	help.TextWrapped = true
 	render = function()
 		volRow:ClearAllChildren()
@@ -470,6 +495,7 @@ do
 					render()
 				end)
 		end
+		for key, control in choices do control.Text = Preferences.choices[key][Preferences.option(settings[key])] end
 		for key, b in toggles do
 			b.Text = settings[key] and "Oui" or "Non"
 			b.BackgroundColor3 = settings[key] and Color3.fromRGB(70, 140, 70) or Color3.fromRGB(60, 50, 40)
@@ -477,7 +503,7 @@ do
 	end
 	render()
 	local showSupport = require(script.Parent:WaitForChild("FormulaireEquipe")).mount(gui, Remotes.Action)
-	btn(panel, "Écrire à l’équipe", UDim2.new(1, -28, 0, 32), UDim2.fromOffset(14, 306), Color3.fromRGB(59, 86, 116), function()
+	btn(body, "Écrire à l’équipe", UDim2.new(1, -28, 0, 32), UDim2.fromOffset(14, 354), Color3.fromRGB(59, 86, 116), function()
 		showSupport(false)
 	end)
 	local function toggleParams()
@@ -499,6 +525,8 @@ do
 			settings.music = tonumber(data.settings.music) or settings.music
 			settings.flash = data.settings.flash == true
 			settings.shake = data.settings.shake == true
+			settings.names = data.settings.names ~= false
+			for key in Preferences.choices do settings[key] = Preferences.option(data.settings[key]) end
 			apply()
 		end
 	end)

@@ -28,6 +28,9 @@ local function radius(): number
 	local ok, q = pcall(function()
 		return UserSettings().GameSettings.SavedQualityLevel.Value
 	end)
+	local graphics = player:GetAttribute("GraphicsProfile")
+	if graphics == 1 then return 25 end
+	if graphics == 3 then return 62 end
 	if not ok or not q or q == 0 then
 		return 50
 	end
