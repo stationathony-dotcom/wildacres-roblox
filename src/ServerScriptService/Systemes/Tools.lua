@@ -10,7 +10,10 @@ function Tools.init(g)
 	G = g
 	local models = require(ServerStorage.OutilsDev.ConstruireModelesOutils)
 	models.harpon(ServerStorage.Outils)
-	require(ServerStorage.OutilsDev.ConstruireModelesMiniatures).identites(game:GetService("ReplicatedStorage"))
+	local replicatedStorage = game:GetService("ReplicatedStorage")
+	local miniatures = require(ServerStorage.OutilsDev.ConstruireModelesMiniatures)
+	miniatures.identites(replicatedStorage)
+	miniatures.piecesDeCreatures(replicatedStorage, require(replicatedStorage.Shared.Prises), G.Gear)
 end
 
 function Tools.use(player: Player, tool: Tool, targetId: string?): boolean

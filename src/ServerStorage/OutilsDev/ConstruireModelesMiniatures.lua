@@ -120,4 +120,86 @@ function M.identites(replicatedStorage)
 	end
 end
 
+local function family(item, material, id)
+	local name = string.lower(item.name)
+	if name:find("crocs", 1, true) and item.slot == "trinket" then
+		return (id:find("white", 1, true) or id:find("frost", 1, true) or id:find("snow", 1, true)) and "glace" or "crocs"
+	end
+	if name:find("venimeuse", 1, true) then
+		if id:find("water", 1, true) then return "venin_eau" end
+		if id:find("scorpion", 1, true) then return "venin_dard" end
+		return "venin"
+	end
+	material = material:lower()
+	if material:find("givre", 1, true) or material:find("glace", 1, true) or material:find("blizzard", 1, true) then
+		return "glace"
+	end
+	if material:find("plume", 1, true) then return "plumes" end
+	if name:find("cailles", 1, true) or name:find("carapace", 1, true) then return "cailles" end
+end
+
+local function trophy(part, category, slot, legendary)
+	local pale, violet, teal = rgb(217, 201, 164), rgb(109, 73, 126), rgb(64, 150, 147)
+	local ice = rgb(115, 201, 225)
+	if category == "crocs" or category == "glace" and slot == "trinket" then
+		curl(part, 0.62, 0.085, 0, legendary and bronze or wood)
+		local frozen = category == "glace"
+		for i = -2, 2 do
+			local x = i * 0.24
+			local length = (frozen and 0.7 or 0.55) - math.abs(i) * 0.091
+			part(frozen and "Cristal" or "Croc", V(0.22, length, 0.19), C(x, -length * 0.35, -0.58 + math.abs(x) * 0.33)
+				* CFrame.Angles(0, 0, i * 0.15 + math.pi), frozen and ice or pale, "Wedge")
+		end
+	elseif category:find("^venin") then
+		local aqueous, sting = category == "venin_eau", category == "venin_dard"
+		local color = aqueous and teal or sting and violet or rgb(101, 156, 76)
+		part("Poignée", V(0.18, 0.49, 0.18), C(0, -0.73, 0), wood)
+		part("Garde", V(sting and 0.61 or 0.81, 0.14, 0.19), C(0, -0.45, 0), legendary and bronze or steel, nil, Enum.Material.Metal)
+		for i = 0, 3 do
+			local x = aqueous and math.sin(i * 1.4) * 0.16 or sting and i * i * 0.031 or i * 0.04
+			part("Segment de lame", V(0.5 - i * 0.076, 0.39, 0.15), C(x, -0.26 + i * 0.32, 0)
+				* CFrame.Angles(0, 0, aqueous and math.cos(i * 1.4) * 0.38 or -i * 0.13), color, "Wedge", Enum.Material.Metal)
+			part("Nervure", V(0.05, 0.26, 0.05), C(x, -0.19 + i * 0.32, -0.10), color:Lerp(pale, 0.42))
+		end
+	elseif category == "plumes" then
+		part("Support", V(0.97, 0.38, 0.5), C(0, -0.23, 0), wood, "Ball")
+		for i = -2, 2 do
+			part("Plume", V(0.24, 1.02 - math.abs(i) * 0.15, 0.12), C(i * 0.177, 0.16, 0)
+				* CFrame.Angles(0, 0, -i * 0.27), teal:Lerp(pale, math.abs(i) * 0.15), "Wedge")
+		end
+	elseif category == "cailles" then
+		part("Cuir", V(1.17, 1.27, 0.39), C(), wood, "Ball")
+		for row = 0, 2 do
+			for col = -1, 1 do
+				part("Écaille", V(0.36, 0.41, 0.16), C(col * 0.31, 0.39 - row * 0.34, -0.24)
+					* CFrame.Angles(0, col * 0.17, math.pi), teal:Lerp(pale, row * 0.11), "Wedge", Enum.Material.Metal)
+			end
+		end
+	else
+		for i = -2, 2 do
+			part("Glace taillée", V(0.41, 1.12 - math.abs(i) * 0.22, 0.25), C(i * 0.23, 0, 0)
+				* CFrame.Angles(0, 0, -i * 0.28), ice:Lerp(pale, math.abs(i) * 0.16), "Wedge", Enum.Material.Glass)
+		end
+	end
+end
+
+function M.piecesDeCreatures(replicatedStorage, prises, gear)
+	local icons = folder(replicatedStorage, "IconesEquipement")
+	local total = 0
+	local function generate(item, material, id, legendary)
+		local category = family(item, material, id)
+		if not category then return end
+		local slot = gear.slotOf(item)
+		local icon = model(icons, slot .. ":" .. item.name, function(part) trophy(part, category, slot, legendary) end)
+		icon:SetAttribute("ApercuDroit", true)
+		icon:SetAttribute("FamilleVisuelle", category)
+		total += 1
+	end
+	for id, entry in prises.KINDS do
+		generate(entry.gear, entry.name, id, false)
+		if entry.soul then generate(entry.soul.gear, entry.name, id, true) end
+	end
+	return total
+end
+
 return M
