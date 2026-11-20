@@ -44,7 +44,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 
 ## Couloir Codex — ce qu'on voit et ce qu'on touche
 
-- [ ] **X1 · Menu commun PC / tactile / manette.** Un seul registre (libellé, icône, action, raccourci)
+- [ ] **X1 · Menu commun PC / tactile / manette.** Un seul registre (libellé, icône, action, raccourci) En cours - Codex, 20/11.
       pour la colonne de menus, les boutons tactiles et la manette ; Sac, Carte, Journal, Personnage,
       Paramètres accessibles partout sans commande de chat. *Fini quand* : les cinq écrans s'ouvrent et
       se ferment sur les trois modes de commande (`AUDIT-PRODUIT.md`, ordre 1).
