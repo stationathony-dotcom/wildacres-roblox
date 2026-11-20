@@ -883,7 +883,7 @@ end
 
 local TOOL_TEMPLATE = { hoe = "Houe", can = "Arrosoir", shovel = "Pelle", axe = "Hache", pickaxe = "Pioche", rod = "Canne à pêche", club = "Gourdin", sword = "Épée", spade = "Pelle" }
 -- barre d'outils : une case par famille (le meilleur outil possédé de la famille)
-J.TOOL_ORDER = { "hoe", "can", "axe", "pickaxe", "shovel", "rod", "sword", "spade" }
+J.TOOL_ORDER = { "hoe", "can", "axe", "pickaxe", "shovel", "rod", "harpoon", "sword", "spade" }
 
 -- Meilleur outil possédé d'une famille : id, palier (nil si aucun)
 -- Usure des outils (18/11, Minecraft + grind) : chaque coup donné avec un outil l'use ; à bout, il

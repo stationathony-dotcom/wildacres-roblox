@@ -115,6 +115,7 @@ C.ITEMS = {
 	pickaxe_steel = { name = "Pioche d’acier", icon = "⛏️", tool = true, price = 460, base = "pickaxe", tier = 4 },
 	pickaxe_diamond = { name = "Pioche au diamant", icon = "💎", tool = true, price = 1850, base = "pickaxe", tier = 5 },
 	rod = { name = "Canne à pêche", icon = "🎣", tool = true, price = 50 },
+	harpoon = { name = "Harpon de pêche", icon = "🔱", tool = true },
 	spade = { name = "Bêche de terrassier", icon = "⛏", tool = true, price = 90 },
 	dirt = { name = "Terre", icon = "🟫", price = 1 },
 	sand = { name = "Sable", icon = "🏜️", price = 1 },

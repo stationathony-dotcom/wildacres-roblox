@@ -1,10 +1,15 @@
 -- Clic avec un outil en main : répartit vers le bon système.
 
+local ServerStorage = game:GetService("ServerStorage")
+local TweenService = game:GetService("TweenService")
+
 local Tools = {}
 local G
 
 function Tools.init(g)
 	G = g
+	local models = require(ServerStorage.OutilsDev.ConstruireModelesOutils)
+	models.harpon(ServerStorage.Outils)
 end
 
 function Tools.use(player: Player, tool: Tool, targetId: string?): boolean
@@ -30,6 +35,13 @@ function Tools.use(player: Player, tool: Tool, targetId: string?): boolean
 		end
 	elseif id == "rod" then
 		G.Fishing.use(player)
+	elseif id == "harpoon" then
+		if G.Fishing.harpoon(player) then
+			G.Props.swing(player, full)
+			local grip = tool.Grip
+			tool.Grip = grip * CFrame.Angles(math.rad(-28), 0, 0)
+			TweenService:Create(tool, TweenInfo.new(0.22, Enum.EasingStyle.Quad), { Grip = grip }):Play()
+		end
 	elseif id == "spade" then
 		G.Terraforme.use(player)
 	elseif id == "club" or id == "sword" then

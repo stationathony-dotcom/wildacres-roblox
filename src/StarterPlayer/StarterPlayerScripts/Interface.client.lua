@@ -933,7 +933,7 @@ local function game_()
 	end
 	local function defaultHotbar()
 		local out = {}
-		for _, base in { "hoe", "can", "axe", "pickaxe", "rod", "sword", "shovel", "spade" } do
+		for _, base in { "hoe", "can", "axe", "pickaxe", "rod", "harpoon", "sword", "shovel", "spade" } do
 			if #out < HOT and ownedCount(base) > 0 then
 				table.insert(out, base)
 			end
