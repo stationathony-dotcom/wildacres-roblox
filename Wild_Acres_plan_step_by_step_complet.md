@@ -519,7 +519,7 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 - [x] Définir lieux uniques et lieux renouvelables.
 - [~] Définir coffres, clés, pièges de jeu non réalistes, énigmes et récompenses.
 - [~] Ajouter puzzles d'environnement et mécanismes médiévaux fictifs. _(grottes : coffre ancien scellé tant que les leviers cachés dans les salles (jusqu'à 3) ne sont pas abaissés, à plusieurs possible (18/11))_
-- [ ] Équilibrer les donjons pour solo et groupes.
+- [x] Équilibrer les donjons pour solo et groupes. _(20/11 : vie des créatures selon le groupe présent, une part du coffre par joueur ; banc `donjons_groupe`)_
 - [~] Prévoir les joueurs qui quittent un donjon, se déconnectent ou reviennent. _(la grotte n'existe que tant que quelqu'un s'y trouve ; coffre regarni tous les quelques jours)_
 - [x] Vérifier que les secrets ne deviennent pas tous connus instantanément si la découverte fait partie du plaisir.
 

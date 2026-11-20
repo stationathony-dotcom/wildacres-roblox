@@ -3,7 +3,10 @@
 -- falaise. Derrière : un réseau de galeries creusé dans le Terrain, 120 studs sous la région.
 -- La grotte n'existe que tant que quelqu'un s'y trouve (construite à l'entrée, effacée quand elle
 -- est vide). Dedans : créatures du biome plus coriaces, un gardien au fond, des filons à miner et
--- un coffre qui se remplit à nouveau tous les quelques jours (le premier arrivé se sert).
+-- un coffre qui se remplit à nouveau tous les quelques jours.
+-- Solo / groupe (20/11, étape 18) : les créatures de la grotte gagnent GROUP_HP de vie par joueur en plus
+-- présent dans les galeries (jamais moins une fois le groupe arrivé : partir ne les affaiblit pas), et le
+-- coffre donne SA part à chacun (une fois par joueur et par remplissage) au lieu du premier arrivé.
 
 local Donjons = {}
 local G, Config
@@ -14,6 +17,7 @@ local GRID = 52 -- pas entre deux salles
 local CHANCE = 0.22 -- part des régions qui ont une grotte
 local REFILL_DAYS = 3
 local EMPTY_DELAY = 60 -- secondes sans personne avant d'effacer la grotte
+Donjons.GROUP_HP = 0.6 -- +60 % de vie des créatures par joueur en plus dans la grotte
 
 local FOES = {
 	prairie = { "slime_blue", "wolf", "boar", "goblin" },
@@ -364,13 +368,13 @@ local function build(e)
 	-- coffre au fond
 	local rs = e.reg.state
 	rs.caves = rs.caves or {}
-	local lastLoot = rs.caves[e.id]
+	local cycle = Donjons.cycle(rs, e.id)
 	local deep = rooms[#rooms].center
 	local chest = G.Config.Catalogue.build("Cat_reinforced_chest")
 	if chest then
 		chest:PivotTo(CFrame.new(deep + Vector3.new(0, 0, rooms[#rooms].d / 2 - 4)) * CFrame.Angles(0, math.pi, 0))
 		chest.Parent = folder
-		local full = not lastLoot or G.world.day >= lastLoot + REFILL_DAYS
+		local full = cycle ~= nil
 		local p = chest:FindFirstChildWhichIsA("BasePart", true)
 		for _, part in chest:GetDescendants() do
 			if part:IsA("BasePart") and part.Size.X > 2.5 and part.Size.Y > 1 then
@@ -410,6 +414,57 @@ local function build(e)
 		end
 	end
 	return cave
+end
+
+-- Remplissage du coffre : { day = début, by = { [uid] = true } } (rs.caveLoot) ; un nouveau cycle commence
+-- REFILL_DAYS jours après le précédent. Ancien format (rs.caves[id] = jour du pillage) : repris comme début.
+function Donjons.cycle(rs, id: string)
+	rs.caveLoot = rs.caveLoot or {}
+	local c = rs.caveLoot[id]
+	if not c and rs.caves and rs.caves[id] then
+		c = { day = rs.caves[id], by = {} }
+		rs.caveLoot[id] = c
+	end
+	if not c or G.world.day >= c.day + REFILL_DAYS then
+		c = { day = G.world.day, by = {} }
+		rs.caveLoot[id] = c
+	end
+	return c
+end
+
+-- joueurs dans les galeries de cette grotte
+local function playersIn(cave): { Player }
+	local list = {}
+	local c = cave.box.cf.Position
+	for _, p in G.Game.players() do
+		local r = G.Util.root(p)
+		if r and r.Position.Y < DEPTH + 40 and r.Position.Y > DEPTH - 40
+			and math.abs(r.Position.X - c.X) < cave.box.size.X / 2 + 10 and math.abs(r.Position.Z - c.Z) < cave.box.size.Z / 2 + 10 then
+			table.insert(list, p)
+		end
+	end
+	return list
+end
+Donjons.playersIn = playersIn
+
+-- le groupe grossit : les créatures encore debout prennent de la vie (proportionnellement)
+function Donjons.scaleFor(cave, n: number)
+	local before = cave.party or 1
+	if n <= before then
+		return
+	end
+	local factor = (1 + Donjons.GROUP_HP * (n - 1)) / (1 + Donjons.GROUP_HP * (before - 1))
+	cave.party = n
+	for _, en in cave.enemies do
+		if not en.dead then
+			en.maxHp = math.floor(en.maxHp * factor)
+			en.hp = math.floor(en.hp * factor)
+			if en.model and en.model.Parent then
+				en.model:SetAttribute("PVMax", en.maxHp)
+				en.model:SetAttribute("PV", en.hp)
+			end
+		end
+	end
 end
 
 -- Abaisser un levier de la grotte ; tous abaissés → le coffre ancien se déverrouille
@@ -549,15 +604,20 @@ function Donjons.loot(player: Player, id: string)
 			return
 		end
 	end
-	cave.chestPrompt.Enabled = false
+	-- chacun sa part, une fois par remplissage
+	local rs0 = cave.e.reg.state
+	local cycle = Donjons.cycle(rs0, id)
+	local uid = tostring(player.UserId)
+	if cycle.by[uid] then
+		G.Util.toast(player, "Tu as déjà pris ta part de ce coffre. Il se remplira de nouveau dans quelques jours.")
+		return
+	end
+	cycle.by[uid] = true
 	local lp = G.Joueurs.get(player)
 	if lp then
 		lp.stats.caves = (lp.stats.caves or 0) + 1
 		G.Social.checkTitles(player)
 	end
-	local rs = cave.e.reg.state
-	rs.caves = rs.caves or {}
-	rs.caves[id] = G.world.day
 	local list = G.Config.Catalogue.TREASURE
 	for _ = 1, 3 do
 		local t = list[math.random(1, #list)]
@@ -579,16 +639,9 @@ function Donjons.step(dt: number)
 	end
 	acc = 0
 	for id, cave in active do
-		local anyone = false
-		for _, p in G.Game.players() do
-			local r = G.Util.root(p)
-			if r and r.Position.Y < DEPTH + 40 and r.Position.Y > DEPTH - 40 then
-				local c = cave.box.cf.Position
-				if math.abs(r.Position.X - c.X) < cave.box.size.X / 2 + 10 and math.abs(r.Position.Z - c.Z) < cave.box.size.Z / 2 + 10 then
-					anyone = true
-				end
-			end
-		end
+		local inside = playersIn(cave)
+		local anyone = #inside > 0
+		Donjons.scaleFor(cave, #inside)
 		if anyone then
 			cave.lastSeen = os.clock()
 		elseif os.clock() - cave.lastSeen > EMPTY_DELAY then
