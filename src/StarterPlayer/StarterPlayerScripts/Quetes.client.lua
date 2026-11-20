@@ -74,14 +74,14 @@ local st = Instance.new("UIStroke")
 st.Color = Color3.fromRGB(176, 140, 72)
 st.Thickness = 2.5
 st.Parent = panel
-local scale = Instance.new("UIScale")
-scale.Parent = panel
 label(panel, "📜  Quêtes", UDim2.new(1, -60, 0, 32), 22, GOLD, true).Position = UDim2.fromOffset(16, 8)
 label(panel, "Toutes facultatives : prends-en, lâche-les, rien n'est obligatoire.", UDim2.new(1, -60, 0, 18), 12, DIM).Position = UDim2.fromOffset(16, 38)
 local close = button(panel, "X", UDim2.fromOffset(30, 30), Color3.fromRGB(190, 60, 50), function()
 	panel.Visible = false
 end)
-close.Position = UDim2.new(1, -40, 0, 10)
+close.Size = UDim2.fromOffset(40, 36)
+close.Position = UDim2.new(1, -48, 0, 7)
+require(script.Parent:WaitForChild("MiseEnPage")).bind(panel)
 
 local body = Instance.new("ScrollingFrame")
 body.BackgroundTransparency = 1
@@ -206,8 +206,6 @@ Remotes:WaitForChild("Fx").OnClientEvent:Connect(function(kind, data)
 end)
 
 showPanel = function()
-	local vp = workspace.CurrentCamera and workspace.CurrentCamera.ViewportSize or Vector2.new(1280, 720)
-	scale.Scale = math.min(1, (vp.X - 32) / 560, (vp.Y - 40) / 520)
 	panel.Visible = true
 end
 local function toggle()

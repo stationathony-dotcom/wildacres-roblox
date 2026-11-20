@@ -87,6 +87,7 @@ end
 local gui = new("ScreenGui", { Name = "WildAcres", ResetOnSpawn = false, IgnoreGuiInset = true, ZIndexBehavior = Enum.ZIndexBehavior.Sibling, Parent = player:WaitForChild("PlayerGui") })
 local uiScale = new("UIScale", { Parent = gui })
 local Hud = require(script.Parent:WaitForChild("Hud"))
+local MiseEnPage = require(script.Parent:WaitForChild("MiseEnPage"))
 local toolIcon: (string, Instance, number, boolean) -> boolean
 
 -- Chat en bas à gauche comme l'image cible (par défaut Roblox le met en haut à gauche, sur le portrait)
@@ -121,7 +122,8 @@ local hotScale: UIScale? = nil
 local function rescale()
 	local cam = workspace.CurrentCamera
 	local v = cam and cam.ViewportSize or Vector2.new(1280, 720)
-	uiScale.Scale = math.clamp(math.min(v.X / 1100, v.Y / 640), 0.62, 1.25)
+	gui.ScreenInsets = MOBILE and Enum.ScreenInsets.CoreUISafeInsets or Enum.ScreenInsets.DeviceSafeInsets
+	uiScale.Scale = math.clamp(math.min(v.X / 1100, v.Y / 640), MOBILE and 0.9 or 0.62, 1.25)
 	if hudScaleUpdate then
 		hudScaleUpdate()
 	end
@@ -168,6 +170,7 @@ local function makePanel(name: string, title: string, size: UDim2, onClose: (() 
 		ScrollBarThickness = 6, ScrollBarImageColor3 = C.line, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y,
 		BorderSizePixel = 0, Parent = f, ZIndex = 6,
 	}, { new("UIListLayout", { Padding = UDim.new(0, 8), SortOrder = Enum.SortOrder.LayoutOrder }) })
+	MiseEnPage.bind(f, uiScale)
 	panels[name] = f
 	return f, body, t
 end
@@ -1193,7 +1196,8 @@ local function game_()
 	wclose.ZIndex = 6
 	wclose.Parent = wbag
 	WindowNav.watch(wbag, wclose, closeWbag)
-	local wtabs = new("Frame", { Size = UDim2.new(1, -20, 0, 30), Position = UDim2.fromOffset(10, 40), BackgroundTransparency = 1, Parent = wbag, ZIndex = 6 },
+	local wtabs = new("ScrollingFrame", { Size = UDim2.new(1, -20, 0, 33), Position = UDim2.fromOffset(10, 40), BackgroundTransparency = 1, Parent = wbag, ZIndex = 6,
+		BorderSizePixel = 0, ScrollBarThickness = 3, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.X, ScrollingDirection = Enum.ScrollingDirection.X },
 		{ new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 3) }) })
 	local wgrid = new("ScrollingFrame", {
 		Size = UDim2.new(1, -20, 1, -118), Position = UDim2.fromOffset(10, 76), BackgroundTransparency = 1, BorderSizePixel = 0,
@@ -1216,6 +1220,16 @@ local function game_()
 	end)
 	bagUi.sortBtn.Size = UDim2.fromOffset(110, 26)
 	bagUi.sortBtn.Position = UDim2.new(1, -156, 0, 8)
+	MiseEnPage.bind(wbag, uiScale, function(narrow)
+		bagUi.box.Position = narrow and UDim2.fromOffset(10, 40) or UDim2.new(1, -312, 0, 8)
+		bagUi.sortBtn.Position = narrow and UDim2.new(1, -120, 0, 40) or UDim2.new(1, -156, 0, 8)
+		bagUi.box.Size = narrow and UDim2.new(1, -141, 0, 34) or UDim2.fromOffset(150, 26)
+		bagUi.sortBtn.Size = UDim2.fromOffset(110, narrow and 34 or 26)
+		wtabs.Position = UDim2.fromOffset(10, narrow and 79 or 40)
+		wgrid.Position = UDim2.fromOffset(10, narrow and 116 or 76)
+		wgrid.Size = UDim2.new(1, -20, 1, narrow and -150 or -118)
+		whelp.Visible = not narrow
+	end)
 	bagUi.sortBtn.TextSize = 12
 	bagUi.sortBtn.ZIndex = 7
 	bagUi.sortBtn.Parent = wbag
@@ -1423,6 +1437,7 @@ local function game_()
 		{ corner(6), stroke(Color3.fromRGB(80, 64, 44), 1) })
 	local right = new("Frame", { Size = UDim2.new(1, -336, 1, -54), Position = UDim2.fromOffset(322, 42), BackgroundColor3 = Color3.fromRGB(32, 26, 20), Parent = bag, ZIndex = 6 },
 		{ corner(6), stroke(Color3.fromRGB(80, 64, 44), 1) })
+	MiseEnPage.bind(bag, uiScale, MiseEnPage.columns(bag, { {left, 386}, {right, 386} }, 42))
 	local tabsRow = new("Frame", { Size = UDim2.new(1, -16, 0, 34), Position = UDim2.fromOffset(8, 8), BackgroundTransparency = 1, Parent = right, ZIndex = 7 },
 		{ new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4) }) })
 	local content = new("ScrollingFrame", {
@@ -1822,6 +1837,7 @@ local function game_()
 	local colBag = column(12, 300, "Matériaux")
 	local colGrid = column(322, 236, "")
 	local colBook = column(568, 240, "Recettes")
+	MiseEnPage.bind(craft, uiScale, MiseEnPage.columns(craft, { {colBag, 267}, {colGrid, 382}, {colBook, 325} }, 46))
 	local bagScroll = new("ScrollingFrame", {
 		Size = UDim2.new(1, -12, 1, -36), Position = UDim2.fromOffset(6, 30), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 4,
 		ScrollBarImageColor3 = C.line, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y, Parent = colBag, ZIndex = 7,
