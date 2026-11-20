@@ -6,6 +6,7 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.2 — 2026-11-20
+- **Écrire à l’équipe** : demande, bug ou appel depuis les paramètres et l’accueil. Quand l’accès est suspendu, l’accueil ouvre directement l’appel.
 - **Invasion** : les 120 or de remerciement vont à ceux qui ont frappé au moins un assaillant (soldats et bêtes comptent pour leur maître), plus à quiconque se tenait à moins de 160 studs
 - **Or des créatures plafonné** : l'or d'une mise à mort ne dépasse plus 25 + 12 % de la vie de la bête (les élites de niveau 6 à 9 donnaient 150 à 650 or chacune, 5 à 15 fois les autres métiers) ; butin des créatures ramené dans la norme de leur niveau (`Bestiaire.normalizeLoot`, banc `butin_creatures`)
 - **Harpon** : outil pris en main depuis le sac ou la barre rapide. Un lancer valide déclenche l’animation et le résultat de pêche.

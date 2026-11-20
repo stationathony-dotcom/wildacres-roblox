@@ -269,7 +269,7 @@ local function lobby()
 	}, { new("UIListLayout", { Padding = UDim.new(0, 6) }) })
 	local busy = false
 	local function go(action: string, id: string?)
-		if busy then
+		if busy or player:GetAttribute("Banni") ~= nil then
 			return
 		end
 		busy = true
@@ -308,8 +308,30 @@ local function lobby()
 	play.TextSize = 22
 	play.Font = TITLE
 	play.Parent = box
+	play.Size = UDim2.new(0.5, -16, 0, 50)
+	local showSupport = require(script.Parent:WaitForChild("FormulaireEquipe")).mount(gui, Remotes.Action)
+	local support = button("Écrire à l’équipe", C.blue, function()
+		showSupport(player:GetAttribute("Banni") ~= nil)
+	end)
+	support.Size = UDim2.new(0.5, -16, 0, 50)
+	support.Position = UDim2.new(0.5, 4, 1, -62)
+	support.Parent = box
+	local function updateBan()
+		local banned = player:GetAttribute("Banni") ~= nil
+		play.Interactable = not banned
+		play.BackgroundColor3 = banned and C.panel2 or C.green
+		list.Visible = not banned
+		support.Text = banned and "Faire appel" or "Écrire à l’équipe"
+		if banned then
+			status.Text = "Accès aux mondes suspendu."
+			showSupport(true)
+		end
+	end
+	player:GetAttributeChangedSignal("Banni"):Connect(updateBan)
+	updateBan()
 
 	local function refresh()
+		if player:GetAttribute("Banni") ~= nil then return end
 		local ok, worlds = pcall(function()
 			return Remotes:WaitForChild("Mondes"):InvokeServer("list")
 		end)
@@ -317,6 +339,7 @@ local function lobby()
 			status.Text = "Liste indisponible pour l'instant."
 			return
 		end
+		if player:GetAttribute("Banni") ~= nil then return end
 		clear(list)
 		local total = 0
 		for i, w in worlds do

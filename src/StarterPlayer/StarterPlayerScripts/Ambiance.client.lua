@@ -396,7 +396,7 @@ do
 	end
 	local panel = Instance.new("Frame")
 	panel.Name = "Panneau"
-	panel.Size = UDim2.fromOffset(330, 310)
+	panel.Size = UDim2.fromOffset(330, 352)
 	panel.Position = UDim2.fromScale(0.5, 0.5)
 	panel.AnchorPoint = Vector2.new(0.5, 0.5)
 	panel.BackgroundColor3 = Color3.fromRGB(24, 19, 15)
@@ -476,6 +476,10 @@ do
 		end
 	end
 	render()
+	local showSupport = require(script.Parent:WaitForChild("FormulaireEquipe")).mount(gui, Remotes.Action)
+	btn(panel, "Écrire à l’équipe", UDim2.new(1, -28, 0, 32), UDim2.fromOffset(14, 306), Color3.fromRGB(59, 86, 116), function()
+		showSupport(false)
+	end)
 	local function toggleParams()
 		if panel.Visible then
 			close()
