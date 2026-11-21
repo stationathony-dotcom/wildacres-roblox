@@ -898,7 +898,7 @@ local function game_()
 		return true
 	end
 
-	local function slotCell(parent: Instance, size: number, id: string?, n: number?, z: number?)
+	local function slotCell(parent: Instance, size: number, id: string?, n: number?, z: number?, differer: boolean?)
 		local info = id and id ~= "" and itemInfo(id) or nil
 		local cell = new("TextButton", {
 			Text = "", AutoButtonColor = true, BackgroundColor3 = Color3.fromRGB(30, 26, 22), Size = UDim2.fromOffset(size, size), Parent = parent, ZIndex = z or 6,
@@ -906,8 +906,8 @@ local function game_()
 		local st = stroke(info and QUALITY[qualityOf(info)] or Color3.fromRGB(70, 60, 50), info and 1.5 or 1)
 		st.Parent = cell
 		if info then
-			if not toolIcon(id :: string, cell, (z or 6) + 1, n == 0) then
-				label({ Text = info.icon or "❔", TextSize = math.floor(size * 0.56), TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1),
+			if differer or not toolIcon(id :: string, cell, (z or 6) + 1, n == 0) then
+				label({ Name = "IconeSecours", Text = info.icon or "❔", TextSize = math.floor(size * 0.56), TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1),
 					TextTransparency = (n == 0) and 0.6 or 0, Parent = cell, ZIndex = (z or 6) + 1 })
 			end
 			if n and n > 1 then
@@ -1236,6 +1236,36 @@ local function game_()
 	local _ = whelp
 	-- recherche + tri (une seule locale : le script frôle la limite de 200 locales)
 	local bagUi = { search = "", sort = 1, SORTS = { "📂 Catégorie", "🔤 Nom", "🔢 Quantité", "💰 Valeur" } }
+	bagUi.apercus = {}
+	function bagUi.mettreAJourApercus()
+		if bagUi.rafraichissement then return end
+		bagUi.rafraichissement = true
+		task.defer(function()
+			bagUi.rafraichissement = false
+			local haut = wgrid.AbsolutePosition.Y
+			local bas = haut + wgrid.AbsoluteWindowSize.Y
+			local ouvert = wbag.Visible and bas > haut
+			for _, entree in bagUi.apercus do
+				local case = entree.cell
+				local y = case.AbsolutePosition.Y
+				local visible = ouvert and y < bas and y + case.AbsoluteSize.Y > haut
+				if visible and not entree.icone and not entree.absente then
+					toolIcon(entree.id, case, 8, false)
+					entree.icone = case:FindFirstChild("IconePeinte") or case:FindFirstChildOfClass("ViewportFrame")
+					entree.absente = entree.icone == nil
+					case.IconeSecours.Visible = entree.absente
+				elseif not visible and entree.icone then
+					entree.icone:Destroy()
+					entree.icone = nil
+					case.IconeSecours.Visible = true
+				end
+			end
+		end)
+	end
+	wgrid:GetPropertyChangedSignal("CanvasPosition"):Connect(bagUi.mettreAJourApercus)
+	wgrid:GetPropertyChangedSignal("AbsoluteCanvasSize"):Connect(bagUi.mettreAJourApercus)
+	wgrid:GetPropertyChangedSignal("AbsoluteWindowSize"):Connect(bagUi.mettreAJourApercus)
+	wbag:GetPropertyChangedSignal("Visible"):Connect(bagUi.mettreAJourApercus)
 	bagUi.box = new("TextBox", {
 		Text = "", PlaceholderText = "🔍 Chercher…", ClearTextOnFocus = false, Font = BOLD, TextSize = 13, TextColor3 = C.text,
 		PlaceholderColor3 = C.dim, BackgroundColor3 = Color3.fromRGB(40, 33, 26), Size = UDim2.fromOffset(150, 26),
@@ -1308,6 +1338,7 @@ local function game_()
 			end)
 		end
 		clear(wgrid)
+		table.clear(bagUi.apercus)
 		local ids = {}
 		for id, n in inv.inv do
 			local info = Config.ITEMS[id]
@@ -1334,10 +1365,11 @@ local function game_()
 		for i = 1, total do
 			local id = ids[i]
 			local n = id and inv.inv[id] or nil
-			local cell = slotCell(wgrid, 42, id, n, 7)
+			local cell = slotCell(wgrid, 42, id, n, 7, true)
 			cell.Name = string.format("Case%03d", i)
 			cell.LayoutOrder = i
 			if id then
+				table.insert(bagUi.apercus, { cell = cell, id = id })
 				local info = itemInfo(id)
 				cell.MouseButton1Down:Connect(function()
 					startDrag(id, "bag")
@@ -1384,6 +1416,7 @@ local function game_()
 			end
 		end
 		wfoot.Text = nTypes .. " objets   ·   💰 " .. (inv.inv.gold or 0)
+		bagUi.mettreAJourApercus()
 	end
 	bagUi.render = renderWBag
 
@@ -1900,15 +1933,12 @@ local function game_()
 		TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.new(1, 0, 0, 30), Position = UDim2.fromOffset(0, 66), Parent = colBook, ZIndex = 8 })
 	local recipeCells = {}
 	local function refreshRecipeIcons()
-		if not craft.Visible then
-			return
-		end
 		local top = bookScroll.AbsolutePosition.Y
 		local bottom = top + bookScroll.AbsoluteWindowSize.Y
 		for _, entry in ipairs(recipeCells) do
 			local cell = entry.cell
 			local y = cell.AbsolutePosition.Y
-			local visible = y < bottom and y + cell.AbsoluteSize.Y > top
+			local visible = craft.Visible and bottom > top and y < bottom and y + cell.AbsoluteSize.Y > top
 			if visible and not entry.preview then
 				if entry.recipe.item then
 					toolIcon(entry.recipe.item, cell, 9, not entry.available)
@@ -1930,6 +1960,7 @@ local function game_()
 	end
 	bookScroll:GetPropertyChangedSignal("CanvasPosition"):Connect(refreshRecipeIcons)
 	bookScroll:GetPropertyChangedSignal("AbsoluteWindowSize"):Connect(refreshRecipeIcons)
+	craft:GetPropertyChangedSignal("Visible"):Connect(refreshRecipeIcons)
 	local gridFrame = new("Frame", { Size = UDim2.fromOffset(3 * 60 + 8, 3 * 60 + 8), Position = UDim2.new(0.5, 0, 0, 14), AnchorPoint = Vector2.new(0.5, 0), BackgroundTransparency = 1, Parent = colGrid, ZIndex = 7 },
 		{ new("UIGridLayout", { CellSize = UDim2.fromOffset(56, 56), CellPadding = UDim2.fromOffset(4, 4), SortOrder = Enum.SortOrder.LayoutOrder }) })
 	label({ Text = "⬇", TextSize = 26, TextColor3 = C.gold, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.new(1, 0, 0, 28), Position = UDim2.fromOffset(0, 206), Parent = colGrid, ZIndex = 7 })

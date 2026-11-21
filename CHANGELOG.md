@@ -7,6 +7,7 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.3 — 2026-11-21
 
+- **Carte et inventaire** — La carte dessine les régions découvertes par lots. Le sac charge les miniatures 3D visibles au défilement.
 - **Arrivée** — La place du village a une enseigne lisible des deux côtés. La lueur de la forge et la fumée du four servent de repères. Les rangées de couleurs défilent sur les petits écrans.
 - **Retour** — La carte réserve un repère pour le lit et le journal de quêtes ouvre un onglet dédié aux événements survenus en l’absence du joueur.
 - **Survol** — L’état des machines et des serrures apparaît à portée. Le nom précise s’il s’agit d’un coffre, d’une porte ou d’un autre mécanisme.

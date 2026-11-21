@@ -29,4 +29,10 @@ sur le PC fixe avec `docs/TEST-PLAY.md` § P7 (`/wa perf`, `/wa etat`) et vont d
 
 ## Côté client (Codex, X23)
 
-_À compléter par Codex._
+En Édition, un essai avec 41 régions découvertes a créé 41 cases, contre 729 auparavant.
+Le premier lot en a construit 24. La fermeture a suspendu la création, la réouverture a repris
+la file, et la réouverture suivante n’a créé aucune case supplémentaire.
+
+La carte ne suit la position du joueur que lorsqu’elle est ouverte. Le sac construit les aperçus 3D
+dans la zone visible du défilement. Le sac et le carnet de l’atelier libèrent leurs aperçus à la fermeture.
+Mesures P7 en Play à relever sur le PC fixe pour le temps d’ouverture, le nombre d’aperçus actifs et les images par seconde au village.

@@ -32,6 +32,9 @@ local SEA = Color3.fromRGB(70, 110, 140)
 local FOG = Color3.fromRGB(196, 178, 140)
 
 local discovered = {}
+local pending = {}
+local regionsVisitees, lieuxVisites = 0, 0
+local enRendu = false
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "Carte"
@@ -149,63 +152,80 @@ local function wg()
 	return WG
 end
 
-local cells = {}
-local function render()
-	local w = wg()
-	if not w then
-		return
-	end
-	local found, places = 0, 0
-	for rx = -R, R do
-		for rz = -R, R do
-			local key = rx .. "," .. rz
-			local c = cells[key]
-			if not c then
-				c = Instance.new("Frame")
-				c.BorderSizePixel = 0
-				c.Size = UDim2.fromOffset(CELLPX, CELLPX)
-				c.Position = UDim2.fromOffset((rx + R) * CELLPX, (rz + R) * CELLPX)
-				c.BackgroundTransparency = 1
-				c.Parent = grid
-				cells[key] = c
-			end
-			if discovered[key] and not c:GetAttribute("Fait") then
-				c:SetAttribute("Fait", true)
-				local inWorld = w.inWorld(rx, rz)
-				local ok, biome = pcall(w.regionBiome, w, rx, rz)
-				c.BackgroundColor3 = inWorld and (BIOME_COLOR[ok and biome or "prairie"] or FOG) or SEA
-				c.BackgroundTransparency = 0
-				-- apparition : fondu (la carte « se dessine »)
-				c.BackgroundTransparency = 1
-				TweenService:Create(c, TweenInfo.new(0.4), { BackgroundTransparency = 0 }):Play()
-				local poi = inWorld and w:poiOf(rx, rz)
-				if poi and POI_ICON[poi.kind] then
-					local ic = Instance.new("TextLabel")
-					ic.BackgroundTransparency = 1
-					ic.Text = POI_ICON[poi.kind]
-					ic.TextSize = 12
-					ic.Size = UDim2.fromScale(1, 1)
-					ic.Parent = c
-				end
-			end
-		end
-	end
-	for key in discovered do
-		found += 1
-		local rx, rz = string.match(key, "^(-?%d+),(-?%d+)$")
-		local poi = rx and w:poiOf(tonumber(rx), tonumber(rz))
-		if poi then
-			places += 1
-		end
-	end
+local function majResume()
 	title.Text = "Carte du monde · " .. (workspace:GetAttribute("WorldName") or "l'île")
-	foot.Text = string.format("%d régions parcourues · %d lieux découverts", found, places)
+	foot.Text = string.format("%d régions parcourues · %d lieux découverts", regionsVisitees, lieuxVisites)
+end
+
+local function dessinerRegion(w, region)
+	local rx, rz = region.x, region.z
+	local c = Instance.new("Frame")
+	c.BorderSizePixel = 0
+	c.Size = UDim2.fromOffset(CELLPX, CELLPX)
+	c.Position = UDim2.fromOffset((rx + R) * CELLPX, (rz + R) * CELLPX)
+	local inWorld = w.inWorld(rx, rz)
+	local ok, biome = pcall(w.regionBiome, w, rx, rz)
+	c.BackgroundColor3 = inWorld and (BIOME_COLOR[ok and biome or "prairie"] or FOG) or SEA
+	c.BackgroundTransparency = region.fondu and 1 or 0
+	c.Parent = grid
+	if region.fondu then
+		TweenService:Create(c, TweenInfo.new(0.4), { BackgroundTransparency = 0 }):Play()
+	end
+	local poiOk, poi
+	if inWorld then poiOk, poi = pcall(w.poiOf, w, rx, rz) end
+	if poiOk and poi then
+		lieuxVisites += 1
+		if POI_ICON[poi.kind] then
+			Composants.creer("TextLabel", {
+				BackgroundTransparency = 1, Text = POI_ICON[poi.kind], TextSize = 12,
+				Size = UDim2.fromScale(1, 1), Parent = c,
+			})
+		end
+	end
+end
+
+local function render()
+	majResume()
+	if enRendu or not next(pending) then return end
+	local w = wg()
+	if not w then return end
+	enRendu = true
+	task.spawn(function()
+		while panel.Visible and next(pending) do
+			local lot = 0
+			local fin = os.clock() + 0.004
+			for key, region in pending do
+				pending[key] = nil
+				dessinerRegion(w, region)
+				lot += 1
+				if lot == 24 or os.clock() >= fin then break end
+			end
+			majResume()
+			if next(pending) then task.wait() end
+		end
+		enRendu = false
+	end)
+end
+
+local function ajouterRegion(key, fondu)
+	if discovered[key] then return false end
+	local x, z = string.match(key, "^(-?%d+),(-?%d+)$")
+	local rx, rz = tonumber(x), tonumber(z)
+	if not rx or not rz then return false end
+	discovered[key] = true
+	regionsVisitees += 1
+	if math.abs(rx) <= R and math.abs(rz) <= R then
+		pending[key] = { x = rx, z = rz, fondu = fondu }
+	end
+	return true
 end
 
 local function addKeys(str)
+	local changed = false
 	for k in string.gmatch(str or "", "[^;]+") do
-		discovered[k] = true
+		if ajouterRegion(k, false) then changed = true end
 	end
+	return changed
 end
 
 Remotes:WaitForChild("Inventory").OnClientEvent:Connect(function(data)
@@ -214,8 +234,7 @@ Remotes:WaitForChild("Inventory").OnClientEvent:Connect(function(data)
 		setCross(type(t) == "table" and t.x and Vector3.new(t.x, 0, t.z) or nil)
 	end
 	if type(data) == "table" and type(data.carte) == "string" then
-		addKeys(data.carte)
-		if panel.Visible then
+		if addKeys(data.carte) and panel.Visible then
 			render()
 		end
 	end
@@ -225,11 +244,8 @@ Remotes:WaitForChild("Fx").OnClientEvent:Connect(function(kind, key)
 		setCross(key)
 		return
 	end
-	if kind == "carte" and type(key) == "string" then
-		discovered[key] = true
-		if panel.Visible then
-			render()
-		end
+	if kind == "carte" and type(key) == "string" and ajouterRegion(key, panel.Visible) and panel.Visible then
+		render()
 	end
 end)
 
@@ -243,9 +259,9 @@ local function toggle()
 	end
 	local vp = workspace.CurrentCamera.ViewportSize
 	local target = math.min(1, (vp.X - 32) / panel.Size.X.Offset, (vp.Y - 40) / panel.Size.Y.Offset)
-	render()
 	scale.Scale = target * 0.9
 	panel.Visible = true
+	render()
 	reperes.refresh()
 	actualiserLit()
 	TweenService:Create(scale, TweenInfo.new(0.18, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = target }):Play()
@@ -260,10 +276,7 @@ ouvrir.Name = "OuvrirCarte"
 ouvrir.Event:Connect(toggle)
 ouvrir.Parent = player
 
-RunService.RenderStepped:Connect(function(dt)
-	if not panel.Visible then
-		return
-	end
+local function suivreJoueur(dt)
 	reperes.step(dt)
 	local char = player.Character
 	local hrp = char and char:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -275,4 +288,17 @@ RunService.RenderStepped:Connect(function(dt)
 	arrow.Position = UDim2.fromOffset(fx * CELLPX, fz * CELLPX)
 	local look = workspace.CurrentCamera.CFrame.LookVector
 	arrow.Rotation = math.deg(math.atan2(look.X, -look.Z))
+end
+
+local suivi
+panel:GetPropertyChangedSignal("Visible"):Connect(function()
+	if panel.Visible then
+		suivi = RunService.RenderStepped:Connect(suivreJoueur)
+	elseif suivi then
+		suivi:Disconnect()
+		suivi = nil
+	end
+end)
+workspace:GetAttributeChangedSignal("Seed"):Connect(function()
+	if panel.Visible then render() end
 end)
