@@ -76,7 +76,7 @@ local function icon(id, family, build)
 				p.Shape = Enum.PartType.Cylinder
 			end
 		end
-		p.Name = name or "Element"
+		p.Name = name or (mat == M.Neon and "Lueur" or "Element")
 		p.Size = size
 		p.CFrame = at
 		p.Color = color
@@ -177,6 +177,7 @@ for id in C.ITEMS do
 		local shape = def and def.shape or "tree"
 		local col = def and def.color or ({ chene = rgb(90, 140, 60), sapin = rgb(40, 100, 60), bouleau = rgb(140, 180, 80), cerisier = rgb(230, 150, 170), saule = rgb(120, 170, 90) })[string.match(crop, "tree_(%a+)") or ""] or rgb(90, 140, 60)
 		icon(id, "graine", function(add)
+			add(v(2.4, 0.16, 1.3), cf(0, -0.06, 0), rgb(112, 80, 52), M.Ground or M.Slate) -- motte de terre commune
 			sachet(add, h, tissu)
 			plante(add, shape, col, crop)
 		end)
@@ -468,8 +469,9 @@ for id, info in C.ITEMS do
 		local c = prisePalette(n, h)
 		icon(id, "prise", function(add)
 			-- petit socle de cuir façon « trophée de chasse » : la pièce posée dessus
-			add(v(0.9, 0.06, 0.6), cf(0.2, 0.0, 0.3), rgb(90, 60, 38), M.Fabric) -- petit carré de cuir sous la prise
-			local o = cf(0, 0.15, 0)
+			add(v(1.5, 0.16, 1.1), cf(0, 0.07, 0), rgb(96, 64, 40), M.Fabric) -- carré de cuir : la prise repose dessus
+			add(v(1.6, 0.05, 1.2), cf(0, -0.03, 0), rgb(70, 46, 30), M.Fabric) -- couture
+			local o = cf(0, 0.08, 0) -- légèrement enfoncée dans le cuir
 			if partie == "croc" or partie == "defense" then
 				local big = partie == "defense"
 				for i = (big and 0 or -1), (big and 0 or 1) do
@@ -512,6 +514,8 @@ for id, info in C.ITEMS do
 				local col = partie == "venin" and rgb(120, 190, 40) or (partie == "coeur" and rgb(170, 30, 50) or c)
 				add(v(0.9, 0.8, 0.9), o * cf(0, 0.42, 0), col, partie == "coeur" and M.SmoothPlastic or M.Glass, "ball").Transparency = partie == "coeur" and 0 or 0.2
 				add(v(0.3, 0.3, 0.3), o * cf(0.4, 0.2, 0.3), col, M.Glass, "ball")
+				add(v(0.2, 0.2, 0.2), o * cf(-0.45, 0.1, 0.25), col, M.Glass, "ball")
+				add(v(0.14, 0.14, 0.14), o * cf(0.15, 0.07, 0.5), col, M.Glass, "ball")
 			elseif partie == "oeil" then
 				add(v(0.9, 0.9, 0.9), o * cf(0, 0.45, 0), rgb(240, 236, 220), M.SmoothPlastic, "ball")
 				add(v(0.5, 0.5, 0.2), o * cf(0, 0.45, -0.38), c, M.SmoothPlastic, "cyl", ANG(0, rad(90), 0))
@@ -569,7 +573,7 @@ for id, info in C.ITEMS do
 				end
 			end
 			-- étiquette nouée : la couleur rappelle la créature
-			add(v(0.3, 0.04, 0.2), cf(0.6, 0.15, 0.45), shade(c, 0.9), M.Fabric)
+			add(v(0.34, 0.05, 0.22), cf(0.55, 0.17, 0.4), shade(c, 0.9), M.Fabric) -- étiquette posée sur le cuir
 		end)
 	end
 end
