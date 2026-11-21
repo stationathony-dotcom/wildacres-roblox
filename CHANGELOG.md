@@ -7,6 +7,7 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.3 — 2026-11-21
 
+- **Interface** — La charte de ville s’utilise depuis le sac. Le groupe défile, le butin au clic et au toucher prend la priorité sur l’attaque ou la pose, et douze icônes d’artisanat avancé sont prêtes à publier.
 - **Décor** — Les lanternes, enseignes et bancs ont des attaches. Les fenêtres et volets posables ont des montants, plusieurs accessoires retrouvent le sol et les grands bâtiments sont allégés. Les champs gardent leurs 88 touffes récoltables avec moins de pièces.
 - **Décor** — Les osselets ont leur propre miniature. La table, les lits et plusieurs petits décors retrouvent leurs appuis. Les pépites d’or ont un reflet métallique.
 - **Justice** — Un PNJ assommé retrouvé n’accuse plus tout le serveur : seul le joueur vu sur place prend des étoiles ; la nouvelle ne court que dans la région.

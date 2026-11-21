@@ -118,10 +118,13 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       poteaurond, demipoutre, madrier, chevron, echalas, poteausculpte, colonnecarree, murincline, colombages, clayonnage,
       treillis, niche, fondation, pavage, pilotis, balcon, gouttiere, lucarne, croisillons, volets, vitrail) + bride
       (`bridle`) et selle de guerre (`saddle_war`).
-- [ ] Claude → Codex · interface du sac · « Utiliser » la Charte de ville (`charter`) : demander un nom (3 à 24 lettres)
-      puis `Action:FireServer("ville_fonder", { nom = … })` ; la réponse arrive en toast (69c11f1).
-- [ ] Claude → Codex · icônes (X25) · `throwing_axe` (⚔️), `caparison`, `music_sheet` (🎼), pièces `blk_caillebotis_*`,
-      gisants (ex-squelettes : statues de tombeau en pierre, `Bestiaire` look `pierre = true`) dans les planches.
+- [x] Claude → Codex · interface du sac · « Utiliser » sur `charter` ouvre la saisie et appelle `ville_fonder` (serveur `69c11f1`).
+      Côté client sur disque le 21/11. Synchronisation, bancs et commit par Claude.
+- [ ] Codex → Claude · `Systemes/Villes.lua` · compter les lettres UTF-8 du nom (`utf8.len`) après normalisation NFC.
+      La limite actuelle en octets refuse certains noms de 3 à 24 lettres accentuées acceptés par la saisie du sac.
+- [x] Claude → Codex · icônes (X25) · `throwing_axe`, `caparison`, `music_sheet`, `truffle_cheese`, `fisher_platter`,
+      `heartwood`, `franchise_letter`, arc et brigandine de bois de cœur, deux pièces de haches de jet et `blk_caillebotis_*`.
+      Atlas et emojis de secours sur disque le 21/11. Aucune planche de créatures trouvée pour les gisants. Commit par Claude, publication par le propriétaire.
 - [x] (30bbba0) Claude → Codex · icônes (X25) · `truffle`, `truffle_omelette`, `wall_lantern` (21/11 soir) ; cochon 🐖 / oie 🦆 au
       fermier en emoji (icône peinte bienvenue). Correspondances commitées. Atlas de la truffe à publier (propriétaire).
 - [x] (a8d776e) Claude → Codex · `ConstruireModeles` · modèle **« Chevre »** (chèvre de ferme, comme « Mouton ») : la chèvre est
@@ -203,10 +206,15 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       Pluie et grotte en boucle, sabots de sa monture selon l’allure. Pose, casse, serrure et cloche
       préchargées et déclenchées par les événements serveur. À vérifier en Studio / Play :
       chargement des sept sons, raccords des boucles, cadence des sabots et portée des sons.
-- [~] **X25 · Icônes peintes, 2e lot** — Sur disque · Codex, 21/11 soir. 66 cases sur cinq planches
-      couvrent les formes, l’harnachement, l’équipement, les matières, le mobilier et les deux objets de cuisine.
+- [~] **X25 · Icônes peintes, 2e lot** — Sur disque · Codex, 21/11 soir. 78 cases sur six planches
+      couvrent les formes, l’harnachement, l’équipement, les matières, le mobilier et la cuisine.
       Découpes contrôlées via l’alpha et ordre consigné dans le README. À vérifier en Studio / Play
       après publication des atlas par le propriétaire.
+- [x] **Groupes jusqu’à 40 · interface** — Codex, sur disque le 21/11. Liste défilante, distances actualisées et contours
+      remis après réapparition. Synchronisation, bancs et commit par Claude. À vérifier en Play au-delà de cinq.
+- [x] **Reprise de la vérification d’interface** — Codex, sur disque le 21/11. Un clic/toucher vaut une action de jeu.
+      Boutons partagés dans le Tableau et l’Hôtel des ventes. Miniature des osselets déjà reprise (`64b3767`).
+      Tableau actualisé dans [`VERIFICATION-INTERFACE.md`](VERIFICATION-INTERFACE.md). Synchronisation et commit par Claude.
 - [~] **X26 · `docs/INTERFACE.md` + planches** — Sur disque · Codex, 21/11 soir. Commandes, carte, pose,
       survol, retour et sons documentés. Les planches peintes complètent le catalogue. À vérifier
       en Studio / Play : vues et nouvelles captures indiquées dans les README.
@@ -269,6 +277,12 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 21/11 · Codex · Charte utilisable depuis le sac, avec validation et annulation sur disque.
+  Groupe défilant et distances actualisées, y compris après réapparition.
+  Douze icônes X25 prêtes à publier. Aucune planche de créatures trouvée.
+  Clic de butin exclusif, boutons communs au Tableau et à l’Hôtel des ventes, audit des osselets actualisé.
+  Claude reprend Studio, les bancs, le Play et les commits. Passage ouvert pour les noms accentués.
 
 - 21/11 · Codex · Props, phase 2 sur disque. 76 défauts traités, 29 écarts voulus, 12 modèles allégés et commande Édition ciblée.
   Vérifié localement sur des instances simulées. À synchroniser et à mesurer dans Studio, puis à regarder en Play sur le PC fixe.
