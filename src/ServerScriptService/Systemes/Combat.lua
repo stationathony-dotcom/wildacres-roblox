@@ -233,7 +233,7 @@ function Combat.shoot(player: Player, targetId: string?)
 	end
 	local hasAmmo = ammoUsed ~= nil
 	if not hasAmmo then
-		local names = { stone = "🪨 Plus de pierres pour la fronde.", javelin = "🔱 Plus de javelots. (Établi : planche, fer et plume.)", throwing_knife = "🔪 Plus de couteaux de lancer. (Enclume : fer.)" }
+		local names = { stone = "⛰️ Plus de pierres pour la fronde.", javelin = "🔱 Plus de javelots. (Établi : planche, fer et plume.)", throwing_knife = "🔪 Plus de couteaux de lancer. (Enclume : fer.)", throwing_axe = "⚔️ Plus de haches de jet. (Enclume : fer et planche.)" }
 		G.Util.toast(player, names[ammoOf or ""] or "🏹 Plus de flèches. (Établi : bois, silex et plume.)")
 		return
 	end
@@ -424,6 +424,11 @@ function Combat.hurtPlayer(player: Player, dmg: number, fromPos: Vector3?)
 		return
 	end
 	local def = G.Joueurs.stats(player).defense or 0
+	-- caparaçon dans le sac : protège le cavalier tant qu'il est en selle (Shared/Equilibre.CAPARISON_DEF)
+	if player:GetAttribute("Riding") and G.Joueurs.has(player, "caparison") then
+		local okE, Eq = pcall(require, game:GetService("ReplicatedStorage").Shared.Equilibre)
+		def += okE and Eq.CAPARISON_DEF or 0
+	end
 	local real = math.max(1, math.floor(dmg * (1 - math.min(0.6, def * 0.04))))
 	hum:TakeDamage(real)
 	G.remotes.Fx:FireClient(player, "hurt", fromPos)

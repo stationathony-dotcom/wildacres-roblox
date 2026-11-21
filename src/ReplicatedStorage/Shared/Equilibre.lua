@@ -180,12 +180,16 @@ E.JEWELS = {
 E.NEW_ITEMS = {
 	{ "javelin", "Javelot", "🔱", 6, { planks = 1, iron_ingot = 1, feather = 1 }, 4, "bench", 6 },
 	{ "throwing_knife", "Couteau de lancer", "🔪", 5, { iron_ingot = 1 }, 6, "anvil", 8 },
+	-- 21/11 soir (passage Codex, A-RETRAVAILLER-EQUIPEMENT : haches de jet sans chemin de jeu)
+	{ "throwing_axe", "Hache de jet", "⚔️", 9, { iron_ingot = 1, planks = 1 }, 3, "anvil", 14 },
 	{ "saddle_leather", "Selle de cuir", "🐎", 120, { leather = 4, buckle = 2, wool_cloth = 1 }, 1, "tannery", 6 },
 	{ "saddle_race", "Selle de course", "🏇", 320, { soft_leather = 3, silver_ingot = 1, buckle = 2 }, 1, "tannery", 18 },
 	{ "stirrups", "Étriers", "🔗", 80, { iron_ingot = 2, leather_strap = 2 }, 1, "anvil", 8 },
 	-- 21/11 (« liste items.txt », montures) : bride et rênes, selle de guerre
 	{ "bridle", "Bride et rênes", "🐴", 60, { leather = 2, leather_strap = 2, iron_ring = 1 }, 1, "tannery", 5 },
 	{ "saddle_war", "Selle de guerre", "🛡️", 240, { leather = 5, steel = 1, buckle = 2 }, 1, "tannery", 14 },
+	-- 21/11 soir (passage Codex) : caparaçon, armure du cheval — en selle, +CAPARISON_DEF de défense (Combat.hurtPlayer)
+	{ "caparison", "Caparaçon", "🐎", 260, { wool_cloth = 3, iron_ring = 6, leather = 3 }, 1, "tannery", 16 },
 	-- flèches meilleures (Combat.shoot : AMMO_DMG), tirées en premier
 	{ "arrow_iron", "Flèche à pointe de fer", "🏹", 4, { branches = 1, iron_ingot = 1, feather = 1 }, 8, "anvil", 10 },
 	{ "arrow_barbed", "Flèche barbelée", "🏹", 7, { branches = 1, steel = 1, feather = 2 }, 8, "anvil", 20 },
@@ -266,10 +270,13 @@ E.RANGED_GEAR = {
 	{ "Javelots de chasse", 2, { force = 3, vitesse = 3 }, 6, "javelin", { oak_log = 1, leather = 1 }, 10 },
 	{ "Javelots de guerre", 3, { force = 6, vitesse = 3 }, 8, "javelin", { steel = 1, oak_log = 1, leather = 1 }, 20 },
 	{ "Baudrier du lanceur de couteaux", 3, { discretion = 6, vitesse = 3 }, 7, "throwing_knife", { soft_leather = 2, steel = 1 }, 22 },
+	{ "Haches de jet du forestier", 2, { force = 4, vitesse = 2 }, 6, "throwing_axe", { leather_strap = 2, oak_log = 1 }, 14 },
+	{ "Haches de jet du franc-tireur", 3, { force = 7, vitesse = 2 }, 8, "throwing_axe", { steel = 1, soft_leather = 1 }, 24 },
 }
-E.AMMO_NAME = { stone = "Pierre", javelin = "Javelot", throwing_knife = "Couteau de lancer", arrow = "Flèche" }
+E.CAPARISON_DEF = 6 -- défense ajoutée au cavalier en selle (0,04 par point, plafond 60 % : Combat.hurtPlayer)
+E.AMMO_NAME = { stone = "Pierre", javelin = "Javelot", throwing_knife = "Couteau de lancer", throwing_axe = "Hache de jet", arrow = "Flèche" }
 -- dégâts selon la munition tirée
-E.AMMO_DMG = { arrow = 1, bolt = 1.1, bolt_heavy = 1.3, arrow_iron = 1.25, arrow_barbed = 1.4, javelin = 1.2, stone = 0.8, throwing_knife = 1 }
+E.AMMO_DMG = { arrow = 1, bolt = 1.1, bolt_heavy = 1.3, arrow_iron = 1.25, arrow_barbed = 1.4, javelin = 1.2, stone = 0.8, throwing_knife = 1, throwing_axe = 1.35 }
 E.BOW_AMMO = { "arrow_barbed", "arrow_iron", "arrow", "bolt", "bolt_heavy" } -- arcs et arbalètes : la meilleure d'abord
 
 -- 15. HAUTS NIVEAUX DES MÉTIERS (19/11, AUDIT-CRAFT § 5 : au-delà de 20, les autres métiers ne
