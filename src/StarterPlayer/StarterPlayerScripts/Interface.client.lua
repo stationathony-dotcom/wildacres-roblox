@@ -1612,6 +1612,14 @@ local function game_()
 		if portrait then
 			portrait.Size, portrait.Position = UDim2.fromOffset(163, 174), UDim2.fromOffset(56, 1)
 			portrait.ZIndex, portrait.Parent = 7, doll
+			-- onglet Apparence : l'aperçu montre le choix en cours (teint, coiffure, tenue) avant validation
+			if charTab == "look" and lookDraft then
+				local copie = portrait:FindFirstChildWhichIsA("WorldModel")
+				copie = copie and copie:FindFirstChildWhichIsA("Model")
+				if copie then
+					pcall(require(Shared:WaitForChild("Apparence")).peindre, copie, lookDraft, require(Shared:WaitForChild("WorldGen")), false)
+				end
+			end
 		else
 			label({ Text = "🧍", TextSize = 110, TextXAlignment = Enum.TextXAlignment.Center, TextTransparency = 0.55, Size = UDim2.fromScale(1, 1), Parent = doll, ZIndex = 7 })
 		end

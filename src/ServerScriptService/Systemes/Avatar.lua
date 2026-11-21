@@ -6,6 +6,7 @@ local G
 local Shared = game:GetService("ReplicatedStorage").Shared
 local Design = require(Shared.GearDesign)
 local Visuals = require(Shared.GearVisuals)
+local Apparence = require(Shared.Apparence)
 
 local LOOK_COST = 20 -- le premier choix est gratuit ; ensuite barbier / tailleur payants (l'or sort de l'économie)
 
@@ -42,54 +43,7 @@ local V = Vector3.new
 local C = CFrame.new
 
 -- Coiffures (tête R15 ≈ 1,16 x 1,18 x 1,16 ; l'avant de la tête regarde vers -Z)
-local HAIRS = {
-	court = function(m, h, c)
-		weld(m, h, "Cheveux", V(1.24, 0.34, 1.24), C(0, 0.5, 0.02), c)
-		weld(m, h, "Cheveux", V(1.24, 0.7, 0.3), C(0, 0.22, 0.5), c)
-	end,
-	herisse = function(m, h, c)
-		weld(m, h, "Cheveux", V(1.22, 0.3, 1.22), C(0, 0.5, 0.02), c)
-		for i = -1, 1 do
-			weld(m, h, "Meche", V(0.28, 0.35, 0.28), C(i * 0.36, 0.78, -0.1 + math.abs(i) * 0.15) * CFrame.Angles(0, 0, -i * 0.3), c)
-		end
-	end,
-	chauve = function(m, h, c)
-		weld(m, h, "Cheveux", V(0.2, 0.45, 0.7), C(-0.6, 0.05, 0.15), c)
-		weld(m, h, "Cheveux", V(0.2, 0.45, 0.7), C(0.6, 0.05, 0.15), c)
-	end,
-	barbe = function(m, h, c)
-		weld(m, h, "Cheveux", V(1.24, 0.32, 1.24), C(0, 0.5, 0.02), c)
-		weld(m, h, "Cheveux", V(1.24, 0.6, 0.3), C(0, 0.25, 0.5), c)
-		weld(m, h, "Barbe", V(0.95, 0.42, 0.22), C(0, -0.42, -0.55), c)
-		weld(m, h, "Moustache", V(0.6, 0.12, 0.08), C(0, -0.17, -0.6), c)
-	end,
-	long = function(m, h, c)
-		weld(m, h, "Cheveux", V(1.26, 0.34, 1.26), C(0, 0.5, 0.02), c)
-		weld(m, h, "Cheveux", V(1.28, 1.7, 0.36), C(0, -0.2, 0.52), c)
-		weld(m, h, "Meche", V(0.22, 1.2, 0.5), C(-0.62, -0.05, 0.1), c)
-		weld(m, h, "Meche", V(0.22, 1.2, 0.5), C(0.62, -0.05, 0.1), c)
-	end,
-	chignon = function(m, h, c)
-		weld(m, h, "Cheveux", V(1.26, 0.34, 1.26), C(0, 0.5, 0.02), c)
-		weld(m, h, "Cheveux", V(1.26, 0.8, 0.3), C(0, 0.2, 0.52), c)
-		weld(m, h, "Chignon", V(0.6, 0.6, 0.6), C(0, 0.55, 0.72), c)
-	end,
-	tresses = function(m, h, c)
-		weld(m, h, "Cheveux", V(1.26, 0.34, 1.26), C(0, 0.5, 0.02), c)
-		weld(m, h, "Cheveux", V(1.26, 0.8, 0.3), C(0, 0.2, 0.52), c)
-		weld(m, h, "Tresse", V(0.26, 1.5, 0.26), C(-0.5, -0.55, 0.45), c)
-		weld(m, h, "Tresse", V(0.26, 1.5, 0.26), C(0.5, -0.55, 0.45), c)
-		weld(m, h, "Ruban", V(0.32, 0.16, 0.32), C(-0.5, -1.25, 0.45), Color3.fromRGB(220, 70, 90))
-		weld(m, h, "Ruban", V(0.32, 0.16, 0.32), C(0.5, -1.25, 0.45), Color3.fromRGB(220, 70, 90))
-	end,
-	carre = function(m, h, c)
-		weld(m, h, "Cheveux", V(1.28, 0.36, 1.28), C(0, 0.5, 0.02), c)
-		weld(m, h, "Cheveux", V(1.3, 1, 0.32), C(0, 0.1, 0.52), c)
-		weld(m, h, "Meche", V(0.22, 0.9, 0.9), C(-0.63, 0.1, 0.12), c)
-		weld(m, h, "Meche", V(0.22, 0.9, 0.9), C(0.63, 0.1, 0.12), c)
-		weld(m, h, "Frange", V(1.2, 0.2, 0.15), C(0, 0.38, -0.6), c)
-	end,
-}
+local HAIRS = Apparence.HAIRS -- coiffures : Shared/Apparence (aussi pour l'aperçu de la fiche)
 
 local STRAW = Color3.fromRGB(226, 196, 104)
 local HATS = {
@@ -440,6 +394,7 @@ function Avatar.applyLook(player: Player)
 	paint(PANTS_PARTS, WG.PANTS[look.pants] or WG.PANTS[1])
 	paint(FEET, Color3.fromRGB(70, 50, 36))
 	local head = char:FindFirstChild("Head") :: BasePart?
+	Apparence.visage(head, WG.HAIR_COLORS[look.hairColor] or WG.HAIR_COLORS[1]) -- la texture effacée emportait le visage
 	if head then
 		local hairModel = Instance.new("Model")
 		hairModel.Name = "Coiffure_WA"
