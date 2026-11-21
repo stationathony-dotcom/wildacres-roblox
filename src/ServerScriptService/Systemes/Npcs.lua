@@ -627,6 +627,9 @@ local function fight(e)
 				player:SetAttribute("SheriffId", e.data.id)
 			end
 			G.Combat.hurtPlayer(player, e.data.role == "sheriff" and 12 or 8, e.root.Position)
+			if G.Util.sfx then
+				G.Util.sfx(e.data.role == "sheriff" and "impact_sourd" or "impact_lame", root.Position + Vector3.new(0, 1.5, 0))
+			end
 		end
 	end
 end

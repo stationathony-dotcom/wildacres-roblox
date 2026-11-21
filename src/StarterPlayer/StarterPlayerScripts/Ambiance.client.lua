@@ -239,6 +239,7 @@ local SFX = {
 	coffre = { id = "rbxassetid://9114493937", len = 0.45, vol = 0.46 },
 	ramasser = { id = "rbxassetid://9114193047", len = 0.26, vol = 0.22 },
 	interface = { id = "rbxassetid://9114193047", len = 0.28, vol = 0.18 },
+	clic = { id = "rbxassetid://9114193047", len = 0.12, vol = 0.08 }, -- bouton pressé (plus bref, plus doux)
 	recu = { id = "rbxassetid://9113502506", len = 0.39, vol = 0.51 },
 	decouverte = { id = "rbxassetid://9113585009", len = 1.33, vol = 0.33 },
 	vache = { id = "rbxassetid://9113636724", len = 1.1, vol = 0.38 },
@@ -384,6 +385,24 @@ do
 	trigger.Name = "SonInterface"
 	trigger.Event:Connect(function() playSfx("interface", Vector3.zero) end)
 	trigger.Parent = player
+	-- chaque bouton de l'interface répond d'un petit clic (une fois par 80 ms au plus)
+	local lastClic = 0
+	local function wire(b: Instance)
+		if b:IsA("GuiButton") and not b:GetAttribute("SansClic") then
+			b.Activated:Connect(function()
+				local now = os.clock()
+				if now - lastClic > 0.08 then
+					lastClic = now
+					playSfx("clic", Vector3.zero)
+				end
+			end)
+		end
+	end
+	local pg = player:WaitForChild("PlayerGui")
+	for _, d in pg:GetDescendants() do
+		wire(d)
+	end
+	pg.DescendantAdded:Connect(wire)
 	Remotes:WaitForChild("Notify").OnClientEvent:Connect(function(message, kind)
 		if kind == "big" and type(message) == "string" and message:find("📍 Découverte : ", 1, true) == 1 then
 			playSfx("decouverte", Vector3.zero)
