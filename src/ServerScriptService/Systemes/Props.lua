@@ -872,6 +872,9 @@ function Props.click(player: Player, id: string)
 	else
 		mode = "take"
 	end
+	if mode == "take" or mode == "berries" then
+		G.Util.geste(player, "cueillir") -- à la main : on se penche pour prendre
+	end
 	Props.harvest(player, id, mode)
 end
 

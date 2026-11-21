@@ -590,6 +590,9 @@ function Quetes.turnIn(player: Player, id: string)
 		G.Economie.record(player, "quete", q.title .. " (+" .. q.gold .. ")")
 	end
 	G.Util.toast(player, "✅ Quête terminée : " .. q.title .. "  (+" .. q.gold .. " or)", "big")
+	if G.Util.sfx then
+		G.Util.sfx("niveau", Vector3.zero, player) -- fanfare de quête rendue
+	end
 	G.Joueurs.sync(player)
 	Quetes.send(player)
 end

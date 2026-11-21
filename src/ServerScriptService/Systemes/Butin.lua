@@ -287,6 +287,9 @@ function Butin.pick(player: Player, id: number): boolean
 		return false
 	end
 	give(player, d)
+	if G.Util.sfx then
+		G.Util.sfx("ramasser", d.pos) -- on entend ce qu'on ramasse
+	end
 	return true
 end
 
@@ -307,6 +310,14 @@ function Butin.pickAll(player: Player): number
 	end
 	for _, d in list do
 		give(player, d)
+	end
+	if #list > 0 then
+		if G.Util.sfx then
+			G.Util.sfx("ramasser", root.Position) -- un seul bruit pour la brassée
+		end
+		if G.Util.geste then
+			G.Util.geste(player, "cueillir")
+		end
 	end
 	if #list == 0 and blocked then
 		G.Util.toast(player, "Pas encore : ce butin revient d'abord à celui qui l'a obtenu.")

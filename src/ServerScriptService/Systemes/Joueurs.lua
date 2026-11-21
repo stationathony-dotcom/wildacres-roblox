@@ -224,6 +224,9 @@ function J.take(player: Player, item: string, n: number?): boolean
 	end
 	if item == "gold" and G.Economie and G.Economie.goldSpent then
 		G.Economie.goldSpent(player, amount) -- flux d'or du monde (/wa or)
+		if G.Util.sfx then
+			G.Util.sfx("pieces", Vector3.zero, player) -- on entend la bourse s'alléger (pour lui seul)
+		end
 	end
 	J.markDirty(player)
 	return true
@@ -478,6 +481,9 @@ function J.learnTalent(player: Player, id: string)
 		end
 	end
 	p.talents[id] = (p.talents[id] or 0) + 1
+	if G.Util.sfx then
+		G.Util.sfx("niveau", Vector3.zero, player) -- talent appris : petite fanfare
+	end
 	G.Util.toast(player, "Talent appris : " .. t.name .. " (rang " .. p.talents[id] .. ")", "big")
 	J.applyStats(player)
 	J.markDirty(player)
@@ -577,6 +583,10 @@ function J.equip(player: Player, id: number)
 			G.Avatar.refresh(player)
 			J.markDirty(player)
 			G.Util.toast(player, "Équipé : " .. item.name)
+			local root = G.Util.root and G.Util.root(player)
+			if root and G.Util.sfx then
+				G.Util.sfx("equiper", root.Position) -- cliquetis de la pièce qu'on enfile
+			end
 			-- panoplie complétée ? (Shared/Equilibre)
 			local okS, EqS = pcall(require, game:GetService("ReplicatedStorage").Shared.Equilibre)
 			if okS then

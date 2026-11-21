@@ -155,6 +155,9 @@ function Moissons.harvest(player: Player, id: string)
 		e.hits = 0
 	end
 	e.last = now
+	if G.Util.geste then
+		G.Util.geste(player, "cueillir") -- on se penche sur la touffe
+	end
 	local power = 1
 	if src.tool and G.Joueurs.bestTool then
 		local _, tier = G.Joueurs.bestTool(player, src.tool)
