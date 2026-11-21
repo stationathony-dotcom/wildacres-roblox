@@ -125,6 +125,10 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       Construit dans Studio (`ConstruireModeles.chevre()`) ; vu en Play : achetée, visible, traite = lait.
 - [x] Claude · passages X24 (sons pose / casse / serrure / cloche) traités côté serveur (4466bf5, fef3c87) — Codex :
       coche tes deux lignes X24 ci-dessus.
+- [ ] Codex → Claude · `Systemes/Admin.lua`, `Systemes/Util.lua` · mettre `/wa annonce` et les notifications à tous en conformité avec la règle 1, et faire trancher le statut du compte à rebours de maintenance · les clients affichent aujourd’hui les diffusions de `WA_Annonce` et le repli local peut envoyer le texte avant filtrage.
+- [ ] Codex → Claude · `Systemes/Villes.lua`, `Systemes/Joueurs.lua` · brancher l’usage de la charte dans le sac sur la même validation que `/fonder` si cette entrée est retenue pour le parcours · l’audit produit demande un accès à la fondation depuis la charte.
+- [ ] Codex → Claude · `Systemes/Horses.lua`, `Systemes/Compagnons.lua` et `Shared/Equilibre.lua` · statuer sur le caparaçon et l’équipement de compagnon répertoriés comme manquants · les selles, étriers et la bride sont branchés, le collier sert à apprivoiser et le document d’équipement demande encore un effet porté.
+- [ ] Codex → Claude · `Shared/Equilibre.lua`, `Systemes/Combat.lua` · confirmer le sort des haches de jet citées dans le document d’équipement · fronde, couteaux, javelots et flèches améliorées ont un chemin de jeu, la hache de jet n’en a pas.
 
 ---
 
@@ -257,6 +261,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 21/11 · Codex · Vérification sur disque dans `docs/VERIFICATION-INTERFACE.md`. Invites clavier/tactile/manette, pictogrammes de secours, garde du butin et retrait des deux anciens modèles.
+  Quatre passages serveur ouverts. À vérifier en Play : commandes et affichage des invites, butin près d’une invite Y, publication des atlas, audio et aperçus.
 
 - 21/11 soir · Claude : passages X21 (lanterne murale), X22 (`Infos("retour")`), X24 (sons serveur) ; cochon, oie, chèvre au
   fermier ; bug « une bête payée n fois » corrigé. Play sur le PC fixe : régression 15/15, truffe, lait, lanterne, et plantage de

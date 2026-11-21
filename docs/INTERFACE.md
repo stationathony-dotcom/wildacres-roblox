@@ -12,7 +12,8 @@ Relevé dans le code (`StarterPlayerScripts`), pour l'étape 20 du plan. Tout es
 | Gauche | colonne de boutons : Sac, Personnage, Compétences, Journal, Carte, Clan, Atelier, Paramètres |
 | Bas-centre | barre rapide 9 cases, icônes peintes si publiées, miniatures 3D ou pictogrammes, usure des outils |
 | Bas-gauche | chat Roblox (onglets Général, Commerce, Clan, Groupe) |
-| Bas-droite | notifications, gains identiques regroupés et alertes de danger prioritaires |
+| Bas-droite | gains et butins, avec regroupement des gains identiques |
+| Haut-centre, sous la boussole | autres notifications, dont les alertes de danger prioritaires |
 | Mobile | bouton Menu, barre rapide et actions tactiles autour du pouce |
 
 ## Navigation
@@ -32,8 +33,8 @@ Sur téléphone, le sac fait défiler ses catégories horizontalement. La fiche 
 | Personnage (équipement, caractéristiques, compétences, collections, titres, apparence) | P | Interface |
 | Compétences et talents | K | Interface |
 | Atelier (grille 3×3, recherche et fiche de recette avec stock, station et compétence) | C | Interface |
-| Clan (membres, grades, coffre, journal) | L | Interface |
-| Construction libre (formes × matériaux, fantôme, rotation) | V | Interface |
+| Clan (membres, grades, coffre, journal) | L. Recrutement via l’invite au-dessus d’un joueur : N au clavier, → à la manette | Interface |
+| Construction libre (formes × matériaux, fantôme, rotation) | Fabriquer à l’atelier, placer la pièce dans la barre rapide, puis la sélectionner ou appuyer sur V | Interface |
 | Journal (offres sur place, quêtes actives et journal d’absence) | J | Quetes.client |
 | Carte du monde (régions découvertes, repères et lit) | M | Carte.client |
 | Paramètres (sons, flashs, secousses, caméra, souris, graphismes, texte et formulaire d’équipe) | O | Ambiance.client |
@@ -43,11 +44,11 @@ Sur téléphone, le sac fait défiler ses catégories horizontalement. La fiche 
 | Banque de village | dialogue marchand | Interface |
 | Coffre (le sien, d'un autre : vol) | invite | Interface (`chest`) |
 | Étal de vente | invite | Interface (`stall`) |
-| Poste : courrier + hôtel des ventes | boîte aux lettres | Interface (`post`) |
-| Échange direct entre joueurs | invitation | Interface (`trade`) |
-| Groupe | liste des joueurs → inviter | Interface (`group`) |
+| Poste et hôtel des ventes | Deux invites sur la boîte aux lettres : E pour la poste, F pour l’hôtel des ventes | Interface (`post`), HotelVentes.client |
+| Échange direct entre joueurs | Invite au-dessus d’un joueur à proximité : Y au clavier, ↑ à la manette | Interface (`trade`) |
+| Groupe | Invite au-dessus d’un joueur à proximité : U au clavier, ↓ à la manette | Interface (`group`) |
 | Tableau d’affichage (activités, concours de dressage et d’élevage) | invite au marché / taverne | Activites.client |
-| Conseil du village (élection, projets, budget) | invite à la chapelle | Conseil.client |
+| Conseil du village (élection, projets, budget) | Invite sur le parvis de la chapelle, au marché ou à la taverne selon le village | Conseil.client |
 | Caserne (recrues, solde et quatre ordres pour les soldats à portée) | invite | Interface |
 | Mini-jeux (apprivoiser, crocheter…) | selon l'action | Interface |
 
@@ -76,9 +77,12 @@ Les miniatures du mobilier reprennent les modèles posés, dont la lanterne mura
 ## Autres commandes
 
 - Souris : clic gauche pour attaquer ou utiliser l’outil, clic droit pour sélectionner une cible. Maintenir le clic gauche prolonge la récolte visée.
-- Clavier : E interagir, R action secondaire, Q tout ramasser,
-  G lâcher ce qu'on porte, X descendre de cheval, H siffler sa monture, Maj courir, 1-9 barre rapide.
-- Manette : stick gauche cliqué = courir, gâchette droite = attaquer ou utiliser l’outil, X / Y = invites.
+- Clavier : E interagir, R pour certaines actions secondaires, Q tout ramasser à proximité,
+  G ou X hors construction pour lâcher ce qu’on porte ou descendre de cheval, H siffler sa monture,
+  Maj courir, 1 à 9 pour la barre rapide et Ctrl gauche pour s’accroupir.
+- Manette : cliquer le stick gauche pour basculer la course, appuyer sur la gâchette droite pour
+  attaquer ou utiliser l’outil. Les invites indiquent leur touche. Y ramasse à proximité lorsqu’aucune
+  invite visible n’utilise cette touche.
 - Chat : `/aide` liste les commandes des joueurs (`/coince`, `/signaler`, `/ceder`, `/louer`,
   `/commande`, `/livrer`, `/demonter`, `/autoriser`, `/bloquer`…).
 
