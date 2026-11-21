@@ -3618,11 +3618,20 @@ local function game_()
 		return math.floor(v * 2 + 0.5) / 2
 	end
 
+	local apercuParcelle = require(script.Parent:WaitForChild("ParcelleApercu")).new(gui, Remotes, Config.CELL)
 	RunService.RenderStepped:Connect(function()
+		local open = WindowNav.isOpen()
+		local held = not open and hotSlots[selected]
+		local info = held and Config.ITEMS[held]
+		local position
+		if info and info.claim and ownedCount(held) > 0 then
+			local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+			position = root and ApercuPose.caseDevant(root, Config.CELL)
+		end
+		apercuParcelle(position)
 		if not building or not ghost or not buildBlock then
 			return
 		end
-		local open = WindowNav.isOpen()
 		buildHint.Visible = not open
 		local hit = not open and aim()
 		if not hit then
