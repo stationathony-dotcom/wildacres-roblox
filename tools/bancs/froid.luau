@@ -40,6 +40,10 @@ check("grotte sans lumière : obscur", F.isDark(P, Vector3.new(0, -120, 0)) == t
 bagT.miner_lamp = 1
 check("lampe de mineur dans le sac : on y voit", F.isDark(P, Vector3.new(0, -120, 0)) == false)
 bagT.miner_lamp = nil
+prof.equipped.offhand = { name = "Torche" }
+c, why = F.isDark(P, Vector3.new(0, -120, 0))
+check("torche en main gauche : on y voit", c == false and why == "torche")
+prof.equipped.offhand = nil
 check("à l'air libre : jamais obscur", F.isDark(P, Vector3.new(0, 5, 0)) == false)
 talents.survivaliste = 1
 local c, why = F.isDark(P, Vector3.new(0, -120, 0))
@@ -52,10 +56,10 @@ T:FillBlock(CFrame.new(M + Vector3.new(0, -2, 0)), Vector3.new(20, 4, 20), Enum.
 task.wait(0.2)
 biome = "marais"
 check("boue du marais, sans bottes : on s'enlise", F.isStuck(P, M + Vector3.new(0, 2, 0)) == true)
-prof.equipped.trinket = { name = "Bottes de marais" }
+prof.equipped.boots = { name = "Bottes de marais" }
 c, why = F.isStuck(P, M + Vector3.new(0, 2, 0))
-check("bottes de marais : sol tenu", c == false and why == "bottes")
-prof.equipped.trinket = nil
+check("bottes de marais (emplacement boots) : sol tenu", c == false and why == "bottes")
+prof.equipped.boots = nil
 statsT.force = 8
 c, why = F.isStuck(P, M + Vector3.new(0, 2, 0))
 check("Force 8 : se tire de la boue", c == false and why == "fort")

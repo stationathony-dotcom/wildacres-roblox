@@ -1,7 +1,7 @@
 -- Zones exigeantes (19/11, ses mots : « certains attributs ou tenues pour certaines zones »).
 -- Le FROID et la CHALEUR (soif) ont été retirés le 20/11 (décision : pas de survie). Restent :
 --   · boue des marais : on s'enlise → bottes, ou Force ≥ STRONG (à cheval : rien) ;
---   · grottes (sous CAVE_Y) : obscurité → une lanterne ou une lampe de mineur dans le sac.
+--   · grottes (sous CAVE_Y) : obscurité → une lanterne ou une lampe de mineur dans le sac, ou une torche en main gauche.
 -- Effets doux (allure réduite : Game.step lit « Enlise » et « Obscur » ; l'obscurité assombrit l'écran) :
 -- ces zones se préparent, elles ne tuent pas. Talent Survivaliste : ni boue ni obscurité.
 -- (Le module garde son nom « Froid » pour les appels et les bancs existants.)
@@ -20,7 +20,8 @@ end
 
 local function wears(player: Player, words): boolean
 	local prof = G.Joueurs.get(player)
-	for _, slot in { "armor", "hat", "trinket" } do
+	-- 20/11 : les bottes ont leur emplacement (« boots ») depuis les 9 emplacements ; les anciens restent lus
+	for _, slot in { "boots", "legs", "armor", "hat", "trinket" } do
 		local it = prof and prof.equipped and prof.equipped[slot]
 		local name = it and string.lower(it.name or "") or ""
 		for _, w in words do
@@ -74,6 +75,12 @@ function Froid.isDark(player: Player, pos: Vector3): (boolean, string?)
 	if survivor(player) then
 		return false, "survivaliste"
 	end
+	-- torche tenue en main gauche (emplacement « offhand », lot C7)
+	local prof = G.Joueurs.get(player)
+	local oh = prof and prof.equipped and prof.equipped.offhand
+	if oh and string.find(string.lower(oh.name or ""), "torche", 1, true) then
+		return false, "torche"
+	end
 	for _, it in LIGHT_ITEMS do
 		if (G.Joueurs.count(player, it) or 0) > 0 then
 			return false, "lumière"
@@ -84,7 +91,7 @@ end
 
 local MSG = {
 	Enlise = { "🥾 Tu t'enlises dans la boue : des bottes t'aideraient.", "Tu retrouves un sol ferme." },
-	Obscur = { "🌑 Il fait noir : une lanterne ou une lampe de mineur dans le sac t'éclairerait.", "Tu y vois de nouveau." },
+	Obscur = { "🌑 Il fait noir : une lanterne, une lampe de mineur ou une torche en main t'éclairerait.", "Tu y vois de nouveau." },
 }
 
 function Froid.step(dt: number)
