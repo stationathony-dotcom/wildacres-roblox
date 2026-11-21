@@ -1100,7 +1100,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (136) 104. **Le moulin** — Construire ou réparer un moulin. → sorte « bâtir (Quetes) »
 - [x] (137) 105. **Le chantier communal** — Livrer des matériaux à un chantier. → repris tel quel (Quetes)
 - [x] (138) 106. **Le mobilier du maire** — Fabriquer un ensemble de meubles. → sorte « fabriquer (Quetes) »
-- [ ] (139) 107. **La maison idéale** — Faire valider une construction par un PNJ.
+- [x] (139) 107. **La maison idéale** — Faire valider une construction par un PNJ. → concours de construction (Activites), jugé par les joueurs
 - [x] (140) 108. **L'artisan reconnu** — Fabriquer 10 objets différents. → sorte « fabriquer (Quetes) »
 - [x] (141) 109. **Le bâtiment remarquable** — Participer à la construction d'un bâtiment public. → sorte « concours / courses (Activites) »
 - [x] (142) 110. **Le maître constructeur** — Construire une propriété répondant à plusieurs critères. → sorte « bâtir (Quetes) »
@@ -1154,7 +1154,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (193) 146. **Les oiseaux migrateurs** — Observer trois espèces d'oiseaux. → sorte « visiter (QuetesLieux) »
 - [x] (194) 147. **Le lac aux grenouilles** — Découvrir une zone où vivent de nombreuses grenouilles. → sorte « découvrir / visiter (QuetesLieux) »
 - [x] (195) 148. **Le terrier mystérieux** — Identifier l'animal qui habite un terrier. → sorte « enquêter (QuetesLieux) »
-- [ ] (196) 149. **Le biologiste amateur** — Photographier ou enregistrer dix observations d'animaux.
+- [x] (196) 149. **Le biologiste amateur** — Photographier ou enregistrer dix observations d'animaux. → livre du bestiaire (Livres)
 - [x] (197) 150. **Le vieux castor** — Retrouver un barrage de castors. → sorte « retrouver (QuetesLieux) »
 - [x] (198) 151. **Le nid de l'aigle** — Localiser un nid en altitude. → sorte « découvrir / visiter (QuetesLieux) »
 - [x] (199) 152. **La tanière des loups** — Découvrir une tanière et en noter l'emplacement. → sorte « découvrir / visiter (QuetesLieux) »
@@ -1262,7 +1262,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (303) 239. **Le fournisseur officiel** — Obtenir un contrat régulier avec un commerçant. → sorte « apporter (Quetes) »
 - [x] (304) 240. **Une commande sur mesure** — Fabriquer un objet demandé par un client. → sorte « fabriquer (Quetes) »
 - [x] (305) 241. **Les marchandises rares** — Trouver cinq produits difficiles à obtenir. → sorte « retrouver (QuetesLieux) »
-- [ ] (306) 242. **Le commerce entre biomes** — Échanger des ressources provenant de trois biomes.
+- [x] (306) 242. **Le commerce entre biomes** — Échanger des ressources provenant de trois biomes. → demandes régionales (Shop.wanted) + troc
 - [x] (307) 243. **La boutique du joueur** — Ouvrir une boutique personnelle. → étals (Ventes)
 - [x] (308) 244. **Le premier client** — Réaliser une vente dans sa boutique. → étals (Ventes)
 - [x] (309) 245. **Le commerçant réputé** — Atteindre un certain niveau de réputation commerciale. → réputation par village (Reputation)
@@ -1446,7 +1446,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (486) 387. **Le dernier cartographe** — Retrouver les cartes d'un ancien explorateur. → sorte « retrouver (QuetesLieux) »
 - [x] (487) 388. **Le royaume disparu** — Découvrir les vestiges d'un royaume oublié. → sorte « découvrir / visiter (QuetesLieux) »
 - [x] (488) 389. **La vérité sur le gardien** — Comprendre l'histoire d'une créature légendaire. → sorte « enquêter (QuetesLieux) »
-- [ ] (489) 390. **Les chroniques de Wild Acres** — Terminer une grande série de quêtes historiques.
+- [x] (489) 390. **Les chroniques de Wild Acres** — Terminer une grande série de quêtes historiques. → chroniques / pages anciennes (Chroniques)
 
 ### 23. Quêtes quotidiennes et hebdomadaires
 
@@ -1510,7 +1510,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (552) 442. **Le domaine agricole** — Installer une exploitation sur son terrain. → sorte « bâtir / étal (QuetesLieux) »
 - [x] (553) 443. **La résidence secondaire** — Obtenir un second lieu de résidence, si le système le permet. → sorte « apporter (Quetes) »
 - [x] (554) 444. **Le manoir** — Construire une grande demeure répondant à des critères précis. → sorte « bâtir (Quetes) »
-- [ ] (555) 445. **L'architecte du royaume** — Faire reconnaître plusieurs constructions.
+- [x] (555) 445. **L'architecte du royaume** — Faire reconnaître plusieurs constructions. → concours de construction (Activites)
 - [x] (556) 446. **Le propriétaire généreux** — Mettre une installation à disposition d'autres joueurs. → sorte « bâtir (Quetes) »
 - [x] (557) 447. **La maison d'hôtes** — Aménager des chambres pour les voyageurs. → sorte « bâtir (Quetes) »
 - [x] (558) 448. **Le domaine prospère** — Posséder une propriété avec plusieurs installations fonctionnelles. → repris tel quel (Quetes)
@@ -1551,7 +1551,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (593) 477. **Le capitaine expérimenté** — Réussir un voyage maritime difficile. → sorte « concours / courses (Activites) »
 - [x] (594) 478. **La crique cachée** — Découvrir un passage côtier secret. → sorte « découvrir / visiter (QuetesLieux) »
 - [x] (595) 479. **Les îlots oubliés** — Visiter plusieurs petites îles. → sorte « visiter (QuetesLieux) »
-- [ ] (596) 480. **La carte des marées** — Étudier les changements d'accès à certaines zones.
+- [x] (596) 480. **La carte des marées** — Étudier les changements d'accès à certaines zones. → volontairement absent : pas de marées (îles fixes)
 
 ### 28. Quêtes de connaissance et de réputation
 
@@ -1594,40 +1594,40 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (638) 511. **Le village en manque de bois** — Un village demande une quantité aléatoire de bois. → sorte « apporter (Quetes) »
 - [x] (639) 512. **La commande surprise** — Un artisan demande un objet aléatoire. → repris tel quel (Quetes)
 - [x] (640) 513. **Le voyageur égaré** — Un PNJ apparaît dans une zone et cherche son village. → sorte « escorter (QuetesLieux) »
-- [ ] (641) 514. **Le marchand ambulant** — Un marchand demande une escorte.
-- [ ] (642) 515. **La ferme en difficulté** — Une exploitation a besoin d'aide.
-- [ ] (643) 516. **Le troupeau dispersé** — Des animaux se sont éloignés de leur enclos.
-- [ ] (644) 517. **Le chantier urgent** — Un bâtiment doit être réparé rapidement.
+- [x] (641) 514. **Le marchand ambulant** — Un marchand demande une escorte. → colporteur (Metiers) + sorte « escorter »
+- [x] (642) 515. **La ferme en difficulté** — Une exploitation a besoin d'aide. → sortes « apporter » / « récolter »
+- [x] (643) 516. **Le troupeau dispersé** — Des animaux se sont éloignés de leur enclos. → sorte « retrouver » (QuetesLieux)
+- [x] (644) 517. **Le chantier urgent** — Un bâtiment doit être réparé rapidement. → sorte « réparer » (QuetesLieux)
 - [ ] (645) 518. **La route encombrée** — Un passage doit être dégagé.
-- [ ] (646) 519. **Le coffre découvert** — Un PNJ a trouvé un coffre et demande de l'aide pour l'identifier.
-- [ ] (647) 520. **La récolte imprévue** — Une récolte exceptionnelle nécessite des bras supplémentaires.
-- [ ] (648) 521. **La cargaison perdue** — Une livraison a disparu sur une route.
-- [ ] (649) 522. **La mine abandonnée** — Une mine a besoin d'être explorée.
-- [ ] (650) 523. **Le campement temporaire** — Des voyageurs ont besoin d'un abri.
-- [ ] (651) 524. **Le visiteur mystérieux** — Un personnage inconnu arrive dans un village.
-- [ ] (652) 525. **La demande du maire** — Le maire choisit une mission selon les besoins du village.
-- [ ] (653) 526. **Le besoin du marchand** — Un marchand réclame le produit dont son stock manque.
+- [x] (646) 519. **Le coffre découvert** — Un PNJ a trouvé un coffre et demande de l'aide pour l'identifier. → sorte « enquêter » (fin d'enquête : coffre)
+- [x] (647) 520. **La récolte imprévue** — Une récolte exceptionnelle nécessite des bras supplémentaires. → sorte « récolter »
+- [x] (648) 521. **La cargaison perdue** — Une livraison a disparu sur une route. → sorte « retrouver » (« Une livraison a disparu »)
+- [x] (649) 522. **La mine abandonnée** — Une mine a besoin d'être explorée. → grottes (Donjons) + sorte « visiter »
+- [x] (650) 523. **Le campement temporaire** — Des voyageurs ont besoin d'un abri. → sorte « bâtir »
+- [x] (651) 524. **Le visiteur mystérieux** — Un personnage inconnu arrive dans un village. → colporteur de passage (Metiers)
+- [x] (652) 525. **La demande du maire** — Le maire choisit une mission selon les besoins du village. → commande de village (Quetes)
+- [x] (653) 526. **Le besoin du marchand** — Un marchand réclame le produit dont son stock manque. → pénuries et demandes régionales (Shop.wanted)
 - [x] (654) 527. **Le signal du garde** — Une patrouille demande de l'aide à proximité. → sorte « ronde (QuetesLieux, 21/11) »
-- [ ] (655) 528. **La découverte rare** — Une ressource spéciale apparaît quelque part sur l'île.
-- [ ] (656) 529. **La rumeur du jour** — Un PNJ donne un indice menant vers un lieu aléatoire.
+- [x] (655) 528. **La découverte rare** — Une ressource spéciale apparaît quelque part sur l'île. → événements (Evenements : météorite, ruines)
+- [x] (656) 529. **La rumeur du jour** — Un PNJ donne un indice menant vers un lieu aléatoire. → rumeurs des habitants (a8774ef)
 - [x] (657) 530. **L'événement imprévu** — Un événement local déclenche une mission collective. → grottes en groupe + chasse en groupe (Donjons)
 
 ### 31. Quêtes de coopération entre joueurs
 
-- [ ] (661) 531. **Deux artisans** — Deux joueurs doivent fabriquer ensemble un objet.
+- [x] (661) 531. **Deux artisans** — Deux joueurs doivent fabriquer ensemble un objet. → commandes entre joueurs (/commande)
 - [x] (662) 532. **La grande livraison** — Plusieurs joueurs réunissent une cargaison. → chantiers de village / commandes (contribution commune)
-- [ ] (663) 533. **L'expédition organisée** — Un groupe visite plusieurs lieux.
-- [ ] (664) 534. **La ferme collective** — Des joueurs travaillent sur une exploitation commune.
+- [x] (663) 533. **L'expédition organisée** — Un groupe visite plusieurs lieux. → groupes + sorte « visiter »
+- [x] (664) 534. **La ferme collective** — Des joueurs travaillent sur une exploitation commune. → confiance « batir » entre joueurs (Util.trusted)
 - [x] (665) 535. **Le chantier partagé** — Plusieurs joueurs contribuent à une construction. → chantiers de village (Chantiers, contribution commune)
-- [ ] (666) 536. **Le convoi sécurisé** — Un groupe accompagne une caravane.
+- [x] (666) 536. **Le convoi sécurisé** — Un groupe accompagne une caravane. → diligence + sorte « escorter »
 - [x] (667) 537. **La chasse aux indices** — Chaque joueur trouve une partie de l'énigme. → énigmes des donjons (Donjons, leviers cachés)
-- [ ] (668) 538. **Le donjon coordonné** — Les joueurs doivent résoudre ensemble des mécanismes.
-- [ ] (669) 539. **Les métiers complémentaires** — Plusieurs métiers doivent produire un objet final.
-- [ ] (670) 540. **Le sauvetage du voyageur** — Un groupe doit retrouver un PNJ perdu.
-- [ ] (671) 541. **Le marché collectif** — Des joueurs fournissent plusieurs produits à un marché.
+- [x] (668) 538. **Le donjon coordonné** — Les joueurs doivent résoudre ensemble des mécanismes. → énigmes des donjons, grottes en groupe (Donjons)
+- [x] (669) 539. **Les métiers complémentaires** — Plusieurs métiers doivent produire un objet final. → commandes entre joueurs + recettes à plusieurs métiers
+- [x] (670) 540. **Le sauvetage du voyageur** — Un groupe doit retrouver un PNJ perdu. → sorte « escorter » / « retrouver »
+- [x] (671) 541. **Le marché collectif** — Des joueurs fournissent plusieurs produits à un marché. → chantier « marché » (Chantiers)
 - [x] (672) 542. **L'alliance temporaire** — Deux clans doivent réussir une mission commune. → volontairement absent : règle 1 (les alliances naissent des joueurs)
-- [ ] (673) 543. **Le festival organisé** — Des joueurs préparent différentes activités.
-- [ ] (674) 544. **La grande expédition maritime** — Plusieurs équipages visitent des îles.
+- [x] (673) 543. **Le festival organisé** — Des joueurs préparent différentes activités. → rassemblement libre au tableau (Activites)
+- [x] (674) 544. **La grande expédition maritime** — Plusieurs équipages visitent des îles. → sorte « naviguer » + voyage en mer (Mondes)
 - [x] (675) 545. **Les gardiens du village** — Plusieurs joueurs assurent ensemble la protection d'un village fictif. → invasion (Evenements) + chantiers (palissade)
 
 ### 32. Quêtes secrètes et découvertes cachées
@@ -1641,7 +1641,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (685) 552. **Le livre sans titre** — Découvrir l'origine d'un livre mystérieux. → sorte « découvrir / visiter (QuetesLieux) »
 - [x] (686) 553. **La chambre secrète** — Trouver une pièce cachée dans un bâtiment. → sorte « retrouver (QuetesLieux) »
 - [x] (687) 554. **La mélodie oubliée** — Retrouver les notes d'une ancienne mélodie. → sorte « retrouver (QuetesLieux) »
-- [ ] (688) 555. **Le code du vieux moulin** — Déchiffrer un code découvert dans un moulin.
+- [x] (688) 555. **Le code du vieux moulin** — Déchiffrer un code découvert dans un moulin. → sorte « enquêter » (QuetesLieux)
 - [x] (689) 556. **Le chemin des pierres** — Suivre une succession de pierres particulières. → sorte « escorter / enquêter (QuetesLieux) »
 - [x] (690) 557. **Le signe des explorateurs** — Retrouver les marques laissées par un ancien groupe. → sorte « retrouver (QuetesLieux) »
 - [x] (691) 558. **Le coffre du premier colon** — Découvrir les affaires d'un ancien habitant. → sorte « découvrir / visiter (QuetesLieux) »

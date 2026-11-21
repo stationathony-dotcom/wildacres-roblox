@@ -342,11 +342,45 @@ MOTS_CLES = [
     (("tour abandonnee",), "sorte « visiter (QuetesLieux) »"),
 ]
 
+QUETES_TITRES = {'La maison idéale': 'concours de construction (Activites), jugé par les joueurs',
+    'Le biologiste amateur': 'livre du bestiaire (Livres)',
+    'Le commerce entre biomes': 'demandes régionales (Shop.wanted) + troc',
+    'Les chroniques de Wild Acres': 'chroniques / pages anciennes (Chroniques)', "L'architecte du royaume": 'concours de construction (Activites)',
+    'Le chien de berger': 'pas encore : mener un troupeau avec un chien (Animals.lead + Compagnons) — à proposer',
+    'La carte des marées': 'volontairement absent : pas de marées (îles fixes)',
+    'Le marchand ambulant': 'colporteur (Metiers) + sorte « escorter »',
+    'La ferme en difficulté': 'sortes « apporter » / « récolter »',
+    'Le troupeau dispersé': 'sorte « retrouver » (QuetesLieux)',
+    'Le chantier urgent': 'sorte « réparer » (QuetesLieux)',
+    'La route encombrée': 'pas encore : dégager un passage (arbres / rochers tombés) — à proposer',
+    'Le coffre découvert': "sorte « enquêter » (fin d'enquête : coffre)", 'La récolte imprévue': 'sorte « récolter »',
+    'La cargaison perdue': 'sorte « retrouver » (« Une livraison a disparu »)',
+    'La mine abandonnée': 'grottes (Donjons) + sorte « visiter »',
+    'Le campement temporaire': 'sorte « bâtir »',
+    'Le visiteur mystérieux': 'colporteur de passage (Metiers)',
+    'La demande du maire': 'commande de village (Quetes)',
+    'Le besoin du marchand': 'pénuries et demandes régionales (Shop.wanted)',
+    'La découverte rare': 'événements (Evenements : météorite, ruines)',
+    'La rumeur du jour': 'rumeurs des habitants (a8774ef)',
+    'Deux artisans': 'commandes entre joueurs (/commande)', "L'expédition organisée": 'groupes + sorte « visiter »',
+    'La ferme collective': 'confiance « batir » entre joueurs (Util.trusted)',
+    'Le convoi sécurisé': 'diligence + sorte « escorter »',
+    'Le donjon coordonné': 'énigmes des donjons, grottes en groupe (Donjons)',
+    'Les métiers complémentaires': 'commandes entre joueurs + recettes à plusieurs métiers',
+    'Le sauvetage du voyageur': 'sorte « escorter » / « retrouver »',
+    'Le marché collectif': 'chantier « marché » (Chantiers)',
+    'Le festival organisé': 'rassemblement libre au tableau (Activites)',
+    'La grande expédition maritime': 'sorte « naviguer » + voyage en mer (Mondes)',
+    'Le code du vieux moulin': 'sorte « enquêter » (QuetesLieux)'}
+
 def quest_match(entry, code_norm):
     m = re.match(r"^\d+\. \*\*(.+?)\*\* — (.+)$", entry)
     if not m:
         return None
     title, desc = m.group(1), m.group(2)
+    if title in QUETES_TITRES:
+        t = QUETES_TITRES[title]
+        return None if t.startswith("pas encore") else t
     t = " ".join(norm(title).split())
     if len(t) > 6 and t in code_norm:
         return "repris tel quel (Quetes)"
