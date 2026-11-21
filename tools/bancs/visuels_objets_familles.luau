@@ -34,7 +34,7 @@ local function shade(c, k)
 end
 local function low(s)
 	s = string.lower(s or "")
-	for a, b in pairs({ ["é"] = "e", ["è"] = "e", ["ê"] = "e", ["à"] = "a", ["â"] = "a", ["î"] = "i", ["ô"] = "o", ["û"] = "u", ["ù"] = "u", ["ç"] = "c", ["œ"] = "oe" }) do
+	for a, b in pairs({ ["é"] = "e", ["è"] = "e", ["ê"] = "e", ["à"] = "a", ["â"] = "a", ["î"] = "i", ["ô"] = "o", ["û"] = "u", ["ù"] = "u", ["ç"] = "c", ["œ"] = "oe", ["É"] = "e", ["È"] = "e", ["Ê"] = "e", ["À"] = "a", ["Î"] = "i", ["Ô"] = "o", ["Œ"] = "oe" }) do
 		s = string.gsub(s, a, b)
 	end
 	return s
@@ -65,7 +65,12 @@ local function icon(id, family, build)
 			p = Instance.new("CornerWedgePart")
 		else
 			p = Instance.new("Part")
-			if shape == "ball" then
+			if shape == "ball" and (math.abs(size.X - size.Y) > 0.01 or math.abs(size.Y - size.Z) > 0.01) then
+				-- boule non uniforme : une Part « Ball » prendrait la plus petite dimension → ellipsoïde par maillage
+				local mesh = Instance.new("SpecialMesh")
+				mesh.MeshType = Enum.MeshType.Sphere
+				mesh.Parent = p
+			elseif shape == "ball" then
 				p.Shape = Enum.PartType.Ball
 			elseif shape == "cyl" then
 				p.Shape = Enum.PartType.Cylinder
@@ -94,19 +99,19 @@ local UP = ANG(0, 0, rad(90)) -- cylindre debout
 
 -- ----------------------------------------------------------------- GRAINES : sachet + plante
 local function sachet(add, h, tissu)
-	add(v(1.3, 1.5, 0.9), cf(0, 0.75, 0.2), tissu, M.Fabric)
-	add(v(1.36, 0.35, 0.96), cf(0, 1.6, 0.2) * ANG(0, 0, rad(4)), shade(tissu, 0.85), M.Fabric) -- rabat froncé
-	add(v(1.42, 0.12, 1.0), cf(0, 1.42, 0.2), rgb(120, 86, 48), M.Fabric) -- ficelle
-	add(v(0.18, 0.18, 0.18), cf(0.62, 1.42, -0.32), rgb(120, 86, 48), M.Fabric, "ball")
-	add(v(0.7, 0.45, 0.04), cf(0, 0.8, -0.27), rgb(236, 222, 186), M.SmoothPlastic) -- étiquette
-	-- graines qui débordent
-	for i = 0, 4 do
-		local a = i / 5 * math.pi * 2 + (h % 7)
-		add(v(0.16, 0.1, 0.12), cf(math.cos(a) * 0.32, 1.82, 0.2 + math.sin(a) * 0.22) * ANG(0, a, 0.4), rgb(176, 136, 82), M.SmoothPlastic, "ball")
+	-- petit sachet de toile ouvert, à gauche ; la plante se tient à droite, bien visible
+	local x = -0.62
+	add(v(0.95, 1.05, 0.8), cf(x, 0.52, 0), tissu, M.Fabric)
+	add(v(1.02, 0.22, 0.86), cf(x, 1.12, 0) * ANG(0, 0, rad(5)), shade(tissu, 0.85), M.Fabric) -- bord roulé
+	add(v(1.06, 0.1, 0.9), cf(x, 0.9, 0), rgb(120, 86, 48), M.Fabric) -- ficelle
+	add(v(0.8, 0.08, 0.66), cf(x, 1.2, 0), rgb(176, 136, 82), M.SmoothPlastic) -- graines dans l'ouverture
+	for i = 0, 2 do
+		local a = i * 2.1 + (h % 5)
+		add(v(0.16, 0.1, 0.12), cf(x + 0.5 + math.cos(a) * 0.15, 0.05, 0.45 + math.sin(a) * 0.15) * ANG(0, a, 0.4), rgb(176, 136, 82), M.SmoothPlastic, "ball")
 	end
 end
 local function plante(add, shape, col, crop)
-	local x, z = 0.15, -0.75
+	local x, z = 0.55, 0
 	if shape == "wheat" then
 		for i = -1, 1 do
 			add(v(0.06, 1.5, 0.06), cf(x + i * 0.22, 0.75, z) * ANG(0, 0, rad(i * 8)), rgb(184, 160, 80), M.Grass)
@@ -437,7 +442,9 @@ local PARTIE = {
 	{ { "essence", "poussiere", "ame", "ectoplasme", "brume" }, "essence" }, { { "peau", "cuir", "fourrure", "toison", "pelage", "hide" }, "peau" },
 	{ { "os", "crane", "bone" }, "os" }, { { "masque", "insigne", "amulette", "talisman" }, "masque" }, { { "coeur", "heart" }, "coeur" },
 	{ { "seve", "ecorce", "ronce", "racine", "spore", "champignon" }, "seve" }, { { "oreille", "ear" }, "oreille" }, { { "queue", "tail" }, "queue" },
-	{ { "tentacule", "pince", "patte" }, "pince" }, { { "crin", "criniere", "poil" }, "crin" }, { { "pierre", "roc", "cœur de golem" }, "pierre" },
+	{ { "tentacule", "pince", "patte", "crochet" }, "pince" }, { { "ecu", "ecusson", "bouclier" }, "ecu" }, { { "faux", "lame" }, "lame" },
+	{ { "carquois" }, "carquois" }, { { "grimoire", "avis", "sceau" }, "ecrit" }, { { "turban", "cape", "collet" }, "tissu" },
+	{ { "fragment", "noyau" }, "cristal" }, { { "bosse" }, "peau" }, { { "paille" }, "crin" }, { { "crin", "criniere", "poil" }, "crin" }, { { "pierre", "roc", "cœur de golem" }, "pierre" },
 }
 local function prisePalette(n, h)
 	if has(n, "glace", "givre", "neige", "blizzard", "polaire") then return rgb(190, 230, 245) end
@@ -461,13 +468,15 @@ for id, info in C.ITEMS do
 		local c = prisePalette(n, h)
 		icon(id, "prise", function(add)
 			-- petit socle de cuir façon « trophée de chasse » : la pièce posée dessus
-			add(v(1.6, 0.12, 1.2), cf(0, 0.06, 0), rgb(110, 72, 44), M.Fabric)
-			add(v(1.7, 0.06, 1.3), cf(0, 0.0, 0), rgb(80, 52, 32), M.Fabric)
+			add(v(0.9, 0.06, 0.6), cf(0.2, 0.0, 0.3), rgb(90, 60, 38), M.Fabric) -- petit carré de cuir sous la prise
 			local o = cf(0, 0.15, 0)
 			if partie == "croc" or partie == "defense" then
 				local big = partie == "defense"
 				for i = (big and 0 or -1), (big and 0 or 1) do
-					add(v(big and 0.4 or 0.22, big and 1.5 or 0.9, big and 0.4 or 0.22), o * cf(i * 0.35, big and 0.6 or 0.42, 0) * ANG(0, 0, rad(big and -35 or i * 10)), rgb(240, 234, 214), M.SmoothPlastic, "wedge")
+					local s = big and 1.6 or (i == 0 and 1.0 or 0.75)
+					local at = o * cf(i * 0.34, s * 0.45, 0) * ANG(0, 0, rad(big and -30 or i * 12))
+					add(v(0.3 * s, s, 0.3 * s), at, rgb(240, 234, 214), M.SmoothPlastic, "ball") -- corps du croc
+					add(v(0.16 * s, 0.4 * s, 0.16 * s), at * cf(0, s * 0.55, 0), rgb(250, 246, 232), M.SmoothPlastic, "ball") -- pointe
 				end
 				add(v(0.9, 0.12, 0.12), o * cf(0, 0.05, -0.2), rgb(90, 60, 40), M.Fabric) -- lien de cuir
 			elseif partie == "griffe" then
@@ -484,8 +493,14 @@ for id, info in C.ITEMS do
 					add(v(0.08, 0.62, 1.02), o * cf(0, 0.32, 0), shade(c, 0.6), M.SmoothPlastic)
 				end
 			elseif partie == "plume" or partie == "aile" then
-				add(v(0.06, 1.6, 0.06), o * cf(0, 0.2, 0) * ANG(rad(-75), rad(30), 0), rgb(236, 230, 214), M.SmoothPlastic)
-				add(v(0.5, 1.4, 0.04), o * cf(0.08, 0.25, 0) * ANG(rad(-75), rad(30), 0), c, M.Fabric, partie == "aile" and "wedge" or nil)
+				local tilt = o * cf(0, 0.45, 0) * ANG(0, rad(30), rad(-35))
+				add(v(0.06, 1.9, 0.06), tilt, rgb(236, 230, 214), M.SmoothPlastic) -- rachis
+				if partie == "aile" then
+					add(v(0.12, 1.4, 1.0), tilt * cf(0, 0.2, 0.4), c, M.Fabric, "wedge")
+				else
+					add(v(0.06, 1.5, 0.55), tilt * cf(0, 0.15, 0), c, M.Fabric, "ball") -- vexille en ellipse
+					add(v(0.05, 0.5, 0.3), tilt * cf(0, -0.7, 0.05), shade(c, 1.15), M.Fabric, "ball") -- duvet
+				end
 			elseif partie == "corne" then
 				for k = 0, 3 do
 					add(v(0.32 - k * 0.06, 0.4, 0.32 - k * 0.06), o * cf(k * 0.14, 0.2 + k * 0.32, 0) * ANG(0, 0, rad(-10 - k * 12)), shade(c, 1 - k * 0.08), M.SmoothPlastic, "cyl", UP)
@@ -514,19 +529,43 @@ for id, info in C.ITEMS do
 				add(v(1.4, 0.3, 0.3), o * cf(0, 0.2, 0.45), shade(c, 0.85), M.Fabric, "cyl") -- roulée
 				add(v(1.5, 0.08, 0.08), o * cf(0, 0.36, 0.45), rgb(90, 60, 40), M.Fabric)
 			elseif partie == "masque" then
-				add(v(1.0, 1.1, 0.16), o * cf(0, 0.6, 0) * ANG(rad(-20), 0, 0), c, M.Wood)
-				add(v(0.2, 0.14, 0.2), o * cf(-0.22, 0.75, -0.12), rgb(20, 20, 24), M.SmoothPlastic)
-				add(v(0.2, 0.14, 0.2), o * cf(0.22, 0.75, -0.12), rgb(20, 20, 24), M.SmoothPlastic)
+				local face = o * cf(0, 0.65, 0) * ANG(rad(-20), 0, 0)
+				add(v(1.0, 1.25, 0.3), face, c, M.Wood, "ball") -- visage ovale
+				for _, s in { -1, 1 } do
+					add(v(0.26, 0.16, 0.1), face * cf(s * 0.22, 0.15, -0.14), rgb(20, 20, 24), M.SmoothPlastic, "ball") -- yeux
+				end
+				add(v(0.12, 0.3, 0.1), face * cf(0, -0.05, -0.15), shade(c, 0.75), M.Wood) -- nez
+				add(v(0.7, 0.14, 0.12), face * cf(0, 0.48, -0.1), rgb(200, 160, 60), M.Metal) -- bandeau orné
 			elseif partie == "seve" then
 				add(v(0.2, 1.1, 0.2), o * cf(0, 0.2, 0) * ANG(rad(-80), rad(20), 0), rgb(110, 80, 50), M.Wood)
 				add(v(0.5, 0.4, 0.5), o * cf(0.3, 0.3, 0), c, M.Glass, "ball").Transparency = 0.2
 			elseif partie == "oreille" or partie == "queue" or partie == "pince" then
 				add(v(0.5, 1.1, 0.14), o * cf(0, 0.4, 0) * ANG(rad(-60), 0, rad(15)), c, M.Fabric, "wedge")
 				add(v(0.3, 0.6, 0.14), o * cf(0.3, 0.3, 0.2) * ANG(rad(-60), 0, rad(-25)), shade(c, 0.8), M.Fabric, "wedge")
+			elseif partie == "ecu" then
+				add(v(1.0, 1.2, 0.14), o * cf(0, 0.65, 0) * ANG(rad(-15), 0, 0), c, M.Metal)
+				add(v(1.0, 0.5, 0.14), o * cf(0, 0.0, 0.14) * ANG(rad(-15), 0, rad(180)), c, M.Metal, "wedge")
+				add(v(0.16, 1.1, 0.18), o * cf(0, 0.55, -0.02) * ANG(rad(-15), 0, 0), shade(c, 0.6), M.Metal)
+			elseif partie == "lame" then
+				add(v(0.12, 1.0, 0.4), o * cf(0, 0.5, 0) * ANG(rad(-40), 0, 0), rgb(200, 205, 210), M.Metal, "wedge")
+				add(v(0.14, 0.7, 0.14), o * cf(0, 0.3, 0.5) * ANG(rad(-40), 0, 0), rgb(110, 80, 50), M.Wood)
+			elseif partie == "carquois" then
+				add(v(1.3, 0.5, 0.5), o * cf(0, 0.3, 0) * ANG(0, rad(20), rad(20)), rgb(120, 76, 44), M.Fabric, "cyl")
+				for i = -1, 1 do
+					add(v(0.5, 0.06, 0.2), o * cf(0.75, 0.6 + i * 0.1, i * 0.12) * ANG(0, rad(20), rad(20)), c, M.Fabric, "wedge")
+				end
+			elseif partie == "ecrit" then
+				add(v(1.4, 0.4, 0.4), o * cf(0, 0.22, 0), rgb(226, 210, 176), M.SmoothPlastic, "cyl")
+				add(v(0.3, 0.3, 0.1), o * cf(0, 0.22, -0.24), c, M.SmoothPlastic, "cyl", ANG(0, rad(90), 0))
+			elseif partie == "tissu" then
+				add(v(1.3, 0.12, 1.0), o * cf(0, 0.08, 0) * ANG(0, rad(15), 0), c, M.Fabric)
+				add(v(0.9, 0.4, 0.4), o * cf(0, 0.3, 0.2), shade(c, 0.85), M.Fabric, "cyl")
 			else -- os
-				add(v(0.24, 1.3, 0.24), o * cf(0, 0.18, 0) * ANG(rad(90), rad(30), 0), rgb(236, 230, 214), M.SmoothPlastic, "cyl", UP)
+				local axe = o * cf(0, 0.22, 0) * ANG(0, rad(30), rad(8))
+				add(v(1.5, 0.26, 0.26), axe, rgb(236, 230, 214), M.SmoothPlastic, "cyl")
 				for _, s in { -1, 1 } do
-					add(v(0.34, 0.34, 0.34), o * cf(s * 0.33, 0.18, s * 0.55), rgb(236, 230, 214), M.SmoothPlastic, "ball")
+					add(v(0.36, 0.36, 0.36), axe * cf(s * 0.78, 0, 0.12), rgb(236, 230, 214), M.SmoothPlastic, "ball")
+					add(v(0.36, 0.36, 0.36), axe * cf(s * 0.78, 0, -0.12), rgb(226, 220, 204), M.SmoothPlastic, "ball")
 				end
 			end
 			-- étiquette nouée : la couleur rappelle la créature
