@@ -512,6 +512,9 @@ function E.apply(C)
 			end
 		end
 	end
+	-- deux objets, un seul nom affiché (banc objets, 21/11) : on distingue
+	if I.rowboat then I.rowboat.name = "Barque d'ornement" end -- posée en décor ; « Barque » = celle qui navigue
+	if I.banniere then I.banniere.name = "Bannière d'avant-poste" end -- se plante (Avantpostes) ; « Bannière de clan » = décor
 	-- règle 10 (pas de jeux de dés) : l'objet « dice » du catalogue devient des osselets (jeu d'adresse en os)
 	if I.dice then
 		I.dice.name, I.dice.icon = "Osselets", "🦴"
