@@ -254,16 +254,20 @@ function Law.bodyFound(body, finder)
 	end
 	for _, player in G.Game.players() do
 		local prof = G.Joueurs.get(player)
-		if suspect then
+		local proot = G.Util.root(player)
+		local near = proot and (proot.Position - pos).Magnitude < 300
+		if suspect and G.Util.pid(player) == suspect then
+			-- seul le joueur vu près du lieu est soupçonné (avant : tout le serveur prenait 3 étoiles)
 			prof.stars = math.max(prof.stars, 3)
 			prof.honor = math.clamp(prof.honor - 20, -100, 100)
 			heat[player] = 0
 			Law.report(player, finder, pos)
 			G.Util.toast(player, body.data.name .. " a été retrouvé" .. (body.data.female and "e" or "") .. " assommé" .. (body.data.female and "e" or "") .. "… et on t'a vu dans le coin !", "danger")
-		else
+			G.Joueurs.markDirty(player)
+		elseif near then
+			-- la nouvelle court dans la région seulement (pas d'annonce à tout le serveur)
 			G.Util.toast(player, body.data.name .. " a été retrouvé" .. (body.data.female and "e" or "") .. " assommé" .. (body.data.female and "e" or "") .. ". La peur gagne la région.")
 		end
-		G.Joueurs.markDirty(player)
 	end
 end
 
