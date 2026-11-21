@@ -129,13 +129,20 @@ function Hud.gearIcon(it)
 	return FORM_ICONS[design.formOf(it)] or gear.SLOT_ICONS[gear.slotOf(it)] or "✨"
 end
 
-function Hud.gearViewport(it, dim: boolean?): ViewportFrame?
+function Hud.gearThumbnail(it, dim: boolean?): GuiObject?
 	local rs = game:GetService("ReplicatedStorage")
 	local equipment = rs:FindFirstChild("IconesEquipement")
 	local tools = rs:FindFirstChild("IconesOutils")
 	local design = require(rs.Shared:WaitForChild("GearDesign"))
 	local slot, form = design.slotOf(it), design.formOf(it)
 	local template = equipment and it.name and (equipment:FindFirstChild(slot .. ":" .. it.name) or equipment:FindFirstChild(it.name))
+	if not (template and template:GetAttribute("FamilleVisuelle")) then
+		local icons = require(script.Parent:WaitForChild("IconesPeintes"))
+		local size = UDim2.fromScale(0.92, 0.92)
+		local painted = icons.image("equipement:" .. (it.name or ""), size, dim)
+			or icons.image("equipement:" .. (form or ""), size, dim)
+		if painted then return painted end
+	end
 	local hue
 	if slot == "weapon" and not template and tools then
 		local key = if form == "axe" then "Hache" elseif form == "mace" then "Gourdin" elseif form == "sword" then "Épée" else nil
