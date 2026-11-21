@@ -7,6 +7,10 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.3 — 2026-11-21
 
+- **Lanterne murale** — Se fabrique à l’établi et se pose contre un mur, du côté où l’on se tient, potence tournée vers soi ; une par face, même sur un mur déjà posé. Elle s’allume la nuit et les ombres rôdeuses s’en écartent.
+- **Ferme** — Le fermier vend le cochon (il trouve des truffes, mets cher et omelette aux truffes au four) et l’oie (plumes pour flèches et javelots). La chèvre (lait) suivra dès que son modèle existe. Une bête achetée à la fois : on ne paie plus plusieurs fois pour une seule.
+- **Sons** — On entend la pose d’une pièce, d’un plan ou d’un meuble, la casse d’un mur, la pose d’une serrure et la cloche d’alarme, à l’endroit de l’action.
+- **Retour** — Le serveur donne à l’interface la position de son lit et le journal de l’absence, relisible pendant toute la session.
 - **Carte et inventaire** — La carte dessine les régions découvertes par lots. Le sac charge les miniatures 3D visibles au défilement.
 - **Arrivée** — La place du village a une enseigne lisible des deux côtés. La lueur de la forge et la fumée du four servent de repères. Les rangées de couleurs défilent sur les petits écrans.
 - **Retour** — La carte réserve un repère pour le lit et le journal de quêtes ouvre un onglet dédié aux événements survenus en l’absence du joueur.
