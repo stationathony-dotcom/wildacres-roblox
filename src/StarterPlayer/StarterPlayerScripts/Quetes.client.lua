@@ -74,7 +74,11 @@ local st = Instance.new("UIStroke")
 st.Color = Color3.fromRGB(176, 140, 72)
 st.Thickness = 2.5
 st.Parent = panel
-label(panel, "📜  Quêtes", UDim2.new(1, -60, 0, 32), 22, GOLD, true).Position = UDim2.fromOffset(16, 8)
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
+Composants.titre({
+	Text = "Quêtes", TextColor3 = GOLD,
+	Size = UDim2.new(1, -60, 0, 32), Position = UDim2.fromOffset(16, 8), Parent = panel,
+})
 label(panel, "Toutes facultatives : prends-en, lâche-les, rien n'est obligatoire.", UDim2.new(1, -60, 0, 18), 12, DIM).Position = UDim2.fromOffset(16, 38)
 local close = button(panel, "X", UDim2.fromOffset(30, 30), Color3.fromRGB(190, 60, 50), function()
 	panel.Visible = false

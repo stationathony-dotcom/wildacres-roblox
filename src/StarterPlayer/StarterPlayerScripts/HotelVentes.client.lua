@@ -107,9 +107,11 @@ local function box(parent, placeholder, text)
 	return b
 end
 
-local title = label(frame, "🏷️ Hôtel des ventes", 24, INK, Enum.Font.Fantasy)
-title.Position = UDim2.fromOffset(18, 10)
-title.Size = UDim2.new(1, -200, 0, 32)
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
+Composants.titre({
+	Text = "Hôtel des ventes", Font = Enum.Font.Fantasy, TextSize = 24, TextColor3 = INK,
+	Position = UDim2.fromOffset(18, 10), Size = UDim2.new(1, -200, 0, 32), Parent = frame,
+})
 local goldLabel = label(frame, "", 16, GOLD, Enum.Font.GothamBold)
 goldLabel.AnchorPoint = Vector2.new(1, 0)
 goldLabel.Position = UDim2.new(1, -56, 0, 16)
@@ -525,7 +527,8 @@ function render()
 	goldLabel.Text = tostring(data.gold or 0) .. " 💰"
 	clear(tabs)
 	for _, t in { { "acheter", "Acheter" }, { "vendre", "Vendre" }, { "mes", "Mes ventes" } } do
-		local b = button(tabs, t[2], tab == t[1] and GREEN or WOOD)
+		local b = button(tabs, t[2], WOOD)
+		Composants.etatBouton(b, t[2], tab == t[1] and "selectionne" or nil, WOOD)
 		b.Size = UDim2.fromOffset(120, 32)
 		b.Activated:Connect(function()
 			tab = t[1]

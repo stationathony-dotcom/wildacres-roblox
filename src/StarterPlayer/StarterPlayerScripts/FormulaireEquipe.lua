@@ -1,5 +1,6 @@
 -- Formulaire commun à l’accueil et aux paramètres. Le serveur filtre et valide l’envoi.
 local WindowNav = require(script.Parent:WaitForChild("WindowNav"))
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 
 local Formulaire = {}
 local GOLD = Color3.fromRGB(239, 199, 116)
@@ -39,10 +40,10 @@ function Formulaire.mount(gui, action)
 		return item
 	end
 
-	local title = text("TextLabel", "Écrire à l’équipe", UDim2.new(1, -60, 0, 38), UDim2.fromOffset(14, 7))
-	title.BackgroundTransparency = 1
-	title.TextXAlignment = Enum.TextXAlignment.Left
-	title.TextColor3, title.TextSize, title.Font = GOLD, 20, Enum.Font.GothamBold
+	local title = Composants.titre({
+		Text = "Écrire à l’équipe", TextSize = 20, TextColor3 = GOLD, ZIndex = 18,
+		Size = UDim2.new(1, -60, 0, 38), Position = UDim2.fromOffset(14, 7), Parent = panel,
+	})
 
 	local close = text("TextButton", "×", UDim2.fromOffset(34, 34), UDim2.new(1, -46, 0, 8))
 	close.BackgroundColor3 = Color3.fromRGB(128, 61, 46)
@@ -68,12 +69,12 @@ function Formulaire.mount(gui, action)
 	local function selectKind(kind)
 		selected = kind
 		for id, tab in tabs do
-			tab.BackgroundColor3 = id == kind and BLUE or Color3.fromRGB(72, 58, 44)
+			Composants.etatBouton(tab.button, tab.label, id == kind and "selectionne" or nil, Color3.fromRGB(72, 58, 44))
 		end
 	end
 	for index, kind in kinds do
 		local tab = text("TextButton", kind[2], UDim2.new(1 / 3, -12, 0, 34), UDim2.new((index - 1) / 3, 14 - (index - 1) * 2, 0, 49))
-		tabs[kind[1]] = tab
+		tabs[kind[1]] = { button = tab, label = kind[2] }
 		tab.Activated:Connect(function() selectKind(kind[1]) end)
 	end
 
@@ -88,9 +89,9 @@ function Formulaire.mount(gui, action)
 	submit.Activated:Connect(function()
 		local message = box.Text:match("^%s*(.-)%s*$") or ""
 		if (utf8.len(message) or 0) < 10 then
-			note.Text = "Ajoute quelques mots (10 caractères minimum)."
+			note.Text = Composants.avertissement("Ajoute quelques mots (10 caractères minimum).")
 		elseif #message > 300 then
-			note.Text = "Le texte est trop long. Raccourcis-le."
+			note.Text = Composants.avertissement("Le texte est trop long. Raccourcis-le.")
 		elseif os.clock() - sentAt >= 2 then
 			sentAt = os.clock()
 			action:FireServer("demande", { kind = selected, text = message })

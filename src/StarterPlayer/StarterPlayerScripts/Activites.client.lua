@@ -78,7 +78,11 @@ local function fit()
 	local vp = workspace.CurrentCamera and workspace.CurrentCamera.ViewportSize or Vector2.new(1280, 720)
 	scale.Scale = math.min(1, (vp.X - 32) / 520, (vp.Y - 40) / 470)
 end
-label(panel, "📜  Tableau d'affichage", UDim2.new(1, -60, 0, 30), 20, GOLD, true).Position = UDim2.fromOffset(14, 8)
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
+Composants.titre({
+	Text = "Tableau d'affichage", TextSize = 20, TextColor3 = GOLD,
+	Size = UDim2.new(1, -60, 0, 30), Position = UDim2.fromOffset(14, 8), Parent = panel,
+})
 local function dismiss()
 	panel.Visible = false
 end

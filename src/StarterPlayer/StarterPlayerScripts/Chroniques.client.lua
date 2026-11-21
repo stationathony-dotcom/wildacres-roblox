@@ -40,17 +40,11 @@ border.Color = Color3.fromRGB(120, 86, 50)
 border.Thickness = 3
 border.Parent = frame
 
-local title = Instance.new("TextLabel")
-title.BackgroundTransparency = 1
-title.Position = UDim2.fromOffset(18, 12)
-title.Size = UDim2.new(1, -70, 0, 30)
-title.Font = Enum.Font.Fantasy
-title.TextSize = 24
-title.TextColor3 = INK
-title.TextXAlignment = Enum.TextXAlignment.Left
-title.TextScaled = false
-title.TextTruncate = Enum.TextTruncate.AtEnd
-title.Parent = frame
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
+local title = Composants.titre({
+	Position = UDim2.fromOffset(18, 12), Size = UDim2.new(1, -70, 0, 30),
+	Font = Enum.Font.Fantasy, TextSize = 24, TextColor3 = INK, Parent = frame,
+})
 
 local sub = Instance.new("TextLabel")
 sub.BackgroundTransparency = 1

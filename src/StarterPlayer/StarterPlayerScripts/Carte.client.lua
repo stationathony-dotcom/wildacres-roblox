@@ -7,6 +7,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 
 if workspace:GetAttribute("Mode") == "accueil" then
 	return
@@ -50,24 +51,15 @@ local stroke = Instance.new("UIStroke", panel)
 stroke.Color = Color3.fromRGB(176, 140, 72)
 stroke.Thickness = 3
 local scale = Instance.new("UIScale", panel)
-local title = Instance.new("TextLabel")
-title.BackgroundTransparency = 1
-title.Font = Enum.Font.Fondamento
-title.TextSize = 24
-title.TextColor3 = Color3.fromRGB(240, 220, 170)
-title.Size = UDim2.new(1, -60, 0, 34)
-title.Position = UDim2.fromOffset(14, 6)
-title.TextXAlignment = Enum.TextXAlignment.Left
-title.TextTruncate = Enum.TextTruncate.AtEnd
-title.Parent = panel
-local close = Instance.new("TextButton")
-close.Text = "X"
-close.Font = Enum.Font.GothamBold
-close.TextColor3 = Color3.new(1, 1, 1)
-close.BackgroundColor3 = Color3.fromRGB(190, 60, 50)
-close.Size = UDim2.fromOffset(28, 28)
-close.Position = UDim2.new(1, -36, 0, 8)
-close.Parent = panel
+local title = Composants.titre({
+	Font = Enum.Font.Fondamento, TextSize = 24, TextColor3 = Color3.fromRGB(240, 220, 170),
+	Size = UDim2.new(1, -60, 0, 34), Position = UDim2.fromOffset(14, 6), Parent = panel,
+})
+local close = Composants.bouton({
+	Text = Composants.PICTOGRAMMES.fermer, TextColor3 = Color3.new(1, 1, 1),
+	BackgroundColor3 = Color3.fromRGB(190, 60, 50), Size = UDim2.fromOffset(28, 28),
+	Position = UDim2.new(1, -36, 0, 8), Parent = panel,
+})
 Instance.new("UICorner", close)
 
 local grid = Instance.new("Frame")

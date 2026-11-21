@@ -85,8 +85,11 @@ end
 fit()
 workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(fit)
 
-local title = label(panel, "", UDim2.new(1, -60, 0, 30), 20, GOLD, true)
-title.Position = UDim2.fromOffset(14, 8)
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
+local title = Composants.titre({
+	Text = "", TextSize = 20, TextColor3 = GOLD,
+	Size = UDim2.new(1, -60, 0, 30), Position = UDim2.fromOffset(14, 8), Parent = panel,
+})
 local function dismiss()
 	panel.Visible = false
 end

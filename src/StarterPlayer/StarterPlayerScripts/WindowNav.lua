@@ -3,6 +3,7 @@ local ContextActionService = game:GetService("ContextActionService")
 local GuiService = game:GetService("GuiService")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 
 local WindowNav = {}
 local open = {}
@@ -44,7 +45,7 @@ function WindowNav.watch(panel, closeButton, close, screen)
 	local layer = panel:FindFirstAncestorWhichIsA("ScreenGui")
 	local source, property = screen or panel, screen and "Enabled" or "Visible"
 	local entry = { panel = panel, focus = closeButton, close = close, layer = layer }
-	closeButton.Text = "×"
+	closeButton.Text = Composants.PICTOGRAMMES.fermer
 	closeButton.Selectable = true
 	panel.Active = true
 	panel.SelectionGroup = true

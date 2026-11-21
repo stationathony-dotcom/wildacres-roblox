@@ -1,3 +1,4 @@
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 local ApercuPose = {}
 
 function ApercuPose.caseDevant(root, cell)
@@ -52,7 +53,7 @@ function ApercuPose.refus(gui, width)
 			local _, visible = camera:WorldToViewportPoint(position + billboard.StudsOffsetWorldSpace)
 			if not visible then return false end
 			anchor.WorldPosition = position
-			label.Text = "!  " .. reason
+			label.Text = Composants.avertissement(reason)
 			billboard.Enabled = true
 			local token = {}
 			notice = token

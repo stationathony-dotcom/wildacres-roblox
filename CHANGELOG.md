@@ -7,6 +7,7 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.3 — 2026-11-21
 
+- **Interface** — Titres, boutons et avertissements partagent leurs composants. Les états de sélection et de verrouillage associent un symbole au changement de couleur.
 - **Construction** — Le motif de refus apparaît près de la pose tentée. Les commandes de pose, rotation et annulation sont indiquées en cours de construction.
 - **Notifications** — Les gains identiques se cumulent dans une seule carte. Les alertes de danger gardent leur place en tête des messages.
 - **Carte du monde** — Cinq types de repères personnels sauvegardés par monde. La légende sert à choisir le type, et la liste permet de retrouver et de retirer un repère même si plusieurs se superposent.

@@ -386,6 +386,7 @@ end)
 -- Volume de l'ambiance, flashs d'éclair, secousses de caméra. Sauvegardés avec le perso
 -- (action "settings") et réappliqués à chaque connexion (payload Inventory.settings).
 do
+	local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 	local settings = { vol = 0.6, music = 0.5, flash = false, shake = false, names = true, camera = 2, sensitivity = 2, graphics = 2, textSize = 2 }
 	local Preferences = require(script.Parent:WaitForChild("Preferences"))
 	local applyPreferences = Preferences.mount(player)
@@ -422,16 +423,10 @@ do
 		return l
 	end
 	local function btn(parent, text, size, pos, color, fn)
-		local b = Instance.new("TextButton")
-		b.Text = text
-		b.Font = Enum.Font.GothamBold
-		b.TextSize = 14
-		b.TextColor3 = Color3.fromRGB(255, 255, 255)
-		b.BackgroundColor3 = color
-		b.AutoButtonColor = true
-		b.Size = size
-		b.Position = pos
-		b.Parent = parent
+		local b = Composants.bouton({
+			Text = text, TextSize = 14, TextColor3 = Color3.new(1, 1, 1), BackgroundColor3 = color,
+			Size = size, Position = pos, Parent = parent,
+		})
 		corner(b)
 		b.Activated:Connect(function()
 			-- petit rebond : le clic se sent
@@ -454,7 +449,10 @@ do
 	st.Color = Color3.fromRGB(176, 140, 72)
 	st.Thickness = 2.5
 	st.Parent = panel
-	txt(panel, "⚙️  Paramètres", UDim2.new(1, -50, 0, 30), UDim2.fromOffset(14, 8), 20, GOLD)
+	Composants.titre({
+		Text = "Paramètres", TextSize = 20, TextColor3 = GOLD,
+		Size = UDim2.new(1, -50, 0, 30), Position = UDim2.fromOffset(14, 8), Parent = panel,
+	})
 	local dirty = false
 	local render
 	local function close()
@@ -517,25 +515,29 @@ do
 		for i = 0, 5 do
 			local v = i / 5
 			local on = math.abs(settings.vol - v) < 0.05
-			btn(volRow, i == 0 and "🔇" or tostring(i * 20), UDim2.new(1/6, -4, 0, 30), UDim2.new(i/6, 0, 0, 2),
-				on and GOLD or Color3.fromRGB(60, 50, 40), function()
+			local texte = tostring(i * 20)
+			local b = btn(volRow, texte, UDim2.new(1/6, -4, 0, 30), UDim2.new(i/6, 0, 0, 2),
+				Color3.fromRGB(60, 50, 40), function()
 					settings.vol = v
 					dirty = true
 					apply()
 					render()
 				end)
+			if on then Composants.etatBouton(b, texte, "selectionne") end
 		end
 		musicRow:ClearAllChildren()
 		for i = 0, 5 do
 			local v = i / 5
 			local on = math.abs(settings.music - v) < 0.05
-			btn(musicRow, i == 0 and "🔇" or tostring(i * 20), UDim2.new(1/6, -4, 0, 30), UDim2.new(i/6, 0, 0, 2),
-				on and GOLD or Color3.fromRGB(60, 50, 40), function()
+			local texte = tostring(i * 20)
+			local b = btn(musicRow, texte, UDim2.new(1/6, -4, 0, 30), UDim2.new(i/6, 0, 0, 2),
+				Color3.fromRGB(60, 50, 40), function()
 					settings.music = v
 					dirty = true
 					apply()
 					render()
 				end)
+			if on then Composants.etatBouton(b, texte, "selectionne") end
 		end
 		for key, control in choices do control.Text = Preferences.choices[key][Preferences.option(settings[key])] end
 		for key, b in toggles do

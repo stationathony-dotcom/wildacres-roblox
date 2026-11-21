@@ -17,6 +17,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Config = require(Shared:WaitForChild("Config"))
 local Gear = require(Shared:WaitForChild("Gear"))
 local ApercuPose = require(script.Parent:WaitForChild("ApercuPose"))
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 
 local MOBILE = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
@@ -38,21 +39,7 @@ local TITLE = Enum.Font.FredokaOne
 local BODY = Enum.Font.GothamMedium
 local BOLD = Enum.Font.GothamBold
 
-local function new(class: string, props, children)
-	local o = Instance.new(class)
-	for k, v in props or {} do
-		if k ~= "Parent" then
-			(o :: any)[k] = v
-		end
-	end
-	for _, c in children or {} do
-		c.Parent = o
-	end
-	if props and props.Parent then
-		o.Parent = props.Parent
-	end
-	return o
-end
+local new = Composants.creer
 
 local function corner(r: number?)
 	return new("UICorner", { CornerRadius = UDim.new(0, r or 10) })
@@ -77,12 +64,10 @@ local function label(props)
 end
 
 local function button(text: string, color: Color3?, onClick: () -> ())
-	local b = new("TextButton", {
-		Text = text, Font = BOLD, TextSize = 16, TextColor3 = C.text, AutoButtonColor = true,
+	return Composants.bouton({
+		Text = text, Font = BOLD, TextSize = 16, TextColor3 = C.text,
 		BackgroundColor3 = color or C.panel2, Size = UDim2.new(0, 120, 0, 36),
-	}, { corner(8), stroke(C.line, 1.5) })
-	b.Activated:Connect(onClick)
-	return b
+	}, onClick, { corner(8), stroke(C.line, 1.5) })
 end
 
 local gui = new("ScreenGui", { Name = "WildAcres", ResetOnSpawn = false, IgnoreGuiInset = true, ZIndexBehavior = Enum.ZIndexBehavior.Sibling, Parent = player:WaitForChild("PlayerGui") })
@@ -156,7 +141,7 @@ local function makePanel(name: string, title: string, size: UDim2, onClose: (() 
 		Name = name, Size = size, Position = UDim2.fromScale(0.5, 0.5), AnchorPoint = Vector2.new(0.5, 0.5),
 		BackgroundColor3 = C.panel, BackgroundTransparency = 0.04, Visible = false, Parent = gui, ZIndex = 5,
 	}, { corner(14), stroke(C.line, 2.5) })
-	local t = label({ Text = title, Font = TITLE, TextSize = 24, TextColor3 = C.gold, Size = UDim2.new(1, -60, 0, 40), Position = UDim2.fromOffset(16, 8), Parent = f, ZIndex = 6 })
+	local t = Composants.titre({ Text = title, Font = TITLE, TextSize = 24, TextColor3 = C.gold, Size = UDim2.new(1, -60, 0, 40), Position = UDim2.fromOffset(16, 8), Parent = f, ZIndex = 6 })
 	local function dismiss()
 		f.Visible = false
 		if onClose then onClose() end
@@ -214,7 +199,7 @@ local function toast(text: string, kind: string?)
 	local urgent = kind == "danger"
 	local color = (urgent or kind == "refus") and C.red or (big and C.gold or C.text)
 	local t = label({
-		Text = urgent and "⚠  " .. text or text, TextColor3 = color, TextSize = big and 22 or 16, Font = big and TITLE or BODY,
+		Text = urgent and Composants.avertissement(text) or text, TextColor3 = color, TextSize = big and 22 or 16, Font = big and TITLE or BODY,
 		TextXAlignment = Enum.TextXAlignment.Center, AutomaticSize = Enum.AutomaticSize.Y,
 		Size = UDim2.new(1, 0, 0, 0), BackgroundTransparency = 0.25, BackgroundColor3 = C.panel,
 		LayoutOrder = urgent and -toastN or toastN, Parent = toastBox, ZIndex = 20,
@@ -1228,7 +1213,7 @@ local function game_()
 		BackgroundColor3 = Color3.fromRGB(24, 19, 15), BackgroundTransparency = 0.03, Visible = false, Parent = gui, ZIndex = 5,
 	}, { corner(6), stroke(Color3.fromRGB(176, 140, 72), 2.5) })
 	panels.SacWoW = wbag
-	label({ Text = "🎒  Sac", Font = TITLE, TextSize = 20, TextColor3 = C.gold, Size = UDim2.new(1, -60, 0, 30), Position = UDim2.fromOffset(12, 6), Parent = wbag, ZIndex = 6 })
+	Composants.titre({ Text = "Sac", Font = TITLE, TextSize = 20, TextColor3 = C.gold, Size = UDim2.new(1, -60, 0, 30), Position = UDim2.fromOffset(12, 6), Parent = wbag, ZIndex = 6 })
 	local function closeWbag()
 		wbag.Visible = false
 		hideTip()
@@ -1465,7 +1450,7 @@ local function game_()
 		BackgroundColor3 = Color3.fromRGB(24, 19, 15), BackgroundTransparency = 0.03, Visible = false, Parent = gui, ZIndex = 5,
 	}, { corner(6), stroke(Color3.fromRGB(176, 140, 72), 2.5) })
 	panels.Perso = bag
-	local charTitle = label({ Text = "", Font = TITLE, TextSize = 20, TextColor3 = C.gold, Size = UDim2.new(1, -60, 0, 30), Position = UDim2.fromOffset(14, 6), Parent = bag, ZIndex = 6 })
+	local charTitle = Composants.titre({ Text = "", Font = TITLE, TextSize = 20, TextColor3 = C.gold, Size = UDim2.new(1, -60, 0, 30), Position = UDim2.fromOffset(14, 6), Parent = bag, ZIndex = 6 })
 	local function closeBag()
 		bag.Visible = false
 		hideTip()
@@ -2005,7 +1990,7 @@ local function game_()
 		end
 		local etat = fiche.model.etat(Config, r, inv, craftStations, k or 1)
 		for _, item in etat.ingredients do
-			table.insert(lines, { string.format("%s — %d / %d en stock", item.name, item.have, item.need), item.have >= item.need and C.text or C.red, 14 })
+			table.insert(lines, { item.name .. " — " .. Composants.quantite(item.have, item.need) .. " en stock", item.have >= item.need and C.text or C.red, 14 })
 		end
 		if etat.station then
 			table.insert(lines, { etat.station.name .. (etat.stationOK and " — à portée" or " — approche-toi de la station"), etat.stationOK and C.green or C.red, 14 })
@@ -2016,7 +2001,7 @@ local function game_()
 			local skill = etat.skill and etat.skill.name or r.skill[1]
 			table.insert(lines, { string.format("%s — %d / %d requis", skill, etat.current, etat.level), etat.skillOK and C.green or C.red, 14 })
 		end
-		if etat.missing then table.insert(lines, { "Il manque des ingrédients.", C.red, 14 }) end
+		if etat.missing then table.insert(lines, { Composants.avertissement("Il manque des ingrédients."), C.red, 14 }) end
 		return lines
 	end
 
@@ -2030,13 +2015,13 @@ local function game_()
 			label({ Text = line[1], TextColor3 = line[2], TextSize = line[3] or 14, TextWrapped = true,
 				Size = UDim2.new(1, -8, 0, 24), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = index, Parent = fiche.body, ZIndex = 7 })
 		end
-		local action = button(fiche.label, etat.ready and C.green or C.panel2, function()
+		local action = button(fiche.label, nil, function()
 			if fiche.model.etat(Config, r, inv, craftStations, batches).ready then
 				fiche.panel.Visible = false
 				fiche.action()
 			end
 		end)
-		action.Interactable = etat.ready
+		Composants.etatBouton(action, fiche.label, etat.ready and "disponible" or "verrouille")
 		action.Size = UDim2.new(1, -8, 0, 40)
 		action.LayoutOrder, action.ZIndex, action.Parent = #lines + 1, 8, fiche.body
 	end
@@ -2507,7 +2492,7 @@ local function game_()
 		BackgroundColor3 = Color3.fromRGB(20, 16, 13), BackgroundTransparency = 0.03, Visible = false, Parent = gui, ZIndex = 5,
 	}, { corner(6), stroke(Color3.fromRGB(176, 140, 72), 2.5) })
 	panels.Talents = tal
-	local talTitle = label({ Text = "✨ Talents", Font = TITLE, TextSize = 22, TextColor3 = C.gold, Size = UDim2.new(1, -60, 0, 32), Position = UDim2.fromOffset(14, 6), Parent = tal, ZIndex = 6 })
+	local talTitle = Composants.titre({ Text = "Talents", Font = TITLE, TextSize = 22, TextColor3 = C.gold, Size = UDim2.new(1, -60, 0, 32), Position = UDim2.fromOffset(14, 6), Parent = tal, ZIndex = 6 })
 	local function closeTal()
 		tal.Visible = false
 		hideTip()
@@ -3610,7 +3595,7 @@ local function game_()
 		if building then
 			makeGhost()
 			if buildCount then
-				buildCount.Text = (Config.BLOCKS[blockId].name or "") .. "  ×" .. haveBlock()
+				buildCount.Text = (Config.BLOCKS[blockId].name or "") .. "  " .. Composants.quantite(haveBlock())
 			end
 		elseif ghost then
 			ghost:Destroy()
@@ -3692,7 +3677,7 @@ local function game_()
 	Remotes:WaitForChild("Inventory").OnClientEvent:Connect(function()
 		task.defer(function()
 			if building and buildCount then
-				buildCount.Text = (Config.BLOCKS[buildBlock].name or "") .. "  ×" .. haveBlock()
+				buildCount.Text = (Config.BLOCKS[buildBlock].name or "") .. "  " .. Composants.quantite(haveBlock())
 			end
 		end)
 	end)
