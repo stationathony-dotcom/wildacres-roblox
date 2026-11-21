@@ -7,6 +7,8 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.3 — 2026-11-21
 
+- **Contrôles** — La rangée de touches sous la barre rapide disparaît : une aide « touche + mot » ne s’affiche que quand elle sert (descendre de cheval, lâcher, tout ramasser, se relever). Toutes les touches sont expliquées dans Paramètres. Un clic donne toujours un coup, même dans l’herbe, et les poings alternent gauche/droite.
+- **Torses** — Les tuniques, mailles, brigandines, plates, robes et prises de créatures se distinguent à la silhouette dans le sac et sur le personnage. Les garnitures marquent le rang et chaque coupe de tunique retrouve son relief au retrait de l’armure.
 - **Combat** — Chaque famille d’arme a son geste (taille, estoc, masse lourde, poing, tir, lancer) et son bruit d’impact. Les outils ont le leur : abattre, piocher, creuser, pêcher, arroser.
 - **Créatures** — On entend une bête grogner (ou un brigand crier) quand elle annonce son attaque. Elle rougit brièvement sous les coups, et on l’entend s’effondrer.
 - **Ressenti** — Ramasser, payer, s’équiper, apprendre un talent, rendre une quête, bêcher, arroser, démonter, siffler son cheval, monter en selle, traire, tondre ou ramasser des œufs : chaque action a maintenant son geste et son son. Une compétence qui monte joue une petite fanfare et un outil brisé se fait entendre. Un témoin crie quand il voit un crime, les coups des gardes s’entendent et un joueur K.O. aussi. Chaque bouton de l’interface fait un petit clic.

@@ -117,7 +117,7 @@ local formsBySlot = {
 		{"plastron de cœur", "heartplate"}, {"plastron d'élytre", "beetle"},
 		{"armure d'écaille", "scale"}, {"armure en écaille", "scale"}, {"cuirasse segmentée", "lamellarplate"},
 		{"cotte de maille", "mail"}, {"brigandine", "brigandine"}, {"gambison", "gambeson"},
-		{"cotte damassée", "gambeson"}, {"gilet", "leather"}, {"armure de cuir", "leather"},
+		{"cotte damassée", "mail"}, {"gilet", "leather"}, {"armure de cuir", "leather"},
 		{"manteau", "coat"}, {"robe", "robe"}, {"tablier", "apron"},
 		{"tunique", "tunic"}, {"tenue", "tunic"}, {"chemise", "shirt"}, {"blouse", "shirt"}, {"vareuse", "shirt"},
 	},
@@ -223,9 +223,29 @@ local function firstMatch(name, rules)
 	return nil
 end
 
+local torsoFamilies = {
+	tunic = "tissu", shirt = "tissu", apron = "tissu", gambeson = "tissu",
+	leather = "cuir", brigandine = "brigandine", mail = "mailles",
+	scale = "ecailles", lamellarplate = "ecailles", plate = "plates",
+	robe = "robes", coat = "robes", beetle = "creatures", heartplate = "creatures",
+}
+
+local signedTorsos = {
+	["cuirasse des anciens"] = true, ["plastron serti de diamant"] = true,
+	["cotte damassée"] = true, ["brigandine de bois de cœur"] = true,
+	["manteau des moissons"] = true, ["manteau du roi des loups"] = true,
+	["armure d'écailles noires"] = true,
+}
+
+local function torsoFamily(name, form, trophy)
+	if signedTorsos[name] or name:find("légendaire", 1, true) then return "legendaires" end
+	if trophy and (form == "scale" or form == "tunic" or form == "coat") then return "creatures" end
+	return torsoFamilies[form] or "plates"
+end
+
 function D.appearance(item)
 	local name = D.lower(item.name or "")
-	local form, style = D.formOf(item), D.style(item)
+	local form, style, slot = D.formOf(item), D.style(item), D.slotOf(item)
 	local trophy = trophies[item.name]
 	local source = trophy and D.lower(trophy.name) or name
 	local trait = firstMatch(source, anatomy)
@@ -262,8 +282,25 @@ function D.appearance(item)
 	if form == "toque" then hide = rgb(231, 217, 185) end
 	if form == "strawhat" then hide = rgb(207, 174, 93) end
 	if form == "tricorn" or form == "headband" then hide = hide:Lerp(rgb(36, 27, 37), 0.64) end
+	local family
+	if slot == "armor" then
+		family = torsoFamily(name, form, trophy)
+		if name == "cotte damassée" then
+			metal, accent = rgb(92, 103, 123), rgb(202, 213, 227)
+		elseif name == "armure d'écailles noires" then
+			hide, accent = rgb(39, 41, 47), rgb(142, 84, 76)
+		elseif name == "cuirasse des anciens" or name:find("^armure de plates") or name:find("^armure de chevalier") then
+			metal = hardColors.steel
+		elseif name == "manteau des moissons" then
+			hide, accent = rgb(117, 82, 53), rgb(230, 185, 94)
+		elseif name == "tunique" or name == "tenue de fermier" then
+			hide = palettes.lin.color
+		elseif name == "robe" then
+			hide = palettes.lune.color
+		end
+	end
 	return {
-		form = form, slot = D.slotOf(item), color = hide, trim = style.trim, accent = accent, metal = metal,
+		form = form, slot = slot, torsoFamily = family, color = hide, trim = style.trim, accent = accent, metal = metal,
 		material = material, cloth = style.cloth, series = style.key, mark = style.mark, trait = trait, name = name,
 		soul = name:find("légendaire", 1, true) ~= nil,
 		rarity = item.rarity or (name:find("légendaire", 1, true) and 4 or 1),

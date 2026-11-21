@@ -451,164 +451,357 @@ local function torch(d, s)
 	d.tip("Flammèche", V(0.02, 0.46, -0.07), V(-0.066, 0.77, -0.08), 0.23, 0.16, rgb(255, 199, 68), M.SmoothPlastic)
 end
 
-local function torso(emit, s, options)
-	local top, waist = pen(emit, "chest"), pen(emit, "waist")
-	local f = s.form
-	local plated = f == "plate" or f == "heartplate" or f == "beetle" or f == "lamellarplate"
-	local armored = plated or f == "scale" or f == "mail"
-	local coat = f == "coat" or f == "robe"
-	local fabric = textile(s)
-	local body = armored and s.metal:Lerp(s.color, f == "mail" and 0.17 or 0.25) or s.color
-	if f == "scale" or f == "beetle" or f == "heartplate" then body = s.color:Lerp(s.accent, 0.30) end
-	local mat = armored and hard(s) or fabric
-	local vest = f == "leather" and s.name:find("^gilet")
-	local width = (plated and 1.84 or (f == "leather" and 1.74 or 1.78)) + s.cut * 0.010
-	local front = -0.49
-	local collar = 0.32 + s.variant * 0.021
-	local breadth = s.profile * 0.02
-	-- Dos et col visibles autour des pans. Les pans de la robe sont fixés au bassin.
-	top.box("Fond du vêtement", 0, -0.04, 0.015, width, 1.15, 0.94, body, mat)
-	waist.box("Taille", 0, f == "mail" and -0.14 or 0.02, 0, f == "mail" and 1.73 or 1.58,
-		f == "mail" and 1.08 or 0.69, 0.95, body, mat)
-	if f == "beetle" or f == "plate" or f == "heartplate" then
+-- Les cols restent au torse, les manches suivent les bras et les pans longs suivent les cuisses.
+local function torsoBody(r, name, color, material, width, depth)
+	r.top.box(name, 0, -0.005, 0, width, 1.23, depth, color, material)
+	r.waist.box("Doublure de taille", 0, 0.015, 0, 1.54, 0.72, 0.89, color, material)
+end
+
+local function torsoBelt(r, name, color, material, y, depth)
+	r.waist.box(name, 0, y, 0, 1.67, 0.18, depth, color, material)
+	local z = -depth / 2
+	r.waist.box("Fermoir", 0, y, z, 0.29, 0.22, 0.092, r.edge, M.Metal)
+	if r.rank >= 2 then
 		for _, sign in pair do
-			top.part(f == "beetle" and "Élytre courbe" or "Poitrine bombée", V(0.91 + breadth, 0.98, 0.40),
-				C(sign * 0.43, 0.075, front + 0.022) * A(0, -sign * 0.20, sign * 0.10),
-				body:Lerp(s.trim, sign == 1 and 0.22 or 0.09), mat, "ball")
-			top.bar("Nervure de cuirasse", V(sign * 0.76, 0.27, -0.57), V(sign * 0.35, -0.44, -0.59),
-				0.075, 0.11, s.trim, mat)
+			r.waist.disc(r.rank >= 3 and "Rivet doré" or "Rivet poli", sign * 0.24, y, z - 0.008,
+				0.102, 0.052, r.edge, M.Metal)
 		end
-		if f == "beetle" then
-			top.box("Suture des élytres", 0, -0.02, -0.565, 0.10, 1.1, 0.15, soot, M.Slate)
-			for _, sign in pair do
-				bentPoint(top, "Pointe d’élytre", V(sign * 0.68, 0.30, -0.48), sign * (0.28 + breadth), 0.43,
-					0.29, 0.24, body, M.Slate)
-			end
-		elseif f == "heartplate" then
-			local core = s.soul and 0.70 or 0.48 + s.variant * 0.030
-			top.disc("Logement de cœur", 0, 0.08, -0.58, core * 1.29, 0.23, s.metal, M.Metal)
-			setting(top, 0, 0.08, -0.719, core, s, s.profile % 2 == 0 and "oval" or nil)
-			for _, sign in pair do
-				local spread = 0.24 + s.profile * 0.041 + s.cut * 0.008
-				top.path("Veine du cœur", {V(sign * 0.21, 0.1, -0.67), V(sign * spread, 0.02, -0.66),
-					V(sign * 0.76, -0.31, -0.57)}, 0.079, 0.09, s.accent, M.Slate)
+	end
+	if r.rank >= 3 then
+		r.waist.box("Filet de ceinture", 0, y + 0.075, z + 0.015, 1.62, 0.046, 0.065, r.edge, M.Metal)
+	end
+	if r.rank >= 4 then
+		r.waist.box("Incrustation du fermoir", 0, y, z - 0.048, 0.125, 0.125, 0.065, r.accent, M.Glass, math.pi / 4)
+	end
+end
+
+local function onArms(r, draw)
+	if r.covered then return end
+	for _, side in pair do draw(pen(r.emit, "shoulder", side), side) end
+end
+
+local function onThighs(r, draw)
+	for _, side in pair do draw(pen(r.emit, "thigh", side), side) end
+end
+
+local function squareCollar(r, name, color, material, height)
+	r.top.box(name, 0, 0.58 + height / 4, 0.375, 1.08, height, 0.24, color, material)
+	for _, side in pair do
+		r.top.box(name, side * 0.49, 0.55 + height / 4, 0.075, 0.19, height, 0.66, color, material)
+	end
+end
+
+local function clothTorso(r, s)
+	local f, color = s.form, r.color
+	local thick = f == "gambeson" or s.name == "tenue de garde" or s.name:find("renforc", 1, true)
+	local apron = f == "apron"
+	local fabric = apron and s.name == "tablier de forgeron" and M.Leather or M.Fabric
+	torsoBody(r, thick and "Corps matelassé" or "Toile cousue", color, M.Fabric, thick and 1.84 or 1.78, 0.92)
+	if apron then
+		local pocket = s.name == "tablier de semeur" and 0.54 or 0.37
+		r.top.box("Bavette", 0, -0.13, -0.486, 1.02, 0.86, 0.16, color:Lerp(pale, 0.24), fabric)
+		for _, side in pair do
+			r.top.box("Bretelle", side * 0.38, 0.30, -0.474, 0.14, 0.48, 0.10, r.edge, fabric, side * -0.14)
+		end
+		onThighs(r, function(d, side)
+			d.box("Jupe du tablier", -side * 0.035, 0.16, -0.41, 0.82, 0.82, 0.21, color:Lerp(pale, 0.24), fabric)
+			d.box("Poche de métier", -side * 0.04, 0.10, -0.523, pocket, 0.27, 0.12, color, fabric)
+		end)
+	else
+		for _, side in pair do
+			r.top.bar("Revers de toile", V(side * 0.37, 0.55, -0.47), V(side * 0.075, 0.16, -0.49),
+				0.13, 0.09, r.edge, M.Fabric)
+			for i = 1, thick and 3 or 1 do
+				r.top.box(thick and "Côte matelassée" or "Pli de lin", side * (0.02 + i * 0.23), -0.20,
+					-0.478, thick and 0.19 or 0.12, 0.73, thick and 0.19 or 0.10,
+					color:Lerp(pale, 0.06 + i * 0.055), M.Fabric, side * 0.075)
 			end
 		end
-	elseif f == "scale" then
-		for row = 0, 2 do
-			for col = -1, 1 do
-				local w = 0.44 + s.variant * 0.035
-				local x = col * w * 1.04 + (row % 2 == 0 and -1 or 1) * 0.062
-				local y = 0.43 - row * (0.29 + s.profile * 0.012)
-				top.part("Écaille chevauchée", V(w, 0.45, 0.20),
-					C(x, y, -0.53) * A(-0.15, col * -0.12, (s.profile % 3 - 1) * 0.09), body:Lerp(s.accent, (row + col + 1) * 0.13),
-					s.trait == "ice" and M.Glass or M.Slate, "ball")
-			end
+		if f == "tunic" then
+			r.waist.box("Bas de tunique", 0, -0.25, -0.045, 1.62, 0.57, 0.97, color, M.Fabric)
 		end
-	elseif f == "lamellarplate" then
-		for i = 0, 3 do
-			top.box("Lame de cuirasse", 0, 0.41 - i * 0.26, -0.53, 1.76 - i * (0.09 + breadth),
-				0.29, 0.26, body:Lerp(s.trim, i % 2 * 0.23), mat)
+		onArms(r, function(d, side)
+			d.box(thick and "Mancheron matelassé" or "Manche souple", -side * 0.036, thick and 0.24 or 0.16, 0,
+				thick and 0.78 or 0.68, thick and 0.49 or 0.65, thick and 0.84 or 0.70, color, M.Fabric, -side * 0.08)
+			d.box("Ourlet de manche", -side * 0.036, thick and 0.02 or -0.15, 0,
+				thick and 0.77 or 0.69, 0.095, thick and 0.86 or 0.72, r.edge, M.Fabric, -side * 0.08)
+		end)
+	end
+	torsoBelt(r, apron and "Lien de tablier" or "Ceinture tissée", hide, fabric, 0.04, 0.98)
+end
+
+local function leatherTorso(r, s)
+	torsoBody(r, "Gilet en cuir", r.color:Lerp(dark, 0.21), M.Leather, 1.78, 0.93)
+	for _, side in pair do
+		r.top.box("Quartier de cuir", side * 0.41, -0.06, -0.48, 0.82, 1.06, 0.17, r.color, M.Leather, -side * 0.11)
+		r.top.bar("Sangle croisée", V(side * 0.61, 0.49, -0.54), V(-side * 0.34, -0.44, -0.55),
+			0.145, 0.11, side == 1 and r.edge or hide, M.Leather)
+		r.waist.box("Basque de cuir", side * 0.59, -0.25, -0.12, 0.48, 0.49, 0.78, r.color, M.Leather, side * 0.17)
+		if s.series == "loup" or s.series == "os" then
+			local bone = s.series == "os"
+			r.top.box(bone and "Agrafe d’os" or "Lisière de toison", side * 0.62, 0.46, -0.50,
+				bone and 0.20 or 0.35, 0.22, 0.19, bone and ivory or r.color:Lerp(pale, 0.34),
+				bone and M.SmoothPlastic or M.Fabric, -side * 0.24)
 		end
-	elseif f == "mail" then
-		for row = 0, 2 do
-			for col = -1, 1 do
-				local x = col * (0.39 + s.cut * 0.006) + (row % 2) * (0.08 + s.profile * 0.014)
-				local y = 0.39 - row * (0.29 + s.profile * 0.012)
-				top.disc("Maillon de bordure", x, y, -0.477, 0.23 + s.variant * 0.016, 0.091, s.metal:Lerp(pale, 0.33), M.Metal)
-				top.disc("Fond de maille", x, y, -0.525, 0.12 + s.variant * 0.009, 0.035, soot, M.Metal)
-			end
+	end
+	if not s.name:find("^gilet") then
+		onArms(r, function(d, side)
+			d.box("Épaulette de sellerie", -side * 0.06, 0.35, 0, 0.77, 0.31, 0.80, r.color, M.Leather, -side * 0.26)
+		end)
+	end
+	torsoBelt(r, "Baudrier de taille", hide, M.Leather, 0.055, 0.98)
+end
+
+local function brigandineTorso(r, s)
+	torsoBody(r, "Enveloppe de brigandine", r.color:Lerp(soot, 0.27), M.Leather, 1.81, 0.95)
+	local woodLames = s.material == "Wood"
+	for _, side in pair do
+		r.top.box("Pan riveté", side * 0.44, 0.02, -0.50, 0.84, 1.12, 0.16, r.color, M.Leather, -side * 0.05)
+		if woodLames then
+			r.top.box("Éclisse de bois de cœur", side * 0.43, 0.02, -0.57, 0.67, 0.97, 0.135,
+				s.metal, M.Wood, -side * 0.05)
 		end
-	elseif f == "brigandine" then
-		for _, sign in pair do
-			top.box("Pan de brigandine", sign * 0.44, 0.02, -0.51, 0.86, 1.12, 0.15, body, M.Leather, sign * 0.04)
-			if mat == M.Wood or s.material == "Wood" then
-				top.box("Éclisse de cœur de bois", sign * 0.43, -0.02, -0.614, 0.42, 0.83, 0.10,
-					wood:Lerp(pale, 0.10), M.Wood, -sign * 0.12)
-			end
-			for row = 0, 1 do
-				for col = 0, 1 do
-					top.ball("Rivet de brigandine", sign * (0.24 + col * (0.31 + breadth)), 0.30 - row * 0.56,
-						-0.585, 0.16, 0.13, 0.10, s.trim, M.Metal)
+		for row = 0, 1 do
+			for col = 0, 1 do
+				if woodLames and row == 1 and col == 0 then continue end
+				local x, y = side * (0.25 + col * 0.34), 0.32 - row * 0.59
+				if s.series == "os" then
+					r.top.part("Cabochon d’os", V(0.14, 0.22, 0.10),
+						C(x, y, -0.58) * A(0, 0, side * 0.19), ivory, M.SmoothPlastic, "wedge")
+				else
+					r.top.disc("Clou de brigandine", x, y, woodLames and -0.638 or -0.58, 0.15, 0.075, r.edge, M.Metal)
 				end
 			end
 		end
-	elseif f == "apron" then
-		top.box("Bavette de tablier", 0, -0.12, -0.49, 1.20, 0.90, 0.16, body:Lerp(pale, 0.22), fabric)
-		waist.box("Jupe du tablier", 0, -0.18, -0.45, 1.38, 1.04 + breadth, 0.16, body:Lerp(pale, 0.22), fabric)
-		waist.box("Poche plaquée", (s.variant - 2) * 0.12, -0.16, -0.55, 0.53, 0.38, 0.12, s.trim, fabric)
-	elseif coat or f == "gambeson" or f == "leather" or f == "tunic" or f == "shirt" then
-		local panels = f == "gambeson" and 3 or f == "leather" and 2 or 1
-		for _, sign in pair do
-			top.bar("Revers", V(sign * collar, 0.50, front), V(sign * (f == "leather" and 0.10 or 0.07),
-				coat and -0.26 or 0.025, front - 0.035), 0.15 + breadth, 0.12, s.trim, fabric)
-			for i = 1, panels do
-				top.box(f == "gambeson" and "Boudin matelassé" or "Pli du tissu", sign * (0.16 + i * 0.19),
-					-0.11, front + 0.01, panels == 3 and 0.16 or 0.21, 0.76, 0.095,
-					body:Lerp(i % 2 == 0 and dark or pale, 0.14), fabric, sign * 0.065)
-			end
-		end
-		if s.trait == "silk" then
-			local winter = s.name:find("givre", 1, true)
-			for _, sign in pair do
-				top.path("Fils de soie", {V(0, winter and 0.25 or -0.38, -0.55), V(sign * 0.20, winter and -0.17 or -0.12, -0.55),
-					V(sign * (0.47 + s.variant * 0.055), 0.12, -0.49), V(sign * 0.81, 0.32 + breadth, -0.475)},
-					0.064, 0.056, s.accent:Lerp(pale, 0.51), M.Fabric)
-			end
-		elseif s.name:find("anguille", 1, true) then
-			for _, sign in pair do
-				top.tip("Aileron de peau d’anguille", V(sign * 0.55, 0.02, -0.505),
-					V(sign * 0.87, -0.52, -0.535), 0.31, 0.16, s.accent, M.Leather)
-			end
-		elseif f == "leather" then
-			for _, sign in pair do
-				top.bar("Sangle de cuir", V(sign * 0.65, 0.49, -0.49), V(sign * 0.23, -0.43, -0.53),
-					0.11, 0.09, hide, M.Leather)
-			end
-		end
-		if coat or f == "tunic" then
-			for _, sign in pair do
-				local length = f == "robe" and 1.35 or f == "coat" and 1.02 or 0.64
-				length += s.cut * 0.011
-				waist.box("Pan fendu", sign * 0.43, -length / 2 + 0.21, 0, 0.92, length, 0.91, body, fabric,
-					sign * (0.082 + s.profile * 0.018))
-			end
-		end
-		if coat and s.trait == "ice" then
-			for _, sign in pair do
-				top.tip("Cristal du col", V(sign * 0.47, 0.49, -0.35), V(sign * (0.68 + breadth), 0.84, -0.38),
-					0.36, 0.22, s.accent, M.Glass)
-			end
+		r.waist.box("Tassette rivetée", side * 0.45, -0.25, -0.45, 0.83, 0.52, 0.25, r.color, M.Leather, side * 0.10)
+	end
+	r.top.box("Fermeture de brigandine", 0, 0.05, -0.502, 0.13, 1.12, 0.15, hide, M.Leather)
+	onArms(r, function(d, side)
+		d.box("Épaulière carrée rivetée", -side * 0.04, 0.27, 0, 0.84, 0.53, 0.84,
+			r.color:Lerp(soot, 0.14), M.Leather, -side * 0.085)
+	end)
+	torsoBelt(r, "Sangle de brigandine", hide, M.Leather, 0.04, 1.07)
+end
+
+local function mailTorso(r, s)
+	local metal = s.metal:Lerp(r.color, 0.18)
+	torsoBody(r, "Haubert", metal:Lerp(soot, 0.34), M.Metal, 1.79, 0.94)
+	r.top.box("Encolure rabattue", 0, 0.49, -0.463, 1.17, 0.20, 0.14, metal, M.Metal)
+	for row = 0, 1 do
+		local y = 0.21 - row * 0.36
+		local damask = s.name == "cotte damassée"
+		r.top.box(damask and "Bande d’acier damassé" or "Bande de mailles", 0, y, -0.483, 1.61, 0.34, 0.12,
+			damask and metal:Lerp(r.accent, 0.15 + row * 0.21) or metal:Lerp(soot, 0.20), M.Metal)
+		local rings = row == 0 and not damask and 3 or 2
+		for i = 1, rings do
+			local x = (i - (rings + 1) / 2) * 0.47 + (row - 0.5) * 0.10
+			local diameter = damask and 0.29 or 0.25
+			r.top.disc("Anneau de haubert", x, y, -0.55, diameter, 0.078, metal:Lerp(pale, 0.42), M.Metal)
+			r.top.disc("Creux du maillon", x, y, -0.59, diameter * 0.57, 0.023, soot, M.Metal)
 		end
 	end
-	local belt = f == "mail" and s.metal or hide
-	waist.box(f == "mail" and "Ourlet de maille" or "Ceinture", 0, f == "mail" and -0.59 or -0.055, 0, f == "mail" and 1.80 or 1.68,
-		0.14, 0.99, belt, f == "mail" and mat or M.Leather)
-	if f ~= "mail" then
-		waist.box("Boucle de ceinture", 0, -0.055, -0.50, 0.32 + breadth, 0.23, 0.095, s.trim, M.Metal)
-	end
-	if f == "plate" or f == "lamellarplate" or f == "brigandine" or f == "gambeson" then
-		emblem(top, s, 0, f == "plate" and 0.24 or 0.17, f == "plate" and -0.625 or f == "lamellarplate" and -0.648 or -0.562,
-			0.40 + s.variant * 0.014)
-	elseif f == "mail" and (s.rarity >= 3 or s.trait == "badge") then
-		waist.box("Insigne de maille", 0, -0.02, -0.50, 0.36 + breadth, 0.29, 0.12, s.trim, M.Metal,
-			s.trait == "badge" and (s.cut - 8) * 0.06 or math.pi / 4)
-	elseif f ~= "heartplate" and f ~= "beetle" and s.rarity >= 3 and s.trait ~= "silk" then
-		setting(top, 0, 0.14, -0.492, 0.26 + breadth, s)
-	end
-	if not options.covered and not vest and f ~= "apron" then
+	r.waist.box("Jupe du haubert", 0, -0.32, 0, 1.69, 0.80, 0.99, metal:Lerp(soot, 0.30), M.Metal)
+	r.waist.box("Ourlet métallique", 0, -0.67, 0, 1.77, 0.13, 1.025, metal, M.Metal)
+	onArms(r, function(d, side)
+		d.box("Manche tombante de mailles", -side * 0.025, 0.07, 0, 0.75, 0.85, 0.77,
+			metal:Lerp(soot, 0.32), M.Metal, -side * 0.07)
+	end)
+	torsoBelt(r, "Sangle du haubert", hide, M.Leather, 0.07, 1.035)
+end
+
+local function scaleTorso(r, s)
+	local segment = s.form == "lamellarplate"
+	local beast = s.torsoFamily ~= "ecailles"
+	local material = segment and hard(s) or (s.series == "nord" and M.Glass or M.Slate)
+	local color = segment and s.metal:Lerp(r.color, 0.21) or r.color:Lerp(r.accent, 0.26)
+	torsoBody(r, segment and "Support lamellaire" or "Peau sous les écailles", r.color:Lerp(soot, 0.40), M.Leather, 1.79, 0.94)
+	local collar = segment and "Barre de col" or beast and "Crête d’écailles" or "Encolure dentelée"
+	r.top.box(collar, 0, 0.52, -0.364, 1.46, beast and 0.26 or 0.20, 0.31, color, material)
+	if segment then
+		for row = 0, 3 do
+			r.top.box("Lame transversale", 0, 0.35 - row * 0.245, -0.50 - row * 0.013,
+				1.76 - row * 0.13, 0.30, 0.23, color:Lerp(pale, row % 2 * 0.21), material)
+		end
 		for _, side in pair do
-			local d = pen(emit, "shoulder", side)
-			local sleeve = plated and 0.58 or f == "mail" and 0.63 or coat and 0.90 or 0.67
-			if plated then
-				d.part("Coque d’épaule du plastron", V(0.94, sleeve, 0.92),
-					C(-side * 0.045, 0.45 - sleeve / 2, 0) * A(0, 0, side * 0.23), body:Lerp(s.trim, 0.17), mat, "ball")
-			else
-				d.box(armored and "Épaulement" or "Manche", -side * 0.075, 0.40 - sleeve / 2, 0,
-					armored and 0.81 or 0.71, sleeve, armored and 0.87 or 0.76, body, mat, side * (armored and 0.15 or 0.07))
+			r.top.box("Ligature lamellaire", side * 0.46, 0, -0.607, 0.095, 0.87, 0.105, r.edge, M.Leather, -side * 0.14)
+		end
+	else
+		local step = 0.49 + (beast and (s.variant - 2) * 0.03 or 0)
+		for row = 0, 2 do
+			local tiles = row == 1 and 2 or 3
+			for i = 1, tiles do
+				local col = i - (tiles + 1) / 2
+				local pose = C(col * step, 0.32 - row * 0.32, -0.52 - row * 0.025)
+					* A(-0.26, col * -0.12, col * (beast and 0.16 or 0.08))
+				r.top.part("Tuile d’écaille", V(step + 0.025, 0.44, 0.24), pose,
+					color:Lerp((row + i) % 2 == 0 and pale or soot, 0.17), material, "wedge")
 			end
 		end
 	end
+	onArms(r, function(d, side)
+		for row = 0, 1 do
+			d.box(segment and "Épaulette à lames" or "Écaille d’épaule", side * (0.02 + row * 0.085), 0.39 - row * 0.20, 0,
+				(segment and 0.81 or 0.92) - row * 0.11, 0.28, 0.87, color:Lerp(pale, row * 0.15), material, -side * 0.28)
+		end
+	end)
+	for _, side in pair do
+		r.waist.box(segment and "Lame de hanche" or "Écaille de hanche", side * 0.62, -0.26, -0.22, 0.52, 0.52, 0.66,
+			color, material, side * 0.19)
+	end
+	torsoBelt(r, "Sangle des lames", hide, M.Leather, 0.045, 1.03)
+end
+
+local function plateTorso(r, s)
+	local metal, material = s.metal:Lerp(r.color, 0.15), hard(s)
+	local heavy = s.name:find("^armure") or s.name:find("^cuirasse")
+	torsoBody(r, "Dossière de cuirasse", metal:Lerp(soot, 0.23), material, 1.84, 1.00)
+	squareCollar(r, "Gorgerin", metal:Lerp(r.edge, 0.20), material, heavy and 0.34 or 0.23)
+	for _, side in pair do
+		r.top.part("Bombe facettée du plastron", V(0.89, 0.97, heavy and 0.35 or 0.28),
+			C(side * 0.394, 0.053, -0.52) * A(0, -side * 0.31, -side * 0.13),
+			metal:Lerp(pale, side == 1 and 0.12 or 0.025), material)
+		r.waist.box("Tassette forgée", side * 0.48, -0.25, -0.45, 0.78, 0.54, 0.28, metal, material, side * 0.16)
+	end
+	r.top.bar("Arête de forge", V(0, 0.43, -0.68), V(0, -0.45, -0.65), 0.137, 0.14, metal:Lerp(pale, 0.39), material)
+	r.waist.box("Lame du ventre", 0, 0.22, -0.41, 1.51, 0.30, 0.32, metal:Lerp(pale, 0.15), material)
+	onArms(r, function(d, side)
+		d.box("Coque de plates", side * 0.06, 0.39, 0, heavy and 1.05 or 0.91, heavy and 0.53 or 0.43,
+			heavy and 1.03 or 0.90, metal, material, -side * 0.29)
+		if heavy then
+			d.box("Feuillet de spallière", side * 0.18, 0.08, 0, 0.81, 0.28, 0.89, metal:Lerp(r.edge, 0.29), material, -side * 0.33)
+		end
+	end)
+	if s.name == "cuirasse des anciens" then
+		r.top.box("Sceau taillé des anciens", 0, 0.13, -0.735, 0.39, 0.39, 0.16, r.edge, M.Slate, math.pi / 4)
+	elseif s.series == "soleil" or s.series == "garde" or s.series == "lune" or s.series == "ronces" or s.series == "nord" then
+		emblem(r.top, s, 0, 0.13, -0.735, 0.45)
+	elseif s.name == "plastron serti de diamant" then
+		setting(r.top, 0, 0.13, -0.735, 0.46, s)
+	end
+	torsoBelt(r, "Ceinturon de cuirasse", hide, M.Leather, 0.042, 1.12)
+end
+
+local function robeTorso(r, s)
+	local coat, color = s.form == "coat", r.color
+	local fur = s.name:find("fourr", 1, true) or s.name:find("loup", 1, true) or s.name:find("hiver", 1, true)
+	local ice = s.name:find("givre", 1, true)
+	local lining = fur and color:Lerp(pale, 0.43) or r.edge
+	torsoBody(r, coat and "Drap de manteau" or "Corps de robe", color, M.Fabric, 1.80, 0.95)
+	r.top.box(fur and "Collier de toison" or "Capuchon rabattu", 0, 0.47, 0.43, fur and 1.38 or 1.11,
+		fur and 0.48 or 0.43, 0.41, lining, M.Fabric)
+	for _, side in pair do
+		r.top.bar(fur and "Revers de fourrure" or "Grand revers", V(side * 0.63, 0.51, -0.448),
+			V(side * (coat and 0.20 or 0.10), -0.39, -0.48), fur and 0.28 or 0.19, 0.16, lining, M.Fabric)
+		if ice then
+			r.top.part("Cristal de l’encolure", V(0.31, 0.45, 0.25),
+				C(side * 0.70, 0.58, -0.40) * A(0, side * 0.3, -side * 0.38), r.accent, M.Glass, "wedge")
+		elseif fur then
+			r.top.box("Mèche de toison", side * 0.73, 0.23, -0.46, 0.25, 0.40, 0.19, lining:Lerp(color, 0.28), M.Fabric, side * 0.27)
+		end
+	end
+	r.waist.box("Drapé du bassin", 0, -0.15, 0, 1.70, 0.55, 0.98, color, M.Fabric)
+	onThighs(r, function(d, side)
+		local length = coat and 0.90 or 1.19
+		local y = 0.56 - length / 2
+		d.box("Pan long avant", side * 0.04, y, -0.44, coat and 0.77 or 0.88, length, 0.23, color, M.Fabric, side * 0.115)
+		d.box("Pan long arrière", side * 0.04, y, 0.42, 0.86, length, 0.26, color:Lerp(dark, 0.18), M.Fabric, side * 0.115)
+		d.box("Galon des pans", side * 0.09, y, -0.551, 0.112, length, 0.085, lining, M.Fabric, side * 0.115)
+	end)
+	onArms(r, function(d, side)
+		d.box("Manche ample", -side * 0.02, 0.006, 0, coat and 0.80 or 0.85, 1.02, 0.84, color, M.Fabric, -side * 0.12)
+	end)
+	torsoBelt(r, coat and "Sangle du manteau" or "Écharpe de taille", color:Lerp(dark, 0.36), M.Fabric, 0.052, 1.05)
+end
+
+local function creatureTorso(r, s)
+	local f = s.form
+	if f == "scale" then
+		scaleTorso(r, s)
+	elseif f == "coat" then
+		robeTorso(r, s)
+	elseif f == "tunic" then
+		clothTorso(r, s)
+		if s.name:find("anguille", 1, true) then
+			for _, side in pair do
+				r.top.tip("Nageoire d’anguille", V(side * 0.59, 0.29, -0.47),
+					V(side * 0.88, -0.44, -0.55), 0.34, 0.17, r.accent, M.Leather)
+			end
+		else
+			for _, side in pair do
+				r.top.path("Soie d’araignée", {V(0, -0.42, -0.53), V(side * 0.38, 0.04, -0.53),
+					V(side * 0.73, 0.32 + s.profile * 0.025, -0.46)}, 0.072, 0.09, r.accent:Lerp(pale, 0.34), M.Fabric)
+			end
+		end
+	else
+		local beetle = f == "beetle"
+		local size = 0.46 + s.variant * 0.042 + (s.soul and 0.11 or 0)
+		local color = r.color:Lerp(r.accent, 0.24)
+		local material = (s.series == "nord" or s.name:find("verre", 1, true)) and M.Glass or M.Slate
+		if s.name:find("de bois", 1, true) then material = M.Wood end
+		torsoBody(r, beetle and "Chitine dorsale" or "Coque du gardien", color:Lerp(soot, 0.37), material, 1.83, 1.00)
+		for _, side in pair do
+			r.top.part(beetle and "Élytre jointif" or "Côte du gardien", V(beetle and 0.92 or 0.58, 0.99, 0.32),
+				C(side * (beetle and 0.437 or 0.56), 0.06, -0.49) * A(0, -side * 0.25, side * (beetle and 0.11 or 0.37)),
+				color:Lerp(pale, side == 1 and 0.22 or 0.08), material)
+			r.top.tip(beetle and "Mandibule de chitine" or "Éclat de la prise", V(side * 0.60, 0.36, -0.50),
+				V(side * (beetle and 1.04 or 0.87), beetle and 0.86 or 0.68 + s.profile * 0.022, -0.52),
+				beetle and 0.42 or 0.32, 0.25, color, material)
+			r.waist.box(beetle and "Abdomen de chitine" or "Fragment de taille", side * 0.47, -0.20, -0.40,
+				0.80, 0.53, 0.32, color, material, side * 0.16)
+		end
+		if beetle then
+			r.top.box("Suture des élytres", 0, 0.02, -0.566, 0.135, 1.06, 0.17, soot, material)
+			if s.soul then setting(r.top, 0, 0.27, -0.65, 0.35, s) end
+		else
+			r.top.disc("Logement de cœur", 0, 0.09, -0.55, size * 1.43, 0.33, s.metal, M.Metal)
+			setting(r.top, 0, 0.09, -0.71, size, s, s.profile % 2 == 0 and "oval" or nil)
+		end
+		torsoBelt(r, "Attache de la prise", hide, M.Leather, 0.065, 1.08)
+	end
+end
+
+local function legendaryTorso(r, s)
+	-- La monture de reliquaire signe la pièce de dos, sur sa construction d'origine.
+	local f = s.form
+	if f == "mail" then
+		mailTorso(r, s)
+	elseif f == "brigandine" then
+		brigandineTorso(r, s)
+	elseif f == "plate" then
+		plateTorso(r, s)
+	else
+		creatureTorso(r, s)
+	end
+	for _, side in pair do
+		if s.name == "manteau du roi des loups" then
+			r.top.part("Croc serti de la toison", V(0.16, 0.31, 0.14),
+				C(side * 0.61, 0.38, -0.55) * A(math.pi, 0, side * 0.21), ivory, M.SmoothPlastic, "wedge")
+		elseif s.name == "manteau des moissons" then
+			r.top.bar("Épi brodé", V(side * 0.20, -0.24, -0.53), V(side * 0.54, 0.41, -0.52),
+				0.105, 0.09, r.accent, M.Fabric)
+		else
+			r.top.bar("Double nervure de reliquaire", V(side * 0.71, 0.50, 0.48),
+				V(side * 0.17, -0.34, 0.51), 0.13, 0.13, r.edge, M.Metal)
+		end
+	end
+end
+
+local torsoBuilders = {
+	tissu = clothTorso, cuir = leatherTorso, brigandine = brigandineTorso, mailles = mailTorso,
+	ecailles = scaleTorso, plates = plateTorso, robes = robeTorso, creatures = creatureTorso, legendaires = legendaryTorso,
+}
+local rankTints = { nil, rgb(154, 189, 202), rgb(224, 183, 106), rgb(245, 194, 94) }
+
+local function torso(emit, s, options)
+	local rank = math.clamp(s.rarity, 1, 4)
+	local tint = rankTints[rank]
+	local r = {
+		emit = emit, top = pen(emit, "chest"), waist = pen(emit, "waist"), covered = options.covered,
+		rank = rank, color = tint and s.color:Lerp(tint, rank * 0.045) or s.color,
+		edge = tint and s.trim:Lerp(tint, rank * 0.14) or s.trim,
+		accent = s.accent,
+	}
+	torsoBuilders[s.torsoFamily](r, s)
 end
 
 local function cloak(d, s)
@@ -1323,6 +1516,7 @@ local function previewFrame(joint, side, slot)
 	if joint == "cape" then return A(0, math.pi, 0) end
 	if joint == "waist" and slot == "armor" then return C(0, -0.87, 0) end
 	if joint == "shoulder" and slot == "armor" then return C(side * 1.03, 0.07, 0) end
+	if joint == "thigh" and slot == "armor" then return C(side * 0.42, -1.659, 0) end
 	if slot == "legs" and (joint == "thigh" or joint == "shin") then
 		return C(side * 0.42, joint == "thigh" and -0.789 or -1.87, 0)
 	end
@@ -1340,6 +1534,7 @@ function Visuals.preview(item)
 	local model = Instance.new("Model")
 	model.Name = s.slot .. ":" .. item.name
 	model:SetAttribute("FamilleVisuelle", s.form)
+	if s.torsoFamily then model:SetAttribute("FamilleTorse", s.torsoFamily) end
 	model:SetAttribute("EquipementCommun", true)
 	model:SetAttribute("RangVisuel", s.rarity)
 	model:SetAttribute("ApercuDroit", true)

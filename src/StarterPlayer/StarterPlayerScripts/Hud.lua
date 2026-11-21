@@ -153,9 +153,11 @@ function Hud.gearThumbnail(it, dim: boolean?): GuiObject?
 	local equipment = rs:FindFirstChild("IconesEquipement")
 	local shared = rs:WaitForChild("Shared")
 	local gear = require(shared:WaitForChild("Gear"))
-	if not it.name or not gear.SLOTS[gear.slotOf(it)] then return nil end
+	local slot = gear.slotOf(it)
+	if not it.name or not gear.SLOTS[slot] then return nil end
 	local template = equipment and equipment:FindFirstChild(gear.visualKey(it))
 	if template and template:IsA("Model") and template:GetAttribute("EquipementCommun")
+		and (slot ~= "armor" or template:GetAttribute("FamilleTorse"))
 		and template:GetAttribute("RangVisuel") == (it.rarity or 1) then
 		return Hud.objectViewport(template, dim)
 	end

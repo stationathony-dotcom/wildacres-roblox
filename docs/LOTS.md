@@ -225,6 +225,8 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [~] **Équipement de 1 à Z** — sur disque, Codex, 21/11. Les 694 clés des planches et neuf entrées du catalogue courant
       passent par la même géométrie que l’avatar. [Style et commandes Édition](STYLE-EQUIPEMENT.md).
       Claude : synchronisation, génération, mannequins, captures et commits. En Play : lisibilité à 36 px et essayage en mouvement.
+- [~] **Silhouettes des torses** — sur disque, Codex, 21/11. Les 104 torses sont inventoriés dans [STYLE-EQUIPEMENT.md](STYLE-EQUIPEMENT.md).
+      Claude reprend la synchronisation, le banc `visuels_equipement("torses")`, la régénération et le commit.
 - [~] **Portrait et personnalisation du joueur** — sur disque, Codex, 21/11. Portrait 3D de la tête portée,
       création libre, visage et vêtements en pièces, aperçu défilant chez les artisans. Claude reprend la
       synchronisation, le banc `apparence` et les commits. En Play : réapparition, coiffes, tarifs, sauvegarde,
@@ -284,6 +286,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 21/11 · Codex · Torses sur disque, 416 variantes et 520 essayages contrôlés sur des instances simulées.
+  Claude reprend les bancs en Édition. En Play : comparer les familles à 36 px, puis les pans en mouvement et le retour des coupes longue et tablier.
 
 - 21/11 · Codex · Portrait et catalogue d’apparence sur disque, avec banc Édition étendu.
   À vérifier en Play : création gratuite, rendu et coiffe après réapparition, barbier et tailleur à la manette et au tactile.

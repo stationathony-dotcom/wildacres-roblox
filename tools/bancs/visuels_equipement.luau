@@ -19,28 +19,39 @@ end
 local shared = RS.Shared:Clone()
 shared.Parent = SS
 local function modules()
-	return require(shared.Config), require(shared.Gear), require(shared.GearVisuals)
+	return require(shared.Config), require(shared.Gear), require(shared.GearVisuals), require(shared.GearDesign),
+		require(shared.Apparence)
 end
-local loaded, config, gear, visuals = pcall(modules)
+local loaded, config, gear, visuals, design, looks = pcall(modules)
 shared:Destroy()
 assert(loaded, config)
 local entries = gear.visualEntries(config)
 local mannequin = assert(SS.Modeles:FindFirstChild("PNJ_Base"), "Modèle de référence PNJ_Base absent")
 
-if mode == "avatar" then
+local function avatarFor(profiles)
 	local source = game:GetService("ServerScriptService").Systemes.Avatar
-	local module = source:Clone()
-	module.Name = "AvatarEquipementBanc"
-	module.Parent = SS
-	local ok, Avatar = pcall(require, module)
-	module:Destroy()
-	assert(ok, Avatar)
-	local profiles = {}
+	local chunk = assert(loadstring(source.Source, "=AvatarEquipementBanc"))
+	local dependencies = {
+		[RS.Shared.GearDesign] = design, [RS.Shared.GearVisuals] = visuals, [RS.Shared.Apparence] = looks,
+	}
+	setfenv(chunk, setmetatable({
+		script = source,
+		require = function(module)
+			return dependencies[module] or require(module)
+		end,
+	}, {__index = getfenv(chunk)}))
+	local Avatar = chunk()
 	Avatar.init({
 		Interact = {onAction = function() end},
 		Joueurs = {get = function(player) return profiles[player] end},
 		WG = require(RS.Shared.WorldGen),
 	})
+	return Avatar
+end
+
+if mode == "avatar" then
+	local profiles = {}
+	local Avatar = avatarFor(profiles)
 	local looks = {
 		{"weapon:Épée longue", "hat:Heaume du Soleil rouge", "armor:Cotte de mailles",
 			"offhand:Bouclier héraldique", "boots:Solerets d'acier", "cape:Cape du Soleil rouge"},
@@ -107,7 +118,21 @@ local function checkNeon(model, rank, iconSize)
 	return nil
 end
 
-local function checkWorn(item, miniatureSize, expected)
+local function footprint(model, key)
+	local names = {}
+	for _, p in model:GetDescendants() do
+		if not p:IsA("BasePart") then continue end
+		assert(p.Name:find("%S") and p.Name ~= p.ClassName, key .. " : pièce sans nom")
+		for _, n in {p.CFrame:GetComponents()} do
+			assert(math.abs(n) < math.huge, key .. " : CFrame invalide pour " .. p.Name)
+		end
+		table.insert(names, p.Name)
+	end
+	table.sort(names)
+	return table.concat(names, "|"), #names
+end
+
+local function checkWorn(item, miniatureSize, expected, label)
 	local count = visuals.wear(item, trial, worn)
 	local message
 	if count < expected or count > 30 then
@@ -123,8 +148,80 @@ local function checkWorn(item, miniatureSize, expected)
 		end
 	end
 	message = message or checkNeon(worn, item.rarity or 1, miniatureSize)
+	local signature = label and footprint(worn, label)
 	worn:ClearAllChildren()
-	return count, message
+	return count, message, signature
+end
+
+if mode == "torses" then
+	local cuts
+	for _, field in looks.FIELDS do
+		if field.key == "shirtCut" then cuts = field.choices break end
+	end
+	assert(cuts and #cuts >= 5, "Catalogue de coupes incomplet")
+	local profile = {equipped = {}, stats = {}, look = {mode = "villageois", shirt = 4, pantsCut = "simple"}}
+	local player = {Character = trial}
+	local Avatar = avatarFor({[player] = profile})
+	local families, signatures, cutsTested = {}, {}, 0
+	local count, variants, maxIcon, maxWorn = 0, 0, 0, 0
+	local ok, failure = pcall(function()
+		for key, item in entries do
+			if gear.slotOf(item) ~= "armor" or key ~= gear.visualKey(item) then continue end
+			count += 1
+			local byRank = {}
+			for rank = 1, #gear.RARITIES do
+				local variant = table.clone(item)
+				variant.rarity = rank
+				local icon = visuals.preview(variant)
+				local label = key .. " · rang " .. rank
+				local family = assert(icon:GetAttribute("FamilleTorse"), label)
+				local signature, iconParts = footprint(icon, label)
+				local _, size = icon:GetBoundingBox()
+				local width = math.max(size.X, size.Y, size.Z)
+				local issues = verify(icon, 2)
+				local neon = checkNeon(icon, rank, width)
+				icon:Destroy()
+				assert(#issues == 0, label .. " : " .. table.concat(issues, ", "))
+				assert(not neon, label .. " : " .. tostring(neon))
+				assert(not signatures[signature] or signatures[signature] == family, label .. " : empreinte commune à deux familles")
+				families[family], signatures[signature] = true, family
+				byRank[rank] = signature
+				if rank > 1 then assert(signature ~= byRank[rank - 1], label .. " : rang sans détail ajouté") end
+				local wornParts, issue, wornSignature = checkWorn(variant, width, iconParts, label)
+				assert(not issue, label .. " : " .. tostring(issue))
+				assert(wornSignature == signature, label .. " : dessin porté différent de la miniature")
+				maxIcon, maxWorn = math.max(maxIcon, iconParts), math.max(maxWorn, wornParts)
+				variants += 1
+			end
+			for _, choice in cuts do
+				local cut = choice[1]
+				profile.look.shirtCut = cut
+				profile.equipped.armor = item
+				Avatar.refresh(player)
+				local armor = assert(trial:FindFirstChild("Armure_WA"), key)
+				local wornSignature = footprint(armor, key .. " · " .. cut)
+				assert(wornSignature == byRank[design.appearance(item).rarity], key .. " : dessin porté différent")
+				assert(not trial:FindFirstChild("Tenue_WA"), key .. " : la coupe " .. cut .. " traverse le torse")
+				assert(trial.UpperTorso.Color == looks.SHIRTS[4], key .. " : couleur de sous-tunique perdue")
+				profile.equipped.armor = nil
+				Avatar.refresh(player)
+				local garment = trial:FindFirstChild("Tenue_WA")
+				assert(not trial:FindFirstChild("Armure_WA") and (garment ~= nil) == (cut ~= "simple")
+					and profile.look.shirtCut == cut, key .. " : la coupe " .. cut .. " ne revient pas")
+				cutsTested += 1
+			end
+			if count % 5 == 0 then task.wait() end
+		end
+		for _, family in {"tissu", "cuir", "brigandine", "mailles", "ecailles", "plates", "robes", "creatures", "legendaires"} do
+			assert(families[family], "Famille absente : " .. family)
+		end
+		assert(count > 0, "Catalogue des torses vide")
+	end)
+	trial:Destroy()
+	folder:Destroy()
+	assert(ok, failure)
+	return string.format("%d torses, %d variantes, %d essayages · maximum %d pièces en miniature et %d pièces portées",
+		count, variants, cutsTested, maxIcon, maxWorn)
 end
 
 local count, maxIcon, maxWorn, issues = 0, 0, 0, {}
