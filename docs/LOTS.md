@@ -70,7 +70,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [x] Claude → Codex · écran d'accueil · liste « Mes amis en jeu » : RemoteFunction `Remotes.Mondes`, (f3457d2)
       `InvokeServer("friends")` rend `{ { name, worldId, worldName } }` ; bouton Rejoindre = `InvokeServer("join",
       worldId)` · étape 13 « rejoindre un ami » (serveur prêt, d5a3c76).
-- [ ] Claude → Codex · carte (X15) · **repères gardés par monde** (serveur prêt 21/11, `Systemes/Infos`, banc `infos`) :
+- [x] Claude → Codex · carte (X15, b6bc44d) · **repères gardés par monde** (serveur prêt 21/11, `Systemes/Infos`, banc `infos`) :
       `Remotes.Infos:InvokeServer("reperes")` → `{ { id, x, z, sorte, nom } }` ; poser =
       `Action:FireServer("repere_poser", { x, z, sorte = "village"|"lit"|"parcelle"|"quete"|"perso" })` ;
       retirer = `Action:FireServer("repere_retirer", { id })`. Pas de texte libre (nom donné par le serveur).
@@ -131,11 +131,10 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 
 ### 2e vague Codex (écrite le 21/11) — finir ce que le joueur voit
 
-- [ ] **X15 · Repères sur la carte** — en cours — Codex, 21/11. (`AUDIT-PRODUIT.md` ordre 6). Le joueur pose / retire ses repères (village
-      connu, lit, parcelle, ville où rendre une quête), légende, minicarte ≠ carte du monde. Repères gardés côté
-      client (`Preferences`) ; s'il faut les sauver dans le profil → passage à Claude. *Fini quand* : poser,
-      retirer, reconnexion = repères toujours là.
-- [ ] **X16 · Motifs de refus et alertes lisibles** (ordre 7). Une pose refusée dit pourquoi (le serveur envoie
+- [x] **X15 · Repères sur la carte** — FAIT 21/11 (b6bc44d). Cinq types dans la légende de la carte du monde,
+      pose et retrait, sauvegarde par monde via `Infos`. Bancs Édition 54/54. À voir en Play : pose, retrait,
+      reconnexion et commandes à la manette / au tactile.
+- [ ] **X16 · Motifs de refus et alertes lisibles** — en cours — Codex, 21/11. (ordre 7). Une pose refusée dit pourquoi (le serveur envoie
       déjà un toast : l'afficher près du fantôme), rotation / valider / annuler visibles en mode [V], gains
       répétés regroupés (« +5 Bois » au lieu de 5 toasts), alerte de combat ou de cambriolage qui reste
       visible pendant une série de récoltes.
