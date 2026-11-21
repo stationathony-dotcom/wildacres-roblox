@@ -196,6 +196,7 @@ function Batir.place(player: Player, data)
 	end
 	table.insert(reg.state.built, d)
 	makePart(d, folderOf(reg))
+	G.Util.sfx("pose", Vector3.new(d.x, d.y, d.z))
 	G.Util.geste(player, "batir")
 	-- une pièce reprise revient entière : XP de pose plafonnée (150 pièces/jour = une belle maison)
 	G.Joueurs.addSkillXpCapped(player, "artisanat", 1, "pose", 150)
@@ -436,7 +437,7 @@ function Batir.placePlan(player: Player, name: string): (boolean, string)
 	end
 	G.Joueurs.addSkillXpCapped(player, "artisanat", #todo, "pose", 150)
 	G.Joueurs.sync(player)
-	G.Util.sfx("pelle", frame.Position)
+	G.Util.sfx("pose", frame.Position)
 	return true, "🏗️ Plan « " .. name .. " » posé : " .. #todo .. " pièces."
 end
 
@@ -513,6 +514,7 @@ function Batir.smash(player: Player, tool: string): boolean
 			G.Protection.log(d.o, player.DisplayName .. " a cassé un mur de ta maison.", false)
 		end
 		table.remove(reg.state.built, i)
+		G.Util.sfx("casse", pos)
 		if p then
 			p:Destroy()
 		end

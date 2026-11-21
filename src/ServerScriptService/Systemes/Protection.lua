@@ -136,6 +136,7 @@ function Protection.ring(owner: string, culprit: Player?, pos: Vector3)
 			G.Util.toast(p, "🔔 Une alarme sonne tout près !", "danger")
 		end
 	end
+	G.Util.sfx("cloche", pos)
 	Protection.log(owner, "🔔 Alarme : " .. who .. " s'introduit chez toi !")
 end
 
@@ -175,6 +176,7 @@ function Protection.useLock(player: Player, item: string)
 	if G.Machines and rawget(G.Machines, "refresh") then
 		G.Machines.refresh(best) -- attribut « Verrouille » sur le modèle (interface)
 	end
+	G.Util.sfx("serrure", Vector3.new(best.x, root.Position.Y, best.z))
 	G.Util.toast(player, "🔒 " .. info.name .. " posée (" .. (best.item == "chest" and "coffre" or "porte") .. ").", "gain")
 	G.Joueurs.sync(player)
 end

@@ -39,6 +39,7 @@ check("couche « applique » distincte du mur", S.slotOf ~= nil)
 
 -- pose : joueur au centre d'une case, regarde vers un bord
 local bag = { wall_lantern = 3 }
+local sons
 local built = {}
 local reg = { state = { placed = {} }, placedFolder = Instance.new("Folder") }
 local root = { Position = Vector3.new(2, 5, 2), CFrame = CFrame.lookAt(Vector3.new(2, 5, 2), Vector3.new(2, 5, 10)) }
@@ -47,7 +48,7 @@ local G = {
 	Interact = { onAction = function() end, onPrompt = function() end },
 	Joueurs = { has = function(_, i) return (bag[i] or 0) > 0 end, take = function(_, i, n) bag[i] -= n return true end, sync = function() end },
 	Util = { root = function() return root end, isWater = function() return false end, toast = function() end, newId = function() return "pl" .. (#reg.state.placed + 1) end,
-		pid = function() return "u1" end, playerOf = function() return nil end, prompt = function() end },
+		pid = function() return "u1" end, playerOf = function() return nil end, prompt = function() end, sfx = function(n) sons = (sons or "") .. n .. " " end },
 	World = { regionAt = function() return reg end, loaded = { r = reg }, buildDeco = function(d, parent)
 		local m = Config.Catalogue.build(d.model)
 		if not m then
@@ -95,6 +96,7 @@ b = built[#built]
 flamme = b and b.m:FindFirstChild("Flamme", true)
 arm = flamme and (flamme.Position - b.m:GetPivot().Position)
 check("bord +X : x = 3,7, potence vers -X", bag.wall_lantern == 0 and math.abs(d.x - 3.7) < 1e-6 and arm and arm.X < -0.3)
+check("son « pose » à chaque pose réussie (X24)", sons == "pose pose pose ")
 
 reg.placedFolder:Destroy()
 shared:Destroy()
