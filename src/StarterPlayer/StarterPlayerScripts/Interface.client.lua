@@ -1471,6 +1471,9 @@ local function game_()
 	local function gearLines(it)
 		local r = Gear.RARITIES[it.rarity] or Gear.RARITIES[1]
 		local lines = { { it.name, r.color, 16 }, { (Gear.SLOTS[it.slot] or it.slot) .. " · " .. r.name, C.dim, 12 } }
+		if it.slot == "offhand" and string.find(string.lower(it.name or ""), "torche", 1, true) then
+			table.insert(lines, { "Tenue en main gauche, elle éclaire les grottes.", C.gold })
+		end
 		if it.power and it.power > 0 then
 			table.insert(lines, { "⚔️ " .. it.power, C.text, 15 })
 		end

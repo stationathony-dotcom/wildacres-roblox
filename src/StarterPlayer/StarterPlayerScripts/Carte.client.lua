@@ -20,6 +20,7 @@ local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local R = Config.WORLD_RADIUS
 local N = 2 * R + 1
 local CELLPX = 16
+local SPAN = Config.CELL * Config.REGION
 local BIOME_COLOR = {
 	prairie = Color3.fromRGB(122, 170, 84), foret = Color3.fromRGB(176, 110, 52), desert = Color3.fromRGB(222, 196, 128),
 	neige = Color3.fromRGB(222, 230, 238), marais = Color3.fromRGB(92, 112, 76),
@@ -38,7 +39,7 @@ gui.Parent = player:WaitForChild("PlayerGui")
 
 local panel = Instance.new("Frame")
 panel.Name = "Panneau"
-panel.Size = UDim2.fromOffset(N * CELLPX + 28, N * CELLPX + 70)
+panel.Size = UDim2.fromOffset(N * CELLPX + 28, N * CELLPX + 168)
 panel.Position = UDim2.fromScale(0.5, 0.5)
 panel.AnchorPoint = Vector2.new(0.5, 0.5)
 panel.BackgroundColor3 = Color3.fromRGB(60, 46, 30)
@@ -57,6 +58,7 @@ title.TextColor3 = Color3.fromRGB(240, 220, 170)
 title.Size = UDim2.new(1, -60, 0, 34)
 title.Position = UDim2.fromOffset(14, 6)
 title.TextXAlignment = Enum.TextXAlignment.Left
+title.TextTruncate = Enum.TextTruncate.AtEnd
 title.Parent = panel
 local close = Instance.new("TextButton")
 close.Text = "X"
@@ -79,9 +81,13 @@ foot.Font = Enum.Font.Gotham
 foot.TextSize = 12
 foot.TextColor3 = Color3.fromRGB(220, 200, 160)
 foot.Size = UDim2.new(1, -28, 0, 16)
-foot.Position = UDim2.new(0, 14, 1, -18)
+foot.Position = UDim2.fromOffset(14, N * CELLPX + 52)
 foot.TextXAlignment = Enum.TextXAlignment.Left
 foot.Parent = panel
+
+local reperes = require(script.Parent:WaitForChild("ReperesCarte")).new(
+	panel, grid, close, Remotes, R, N, SPAN, N * CELLPX + 72
+)
 
 local arrow = Instance.new("TextLabel")
 arrow.Text = "▲"
@@ -107,8 +113,7 @@ cross.Visible = false
 cross.Parent = grid
 local function setCross(pos)
 	if typeof(pos) == "Vector3" then
-		local span = Config.CELL * Config.REGION
-		cross.Position = UDim2.fromOffset((pos.X / span + R) * CELLPX, (pos.Z / span + R) * CELLPX)
+		cross.Position = UDim2.fromOffset((pos.X / SPAN + R) * CELLPX, (pos.Z / SPAN + R) * CELLPX)
 		cross.Visible = true
 	else
 		cross.Visible = false
@@ -176,7 +181,7 @@ local function render()
 			places += 1
 		end
 	end
-	title.Text = "Carte de " .. (workspace:GetAttribute("WorldName") or "l'île")
+	title.Text = "Carte du monde · " .. (workspace:GetAttribute("WorldName") or "l'île")
 	foot.Text = string.format("%d régions parcourues · %d lieux découverts", found, places)
 end
 
@@ -213,6 +218,9 @@ end)
 
 local function toggle()
 	if panel.Visible then
+		if reperes.cancelPlacement() then
+			return
+		end
 		panel.Visible = false
 		return
 	end
@@ -221,27 +229,31 @@ local function toggle()
 	render()
 	scale.Scale = target * 0.9
 	panel.Visible = true
+	reperes.refresh()
 	TweenService:Create(scale, TweenInfo.new(0.18, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = target }):Play()
 end
-close.Activated:Connect(toggle)
+close.Activated:Connect(function()
+	reperes.cancelPlacement()
+	panel.Visible = false
+end)
 require(script.Parent:WaitForChild("WindowNav")).watch(panel, close, toggle)
 local ouvrir = Instance.new("BindableEvent")
 ouvrir.Name = "OuvrirCarte"
 ouvrir.Event:Connect(toggle)
 ouvrir.Parent = player
 
-RunService.RenderStepped:Connect(function()
+RunService.RenderStepped:Connect(function(dt)
 	if not panel.Visible then
 		return
 	end
+	reperes.step(dt)
 	local char = player.Character
 	local hrp = char and char:FindFirstChild("HumanoidRootPart") :: BasePart?
 	if not hrp then
 		return
 	end
-	local span = Config.CELL * Config.REGION
-	local fx = hrp.Position.X / span + R
-	local fz = hrp.Position.Z / span + R
+	local fx = hrp.Position.X / SPAN + R
+	local fz = hrp.Position.Z / SPAN + R
 	arrow.Position = UDim2.fromOffset(fx * CELLPX, fz * CELLPX)
 	local look = workspace.CurrentCamera.CFrame.LookVector
 	arrow.Rotation = math.deg(math.atan2(look.X, -look.Z))

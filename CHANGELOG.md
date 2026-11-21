@@ -5,6 +5,11 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
+## 0.2.3 — 2026-11-21
+
+- **Carte du monde** — Cinq types de repères personnels sauvegardés par monde. La légende sert à choisir le type, et la liste permet de retrouver et de retirer un repère même si plusieurs se superposent.
+- **Torche** — La fiche d’équipement indique que la torche éclaire les grottes lorsqu’elle est tenue en main gauche.
+
 ## 0.2.2 — 2026-11-20
 - **Direction visuelle** : contrôle en mode Edit des formes du catalogue et de la palette du village.
 - **Armures** : les pièces d’écailles gardent des épaules et une ceinture visibles dans le sac.
