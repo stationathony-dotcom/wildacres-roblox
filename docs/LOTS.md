@@ -225,6 +225,10 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [~] **Équipement de 1 à Z** — sur disque, Codex, 21/11. Les 694 clés des planches et neuf entrées du catalogue courant
       passent par la même géométrie que l’avatar. [Style et commandes Édition](STYLE-EQUIPEMENT.md).
       Claude : synchronisation, génération, mannequins, captures et commits. En Play : lisibilité à 36 px et essayage en mouvement.
+- [~] **Portrait et personnalisation du joueur** — sur disque, Codex, 21/11. Portrait 3D de la tête portée,
+      création libre, visage et vêtements en pièces, aperçu défilant chez les artisans. Claude reprend la
+      synchronisation, le banc `apparence` et les commits. En Play : réapparition, coiffes, tarifs, sauvegarde,
+      défilement tactile et focus manette.
 
 ## Couloir Claude — les règles et le monde
 
@@ -280,6 +284,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 21/11 · Codex · Portrait et catalogue d’apparence sur disque, avec banc Édition étendu.
+  À vérifier en Play : création gratuite, rendu et coiffe après réapparition, barbier et tailleur à la manette et au tactile.
 
 - 21/11 · Codex · Équipement de 1 à Z sur disque. 703 miniatures contrôlées sur des instances simulées.
   Studio Édition et captures à reprendre par Claude. En Play sur le PC fixe, vérifier les cases à 36 px et les dégagements sur l’avatar.

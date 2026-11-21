@@ -168,7 +168,106 @@ function Hud.gearThumbnail(it, dim: boolean?): GuiObject?
 	return viewport
 end
 
-function Hud.avatarViewport(character: Model): ViewportFrame?
+-- Les mêmes couches sont observées par la carte et la fiche. Les événements des descendants
+-- gèrent aussi une couche qui arrive en plusieurs paquets ou une coiffe retirée.
+local headLayers = { "Visage_WA", "Coiffure_WA", "Chapeau_WA" }
+local avatarLayers = { "Tenue_WA", "Armure_WA", "Equipement_WA", "Cape_WA" }
+
+function Hud.watchAvatar(player: Player, changed)
+	local current
+	local connections = {}
+	local headConnections = {}
+	local function disconnect(list)
+		for _, connection in list do connection:Disconnect() end
+		table.clear(list)
+	end
+	local queued = false
+	local function refresh()
+		if queued then return end
+		queued = true
+		task.defer(function()
+			queued = false
+			changed(current)
+		end)
+	end
+	local function follow(character)
+		disconnect(connections)
+		disconnect(headConnections)
+		current = character
+		if character then
+			local function watchHead()
+				disconnect(headConnections)
+				local head = character:FindFirstChild("Head")
+				if head and head:IsA("BasePart") then
+					for _, property in head:IsA("MeshPart") and { "Color", "Size", "TextureID" } or { "Color", "Size" } do
+						table.insert(headConnections, head:GetPropertyChangedSignal(property):Connect(refresh))
+					end
+				end
+			end
+			local function relevant(node)
+				if not (node:IsA("BasePart") or node:IsA("Model")) then return end
+				while node and node.Parent ~= character do node = node.Parent end
+				if node and (node.Name == "Head" or node.Name == "HumanoidRootPart"
+					or table.find(headLayers, node.Name) or table.find(avatarLayers, node.Name)) then
+					refresh()
+				end
+			end
+			table.insert(connections, character.DescendantAdded:Connect(relevant))
+			table.insert(connections, character.DescendantRemoving:Connect(relevant))
+			table.insert(connections, character.ChildAdded:Connect(function(child)
+				if child.Name == "Head" then watchHead() end
+			end))
+			watchHead()
+		end
+		refresh()
+	end
+	player.CharacterAdded:Connect(follow)
+	player.CharacterRemoving:Connect(function(character)
+		if current == character then follow(nil) end
+	end)
+	follow(player.Character)
+end
+
+function Hud.headViewport(character: Model, rear: boolean?): ViewportFrame?
+	local head = character:FindFirstChild("Head")
+	if not (head and head:IsA("BasePart") and character:FindFirstChild("Visage_WA")) then return nil end
+	local vf = new("ViewportFrame", {
+		BackgroundTransparency = 1, Ambient = Color3.fromRGB(208, 198, 185), LightColor = TEXT,
+		LightDirection = Vector3.new(-0.5, -1, 0.8),
+	})
+	local world = new("WorldModel", { Parent = vf })
+	local model = new("Model", { Parent = world })
+	local function copyPart(part)
+		local archivable = part.Archivable
+		part.Archivable = true
+		local copy = part:Clone()
+		part.Archivable = archivable
+		for _, child in copy:GetChildren() do
+			if not child:IsA("DataModelMesh") and not child:IsA("SurfaceAppearance") then child:Destroy() end
+		end
+		copy.Anchored, copy.LocalTransparencyModifier = true, 0
+		copy.CFrame = head.CFrame:ToObjectSpace(part.CFrame)
+		copy.Parent = model
+	end
+	copyPart(head)
+	for _, name in headLayers do
+		local layer = character:FindFirstChild(name)
+		if not layer then continue end
+		for _, part in layer:GetDescendants() do
+			if part:IsA("BasePart") and part.Transparency < 1 then copyPart(part) end
+		end
+	end
+	local camera = new("Camera", { FieldOfView = 28, Parent = vf })
+	local bounds, size = model:GetBoundingBox()
+	local at = Vector3.new(0, bounds.Y * 0.80, 0)
+	local direction = (rear and Vector3.new(0.55, 0.12, 1) or Vector3.new(0.15, 0.06, -1)).Unit
+	local distance = math.max(size.X, size.Y) * 2.56 + size.Z * 0.5
+	camera.CFrame = CFrame.lookAt(at + direction * distance, at)
+	vf.CurrentCamera = camera
+	return vf
+end
+
+function Hud.avatarViewport(character: Model, prepare: ((Model) -> ())?): (ViewportFrame?, Model?)
 	local old = character.Archivable
 	character.Archivable = true
 	local copy = character:Clone()
@@ -180,6 +279,8 @@ function Hud.avatarViewport(character: Model): ViewportFrame?
 		if node:IsA("LuaSourceContainer") or node:IsA("Tool") or node:IsA("BillboardGui")
 			or node:IsA("ParticleEmitter") or node:IsA("Sound") or node:IsA("Highlight") then
 			node:Destroy()
+		elseif node:IsA("BasePart") then
+			node.LocalTransparencyModifier = 0
 		end
 	end
 	local pivot = copy:FindFirstChild("HumanoidRootPart")
@@ -193,13 +294,14 @@ function Hud.avatarViewport(character: Model): ViewportFrame?
 	})
 	local world = new("WorldModel", { Parent = vf })
 	copy:PivotTo(CFrame.new())
+	if prepare then prepare(copy) end
 	copy.Parent = world
 	local at, size = copy:GetBoundingBox()
 	local camera = new("Camera", { FieldOfView = 28, Parent = vf })
 	local offset = pivot.CFrame:VectorToWorldSpace(Vector3.new(0.20, 0.07, -1)).Unit
 	camera.CFrame = CFrame.lookAt(at.Position + offset * (math.max(size.Y, size.X) * 2.25), at.Position)
 	vf.CurrentCamera = camera
-	return vf
+	return vf, copy
 end
 
 -- ---------------------------------------------------------------- carte du joueur (haut-gauche)
@@ -226,7 +328,7 @@ function Hud.build(parent: Instance, opts)
 		{ corner(10), new("UIGradient", { Transparency = NumberSequence.new(0, 1) }) })
 	local ring = new("Frame", { Size = UDim2.fromOffset(128, 128), Position = UDim2.fromOffset(0, 4), BackgroundColor3 = Color3.fromRGB(70, 56, 40), Parent = card, ZIndex = 2 },
 		{ corner(UDim.new(0.5, 0)), stroke(EDGE, 4) })
-	self.portrait = new("ImageLabel", { Size = UDim2.new(1, -12, 1, -12), Position = UDim2.fromOffset(6, 6), BackgroundColor3 = Color3.fromRGB(120, 170, 210), Image = "", Parent = ring, ZIndex = 3 },
+	self.portrait = new("Frame", { Size = UDim2.new(1, -12, 1, -12), Position = UDim2.fromOffset(6, 6), BackgroundColor3 = Color3.fromRGB(54, 69, 80), Parent = ring, ZIndex = 3 },
 		{ corner(UDim.new(0.5, 0)) })
 	local badge = new("Frame", { Size = UDim2.fromOffset(46, 52), Position = UDim2.fromOffset(92, 92), BackgroundColor3 = NAVY, Parent = card, ZIndex = 5 },
 		{ corner(UDim.new(0.3, 0)), stroke(GOLD, 2.5), grad(Color3.fromRGB(60, 84, 130), Color3.fromRGB(26, 36, 62)) })
@@ -414,13 +516,21 @@ function Hud.build(parent: Instance, opts)
 end
 
 -- ---------------------------------------------------------------- mises à jour
-function Hud:setPlayer(name: string, image: string?, badge: string?)
+function Hud:setPlayer(name: string, badge: string?)
 	self.name.Text = name
-	if image then
-		self.portrait.Image = image
-	end
 	if badge then
 		self.badge.Text = badge
+	end
+end
+
+function Hud:setPortrait(character: Model?)
+	if self.portraitView then self.portraitView:Destroy() end
+	local view = character and Hud.headViewport(character)
+	self.portraitView = view
+	if view then
+		view.Size, view.ZIndex = UDim2.fromScale(1, 1), self.portrait.ZIndex
+		corner(UDim.new(0.5, 0)).Parent = view
+		view.Parent = self.portrait
 	end
 end
 

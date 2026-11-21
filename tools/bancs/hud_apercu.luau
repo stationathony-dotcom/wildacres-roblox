@@ -17,6 +17,8 @@ local WG = require(shared.WorldGen)
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "ApercuHud"
+-- jamais copié dans le PlayerGui en Play (il recouvrait le vrai HUD) ni enregistré dans la place
+gui.Archivable = false
 gui.IgnoreGuiInset = true
 gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 local cam = workspace.CurrentCamera
@@ -33,7 +35,13 @@ local hud = Hud.build(gui, {
 		{ icon = "🛠️", label = "Atelier", key = "C" }, { icon = "⚙️", label = "Paramètres", key = "O" },
 	},
 })
-hud:setPlayer("WildPlayer", "rbxthumb://type=AvatarHeadShot&id=1&w=150&h=150", "😇")
+local exemple = Instance.new("Model")
+local tete = Instance.new("Part")
+tete.Name, tete.Size, tete.Parent = "Head", Vector3.new(1.16, 1.18, 1.16), exemple
+require(shared.Apparence).peindre(exemple, { skin = 2, hair = "meche", eyes = "amande", beard = "courte" })
+hud:setPlayer("WildPlayer", "😇")
+hud:setPortrait(exemple)
+exemple:Destroy()
 hud:setBars(850, 850, 320, 320)
 hud:setGold(1240)
 hud:setStars(0, 5)

@@ -7,6 +7,8 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.3 — 2026-11-21
 
+- **Interface** — Le portrait du HUD montre la tête du personnage et sa coiffe portée. Il suit les réapparitions, l’essayage et les changements d’apparence validés.
+- **Personnage** — La création propose gratuitement 19 coiffures, 10 teints, des traits du visage et plusieurs coupes de vêtements. La fiche montre les choix en direct. Le barbier s’occupe aussi de la barbe, de la moustache et des sourcils, et le tailleur propose les nouvelles coupes.
 - **Équipement** — Armes, coiffes, armures, bijoux et accessoires ont des silhouettes propres, partagées entre les miniatures et l’avatar. Les pièces de créatures intègrent leur prise, de la défense cerclée à l’écaille chevauchée.
 - **Interface** — La charte de ville s’utilise depuis le sac. Le groupe défile, le butin au clic et au toucher prend la priorité sur l’attaque ou la pose, et douze icônes d’artisanat avancé sont prêtes à publier.
 - **Décor** — Les lanternes, enseignes et bancs ont des attaches. Les fenêtres et volets posables ont des montants, plusieurs accessoires retrouvent le sol et les grands bâtiments sont allégés. Les champs gardent leurs 88 touffes récoltables avec moins de pièces.

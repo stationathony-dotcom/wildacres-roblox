@@ -180,48 +180,46 @@ function Avatar.dress(model: Model, look, role: string)
 end
 
 -- ----------------------------------------------------------------- Apparence du joueur
--- prof.look = { mode = "roblox" | "villageois", skin, hair, hairColor, shirt, pants, paid }
--- « roblox » : l'avatar du joueur, avec chapeau et armure du jeu par-dessus.
--- « villageois » : corps lisse aux couleurs choisies (palette médiévale des PNJ), sans
--- accessoires ni vêtements modernes : cohérent avec le monde 100 % médiéval.
-
-local HAIR_LIST = { "court", "herisse", "chauve", "barbe", "long", "chignon", "tresses", "carre" }
-Avatar.HAIR_LIST = HAIR_LIST
+-- prof.look conserve les choix du catalogue joueur. Les champs ajoutés sont facultatifs.
+Avatar.HAIR_LIST = Apparence.HAIR_LIST
 Avatar.LOOK_COST = LOOK_COST
 
-local function validLook(data)
-	local WG = G.WG
-	local function idx(v, max)
-		v = tonumber(v)
-		return (v and v == math.floor(v) and v >= 1 and v <= max) and v or 1
+local function validLook(data, current)
+	local want = current and Apparence.normalize(current) or {}
+	for _, field in Apparence.FIELDS do
+		local key = field.key
+		local value = data[key]
+		if value ~= nil then
+			if not Apparence.validValue(key, value) then return nil end
+			want[key] = value
+		end
 	end
-	return {
-		mode = "villageois", -- 19/11 (sa demande) : plus de skin Roblox, tout le monde a une allure du monde
-		skin = idx(data.skin, #WG.SKINS),
-		hair = table.find(HAIR_LIST, data.hair) and data.hair or "court",
-		hairColor = idx(data.hairColor, #WG.HAIR_COLORS),
-		shirt = idx(data.shirt, #WG.SHIRTS),
-		pants = idx(data.pants, #WG.PANTS),
-	}
+	return Apparence.normalize(want)
 end
 
--- Création et établissements (19/11, ses mots : « personnaliser son perso en arrivant, avec des
--- attributs qui collent à ce monde, pas garder son skin Roblox » ; « modifier par la suite en
--- débloquant des trucs type coupe de cheveux » ; « coiffeur et établissements dans le genre »).
---   · à la PREMIÈRE arrivée : écran de création, gratuit, parmi le choix de départ (STARTER) ;
---   · ensuite : le BARBIER (coiffure, couleur de cheveux) et le TAILLEUR (tunique, chausses), au marché
---     des villages. Un style hors du choix de départ se DÉBLOQUE une fois pour toutes (prix UNLOCK),
---     puis on en change contre une petite façon (FEE). Le teint ne change pas après la création.
--- prof.unlocks = { hair = { [nom] = true }, hairColor = { ["5"] = true }, shirt = {…}, pants = {…} }
+-- Création : tout le catalogue est accessible. Le choix de départ et les styles choisis
+-- à la création sont acquis. Chez l’artisan, un autre style se débloque une fois (UNLOCK),
+-- puis reste accessible pour le prix de la façon (FEE).
 Avatar.STARTER = {
 	hair = { court = true, long = true, chauve = true, chignon = true },
 	hairColor = { [1] = true, [2] = true, [3] = true, [4] = true },
+	brows = { naturels = true },
+	beard = { aucune = true, carree = true },
+	mustache = { aucune = true, droite = true },
 	shirt = { [1] = true, [2] = true, [3] = true, [4] = true, [5] = true },
 	pants = { [1] = true, [2] = true, [3] = true, [4] = true, [5] = true },
+	shirtCut = { simple = true },
+	pantsCut = { simple = true },
 }
-Avatar.UNLOCK = { hair = 60, hairColor = 40, shirt = 30, pants = 30 }
+Avatar.UNLOCK = {
+	hair = 60, hairColor = 40, brows = 40, beard = 60, mustache = 40,
+	shirt = 30, pants = 30, shirtCut = 30, pantsCut = 30,
+}
 Avatar.FEE = 10
-Avatar.SHOPS = { barbier = { "hair", "hairColor" }, tailleur = { "shirt", "pants" } }
+Avatar.SHOPS = {
+	barbier = { "hair", "hairColor", "brows", "beard", "mustache" },
+	tailleur = { "shirt", "pants", "shirtCut", "pantsCut" },
+}
 local session = setmetatable({}, { __mode = "k" }) -- joueur -> { ctx, e, t }
 
 local function owned(prof, key: string, value): boolean
@@ -237,23 +235,28 @@ Avatar.owned = owned
 function Avatar.defaultLook(player: Player)
 	local r = Random.new(player.UserId)
 	local hairs = { "court", "long", "chauve", "chignon" }
-	return { mode = "villageois", skin = r:NextInteger(1, #G.WG.SKINS), hair = hairs[r:NextInteger(1, #hairs)], hairColor = r:NextInteger(1, 4),
+	return { mode = "villageois", skin = r:NextInteger(1, 4), hair = hairs[r:NextInteger(1, #hairs)], hairColor = r:NextInteger(1, 4),
 		shirt = r:NextInteger(1, 5), pants = r:NextInteger(1, 5) }
 end
 
 -- ce que le client doit savoir pour l'écran (possédé, prix)
 local function shopInfo(prof, ctx: string)
-	local WG = G.WG
-	local own = { hair = {}, hairColor = {}, shirt = {}, pants = {} }
-	for _, h in HAIR_LIST do
-		own.hair[h] = owned(prof, "hair", h)
-	end
-	for key, list in { hairColor = WG.HAIR_COLORS, shirt = WG.SHIRTS, pants = WG.PANTS } do
-		for i in list do
-			own[key][i] = owned(prof, key, i)
+	local own = {}
+	local keys = Avatar.SHOPS[ctx]
+	if keys then
+		for _, field in Apparence.FIELDS do
+			local key = field.key
+			if not table.find(keys, key) then continue end
+			local styles = {}
+			for index, option in field.colors or field.choices do
+				local value = field.colors and index or option[1]
+				-- Les indices numériques voyagent sous forme de clés texte, même quand ils sont clairsemés.
+				styles[tostring(value)] = owned(prof, key, value)
+			end
+			own[key] = styles
 		end
 	end
-	return { kind = "look", ctx = ctx, owned = own, prices = Avatar.UNLOCK, fee = Avatar.FEE, look = prof.look }
+	return { kind = "look", ctx = ctx, keys = keys, owned = own, prices = Avatar.UNLOCK, fee = Avatar.FEE, look = prof.look }
 end
 
 -- ouvre l'écran d'apparence (création à l'arrivée, ou chez un barbier / tailleur e)
@@ -287,8 +290,12 @@ function Avatar.setLook(player: Player, data)
 			return
 		end
 	end
-	local want = validLook(data)
 	local cur = prof.look and prof.look.created and prof.look or nil
+	local want = validLook(data, cur)
+	if not want then
+		G.Util.toast(player, "Ce choix d’apparence est inconnu.")
+		return
+	end
 	local look
 	local cost, newUnlocks = 0, {}
 	if ctx == "creation" then
@@ -297,8 +304,7 @@ function Avatar.setLook(player: Player, data)
 		end
 		for key in Avatar.STARTER do
 			if not owned(prof, key, want[key]) then
-				G.Util.toast(player, "Ce style se débloque plus tard, chez le barbier ou le tailleur.")
-				return
+				table.insert(newUnlocks, { key, want[key] })
 			end
 		end
 		look = want
@@ -308,9 +314,10 @@ function Avatar.setLook(player: Player, data)
 			return
 		end
 		look = table.clone(cur)
+		local current = Apparence.normalize(cur)
 		local changed = false
 		for _, key in keys do
-			if want[key] ~= cur[key] then
+			if want[key] ~= current[key] then
 				changed = true
 				look[key] = want[key]
 				if not owned(prof, key, want[key]) then
@@ -322,11 +329,18 @@ function Avatar.setLook(player: Player, data)
 		if not changed then
 			return
 		end
+		if ctx == "barbier" and look.hair ~= cur.hair then
+			-- En quittant la coupe historique, conserver ses attributs faciaux implicites.
+			look.beard = look.beard or current.beard
+			look.mustache = look.mustache or current.mustache
+		end
 		cost += Avatar.FEE
 		if not G.Joueurs.take(player, "gold", cost) then
 			G.Util.toast(player, "Il te faut " .. cost .. " 💰 pour ça.")
 			return
 		end
+	end
+	if #newUnlocks > 0 then
 		prof.unlocks = prof.unlocks or {}
 		for _, u in newUnlocks do
 			prof.unlocks[u[1]] = prof.unlocks[u[1]] or {}
@@ -363,52 +377,24 @@ function Avatar.applyLook(player: Player)
 	if not char or not prof then
 		return
 	end
-	clearFolder(char, "Coiffure_WA")
 	-- jamais le skin Roblox : sans apparence choisie (ou l'ancien mode « avatar »), celle par défaut
 	if not prof.look or prof.look.mode ~= "villageois" then
 		prof.look = Avatar.defaultLook(player)
 		G.Joueurs.markDirty(player)
 	end
-	local look = prof.look
 	for _, c in char:GetChildren() do
 		if c:IsA("Shirt") or c:IsA("Pants") or c:IsA("ShirtGraphic") or c:IsA("Accessory") then
 			c:Destroy()
 		end
 	end
-	local WG = G.WG
-	local function paint(names, color)
-		for _, n in names do
-			local p = char:FindFirstChild(n)
-			if p and p:IsA("BasePart") then
-				p.Color = color
-				if p:IsA("MeshPart") then
-					pcall(function()
-						p.TextureID = ""
-					end)
-				end
-			end
-		end
-	end
-	paint(SKIN_PARTS, WG.SKINS[look.skin] or WG.SKINS[1])
-	paint(SHIRT_PARTS, WG.SHIRTS[look.shirt] or WG.SHIRTS[1])
-	paint(PANTS_PARTS, WG.PANTS[look.pants] or WG.PANTS[1])
-	paint(FEET, Color3.fromRGB(70, 50, 36))
-	local head = char:FindFirstChild("Head") :: BasePart?
-	Apparence.visage(head, WG.HAIR_COLORS[look.hairColor] or WG.HAIR_COLORS[1]) -- la texture effacée emportait le visage
-	if head then
-		local hairModel = Instance.new("Model")
-		hairModel.Name = "Coiffure_WA"
-		hairModel.Parent = char
-		-- pas de cheveux sous une capuche ou une toque (ils traverseraient)
-		local hat = prof.equipped and prof.equipped.hat
-		local fn = HAIRS[look.hair]
-		local form = hat and Design.formOf(hat)
-		local covered = form == "hood" or form == "cowl" or form == "toque" or form == "chapka"
-			or form == "turban" or (form and form:find("helm", 1, true))
-		if fn and not covered then
-			fn(hairModel, head, WG.HAIR_COLORS[look.hairColor] or WG.HAIR_COLORS[1])
-		end
-	end
+	local worn = prof.equipped or {}
+	local form = worn.hat and Design.formOf(worn.hat)
+	local covered = form == "hood" or form == "cowl" or form == "toque" or form == "chapka"
+		or form == "turban" or (form and form:find("helm", 1, true))
+	Apparence.peindre(char, prof.look, {
+		covered = covered, armor = worn.armor ~= nil, legs = worn.legs ~= nil,
+		tallboots = worn.boots and Design.formOf(worn.boots) == "tallboots",
+	})
 end
 
 local function layer(char, name)

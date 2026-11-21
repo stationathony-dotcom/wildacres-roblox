@@ -442,6 +442,7 @@ local function game_()
 		menuKeys[entry.key] = entry.fn
 	end
 	local hud = Hud.build(hudGui, { compact = MOBILE, menu = menu, onMap = menu[5].fn, gamepad = true })
+	local updateFichePortrait
 	hudNotify = function(text: string, kind: string?)
 		local n, icon, name = string.match(text, "^%+(%d+) (%S+) (.+)$")
 		if n then
@@ -458,14 +459,10 @@ local function game_()
 			hud:notify("✨", text)
 		end
 	end
-	hud:setPlayer(player.DisplayName, nil, "😇")
-	task.spawn(function()
-		local ok, img = pcall(function()
-			return Players:GetUserThumbnailAsync(player.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size150x150)
-		end)
-		if ok and img then
-			hud:setPlayer(player.DisplayName, img)
-		end
+	hud:setPlayer(player.DisplayName, "😇")
+	Hud.watchAvatar(player, function(character)
+		hud:setPortrait(character)
+		if updateFichePortrait then updateFichePortrait(character) end
 	end)
 
 	local biomeNames = {}
@@ -1505,7 +1502,7 @@ local function game_()
 	STAT_ICON.discretion = "🌑"
 	local charTab = "stats"
 	local lookInfo = nil -- écran d'apparence ouvert par le serveur (création, barbier, tailleur)
-	local lookDraft = nil -- apparence en cours de choix (onglet Apparence)
+	local FicheApparence = require(script.Parent:WaitForChild("FicheApparence"))
 	local bag = new("Frame", {
 		Name = "Perso", Size = UDim2.fromOffset(760, 440), Position = UDim2.fromScale(0.5, 0.5), AnchorPoint = Vector2.new(0.5, 0.5),
 		BackgroundColor3 = Color3.fromRGB(24, 19, 15), BackgroundTransparency = 0.03, Visible = false, Parent = gui, ZIndex = 5,
@@ -1522,6 +1519,7 @@ local function game_()
 	pclose.ZIndex = 6
 	pclose.Parent = bag
 	WindowNav.watch(bag, pclose, closeBag)
+	local editor = FicheApparence.mount(bag, pclose, C, uiScale, send)
 	local left = new("Frame", { Size = UDim2.new(0, 300, 1, -54), Position = UDim2.fromOffset(12, 42), BackgroundColor3 = Color3.fromRGB(32, 26, 20), Parent = bag, ZIndex = 6 },
 		{ corner(6), stroke(Color3.fromRGB(80, 64, 44), 1) })
 	local right = new("Frame", { Size = UDim2.new(1, -336, 1, -54), Position = UDim2.fromOffset(322, 42), BackgroundColor3 = Color3.fromRGB(32, 26, 20), Parent = bag, ZIndex = 6 },
@@ -1533,6 +1531,26 @@ local function game_()
 		Size = UDim2.new(1, -16, 1, -52), Position = UDim2.fromOffset(8, 46), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 4,
 		ScrollBarImageColor3 = C.line, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y, Parent = right, ZIndex = 7,
 	}, { new("UIListLayout", { Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder }) })
+	local portraitSlot
+	updateFichePortrait = function(character)
+		editor:setCharacter(bag.Visible and character or nil)
+		if not bag.Visible or editor.panel.Visible or not portraitSlot then return end
+		clear(portraitSlot)
+		local portrait = character and Hud.avatarViewport(character)
+		if portrait then
+			portrait.Size, portrait.Position = UDim2.fromScale(1, 1), UDim2.new()
+			portrait.ZIndex, portrait.Parent = 7, portraitSlot
+		else
+			label({ Text = "🧍", TextSize = 110, TextXAlignment = Enum.TextXAlignment.Center, TextTransparency = 0.55,
+				Size = UDim2.fromScale(1, 1), Parent = portraitSlot, ZIndex = 7 })
+		end
+	end
+	bag:GetPropertyChangedSignal("Visible"):Connect(function()
+		if not bag.Visible then
+			editor:setCharacter(nil)
+			if portraitSlot then clear(portraitSlot) end
+		end
+	end)
 
 	local function gearLines(it)
 		local r = Gear.RARITIES[it.rarity] or Gear.RARITIES[1]
@@ -1600,6 +1618,7 @@ local function game_()
 	end
 
 	local function renderChar()
+		if editor.panel.Visible then return end
 		local mastery = 0
 		for _, xp in inv.skills or {} do
 			mastery += Config.skillLevel(xp)
@@ -1608,21 +1627,9 @@ local function game_()
 		-- gauche : poupée d'équipement
 		clear(left)
 		local doll = new("Frame", { Size = UDim2.fromOffset(276, 218), Position = UDim2.new(0.5, -138, 0, 8), BackgroundTransparency = 1, Parent = left, ZIndex = 7 })
-		local portrait = player.Character and Hud.avatarViewport(player.Character)
-		if portrait then
-			portrait.Size, portrait.Position = UDim2.fromOffset(163, 174), UDim2.fromOffset(56, 1)
-			portrait.ZIndex, portrait.Parent = 7, doll
-			-- onglet Apparence : l'aperçu montre le choix en cours (teint, coiffure, tenue) avant validation
-			if charTab == "look" and lookDraft then
-				local copie = portrait:FindFirstChildWhichIsA("WorldModel")
-				copie = copie and copie:FindFirstChildWhichIsA("Model")
-				if copie then
-					pcall(require(Shared:WaitForChild("Apparence")).peindre, copie, lookDraft, require(Shared:WaitForChild("WorldGen")), false)
-				end
-			end
-		else
-			label({ Text = "🧍", TextSize = 110, TextXAlignment = Enum.TextXAlignment.Center, TextTransparency = 0.55, Size = UDim2.fromScale(1, 1), Parent = doll, ZIndex = 7 })
-		end
+		portraitSlot = new("Frame", { Name = "Apercu", BackgroundTransparency = 1, Size = UDim2.fromOffset(163, 174),
+			Position = UDim2.fromOffset(56, 1), Parent = doll, ZIndex = 7 })
+		updateFichePortrait(player.Character)
 		local spots = {
 			hat = Vector2.new(6, 0), armor = Vector2.new(6, 52), gloves = Vector2.new(6, 104), legs = Vector2.new(6, 156),
 			cape = Vector2.new(230, 0), shoulders = Vector2.new(230, 52), trinket = Vector2.new(230, 104), boots = Vector2.new(230, 156),
@@ -1677,6 +1684,7 @@ local function game_()
 		for _, t in { { "stats", "💪" }, { "skills", "🎓" }, { "col", "🏺" }, { "titles", "🏅" }, { "look", "✂️" } } do
 			local b = button(t[2], charTab == t[1] and C.gold or C.panel2, function()
 				charTab = t[1]
+				content.CanvasPosition = Vector2.zero
 				renderChar()
 			end)
 			b.Size = UDim2.fromOffset(56, 32)
@@ -1759,127 +1767,18 @@ local function game_()
 				end
 			end
 		elseif charTab == "look" then
-			-- Apparence (19/11) : création à l'arrivée (choix de départ, gratuit), puis barbier (coiffure,
-			-- couleur) et tailleur (tunique, chausses) au marché ; les styles 🔒 se débloquent pour de bon
-			local WGl = require(Shared:WaitForChild("WorldGen"))
-			local info = lookInfo
-			local ctx = info and info.ctx or nil
-			lookDraft = lookDraft or table.clone((info and info.look) or inv.look or { skin = 1, hair = "court", hairColor = 1, shirt = 1, pants = 1 })
-			local d = lookDraft
-			local cur = (info and info.look) or inv.look or {}
-			local own = info and info.owned or nil
-			local prices = info and info.prices or {}
-			local function isOwned(key, v)
-				if not own or not own[key] then
-					return true
+			local r = row(0, 54)
+			label({ Text = "Le barbier change les cheveux, les sourcils, la barbe et la moustache. Le tailleur change la tenue.",
+				TextSize = 13, TextColor3 = C.dim, Size = UDim2.new(1, -16, 1, 0),
+				Position = UDim2.fromOffset(8, 0), Parent = r, ZIndex = 9 })
+			for order, choice in FicheApparence.choixActuels(inv.look) do
+				local line = row(order, 34)
+				if choice.color then
+					new("Frame", { BackgroundColor3 = choice.color, Size = UDim2.fromOffset(18, 18),
+						Position = UDim2.fromOffset(7, 8), Parent = line, ZIndex = 9 }, { corner(4) })
 				end
-				return own[key][v] == true
-			end
-			local editable = {
-				creation = { skin = true, hairColor = true, hair = true, shirt = true, pants = true },
-				barbier = { hairColor = true, hair = true },
-				tailleur = { shirt = true, pants = true },
-			}
-			local can = ctx and editable[ctx] or {}
-			local r0 = row(0, 40)
-			local head = ({ creation = "Crée ton personnage", barbier = "Chez le barbier", tailleur = "Chez le tailleur" })[ctx]
-				or "Ton apparence se change au marché des villages : barbier (coiffure) et tailleur (tenue)."
-			label({ Text = head, Font = BOLD, TextSize = ctx and 16 or 12, TextColor3 = ctx and C.gold or C.dim, TextWrapped = true,
-				Size = UDim2.new(1, -16, 1, 0), Position = UDim2.fromOffset(8, 0), Parent = r0, ZIndex = 9 })
-			local function lockMark(parent, key, v)
-				if not isOwned(key, v) then
-					label({ Text = ctx == "creation" and "🔒" or ("🔒" .. (prices[key] or "")), TextSize = 10, Size = UDim2.fromScale(1, 1), Parent = parent, ZIndex = 11 })
-				end
-			end
-			local function pickable(key, v): boolean
-				if not can[key] then
-					return false
-				end
-				return ctx ~= "creation" or isOwned(key, v)
-			end
-			local function swatches(order: number, title: string, colors, key: string)
-				local r = row(order, 40)
-				label({ Text = title, Font = BOLD, TextSize = 13, TextColor3 = can[key] and C.text or C.dim, Size = UDim2.fromOffset(78, 40), Position = UDim2.fromOffset(8, 0), Parent = r, ZIndex = 9 })
-				local strip = new("ScrollingFrame", {
-					Size = UDim2.new(1, -90, 1, 0), Position = UDim2.fromOffset(84, 0),
-					BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3,
-					CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.X,
-					ScrollingDirection = Enum.ScrollingDirection.X, Parent = r, ZIndex = 9,
-				}, { new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal,
-					Padding = UDim.new(0, 4), VerticalAlignment = Enum.VerticalAlignment.Center,
-					SortOrder = Enum.SortOrder.LayoutOrder }) })
-				for i, c in colors do
-					local sw = new("TextButton", { Text = d[key] == i and "✓" or "", Font = BOLD, TextSize = 15,
-						TextColor3 = Color3.new(1, 1, 1), TextStrokeTransparency = 0.2,
-						AutoButtonColor = pickable(key, i), BackgroundColor3 = c, Size = UDim2.fromOffset(28, 28),
-						BackgroundTransparency = (can[key] and isOwned(key, i)) and 0 or 0.45, LayoutOrder = i, Parent = strip, ZIndex = 9 }, { corner(14) })
-					lockMark(sw, key, i)
-					if d[key] == i then
-						stroke(C.gold, 2.5).Parent = sw
-					end
-					sw.Activated:Connect(function()
-						if pickable(key, i) then
-							d[key] = i
-							renderChar()
-						end
-					end)
-				end
-				local decale = math.max(0, ((d[key] or 1) - 3) * 32)
-				task.defer(function()
-					if strip.Parent then strip.CanvasPosition = Vector2.new(decale, 0) end
-				end)
-			end
-			swatches(1, "Teint", WGl.SKINS, "skin")
-			swatches(2, "Cheveux", WGl.HAIR_COLORS, "hairColor")
-			local r3 = row(3, 40)
-			local hairs = { "court", "long", "chauve", "chignon", "herisse", "barbe", "tresses", "carre" }
-			local names = { court = "Court", herisse = "Hérissé", chauve = "Dégarni", barbe = "Barbu", long = "Long", chignon = "Chignon", tresses = "Tresses", carre = "Carré" }
-			local hs = new("ScrollingFrame", { Size = UDim2.new(1, -8, 1, 0), Position = UDim2.fromOffset(4, 0), BackgroundTransparency = 1, BorderSizePixel = 0,
-				ScrollBarThickness = 3, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.X, ScrollingDirection = Enum.ScrollingDirection.X, Parent = r3, ZIndex = 9 },
-				{ new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), VerticalAlignment = Enum.VerticalAlignment.Center }) })
-			for _, h in hairs do
-				local locked = not isOwned("hair", h)
-				local text = names[h] .. (locked and (ctx == "creation" and " 🔒" or (" 🔒" .. (prices.hair or ""))) or "")
-				local b = button(text, d.hair == h and C.gold or C.panel2, function()
-					if pickable("hair", h) then
-						d.hair = h
-						renderChar()
-					end
-				end)
-				b.Size = UDim2.fromOffset(locked and 96 or 74, 30)
-				b.TextSize = 12
-				b.ZIndex = 10
-				b.TextTransparency = pickable("hair", h) and 0 or 0.5
-				b.Parent = hs
-			end
-			swatches(4, "Tunique", WGl.SHIRTS, "shirt")
-			swatches(5, "Chausses", WGl.PANTS, "pants")
-			if ctx then
-				-- coût : la façon + les styles pas encore débloqués (rien à la création)
-				local cost = 0
-				if ctx ~= "creation" then
-					local changed = false
-					for key in can do
-						if d[key] ~= cur[key] then
-							changed = true
-							if not isOwned(key, d[key]) then
-								cost += prices[key] or 0
-							end
-						end
-					end
-					cost += changed and (info.fee or 0) or 0
-				end
-				local r6 = row(6, 44)
-				local ok = button(ctx == "creation" and "Commencer" or ("Appliquer (" .. cost .. " 💰)"), C.green, function()
-					local out = table.clone(d)
-					out.ctx = ctx
-					send("set_look", out)
-					lookDraft = nil
-				end)
-				ok.Size = UDim2.new(1, -8, 1, -8)
-				ok.Position = UDim2.fromOffset(4, 4)
-				ok.ZIndex = 9
-				ok.Parent = r6
+				label({ Text = choice.label .. " · " .. choice.name, TextSize = 13, Size = UDim2.new(1, -44, 1, 0),
+					Position = UDim2.fromOffset(34, 0), Parent = line, ZIndex = 9 })
 			end
 		else
 			for k, t in inv.titles or {} do
@@ -1900,22 +1799,33 @@ local function game_()
 		end
 	end
 	openLook = function(data)
-		-- Création à l'arrivée, barbier ou tailleur (Avatar.open).
-		lookInfo = data
-		lookDraft = nil
 		closeAll()
+		lookInfo = data
 		charTab = "look"
+		charTitle.Text = FicheApparence.titres[data.ctx]
+		left.Visible, right.Visible = false, false
+		editor:setCharacter(player.Character)
+		editor:open(data, inv.look)
 		bag.Visible = true
-		renderChar()
 	end
 	closeLook = function()
-		lookInfo, lookDraft = nil, nil
+		if not lookInfo then return end
+		editor:close()
+		lookInfo = nil
+		left.Visible, right.Visible = true, true
 	end
 	toggleChar = function()
-		closeLook() -- ouverte à la main : l'apparence se consulte seulement
 		local v = not bag.Visible
 		closeAll()
 		hideTip()
+		if lookInfo and lookInfo.ctx == "creation" and not (inv.look and inv.look.created) then
+			if v then
+				editor:setCharacter(player.Character)
+				bag.Visible = true
+			end
+			return
+		end
+		closeLook()
 		bag.Visible = v
 		if v then
 			renderChar()
