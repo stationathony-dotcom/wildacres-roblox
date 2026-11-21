@@ -371,6 +371,10 @@ function Game.onDeath(player: Player)
 	if not prof then
 		return
 	end
+	local root = G.Util.root(player)
+	if root and G.Util.sfx then
+		G.Util.sfx("chute", root.Position) -- on l'entend tomber, lui et ceux autour
+	end
 	-- mis K.O. par un joueur ? chasse aux primes
 	local hunterId = player:GetAttribute("LastHitBy")
 	local hitAt = player:GetAttribute("LastHitAt") or 0
