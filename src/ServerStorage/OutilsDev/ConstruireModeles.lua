@@ -580,8 +580,8 @@ function M.creatures()
 		Q(m, "Dard", Vector3.new(0.3, 0.3, 0.7), Vector3.new(0, 3.3, 1.1), rgb(60, 30, 30), Mat.SmoothPlastic, { rot = CFrame.Angles(math.rad(200), 0, 0) })
 		fini(m)
 	end
-	-- ---------------------------------------------------------------- Bipèdes (squelette, zombie, yéti, golem)
-	type Bipede = { peau: Color3, haut: Color3, bas: Color3, echelle: number?, mat: Enum.Material?, brasDevant: boolean?, extra: ((Model, number) -> ())? }
+	-- ---------------------------------------------------------------- Bipèdes (yéti, golem)
+	type Bipede = { peau: Color3, haut: Color3, bas: Color3, echelle: number?, mat: Enum.Material?, extra: ((Model, number) -> ())? }
 	local function bipede(nom: string, o: Bipede)
 		local m = nouveau(nom)
 		local e = o.echelle or 1
@@ -593,27 +593,13 @@ function M.creatures()
 		Q(m, "Tete", Vector3.new(1.3, 1.3, 1.3) * e, Vector3.new(0, 4.65, 0) * e, o.peau, mat)
 		yeux(m, 0.3 * e, 4.75 * e, -0.67 * e, nil, 0.22 * e)
 		for _, sx in { -1, 1 } do
-			if o.brasDevant then
-				Q(m, "Bras", Vector3.new(0.6, 0.6, 2) * e, Vector3.new(sx * 1.3, 3.6, -0.9) * e, o.peau, mat)
-			else
-				Q(m, "Bras", Vector3.new(0.6, 2, 0.6) * e, Vector3.new(sx * 1.3, 3, 0) * e, o.peau, mat)
-			end
+			Q(m, "Bras", Vector3.new(0.6, 2, 0.6) * e, Vector3.new(sx * 1.3, 3, 0) * e, o.peau, mat)
 		end
 		if o.extra then
 			o.extra(m, e)
 		end
 		fini(m)
 	end
-	bipede("Squelette", {
-		peau = rgb(232, 228, 214), haut = rgb(232, 228, 214), bas = rgb(232, 228, 214),
-		extra = function(m, e)
-			for i = 0, 2 do
-				Q(m, "Cote", Vector3.new(2.05, 0.18, 1.05) * e, Vector3.new(0, 2.6 + i * 0.45, 0) * e, rgb(60, 56, 50))
-			end
-			Q(m, "Arc", Vector3.new(0.2, 2.6, 0.2) * e, Vector3.new(1.6, 3, -0.6) * e, rgb(120, 84, 52), Mat.Wood)
-		end,
-	})
-	bipede("Zombie", { peau = rgb(110, 160, 100), haut = rgb(70, 110, 160), bas = rgb(80, 60, 50), brasDevant = true })
 	bipede("Yeti", {
 		peau = rgb(242, 244, 248), haut = rgb(240, 242, 246), bas = rgb(230, 232, 238), echelle = 1.7, mat = Mat.Fabric,
 		extra = function(m, e)

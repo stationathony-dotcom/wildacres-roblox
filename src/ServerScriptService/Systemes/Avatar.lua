@@ -384,9 +384,7 @@ function Avatar.setLook(player: Player, data)
 	session[player] = nil
 	G.Joueurs.markDirty(player)
 	G.Joueurs.sync(player)
-	if ctx == "creation" then
-		G.Util.toast(player, "✨ Bienvenue dans Wild Acres ! Le barbier et le tailleur des villages débloquent d'autres styles.", "big")
-	else
+	if ctx ~= "creation" then
 		G.Util.toast(player, string.format("✂️ C'est fait (-%d 💰)%s.", cost, #newUnlocks > 0 and (", " .. #newUnlocks .. " style(s) débloqué(s) pour toujours") or ""), "gain")
 	end
 	G.remotes.Menu:FireClient(player, { kind = "close" })
