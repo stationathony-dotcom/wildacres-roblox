@@ -77,5 +77,6 @@ Questions d'origine :
 | P2.1 panneau de propriété | OK : 1er terrain gratuit, créé. |
 | P2.2 construire | OK : 2 murs posés, le même mur au même endroit refusé ; reprise autour de soi → matériaux rendus (voulu). |
 | P2.3 coffre, serrure, alarme | OK : coffre posé et verrouillé (`Verrouille`), alarme posée. |
+| P3.4 K.O. | OK : réveil chez soi en 10,5 s (à 701 studs du lieu du K.O.), −15 % d'or (200 → 170), sac intact. |
 | P9.1 vol devant témoin, reddition | OK : 0 → 1 étoile ; « Je me rends » au shérif → 0 étoile. |
 | Reste au propriétaire | Ressenti (lisibilité, sans tutoriel), P4 en ligne, P5 à deux joueurs, mobile, 40 joueurs. |
