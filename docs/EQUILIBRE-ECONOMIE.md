@@ -7,10 +7,10 @@ estimé avec les vraies données ; hypothèses en tête du banc. Médiane de tou
 | Activité | Catégorie | Or / min | Repère | Note |
 |---|---|---|---|---|
 | créatures niveau 9 (4) | combat | 250 | TROP | butin vendu + or |
-| créatures niveau 7 (13) | combat | 142 | TROP | butin vendu + or |
+| créatures niveau 7 (14) | combat | 140 | TROP | butin vendu + or |
 | créatures niveau 8 (10) | combat | 128 |  | butin vendu + or |
-| créatures niveau 6 (23) | combat | 95 |  | butin vendu + or |
-| créatures niveau 5 (28) | combat | 83 |  | butin vendu + or |
+| créatures niveau 6 (24) | combat | 94 |  | butin vendu + or |
+| créatures niveau 5 (29) | combat | 83 |  | butin vendu + or |
 | créatures niveau 4 (27) | combat | 73 |  | butin vendu + or |
 | créatures niveau 3 (13) | combat | 55 |  | butin vendu + or |
 | créatures niveau 2 (6) | combat | 47 |  | butin vendu + or |

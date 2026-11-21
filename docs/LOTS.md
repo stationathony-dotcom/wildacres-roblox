@@ -9,30 +9,23 @@ ou marquée « volontairement absent »), en respectant les règles d'`AGENTS.md
 
 ---
 
-## Message à Codex — vérification du 20/11, 11 h (à lire en premier)
+## Message à Codex — vérification du 21/11 (à lire en premier)
 
-Ton travail compile, Studio = disque, et le menu commun tient (registre unique B/P/K/J/M/L/C/O,
-`WindowNav` pour le retour et le focus manette). Mais :
+Relu tes 52 commits du 20/11 : couloirs respectés, commits fichier par fichier, pas de `.rbxl`, X1–X14 cochés
+avec leurs hash. Bon travail. Points relevés :
 
-1. **Rien n'est commité** à part tes deux réservations : ~850 lignes sur 15 fichiers + `WindowNav.lua`,
-   `GearDesign.lua`, `images/`, les audits visuels et les bancs `visuels_*` ne sont que sur disque. Commite-les
-   **fichier par fichier** (`[Codex] …`, une phrase par lot), sans `wildacres.rbxl`. Attention : `Config.lua` et
-   `Joueurs.lua` contiennent déjà des lignes de Claude commitées (talent Survivaliste, outils du sac, flux d'or) —
-   `git diff` doit ne montrer que les tiennes.
-2. Coche X1, X2, X3 avec leurs commits (ils sont « en cours » alors que tu les dis finis) et note ce qui reste
-   à voir en Play (le propriétaire teste sur le PC fixe).
-3. **Bug corrigé par Claude (f63157d)** : tes outils d'acier et au diamant (paliers 4 et 5) n'avaient pas de force
-   dans `Props` → ils minaient comme la pierre. Désormais acier ×3, diamant ×3,8. Tout nouveau palier d'outil :
-   passage à Claude pour `Props.POWER`.
-4. Tu as retiré les boutons tactiles 🗺️ et ⚙️ de `Carte` / `Ambiance` : vérifie qu'ils sont bien dans le menu
-   tactile du registre (X1 « accessibles partout »).
+1. **Régression corrigée par Claude** : le passage à 9 emplacements a mis les bottes dans « boots », mais
+   `Systemes/Froid` ne les cherchait que dans torse / casque / bijou → les bottes de marais ne servaient plus à
+   rien (le banc `froid` restait vert parce qu'il les posait en bijou). Corrigé + banc aligné. **Règle** : tout
+   changement d'emplacement, de forme ou de nom de pièce lu par le serveur → passage à Claude (grep des
+   `equipped.<slot>` et des noms : `Froid`, `Combat`, `Horses`, `Equilibre`).
+2. Le clic passe maintenant par l'action « hit » → `Tools.use` (houe, arrosoir, graines compris) : vérifie en Play
+   qu'aucun outil ne se déclenche deux fois et que le clic derrière une fenêtre reste bloqué au tactile.
+3. Torche en main gauche = lumière dans les grottes (Claude, lot C7). Montre-le dans l'infobulle de la torche.
+4. Rien n'a pu être relancé dans Studio le 21/11 (MCP Studio déconnecté) : relance `tools/bancs/tout.luau`
+   avant ton premier commit.
 
-**Ensuite, dans cet ordre** :
-- les **Passages** ci-dessous (ils débloquent des fonctions serveur déjà prêtes et testées) : harpon (X6 :
-  `G.Fishing.harpoon(player)` existe), formulaire « Écrire à l'équipe », boutons d'ordres d'armée, neige d'hiver
-  morte dans `Ambiance`, plus de « Façonnée par », emplacement main gauche (X5), 3 formes de créatures ;
-- puis X4 (mobile), X7 (modèles faux), X9, X10, X8, X11, X12, X13, X14.
-Après chaque lot : `tools/bancs/tout.luau` doit rester tout vert.
+**Ensuite** : la 2e vague ci-dessous (X15 → X26), dans l'ordre.
 
 ## Questions en attente (réponse du propriétaire nécessaire)
 
@@ -112,6 +105,42 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       charge l'asset `203785492` (type incompatible en console). Effets ajoutés (dd27096). Rojo précharge son son de notification avec les URI d’images. Six effets du jeu préchargés en Edit.
 - [x] **X14 · `docs/INTERFACE.md` à jour** FAIT 20/11 (b9c85af). après X1–X4 (raccourcis, boutons, manette).
 
+### 2e vague Codex (écrite le 21/11) — finir ce que le joueur voit
+
+- [ ] **X15 · Repères sur la carte** (`AUDIT-PRODUIT.md` ordre 6). Le joueur pose / retire ses repères (village
+      connu, lit, parcelle, ville où rendre une quête), légende, minicarte ≠ carte du monde. Repères gardés côté
+      client (`Preferences`) ; s'il faut les sauver dans le profil → passage à Claude. *Fini quand* : poser,
+      retirer, reconnexion = repères toujours là.
+- [ ] **X16 · Motifs de refus et alertes lisibles** (ordre 7). Une pose refusée dit pourquoi (le serveur envoie
+      déjà un toast : l'afficher près du fantôme), rotation / valider / annuler visibles en mode [V], gains
+      répétés regroupés (« +5 Bois » au lieu de 5 toasts), alerte de combat ou de cambriolage qui reste
+      visible pendant une série de récoltes.
+- [ ] **X17 · Composants d'interface communs** (ordre 8). Un module (titre, bouton, quantité, avertissement,
+      icône) utilisé par toutes les fenêtres ; états disponible / sélectionné / verrouillé avec couleur **et**
+      symbole (daltonisme). Remplacer d'abord les emojis ambigus.
+- [ ] **X18 · Périmètre de parcelle avant la pose.** Contour de la parcelle 12×12 au sol quand on tient le
+      panneau, rouge si chevauchement ou village, coût du terrain suivant affiché. Données : `Parcelles` (lecture
+      seule ; besoin d'une fonction serveur → passage à Claude).
+- [ ] **X19 · État lisible à proximité** : culture (pousse, arrosée, prête), machine (roue à eau, four), coffre
+      verrouillé — en **invite au survol / à [E]** comme « [E] Parler », **jamais de texte permanent au-dessus des
+      PNJ ni des objets**.
+- [ ] **X20 · Formes de construction × matières** (reste du lot C6) : `liste items.txt` § construction —
+      escaliers, arches, demi-murs, colonnes, rambardes, volets, en bois / pierre / brique / chaume. Modèles +
+      fantôme `Batir` ; donner la liste à Claude (passage) pour les recettes, prix et usages dans `Equilibre`.
+- [ ] **X21 · Mobilier et décor posables** (reste C6) : tables, bancs, étagères, tapis, bannières, pots,
+      lanternes murales… Modèles + miniatures ; passage à Claude pour recettes. Règle 7 : rien sans usage.
+- [ ] **X22 · Arrivée et retour lisibles** (`AUDIT-PRODUIT` « Arrivée et retour ») : sans tutoriel (règle 1) —
+      repères visibles au lieu de départ (panneau de village, lueur de l'atelier, fumée du four), lit et journal
+      d'absence faciles à retrouver au retour. Vérifier la création de perso sur petit écran.
+- [ ] **X23 · Carte du monde légère** (côté client du lot C12) : la grille se construit au rendu → la construire
+      par morceaux / la mettre en cache, limiter les aperçus 3D visibles (`ViewportFrame`) et les `RenderStepped`.
+      Noter avant / après dans `docs/PERFORMANCE.md` (mesures en Play sur le PC fixe).
+- [ ] **X24 · Sons de la 2e vague** : construction (pose, casse), serrure / crochetage, alarme, cheval, pluie,
+      ambiance de grotte ; bibliothèque Roblox sous licence uniquement.
+- [ ] **X25 · Icônes peintes, 2e lot** : équipement (9 emplacements × formes), matières de créatures, objets de
+      X20 / X21 ; même atlas que d28d1f0, emoji en secours.
+- [ ] **X26 · `docs/INTERFACE.md` + planches** à jour après X15–X25.
+
 ## Couloir Claude — les règles et le monde
 
 - [x] **C1 · Banc de régression unique.** FAIT 20/11 (edef686) : 39 bancs, ~2 min, ménage des restes. `tools/bancs/tout.luau` lance tous les bancs Edit et rend un
@@ -135,8 +164,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       métier du sac ; reste surtout de la construction (formes × matières, couloir Codex) et du décor ; (`liste items.txt`, ~300 entrées) : rapprocher entrée par entrée de
       `docs/REFERENCE.md` (déjà là sous un autre nom ?), ajouter le reste par lots dans `Equilibre`
       avec un usage ; formes neuves = passage à Codex.
-- [ ] **C7 · Harpon côté pêche** (`Fishing.harpoon`) **et main gauche côté stats** (`Joueurs.stats`,
-      `Combat`), dès que les deux passages sont faits.
+- [x] **C7 · Harpon côté pêche et main gauche côté stats** — FAIT : harpon (ba4b1d5) ; la défense du bouclier passe
+      déjà par `Gear.totals` (tous les emplacements) ; 21/11 : torche en main gauche = lumière des grottes, bottes
+      lues dans le nouvel emplacement « boots » (régression des 9 emplacements, `Systemes/Froid`).
 - [x] **C8 · Équilibrage global** — FAIT 20/11 : banc `economie` + `docs/EQUILIBRE-ECONOMIE.md` (médiane 43 or/min) ;
       pêche ×0,6 à la revente ; à confirmer en Play (les hypothèses de temps sont en tête du banc). (étape 26B) : banc qui mesure, pour chaque métier, le temps pour
       gagner 100 or et les sources / dépenses d'or ; `docs/EQUILIBRE-ECONOMIE.md` ; corriger ce qui
@@ -164,6 +194,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 21/11 · Claude : relu les 52 commits Codex du 20/11 (RAS sauf bottes de marais cassées par les 9 emplacements →
+  corrigé dans `Froid` + banc `froid`), C7 fini (torche), 2e vague Codex X15–X26 écrite. Studio MCP déconnecté : bancs à relancer.
 
 - 20/11 (3) · Claude : grottes en groupe, or des créatures plafonné, invasion aux combattants, LOD des armées,
   villageois qui fuient les bêtes, se rendre au shérif, duels /defi, trésors /enterrer, amis sur l'accueil (passage
