@@ -86,10 +86,10 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (64) Fondation en pierre → Fondation (Pierre)
 - [x] (65) Fondation en bois → Fondation (Bois)
 - [x] (66) Plateforme sur pilotis → Plateforme sur pilotis
-- [x] (67) Terrasse → Terrain
+- [x] (67) Terrasse → Balcon / Dalle (pièces de construction)
 - [x] (68) Balcon → Balcon
 - [x] (69) Passerelle → Où est-il passé…
-- [x] (70) Caillebotis → Caillou
+- [x] (70) Caillebotis → Caillebotis (forme de construction)
 
 ### 4. Toitures médiévales
 
@@ -188,7 +188,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (166) Tabouret → Tabouret
 - [x] (167) Lit simple → Lit
 - [x] (168) Lit double → Lit double
-- [x] (169) Paillasse → Paille
+- [x] (169) Paillasse → Paillasse
 - [x] (170) Armoire → Armoire
 - [x] (171) Coffre → Coffre
 - [x] (172) Coffre renforcé → Coffre renforcé
@@ -196,8 +196,8 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (174) Bibliothèque → Bibliothèque
 - [x] (175) Comptoir → Comptoir
 - [x] (176) Bureau → Bureau
-- [x] (177) Établi → Étable
-- [x] (178) Cheminée → Chemise
+- [x] (177) Établi → Établi
+- [x] (178) Cheminée → Cheminée
 - [x] (179) Foyer → Foyer
 - [x] (180) Four à pain → Four à pain
 - [x] (181) Four de cuisson → Four
@@ -222,7 +222,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (200) Bergerie → Bergerie
 - [x] (201) Grange → Grange
 - [x] (202) Grenier → Grenier
-- [x] (203) Mangeoire → Manger
+- [x] (203) Mangeoire → Mangeoire
 - [x] (204) Abreuvoir → Abreuvoir
 - [x] (205) Râtelier à foin → Râtelier à foin
 - [x] (206) Puits → Puits
@@ -247,7 +247,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (225) Pont-levis fonctionnel → Pont-levis
 - [x] (226) Trappe mécanique → Trappe
 - [x] (227) Levier → Levier
-- [x] (228) Contrepoids → Contrebandier
+- [x] (228) Contrepoids → Pont-levis (mécanisme à contrepoids)
 - [x] (229) Pompe à eau → Pompe à eau
 - [x] (230) Canal d'irrigation → Canal d'irrigation
 - [x] (231) Roue hydraulique → Roue à eau
@@ -364,7 +364,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (394) Dague → Dague
 - [x] (395) Hache de combat → Hache de combat
 - [x] (396) Masse → Masse
-- [x] (397) Gourdin → Gourde
+- [x] (397) Gourdin → Gourdin
 - [x] (398) Marteau de guerre → Marteau de guerre
 - [x] (399) Lance → Lance
 - [x] (400) Pique → Pique
@@ -391,7 +391,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (429) Chapeau → Chapeau
 - [x] (430) Ceinture → Ceinture
 - [x] (431) Bottes → Botte
-- [x] (432) Chaussures → Chausses
+- [x] (432) Chaussures → Bottes (emplacement « bottes »)
 - [x] (433) Gants → Gants
 - [x] (434) Gants en cuir → Gants en cuir
 - [x] (435) Armure en cuir → Armure de cuir
@@ -580,7 +580,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (690) Sacoche de selle → Sacoche de selle
 - [x] (691) Sac de bât → Besace en toile
 - [x] (692) Fer à cheval → ferrage (C.SHOD_BONUS)
-- [x] (693) Chariot → Charisme
+- [x] (693) Chariot → Charrette
 - [x] (694) Charrette → Charrette
 - [x] (695) Chariot de marchand → Chariot de marchand
 - [x] (696) Brouette → Brouette
@@ -760,14 +760,14 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (913) Infusion de menthe → Infusion de menthe
 - [x] (914) Infusion de camomille → Infusion de camomille
 - [x] (915) Infusion de thym → Infusion de thym
-- [x] (916) Bouillon → Bouillie
+- [x] (916) Bouillon → Bouillon
 - [x] (917) Sirop de fruits → Sirop de fruits
 - [x] (918) Cidre → Cidre
 - [x] (919) Vinaigre de pomme → Vinaigre de pomme
 
 ### 4. Objets de métiers
 
-- [x] (933) Arrosoir → Arrosee
+- [x] (933) Arrosoir → Arrosoir
 - [x] (934) Panier de semences → Sac de graines
 - [x] (935) Sac de compost → Sac de compost
 - [x] (936) Râteau → Râteau
@@ -903,7 +903,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (1097) Tambour → Tambour
 - [x] (1098) Clochette → Cloche
 - [x] (1099) Livre de chansons originales → Livre de chansons
-- [x] (1100) Partition → ParticleEmitter
+- [x] (1100) Partition → Partition (se joue : charisme)
 - [x] (1101) Ballon en cuir → Ballon en cuir
 - [x] (1102) Cerf-volant → Cerf-volant
 - [x] (1103) Cerceau → Cerceau
@@ -1678,7 +1678,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (42) Loup → Loup
 - [x] (43) Loup noir → Loup noir
 - [x] (44) Loup des neiges → Loup polaire (Bestiaire)
-- [x] (45) Sanglier → Sangle
+- [x] (45) Sanglier → Sanglier
 - [x] (46) Ours brun → Ours brun
 - [x] (47) Ours des cavernes → Ours des cavernes
 - [x] (48) Lynx → Lynx
@@ -1694,7 +1694,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### 3. Créatures des forêts
 
-- [x] (69) Gobelin des bois → Gobelet en bois
+- [x] (69) Gobelin des bois → Gobelin des bois
 - [x] (70) Gobelin archer → Gobelin archer
 - [x] (71) Troll des racines → Troll des racines
 - [x] (72) Ent corrompu → Ent corrompu
@@ -1773,7 +1773,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (179) Squelette ancien → Gisant ancien (règle 9)
 - [x] (180) Revenant → Revenant
 - [x] (181) Goule → Goule
-- [x] (182) Spectre → Cerf spectral
+- [x] (182) Spectre → Spectre du blizzard
 - [x] (183) Fantôme de chevalier → Fantôme de chevalier
 - [x] (184) Gardien maudit → Gardien maudit
 - [x] (185) Moine déchu → Moine déchu
@@ -1791,7 +1791,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (205) Chauve-souris des cavernes → Chauve-souris des cavernes
 - [x] (206) Harpie → Harpie
 - [x] (207) Griffon → Griffon
-- [x] (208) Hippogriffe → Hippolyte
+- [x] (208) Hippogriffe → Hippogriffe
 - [x] (209) Wyverne → Wyverne
 - [x] (210) Aigle des montagnes → Aigle des montagnes
 - [x] (211) Chouette spectrale → Chouette spectrale
@@ -1869,11 +1869,11 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 - [x] (359) Villageois → Village
 - [x] (360) Fermiers → Fermier
-- [x] (361) Marchands → Marche
+- [x] (361) Marchands → Marchand
 - [x] (362) Forgerons → Forge
-- [x] (363) Cuisiniers → Cuisine
+- [x] (363) Cuisiniers → Cuisinier
 - [x] (364) Boulangers → Boulanger
-- [x] (365) Aubergistes → Auberge
+- [x] (365) Aubergistes → Aubergiste
 - [x] (366) Gardes → Garde
 - [x] (367) Shérifs → Shérif
 - [x] (368) Médecins → guérisseur (Metiers)
@@ -1896,7 +1896,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (395) Écureuils → écureuils (Faune.client)
 - [x] (396) Hérissons
 - [x] (397) Blaireaux
-- [x] (398) Chevreuils → Chevron de toit
+- [x] (398) Chevreuils → Cerf / Biche
 - [x] (399) Marmottes
 - [x] (400) Papillons → papillons (Faune.client)
 - [x] (401) Abeilles
@@ -1928,7 +1928,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (429) Alchimie → Alchimie
 - [x] (430) Extraction minière → minage (Props, filons)
 - [x] (431) Bûcheronnage → Buche
-- [x] (432) Commerce → Commère
+- [x] (432) Commerce → commerce (boutiques, étals, hôtel des ventes)
 - [x] (433) Dressage → Dressage
 - [x] (434) Équitation → montures (Horses)
 - [x] (435) Exploration → Explorateur
@@ -1965,7 +1965,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (482) Chevaux de différentes races → robes et lignées (Horses / Ecurie)
 - [x] (483) Ânes → Âne (Config.MOUNTS)
 - [x] (484) Mulets → Mulet
-- [x] (485) Chariots → Charisme
+- [x] (485) Chariots → Charrette
 - [x] (486) Charrettes → Charrette
 - [x] (487) Diligences → diligence (Activites)
 - [x] (488) Barques → Barque
@@ -1982,13 +1982,13 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (499) Talents → Talents
 - [x] (500) Expérience → Lire : expérience en compétence
 - [x] (501) Réputation → Reputation
-- [x] (502) Honneur → Le travail honnête nourrit l'âme, l'ami.
+- [x] (502) Honneur → honneur (Law : réputation de justice)
 - [x] (503) Titres → Titre
 - [x] (504) Succès → succès (Social.bump)
 - [x] (505) Collections → Collections
 - [x] (506) Recettes à débloquer → recettes à découvrir (Config.STARTER_RECIPES)
 - [x] (507) Plans rares → Plan d'artisan
-- [x] (508) Spécialisations → SpecialMesh
+- [x] (508) Spécialisations → spécialisations (voies de talents)
 - [x] (509) Maîtrise des métiers → rangs de maîtrise (Metiers)
 
 ### 7. L'économie
@@ -2038,9 +2038,9 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (567) Quartiers généraux → territoire de clan (Parcelles p.clan)
 - [x] (568) Alliances → volontairement absent : règle 1 : pas de système encadré, les alliances naissent des joueurs
 - [x] (569) Relations entre clans → volontairement absent : règle 1 : pas de système encadré
-- [x] (570) Territoires → Terrier
+- [x] (570) Territoires → territoire de clan (Parcelles)
 - [x] (571) Avant-postes → Un autre avant-poste est trop près.
-- [x] (572) Diplomatie → Diplôme d'apprentissage
+- [x] (572) Diplomatie → volontairement absent : règle 1 (pas de système encadré entre clans)
 - [x] (573) Taxes territoriales → volontairement absent : règle 3 : pas d'arbitre territorial ; taxe de village seulement
 - [x] (574) Armées → Armee
 - [x] (575) Guerres de clans → volontairement absent : règle 1 : pas de guerre déclarée
@@ -2052,7 +2052,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (581) Marché itinérant → colporteur (Metiers)
 - [x] (582) Fête des récoltes → fête (Quetes / Evenements)
 - [x] (583) Foire médiévale → foire (Evenements)
-- [x] (584) Tempête → Terres tempérées
+- [x] (584) Tempête → orage (Meteo)
 - [x] (585) Inondation → inondation (Evenements → Farm.flood)
 - [x] (586) Sécheresse → Fruits séchés
 - [x] (587) Hiver rigoureux → volontairement absent : règle 10 : saisons retirées (biomes enneigés à la place)
@@ -2062,7 +2062,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (591) Convoi marchand → convoi (Evenements)
 - [x] (592) Découverte d'une ruine → ruines (Evenements)
 - [x] (593) Trésor enfoui → trésors (Tresors, chasse au trésor)
-- [x] (594) Tournoi → Tu as vu le moulin ? Ses ailes tournent même la nuit !
+- [x] (594) Tournoi → duels (/defi) + concours (Activites)
 - [x] (595) Événement maritime → Serpent marin / pêche (Evenements)
 - [x] (596) Événement saisonnier → volontairement absent : règle 10 : saisons retirées
 
@@ -2075,7 +2075,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (612) Brouillard → Brouillard
 - [x] (613) Neige → Neige
 - [x] (614) Vents → météo (Meteo)
-- [x] (615) Températures → Terres tempérées
+- [x] (615) Températures → volontairement absent : froid / chaleur retirés le 20/11
 - [x] (616) Rivières → Serpent des rivières
 - [x] (617) Lacs → Pays des Lacs
 - [x] (618) Cascades → cascades (Systemes/Cascades)
@@ -2097,7 +2097,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (634) Coffres partagés → coffres + confiance (Util.trusted)
 - [x] (635) Construction collaborative → confiance « batir » (Util.trusted)
 - [x] (636) Visites de maisons → monde libre (règle 3)
-- [x] (637) Messagerie → MessagingService
+- [x] (637) Messagerie → courrier (Poste)
 - [x] (638) Liste des joueurs → liste Roblox + /classement
 - [x] (639) Gestion des permissions → confiance (Util.trusted)
 - [x] (640) Signalement et modération → Demandes (/bug /appel)
@@ -2105,7 +2105,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### 13. L'interface et le confort de jeu
 
-- [x] (645) Inventaire → Inventory
+- [x] (645) Inventaire → sac (Interface)
 - [x] (646) Banque → Banque du village
 - [x] (647) Carte → Carte
 - [x] (648) Boussole → Boussole

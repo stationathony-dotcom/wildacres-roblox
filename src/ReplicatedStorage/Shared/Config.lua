@@ -662,6 +662,8 @@ C.BUILD_SHAPES = {
 	{ id = "colombages", name = "Mur à colombages", shape = "timberwall", size = Vector3.new(4, 4, 0.5), cost = 3, mats = { "torchis", "pise", "brique" }, extra = { planks = 2 } },
 	{ id = "clayonnage", name = "Mur en clayonnage", shape = "wattle", size = Vector3.new(4, 3, 0.4), cost = 2, mats = { "bois", "rondin" } },
 	{ id = "treillis", name = "Treillis", shape = "lattice", size = Vector3.new(4, 4, 0.2), cost = 2, mats = { "bois", "pin", "fer" } },
+	-- 21/11 soir (« liste items.txt » : caillebotis) : plancher à claire-voie, lattes sur deux traverses
+	{ id = "caillebotis", name = "Caillebotis", shape = "slats", size = Vector3.new(4, 0.4, 4), cost = 2, mats = { "bois", "pin" } },
 	{ id = "niche", name = "Mur avec niche", shape = "nichewall", size = Vector3.new(4, 4, 0.8), cost = 3, mats = { "pierre", "taille", "brique", "torchis" } },
 	{ id = "fondation", name = "Fondation", shape = "block", size = Vector3.new(4, 1, 4), cost = 4, mats = { "pierre", "taille", "bois", "rondin", "gravier" } },
 	{ id = "pavage", name = "Pavage irrégulier", shape = "paving", size = Vector3.new(4, 0.4, 4), cost = 2, mats = { "pierre", "taille", "brique", "gravier" } },
@@ -768,6 +770,20 @@ C.SHAPE_PARTS.cone = function(size: Vector3)
 	for k = 0, n - 1 do
 		local d = math.max(0.3, size.X * (1 - (k + 0.5) / n))
 		table.insert(out, disc(-size.Y / 2 + (k + 0.5) * h, d, h + 0.02))
+	end
+	return out
+end
+-- caillebotis : deux traverses en bas, cinq lattes au-dessus avec un jour entre elles
+C.SHAPE_PARTS.slats = function(size: Vector3)
+	local h = size.Y / 2
+	local out = {
+		{ Vector3.new(size.X, h, 0.4), CFrame.new(0, -h / 2, -size.Z / 2 + 0.6) },
+		{ Vector3.new(size.X, h, 0.4), CFrame.new(0, -h / 2, size.Z / 2 - 0.6) },
+	}
+	local n = 5
+	local w = size.X / n - 0.15
+	for k = 0, n - 1 do
+		table.insert(out, { Vector3.new(w, h, size.Z), CFrame.new(-size.X / 2 + (k + 0.5) * size.X / n, h / 2, 0) })
 	end
 	return out
 end

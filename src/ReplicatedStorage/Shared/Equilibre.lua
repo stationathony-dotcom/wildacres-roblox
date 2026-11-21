@@ -122,6 +122,7 @@ E.USES = {
 	rag_doll = { "buff", "charisme" }, wood_toy = { "buff", "charisme" }, perfume = { "buff", "charisme" }, comb = { "buff", "charisme" },
 	pocket_mirror = { "buff", "charisme" }, brush = { "buff", "charisme" }, towel = { "buff", "vie" },
 	-- écrits : on apprend
+	music_sheet = { "buff", "charisme" },
 	songbook = { "livre", "commerce" }, diploma = { "livre", "artisanat" }, contract = { "livre", "commerce" },
 	recruit_contract = { "livre", "combat" }, patrol_log = { "livre", "combat" }, sea_chart = { "livre", "peche" },
 	-- antiquités : on les étudie (collection, Chance) — la voie Explorateur s'en nourrit
@@ -209,6 +210,8 @@ E.NEW_ITEMS = {
 	{ "leash", "Laisse", "🐕", 30, { leather = 1, iron_ring = 1 }, 1, "tannery", 2 },
 	{ "pitchfork", "Fourche à foin", "🍴", 70, { iron_ingot = 1, planks = 1, rope = 1 }, 1, "anvil", 4 },
 	{ "price_tags", "Étiquettes de prix", "🏷️", 20, { paper = 3, ink = 1 }, 1, "bench", 0 },
+	-- 21/11 soir (« liste items.txt » : partition) : se joue (E.USES : bonus de charisme)
+	{ "music_sheet", "Partition", "🎼", 22, { paper = 2, ink = 1 }, 1, "bench", 2 },
 }
 -- Harpon de pêche (outil déclaré par Codex dans Config sans prix ni recette, passage du 20/11)
 E.HARPOON = { price = 85, needs = { iron_ingot = 1, planks = 2, rope = 1 }, station = "anvil", level = 6 }
