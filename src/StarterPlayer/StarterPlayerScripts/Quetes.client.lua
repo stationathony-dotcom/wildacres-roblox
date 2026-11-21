@@ -254,6 +254,7 @@ Remotes:WaitForChild("Fx").OnClientEvent:Connect(function(kind, data)
 		render(data)
 		-- ouvert depuis un tableau ou un habitant : le panneau s'affiche de lui-même
 		if data.village and not panel.Visible and showPanel then
+			onglet(false)
 			showPanel()
 		end
 	end
@@ -261,6 +262,9 @@ end)
 
 showPanel = function()
 	panel.Visible = true
+	if absence.Visible then
+		onglet(true)
+	end
 end
 local function toggle()
 	if panel.Visible then

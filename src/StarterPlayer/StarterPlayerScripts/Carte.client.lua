@@ -95,11 +95,11 @@ local demandeLit = 0
 local function actualiserLit()
 	demandeLit += 1
 	local demande = demandeLit
+	lit.Visible = false
 	task.spawn(function()
 		local retour = Retour.lire(Remotes)
 		if demande ~= demandeLit then return end
 		local pos = retour and retour.lit
-		lit.Visible = false
 		if type(pos) ~= "table" or type(pos.x) ~= "number" or type(pos.z) ~= "number" then return end
 		local u, v = (pos.x / SPAN + R) / N, (pos.z / SPAN + R) / N
 		if u >= 0 and u < 1 and v >= 0 and v < 1 then
