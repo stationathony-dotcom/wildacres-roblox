@@ -38,7 +38,7 @@ for i = 1, 300 do
 		end
 	end
 end
-for _, k in { "retrouver", "visiter", "enqueter", "escorter", "livrer", "reparer", "etal" } do
+for _, k in { "retrouver", "visiter", "enqueter", "escorter", "livrer", "reparer", "etal", "ronde", "rencontrer" } do
 	check(seen[k] ~= nil, "sorte « " .. k .. " » générée")
 end
 local vis = seen.visiter
@@ -111,6 +111,44 @@ if et then
 	check(not QL.stallOnSquare(P, v), "étal trop loin de la place : non")
 	placed[1].x, placed[1].owner = 310, "u2"
 	check(not QL.stallOnSquare(P, v), "étal d'un autre joueur : non")
+end
+-- ronde (21/11) : trois points autour de la place, inspectés un par un, sans rien coûter
+local rd = seen.ronde
+if rd then
+	QL.onTake(P, rd, v)
+	local okPts = rd.pts and #rd.pts == 3
+	for _, p in rd.pts or {} do
+		local d = Vector2.new(p[1] - v.x, p[2] - v.z).Magnitude
+		okPts = okPts and d >= 20 and d <= 80
+	end
+	check(okPts, "ronde : 3 points entre 20 et 80 studs de la place")
+	check(string.find(QL.what(rd), "0/3", 1, true) ~= nil, "ronde : texte « 0/3 » (" .. QL.what(rd) .. ")")
+	G.world.players["1"] = { quetes = { act = { [rd.id] = rd } } }
+	local prompt = { GetAttribute = function(_, k) return ({ Owner = "1", Quete = rd.id })[k] end }
+	ROOT = { Position = Vector3.new(rd.pts[2][1], 0, rd.pts[2][2]) }
+	SEARCH(P, prompt)
+	check((rd.got or 0) == 0 or Vector2.new(rd.pts[1][1] - rd.pts[2][1], rd.pts[1][2] - rd.pts[2][2]).Magnitude <= 14, "ronde : il faut commencer par le premier point")
+	rd.got = 0
+	for i = 1, 3 do
+		ROOT = { Position = Vector3.new(rd.pts[i][1] + 1, 0, rd.pts[i][2]) }
+		SEARCH(P, prompt)
+	end
+	check(rd.got == 3, "ronde : les 3 points inspectés")
+end
+-- rencontrer (21/11) : N habitants différents
+local rc = seen.rencontrer
+if rc then
+	QL.onTake(P, rc, v)
+	rc.need = 3
+	G.world.players["1"] = { quetes = { act = { [rc.id] = rc } } }
+	QL.noteTalk(P, "a")
+	QL.noteTalk(P, "a")
+	check(rc.got == 1, "rencontrer : parler deux fois au même habitant ne compte qu'une fois")
+	QL.noteTalk(P, "b")
+	QL.noteTalk(P, "c")
+	check(rc.got == 3, "rencontrer : 3 habitants différents → fini")
+	QL.noteTalk(P, "d")
+	check(rc.got == 3, "rencontrer : rien au-delà")
 end
 local f = workspace:FindFirstChild("QuetesLieux")
 if f then

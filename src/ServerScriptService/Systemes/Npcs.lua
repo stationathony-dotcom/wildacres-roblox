@@ -1118,6 +1118,10 @@ function Npcs.talk(player: Player, id: string)
 	if s == "ko" or s == "carried" or s == "gone" or s == "fight" or s == "chase" then
 		return
 	end
+	-- quêtes « faire connaissance » (QuetesLieux, 21/11)
+	if G.QuetesLieux and rawget(G.QuetesLieux, "noteTalk") then
+		G.QuetesLieux.noteTalk(player, id)
+	end
 	if asleep(e) then
 		e.woken = true
 		getUp(e)
