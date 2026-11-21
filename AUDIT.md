@@ -334,7 +334,7 @@ tous les 7 jours) ; un îlot porte un phare allumé la nuit. Testé : 5/5 en mer
 unique. Sons : porte et fabrication (établi/forge) ajoutés aussi.
 
 ## Étape 3D — terrain modifiable (testé en Play le 18/11)
-- Déjà en place, coché : limites (terrassement seulement sur ses terres / celles du clan, `Terraforme.allowed`),
+- Déjà en place, coché : limites (terrassement seulement sur ses terres / celles du clan, `Terraforme.allowed` — *depuis : `Config.LIBRE.terrasserPartout`, on terrasse partout*),
   sauvegarde par secteur (`reg.state.terra`, réappliqué au chargement), reboisement (graines d'arbre → pousse
   3 jours → arbre, `Props.plant`).
 - Nouveau : `Terraforme.restore(pos, rayon)` + commande `/wa terrain [rayon≤12]` (inscrite au registre) :
@@ -363,7 +363,7 @@ unique. Sons : porte et fabrication (établi/forge) ajoutés aussi.
 ## Étape 8B — reproduction des bêtes de ferme (testé en Play le 18/11)
 - Chaque matin, deux bêtes de même espèce, au même éleveur, même région, NOURRIES LA VEILLE forment un
   couple : 35 % de chances d'un petit à côté d'un parent (même enclos). Bêtes sauvages / des PNJ : non.
-- Plafond `Animals.OWN_CAP` = 24 bêtes par éleveur et par monde : bloque l'achat (avant de payer) et les
+- *(Remplacé depuis par `Animals.capacity` : la place vient des abris construits, règle 2.)* Plafond `Animals.OWN_CAP` = 24 bêtes par éleveur et par monde : bloque l'achat (avant de payer) et les
   naissances. Test : 2 poules nourries → naissances ; au-dessus du plafond → 0 naissance, achat refusé.
 - 5 (annulation/déconnexion pendant fabrication) : sans objet, la fabrication est instantanée côté serveur.
 
@@ -560,7 +560,7 @@ unique. Sons : porte et fabrication (établi/forge) ajoutés aussi.
   du fermier.
 
 ## Châteaux habités (18/11, Metiers + Chateaux + Social, testé en Play sur la graine 7)
-- `Chateaux` marque la région (`reg.castle`, `reg.castleVillage`) ; `Metiers.spawnCastle` pose le seigneur dans la
+- `Chateaux` marque la région (`reg.castle`, `reg.castleVillage`) ; `Metiers` (fonction locale `spawnCastle`) pose le seigneur dans la
   `Cour`, deux gardes devant l'attache `Entree` (horaires 0–24, bourrus donc ils se battent contre un crime vu).
 - Postes remplacés comme les artisans (`Metiers.currentId` : 3 jours après une disparition).
 - Seigneur : rachète `prise_*` et `ame_*` (+20 %, ne vend rien) ; titres de noblesse = dépense facultative des

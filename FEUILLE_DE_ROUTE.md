@@ -23,7 +23,7 @@ banque agrandissable sans fin, champs sans limite.
 - [x] Créatures (21), gibier, butin, niveaux, équipement fabriqué
 - [x] Compétences (10, grind), talents (19), mini-jeux serveur, compagnons
 - [x] Serrures, crochetage, alarme, cambriolages, journal, étoiles et primes persistantes
-- [x] Anti-abus : maison jamais vidée, absents protégés, bouclier d'arrivée, anti-farm d'XP
+- [x] Anti-abus : maison jamais vidée, absents protégés, bouclier d'arrivée, anti-farm d'XP *(bouclier d'arrivée et zone sûre éteints depuis par `Config.LIBRE`, règle 3)*
 - [x] Butin au sol façon Minecraft / Fortnite (récolte, minage, fouille, créatures, coffres) : clic, [E], [Q] tout autour ; réservé 30 s, disparaît en 5 min — banc Edit 16/16, testé en Play le 18/11 (posé sur le sol, [Q] ramasse tout)
 - [x] HUD façon image cible (portrait, boussole, lieu, météo, minicarte, menu, notifications) — vu en Play le 18/11 (captures : tout en place) ; reste à voir sur mobile ; monde : lumière, châteaux, potences (banc `chateaux` OK)
 - [x] Plus de niveau ni de barre d'XP : les caractéristiques montent en pratiquant (banc 13/13)
@@ -138,8 +138,8 @@ banque agrandissable sans fin, champs sans limite.
 - [x] Plafond de 24 bêtes remplacé par la place des abris construits
 - [x] Gestes de loisir : /danse /salut /applaudir /reverence
 - [x] Correctifs de la nuit intégrés (sommeil, sauvegarde, relations PNJ, courrier, chasse au trésor)
-- [x] Sélection des semences (/cultures), lignées des bêtes de ferme, qualité de façon + signature des pièces
-- [x] Lieux découverts → vitesse/chance + succès ; froid (neige la nuit) et chaleur (désert le jour, boire protège)
+- [x] Sélection des semences (/cultures), lignées des bêtes de ferme, qualité de façon + signature des pièces *(qualité et signature retirées le 20/11)*
+- [x] Lieux découverts → vitesse/chance + succès ; froid (neige la nuit) et chaleur (désert le jour, boire protège) *(froid et chaleur retirés le 20/11)*
 - [x] Talents de maître à choix exclusifs (palier 4, un sur deux par voie)
 - [x] Villes de joueurs : Charte de ville + /fonder <nom>, un habitant PNJ par lit posé (/villes)
 - [x] Quêtes bâtir / apprivoiser / prime (16 sortes) — 30 bancs Edit au vert en fin de session
@@ -154,9 +154,11 @@ banque agrandissable sans fin, champs sans limite.
 - [x] Alchimie (10 potions), festins partagés, recettes de haut niveau par métier, renom d'artisan, hôtel des ventes v2
 - [x] Pénuries de village + rumeurs des habitants, fouilles archéologiques, chantiers de village, chasse en groupe, concours de cuisine et de chasse, fuite du gibier, 4 titres de collection
 - [x] Banc `tools/bancs/equilibre.luau` (à relancer après chaque ajout) ; `docs/REFERENCE.md` régénéré
-- [ ] Harpon (attend le commit de Codex sur `Tools.lua`), emplacement main gauche (attend ses emplacements)
+- [x] Harpon (b405756, ba4b1d5) et emplacement main gauche (a23919e) — à voir en Play
 - [x] Tranché le 20/11 : saisons, froid/chaleur et qualité de façon RETIRÉS (boue des marais et obscurité des grottes gardées)
 - [x] Demandes à l'équipe (20/11) : `/demande`, `/bug`, `/appel` (file des admins `/wa demandes`, réponse au joueur même hors ligne), bannissement maison qui laisse l'écran d'accueil pour faire appel — à voir en Play ; formulaire = passage à Codex
+- [x] 21/11 : lanterne murale, cochon / oie / chèvre, sons de pose / casse / serrure / cloche, retour (lit + journal d'absence), caillebotis, partition — vus en Play sur le PC fixe (régression 15/15)
+- [x] 21/11 soir, relecture des règles d'AGENTS.md dans le code : squelettes → gisants (règle 9), jeu de dés → osselets (règle 10), annonces à tout le serveur retirées (règle 1), déblocages par compétence entraînée (règle 4), bug « tout le serveur accusé » corrigé
 - [ ] **TEST en Play** de tout ce qui précède (PC fixe)
 - [ ] Icônes peintes à la place des emojis (il faut mettre des images en ligne avec le compte du joueur)
-- Restes des listes, volontairement laissés : jeux de dés (règles Roblox sur les jeux de hasard), tutoriel (principe « sans indication »), guerres/alliances déclarées (retirées le 17/11), saisons (remplacées par les biomes)
+- Restes des listes, volontairement laissés : jeux de dés (règles Roblox sur les jeux de hasard ; l'objet est devenu des osselets), tutoriel (principe « sans indication »), guerres/alliances déclarées (retirées le 17/11), saisons (remplacées par les biomes)
