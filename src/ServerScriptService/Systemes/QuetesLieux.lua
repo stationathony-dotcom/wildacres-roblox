@@ -12,6 +12,7 @@
 -- 21/11 (« liste quetes.txt » : patrouille, lanternes, village inquiet, faire connaissance) :
 --   ronde      : trois points autour de la place à inspecter / lanternes à rallumer ([E] maintenu 1 s) ;
 --   rencontrer : parler à N habitants DIFFÉRENTS (n'importe où), noté par Npcs.talk.
+--   troupeau   : avoir N bêtes de ferme à soi (Animals.ownedBy), vérifié toutes les 3 s.
 -- Toujours facultatives, tirées par le générateur de Quetes (même île + même village + même période =
 -- même offre). Les points précis sont tirés à la prise de la quête (propres à chaque joueur).
 -- Repères : posés seulement quand le joueur approche (moins de 150 studs), visibles de tous mais
@@ -26,9 +27,9 @@ local Players = game:GetService("Players")
 
 QuetesLieux.SHARE = 0.22 -- part des offres du tableau qui sont « à un lieu »
 QuetesLieux.ICON = { retrouver = "🔍", visiter = "🗺️", enqueter = "🔎", escorter = "🚶", livrer = "🎁", reparer = "🔨", etal = "🏪",
-	ronde = "🏮", rencontrer = "🤝" }
+	ronde = "🏮", rencontrer = "🤝", troupeau = "🐑" }
 QuetesLieux.SKILL = { retrouver = "commerce", visiter = "commerce", enqueter = "commerce", escorter = "combat",
-	livrer = "commerce", reparer = "artisanat", etal = "commerce", ronde = "combat", rencontrer = "commerce" }
+	livrer = "commerce", reparer = "artisanat", etal = "commerce", ronde = "combat", rencontrer = "commerce", troupeau = "elevage" }
 QuetesLieux.REPAIR = { planks = 4, nails = 2 } -- par endroit réparé
 local MARKET_R = 45 -- studs autour de la place : l'étal doit y être
 
@@ -77,6 +78,8 @@ local ROUNDS = {
 	{ "Les lanternes éteintes", "Rallumer", "Lanterne éteinte" }, { "Le festival des lanternes", "Allumer", "Lanterne de fête" },
 }
 local MEETS = { "Une nouvelle rencontre", "Le nouveau venu", "Bonjour, voisin", "Les gens d'ici" }
+local HERDS = { "Le troupeau s'agrandit", "Un élevage réputé", "La ferme du voisin", "Le domaine prospère" }
+local herdCheck = {} -- joueur -> dernière vérification (os.clock)
 local DIRS = { "au nord", "au nord-est", "à l'est", "au sud-est", "au sud", "au sud-ouest", "à l'ouest", "au nord-ouest" }
 
 local folder: Folder
@@ -256,6 +259,10 @@ function QuetesLieux.offerHome(v, r: Random, q, reward, villages, roll: number):
 		q.kind, q.key, q.need, q.title = "rencontrer", "habitants", r:NextInteger(3, 5), pick(r, MEETS)
 		q.gold = reward(r, 12 * q.need)
 		return true
+	elseif roll < 0.97 then
+		q.kind, q.key, q.need, q.title = "troupeau", "betes", r:NextInteger(3, 6), pick(r, HERDS)
+		q.gold = reward(r, 25 * q.need)
+		return true
 	end
 	q.kind, q.key, q.need, q.title = "etal", "place", 1, pick(r, STALLS)
 	q.gold = reward(r, 45)
@@ -344,6 +351,8 @@ function QuetesLieux.what(q): string?
 			q.where and (" — " .. q.where) or "")
 	elseif q.kind == "rencontrer" then
 		return string.format("Faire connaissance avec %d habitants (%d/%d)", q.need, math.min(q.got or 0, q.need), q.need)
+	elseif q.kind == "troupeau" then
+		return string.format("Avoir %d bêtes de ferme à toi (%d/%d) — achetées, élevées ou apprivoisées", q.need, math.min(q.got or 0, q.need), q.need)
 	end
 	return nil
 end
@@ -413,6 +422,22 @@ function QuetesLieux.onTake(player: Player, q, here)
 	elseif q.kind == "rencontrer" then
 		q.seen = {}
 		G.Util.toast(player, "🤝 Va parler aux gens d'ici (ou d'ailleurs) : " .. q.need .. " habitants différents.")
+	end
+end
+
+-- Quête « troupeau » : compte les bêtes de ferme du joueur (au plus toutes les 3 s, sauf force)
+function QuetesLieux.checkHerd(player: Player, q, force: boolean?)
+	local now = os.clock()
+	if (q.got or 0) >= q.need or (not force and now - (herdCheck[player] or 0) <= 3) then
+		return
+	end
+	herdCheck[player] = now
+	local n = math.min(q.need, G.Animals.ownedBy("u" .. player.UserId))
+	if n >= q.need then
+		q.got = q.need - 1
+		advance(player, q, nil)
+	else
+		q.got = n
 	end
 end
 
@@ -726,6 +751,8 @@ function QuetesLieux.step(dt: number)
 					end
 				elseif q.kind == "escorter" then
 					stepEscort(player, q, root)
+				elseif q.kind == "troupeau" then
+					QuetesLieux.checkHerd(player, q)
 				elseif q.kind == "etal" then
 					local v = (q.got or 0) < q.need and villageByKey(q.v)
 					if v and flat(root.Position, v.x, v.z) < 120 and stallOnSquare(player, v) then
@@ -763,6 +790,7 @@ function QuetesLieux.init(g)
 			e.model:Destroy()
 		end
 		markers[player], escorts[player] = nil, nil
+		herdCheck[player] = nil
 	end)
 end
 

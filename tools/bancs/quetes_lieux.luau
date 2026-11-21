@@ -38,7 +38,7 @@ for i = 1, 300 do
 		end
 	end
 end
-for _, k in { "retrouver", "visiter", "enqueter", "escorter", "livrer", "reparer", "etal", "ronde", "rencontrer" } do
+for _, k in { "retrouver", "visiter", "enqueter", "escorter", "livrer", "reparer", "etal", "ronde", "rencontrer", "troupeau" } do
 	check(seen[k] ~= nil, "sorte « " .. k .. " » générée")
 end
 local vis = seen.visiter
@@ -149,6 +149,25 @@ if rc then
 	check(rc.got == 3, "rencontrer : 3 habitants différents → fini")
 	QL.noteTalk(P, "d")
 	check(rc.got == 3, "rencontrer : rien au-delà")
+end
+-- troupeau (21/11) : N bêtes à soi, vérifié par QuetesLieux.step
+local tp = seen.troupeau
+if tp then
+	tp.need = 3
+	local owned = 2
+	G.Animals = { ownedBy = function(o) return o == "u1" and owned or 0 end }
+	G.world.players["1"] = { quetes = { act = { [tp.id] = tp } } }
+	QL.checkHerd(P, tp, true)
+	check(tp.got == 2 and string.find(QL.what(tp), "2/3", 1, true) ~= nil, "troupeau : 2 bêtes sur 3 (" .. QL.what(tp) .. ")")
+	owned = 1
+	QL.checkHerd(P, tp, true)
+	check(tp.got == 1, "troupeau : une bête vendue, le compte redescend")
+	owned = 4
+	QL.checkHerd(P, tp, true)
+	check(tp.got == 3, "troupeau : 4 bêtes → fini")
+	owned = 0
+	QL.checkHerd(P, tp, true)
+	check(tp.got == 3, "troupeau : une fois fini, ça reste fini")
 end
 local f = workspace:FindFirstChild("QuetesLieux")
 if f then
