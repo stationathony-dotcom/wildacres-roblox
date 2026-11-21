@@ -892,62 +892,97 @@ end
 local ARCH = {}
 
 ARCH.caisse = function(m, c)
-	lames(m, "Fond", V(2.4, 0.2, 2.36), V(0, 0.1, 0), 4, "X", c)
+	lames(m, "Fond", V(2.38, 0.19, 2.38), V(0, 0.095, 0), 4, "X", c)
 	for _, s in { -1, 1 } do
-		lames(m, "Lame", V(2.32, 2.12, 0.16), V(0, 1.19, s * 1.14), 4, "Y", c)
-		lames(m, "Lame", V(0.16, 2.12, 2.16), V(s * 1.14, 1.19, 0), 4, "Y", c)
-		for _, x in { -1.12, 1.12 } do
-			bois(m, "Cornière", V(0.24, 2.36, 0.24), V(x, 1.18, s * 1.12), DARK)
-			for _, y in { 0.35, 2.13 } do rivet(m, V(x, y, s * 1.24), 0.075) end
+		for i = 0, 3 do
+			local y = 0.42 + i * 0.51
+			local couleur = teinte(c:Lerp(COLORS.BC, 0.28), i)
+			piece(m, "Bordage", V(2.23, 0.456, 0.17), V(0, y, s * 1.026), couleur, Mat.WoodPlanks)
+			piece(m, "Bordage", V(0.17, 0.456, 2.23), V(s * 1.026, y, 0), couleur, Mat.WoodPlanks)
+		end
+		for _, y in { 0.25, 2.14 } do
+			bois(m, "Traverse", V(2.24, 0.19, 0.19), V(0, y, s * 1.132), DARK)
+			bois(m, "Traverse", V(0.19, 0.19, 2.24), V(s * 1.132, y, 0), DARK)
+		end
+		for _, x in { -1.118, 1.118 } do
+			bois(m, "Cornière", V(0.236, 2.28, 0.236), V(x, 1.14, s * 1.118), DARK)
+			for _, y in { 0.29, 2.10 } do
+				rivet(m, V(x, y, s * 1.234), 0.088, COLORS.F)
+				rivet(m, V(math.sign(x) * 1.234, y, s * 1.118), 0.088, COLORS.F)
+			end
 		end
 	end
-	lames(m, "Couvercle", V(2.47, 0.18, 2.47), V(0, 2.36, 0), 5, "Z", c)
-	lien(m, "Écharpe", V(-1.05, 0.33, 1.19), V(1.05, 2.14, 1.19), 0.24, 0.13, DARK, Mat.Wood, true)
+
+	-- Le second bras du croisillon s'assemble de part et d'autre du premier.
+	lien(m, "Écharpe", V(-1.05, 0.27, 1.166), V(1.05, 2.13, 1.166), 0.145, 0.20, DARK, Mat.Wood, true)
+	lien(m, "Demi-écharpe", V(-1.05, 2.13, 1.166), V(-0.07, 1.262, 1.166), 0.145, 0.20, DARK, Mat.Wood, true)
+	lien(m, "Demi-écharpe", V(0.07, 1.138, 1.166), V(1.05, 0.27, 1.166), 0.145, 0.20, DARK, Mat.Wood, true)
+
+	local couvercle = CFrame.new(0, 2.435, -0.012) * CFrame.Angles(-0.15, 0, 0)
+	for i = -2, 2 do
+		piece(m, "Lame du couvercle", V(0.47, 0.14, 2.46), couvercle:PointToWorldSpace(V(i * 0.5, 0, 0)),
+			teinte(c, i), Mat.WoodPlanks, nil, couvercle.Rotation)
+	end
+	for _, z in { -0.86, 0.68 } do
+		bois(m, "Taquet du couvercle", V(2.26, 0.11, 0.22), couvercle:PointToWorldSpace(V(0, -0.096, z)),
+			DARK, true, couvercle.Rotation)
+	end
 end
 
-local function fut(m, c, cadre, diam, haut, horizontal)
+local function fut(m, c, cadre, diam, haut)
 	local function cent(y, x, z)
 		return cadre:PointToWorldSpace(V(x or 0, y, z or 0))
 	end
 	local orientation = cadre.Rotation * UP
-	for i, profil in { { 0.14, 0.82, 0.28 }, { 0.34, 0.94, 0.27 }, { 0.5, 1, 0.29 },
-		{ 0.68, 0.96, 0.29 }, { 0.86, 0.85, 0.28 } } do
-		cyl(m, "Douelles", diam * profil[2], haut * profil[3], cent(haut * profil[1]),
-			teinte(c, i), Mat.WoodPlanks, orientation)
-	end
-	for _, y in { 0.22, 0.77 } do
-		cyl(m, "Cercle", diam * 0.98, haut * 0.068, cent(haut * y), IRON, Mat.Metal, orientation, true)
-		for i = 0, 3 do
-			local a = (i + 0.4) * TAU / 4
-			rivet(m, cent(haut * y, math.cos(a) * diam * 0.49, math.sin(a) * diam * 0.49), diam * 0.05)
+	local profil = { { 0.015, 0.391 }, { 0.265, 0.445 }, { 0.735, 0.445 }, { 0.985, 0.391 } }
+	local ep, n = diam * 0.09, 12
+	cyl(m, "Âme du fût", diam * 0.82, haut, cent(haut / 2), DARK, Mat.Wood, orientation)
+	for i = 0, n - 1 do
+		local angle = i * TAU / n
+		local radial = CFrame.Angles(0, angle, 0)
+		local couleur = teinte(c, i)
+		for j = 1, #profil - 1 do
+			local a, b = profil[j], profil[j + 1]
+			local rayon = (a[2] + b[2]) * diam / 2
+			local dy, dr = (b[1] - a[1]) * haut, (b[2] - a[2]) * diam
+			local milieu = radial:VectorToWorldSpace(V(0, (a[1] + b[1]) * haut / 2, rayon))
+			piece(m, "Douelle", V(2 * rayon * math.tan(math.pi / n) - 0.019, math.sqrt(dy * dy + dr * dr) + 0.018, ep),
+				cadre:PointToWorldSpace(milieu), couleur, Mat.WoodPlanks, nil,
+				cadre.Rotation * radial * CFrame.Angles(math.atan2(dr, dy), 0, 0), true)
 		end
 	end
-	cyl(m, "Fond du fût", diam * 0.77, haut * 0.042, cent(haut), DARK, Mat.Wood, orientation, true)
-	if not horizontal then
-		for i = -1, 1 do
-			bois(m, "Lame du couvercle", V(diam * (0.69 - 0.12 * math.abs(i)), 0.052, diam * 0.18),
-				cent(haut + 0.024, 0, diam * i * 0.185), teinte(c, i), true)
+	for _, y in { 0.26, 0.74 } do
+		cyl(m, "Cercle de fer", diam * 0.984, haut * 0.084, cent(haut * y), IRON, Mat.Metal, orientation, true)
+		for _, a in { TAU / 12, TAU * 7 / 12 } do
+			rivet(m, cent(haut * y, math.sin(a) * diam * 0.492, math.cos(a) * diam * 0.492), diam * 0.046, COLORS.P)
 		end
 	end
-	cyl(m, "Bonde", diam * 0.13, haut * 0.055, cent(haut + 0.053, diam * 0.12), COLORS.BC,
+	cyl(m, "Fond du fût", diam * 0.78, haut * 0.027, cent(haut + 0.005), DARK, Mat.Wood, orientation, true)
+	for i = -1, 1 do
+		bois(m, "Lame du fond", V(diam * (0.73 - 0.14 * math.abs(i)), 0.053, diam * 0.220),
+			cent(haut + 0.022, 0, diam * i * 0.226), teinte(c, i), true, cadre.Rotation)
+	end
+	cyl(m, "Bonde", diam * 0.14, haut * 0.047, cent(haut + 0.058, diam * 0.12), COLORS.BC,
 		Mat.Wood, orientation, true)
 end
 
 ARCH.tonneau = function(m, c)
-	fut(m, c, CFrame.identity, 2.46, 2.88, false)
+	fut(m, c, CFrame.identity, 2.43, 2.88)
 end
 
 ARCH.baril = function(m, c)
-	fut(m, c, CFrame.new(-1, 1.02, 0) * CFrame.Angles(0, 0, -math.pi / 2), 1.59, 1.91, true)
+	fut(m, c, CFrame.new(-1, 1.02, 0) * CFrame.Angles(0, 0, -math.pi / 2), 1.57, 1.91)
 	for _, x in { -0.63, 0.61 } do
-		bois(m, "Semelle", V(0.28, 0.24, 1.42), V(x, 0.12, 0), DARK)
+		bois(m, "Semelle", V(0.28, 0.24, 1.48), V(x, 0.12, 0), DARK)
 		for _, z in { -0.48, 0.48 } do
-			piece(m, "Berceau", V(0.28, 0.43, 0.43), V(x, 0.43, z), c, Mat.Wood, "coin",
+			piece(m, "Berceau", V(0.28, 0.51, 0.51), V(x, 0.435, z), c:Lerp(COLORS.BC, 0.35), Mat.Wood, "coin",
 				z < 0 and CFrame.Angles(0, math.pi, 0) or nil)
 		end
 	end
-	fer(m, "Robinet", V(0.24, 0.14, 0.12), V(0.98, 0.83, 0), COLORS.O)
-	fer(m, "Poignée", V(0.09, 0.12, 0.24), V(1.05, 0.92, 0), COLORS.O)
+	cyl(m, "Rosace du robinet", 0.31, 0.06, V(0.958, 0.77, 0), IRON, Mat.Metal, CFrame.identity, true)
+	cyl(m, "Robinet", 0.17, 0.21, V(1.035, 0.77, 0), COLORS.O, Mat.Metal, CFrame.identity, true)
+	cyl(m, "Bec du robinet", 0.141, 0.16, V(1.08, 0.693, 0), COLORS.O, Mat.Metal, nil, true)
+	fer(m, "Poignée du robinet", V(0.1, 0.12, 0.34), V(1.035, 0.858, 0), COLORS.O)
 end
 
 local function tableMenuisee(m, c, w, d, nb)
@@ -969,17 +1004,23 @@ ARCH.table = function(m, c) tableMenuisee(m, c, 3.4, 2.2, 4) end
 ARCH.grandetable = function(m, c) tableMenuisee(m, c, 7, 2.6, 5) end
 
 ARCH.tabouret = function(m, c)
-	cyl(m, "Assise", 1.75, 0.22, V(0, 1.56, 0), c, Mat.WoodPlanks)
-	cyl(m, "Chant", 1.78, 0.10, V(0, 1.48, 0), DARK, Mat.Wood)
+	cyl(m, "Assise", 1.75, 0.23, V(0, 1.555, 0), c:Lerp(COLORS.BC, 0.37), Mat.WoodPlanks)
+	cyl(m, "Chant", 1.78, 0.13, V(0, 1.467, 0), DARK, Mat.Wood)
+	local entretoises = {}
 	for i = 0, 2 do
 		local a = i * TAU / 3 + 0.29
 		local x, z = math.cos(a), math.sin(a)
+		local y = 0.50 + i * 0.056
+		local rayon = 0.67 + (0.49 - 0.67) * ((y - 0.15) / (1.46 - 0.15))
+		table.insert(entretoises, V(x * rayon, y, z * rayon))
 		lien(m, "Pied évasé", V(x * 0.67, 0.15, z * 0.67), V(x * 0.49, 1.46, z * 0.49),
-			0.23, 0.23, DARK, Mat.Wood)
-		cyl(m, "Sabot", 0.25, 0.18, V(x * 0.67, 0.09, z * 0.67), IRON, Mat.Metal, nil, true)
-		boule(m, "Cheville", V(0.13, 0.037, 0.13), V(x * 0.49, 1.67, z * 0.49), DARK, Mat.Wood)
+			0.25, 0.25, c, Mat.Wood)
+		cyl(m, "Bout de pied", 0.25, 0.18, V(x * 0.67, 0.09, z * 0.67), c, Mat.Wood)
+		cyl(m, "Cheville", 0.141, 0.022, V(x * 0.49, 1.672, z * 0.49), DARK, Mat.Wood, nil, true)
 	end
-	bois(m, "Entretoise", V(1.06, 0.13, 0.16), V(-0.03, 0.53, 0.12), c)
+	for i, p in entretoises do
+		lien(m, "Entretoise", p, entretoises[i % 3 + 1], 0.15, 0.13, DARK, Mat.Wood, true)
+	end
 end
 
 ARCH.chaise = function(m, c)
@@ -1018,15 +1059,24 @@ ARCH.lit = function(m, c) lit(m, c, 2.6, 1.88, 1) end
 ARCH.litdouble = function(m, c) lit(m, c, 4.6, 2.37, 2) end
 
 ARCH.paillasse = function(m, c)
-	toile(m, "Sac de lin", V(2.34, 0.16, 4.52), V(0, 0.08, 0), CLOTH)
-	for i = 1, 7 do
-		local x = (i - 4) * 0.32
-		boule(m, "Botte de paille", V(0.61, 0.43 + i % 3 * 0.04, 4.58 - i % 3 * 0.12),
-			V(x, 0.24, 0), c:Lerp(COLORS.BC, i % 3 * 0.22), Mat.Grass)
+	toile(m, "Couture du matelas", V(2.28, 0.18, 4.50), V(0, 0.09, 0), c:Lerp(DARK, 0.35))
+	toile(m, "Toile de la paillasse", V(2.26, 0.28, 4.36), V(0, 0.24, 0), c:Lerp(CLOTH, 0.44))
+	for _, x in { -1.10, 1.10 } do
+		boule(m, "Bourrelet de paille", V(0.32, 0.34, 4.36), V(x, 0.21, 0), c, Mat.Grass)
 	end
-	toile(m, "Couverture", V(2.12, 0.14, 2.53), V(0.03, 0.5, 0.81), COLORS.R)
-	toile(m, "Galon", V(2.13, 0.035, 0.12), V(0.03, 0.58, -0.35), COLORS.O)
-	boule(m, "Traversin", V(1.83, 0.46, 0.9), V(-0.07, 0.47, -1.67), CLOTH, Mat.Fabric)
+	for i = -2, 2 do
+		lien(m, "Brins de paille", V(i * 0.36, 0.15, -2.15), V(i * 0.40 + 0.06, 0.12 + i % 2 * 0.07, -2.26),
+			0.095, 0.086, teinte(c, i), Mat.Grass, true)
+	end
+	toile(m, "Couverture de laine", V(2.24, 0.13, 2.52), V(0.01, 0.414, 0.88), COLORS.R:Lerp(DARK, 0.14))
+	toile(m, "Rabattement", V(2.25, 0.27, 0.16), V(0.01, 0.33, 2.11), COLORS.R:Lerp(DARK, 0.14))
+	toile(m, "Revers", V(2.26, 0.13, 0.34), V(0.01, 0.46, -0.27), COLORS.R)
+	toile(m, "Galon", V(2.24, 0.022, 0.12), V(0.01, 0.527, -0.23), COLORS.O)
+	cyl(m, "Traversin de lin", 0.57, 1.62, V(-0.04, 0.527, -1.57), CLOTH, Mat.Fabric, CFrame.identity, true)
+	for _, x in { -0.80, 0.72 } do
+		cyl(m, "Couture du traversin", 0.575, 0.052, V(x, 0.527, -1.57), CLOTH:Lerp(DARK, 0.23),
+			Mat.Fabric, CFrame.identity, true)
+	end
 end
 
 ARCH.armoire = function(m, c)
@@ -1213,22 +1263,38 @@ ARCH.foyer = function(m, c)
 end
 
 ARCH.fourpain = function(m, c)
+	local argile = c:Lerp(Color3.fromRGB(178, 143, 100), 0.67)
+	local chamotte = argile:Lerp(COLORS.PC, 0.26)
 	for i = 0, 1 do
 		assises(m, 0.246 + i * 0.49, 0.51, 4.27, 4.22, 0, STONE, i == 0 and { 0.25, 0.43, 0.32 } or { 0.43, 0.31, 0.26 })
 	end
 	pierre(m, "Sole", V(4.39, 0.22, 4.36), V(0, 1.07, 0), COLORS.PC)
-	for i, profil in { { 1.38, 4, 0.58 }, { 1.91, 3.75, 0.53 }, { 2.41, 3.33, 0.52 },
-		{ 2.88, 2.69, 0.47 }, { 3.28, 1.85, 0.42 }, { 3.59, 0.94, 0.26 } } do
-		cyl(m, "Voûte d’argile", profil[2], profil[3], V(0, profil[1], -0.04), teinte(c, i), Mat.Brick)
+	-- La moitié basse de l'ellipsoïde est noyée dans le socle.
+	piece(m, "Dôme d’argile", V(3.99, 2.70, 3.92), V(0, 1.38, -0.17), argile, Mat.Slate, "boule")
+	for _, x in { -0.79, 0.79 } do
+		pierre(m, "Jambage", V(0.39, 0.57, 0.85), V(x, 1.445, 1.69), chamotte, Mat.Brick)
 	end
-	pierre(m, "Gueule", V(1.47, 0.81, 0.24), V(0, 1.56, 1.96), COLORS.N)
-	boule(m, "Voûte noircie", V(1.47, 0.8, 0.24), V(0, 1.92, 1.96), COLORS.N, Mat.Slate)
-	for i = 0, 6 do
-		local a = i * math.pi / 6
-		pierre(m, "Claveau", V(0.34, 0.40, 0.37), V(math.cos(a) * 0.88, 1.67 + math.sin(a) * 0.69, 1.97),
-			c:Lerp(COLORS.PC, 0.25 + i % 3 * 0.13), Mat.Brick, CFrame.Angles(0, 0, a - math.pi / 2))
+	pierre(m, "Fond noirci", V(1.31, 0.59, 0.12), V(0, 1.46, 1.79), COLORS.N)
+	boule(m, "Voûte noircie", V(1.37, 1.22, 0.21), V(0, 1.71, 1.78), COLORS.N, Mat.Slate)
+	for i = 0, 8 do
+		local a = i * math.pi / 8
+		local noirci = i >= 2 and i <= 6 and 0.12 or 0
+		pierre(m, "Claveau", V(0.342, 0.31, 0.82),
+			V(math.cos(a) * 0.78, 1.71 + math.sin(a) * 0.725, 1.71 + (i == 4 and 0.026 or 0)),
+			chamotte:Lerp(DARK, noirci + i % 3 * 0.079), Mat.Brick, CFrame.Angles(0, 0, a - math.pi / 2))
 	end
-	fer(m, "Poignée", V(0.44, 0.10, 0.12), V(0, 1.66, 2.1), COLORS.O)
+	pierre(m, "Seuil enfumé", V(1.56, 0.09, 0.64), V(0, 1.209, 1.82), argile:Lerp(DARK, 0.47))
+	local braises = boule(m, "Braises", V(0.69, 0.105, 0.26), V(0, 1.277, 1.849), Color3.fromRGB(207, 100, 43), Mat.Neon)
+	local lueur = Instance.new("PointLight")
+	lueur.Color, lueur.Range, lueur.Brightness = Color3.fromRGB(255, 166, 93), 4.5, 0.48
+	lueur.Parent = braises
+
+	cyl(m, "Évent", 0.58, 1.04, V(0.64, 3.01, -0.69), chamotte, Mat.Brick)
+	cyl(m, "Bord de l’évent", 0.73, 0.16, V(0.64, 3.52, -0.69), chamotte, Mat.Brick)
+	cyl(m, "Trou de fumée", 0.47, 0.023, V(0.64, 3.604, -0.69), COLORS.N, Mat.Slate, nil, true)
+
+	bois(m, "Pale de la pelle", V(0.44, 0.56, 0.095), V(1.61, 0.35, 2.08), COLORS.BC, true, CFrame.Angles(0, 0, 0.36))
+	lien(m, "Manche de la pelle", V(1.57, 0.46, 2.13), V(0.93, 2.02, 2.071), 0.105, 0.112, WOOD, Mat.Wood, true)
 end
 
 ARCH.chaudron = function(m, c)
@@ -1376,30 +1442,70 @@ end
 
 ARCH.statue = function(m, c)
 	socle(m, 2.4, 0.96, c)
-	for _, x in { -0.38, 0.38 } do
-		pierre(m, "Soulier", V(0.47, 0.25, 0.76), V(x, 1.06, 0.06 + x * 0.15), c)
+	local patine = c:Lerp(STONE, 0.6)
+	for _, x in { -0.24, 0.24 } do
+		pierre(m, "Soleret", V(0.43, 0.23, 0.71), V(x, 1.066, 0.115), patine)
+		lien(m, "Jambe", V(x, 1.12, -0.02), V(x * 1.07, 2.45, -0.02), 0.41, 0.44, c, Mat.Slate, false)
+		pierre(m, "Genouillère", V(0.41, 0.28, 0.21), V(x, 1.84, 0.22), patine, Mat.Rock)
 	end
-	piece(m, "Manteau", V(1.51, 2.22, 0.92), V(0, 2.2, -0.08), c, Mat.Slate, "boule")
-	pierre(m, "Ourlet", V(1.3, 0.31, 0.81), V(0, 1.36, -0.09), c)
-	boule(m, "Épaules", V(1.62, 0.91, 0.81), V(0, 3.18, -0.07), c, Mat.Slate)
-	boule(m, "Capuche", V(0.94, 1.03, 0.9), V(0, 4.13, -0.06), STONE, Mat.Slate)
-	boule(m, "Visage", V(0.59, 0.66, 0.57), V(0, 4.15, 0.34), c, Mat.Slate)
-	lien(m, "Bras drapé", V(-0.63, 3.32, 0.04), V(-0.87, 2.57, 0.44), 0.34, 0.36, c, Mat.Slate, true)
-	lien(m, "Bras drapé", V(0.64, 3.25, 0.03), V(0.38, 2.72, 0.53), 0.33, 0.35, c, Mat.Slate, true)
-	pierre(m, "Livre de pierre", V(0.63, 0.46, 0.24), V(0.28, 2.71, 0.62), STONE, Mat.Slate, CFrame.Angles(0, 0, -0.22))
-	lien(m, "Bâton du voyageur", V(-0.91, 0.98, 0.57), V(-0.91, 3.34, 0.57), 0.13, 0.13, STONE, Mat.Slate, true)
+	pierre(m, "Tassettes", V(0.94, 0.41, 0.62), V(0, 2.34, -0.04), patine)
+	pierre(m, "Torse", V(0.92, 1.08, 0.62), V(0, 2.89, -0.04), c)
+	boule(m, "Relief de la cuirasse", V(1.27, 1.09, 0.49), V(0, 2.98, 0.16), c, Mat.Slate)
+	pierre(m, "Ceinture sculptée", V(0.99, 0.17, 0.73), V(0, 2.483, -0.03), patine)
+	piece(m, "Cape", V(1.24, 2.26, 0.55), V(0, 2.22, -0.415), patine, Mat.Slate, "coin")
+	for _, x in { -0.39, 0, 0.39 } do
+		lien(m, "Pli de cape", V(x * 1.25, 1.18, -0.61), V(x, 3.28, -0.44), 0.15, 0.17, c, Mat.Slate, true)
+	end
+	for _, s in { -1, 1 } do
+		local epaule = V(s * 0.59, 3.27, -0.03)
+		local coude = V(s * 0.71, 2.73 + s * 0.08, 0.23)
+		local main = V(s * 0.09, 2.66 + s * 0.085, 0.633)
+		boule(m, "Épaulière", V(0.54, 0.39, 0.67), epaule, patine, Mat.Slate)
+		lien(m, "Bras", epaule, coude, 0.35, 0.35, c, Mat.Slate, true)
+		lien(m, "Avant-bras", coude, main, 0.31, 0.29, c, Mat.Slate, true)
+		boule(m, "Gantelet", V(0.31, 0.24, 0.27), main, patine, Mat.Slate)
+	end
+	cyl(m, "Gorgerin", 0.54, 0.26, V(0, 3.49, -0.05), patine, Mat.Slate)
+	cyl(m, "Heaume", 0.77, 0.61, V(0, 3.93, -0.05), c, Mat.Slate)
+	boule(m, "Calotte du heaume", V(0.77, 0.40, 0.77), V(0, 4.25, -0.05), c, Mat.Slate)
+	pierre(m, "Fente de visière", V(0.49, 0.097, 0.125), V(0, 4.015, 0.29), STONE:Lerp(COLORS.F, 0.28))
+	pierre(m, "Arête du heaume", V(0.093, 0.49, 0.14), V(0, 3.968, 0.344), patine, Mat.Slate)
+	pierre(m, "Poignée d’épée", V(0.18, 0.48, 0.17), V(0, 2.681, 0.63), patine)
+	pierre(m, "Garde de l’épée", V(0.73, 0.12, 0.22), V(0, 2.429, 0.63), c)
+	pierre(m, "Lame de l’épée", V(0.23, 1.26, 0.14), V(0, 1.755, 0.63), c)
+	pierre(m, "Pointe d’épée", V(0.16, 0.16, 0.14), V(0, 1.121, 0.63), c, Mat.Slate,
+		CFrame.Angles(0, 0, math.pi / 4))
 end
 
 ARCH.sculpture = function(m, c)
 	socle(m, 1.6, 0.83, c)
-	piece(m, "Roc sculpté", V(1.33, 0.44, 1.41), V(0, 0.99, 0), STONE, Mat.Rock, "boule")
-	boule(m, "Corps d’oiseau", V(0.99, 1.28, 1.21), V(0.06, 1.66, 0), c, Mat.Slate)
-	boule(m, "Tête d’oiseau", V(0.56, 0.64, 0.62), V(0.13, 2.43, 0.29), c, Mat.Slate)
-	piece(m, "Bec", V(0.26, 0.19, 0.40), V(0.13, 2.39, 0.62), STONE, Mat.Slate, "coin")
-	for _, x in { -0.45, 0.47 } do
-		boule(m, "Aile", V(0.29, 0.85, 1.02), V(x, 1.69, -0.09), STONE, Mat.Slate)
+	local patine = STONE:Lerp(c, 0.45)
+	piece(m, "Roc sculpté", V(1.39, 0.53, 1.47), V(0, 1.02, 0), STONE, Mat.Rock, "boule")
+	piece(m, "Poitrail", V(0.90, 1.13, 1.29), V(0, 1.73, 0.025), c, Mat.Slate, "boule", CFrame.Angles(0.44, 0, 0))
+	boule(m, "Gorge", V(0.64, 0.67, 0.68), V(0, 2.17, 0.23), c, Mat.Slate)
+	boule(m, "Tête du faucon", V(0.57, 0.50, 0.65), V(0, 2.476, 0.29), c, Mat.Slate)
+	piece(m, "Bec du faucon", V(0.32, 0.24, 0.34), V(0, 2.408, 0.602), patine, Mat.Slate, "boule")
+	piece(m, "Crochet du bec", V(0.21, 0.26, 0.22), V(0, 2.30, 0.675), patine, Mat.Slate, "coin",
+		CFrame.Angles(math.pi, 0, 0), true)
+	for _, s in { -1, 1 } do
+		boule(m, "Œil sculpté", V(0.108, 0.103, 0.128), V(s * 0.257, 2.501, 0.425), STONE, Mat.Slate)
+		lien(m, "Sourcil sculpté", V(s * 0.253, 2.551, 0.31), V(s * 0.226, 2.545, 0.502),
+			0.093, 0.078, c, Mat.Slate, true)
+		piece(m, "Aile repliée", V(0.29, 0.63, 1.09), V(s * 0.357, 1.813, -0.126), patine, Mat.Slate, "boule",
+			CFrame.Angles(-0.33, s * 0.14, 0), true)
+		for i = 0, 2 do
+			lien(m, "Rémige sculptée", V(s * (0.415 - i * 0.032), 1.89 - i * 0.095, 0.08),
+				V(s * (0.395 - i * 0.07), 1.62 - i * 0.089, -0.59 + i * 0.04), 0.127, 0.14,
+				i % 2 == 0 and c or patine, Mat.Slate, true)
+		end
+		lien(m, "Serre", V(s * 0.21, 1.44, 0.25), V(s * 0.29, 1.19, 0.39), 0.16, 0.16, patine, Mat.Slate, true)
+		for i = -1, 1 do
+			lien(m, "Griffe", V(s * 0.29, 1.20, 0.35), V(s * 0.29 + i * 0.103, 1.14, 0.55),
+				0.072, 0.08, c, Mat.Slate, true)
+		end
 	end
-	piece(m, "Queue", V(0.62, 0.48, 0.86), V(0.02, 1.43, -0.58), c, Mat.Slate, "coin")
+	piece(m, "Queue du faucon", V(0.53, 0.24, 0.75), V(0, 1.43, -0.54), c, Mat.Slate, "coin",
+		CFrame.Angles(0.48, math.pi, 0), true)
 end
 
 local function ceramique(m, c, profil)
@@ -2040,20 +2146,45 @@ end
 
 ARCH.pompe = function(m, c)
 	assises(m, 0.193, 0.41, 2.38, 2.36, 0, STONE, { 0.27, 0.42, 0.31 })
-	pierre(m, "Couronnement", V(2.3, 0.23, 2.27), V(0, 0.47, 0), COLORS.PC)
-	cyl(m, "Embase", 1.16, 0.23, V(0, 0.68, 0), IRON, Mat.Metal)
-	cyl(m, "Corps de fonte", 0.89, 1.77, V(0, 1.56, 0), c, Mat.Metal)
-	for _, y in { 0.88, 1.46, 2.24 } do cyl(m, "Collier", 1, 0.13, V(0, y, 0), IRON, Mat.Metal) end
-	cyl(m, "Chapiteau", 1.03, 0.27, V(0, 2.45, 0), c, Mat.Metal)
-	local a, b, d = V(0, 1.86, -0.30), V(0, 1.86, -1.14), V(0, 1.52, -1.30)
-	lien(m, "Bec", a, b, 0.29, 0.28, c, Mat.Metal, true)
-	lien(m, "Coude", b, d, 0.26, 0.25, c, Mat.Metal, true)
-	cyl(m, "Lèvre", 0.32, 0.08, d, COLORS.O, Mat.Metal, nil, true)
-	fer(m, "Chape", V(0.34, 0.45, 0.26), V(0, 2.64, -0.02))
-	cyl(m, "Axe", 0.19, 0.47, V(0, 2.78, -0.02), COLORS.O, Mat.Metal, CFrame.identity, true)
-	lien(m, "Balancier", V(0, 2.79, -0.07), V(0, 2.83, 0.63), 0.14, 0.16, c, Mat.Metal, true)
-	lien(m, "Balancier", V(0, 2.83, 0.63), V(0, 2.46, 1.48), 0.13, 0.15, c, Mat.Metal, true)
-	lien(m, "Poignée", V(0, 2.46, 1.48), V(0, 2.38, 1.76), 0.2, 0.21, WOOD, Mat.Wood, true)
+	pierre(m, "Couronnement", V(2.3, 0.20, 2.27), V(0, 0.465, 0), COLORS.PC)
+	pierre(m, "Fond d’auge", V(1.43, 0.20, 1.41), V(0, 0.637, -0.74), STONE, Mat.Cobblestone)
+	for _, x in { -0.60, 0.60 } do
+		pierre(m, "Joue de l’auge", V(0.23, 0.36, 1.42), V(x, 0.84, -0.74), COLORS.PC)
+	end
+	for _, z in { -1.34, -0.14 } do
+		pierre(m, "Rebord de l’auge", V(1.09, 0.37, 0.23), V(0, 0.845, z), STONE:Lerp(COLORS.PC, 0.57))
+	end
+	verre(m, "Eau de l’auge", V(1.01, 0.06, 1.01), V(0, 0.812, -0.74), EAU)
+
+	local zFut = 0.38
+	cyl(m, "Sabot de fonte", 1.06, 0.22, V(0, 0.67, zFut), IRON, Mat.Metal)
+	cyl(m, "Fût en bois", 0.85, 1.64, V(0, 1.56, zFut), DARK, Mat.Wood)
+	for i = 0, 9 do
+		local a = i * TAU / 10
+		bois(m, "Douelle", V(0.27, 1.60, 0.158), V(math.sin(a) * 0.404, 1.56, zFut + math.cos(a) * 0.404),
+			teinte(WOOD, i), true, CFrame.Angles(0, a, 0))
+	end
+	for _, y in { 0.84, 1.39, 2.26 } do
+		cyl(m, "Collier de fer", 1.006, 0.13, V(0, y, zFut), c, Mat.Metal, nil, true)
+		rivet(m, V(0.502, y, zFut), 0.105, COLORS.P)
+	end
+	cyl(m, "Chapeau de fonte", 0.96, 0.21, V(0, 2.45, zFut), c, Mat.Metal)
+
+	local depart, col, bout = V(0, 1.94, 0.0), V(0, 1.94, -1.19), V(0, 1.66, -1.271)
+	cyl(m, "Bride du bec", 0.46, 0.20, V(0, 1.94, -0.084), c, Mat.Metal, FACE, true)
+	cyl(m, "Bec verseur", 0.28, 1.21, (depart + col) / 2, c, Mat.Metal, FACE, true)
+	lien(m, "Coude du bec", col, bout, 0.249, 0.24, c, Mat.Metal, true)
+	cyl(m, "Lèvre du bec", 0.32, 0.103, bout, IRON, Mat.Metal, nil, true)
+	cyl(m, "Ouverture du bec", 0.224, 0.023, bout - V(0, 0.054, 0), COLORS.N, Mat.Metal, nil, true)
+
+	local axe = V(0, 2.755, zFut)
+	fer(m, "Fourche d’articulation", V(0.34, 0.38, 0.31), V(0, 2.64, zFut))
+	cyl(m, "Axe de fer", 0.22, 0.51, axe, COLORS.P, Mat.Metal, CFrame.identity, true)
+	local tete, manche = V(0, 2.60, -0.03), V(0, 3.02, 1.51)
+	lien(m, "Balancier", tete, axe, 0.18, 0.22, IRON, Mat.Metal, true)
+	lien(m, "Balancier en bois", axe, manche, 0.21, 0.22, WOOD, Mat.Wood, true)
+	lien(m, "Poignée", manche, V(0, 3.071, 1.75), 0.24, 0.235, COLORS.BC, Mat.Wood, true)
+	lien(m, "Tige de piston", V(0, 2.33, 0.023), tete, 0.136, 0.14, c, Mat.Metal, true)
 end
 
 ARCH.canal = function(m, c)
