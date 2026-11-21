@@ -221,6 +221,11 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 
 ## Journal (5 lignes maximum par session)
 
+- 21/11 (2) · Claude : C6, C7 faits, C12 côté serveur (plan de région par étapes, docs/PERFORMANCE.md) ; 21 formes de
+  construction, concours dressage/élevage, quêtes ronde/rencontrer/troupeau, route encombrée, chien de berger, cascades ;
+  passage X19 traité (états machines/coffres). Inventaire 2 088/2 094. 54/54 bancs verts. À voir en Play : cascades,
+  route encombrée, chien de berger, concours, saccades au galop (P7).
+
 - 21/11 · Claude : relu les 52 commits Codex du 20/11 (RAS sauf bottes de marais cassées par les 9 emplacements →
   corrigé dans `Froid` + banc `froid`), C7 fini (torche), 2e vague Codex X15–X26 écrite. Serveur prêt pour X15 / X16 / X18 (`Systemes/Infos`,
   `Parcelles.check`, toasts « refus »). 50 bancs (economie rouge = sync.py absent).
