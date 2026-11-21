@@ -66,3 +66,16 @@ Questions d'origine :
 | Play : chaque recette d'objet aux 6 ateliers (juste assez → fabriqué, un de moins → refus) | **596 fabriquées juste, 84 refus de compétence corrects, 0 échec**. Le banc `recettes` lisait `skill` au lieu de `skillRaw` (faux échec du caparaçon) : corrigé. |
 | Play : chaque pièce d'équipement fabricable | **328 fabriquées juste, 0 échec** ; 299 au-delà du niveau du perso de test (non fabriquées pour ne pas toucher sa sauvegarde). |
 | Allure des props (Codex, banc `visuels_props`) | 417 props, 105 signalements → `docs/RAPPORT-BANC-PROPS.md`, tri et corrections en cours (phase 2). |
+
+## Parcours de `TEST-PLAY.md` rejoués par script en Play (21/11, PC fixe)
+
+| Parcours | Résultat |
+|---|---|
+| P1.2 ramasser à la main | OK (caillou cliqué, butin au sol ramassé) |
+| P1.4 abattre / miner | OK : bouleau en 7 coups → 3 bûches ; rocher → +3 pierres. Filon de fer : aucun à portée du point de test (non vu). |
+| P1.5 vendre / acheter au marchand | OK : 5 rondins vendus 20 or, corde achetée 4 or. Après un vol dans le village, l'autre marchand ferme boutique (voulu). |
+| P2.1 panneau de propriété | OK : 1er terrain gratuit, créé. |
+| P2.2 construire | OK : 2 murs posés, le même mur au même endroit refusé ; reprise autour de soi → matériaux rendus (voulu). |
+| P2.3 coffre, serrure, alarme | OK : coffre posé et verrouillé (`Verrouille`), alarme posée. |
+| P9.1 vol devant témoin, reddition | OK : 0 → 1 étoile ; « Je me rends » au shérif → 0 étoile. |
+| Reste au propriétaire | Ressenti (lisibilité, sans tutoriel), P4 en ligne, P5 à deux joueurs, mobile, 40 joueurs. |
