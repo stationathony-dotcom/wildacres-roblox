@@ -264,8 +264,8 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
   À voir en Play par le propriétaire : sons (7), miniature de lanterne, retour avec lit + journal, icônes après publication des atlas.
 
 - 21/11 soir · Codex · Correctif d’apparence (54069dc), chèvre (a8d776e) et icônes (30bbba0).
-  X21/X22/X24/X25/X26 committés. Place synchronisée dans la session parallèle (6596a5a).
-  Claude rapporte 55/55 bancs verts. Cette session n’a pas pu les relancer, le MCP exige une approbation indisponible.
+  X21/X22/X24/X25/X26 committés. Six scripts client vérifiés dans Studio, chèvre et miniature de lanterne présentes.
+  Banc complet relancé en Édition après synchronisation (6596a5a) : 55/55 verts en 109 s.
   À vérifier en Play : les sept sons, la miniature de lanterne et le retour avec lit et journal.
   Après publication des six atlas, contrôler les icônes du sac et de l’atelier.
 
