@@ -1,6 +1,6 @@
 -- Butin au sol, côté joueur (le serveur décide de tout : Systemes/Butin) :
 --   · les objets tombés tournent et flottent doucement (animation locale, zéro réseau) ;
---   · clic gauche / toucher un objet = le ramasser ; [E] sur l'invite marche aussi ;
+--   · le clic et le toucher passent par Interface.client ; [E] sur l'invite marche aussi ;
 --   · [Q] (manette : Y) = ramasser tout ce qui est autour.
 
 local Players = game:GetService("Players")
@@ -28,7 +28,6 @@ ProximityPromptService.PromptHidden:Connect(function(prompt)
 end)
 
 local ANIM_RANGE = 90
-local CLICK_RANGE = 14
 
 -- ---------------------------------------------------------------- animation
 local items = {} -- part -> phase
@@ -65,61 +64,11 @@ RunService.RenderStepped:Connect(function()
 end)
 
 -- ---------------------------------------------------------------- ramasser
-local function butinUnder(screenPos: Vector2): BasePart?
-	local cam = workspace.CurrentCamera
-	local folder = workspace:FindFirstChild("ButinAuSol")
-	if not cam or not folder then
-		return nil
-	end
-	local ray = cam:ViewportPointToRay(screenPos.X, screenPos.Y)
-	local params = RaycastParams.new()
-	params.FilterType = Enum.RaycastFilterType.Include
-	params.FilterDescendantsInstances = { folder }
-	local hit = workspace:Raycast(ray.Origin, ray.Direction * 200, params)
-	if not hit then
-		-- petite tolérance : l'objet le plus proche du rayon (les cubes sont petits)
-		local best, bestD = nil, 1.6
-		for part in items do
-			if part.Parent then
-				local v = part.Position - ray.Origin
-				local along = v:Dot(ray.Direction)
-				if along > 0 then
-					local d = (v - ray.Direction * along).Magnitude
-					if d < bestD then
-						best, bestD = part, d
-					end
-				end
-			end
-		end
-		return best
-	end
-	return hit.Instance
-end
-
-local function tryPick(screenPos: Vector2): boolean
-	local part = butinUnder(screenPos)
-	local char = player.Character
-	local root = char and char:FindFirstChild("HumanoidRootPart")
-	if not part or not root or (part.Position - root.Position).Magnitude > CLICK_RANGE then
-		return false
-	end
-	local id = part:GetAttribute("ButinId")
-	if id then
-		Action:FireServer("ramasser", { id = id })
-		return true
-	end
-	return false
-end
-
 UserInputService.InputBegan:Connect(function(input, processed)
 	if processed or WindowNav.isOpen() then
 		return
 	end
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		tryPick(UserInputService:GetMouseLocation())
-	elseif input.UserInputType == Enum.UserInputType.Touch then
-		tryPick(Vector2.new(input.Position.X, input.Position.Y))
-	elseif input.KeyCode == Enum.KeyCode.Q or input.KeyCode == Enum.KeyCode.ButtonY then
+	if input.KeyCode == Enum.KeyCode.Q or input.KeyCode == Enum.KeyCode.ButtonY then
 		if input.KeyCode == Enum.KeyCode.ButtonY then
 			for prompt in secondaryPrompts do
 				if prompt.Parent and prompt.Enabled then return end

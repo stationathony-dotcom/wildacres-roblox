@@ -77,14 +77,9 @@ local function label(parent, text, size, color, font)
 end
 
 local function button(parent, text, color)
-	local b = Instance.new("TextButton")
-	b.AutoButtonColor = true
-	b.BackgroundColor3 = color or WOOD
-	b.Text = text
-	b.TextColor3 = PAPER
-	b.Font = Enum.Font.GothamBold
-	b.TextSize = 14
-	b.Parent = parent
+	local b = Composants.bouton({
+		Text = text, TextColor3 = PAPER, TextSize = 14, BackgroundColor3 = color or WOOD, Parent = parent,
+	})
 	Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
 	return b
 end
@@ -108,7 +103,6 @@ local function box(parent, placeholder, text)
 	return b
 end
 
-local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 Composants.titre({
 	Text = "Hôtel des ventes", Font = Enum.Font.Fantasy, TextSize = 24, TextColor3 = INK,
 	Position = UDim2.fromOffset(18, 10), Size = UDim2.new(1, -200, 0, 32), Parent = frame,
@@ -530,7 +524,7 @@ function render()
 	for _, t in { { "acheter", "Acheter" }, { "vendre", "Vendre" }, { "mes", "Mes ventes" } } do
 		local b = button(tabs, t[2], WOOD)
 		Composants.etatBouton(b, t[2], tab == t[1] and "selectionne" or nil, WOOD)
-		b.Size = UDim2.fromOffset(120, 32)
+		b.Size = UDim2.new(1 / 3, -5, 0, 32)
 		b.Activated:Connect(function()
 			tab = t[1]
 			render()

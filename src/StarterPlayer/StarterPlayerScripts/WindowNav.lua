@@ -41,10 +41,10 @@ function WindowNav.rememberMenu(restore)
 	end)
 end
 
-function WindowNav.watch(panel, closeButton, close, screen)
+function WindowNav.watch(panel, closeButton, close, screen, initialFocus)
 	local layer = panel:FindFirstAncestorWhichIsA("ScreenGui")
 	local source, property = screen or panel, screen and "Enabled" or "Visible"
-	local entry = { panel = panel, focus = closeButton, close = close, layer = layer }
+	local entry = { panel = panel, focus = initialFocus or closeButton, close = close, layer = layer }
 	closeButton.Text = Composants.PICTOGRAMMES.fermer
 	closeButton.Selectable = true
 	panel.Active = true
@@ -102,6 +102,10 @@ function WindowNav.bindMenu(menu, toggle, close)
 	ContextActionService:BindActionAtPriority("WildAcresRetour", function(_, state)
 		local entry = topWindow()
 		local selected = GuiService.SelectedObject
+		local focused = UserInputService:GetFocusedTextBox()
+		if entry and focused and focused:IsDescendantOf(entry.panel) then
+			return Enum.ContextActionResult.Pass
+		end
 		if not entry and not (selected and selected:IsDescendantOf(menu)) then
 			return Enum.ContextActionResult.Pass
 		end

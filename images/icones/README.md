@@ -1,6 +1,6 @@
 # Icônes peintes de Wild Acres
 
-Les six planches transparentes sont associées aux identifiants du jeu dans
+Les sept planches transparentes sont associées aux identifiants du jeu dans
 [`IconesPeintes.lua`](../../src/StarterPlayer/StarterPlayerScripts/IconesPeintes.lua).
 Le sac, la barre rapide, les cases d’équipement et l’atelier utilisent l’illustration lorsqu’elle est disponible et gardent
 la miniature 3D ou l’emoji tant que l’identifiant de sa planche est vide.
@@ -15,6 +15,7 @@ la miniature 3D ou l’emoji tant que l’identifiant de sa planche est vide.
 | [Atlas équipement](atlas-equipement.png) | `equipement` | 1 263 × 1 246 | Armes, protections, accessoires et vêtements |
 | [Atlas matières et mobilier](atlas-matieres-mobilier.png) | `matieresMobilier` | 1 254 × 1 254 | Butin, ressources et huit objets à poser |
 | [Atlas truffe](atlas-truffe.png) | `truffe` | 512 × 256 | Truffe et omelette aux truffes |
+| [Atlas artisanat avancé](atlas-artisanat-avance.png) | `artisanatAvance` | 1 448 × 1 086 | Haches de jet, bois de cœur, caparaçon, cuisine, partition, franchise et caillebotis |
 
 Importer chaque PNG dans Roblox avec son alpha et son cadrage complet. Après approbation,
 renseigner l’entrée correspondante avec `asset = "rbxassetid://…"` et la largeur et la hauteur
@@ -80,6 +81,18 @@ Les entrées `equipement:` correspondent à un nom ou à une forme reconnue par 
 | --- | --- |
 | Truffe (`truffle`, 🍄) | Omelette aux truffes (`truffle_omelette`, 🍳) |
 
+### Atlas artisanat avancé
+
+| Ligne | Colonne 1 | Colonne 2 | Colonne 3 | Colonne 4 |
+| --- | --- | --- | --- | --- |
+| 1 | Hache de jet (`throwing_axe`) | Caparaçon (`caparison`) | Partition (`music_sheet`) | Fromage truffé (`truffle_cheese`) |
+| 2 | Plateau du maître pêcheur (`fisher_platter`) | Bois de cœur (`heartwood`) | Lettre de franchise (`franchise_letter`) | Caillebotis (`bloc:caillebotis`, géométrie `slats`) |
+| 3 | Arc de bois de cœur | Brigandine de bois de cœur | Haches de jet du forestier | Haches de jet du franc-tireur |
+
+La troisième ligne correspond aux quatre noms d’équipement exacts sous le préfixe `equipement:`.
+Les caillebotis en bois et en pin partagent la case de forme. Les emojis de secours et les miniatures 3D
+restent disponibles pendant la publication. Le pic d’alpha aux jointures de cette planche est de 1/255.
+
 La lanterne murale garde sa case dans l’atlas matières et mobilier. Avant publication, elle affiche la miniature 3D ou l’emoji 🏮.
 Les séparations des planches X25 ont été contrôlées sur le canal alpha des PNG. L’aperçu des cinq premières
 planches utilise les rectangles du module Lua et réduit chaque case à 36 px. [Contrôle à 36 px](controle-36px.png).
@@ -96,6 +109,18 @@ Le cristal ancien est représenté par une gemme violette facettée.
 Pour la planche truffe, les prompts ImageGen demandaient deux icônes peintes en trois-quarts sur fond transparent,
 lisibles à 36 px sous une lumière ambrée. La première montre une truffe noire entière et une moitié veinée. La seconde
 montre une omelette dorée pliée, garnie de lamelles de truffe sur une assiette de terre cuite.
+
+Pour l’atlas artisanat avancé, ImageGen intégré a reçu la grille de trois rangées ci-dessus et la description
+de douze icônes médiévales peintes à la main, en trois-quarts, éclairées à l’ambre, aux silhouettes lisibles à 36 px.
+La composition demande des marges transparentes, sans titres ni cadres. Les deux paires de haches se distinguent
+par la largeur des fers et l’enroulement de cuir. Les rectangles suivent les séparations transparentes du PNG.
+
+<details>
+<summary>Prompt ImageGen de l’atlas artisanat avancé</summary>
+
+> Use case: stylized-concept. Make a single transparent PNG sprite atlas for Wild Acres, an original medieval crafting RPG. Exactly twelve separated hand-painted inventory icons in a strictly regular four-column by three-row landscape grid (canvas ratio 4:3, equal square cells). Object centers at 12.5%, 37.5%, 62.5%, 87.5% width and 16.67%, 50%, 83.33% height. Keep each icon within the central 70% of its cell in both axes with ample fully transparent gutters for cropping. Row 1 left to right: a single modest iron throwing hatchet with short wooden haft; a folded burgundy and gold caparison (medieval padded horse cloth armor with straps); an opened cream parchment sheet with musical notes; a wedge of pale cheese with distinct black truffle flecks and dark rind. Row 2: a large glazed ceramic fish platter with one cooked whole fish and two small green garnishes; a pair of heartwood billets with deep dark reddish cores and oak bark; a tightly rolled cream parchment grant with red wax seal and gold cord; a wooden walkway tile made of five parallel spaced flat slats over two low crossbattens, with daylight gaps clearly visible. Row 3: a heartwood longbow with deep reddish brown wood, pale bowstring and green binding; a sleeveless heartwood brigandine chest garment made with small overlapping reddish wood plates riveted onto dark leather; two crossed forester throwing axes with rustic oak handles and broad iron heads; two crossed skirmisher throwing axes with slender steel heads, forward points and dark leather-wrapped handles. Warm amber lighting, clean bold silhouettes readable at 36 px, saturated earthy colors, hand-painted material definition, consistent three-quarter view. No cell outlines, no backgrounds, no labels, no letters, no digits, no framing or watermarks, no cast shadows outside the objects. Preserve transparent alpha throughout gutters.
+
+</details>
 
 ### Prompt de l’atlas Wild Acres
 

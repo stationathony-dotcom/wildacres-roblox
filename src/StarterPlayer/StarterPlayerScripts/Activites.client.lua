@@ -43,20 +43,15 @@ local function label(parent, text, size, ts, color, bold)
 	return l
 end
 local function button(parent, text, size, color, fn)
-	local b = Instance.new("TextButton")
-	b.Text = Composants.texteCompatible(text)
-	b.Font = Enum.Font.GothamBold
-	b.TextSize = 13
-	b.TextColor3 = Color3.new(1, 1, 1)
-	b.BackgroundColor3 = color
-	b.Size = size
-	b.Parent = parent
-	corner(b)
-	b.Activated:Connect(function()
+	local b
+	b = Composants.bouton({
+		Text = text, TextSize = 13, BackgroundColor3 = color, Size = size, Parent = parent,
+	}, function()
 		b.Size = size - UDim2.fromOffset(4, 4)
 		TweenService:Create(b, TweenInfo.new(0.15, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Size = size }):Play()
 		fn()
 	end)
+	corner(b)
 	return b
 end
 
@@ -79,7 +74,6 @@ local function fit()
 	local vp = workspace.CurrentCamera and workspace.CurrentCamera.ViewportSize or Vector2.new(1280, 720)
 	scale.Scale = math.min(1, (vp.X - 32) / 520, (vp.Y - 40) / 470)
 end
-local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 Composants.titre({
 	Text = "Tableau d'affichage", TextSize = 20, TextColor3 = GOLD,
 	Size = UDim2.new(1, -60, 0, 30), Position = UDim2.fromOffset(14, 8), Parent = panel,
@@ -133,10 +127,12 @@ end
 local render
 local function choices(r, y, values, key, fmt)
 	for i, v in values do
-		local b = button(r, fmt(v), UDim2.fromOffset(76, 26), form[key] == v and GOLD or OFF, function()
+		local texte = fmt(v)
+		local b = button(r, texte, UDim2.fromOffset(76, 26), OFF, function()
 			form[key] = v
 			render(current)
 		end)
+		Composants.etatBouton(b, texte, form[key] == v and "selectionne" or nil, OFF)
 		b.Position = UDim2.fromOffset(120 + (i - 1) * 80, y)
 	end
 end

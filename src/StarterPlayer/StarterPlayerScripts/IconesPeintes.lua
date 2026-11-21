@@ -68,7 +68,35 @@ local atlas = {
 		y = { 0, 256 },
 		cellules = { "truffle", "truffle_omelette" },
 	},
+	artisanatAvance = {
+		asset = "",
+		taille = Vector2.new(1448, 1086),
+		x = { 0, 368, 723, 1078, 1448 },
+		y = { 0, 362, 719, 1086 },
+		cellules = {
+			"throwing_axe", "caparison", "music_sheet", "truffle_cheese",
+			"fisher_platter", "heartwood", "franchise_letter", "bloc:caillebotis",
+			"equipement:Arc de bois de cœur", "equipement:Brigandine de bois de cœur",
+			"equipement:Haches de jet du forestier", "equipement:Haches de jet du franc-tireur",
+		},
+	},
 }
+
+local secours = {
+	throwing_axe = "⚔️", caparison = "🐎", music_sheet = "🎼", truffle_cheese = "🧀",
+	fisher_platter = "🐟", heartwood = "🌳", franchise_letter = "📜", ["bloc:caillebotis"] = "🔲",
+	["equipement:Arc de bois de cœur"] = "🏹", ["equipement:Brigandine de bois de cœur"] = "🛡️",
+	["equipement:Haches de jet du forestier"] = "⚒️", ["equipement:Haches de jet du franc-tireur"] = "⚔️",
+}
+
+local function cleBloc(id)
+	local forme = id:match("^blk_([^_]+)_[^_]+$")
+	return forme and "bloc:" .. forme
+end
+
+function M.secours(id, parDefaut)
+	return secours[id] or secours[cleBloc(id)] or parDefaut
+end
 
 local cellules = {}
 local function pixel(source, largeurSource, largeurPubliee)
@@ -93,8 +121,7 @@ for _, planche in atlas do
 end
 
 function M.image(id, size, dim): ImageLabel?
-	local forme = id:match("^blk_([^_]+)_[^_]+$")
-	local cellule = cellules[id] or (forme and cellules["bloc:" .. forme])
+	local cellule = cellules[id] or cellules[cleBloc(id)]
 	if not cellule or cellule.asset == "" then return nil end
 	local image = Instance.new("ImageLabel")
 	image.Name = "IconePeinte"

@@ -683,7 +683,13 @@ local function game_()
 	local inv = { inv = {}, gear = {}, equipped = {}, stats = {} }
 
 	local function itemInfo(id: string)
-		return Config.ITEMS[id] or { name = id, icon = "❔" }
+		local info = Config.ITEMS[id]
+		if not info then return { name = id, icon = "❔" } end
+		local icone = IconesPeintes.secours(id, info.icon)
+		if icone == info.icon then return info end
+		local affichage = table.clone(info)
+		affichage.icon = icone
+		return affichage
 	end
 
 	Remotes:WaitForChild("Inventory").OnClientEvent:Connect(function(data)
@@ -695,6 +701,7 @@ local function game_()
 	end)
 
 	-- ---------------------------------------------------------------- Infobulle (façon WoW)
+	local selectionGui = game:GetService("GuiService")
 	local QUALITY = {
 		Color3.fromRGB(235, 235, 235), -- commun
 		Color3.fromRGB(30, 255, 0), -- peu commun (outils, équipement)
@@ -747,8 +754,8 @@ local function game_()
 		tip.Visible = false
 		tipActions = nil
 	end
-	local function placeTip()
-		local m = UserInputService:GetMouseLocation()
+	local function placeTip(source)
+		local m = source and (source.AbsolutePosition + source.AbsoluteSize / 2) or UserInputService:GetMouseLocation()
 		local s = uiScale.Scale
 		local vp = workspace.CurrentCamera.ViewportSize
 		local x, y = m.X + 18, m.Y + 6
@@ -761,7 +768,9 @@ local function game_()
 		tip.Position = UDim2.fromOffset(x / s, y / s)
 	end
 	-- lines = { {texte, couleur?, taille?} } ; actions = { {texte, fonction} } (boutons, infobulle épinglée)
-	local function showTip(lines, actions)
+	local function showTip(lines, actions, source)
+		local manette = source and UserInputService:GetLastInputType().Name:match("^Gamepad")
+		local premiereAction
 		clear(tip)
 		for i, l in lines do
 			tipLine(l[1], l[2], l[3], i)
@@ -772,6 +781,7 @@ local function game_()
 				{ new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 6) }) })
 			for _, a in actions do
 				local b = button(a[1], a[3] or C.panel2, function()
+					if manette and source.Parent then selectionGui.SelectedObject = source end
 					hideTip()
 					a[2]()
 				end)
@@ -779,10 +789,12 @@ local function game_()
 				b.TextSize = 13
 				b.ZIndex = 82
 				b.Parent = row
+				premiereAction = premiereAction or b
 			end
 		end
 		tip.Visible = true
-		placeTip()
+		placeTip(source)
+		if manette and premiereAction then selectionGui.SelectedObject = premiereAction end
 	end
 	local function itemLines(id: string, n: number?)
 		local info = itemInfo(id)
@@ -820,6 +832,9 @@ local function game_()
 		end
 		if info.use and USE_TEXT[info.use] then
 			table.insert(lines, { USE_TEXT[info.use], Color3.fromRGB(30, 255, 0) })
+		end
+		if id == "charter" then
+			table.insert(lines, { "Sert à fonder une ville à cet endroit.", C.gold })
 		end
 		if info.lock then
 			table.insert(lines, { "Se pose sur une porte ou un coffre (niveau " .. info.lock .. ")", Color3.fromRGB(30, 255, 0) })
@@ -1018,9 +1033,14 @@ local function game_()
 		hotSaved = true
 		send("hotbar_set", { slots = hotSlots })
 	end
+	local openCharte
+	panels.CharteVille, openCharte = require(script.Parent:WaitForChild("CharteVille")).mount(gui, uiScale, send)
 	local function useItem(id: string)
 		local info = itemInfo(id)
-		if info.food or info.use or info.lock then
+		if id == "charter" then
+			hideTip()
+			openCharte()
+		elseif info.food or info.use or info.lock then
 			send("eat", { item = id })
 		elseif info.place then
 			if info.claim then
@@ -1398,7 +1418,7 @@ local function game_()
 				cell.Activated:Connect(function()
 					-- clic simple (ou toucher sur mobile) : infobulle épinglée avec les actions
 					local actions = {}
-					local verb = info.food and "Manger" or ((info.use or info.lock) and "Utiliser" or (info.place and "Poser" or nil))
+					local verb = info.food and "Manger" or ((id == "charter" or info.use or info.lock) and "Utiliser" or (info.place and "Poser" or nil))
 					if verb then
 						table.insert(actions, { verb, function()
 							useItem(id)
@@ -1413,7 +1433,7 @@ local function game_()
 							send("repair", { id = id })
 						end })
 					end
-					showTip(itemLines(id, n), actions)
+					showTip(itemLines(id, n), actions, id == "charter" and cell or nil)
 				end)
 			end
 		end
@@ -3297,60 +3317,8 @@ local function game_()
 	Players.PlayerAdded:Connect(watch)
 
 	-- ---------------------------------------------------------------- Groupe
-	local groupBox = new("Frame", { Size = UDim2.fromOffset(200, 0), AutomaticSize = Enum.AutomaticSize.Y, Position = UDim2.fromOffset(14, 90), BackgroundColor3 = C.panel, BackgroundTransparency = 0.25, Visible = false, Parent = gui },
-		{ corner(8), pad(6), new("UIListLayout", { Padding = UDim.new(0, 2) }) })
-	local groupIds = {}
-	local highlights = {}
-	local function refreshGroup()
-		for _, h in highlights do
-			h:Destroy()
-		end
-		table.clear(highlights)
-		for _, c in groupBox:GetChildren() do
-			if c:IsA("TextLabel") or c:IsA("TextButton") then
-				c:Destroy()
-			end
-		end
-		groupBox.Visible = #groupIds > 0
-		if #groupIds == 0 then
-			return
-		end
-		label({ Text = "👥 Groupe (+10 % XP ensemble)", Font = BOLD, TextSize = 13, TextColor3 = C.gold, Size = UDim2.new(1, 0, 0, 18), Parent = groupBox })
-		for _, uid in groupIds do
-			local m = Players:GetPlayerByUserId(uid)
-			if m and m ~= player then
-				local l = label({ Name = "M" .. uid, Text = m.DisplayName, TextSize = 13, Size = UDim2.new(1, 0, 0, 18), Parent = groupBox })
-				local _ = l
-				if m.Character then
-					local h = Instance.new("Highlight")
-					h.FillTransparency = 1
-					h.OutlineColor = C.green
-					h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-					h.Parent = m.Character
-					table.insert(highlights, h)
-				end
-			end
-		end
-		local leave = button("Quitter le groupe", C.red, function()
-			send("group_leave")
-		end)
-		leave.Size = UDim2.new(1, 0, 0, 26)
-		leave.TextSize = 12
-		leave.Parent = groupBox
-	end
-	RunService.Heartbeat:Connect(function()
-		if #groupIds == 0 then
-			return
-		end
-		local me = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-		for _, uid in groupIds do
-			local m = Players:GetPlayerByUserId(uid)
-			local l = groupBox:FindFirstChild("M" .. uid)
-			local r = m and m.Character and m.Character:FindFirstChild("HumanoidRootPart")
-			if l and r and me then
-				l.Text = m.DisplayName .. "  ·  " .. math.floor((r.Position - me.Position).Magnitude) .. " m"
-			end
-		end
+	local renderGroup = require(script.Parent:WaitForChild("GroupeHud")).mount(gui, uiScale, C, function()
+		send("group_leave")
 	end)
 	local gInvite = new("Frame", { Size = UDim2.fromOffset(420, 110), Position = UDim2.new(0.5, 0, 0, 240), AnchorPoint = Vector2.new(0.5, 0), BackgroundColor3 = C.panel, Visible = false, Parent = gui, ZIndex = 25 }, { corner(12), stroke(C.green, 2) })
 	local gText = label({ Text = "", Font = BOLD, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.new(1, -20, 0, 40), Position = UDim2.fromOffset(10, 8), Parent = gInvite, ZIndex = 26 })
@@ -3372,8 +3340,7 @@ local function game_()
 			return
 		end
 		if data.kind == "group" then
-			groupIds = data.members or {}
-			refreshGroup()
+			renderGroup(data.members or {})
 		elseif data.kind == "group_invite" then
 			gText.Text = "👥 " .. data.from .. " t'invite dans son groupe."
 			gInvite.Visible = true
@@ -3408,7 +3375,6 @@ local function game_()
 		end
 		other.CharacterAdded:Connect(function(c)
 			groupPrompt(other, c)
-			task.defer(refreshGroup)
 		end)
 		if other.Character then
 			task.spawn(groupPrompt, other, other.Character)
@@ -3754,7 +3720,7 @@ local function game_()
 		if processed or not building or WindowNav.isOpen() then
 			return
 		end
-		if (input.UserInputType == Enum.UserInputType.MouseButton1 and not MOBILE) or input.KeyCode == Enum.KeyCode.ButtonR2 then
+		if input.KeyCode == Enum.KeyCode.ButtonR2 then
 			placeNow()
 		elseif input.KeyCode == Enum.KeyCode.R or input.KeyCode == Enum.KeyCode.ButtonR1 then
 			buildRot = (buildRot + 1) % 4
@@ -3909,14 +3875,13 @@ local function game_()
 		local result = workspace:Raycast(ray.Origin, ray.Direction * 150, params)
 		setTarget(result and targetOf(result.Instance) or nil)
 	end
+	cibleApi.selectAt = selectAt
 	UserInputService.InputBegan:Connect(function(input, processed)
-		if processed or building then
+		if processed or building or WindowNav.isOpen() then
 			return
 		end
 		if input.UserInputType == Enum.UserInputType.MouseButton2 then
 			rightStart = UserInputService:GetMouseLocation()
-		elseif input.UserInputType == Enum.UserInputType.Touch then
-			selectAt(Vector2.new(input.Position.X, input.Position.Y))
 		elseif input.KeyCode == Enum.KeyCode.Escape then
 			setTarget(nil)
 		end
@@ -3931,7 +3896,7 @@ local function game_()
 			local start = rightStart
 			rightStart = nil
 			local pos = UserInputService:GetMouseLocation()
-			if start and not processed and not building and (pos - start).Magnitude <= 5 then
+			if start and not processed and not building and not WindowNav.isOpen() and (pos - start).Magnitude <= 5 then
 				selectAt(pos)
 			end
 		end
@@ -4037,6 +4002,37 @@ local function game_()
 	end
 
 	-- ---------------------------------------------------------------- Commandes
+	local function ramasserVise(pos: Vector2): boolean
+		local cam = workspace.CurrentCamera
+		local dossier = workspace:FindFirstChild("ButinAuSol")
+		local racine = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+		if not (cam and dossier and racine) then return false end
+		local rayon = cam:ViewportPointToRay(pos.X, pos.Y)
+		local params = RaycastParams.new()
+		params.FilterType = Enum.RaycastFilterType.Include
+		params.FilterDescendantsInstances = { dossier }
+		local impact = workspace:Raycast(rayon.Origin, rayon.Direction * 200, params)
+		local objet = impact and impact.Instance
+		local id = objet and (objet.Position - racine.Position).Magnitude <= 14 and objet:GetAttribute("ButinId")
+		if not id then
+			-- Tolérance autour du rayon pour les petits objets ramassables à portée.
+			local meilleurEcart = 1.6
+			for _, part in dossier:GetChildren() do
+				local candidat = part:IsA("BasePart") and part:GetAttribute("ButinId")
+				if not candidat or (part.Position - racine.Position).Magnitude > 14 then continue end
+				local v = part.Position - rayon.Origin
+				local profondeur = v:Dot(rayon.Direction)
+				local ecart = (v - rayon.Direction * profondeur).Magnitude
+				if profondeur > 0 and ecart < meilleurEcart then
+					id, meilleurEcart = candidat, ecart
+				end
+			end
+		end
+		if not id then return false end
+		send("ramasser", { id = id })
+		return true
+	end
+
 	-- récolte façon Minecraft : un clic sur une touffe « Recoltable » (blé du village…) la cueille
 	local function recolteVisee(touch: Vector3?): (string?, string?, Model?, boolean?)
 		local cam = workspace.CurrentCamera
@@ -4133,15 +4129,16 @@ local function game_()
 		local t = cibleApi.get()
 		send("hit", { target = t and t:GetAttribute("EnemyId") or nil })
 	end
-	-- Clic gauche : récolte visée, usage de l’outil ou attaque. Maintenir répète la récolte.
+	-- Clic gauche ou toucher : un seul chemin pour le butin, la pose, la récolte ou le coup.
+	-- Maintenir répète la récolte.
 	-- Le serveur fixe la cadence (un coup / 0,25 s) : cliquer vite ne va pas plus vite.
 	local holding = 0
 	UserInputService.InputBegan:Connect(function(input, processed)
-		if processed or building or WindowNav.isOpen() then
+		if processed or WindowNav.isOpen() then
 			return
 		end
 		if input.KeyCode == Enum.KeyCode.ButtonR2 then
-			if not strikeAim() then
+			if not building and not strikeAim() then
 				hit()
 			end
 			return
@@ -4151,6 +4148,13 @@ local function game_()
 			holding += 1
 			local me = holding
 			local tp = touch and input.Position or nil
+			local position = touch and Vector2.new(tp.X, tp.Y) or UserInputService:GetMouseLocation()
+			if ramasserVise(position) then return end
+			if building then
+				if not touch and not MOBILE then placeNow() end
+				return
+			end
+			if touch then cibleApi.selectAt(position) end
 			if strikeAim(tp) then
 				task.spawn(function()
 					task.wait(0.3)
@@ -4219,7 +4223,7 @@ local function game_()
 	end
 
 	UserInputService.InputBegan:Connect(function(input, processed)
-		if processed then
+		if processed or panels.CharteVille.Visible then
 			return
 		end
 		local k = input.KeyCode
