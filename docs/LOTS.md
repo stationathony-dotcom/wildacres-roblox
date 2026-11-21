@@ -263,10 +263,11 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
   l'écran d'apparence trouvé → corrigé par Codex (commité par Claude : Codex headless n'a pas accès à Git). 55/55 bancs verts.
   À voir en Play par le propriétaire : sons (7), miniature de lanterne, retour avec lit + journal, icônes après publication des atlas.
 
-- 21/11 soir · Codex · Correctif d’apparence, modèle `Chevre` et icônes truffe, omelette et lanterne prêts sur disque.
-  X21, X22, X24, X25 et X26 attendent la synchronisation Studio, les bancs et les commits. Passages serveur X24 cochés.
-  En Édition : lancer `ConstruireModeles.chevre()` et les bancs. En Play : création, barbier, tailleur, chèvre, lanterne, retour et sons.
-  Après publication des six atlas : contrôler les icônes du sac et de l’atelier, puis compléter les captures.
+- 21/11 soir · Codex · Correctif d’apparence (54069dc), chèvre (a8d776e) et icônes (30bbba0).
+  X21/X22/X24/X25/X26 committés. Place synchronisée dans la session parallèle (6596a5a).
+  Claude rapporte 55/55 bancs verts. Cette session n’a pas pu les relancer, le MCP exige une approbation indisponible.
+  À vérifier en Play : les sept sons, la miniature de lanterne et le retour avec lit et journal.
+  Après publication des six atlas, contrôler les icônes du sac et de l’atelier.
 
 - 21/11 · Codex · Pause à la demande du propriétaire. X15–X19 livrés et synchronisés dans Studio. X20 était déjà fait.
   Après synchronisation sur l’autre PC, lancer `ConstruireModeles.animauxFerme()`, `tableauQuetes()` et `reperesDepart()` en Édition.
