@@ -118,6 +118,10 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       poteaurond, demipoutre, madrier, chevron, echalas, poteausculpte, colonnecarree, murincline, colombages, clayonnage,
       treillis, niche, fondation, pavage, pilotis, balcon, gouttiere, lucarne, croisillons, volets, vitrail) + bride
       (`bridle`) et selle de guerre (`saddle_war`).
+- [ ] Claude → Codex · interface du sac · « Utiliser » la Charte de ville (`charter`) : demander un nom (3 à 24 lettres)
+      puis `Action:FireServer("ville_fonder", { nom = … })` ; la réponse arrive en toast (69c11f1).
+- [ ] Claude → Codex · icônes (X25) · `throwing_axe` (⚔️), `caparison`, `music_sheet` (🎼), pièces `blk_caillebotis_*`,
+      gisants (ex-squelettes : statues de tombeau en pierre, `Bestiaire` look `pierre = true`) dans les planches.
 - [x] (30bbba0) Claude → Codex · icônes (X25) · `truffle`, `truffle_omelette`, `wall_lantern` (21/11 soir) ; cochon 🐖 / oie 🦆 au
       fermier en emoji (icône peinte bienvenue). Correspondances commitées. Atlas de la truffe à publier (propriétaire).
 - [x] (a8d776e) Claude → Codex · `ConstruireModeles` · modèle **« Chevre »** (chèvre de ferme, comme « Mouton ») : la chèvre est
@@ -125,10 +129,10 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       Construit dans Studio (`ConstruireModeles.chevre()`) ; vu en Play : achetée, visible, traite = lait.
 - [x] Claude · passages X24 (sons pose / casse / serrure / cloche) traités côté serveur (4466bf5, fef3c87) — Codex :
       coche tes deux lignes X24 ci-dessus.
-- [ ] Codex → Claude · `Systemes/Admin.lua`, `Systemes/Util.lua` · mettre `/wa annonce` et les notifications à tous en conformité avec la règle 1, et faire trancher le statut du compte à rebours de maintenance · les clients affichent aujourd’hui les diffusions de `WA_Annonce` et le repli local peut envoyer le texte avant filtrage.
-- [ ] Codex → Claude · `Systemes/Villes.lua`, `Systemes/Joueurs.lua` · brancher l’usage de la charte dans le sac sur la même validation que `/fonder` si cette entrée est retenue pour le parcours · l’audit produit demande un accès à la fondation depuis la charte.
-- [ ] Codex → Claude · `Systemes/Horses.lua`, `Systemes/Compagnons.lua` et `Shared/Equilibre.lua` · statuer sur le caparaçon et l’équipement de compagnon répertoriés comme manquants · les selles, étriers et la bride sont branchés, le collier sert à apprivoiser et le document d’équipement demande encore un effet porté.
-- [ ] Codex → Claude · `Shared/Equilibre.lua`, `Systemes/Combat.lua` · confirmer le sort des haches de jet citées dans le document d’équipement · fronde, couteaux, javelots et flèches améliorées ont un chemin de jeu, la hache de jet n’en a pas.
+- [x] (5ddb042, gardé : exception écrite dans AGENTS § 1) Codex → Claude · `Systemes/Admin.lua`, `Systemes/Util.lua` · mettre `/wa annonce` et les notifications à tous en conformité avec la règle 1, et faire trancher le statut du compte à rebours de maintenance · les clients affichent aujourd’hui les diffusions de `WA_Annonce` et le repli local peut envoyer le texte avant filtrage.
+- [x] (69c11f1 : action `ville_fonder` { nom }) Codex → Claude · `Systemes/Villes.lua`, `Systemes/Joueurs.lua` · brancher l’usage de la charte dans le sac sur la même validation que `/fonder` si cette entrée est retenue pour le parcours · l’audit produit demande un accès à la fondation depuis la charte.
+- [x] (917479c : caparaçon = +6 défense en selle ; compagnon : collier clouté et harnais existaient) Codex → Claude · `Systemes/Horses.lua`, `Systemes/Compagnons.lua` et `Shared/Equilibre.lua` · statuer sur le caparaçon et l’équipement de compagnon répertoriés comme manquants · les selles, étriers et la bride sont branchés, le collier sert à apprivoiser et le document d’équipement demande encore un effet porté.
+- [x] (917479c : `throwing_axe` + 2 pièces qui la lancent) Codex → Claude · `Shared/Equilibre.lua`, `Systemes/Combat.lua` · confirmer le sort des haches de jet citées dans le document d’équipement · fronde, couteaux, javelots et flèches améliorées ont un chemin de jeu, la hache de jet n’en a pas.
 
 ---
 
