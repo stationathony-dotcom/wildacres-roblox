@@ -7,6 +7,12 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.3 — 2026-11-21
 
+- **Justice** — Un PNJ assommé retrouvé n’accuse plus tout le serveur : seul le joueur vu sur place prend des étoiles ; la nouvelle ne court que dans la région.
+- **Créatures** — Les squelettes deviennent des gisants, statues de tombeau qui se lèvent la nuit (créatures originales).
+- **Récolte** — Roseaux et nénuphars se ramassent au clic et repoussent.
+- **Armes et monture** — Haches de jet (munition et deux pièces pour les lancer). Le caparaçon protège le cavalier en selle.
+- **Nouveaux objets** — Caillebotis (pièce de construction), partition (se joue), osselets (ex-jeu de dés).
+- **Règles** — Arrivée d’un joueur annoncée à ses amis et à son clan seulement. Poissons rares et recettes des livres débloqués par la compétence entraînée, pas par l’équipement. Charte de ville utilisable depuis le sac (serveur prêt).
 - **Lanterne murale** — Se fabrique à l’établi et se pose contre un mur, du côté où l’on se tient, potence tournée vers soi ; une par face, même sur un mur déjà posé. Elle s’allume la nuit et les ombres rôdeuses s’en écartent.
 - **Ferme** — Le fermier vend le cochon (il trouve des truffes, mets cher et omelette aux truffes au four) et l’oie (plumes pour flèches et javelots). La chèvre (lait) suivra dès que son modèle existe. Une bête achetée à la fois : on ne paie plus plusieurs fois pour une seule.
 - **Sons** — On entend la pose d’une pièce, d’un plan ou d’un meuble, la casse d’un mur, la pose d’une serrure et la cloche d’alarme, à l’endroit de l’action.
