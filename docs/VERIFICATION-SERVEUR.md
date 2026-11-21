@@ -44,7 +44,14 @@
 | `docs/EQUILIBRE-ECONOMIE.md` | OK | Alertes du banc (`créatures niveau 7 et 9` TROP, souche / cactus à mains nues faibles) déjà notées. |
 | `docs/PERFORMANCE.md` | OK | Mesures Play à faire (P7). |
 
-## Questions au propriétaire
+## Questions au propriétaire — tranchées le 21/11 (« fais ce qui te semble logique »)
+
+- Groupe : limite de 5 retirée (règle 2), borne technique = 40 (capacité d'un monde).
+- Paliers hauts : plateau du maître pêcheur (pêche 32), fromage truffé (élevage 35), bois de cœur + arc et brigandine
+  (bûcheronnage 35), lettre de franchise (commerce 30, rend de la réputation au village).
+- Créatures de niveau 7 et 9 : gain gardé (risque), noté dans `EQUILIBRE-ECONOMIE.md`.
+
+Questions d'origine :
 
 1. **Groupe de 5 joueurs** (`Social.MAX_GROUP`) : on le garde, ou on l'ouvre (règle 2) ?
 2. **Paliers hauts des métiers** pêche, élevage, bûcheronnage, commerce : à ajouter (recettes ≥ 30) ?
