@@ -2078,7 +2078,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (615) Températures → Terres tempérées
 - [x] (616) Rivières → Serpent des rivières
 - [x] (617) Lacs → Pays des Lacs
-- [ ] (618) Cascades
+- [x] (618) Cascades → cascades (Systemes/Cascades)
 - [x] (619) Grottes → Grotte
 - [x] (620) Végétation évolutive → repousse (Moissons / Bosquets)
 - [x] (621) Ressources renouvelables → repousse (Moissons / Props)

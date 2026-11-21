@@ -529,6 +529,7 @@ IDEES = {'Réputation — Réputation individuelle auprès de chaque village': '
     '7 — Activités secondaires': 'Activites',
     '8 — Progression avancée': 'statXp, rangs, talents',
     '9 — Interface et accessibilité Roblox': 'lots Codex X1–X14 (2e vague X15–X26 en cours)'}
+SYNONYMES["Cascades"] = "cascades (Systemes/Cascades)"
 IDEES["Concours de dressage."] = "concours de dressage (Activites, 21/11)"
 DERNIER = 'fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)'
 

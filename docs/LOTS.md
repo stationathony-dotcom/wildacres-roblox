@@ -137,10 +137,10 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [x] **X16 · Motifs de refus et alertes lisibles** — FAIT 21/11 (a1e4209). Refus près de la pose, commandes
       de construction selon l’entrée, gains cumulés, danger prioritaire. Vérifié en Édition : ancrage du refus
       et cumul de deux gains. À voir en Play : contrôles et alertes pendant les récoltes.
-- [ ] **X17 · Composants d'interface communs** — en cours — Codex, 21/11. (ordre 8). Un module (titre, bouton, quantité, avertissement,
-      icône) utilisé par toutes les fenêtres ; états disponible / sélectionné / verrouillé avec couleur **et**
-      symbole (daltonisme). Remplacer d'abord les emojis ambigus.
-- [ ] **X18 · Périmètre de parcelle avant la pose.** Contour de la parcelle 12×12 au sol quand on tient le
+- [x] **X17 · Composants d'interface communs** — FAIT 21/11 (2f5e84d). Titres, boutons, quantités,
+      avertissements et pictogrammes partagés. Sélection et verrouillage visibles par symbole et par couleur.
+      Les trois états ont été vérifiés en Édition. À voir en Play : lisibilité et navigation des fenêtres.
+- [ ] **X18 · Périmètre de parcelle avant la pose** — en cours — Codex, 21/11. Contour de la parcelle 12×12 au sol quand on tient le
       panneau, rouge si chevauchement ou village, coût du terrain suivant affiché. Données : `Parcelles` (lecture
       seule ; besoin d'une fonction serveur → passage à Claude).
 - [ ] **X19 · État lisible à proximité** : culture (pousse, arrosée, prête), machine (roue à eau, four), coffre
@@ -182,10 +182,11 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       toujours données sur place.
 - [x] **C5 · Fin du bestiaire** — 20/11 : complet, 168 créatures (les 3 dernières sur les modèles de Codex). (`listes ennemi.txt`) : aquatiques, dragonnets, griffons, PNJ civils
       restants, faune passive restante — avec les formes existantes ; une forme neuve = passage à Codex.
-- [~] **C6 · Fin du catalogue** — 20/11 : 532 / 812 entrées déjà là (souvent sous un autre nom) ; ajouté 17 outils de
-      métier du sac ; reste surtout de la construction (formes × matières, couloir Codex) et du décor ; (`liste items.txt`, ~300 entrées) : rapprocher entrée par entrée de
-      `docs/REFERENCE.md` (déjà là sous un autre nom ?), ajouter le reste par lots dans `Equilibre`
-      avec un usage ; formes neuves = passage à Codex.
+- [x] **C6 · Fin du catalogue** — FAIT 21/11 : `tools/rapprocher.py` coche `docs/INVENTAIRE-MISSIONS.md` (objets,
+      créatures, quêtes, idées : 2 087 / 2 094) avec le nom en jeu ou la règle qui écarte ; ajouts : 21 formes de
+      construction + 4 matières (bb861c5), bride / selle de guerre, concours de dressage / élevage, quêtes ronde /
+      rencontrer / troupeau, route encombrée, chien de berger, cascades. Restent : cochon, oie (passage Codex) et
+      les mesures en Play (C12).
 - [x] **C7 · Harpon côté pêche et main gauche côté stats** — FAIT : harpon (ba4b1d5) ; la défense du bouclier passe
       déjà par `Gear.totals` (tous les emplacements) ; 21/11 : torche en main gauche = lumière des grottes, bottes
       lues dans le nouvel emplacement « boots » (régression des 9 emplacements, `Systemes/Froid`).
