@@ -77,7 +77,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] Claude → Codex · panneau de propriété (X18) · **aperçu avant la pose** (serveur prêt 21/11) :
       `Remotes.Infos:InvokeServer("parcelle", { x, z })` → `{ ok, motif, prix, n, half }` (10 appels/s max :
       ne demander qu'au changement de case). Contour = carré de `2 × half` studs centré sur le point.
-- [ ] Claude → Codex · interface (X16) · **toasts de sorte `"refus"`** : Batir (trop loin, trop haut, village,
+- [x] Claude → Codex · interface (X16, a1e4209) · **toasts de sorte `"refus"`** : Batir (trop loin, trop haut, village,
       même pièce, plus dans le sac) et Parcelles (terrain d'autrui, panneau refusé) les envoient maintenant avec
       `kind = "refus"` → les afficher près du fantôme / du panneau (aujourd'hui : toast normal).
 - [ ] Claude → Codex · invite au survol (X19) · **état des cultures en attributs** sur le modèle `Culture`
@@ -134,11 +134,10 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [x] **X15 · Repères sur la carte** — FAIT 21/11 (b6bc44d). Cinq types dans la légende de la carte du monde,
       pose et retrait, sauvegarde par monde via `Infos`. Bancs Édition 54/54. À voir en Play : pose, retrait,
       reconnexion et commandes à la manette / au tactile.
-- [ ] **X16 · Motifs de refus et alertes lisibles** — en cours — Codex, 21/11. (ordre 7). Une pose refusée dit pourquoi (le serveur envoie
-      déjà un toast : l'afficher près du fantôme), rotation / valider / annuler visibles en mode [V], gains
-      répétés regroupés (« +5 Bois » au lieu de 5 toasts), alerte de combat ou de cambriolage qui reste
-      visible pendant une série de récoltes.
-- [ ] **X17 · Composants d'interface communs** (ordre 8). Un module (titre, bouton, quantité, avertissement,
+- [x] **X16 · Motifs de refus et alertes lisibles** — FAIT 21/11 (a1e4209). Refus près de la pose, commandes
+      de construction selon l’entrée, gains cumulés, danger prioritaire. Vérifié en Édition : ancrage du refus
+      et cumul de deux gains. À voir en Play : contrôles et alertes pendant les récoltes.
+- [ ] **X17 · Composants d'interface communs** — en cours — Codex, 21/11. (ordre 8). Un module (titre, bouton, quantité, avertissement,
       icône) utilisé par toutes les fenêtres ; états disponible / sélectionné / verrouillé avec couleur **et**
       symbole (daltonisme). Remplacer d'abord les emojis ambigus.
 - [ ] **X18 · Périmètre de parcelle avant la pose.** Contour de la parcelle 12×12 au sol quand on tient le
