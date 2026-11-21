@@ -2,6 +2,7 @@ local UserInputService = game:GetService("UserInputService")
 local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 
 local EtatsProches = {}
+local NOM_VERROU = { Coffre = "Coffre", Porte = "Porte", Cat_drawbridge = "Pont-levis", Cat_trapdoor = "Trappe" }
 
 function EtatsProches.lire(target)
 	while target and target ~= workspace do
@@ -22,7 +23,8 @@ function EtatsProches.lire(target)
 			end
 			local verrou = target:GetAttribute("Verrouille")
 			if type(verrou) == "boolean" then
-				return target, target:GetAttribute("NomEtat") or "Coffre", verrou and "Verrouillé" or "Déverrouillé"
+				local nom = target:GetAttribute("NomEtat") or NOM_VERROU[target.Name] or "Serrure"
+				return target, nom, verrou and "Verrouillé" or "Déverrouillé"
 			end
 		end
 		target = target.Parent
