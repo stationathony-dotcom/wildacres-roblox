@@ -83,6 +83,17 @@ local BIOME_FAUNA = {
 }
 WG.BIOME_FOES, WG.BIOME_FAUNA = BIOME_FOES, BIOME_FAUNA
 
+-- Pauses du calcul de plan (21/11, lot C12 : ~120 ms d'un bloc sur le PC portable = une saccade du serveur
+-- à chaque région traversée). Le serveur (World.init) y met `task.wait` quand c'est possible ; sinon rien.
+-- Les pauses ne changent AUCUN tirage : le plan obtenu est identique.
+WG.pauseHook = nil
+local function pause()
+	local h = WG.pauseHook
+	if h then
+		h()
+	end
+end
+
 function WG:plan(rx: number, rz: number)
 	local pkey = rx .. "," .. rz
 	local cached = self.planCache[pkey]
@@ -104,6 +115,7 @@ function WG:plan(rx: number, rz: number)
 	end
 	local poi = self:poiOf(rx, rz)
 
+	pause()
 	-- Distance aux routes
 	local roadD = table.create(N, 99)
 	local roads = self:roadsNear(rx, rz)
@@ -137,6 +149,7 @@ function WG:plan(rx: number, rz: number)
 		end
 	end
 
+	pause()
 	-- Poids des lieux, eau brute
 	local poiW = table.create(N, 0)
 	local inPoi = table.create(N, false)
@@ -160,7 +173,11 @@ function WG:plan(rx: number, rz: number)
 				water[i] = self:wetRaw(cx, cz)
 			end
 		end
+		if lz % 14 == 0 then
+			pause()
+		end
 	end
+	pause()
 
 	-- Distances eau / terre (jusqu'à 3 cases), sur la région + 1 case
 	local distW = table.create(N, 9)
@@ -194,8 +211,12 @@ function WG:plan(rx: number, rz: number)
 				distW[i] = found
 			end
 		end
+		if lz % 12 == 0 then
+			pause()
+		end
 	end
 
+	pause()
 	-- Niveaux, hauteurs, matières
 	local level = table.create(N, 0)
 	local H = table.create(N, Config.GROUND_Y)
@@ -442,6 +463,7 @@ function WG:plan(rx: number, rz: number)
 		end
 	end
 
+	pause()
 	-- Lieu de la région -------------------------------------------------
 	local o = plan.poi
 	if o then
@@ -576,6 +598,7 @@ function WG:plan(rx: number, rz: number)
 		end
 	end
 
+	pause()
 	-- Escaliers sur les falaises (jusqu'à 3 par région) --------------------
 	do
 		local cands = {}
@@ -664,6 +687,7 @@ function WG:plan(rx: number, rz: number)
 		end
 	end
 
+	pause()
 	-- Nature sauvage ------------------------------------------------------
 	local dist = math.sqrt(rx * rx + rz * rz)
 	-- cultures sauvages mûres (libres)

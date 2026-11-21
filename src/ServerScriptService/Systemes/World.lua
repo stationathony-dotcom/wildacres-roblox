@@ -15,10 +15,19 @@ local queue = {} -- régions à charger (clés)
 local queued = {}
 local busy = false
 
+local planThread = nil -- tâche qui calcule un plan de région et peut céder la main (lot C12)
+
 function World.init(g)
 	G = g
 	Config = G.Config
 	CELL, REGION = Config.CELL, Config.REGION
+	-- le calcul d'un plan de région cède la main entre ses étapes (lot C12), mais SEULEMENT dans la tâche de
+	-- chargement des régions : un système qui demande un plan pendant sa boucle ne doit jamais être suspendu
+	G.WG.pauseHook = function()
+		if planThread and coroutine.running() == planThread and coroutine.isyieldable() then
+			task.wait()
+		end
+	end
 	local f = workspace:FindFirstChild("Monde") or Instance.new("Folder")
 	f.Name = "Monde"
 	f.Parent = workspace
@@ -298,7 +307,13 @@ local function loadRegion(rx: number, rz: number)
 	G.Mondes.ensureRegion(rx, rz) -- état sauvegardé de la région (secteur lu au besoin)
 	-- Les couches de décor ajoutent et retirent des ressources à chaque chargement.
 	-- Garder le plan mémorisé intact pour les prochains chargements.
-	local plan = table.clone(G.wg:plan(rx, rz))
+	planThread = coroutine.running()
+	local okPlan, rawPlan = pcall(G.wg.plan, G.wg, rx, rz)
+	planThread = nil
+	if not okPlan then
+		error(rawPlan)
+	end
+	local plan = table.clone(rawPlan)
 	plan.props = table.clone(plan.props)
 	task.wait()
 	writeTerrain(plan)

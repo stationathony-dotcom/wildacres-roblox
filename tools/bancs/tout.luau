@@ -23,7 +23,7 @@ local RAPIDES = {
 	"quetes_lieux", "relations_pnj", "reputation", "resistance", "roue_eau", "save_instantane",
 	"securite", "selection", "sommeil_collectif", "stats", "talents", "tourelles", "tresors", "usure", "ventes", "villes",
 }
-local LOURDS = { "generation", "chateaux", "secteurs", "save_concurrence", "cascades" }
+local LOURDS = { "generation", "chateaux", "secteurs", "save_concurrence", "cascades", "perf_serveur" }
 
 local SAVE_ATTENDU = {
 	firstLoad = "new", saveA = true, bWhileLocked = "nil", releaseA = true, bAfterRelease = "ok", bGold = 70,
