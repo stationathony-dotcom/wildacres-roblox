@@ -105,6 +105,7 @@ function Machines.mill(player: Player, id: string)
 		G.Joueurs.add(player, "flour", d.mill.flour)
 		d.mill.flour = 0
 		G.Joueurs.sync(player)
+		Machines.refresh(d)
 		return
 	end
 	local n = G.Joueurs.count(player, "wheat")
@@ -120,6 +121,7 @@ function Machines.mill(player: Player, id: string)
 	local wheel = Machines.waterPowered(rs, d)
 	G.Util.toast(player, "🌾 " .. n .. " blé au moulin : la farine sera prête demain" .. (wheel and " (roue à eau : tout est moulu, 1 pour 1)." or " (2 pour 3 ; une roue à eau au bord de l'eau, tout près, fait mieux)."))
 	G.Joueurs.sync(player)
+	Machines.refresh(d)
 end
 
 function Machines.sprinkler(player: Player, id: string)
@@ -135,6 +137,7 @@ function Machines.sprinkler(player: Player, id: string)
 	G.Joueurs.add(player, "bucket_empty", 1, true)
 	G.Util.toast(player, "💧 Arroseur rempli : " .. d.water .. " jour(s) d'eau.")
 	G.Joueurs.sync(player)
+	Machines.refresh(d)
 end
 
 function Machines.hive(player: Player, id: string)
@@ -153,6 +156,78 @@ function Machines.hive(player: Player, id: string)
 	G.Joueurs.add(player, "honey", math.random(1, 2))
 	G.Joueurs.addSkillXp(player, "elevage", 4)
 	G.Joueurs.sync(player)
+	Machines.refresh(d)
+end
+
+-- ----------------------------------------------------------------- états lisibles (passage Codex X19, 21/11)
+-- Sur le modèle posé : `NomEtat` (nom affiché) et `EtatMachine` (texte bref), lus par l'interface à
+-- proximité (jamais en texte permanent au-dessus de l'objet). Coffres, portes : `Verrouille` (booléen).
+local LOCKABLE = { chest = true, door = true, drawbridge = true, trapdoor = true }
+Machines.STATE_NAME = { furnace = "Four", water_wheel = "Roue à eau", windmill = "Moulin", sprinkler = "Arroseur", beehive = "Ruche" }
+
+function Machines.stateText(d, rs): string?
+	if d.item == "furnace" then
+		return "Prêt : cuire et fondre"
+	elseif d.item == "water_wheel" then
+		local wet = false
+		for _, off in { { 0, 0 }, { 4, 0 }, { -4, 0 }, { 0, 4 }, { 0, -4 } } do
+			if G.Util.isWater(d.x + off[1], d.z + off[2]) then
+				wet = true
+				break
+			end
+		end
+		if not wet then
+			return "Au sec : à poser au bord de l'eau"
+		end
+		for _, o in (rs and rs.placed) or {} do
+			if o.item == "windmill" and math.abs(o.x - d.x) <= Machines.WHEEL_REACH and math.abs(o.z - d.z) <= Machines.WHEEL_REACH then
+				return "Tourne : entraîne le moulin"
+			end
+		end
+		return "Tourne, sans moulin à portée"
+	elseif d.item == "windmill" then
+		local m = d.mill or {}
+		if (m.flour or 0) > 0 then
+			return (m.flour .. " farine prête")
+		elseif (m.wheat or 0) > 0 then
+			return (m.wheat .. " blé à moudre (prêt demain)")
+		end
+		return "Vide : apporte du blé"
+	elseif d.item == "sprinkler" then
+		return (d.water or 0) > 0 and ((d.water or 0) .. " jour(s) d'eau") or "À sec : verse un seau d'eau"
+	elseif d.item == "beehive" then
+		return (d.hive or 0) >= 2 and "Miel prêt" or "Les abeilles travaillent"
+	end
+	return nil
+end
+
+-- Publie l'état sur le modèle (appelé au décor, et quand l'état change)
+function Machines.publish(model: Instance?, d, rs)
+	if not model or not d then
+		return
+	end
+	if Machines.STATE_NAME[d.item] then
+		model:SetAttribute("NomEtat", Machines.STATE_NAME[d.item])
+		model:SetAttribute("EtatMachine", Machines.stateText(d, rs))
+	end
+	if LOCKABLE[d.item] then
+		model:SetAttribute("Verrouille", (d.lock or 0) > 0)
+	end
+end
+
+-- Retrouve le modèle d'un objet posé (région chargée) et republie son état
+function Machines.refresh(d)
+	if not d or not d.id then
+		return
+	end
+	for _, reg in (G.World and G.World.loaded) or {} do
+		for _, m in reg.placedModels or {} do
+			if m.Parent and m:GetAttribute("PlacedId") == d.id then
+				Machines.publish(m, d, reg.state)
+				return
+			end
+		end
+	end
 end
 
 -- Chaque matin (après la pousse des cultures) : moulins, arroseurs, ruches
@@ -203,6 +278,20 @@ function Machines.newDay()
 					end
 				end
 				d.hive = (d.hive or 0) + 1 + math.min(2, flowers) * 0.5
+			end
+		end
+	end
+	-- états du matin sur les modèles chargés (farine prête, eau consommée, miel)
+	for _, reg in (G.World and G.World.loaded) or {} do
+		for _, m in reg.placedModels or {} do
+			local id = m.Parent and m:GetAttribute("PlacedId")
+			if id then
+				for _, d in reg.state.placed or {} do
+					if d.id == id and Machines.STATE_NAME[d.item] then
+						Machines.publish(m, d, reg.state)
+						break
+					end
+				end
 			end
 		end
 	end

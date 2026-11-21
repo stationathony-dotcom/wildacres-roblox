@@ -158,6 +158,9 @@ function Protection.useLock(player: Player, item: string)
 	end
 	best.lock = info.lock
 	best.lockBonus = G.Joueurs.talent(player, "serrurier") -- compte contre les cambrioleurs
+	if G.Machines and rawget(G.Machines, "refresh") then
+		G.Machines.refresh(best) -- attribut « Verrouille » sur le modèle (interface)
+	end
 	G.Util.toast(player, "🔒 " .. info.name .. " posée (" .. (best.item == "chest" and "coffre" or "porte") .. ").", "gain")
 	G.Joueurs.sync(player)
 end

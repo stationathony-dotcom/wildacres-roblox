@@ -891,6 +891,10 @@ local function buildPlaced(reg, d)
 	end
 	model.Name = info.place
 	model:SetAttribute("PlacedId", d.id)
+	-- état lisible au survol (four, roue à eau, moulin… ; coffre / porte verrouillé), Systemes/Machines
+	if G.Machines and rawget(G.Machines, "publish") then
+		G.Machines.publish(model, d, reg.state)
+	end
 	if d.item == "training_dummy" then
 		model:SetAttribute("Mannequin", true) -- cible du tir (Systemes/Combat)
 	end
