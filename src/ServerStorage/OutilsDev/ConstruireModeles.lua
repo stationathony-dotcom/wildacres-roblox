@@ -98,6 +98,34 @@ local function fini(m: Model)
 	m.Parent = dossier
 end
 
+local function fumee(parent: BasePart, taille: number, opacite: number)
+	local nuage = parent:FindFirstChildOfClass("Smoke") or Instance.new("Smoke")
+	nuage.Size, nuage.Opacity, nuage.RiseVelocity = taille, opacite, 5.2
+	nuage.Color = rgb(224, 215, 200)
+	nuage.Parent = parent
+end
+
+local function reperesFeu(m: Model)
+	local sortie = m:FindFirstChild(m.Name == "Forge" and "Sortie" or "Cheminee")
+	if sortie and sortie:IsA("BasePart") then
+		local forge = m.Name == "Forge"
+		fumee(sortie, forge and 5.5 or 2.6, forge and 0.24 or 0.17)
+	end
+	local foyer = m:FindFirstChild("Braise")
+	local lueur = foyer and foyer:FindFirstChildOfClass("PointLight")
+	if lueur and lueur:IsA("PointLight") then
+		lueur.Range = m.Name == "Forge" and 24 or 12
+	end
+end
+
+function M.reperesDepart()
+	local modeles = dossierModeles()
+	for _, nom in { "Forge", "Fourneau" } do
+		local modele = modeles:FindFirstChild(nom)
+		if modele and modele:IsA("Model") then reperesFeu(modele) end
+	end
+end
+
 local function feuillage(p: BasePart, caduc: boolean)
 	CollectionService:AddTag(p, "Feuillage")
 	p:SetAttribute("Caduc", caduc)
@@ -261,6 +289,7 @@ function M.artisanat()
 		light.Color = rgb(255, 150, 70)
 		light.Parent = feu
 		P(m, "Cheminee", Vector3.new(1, 2, 1), Vector3.new(0.8, 4.4, -0.6), PIERRE_CLAIRE, Mat.Cobblestone)
+		reperesFeu(m)
 		fini(m)
 	end
 	-- Construction : pivot au sol, au centre de la case ; un mur occupe le bord +Z... posé au bord de la case
@@ -1668,6 +1697,7 @@ local function maisons()
 		P(m, "Eau", Vector3.new(0.1, 1.8, 1.8), Vector3.new(-2.6, 2.25, 12), rgb(60, 90, 110), Mat.Glass, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)), collide = false })
 		attache(base, "Travail", CFrame.new(0, 1, 9.5))
 		enseigne(m, Vector3.new(-8, 8, 7.2), "Forge")
+		reperesFeu(m)
 		fini(m)
 	end
 	-- Chapelle : pierre, nef haute, clocher carré avec sa cloche
@@ -2198,8 +2228,8 @@ function M.chateau()
 	return m
 end
 
--- Tableau des quêtes façon WoW : deux poteaux, un auvent, une planche couverte de parchemins
--- cachetés, et un grand « ! » doré au-dessus (repère visible de loin). Invite posée sur « Planche ».
+-- Tableau de village : deux poteaux, un auvent et une planche couverte de parchemins.
+-- L'invite se fixe à « Planche ».
 function M.tableauQuetes()
 	dossier = dossierModeles()
 	local m = nouveau("Tableau_Quetes")
@@ -2223,14 +2253,19 @@ function M.tableauQuetes()
 		P(m, "Cachet", Vector3.new(0.12, 0.3, 0.3), Vector3.zero, rgb(170, 30, 30), Mat.SmoothPlastic,
 			{ cf = cf * CFrame.new(0, -0.45, 0.05) * CFrame.Angles(0, math.rad(90), 0), forme = "Cylinder", collide = false })
 	end
-	-- grand « ! » doré
-	local ex = P(m, "Exclamation", Vector3.new(0.7, 1.8, 0.7), Vector3.new(0, 10.4, 0), OR, Mat.Neon, { collide = false })
-	P(m, "Point", Vector3.new(0.75, 0.75, 0.75), Vector3.new(0, 8.9, 0), OR, Mat.Neon, { forme = "Ball", collide = false })
-	local light = Instance.new("PointLight")
-	light.Range = 10
-	light.Brightness = 0.8
-	light.Color = rgb(255, 214, 110)
-	light.Parent = ex
+	local enseigneVillage = P(m, "Enseigne", Vector3.new(6.0, 0.88, 0.36), Vector3.new(0, 6.84, 0),
+		BOIS_FONCE, Mat.WoodPlanks, { collide = false })
+	for _, face in { Enum.NormalId.Front, Enum.NormalId.Back } do
+		local surface = Instance.new("SurfaceGui")
+		surface.Face, surface.LightInfluence, surface.MaxDistance = face, 0.45, 95
+		surface.CanvasSize = Vector2.new(480, 72)
+		surface.Parent = enseigneVillage
+		local nom = Instance.new("TextLabel")
+		nom.BackgroundTransparency, nom.TextScaled = 1, true
+		nom.Size, nom.Position = UDim2.fromScale(0.94, 0.77), UDim2.fromScale(0.03, 0.115)
+		nom.Font, nom.TextColor3, nom.Text = Enum.Font.Fondamento, PARCH, "Place du village"
+		nom.Parent = surface
+	end
 	P(m, "Caisse", Vector3.new(1.6, 1.2, 1.2), Vector3.new(2.6, 0.6, 1.4), BOIS_CLAIR, Mat.WoodPlanks)
 	attache(m.PrimaryPart, "Devant", CFrame.new(0, 0, 4))
 	fini(m)

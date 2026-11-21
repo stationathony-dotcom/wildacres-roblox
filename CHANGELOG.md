@@ -7,6 +7,8 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.3 — 2026-11-21
 
+- **Arrivée** — La place du village a une enseigne lisible des deux côtés. La lueur de la forge et la fumée du four servent de repères. Les rangées de couleurs défilent sur les petits écrans.
+- **Retour** — La carte réserve un repère pour le lit et le journal de quêtes ouvre un onglet dédié aux événements survenus en l’absence du joueur.
 - **Survol** — L’état des machines et des serrures apparaît à portée. Le nom précise s’il s’agit d’un coffre, d’une porte ou d’un autre mécanisme.
 - **Mobilier** — Dix-sept miniatures reprennent les formes des objets posés. La grande table, l’étagère, le tapis, la bannière et le pot en terre cuite ont des modèles détaillés.
 - **Élevage** — Les modèles de cochon et d’oie sont prêts pour leur intégration à la ferme.

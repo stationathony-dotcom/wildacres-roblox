@@ -8,6 +8,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
+local Retour = require(script.Parent:WaitForChild("Retour"))
 
 if workspace:GetAttribute("Mode") == "accueil" then
 	return
@@ -80,6 +81,30 @@ foot.Parent = panel
 local reperes = require(script.Parent:WaitForChild("ReperesCarte")).new(
 	panel, grid, close, Remotes, R, N, SPAN, N * CELLPX + 72
 )
+
+local lit = Composants.creer("TextLabel", {
+	Name = "MonLit", Text = "◆ Mon lit", Font = Enum.Font.GothamBold, TextSize = 12,
+	TextColor3 = Color3.fromRGB(237, 190, 251), BackgroundColor3 = Color3.fromRGB(48, 36, 25),
+	Size = UDim2.fromOffset(62, 18), AnchorPoint = Vector2.new(0.5, 0.55),
+	Visible = false, ZIndex = 7, Parent = grid,
+}, { Composants.creer("UICorner", { CornerRadius = UDim.new(0, 4) }) })
+local demandeLit = 0
+local function actualiserLit()
+	demandeLit += 1
+	local demande = demandeLit
+	task.spawn(function()
+		local retour = Retour.lire(Remotes)
+		if demande ~= demandeLit then return end
+		local pos = retour and retour.lit
+		lit.Visible = false
+		if type(pos) ~= "table" or type(pos.x) ~= "number" or type(pos.z) ~= "number" then return end
+		local u, v = (pos.x / SPAN + R) / N, (pos.z / SPAN + R) / N
+		if u >= 0 and u < 1 and v >= 0 and v < 1 then
+			lit.Position = UDim2.fromScale(u, v)
+			lit.Visible = true
+		end
+	end)
+end
 
 local arrow = Instance.new("TextLabel")
 arrow.Text = "▲"
@@ -222,6 +247,7 @@ local function toggle()
 	scale.Scale = target * 0.9
 	panel.Visible = true
 	reperes.refresh()
+	actualiserLit()
 	TweenService:Create(scale, TweenInfo.new(0.18, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = target }):Play()
 end
 close.Activated:Connect(function()

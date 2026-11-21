@@ -1713,7 +1713,7 @@ local function game_()
 			}
 			local can = ctx and editable[ctx] or {}
 			local r0 = row(0, 40)
-			local head = ({ creation = "✨ Crée ton personnage", barbier = "✂️ Chez le barbier", tailleur = "🧵 Chez le tailleur" })[ctx]
+			local head = ({ creation = "Crée ton personnage", barbier = "Chez le barbier", tailleur = "Chez le tailleur" })[ctx]
 				or "Ton apparence se change au marché des villages : barbier (coiffure) et tailleur (tenue)."
 			label({ Text = head, Font = BOLD, TextSize = ctx and 16 or 12, TextColor3 = ctx and C.gold or C.dim, TextWrapped = true,
 				Size = UDim2.new(1, -16, 1, 0), Position = UDim2.fromOffset(8, 0), Parent = r0, ZIndex = 9 })
@@ -1731,9 +1731,19 @@ local function game_()
 			local function swatches(order: number, title: string, colors, key: string)
 				local r = row(order, 40)
 				label({ Text = title, Font = BOLD, TextSize = 13, TextColor3 = can[key] and C.text or C.dim, Size = UDim2.fromOffset(78, 40), Position = UDim2.fromOffset(8, 0), Parent = r, ZIndex = 9 })
+				local strip = new("ScrollingFrame", {
+					Size = UDim2.new(1, -90, 1, 0), Position = UDim2.fromOffset(84, 0),
+					BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3,
+					CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.X,
+					ScrollingDirection = Enum.ScrollingDirection.X, Parent = r, ZIndex = 9,
+				}, { new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal,
+					Padding = UDim.new(0, 4), VerticalAlignment = Enum.VerticalAlignment.Center,
+					SortOrder = Enum.SortOrder.LayoutOrder }) })
 				for i, c in colors do
-					local sw = new("TextButton", { Text = "", AutoButtonColor = pickable(key, i), BackgroundColor3 = c, Size = UDim2.fromOffset(28, 28),
-						BackgroundTransparency = (can[key] and isOwned(key, i)) and 0 or 0.45, Position = UDim2.fromOffset(86 + (i - 1) * 32, 6), Parent = r, ZIndex = 9 }, { corner(14) })
+					local sw = new("TextButton", { Text = d[key] == i and "✓" or "", Font = BOLD, TextSize = 15,
+						TextColor3 = Color3.new(1, 1, 1), TextStrokeTransparency = 0.2,
+						AutoButtonColor = pickable(key, i), BackgroundColor3 = c, Size = UDim2.fromOffset(28, 28),
+						BackgroundTransparency = (can[key] and isOwned(key, i)) and 0 or 0.45, LayoutOrder = i, Parent = strip, ZIndex = 9 }, { corner(14) })
 					lockMark(sw, key, i)
 					if d[key] == i then
 						stroke(C.gold, 2.5).Parent = sw
@@ -1745,6 +1755,10 @@ local function game_()
 						end
 					end)
 				end
+				local decale = math.max(0, ((d[key] or 1) - 3) * 32)
+				task.defer(function()
+					if strip.Parent then strip.CanvasPosition = Vector2.new(decale, 0) end
+				end)
 			end
 			swatches(1, "Teint", WGl.SKINS, "skin")
 			swatches(2, "Cheveux", WGl.HAIR_COLORS, "hairColor")
@@ -1787,7 +1801,7 @@ local function game_()
 					cost += changed and (info.fee or 0) or 0
 				end
 				local r6 = row(6, 44)
-				local ok = button(ctx == "creation" and "✨ Commencer l'aventure" or ("Appliquer (" .. cost .. " 💰)"), C.green, function()
+				local ok = button(ctx == "creation" and "Commencer" or ("Appliquer (" .. cost .. " 💰)"), C.green, function()
 					local out = table.clone(d)
 					out.ctx = ctx
 					send("set_look", out)

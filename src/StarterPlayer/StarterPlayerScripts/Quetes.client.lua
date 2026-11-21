@@ -75,11 +75,11 @@ st.Color = Color3.fromRGB(176, 140, 72)
 st.Thickness = 2.5
 st.Parent = panel
 local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
+local Retour = require(script.Parent:WaitForChild("Retour"))
 Composants.titre({
-	Text = "Quêtes", TextColor3 = GOLD,
+	Text = "Journal", TextColor3 = GOLD,
 	Size = UDim2.new(1, -60, 0, 32), Position = UDim2.fromOffset(16, 8), Parent = panel,
 })
-label(panel, "Toutes facultatives : prends-en, lâche-les, rien n'est obligatoire.", UDim2.new(1, -60, 0, 18), 12, DIM).Position = UDim2.fromOffset(16, 38)
 local close = button(panel, "X", UDim2.fromOffset(30, 30), Color3.fromRGB(190, 60, 50), function()
 	panel.Visible = false
 end)
@@ -100,6 +100,56 @@ local layout = Instance.new("UIListLayout")
 layout.Padding = UDim.new(0, 6)
 layout.SortOrder = Enum.SortOrder.LayoutOrder
 layout.Parent = body
+
+local absence = body:Clone()
+absence.Name = "JournalAbsence"
+absence.Visible = false
+absence.Parent = panel
+local ongletQuetes, ongletAbsence
+local demandeAbsence = 0
+local function onglet(voirAbsence)
+	body.Visible, absence.Visible = not voirAbsence, voirAbsence
+	Composants.etatBouton(ongletQuetes, "Quêtes", not voirAbsence and "selectionne" or nil, ROW)
+	Composants.etatBouton(ongletAbsence, "Journal d’absence", voirAbsence and "selectionne" or nil, ROW)
+	if not voirAbsence then return end
+	demandeAbsence += 1
+	local demande = demandeAbsence
+	for _, enfant in absence:GetChildren() do
+		if enfant:IsA("GuiObject") then enfant:Destroy() end
+	end
+	absence.CanvasPosition = Vector2.zero
+	local function texte(contenu, ordre)
+		return Composants.creer("TextLabel", {
+			Text = contenu, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left,
+			Size = UDim2.new(1, -10, 0, 28), AutomaticSize = Enum.AutomaticSize.Y,
+			BackgroundTransparency = 1, TextColor3 = TEXT, TextSize = 14,
+			Font = Enum.Font.Gotham, LayoutOrder = ordre, Parent = absence,
+		})
+	end
+	local attente = texte("Chargement du journal…", 0)
+	task.spawn(function()
+		local retour = Retour.lire(Remotes)
+		if demande ~= demandeAbsence then return end
+		local messages = retour and retour.absence
+		if type(messages) ~= "table" or #messages == 0 then
+			attente.Text = type(messages) == "table" and "Aucun événement pendant ton absence." or "Journal indisponible."
+			return
+		end
+		attente:Destroy()
+		for index = #messages, 1, -1 do
+			local entree = messages[index]
+			if type(entree) == "table" and type(entree.text) == "string" then
+				local jour = type(entree.day) == "number" and ("Jour " .. entree.day .. " · ") or ""
+				texte(jour .. entree.text, #messages - index)
+			end
+		end
+	end)
+end
+ongletQuetes = button(panel, "Quêtes", UDim2.fromOffset(76, 24), ROW, function() onglet(false) end)
+ongletQuetes.Position = UDim2.fromOffset(16, 35)
+ongletAbsence = button(panel, "Journal d’absence", UDim2.fromOffset(153, 24), ROW, function() onglet(true) end)
+ongletAbsence.Position = UDim2.fromOffset(98, 35)
+onglet(false)
 
 local function send(kind, data)
 	Remotes.Action:FireServer(kind, data or {})
