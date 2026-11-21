@@ -639,6 +639,10 @@ local function think(en, dt: number)
 				en.state = "windup"
 				en.t = 0
 				en.target = proot.Position
+				-- l'annonce s'entend aussi : cri d'effort (humanoïdes) ou grognement (bêtes, monstres)
+				if G.Util.sfx and en.pos then
+					G.Util.sfx((k.form == "humain") and "cri_humain" or "grognement", en.pos + Vector3.new(0, 2, 0))
+				end
 			elseif k.style ~= "spore" or pd > 14 then
 				moveToward(en, proot.Position, speed, dt)
 				en.hop += dt * 7
@@ -750,6 +754,9 @@ local function dieInner(en, player: Player)
 		en.reg.state.enemies[en.id] = G.world.day
 	end
 	puff(en.pos + Vector3.new(0, en.height / 2, 0), Color3.fromRGB(200, 200, 200), en.boss and 60 or 20)
+	if G.Util.sfx then
+		G.Util.sfx("chute", en.pos) -- la bête s'effondre
+	end
 	en.model:Destroy()
 	local k = en.k
 	local luck = G.Joueurs.stats(player).chance or 0
@@ -876,6 +883,17 @@ function Enemies.hit(en, dmg: number, player: Player)
 	en.hp -= dmg
 	if en.pos then
 		G.Util.sfx("coup", en.pos + Vector3.new(0, 2, 0))
+	end
+	-- éclair rouge : on VOIT qu'on a touché
+	if en.model and en.model.Parent and not en.model:FindFirstChild("Touche") then
+		local h = Instance.new("Highlight")
+		h.Name = "Touche"
+		h.FillColor = Color3.fromRGB(255, 60, 40)
+		h.FillTransparency = 0.35
+		h.OutlineTransparency = 1
+		h.DepthMode = Enum.HighlightDepthMode.Occluded
+		h.Parent = en.model
+		game:GetService("Debris"):AddItem(h, 0.14)
 	end
 	en.model:SetAttribute("PV", math.max(0, en.hp))
 	if en.model:GetAttribute("Humeur") == "neutre" then

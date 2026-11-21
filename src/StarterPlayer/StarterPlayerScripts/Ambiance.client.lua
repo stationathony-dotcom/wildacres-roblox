@@ -256,6 +256,9 @@ local SFX = {
 	eau = { id = "rbxassetid://9120502487", len = 1.1, vol = 0.5 }, -- arrosoir
 	niveau = { id = "rbxassetid://9113585009", len = 1.33, vol = 0.45 }, -- compétence qui monte
 	sifflet = { id = "rbxassetid://9125997043", len = 0.8, vol = 0.5 }, -- appeler son cheval
+	grognement = { id = "rbxassetid://9125471073", len = 0.9, vol = 0.6 }, -- créature qui va attaquer
+	cri_humain = { id = "rbxassetid://86995398443904", len = 0.6, vol = 0.55 }, -- brigand, soldat… qui frappe
+	chute = { id = "rbxassetid://124795269302947", len = 0.8, vol = 0.6 }, -- créature abattue
 }
 local lastSfx = {}
 
