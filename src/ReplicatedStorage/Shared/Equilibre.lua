@@ -490,6 +490,10 @@ function E.apply(C)
 			end
 		end
 	end
+	-- règle 10 (pas de jeux de dés) : l'objet « dice » du catalogue devient des osselets (jeu d'adresse en os)
+	if I.dice then
+		I.dice.name, I.dice.icon = "Osselets", "🦴"
+	end
 	local wl = E.WALL_LANTERN
 	if not I.wall_lantern and known(C, wl.needs) then
 		I.wall_lantern = { name = "Lanterne murale", icon = "🏮", price = wl.price, place = "Cat_wall_lantern", grid = "edge", wallMount = true,
