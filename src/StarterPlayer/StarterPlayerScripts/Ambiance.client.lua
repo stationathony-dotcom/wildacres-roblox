@@ -24,7 +24,7 @@ end
 
 -- Sons (bibliothèque Roblox, gratuits ; à remplacer ici seulement)
 local SOUNDS = Config.SOUNDS or {
-	rain = "rbxassetid://9112854469", -- Rain On Water 1 (Pro Sound Effects)
+	rain = "rbxassetid://9112852671",
 	thunder = { "rbxassetid://72113341430811", "rbxassetid://105118686124791" },
 	wind = "rbxassetid://8202539690",
 }
@@ -40,6 +40,16 @@ end
 
 local rainSound = newSound(SOUNDS.rain, true)
 local windSound = newSound(SOUNDS.wind, true)
+local caveSound = newSound("rbxassetid://9112795583", true)
+
+local function loopVolume(sound: Sound, volume: number)
+	sound.Volume = volume
+	if volume > 0.01 and not sound.IsPlaying then
+		sound:Play()
+	elseif volume <= 0.01 and sound.IsPlaying then
+		sound:Stop()
+	end
+end
 
 local function vol(): number
 	local v = player:GetAttribute("VolAmbiance")
@@ -126,6 +136,7 @@ local TARGETS = {
 }
 local cur = { rain = 0, cover = 0.32, density = Eclairage.DENSITY_CLEAR, dark = 0, wind = 0.15 }
 local biome, biomeT = "prairie", 0
+local caveMix = 0
 
 RunService.RenderStepped:Connect(function(dt)
 	local cam = workspace.CurrentCamera
@@ -165,16 +176,15 @@ RunService.RenderStepped:Connect(function(dt)
 	gloom.Brightness = -cur.dark * 0.5
 	gloom.Saturation = -cur.dark
 	local v = vol()
-	rainSound.Volume = (snowy or dry) and 0 or math.min(1, cur.rain) * 0.7 * v * (covered and 0.5 or 1)
-	windSound.Volume = cur.wind * 0.5 * v
-	if rainSound.Volume > 0.01 and not rainSound.IsPlaying then
-		rainSound:Play()
-	elseif rainSound.Volume <= 0.01 and rainSound.IsPlaying then
-		rainSound:Stop()
-	end
-	if windSound.Volume > 0.01 and not windSound.IsPlaying then
-		windSound:Play()
-	end
+	local char = player.Character
+	local root = char and char:FindFirstChild("HumanoidRootPart")
+	-- Même seuil que la musique de grotte, y compris quand le joueur s'éclaire.
+	local underground = root and root.Position.Y < -40
+	caveMix += ((underground and 1 or 0) - caveMix) * k
+	local rainVolume = (snowy or dry) and 0 or math.min(1, cur.rain) * 0.7 * (covered and 0.5 or 1)
+	loopVolume(rainSound, rainVolume * v * (1 - caveMix))
+	loopVolume(windSound, cur.wind * 0.5 * v * (1 - caveMix))
+	loopVolume(caveSound, 0.35 * caveMix * v)
 end)
 
 -- ---------------------------------------------------------------- Éclairs
@@ -233,6 +243,11 @@ local SFX = {
 	decouverte = { id = "rbxassetid://9113585009", len = 1.33, vol = 0.33 },
 	vache = { id = "rbxassetid://9113636724", len = 1.1, vol = 0.38 },
 	mouton = { id = "rbxassetid://9119067510", len = 0.77, vol = 0.32 },
+	pose = { id = "rbxassetid://9120946570", len = 0.6, vol = 0.55 },
+	casse = { id = "rbxassetid://9119482853", len = 0.85, vol = 0.65 },
+	serrure = { id = "rbxassetid://9116324156", len = 0.55, vol = 0.45 },
+	cloche = { id = "rbxassetid://9113583960", len = 1.4, vol = 0.7 },
+	sabots = { id = "rbxassetid://9113124912", len = 0.28, vol = 0.35 },
 }
 local lastSfx = {}
 
@@ -262,31 +277,40 @@ do
 end
 -- préchargement : sinon le tout premier coup de hache serait muet (son pas encore téléchargé)
 task.spawn(function()
-	local list = {}
+	local list = { rainSound, caveSound }
+	local clips = {}
 	for _, d in SFX do
 		local s = Instance.new("Sound")
 		s.SoundId = d.id
 		table.insert(list, s)
+		table.insert(clips, s)
 	end
 	pcall(function()
 		game:GetService("ContentProvider"):PreloadAsync(list)
 	end)
+	for _, clip in clips do
+		clip:Destroy()
+	end
 end)
 local function playSfx(name: string, pos: Vector3)
 	local d = SFX[name]
 	if not d then
 		return
 	end
+	local volume = d.vol * vol() * 1.4
+	if volume <= 0 then
+		return
+	end
+	local cam = workspace.CurrentCamera
+	if pos.Magnitude >= 1 and cam and (cam.CFrame.Position - pos).Magnitude > 90 then return end
 	local now = os.clock()
 	if lastSfx[name] and now - lastSfx[name] < 0.08 then
 		return -- pas de mitraillage du même son
 	end
 	lastSfx[name] = now
-	local cam = workspace.CurrentCamera
-	if pos.Magnitude >= 1 and cam and (cam.CFrame.Position - pos).Magnitude > 90 then return end
 	local s = Instance.new("Sound")
 	s.SoundId = d.id
-	s.Volume = d.vol * vol() * 1.4
+	s.Volume = volume
 	s.PlaybackSpeed = 0.92 + math.random() * 0.16
 	if pos.Magnitude < 1 then
 		s.Parent = SoundService -- son « dans la tête » (pièces)
@@ -313,6 +337,31 @@ local function playSfx(name: string, pos: Vector3)
 		task.delay(0.25, function()
 			s:Destroy()
 		end)
+	end)
+end
+
+-- La monture est soudée au personnage. Cadencer ses pas sur sa vitesse au sol.
+do
+	local distance = 0
+	RunService.Heartbeat:Connect(function(dt)
+		if not player:GetAttribute("Riding") then
+			distance = 0
+			return
+		end
+		local char = player.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+		local hum = char and char:FindFirstChildOfClass("Humanoid")
+		if not root or not hum or hum.FloorMaterial == Enum.Material.Air or hum.MoveDirection.Magnitude == 0 then
+			distance = 0
+			return
+		end
+		local velocity = root.AssemblyLinearVelocity
+		distance += Vector3.new(velocity.X, 0, velocity.Z).Magnitude * dt
+		local stride = 7
+		if distance >= stride then
+			distance %= stride
+			playSfx("sabots", root.Position - Vector3.new(0, hum.HipHeight, 0))
+		end
 	end)
 end
 
@@ -471,7 +520,7 @@ do
 	body.ScrollingDirection = Enum.ScrollingDirection.Y
 	body.Parent = panel
 	require(script.Parent:WaitForChild("MiseEnPage")).bind(panel)
-	txt(body, "🔊 Ambiance (pluie, vent, tonnerre)", UDim2.new(1, -28, 0, 20), UDim2.fromOffset(14, 6), 13)
+	txt(body, "🔊 Ambiance et bruitages", UDim2.new(1, -28, 0, 20), UDim2.fromOffset(14, 6), 13)
 	local volRow = Instance.new("Frame")
 	volRow.BackgroundTransparency = 1
 	volRow.Size = UDim2.new(1, -28, 0, 34)
