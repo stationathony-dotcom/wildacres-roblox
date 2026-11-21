@@ -229,9 +229,11 @@ function Batir.remove(player: Player, id: string)
 	end
 	table.remove(reg.state.built, i)
 	if parts[id] then
+		G.Util.sfx("pose", parts[id].Position) -- on entend la pièce qu'on démonte
 		parts[id]:Destroy()
 		parts[id] = nil
 	end
+	G.Util.geste(player, "batir")
 	-- sa propre pièce rend ses matériaux (18/11 : avant, rien ne revenait — `b.item` n'existe pas)
 	local b = blockOf(d.b)
 	for item, n in (b and b.cost) or {} do

@@ -651,7 +651,12 @@ end
 function Horses.whistle(player: Player)
 	local prof = G.Joueurs.get(player)
 	local root = G.Util.root(player)
-	if not prof or not prof.horse or not root or riding[player] then
+	if not prof or not root or riding[player] then
+		return
+	end
+	G.Util.sfx("sifflet", root.Position) -- on siffle, cheval ou pas
+	if not prof.horse then
+		G.Util.toast(player, "Aucun cheval ne te répond : il faut d'abord en acheter ou en apprivoiser un.")
 		return
 	end
 	local h = live[prof.horse.id]

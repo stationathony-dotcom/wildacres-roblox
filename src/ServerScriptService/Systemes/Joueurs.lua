@@ -393,6 +393,9 @@ function J.addSkillXp(player: Player, skill: string, amount: number)
 	player:SetAttribute("Comp_" .. skill, after) -- lu par le client (repérage des filons…)
 	if after > before then
 		local rank = G.Config.skillRank(after)
+		if G.Util.sfx then
+			G.Util.sfx("niveau", Vector3.zero, player) -- petite fanfare, pour lui seul
+		end
 		if rank ~= G.Config.skillRank(before) then
 			G.Util.toast(player, info.icon .. " " .. info.name .. " niveau " .. after .. " : te voilà " .. string.lower(rank) .. " !", "big")
 		else
@@ -908,6 +911,10 @@ function J.wearTool(player: Player, base: string, amount: number?)
 		p.wear[id] = 0
 		J.take(player, id, 1)
 		G.Util.toast(player, "💥 " .. name .. " : brisée ! Il faut en refaire une (atelier).", "big")
+		local root = G.Util.root and G.Util.root(player)
+		if root and G.Util.sfx then
+			G.Util.sfx("casse", root.Position)
+		end
 		J.sync(player)
 	elseif left == math.floor(life * 0.1) then
 		G.Util.toast(player, "⚠️ " .. name .. " presque usée (" .. left .. " coups).")

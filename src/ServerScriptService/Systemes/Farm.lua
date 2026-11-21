@@ -192,12 +192,13 @@ function Farm.targetCell(player: Player): (number?, number?)
 	return math.floor(p.X / CELL), math.floor(p.Z / CELL)
 end
 
-local function swing(player)
-	local char = player.Character
-	if char and char:FindFirstChildOfClass("Tool") then
-		G.Props.swing(player) -- houe, arrosoir… : le coup de l'outil
-	else
-		G.Util.geste(player, "cueillir") -- semer, récolter à la main : on se penche
+-- geste (client Gestes) et bruit de l'outil : bêcher = creuser + pelle, arroser = arroser + eau ;
+-- semer, récolter à la main = on se penche (cueillir)
+local function swing(player, geste: string?, son: string?)
+	G.Util.geste(player, geste or "cueillir")
+	local root = son and G.Util.root(player)
+	if root then
+		G.Util.sfx(son, root.Position + root.CFrame.LookVector * 3)
 	end
 end
 
@@ -266,7 +267,7 @@ function Farm.till(player: Player)
 	end
 	local key = cellKey(cx, cz)
 	local entry = cells[key]
-	swing(player)
+	swing(player, "creuser", "pelle")
 	if entry then
 		if not entry.plotId and not entry.state.crop and (not entry.owner or G.Util.owns(player, entry.owner)) then
 			-- reboucher (seulement sa propre terre)
@@ -345,7 +346,7 @@ function Farm.water(player: Player)
 	if not cx then
 		return
 	end
-	swing(player)
+	swing(player, "arroser", "eau")
 	local any = false
 	local area = { { 0, 0 } }
 	if G.Joueurs.talent(player, "arrosage") > 0 then

@@ -253,6 +253,9 @@ local SFX = {
 	impact_sourd = { id = "rbxassetid://9113960751", len = 0.5, vol = 0.7 },
 	impact_poing = { id = "rbxassetid://9119062782", len = 0.4, vol = 0.6 },
 	impact_metal = { id = "rbxassetid://9119072660", len = 0.5, vol = 0.55 },
+	eau = { id = "rbxassetid://9120502487", len = 1.1, vol = 0.5 }, -- arrosoir
+	niveau = { id = "rbxassetid://9113585009", len = 1.33, vol = 0.45 }, -- compétence qui monte
+	sifflet = { id = "rbxassetid://9125997043", len = 0.8, vol = 0.5 }, -- appeler son cheval
 }
 local lastSfx = {}
 
