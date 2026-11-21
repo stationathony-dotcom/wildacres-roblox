@@ -14,7 +14,6 @@ function Tools.init(g)
 	local miniatures = require(ServerStorage.OutilsDev.ConstruireModelesMiniatures)
 	miniatures.identites(replicatedStorage)
 	miniatures.mobilier(replicatedStorage, ServerStorage.Modeles, G.Config)
-	miniatures.piecesDeCreatures(replicatedStorage, require(replicatedStorage.Shared.Prises), G.Gear)
 end
 
 function Tools.use(player: Player, tool: Tool, targetId: string?): boolean

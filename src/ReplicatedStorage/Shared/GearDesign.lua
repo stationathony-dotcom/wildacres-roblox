@@ -55,8 +55,15 @@ D.FORMS = {
 }
 
 local palettes = {}
+local prises = require(script.Parent.Prises)
+local trophies = {}
 for _, m in ipairs(D.MATERIALS) do
 	palettes[m.key] = m
+end
+for id, entry in prises.KINDS do
+	local source = { id = id, name = entry.name }
+	trophies[entry.gear.name] = source
+	if entry.soul then trophies[entry.soul.gear.name] = source end
 end
 
 function D.lower(name: string): string
@@ -78,76 +85,190 @@ function D.slotOf(it): string
 	return slot
 end
 
+local function starts(name, prefix)
+	return name:sub(1, #prefix) == prefix
+end
+
+local formsBySlot = {
+	weapon = {
+		{"arbalète", "crossbow"}, {"arc court", "shortbow"}, {"arc long", "longbow"}, {"arc", "bow"},
+		{"pique", "longpike"}, {"lance", "pike"}, {"javelot", "javelin"}, {"hallebarde", "halberd"},
+		{"fauchard", "reaper"}, {"faux", "scythe"}, {"faucille", "sickle"}, {"serpe", "sickle"},
+		{"haches de jet", "throwaxes"}, {"hache", "axe"}, {"marteau", "hammer"},
+		{"gantelet", "clawglove"}, {"masse-pince", "claw"},
+		{"massue", "club"}, {"gourdin", "club"}, {"masse", "mace"}, {"dague", "dagger"},
+		{"sabre", "saber"}, {"espadon", "greatsword"}, {"épée bâtarde", "bastard"},
+		{"épée courte", "shortsword"}, {"épée longue", "longsword"}, {"lame de dard", "dagger"},
+		{"lame venimeuse", "venomblade"}, {"bâton", "staff"}, {"fronde", "sling"},
+		{"couteaux", "throwing"}, {"baudrier", "bandolier"},
+	},
+	hat = {
+		{"heaume", "closedhelm"}, {"casque nasal", "nasalhelm"}, {"casque à crête", "cresthelm"},
+		{"casque de mineur", "minerhelm"}, {"casque", "helmet"}, {"capuche", "hood"},
+		{"cagoule", "cowl"}, {"bandeau", "headband"}, {"béret", "beret"}, {"toque", "toque"},
+		{"tricorne", "tricorn"}, {"haut-de-forme", "tophat"}, {"chapeau de mage", "magehat"},
+		{"chapeau-champignon", "mushroom"}, {"chapeau à plume", "featherhat"}, {"coiffe", "feathered"},
+		{"chapeau de paille", "strawhat"}, {"chapeau de pêcheur", "fisherhat"},
+		{"chapeau de traqueur", "hunterhat"}, {"chapka", "chapka"}, {"bonnet", "bonnet"},
+		{"couronne de bois", "antlers"}, {"couronne", "crown"}, {"diadème", "diadem"}, {"turban", "turban"},
+		{"masque", "mask"}, {"lunettes", "goggles"},
+	},
+	armor = {
+		{"plastron de cœur", "heartplate"}, {"plastron d'élytre", "beetle"},
+		{"armure d'écaille", "scale"}, {"armure en écaille", "scale"}, {"cuirasse segmentée", "lamellarplate"},
+		{"cotte de maille", "mail"}, {"brigandine", "brigandine"}, {"gambison", "gambeson"},
+		{"cotte damassée", "gambeson"}, {"gilet", "leather"}, {"armure de cuir", "leather"},
+		{"manteau", "coat"}, {"robe", "robe"}, {"tablier", "apron"},
+		{"tunique", "tunic"}, {"tenue", "tunic"}, {"chemise", "shirt"}, {"blouse", "shirt"}, {"vareuse", "shirt"},
+	},
+	gloves = {{"gantelet", "gauntlets"}, {"brassard", "bracer"}, {"mitaine", "mittens"},
+		{"gants de crocheteur", "fingerless"}, {"gants de pisteur", "fingerless"}},
+	shoulders = {{"épaulières à corne", "hornshoulder"}, {"spallière", "lamellar"}},
+	legs = {{"jambière", "greaves"}, {"genouillère", "kneepads"}, {"chausse", "leggings"}},
+	boots = {{"soleret", "sabatons"}, {"sabot", "clogs"}, {"bottes de marche", "tallboots"}, {"bottes de marais", "tallboots"}},
+	cape = {{"mantelet", "splitcape"}, {"pèlerine", "mantle"}, {"ciré", "raincape"}, {"manteau", "dresscape"}},
+	offhand = {{"torche", "torch"}, {"bouclier rond", "roundshield"}, {"bouclier rectangulaire", "pavise"},
+		{"bouclier-carapace", "shellshield"}},
+	trinket = {
+		{"écu", "shield"}, {"carapace", "shellshield"}, {"anneau", "ring"}, {"bague", "signet"},
+		{"chevalière", "signet"}, {"bracelet", "bracelet"}, {"broche", "brooch"},
+		{"collier", "necklace"}, {"chaîne", "necklace"}, {"médaillon", "medallion"},
+		{"amulette", "amulet"}, {"talisman", "talisman"}, {"plume", "feather"}, {"trèfle", "clover"},
+		{"cœur", "heart"}, {"pierre-cœur", "heart"}, {"éclat", "shard"}, {"fiole", "vial"},
+		{"fers à cheval", "horseshoe"}, {"faucille", "sickle"}, {"couteau", "dagger"},
+		{"marteau", "hammer"}, {"bâton", "staff"}, {"ceinture", "belt"}, {"trousseau", "keyring"},
+		{"cor de", "horn"}, {"sifflet", "whistle"}, {"carquois", "quiver"}, {"filet", "net"},
+		{"gourde", "gourd"}, {"panier", "basket"}, {"sacoche", "satchel"}, {"bourse", "pouch"},
+		{"selle", "saddle"}, {"bride", "bridle"}, {"lanterne", "lamp"}, {"voile", "veil"},
+		{"porte-bonheur", "paw"},
+	},
+}
+local defaults = {weapon = "sword", hat = "brim", armor = "plate", gloves = "gloves", shoulders = "pauldrons",
+	legs = "pants", boots = "boots", cape = "cape", offhand = "shield", trinket = "pendant"}
+local oldHats = {paille = "strawhat", bonnet = "bonnet", capuche = "hood", toque = "toque", mage = "magehat",
+	beret = "beret", tricorne = "tricorn", hautdeforme = "tophat", bandeau = "headband", sherif = "brim"}
+
 function D.formOf(it): string?
-	if it.design then return it.design.form end
-	local n = D.lower(it.name or "")
-	local s = D.slotOf(it)
-	if s=="gloves" then return n:match("^gant de") and "fingerless" or n:match("^gantelet") and "gauntlets" or "gloves" end
-	if s=="shoulders" then return n:find("corne",1,true) and "hornshoulder" or "pauldrons" end
-	if s=="legs" then return n:match("^jambière") and "greaves" or "pants" end
-	if s=="cape" then return "cape" end
-	if s=="boots" then return n:find("marais",1,true) and "tallboots" or "boots" end
-	if s=="offhand" then
-		if n:match("^torche") then return "torch" end
-		return n:find("rond", 1, true) and "roundshield" or "shield"
+	local name, slot = D.lower(it.name or ""), D.slotOf(it)
+	if it.design and it.design.form then
+		if it.design.form == "scale" then return "lamellarplate" end
+		if it.design.form == "scythe" and starts(name, "fauchard") then return "reaper" end
+		return it.design.form
 	end
-	if s=="weapon" then
-		if n:match("^arbalète") then return "crossbow" end
-		if n:match("^arc ") then return "bow" end
-		if n:match("^hallebarde") then return "halberd" end
-		if n:match("^lance") or n:match("^pique") then return "pike" end
-		if n:match("^faux") or n:match("^fauchard") then return "scythe" end
-		if n:match("^faucille") or n:match("^serpe") then return "sickle" end
-		if n:match("^hache") then return "axe" end
-		if n:match("^marteau") then return "hammer" end
-		if n:match("^gantelet") then return "gauntlet" end
-		if n:match("^masse%-pince") then return "claw" end
-		if n:match("^masse") or n:match("^massue") or n:match("^gourdin") then return "mace" end
-		if n:match("^dague") then return "dagger" end
-		if n:match("^sabre") then return "saber" end
-		if n:match("^espadon") then return "greatsword" end
-	elseif s=="armor" then
-		if n:find("écaille",1,true) then return "scale" end
-		if n:find("élytre",1,true) then return "beetle" end
-		if n:find("maille",1,true) then return "mail" end
-		if n:match("^manteau") then return "coat" end
-		if n:match("^tunique") or n:match("^tenue") or n:match("^chemise") or n:match("^robe") then return "tunic" end
-		if n:match("^brigandine") then return "brigandine" end
-		if n:find("cuir",1,true) or n:match("^gilet") then return "leather" end
-		return "plate"
-	elseif s=="hat" then
-		if n:match("^heaume") then return "closedhelm" end
-		if n:match("^casque nasal") then return "nasalhelm" end
-		if n:match("^casque") then return "helmet" end
-		if n:match("^bandeau") then return "headband" end
-		if n:match("^béret") then return "beret" end
-		if n:match("^toque") then return "toque" end
-		if n:match("^tricorne") then return "tricorn" end
-		if n:match("^haut%-de%-forme") then return "tophat" end
-		if n:find("de mage",1,true) then return "magehat" end
-	elseif s=="trinket" then
-		if n:match("^faucille") then return "sickle" end
-		if n:match("^plume") then return "feather" end
-		if n:match("^trèfle") then return "clover" end
-		if n:match("^broche") then return "brooch" end
-		if n:match("^bracelet") then return "bracelet" end
-		if n:match("^médaillon") then return "medallion" end
+	for _, pair in formsBySlot[slot] or {} do
+		if starts(name, pair[1]) then return pair[2] end
+	end
+	if slot == "hat" and not starts(name, "chapeau") and oldHats[it.visual] then return oldHats[it.visual] end
+	return defaults[slot]
+end
+
+local finishes = {
+	{"diamant", "diamant"}, {"forg", "forge"}, {"givre", "nord"}, {"glace", "nord"}, {"neige", "nord"},
+	{"hiver", "nord"}, {"polaire", "nord"}, {"loup", "loup"}, {"fourr", "loup"}, {"ours blanc", "nord"},
+	{"cuivre", "forge"}, {"bronze", "forge"}, {"ronce", "ronces"}, {"sylvestre", "ronces"}, {"marais", "ronces"},
+	{"émeraude", "ronces"}, {"jade", "ronces"}, {"soie", "lune"}, {"saphir", "lune"},
+	{"argent", "lune"}, {"rubis", "soleil"}, {"ambre", "ambre"}, {"doré", "ambre"}, {"d'or", "ambre"},
+	{"d'os", "os"}, {"lin", "lin"}, {"paille", "lin"}, {"toile", "lin"}, {"cuir", "cuir"},
+	{"mailles", "garde"}, {"de fer", "garde"}, {"acier", "nord"},
+}
+local baseStyle = {
+	weapon = "garde", armor = "garde", offhand = "garde", shoulders = "garde",
+	hat = "cuir", cape = "lune", gloves = "cuir", boots = "cuir", legs = "lin", trinket = "ambre",
+}
+
+function D.style(it)
+	if it.design and palettes[it.design.material] then return palettes[it.design.material] end
+	local name = D.lower(it.name or "")
+	for _, palette in D.MATERIALS do
+		if name:sub(-#palette.suffix) == D.lower(palette.suffix) then return palette end
+	end
+	for _, rule in finishes do
+		if name:find(rule[1], 1, true) then return palettes[rule[2]] end
+	end
+	return palettes[baseStyle[D.slotOf(it)]] or palettes.cuir
+end
+
+local hardColors = {
+	copper_ingot = rgb(184, 109, 66), iron_ingot = rgb(131, 148, 151), steel = rgb(168, 186, 200),
+	bone = rgb(220, 202, 160), silver_ingot = rgb(206, 219, 231), gold_ingot = rgb(203, 147, 61),
+}
+local namedColors = {
+	{"rubis", rgb(185, 53, 63)}, {"saphir", rgb(72, 129, 199)}, {"émeraude", rgb(64, 169, 118)},
+	{"diama", rgb(143, 219, 239)}, {"jade", rgb(79, 170, 132)}, {"ambre", rgb(238, 160, 55)},
+}
+local anatomy = {
+	{"venin", "venom"}, {"dard", "sting"}, {"griffe", "claws"}, {"croc", "fangs"}, {"défense", "tusk"},
+	{"pince", "pincer"}, {"écaille", "scales"}, {"élytre", "elytra"}, {"carapace", "shell"},
+	{"corne", "horn"}, {"ramure", "antlers"}, {"bois de cerf", "antlers"}, {"plume", "feather"},
+	{"aile membraneuse", "wing"}, {"queue de renard", "tail"}, {"soie", "silk"}, {"givre", "ice"},
+	{"cristal de glace", "ice"}, {"cœur", "core"}, {"gelée", "gel"}, {"essence", "essence"},
+	{"spore", "spores"}, {"oreille", "ear"}, {"d'os", "bone"}, {"os ", "bone"},
+	{"patte", "paw"}, {"poussière", "dust"}, {"crin", "hair"}, {"insigne", "badge"},
+	{"écu", "crest"}, {"chair", "hide"}, {"peau", "hide"}, {"tentacule", "tentacle"},
+}
+local faunaColors = {
+	{{"spectral", "fantôme", "ombre", "nocturne"}, rgb(104, 106, 167)},
+	{{"glace", "neige", "givre", "polaire", "blanc", "brumeglace", "blizzard"}, rgb(138, 205, 219)},
+	{{"sable", "désert", "grès", "dune", "chacal"}, rgb(194, 150, 85)},
+	{{"lac", "marin", "rivière", "eaux", "profond", "anguille", "bleu"}, rgb(63, 154, 168)},
+	{{"marais", "vase", "tourbière", "croco", "ronce", "racine", "serpent"}, rgb(95, 139, 84)},
+	{{"flamant", "dragonnet", "royal", "renard", "feu"}, rgb(192, 101, 71)},
+	{{"noir", "corbeau", "caverne"}, rgb(78, 83, 114)},
+}
+
+local function firstMatch(name, rules)
+	for _, rule in rules do
+		if name:find(rule[1], 1, true) then return rule[2] end
 	end
 	return nil
 end
 
-function D.style(it)
-	if it.design and palettes[it.design.material] then return palettes[it.design.material] end
-	local n=D.lower(it.name or "")
-	for _, rule in ipairs({
-		{"diamant","diamant"},{"givre","nord"},{"glace","nord"},{"neige","nord"},{"hiver","nord"},
-		{"loup","loup"},{"fourr","loup"},{"maill","garde"},{"fer","garde"},{"cuivre","forge"},
-		{"ronce","ronces"},{"sylvestre","ronces"},{"marais","ronces"},{"soie","lune"},
-		{"ambre","ambre"},{"royal","ambre"},{"os","os"},{"lin","lin"},{"cuir","cuir"},
-	}) do
-		if n:find(rule[1],1,true) then return palettes[rule[2]] end
+function D.appearance(item)
+	local name = D.lower(item.name or "")
+	local form, style = D.formOf(item), D.style(item)
+	local trophy = trophies[item.name]
+	local source = trophy and D.lower(trophy.name) or name
+	local trait = firstMatch(source, anatomy)
+	local hash = 0
+	for i = 1, #name do hash = (hash * 131 + name:byte(i)) % 2147483647 end
+	local accent = firstMatch(name, namedColors) or style.trim
+	local hide = style.color
+	if trophy then
+		for _, group in faunaColors do
+			local found = false
+			for _, word in group[1] do
+				if name:find(word, 1, true) then found = true break end
+			end
+			if found then
+				accent, hide = group[2], hide:Lerp(group[2], 0.56)
+				break
+			end
+		end
 	end
-	return palettes.cuir
+	local material = style.hard == "bone" and "Bone" or "Metal"
+	local metal = hardColors[style.hard]
+	if firstMatch(name, {{"de bois", true}, {"bois pétrifié", true}}) and not trophy then
+		metal, material = rgb(151, 104, 56), "Wood"
+	elseif (trait == "ice" and (form == "sword" or form == "staff")) or name:find("verre vivant", 1, true) then
+		metal, material = rgb(125, 190, 203), "Glass"
+	elseif name:find("d'acier", 1, true) or name:find("au diamant boréal", 1, true) then
+		metal = hardColors.steel
+	elseif name:find("de fer", 1, true) and style.key == "garde" then
+		metal = rgb(106, 115, 127)
+	end
+	if form == "magehat" then hide = rgb(84, 65, 126) end
+	if form == "bonnet" and name:find("rouge", 1, true) then hide = rgb(161, 48, 56) end
+	if form == "tophat" and name:find("vert", 1, true) then hide = rgb(59, 108, 70) end
+	if form == "toque" then hide = rgb(231, 217, 185) end
+	if form == "strawhat" then hide = rgb(207, 174, 93) end
+	if form == "tricorn" or form == "headband" then hide = hide:Lerp(rgb(36, 27, 37), 0.64) end
+	return {
+		form = form, slot = D.slotOf(item), color = hide, trim = style.trim, accent = accent, metal = metal,
+		material = material, cloth = style.cloth, series = style.key, mark = style.mark, trait = trait, name = name,
+		soul = name:find("légendaire", 1, true) ~= nil,
+		rarity = item.rarity or (name:find("légendaire", 1, true) and 4 or 1),
+		variant = hash % 5, profile = math.floor(hash / 5) % 7, cut = math.floor(hash / 35) % 17,
+	}
 end
 
 return D

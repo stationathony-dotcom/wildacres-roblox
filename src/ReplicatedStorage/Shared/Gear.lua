@@ -227,4 +227,63 @@ function G.totals(equipped): { [string]: number }
 	return t
 end
 
+-- Catalogue des maquettes par clé de recherche du HUD. Les raccourcis des
+-- planches et les anciennes clés restent utilisables pour les anciennes pièces.
+function G.visualEntries(config)
+	local entries, byName = {}, {}
+	local function add(item)
+		local key = G.visualKey(item)
+		entries[key] = entries[key] or item
+		byName[item.name] = byName[item.name] or entries[key]
+		return entries[key]
+	end
+	for _, recipe in config.RECIPES do
+		if recipe.gear then add(recipe.gear) end
+	end
+	for _, entry in config.Prises.KINDS do
+		add(entry.gear)
+		if entry.soul then add(entry.soul.gear) end
+	end
+	for _, name in G.WEAPON_NAMES do add({slot = "weapon", name = name}) end
+	for _, group in {{G.HATS, "hat"}, {G.ARMORS, "armor"}, {G.TRINKETS, "trinket"}} do
+		for _, entry in group[1] do
+			local visual = group[2] == "hat" and entry[2] or nil
+			entries[entry[1]] = add({slot = group[2], name = entry[1], visual = visual})
+		end
+	end
+	entries.armor = byName["Plastron de cuivre"]
+	entries.hat = byName["Chapeau de paille"]
+	entries.trinket = byName["Anneau de fer"]
+	local previousSlots = {
+		armor = {"Bouclier-carapace de tortue ancienne", "Cape", "Cape de soie", "Épaulières de pierre de gargouille animée"},
+		trinket = {"Bottes de marais", "Bottes de marche", "Brassards", "Gantelets", "Gants en cuir", "Jambières",
+			"Bouclier héraldique", "Bouclier rectangulaire", "Bouclier renforcé au diamant", "Bouclier rond", "Torche"},
+	}
+	for slot, names in previousSlots do
+		for _, name in names do
+			entries[slot .. ":" .. name] = assert(byName[name], name)
+		end
+	end
+	-- Pièces encore présentes dans les planches et les sauvegardes antérieures.
+	-- Les recettes et leurs statistiques restent celles de Config.
+	local oldNames = {
+		trinket = {"Anneau de forge cuivrée", "Collier du Loup gris"},
+		weapon = {"Arbalète en lin de Valdor", "Arc recourbé en lin de Valdor", "Dague en lin de Valdor",
+			"Hache en lin de Valdor", "Lance en lin de Valdor", "Masse en lin de Valdor", "Épée en lin de Valdor",
+			"Masse d'os de squelette ancien", "Masse d'os de squelette errant"},
+	}
+	for slot, names in oldNames do
+		for _, name in names do
+			local item = {slot = slot, name = name}
+			item.rarity = Design.style(item).rank
+			add(item)
+		end
+	end
+	return entries
+end
+
+function G.visualKey(item): string
+	return G.slotOf(item) .. ":" .. item.name
+end
+
 return G

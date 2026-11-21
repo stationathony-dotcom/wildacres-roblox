@@ -222,6 +222,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [~] **Vérification des props, phase 2** — sur disque, Codex, 21/11. Les 105 signalements sont tranchés et 20 modèles
       stockés ont une reconstruction ciblée. Commandes et relevé dans [`VERIFICATION-PROPS.md`](VERIFICATION-PROPS.md).
       Claude : synchronisation, reconstruction, bancs Édition et commits. En Play : pose, façades, éclairage et récolte du blé.
+- [~] **Équipement de 1 à Z** — sur disque, Codex, 21/11. Les 694 clés des planches et neuf entrées du catalogue courant
+      passent par la même géométrie que l’avatar. [Style et commandes Édition](STYLE-EQUIPEMENT.md).
+      Claude : synchronisation, génération, mannequins, captures et commits. En Play : lisibilité à 36 px et essayage en mouvement.
 
 ## Couloir Claude — les règles et le monde
 
@@ -277,6 +280,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 21/11 · Codex · Équipement de 1 à Z sur disque. 703 miniatures contrôlées sur des instances simulées.
+  Studio Édition et captures à reprendre par Claude. En Play sur le PC fixe, vérifier les cases à 36 px et les dégagements sur l’avatar.
 
 - 21/11 · Codex · Charte utilisable depuis le sac, avec validation et annulation sur disque.
   Groupe défilant et distances actualisées, y compris après réapparition.

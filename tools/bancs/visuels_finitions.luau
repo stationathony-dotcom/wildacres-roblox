@@ -1,17 +1,25 @@
--- À lancer dans Studio Edit après visuels_objets. Produit les miniatures affinées du catalogue.
+-- visuels_objets passe son dossier temporaire pour la phase objets.
+-- Un appel sans paramètre conserve la génération des visuels d'équipement.
+local cibleObjets, moduleObjets, configObjets = ...
 local RS, SS = game.ReplicatedStorage, game.ServerStorage
-local sourceMiniatures = SS.OutilsDev.ConstruireModelesMiniatures:Clone()
-local okMiniatures, miniatures = pcall(require, sourceMiniatures)
-sourceMiniatures:Destroy()
-assert(okMiniatures, miniatures)
-local shared = RS.Shared:Clone()
-shared.Parent = SS
-local ok, config, gear, design = pcall(function()
-	return require(shared.Config), require(shared.Gear), require(shared.GearDesign)
-end)
-shared:Destroy()
-assert(ok, tostring(config))
-local items, equipment = RS.IconesObjets, RS.IconesEquipement
+local miniatures = moduleObjets
+if not miniatures then
+	local clone = SS.OutilsDev.ConstruireModelesMiniatures:Clone()
+	local ok, resultat = pcall(require, clone)
+	clone:Destroy()
+	assert(ok, resultat)
+	miniatures = resultat
+end
+local config = configObjets
+if not config then
+	local shared = RS.Shared:Clone()
+	shared.Parent = SS
+	local ok
+	ok, config = pcall(require, shared.Config)
+	shared:Destroy()
+	assert(ok, config)
+end
+local items = cibleObjets
 
 local rgb, v, cf = Color3.fromRGB, Vector3.new, CFrame.new
 local wood, dark, brass, steel = rgb(125,78,42), rgb(58,38,28), rgb(193,139,66), rgb(159,174,179)
@@ -109,16 +117,6 @@ local function flask(d,c)
 	d.disc("Bouchon",0.33,0.16,0,0.61,0,wood)
 	d.box("Bande d'étiquette",0.39,0.22,0.045,0,-0.08,-0.30,ivory,0,cloth)
 end
-local seedIdentity = {
-	carrot={"root",rgb(238,122,42)}, parsnip={"root",rgb(248,224,156)}, beetroot={"bulb",rgb(161,66,98)}, turnip={"bulb",rgb(190,149,188)},
-	potato={"tuber",rgb(193,136,76)}, onion={"bulb",rgb(218,159,84)}, garlic={"cloves",ivory},
-	wheat={"grain",rgb(230,184,79)}, barley={"barley",rgb(223,172,62)}, oat={"oat",rgb(216,182,135)}, rye={"rye",rgb(150,113,64)},
-	tomato={"fruit",rgb(214,65,51)}, melon={"melon",rgb(96,150,78)}, pumpkin={"melon",rgb(232,133,36)}, squash={"squash",rgb(221,177,70)},
-	eggplant={"squash",rgb(135,80,167)}, cabbage={"cabbage",rgb(109,167,101)}, herbs={"leaf",rgb(70,153,91)}, hops={"cone",rgb(138,161,74)},
-	flax={"flower",rgb(117,156,213)}, grape={"bunch",rgb(151,88,167)}, pea={"pod",rgb(112,171,74)}, bean={"kidney",rgb(158,98,76)},
-	tree_chene={"acorn",rgb(143,95,54)}, tree_bouleau={"leaf",rgb(225,189,77)}, tree_sapin={"cone",rgb(130,82,49)},
-	tree_saule={"leaf",rgb(99,151,85)}, tree_cerisier={"cherry",rgb(192,62,67)},
-}
 -- Le motif occupe la face de l’étiquette. Sa silhouette reste visible après réduction.
 local function cropMark(d,kind,c,x,y,z)
 	local y0=y or 0
@@ -160,20 +158,6 @@ local function cropMark(d,kind,c,x,y,z)
 		else d.part("Fruit",elongated and v(0.30,0.43,0.062) or v(0.40,0.34,0.062),cf(x,y0,z)*CFrame.Angles(0,0,elongated and -0.4 or 0),c,"ball") end
 		if kind~="tuber" then d.box("Pédoncule",0.08,0.14,0.028,x+0.02,y0+0.19,z,g,0.23) end
 	end
-end
-local function seedPacket(d,id)
-	local key=id:gsub("^seed_","")
-	local mark=assert(seedIdentity[key],id)
-	local tone=mix(mark[2],linen,0.75)
-	if key:match("^tree_") then
-		d.box("Enveloppe de pépinière",1.06,1.31,0.36,0,0,0,rgb(107,132,95),0,cloth)
-	else
-		d.box("Sachet de semences",1.08,1.34,0.34,0,0,0,tone,0,cloth)
-	end
-	d.box("Pli supérieur",1.12,0.17,0.38,0,0.64,0,mix(tone,dark,0.35),0,cloth)
-	d.box("Étiquette frontale",0.79,0.89,0.052,0,-0.06,-0.171,rgb(239,221,171))
-	cropMark(d,mark[1],mark[2],0,-0.052,-0.207)
-	d.box("Bande de semence",0.77,0.076,0.045,0,-0.46,-0.201,mark[2])
 end
 local function juice(d,id)
 	local kind,c,body
@@ -384,156 +368,6 @@ local function shield(d,c,kind)
 	end
 end
 
-local function weapon(d,c,form,long,short,style)
-	local blade=mix(c,steel,0.25)
-	local mark=style and style.mark
-	local trim=style and style.trim or brass
-	if form=="bow" or form=="crossbow" then
-		local span=long and 0.91 or 0.74
-		local bend=mark=="leaf" and 0.52 or mark=="frost" and 0.31 or 0.47
-		local curve={v(-0.12,-span,0),v(bend*0.65,-span*0.63,0),v(bend,0,0),v(bend*0.65,span*0.63,0),v(-0.12,span,0)}
-		if form=="crossbow" then
-			for i,p in ipairs(curve) do curve[i]=v(-p.Y,p.X,0) end
-			d.box("Fût",0.24,1.26,0.28,0,-0.29,0,wood)
-			d.box("Rail",0.08,0.94,0.08,0,-0.11,-0.16,steel,0,metal)
-		end
-		for i=1,#curve-1 do
-			d.line("Branche d'arc",curve[i],curve[i+1],mark=="fang" and 0.139 or 0.10,style and mix(wood,c,0.45) or wood)
-			if mark=="crest" or mark=="sun" or mark=="frost" then
-				d.line("Lamelle de renfort",curve[i]+v(0,0,-0.055),curve[i+1]+v(0,0,-0.055),0.047,trim)
-			end
-		end
-		d.line("Corde",curve[1],curve[#curve],0.041,ivory)
-		d.box("Poignée",0.16,0.28,0.17,form=="bow" and bend or 0,0,0,dark)
-		if mark=="leaf" or mark=="fang" then
-			for _,p in ipairs({curve[1],curve[#curve]}) do
-				d.part("Extrémité recourbée",v(0.18,0.19,0.077),cf(p)*CFrame.Angles(0,0,0.67),trim,"wedge")
-			end
-		end
-		return
-	elseif form=="gauntlet" then
-		d.box("Gantelet",0.66,0.84,0.41,0,-0.12,0,c,0,leather)
-		for i=-1,1 do fang(d,v(i*0.21,0.61,-0.08),0.62,ivory) end
-		d.box("Poignet",0.71,0.18,0.43,0,-0.49,0,brass)
-		return
-	end
-	local pole=form=="pike" or form=="scythe" or form=="halberd"
-	local edged=form=="dagger" or form=="sword" or form=="knife" or form=="greatsword" or form=="saber"
-	local handleLength=pole and 1.49 or form=="greatsword" and 0.58 or edged and 0.42 or 1.04
-	d.box("Manche",edged and 0.19 or 0.14,handleLength,0.16,0, -0.64+handleLength/2,0,style and mix(wood,c,0.40) or wood,0,leather)
-	if form=="hammer" then
-		d.box("Tête",0.93,0.41,0.46,0,0.45,0,blade,0,metal)
-		d.box("Face de frappe",0.15,0.44,0.48,-0.43,0.45,0,steel,0,metal)
-	elseif form=="sickle" or form=="scythe" then
-		local sickle = form=="sickle"
-		local first = v(0,sickle and 0.34 or 0.80,0)
-		local curve = sickle and {first,v(0.17,0.56,0),v(0.44,0.61,0),v(0.65,0.48,0),v(0.68,0.24,0),v(0.54,0.04,0)}
-			or {first,v(0.32,0.93,0),v(0.63,0.90,0),v(0.88,0.80,0),v(1.03,0.62,0)}
-		for i=1,#curve-1 do
-			d.line("Lame courbe",curve[i],curve[i+1],0.22-(i-1)*0.032,blade,metal)
-		end
-	elseif form=="axe" or form=="halberd" then
-		local long=form=="scythe" or form=="sickle"
-		d.box("Œil",0.31,0.24,0.22,0,0.44,0,steel,0,metal)
-		d.part("Lame latérale",v(long and 0.81 or 0.59,long and 0.30 or 0.57,0.13),cf(0.38,0.53,0)*CFrame.Angles(0,0,long and 0.25 or -0.16),blade,"wedge",metal)
-		if long then d.line("Tranchant",v(0.22,0.57,-0.055),v(0.76,0.72,-0.055),0.064,steel,metal) end
-		if form=="halberd" then d.part("Pointe haute",v(0.23,0.46,0.13),cf(0,0.75,0),steel,"wedge",metal) end
-	elseif form=="claw" then
-		for _,s in ipairs({-1,1}) do
-			d.part("Pince",v(0.27,0.60,0.24),cf(s*0.22,0.53,0)*CFrame.Angles(0,0,s*0.27),c,"wedge")
-		end
-		d.ball("Articulation",0.55,0.33,0.31,0,0.41,0,mix(c,brass,0.30))
-	elseif form=="mace" then
-		d.disc("Tête renforcée",0.58,0.47,0,0.52,0,c,metal)
-		for i=0,3 do
-			local a=i*math.pi/2
-			d.ball("Garniture",0.23,0.26,0.23,math.cos(a)*0.27,0.56,math.sin(a)*0.27,steel)
-		end
-	elseif form=="pike" then
-		d.part("Pointe",v(0.27,0.53,0.15),cf(0,0.92,0),blade,"wedge",metal)
-		d.box("Douille",0.19,0.19,0.18,0,0.67,0,brass,0,metal)
-	else
-		local length=form=="greatsword" and 1.62 or form=="saber" and 1.23
-			or form=="sword" and (long and 1.24 or short and 0.82 or 1.06) or form=="knife" and 0.68 or 0.63
-		local width=form=="greatsword" and 0.39 or form=="sword" and 0.29 or 0.23
-		if mark=="fang" or mark=="crest" then width*=1.17 elseif mark=="moon" then width*=0.86 end
-		local base=form=="greatsword" and -0.08 or -0.25
-		local guard=form=="knife" and 0.33 or form=="greatsword" and 0.78 or 0.57
-		d.box("Garde",guard,0.09,0.17,0,base,0,trim,0,metal)
-		if mark=="sun" or mark=="frost" or mark=="leaf" then
-			for s=-1,1,2 do
-				d.part("Quillon",v(0.20,0.29,0.13),cf(s*guard*0.44,base+0.105,0)*CFrame.Angles(0,0,s*0.43),trim,"wedge",metal)
-			end
-		elseif mark=="moon" then d.oval("Garde fermée",0,base-0.064,0,guard*0.59,0.16,0.063,trim,metal,10)
-		elseif mark=="fang" then d.ball("Pommeau d’os",0.25,0.18,0.19,0,-0.64,0,ivory) end
-		if form=="saber" then
-			d.line("Lame",v(0,base,0),v(0.06,0.39,0),0.19,blade,metal)
-			d.line("Courbure",v(0.06,0.39,0),v(0.32,0.90,0),0.15,blade,metal)
-			d.part("Pointe recourbée",v(0.13,0.24,0.10),cf(0.35,0.99,0)*CFrame.Angles(0,0,-0.55),blade,"wedge",metal)
-			d.oval("Garde de sabre",0.12,-0.43,0,0.29,0.24,0.066,brass,metal,8)
-		else
-			d.box("Lame",width,length-0.18,0.117,0,base+(length-0.18)/2,0,blade,0,metal)
-			d.part("Pointe",v(width,0.18,0.115),cf(0,base+length-0.09,0),blade,"wedge",metal)
-			d.box("Dos poli",0.051,length-0.22,0.029,0,base+(length-0.22)/2,-0.066,mix(blade,ivory,0.32),0,metal)
-			if form=="greatsword" then d.box("Ricasso",0.30,0.21,0.16,0,base+0.15,-0.009,steel,0,metal) end
-		end
-	end
-end
-
-local function armor(d,c,kind,name)
-	if kind=="shield" then shield(d,c,"shell") return end
-	local textile=kind=="cape" or kind=="coat" or kind=="tunic"
-	local material=textile and cloth or kind=="leather" and leather or metal
-	if kind=="cape" then
-		d.box("Dos de cape",0.91,1.48,0.17,0,-0.09,0,c,0,cloth)
-		for _,s in ipairs({-1,1}) do
-			d.box("Tombé",0.27,1.51,0.18,s*0.40,-0.11,0,mix(c,ivory,0.18),s*0.17,cloth)
-			d.line("Ourlet",v(s*0.43,0.48,-0.11),v(s*0.57,-0.83,-0.13),0.054,brass,cloth)
-		end
-		d.box("Col",0.53,0.20,0.24,0,0.65,0,mix(c,ivory,0.32),0,cloth)
-		bolt(d,0,0.54,-0.15)
-		return
-	end
-	local bodyHeight=kind=="coat" and 1.57 or 1.03
-	local width=kind=="shoulder" and 0.46 or 0.91
-	d.box("Buste",width,bodyHeight,0.53,0,kind=="coat" and -0.15 or 0,0,c,0,material)
-	for _,s in ipairs({-1,1}) do
-		d.box(textile and "Manche" or "Épaule",kind=="shoulder" and 0.50 or 0.40,kind=="coat" and 0.72 or 0.37,0.53,s*0.52,0.30,0,mix(c,ivory,0.22),-s*0.27,material)
-	end
-	if kind=="mail" or kind=="scale" then
-		for row=0,2 do
-			for col=-1,1 do
-				local tone=mix(c,ivory,0.15+(row+col+1)%2*0.21)
-				d.box(kind=="mail" and "Maille" or "Écaille",0.23,0.15,0.06,col*0.25+row%2*0.036,0.29-row*0.235,-0.28,tone,col*0.12,metal)
-			end
-		end
-	elseif kind=="plate" or kind=="beetle" then
-		for _,s in ipairs({-1,1}) do
-			d.part(kind=="beetle" and "Élytre" or "Plaque",v(0.56,0.71,0.35),cf(s*0.26,0.16,-0.22)*CFrame.Angles(0,s*0.1,s*0.1),mix(c,ivory,0.13),"wedge",metal)
-			bolt(d,s*0.31,-0.12,-0.33)
-		end
-	else
-		for s=-1,1,2 do strap(d,v(s*0.33,0.34,-0.29),v(s*0.22,-0.37,-0.29),0.075,textile and linen or dark) end
-	end
-	local trim=kind=="coat" and ivory or textile and linen or brass
-	d.box("Ceinture",1.01,0.101,0.56,0,-0.36,0,dark,0,leather)
-	d.box("Boucle",0.23,0.17,0.07,0,-0.36,-0.31,trim)
-	if name and (name:find("cœur",1,true) or name:find("diamant",1,true)) then
-		local diamond=name:find("diamant",1,true)~=nil
-		local theme,gemColor=heartTheme(name)
-		if diamond then gemColor=rgb(119,209,222) end
-		d.part("Sertissage",v(0.47,0.47,0.10),cf(0,0.12,-0.42)*CFrame.Angles(0,0,math.pi/4),brass,nil,metal)
-		gem(d,0,0.13,-0.54,gemColor,0.75)
-		if theme=="root" or theme=="thorn" or theme=="harvest" then
-			for s=-1,1,2 do d.line("Entrelacs",v(0,0.12,-0.43),v(s*0.43,0.42,-0.37),0.081,leaf) end
-		elseif theme=="frost" or theme=="glass" or theme=="dormant" then
-			for s=-1,1,2 do gem(d,s*0.30,0.39,-0.37,gemColor,0.41) end
-		elseif theme=="cursed" then
-			for s=-1,1,2 do bolt(d,s*0.33,0.32,-0.40,gemColor) end
-		end
-	end
-end
-
 local function hat(d,c,kind)
 	if kind=="turban" then
 		d.ball("Calotte de lin",1.19,0.71,1.12,0,0.12,0,c)
@@ -702,6 +536,10 @@ local function meat(d,id)
 		d.ball("Articulation",0.28,0.24,0.23,0.63,0.095,0,ivory)
 		d.ball("Cuisse",1.10,0.52,0.73,-0.23,0,-0.025,rgb(193,125,115))
 		d.ball("Hanche",0.48,0.43,0.56,0.10,0.01,0.07,rgb(177,104,99))
+		for i = -1, 1 do
+			d.line("Fibre de la cuisse", v(-0.32 + i * 0.14, 0.20, -0.18),
+				v(-0.24 + i * 0.13, 0.22, 0.08), 0.055, cream)
+		end
 	elseif id=="venison" then
 		local c=rgb(125,48,50)
 		cut(d,"Médaillon",cuts.medallion,-0.34,0,0.17,0.22,c,0.65,0.69)
@@ -717,8 +555,9 @@ local function meat(d,id)
 		d.box("Os de côte",0.64,0.16,0.19,0.39,0.045,0.04,ivory,0.26)
 		d.ball("Extrémité d'os",0.26,0.20,0.22,0.70,0.13,0.04,ivory)
 	elseif id=="jerky" then
+		local laniere = { {-0.45,-0.31}, {0.28,-0.44}, {0.52,-0.12}, {0.30,0.42}, {-0.39,0.37} }
 		for i=-1,1 do
-			cut(d,"Lamelle sèche",cuts.medallion,i*0.36,i%2*0.067,-i*0.16,0.12,mix(rgb(104,52,36),rind,(i+1)*0.16),0.28,1.70-i*0.17)
+			cut(d,"Lamelle sèche",laniere,i*0.36,i%2*0.067,-i*0.16,0.12,mix(rgb(104,52,36),rind,(i+1)*0.16),0.38,1.70-i*0.17)
 			d.part("Bord sec",v(0.21,0.088,0.34),cf(i*0.29+0.04,0.08,0.56-i*0.13)*CFrame.Angles(0,i*0.16,0),cooked,"wedge")
 		end
 	elseif id=="roast" then
@@ -733,7 +572,11 @@ local function meat(d,id)
 		local c=grill and cooked or raw
 		local outline=grill and cuts.steak or cuts.raw
 		cut(d,"Face de coupe",outline,-0.06,0,0.02,0.28,c,1.15,1.13)
-		cut(d,"Bord de coupe",outline,-0.06,0.137,0.02,0.035,mix(c,grill and rind or cream,0.20),1.03,1.02)
+		if grill then
+			d.ball("Face saisie", 1.16, 0.12, 0.79, -0.03, 0.11, 0.016, mix(c,rind,0.21))
+		else
+			cut(d,"Bord de coupe",outline,-0.06,0.137,0.02,0.035,mix(c,cream,0.20),1.03,1.02)
+		end
 		d.line(grill and "Croûte" or "Gras",v(-0.70,0.079,-0.02),v(-0.31,0.103,-0.30),0.088,grill and rind or cream)
 		for i=-1,0 do
 			d.line(grill and "Grille" or "Marbrure",v(i*0.37+0.05,0.147,-0.16),v(i*0.36+0.19,0.147,0.31),0.042,grill and dark or cream)
@@ -749,65 +592,23 @@ local function assign(form, ids)
 	end
 end
 
-local blue, ice, purple, amber = rgb(79,140,175), rgb(164,226,229), rgb(132,82,161), rgb(226,155,67)
+local ice, purple, amber = rgb(164,226,229), rgb(132,82,161), rgb(226,155,67)
 local green, moss, soot, rose = rgb(110,164,81), rgb(82,119,76), rgb(63,59,80), rgb(185,81,104)
-local jellyLooks={
-	prise_mud_man={"mud",rgb(139,91,49)}, prise_mud_golem={"block",rgb(110,74,56)}, prise_freshwater_jellyfish={"bell",rgb(133,160,205)},
-	prise_leech={"strip",rgb(132,53,73)}, prise_slime={"drop",green}, slime_gel={"pile",rgb(174,206,83)},
-	prise_slime_blue={"ice",blue}, prise_marsh_king={"reed",moss}, prise_boss_slime={"crown",purple}, prise_bee_swarm={"comb",amber},
+-- Les prises, potions, teintures, graines et âmes sont rendues par leur banc dédié.
+local jellyLooks = { slime_gel = { "pile", rgb(174,206,83) } }
+local vialLooks = {
+	oil = { "oil", amber },
+	vinegar = { "sour", rgb(164,92,63) },
+	fruit_syrup = { "syrup", rose },
 }
-local vialLooks={
-	vial={"empty",ice}, extract={"extract",green}, bottle={"bottle",moss}, message_bottle={"letter",blue}, perfume={"perfume",rose},
-	herbal_salve={"balm",moss}, calming_draught={"calm",rgb(111,169,197)}, healing_potion={"heal",rgb(199,53,60)},
-	dye={"dye",purple}, vigor_elixir={"vigor",amber}, night_elixir={"night",rgb(106,108,189)},
-	oil={"oil",amber}, vinegar={"sour",rgb(164,92,63)}, fruit_syrup={"syrup",rose},
-	potion_taureau={"bull",rgb(176,78,55)}, potion_sauvage={"wild",rgb(196,102,63)}, potion_brume={"mist",rgb(161,177,191)},
-	elixir_lunaire={"moon",rgb(111,146,196)}, potion_vent={"air",rgb(112,190,178)},
-	potion_pierre={"stone",rgb(111,123,139)}, elixir_racine={"root",rgb(130,154,75)},
-	grande_potion={"great_heal",rgb(185,56,73)}, potion_trefle={"clover",rgb(106,168,85)}, potion_charme={"charm",rgb(192,91,145)},
-	prise_assassin={"shade",soot}, prise_storm_wraith={"storm",rgb(116,157,233)}, prise_tree_spirit={"tree",green},
-	prise_woods_spirit={"leaf",moss}, prise_water_spirit={"water",rgb(78,196,202)}, prise_ruin_spirit={"ruin",rgb(179,132,78)},
-	prise_drowned_spirit={"sunken",rgb(70,147,159)}, prise_possessed_shade={"bound",purple}, prise_creeping_shadow={"crawl",soot},
-	prise_shade={"veil",rgb(114,99,159)}, prise_brumeglace={"frost",ice}, prise_wisp={"wisp",rgb(237,194,78)},
-	prise_faceless_walker={"mask",rgb(145,170,171)}, prise_revenant={"bone",ivory}, prise_dune_spectre={"sand",amber},
-	prise_blizzard_spectre={"blizzard",rgb(142,169,217)}, prise_wandering_spectre={"mist",rgb(149,186,179)}, prise_crownless_king={"king",rgb(124,91,171)},
-	prise_toad={"toad",moss}, prise_deep_beast={"deep",purple}, prise_dune_snake={"venom_sand",amber}, prise_water_snake={"venom_water",blue},
-	prise_river_serpent={"river",rgb(94,177,140)}, prise_snake={"fang",rgb(153,191,75)}, prise_sand_worm={"grit",rgb(171,105,55)},
+local boneLooks = { fossil_bone = { "fossil", rgb(171,145,111) } }
+local scaleLooks = {
+	golden_carapace = { "gold", amber },
+	scales = { "plain", rgb(126,157,121) },
 }
-local boneLooks={
-	bone={"clean",ivory}, fossil_bone={"fossil",rgb(171,145,111)}, prise_ogre={"broken",rgb(221,192,149)},
-	prise_cyclops={"brow",rgb(203,172,135)}, prise_ice_giant={"ice",ice}, prise_forest_giant={"moss",rgb(172,174,128)},
-	prise_ruin_giant={"carved",rgb(177,168,143)}, prise_minotaur={"rib",ivory},
-	prise_cave_troll={"basalt",rgb(154,144,125)}, prise_frost_troll={"icewrap",rgb(195,218,215)},
-	prise_mountain_troll={"shale",rgb(176,153,134)}, prise_root_troll={"root",rgb(197,165,113)}, prise_yeti={"fur",ivory},
-	prise_mountain_giant={"thick",rgb(182,167,141)}, prise_ghoul={"crack",rgb(169,156,124)},
-	prise_mummy={"linen",rgb(209,180,132)}, prise_ancient_skeleton={"rune",rgb(188,163,133)},
-	prise_skeleton={"joint",rgb(211,211,184)},
-}
-local soulLooks={
-	ame_brumeglace={"frost",rgb(119,185,229)}, ame_deep_beast={"deep",rgb(90,113,174)}, ame_bramble_mother={"thorn",rose},
-	ame_snow_wyvern={"wings",ice}, ame_vargor={"wolf",rgb(216,134,72)}, ame_boss_goblin={"goblin",green},
-	ame_glass_colossus={"glass",rgb(124,213,202)}, ame_ice_sleeper={"dormant",blue}, ame_harvest_warden={"harvest",amber},
-	ame_mountain_giant={"mountain",rgb(167,154,132)}, ame_boss_myconid={"spore",rgb(103,183,164)}, ame_marsh_king={"marsh",moss},
-	ame_boss_slime={"slime",purple}, ame_mycelian_king={"mycelium",rgb(186,113,164)}, ame_crownless_king={"broken",rgb(135,118,191)},
-	ame_royal_scarab={"scarab",rgb(219,177,74)},
-}
-local scaleLooks={
-	prise_ancient_turtle={"shell",rgb(106,143,130)}, golden_carapace={"gold",amber}, ancient_scale={"ancient",rgb(125,151,132)},
-	prise_hostile_siren={"siren",rgb(94,165,189)}, black_scale={"black",soot}, scales={"plain",rgb(126,157,121)},
-	prise_sand_basilisk={"sand",rgb(182,141,80)}, prise_croc={"croc",rgb(98,129,77)}, prise_drakeling={"ember",rgb(181,69,51)},
-	prise_snow_wyvern={"frost",ice}, prise_bog_lizard={"bog",moss}, prise_wyvern={"wing",rgb(124,91,149)},
-	prise_beetle={"elytra",rgb(100,149,139)}, prise_royal_scarab={"royal",amber},
-}
-local fangLooks={
-	prise_hyena={"notch",rgb(219,180,122)}, prise_jackal={"thin",rgb(212,193,152)}, prise_stray_dog={"blunt",ivory},
-	prise_wild_dog={"pair",rgb(233,224,187)}, prise_night_howler={"night",purple}, prise_wolf={"wolf",ivory},
-	prise_wolf_white={"white",rgb(242,237,208)}, prise_shadow_wolf={"shadow",soot}, prise_black_wolf={"black",rgb(90,82,87)},
-	prise_polar_wolf={"ice",ice}, prise_lynx={"hook",rgb(231,207,165)}, prise_vargor={"king",amber},
-	tooth={"molar",ivory}, monster_tooth={"serrated",rgb(217,184,146)},
-	prise_boar={"tusk",ivory}, prise_colossal_boar={"big",rgb(222,196,147)}, prise_swamp_boar={"swamp",rgb(148,155,95)},
-	prise_frost_boar={"tusk_ice",ice}, prise_bear={"claw",rgb(120,94,73)}, prise_polar_bear={"claw_ice",ice},
-	prise_brown_bear={"claw_brown",rgb(134,78,50)}, prise_cave_bear={"claw_deep",soot}, claw={"claw_pair",ivory},
+local fangLooks = {
+	monster_tooth = { "serrated", rgb(217,184,146) },
+	claw = { "claw_pair", ivory },
 }
 
 local function jellyShape(d,k,c)
@@ -1080,75 +881,9 @@ local function scaleShape(d,k,c)
 	elseif k=="sand" then for i=-1,1 do d.ball("Grain",0.10,0.11,0.052,i*0.19,0.15-i*0.11,-0.16,amber) end end
 end
 
-local function soulShape(d,k,c)
-	local light=mix(c,ivory,0.59)
-	-- Chaque âme porte une silhouette du boss. Le noyau seul ne sert pas d’icône.
-	gem(d,0,-0.07,-0.016,c,1.0)
-	if k=="wings" or k=="deep" then
-		for s=-1,1,2 do
-			for i=0,2 do d.part(k=="wings" and "Membrane de wyverne" or "Aileron des profondeurs",
-				v(0.31,0.64-i*0.13,0.13),cf(s*(0.32+i*0.15),0.22-i*0.22,0)*CFrame.Angles(0,0,-s*(0.48+i*0.13)),mix(c,light,i*0.13),"wedge") end
-		end
-	elseif k=="wolf" or k=="goblin" then
-		for s=-1,1,2 do
-			d.part(k=="wolf" and "Oreille de loup" or "Oreille de gobelin",v(0.34,0.53,0.21),cf(s*0.34,0.42,0)*CFrame.Angles(0,0,-s*(k=="wolf" and 0.20 or 0.50)),c,"wedge")
-			d.box("Œil",0.16,0.075,0.065,s*0.17,0.11,-0.19,light,s*0.18)
-		end
-		d.part("Museau",v(0.46,0.36,0.35),cf(0,-0.26,-0.17),c,"wedge")
-	elseif k=="glass" or k=="mountain" or k=="frost" or k=="dormant" then
-		for s=-1,1,2 do
-			local size=k=="mountain" and v(0.61,1.28,0.44) or k=="dormant" and v(0.29,1.24,0.23) or v(0.24,0.94,0.26)
-			d.part("Éclat latéral",size,cf(s*0.40,-0.07,0.09)*CFrame.Angles(0,s*0.21,-s*(k=="glass" and 0.55 or 0.22)),light,k=="mountain" and "corner" or "wedge")
-		end
-		if k=="dormant" then d.oval("Sceau de glace",0,0,0,0.41,0.57,0.079,ice,metal,8) end
-	elseif k=="harvest" or k=="thorn" or k=="marsh" then
-		for s=-1,1,2 do
-			local a,b=v(s*0.13,-0.53,0),v(s*0.58,0.56,0.01)
-			d.line("Rameau",a,b,0.11,c)
-			for i=0,2 do
-				local at=a:Lerp(b,0.43+i*0.18)
-				d.part(k=="harvest" and "Grain d’épi" or k=="thorn" and "Épine" or "Feuille de roseau",v(0.19,0.30,0.10),cf(at+v(s*0.11,0,0))*CFrame.Angles(0,0,-s*0.48),light,k=="harvest" and "ball" or "wedge")
-			end
-		end
-	elseif k=="spore" or k=="mycelium" then
-		d.box("Stipe spectral",0.23,0.62,0.23,0,-0.27,0,light)
-		d.ball("Chapeau mycélien",k=="mycelium" and 1.35 or 0.99,0.46,0.76,0,0.34,0,c)
-		for i=-1,1 do d.ball("Spore",0.14,0.15,0.14,i*0.43,0.50-math.abs(i)*0.11,-0.15,light) end
-		if k=="mycelium" then d.disc("Couronne de spores",0.82,0.091,0,0.17,0,brass) end
-	elseif k=="slime" then
-		d.ball("Masse spectrale",1.10,0.61,0.87,0,-0.27,0,c)
-		for s=-1,1 do d.part("Couronne de gel",v(0.18,0.50,0.17),cf(s*0.29,0.29,0)*CFrame.Angles(0,0,-s*0.33),light,"wedge") end
-	elseif k=="scarab" then
-		for s=-1,1,2 do
-			d.part("Élytre spectrale",v(0.54,0.76,0.26),cf(s*0.32,-0.039,0)*CFrame.Angles(0,0,s*0.40),c,"ball")
-			d.line("Antenne",v(s*0.12,0.32,0),v(s*0.45,0.73,0),0.085,light)
-		end
-	else
-		for s=-1,1,2 do d.part("Couronne brisée",v(0.38,0.48,0.15),cf(s*0.35,0.13,0)*CFrame.Angles(0,0,-s*0.42),c,"wedge") end
-		d.box("Sceau du roi",0.47,0.12,0.17,0,-0.42,0,light,0.14)
-	end
-end
-
-local silkGlands={
-	prise_frost_spider={ice,"frost"},prise_cave_spider={soot,"cave"},prise_reed_spider={moss,"reed"},
-	prise_desert_spider={amber,"sand"},prise_spider={linen,"giant"},prise_sylvan_spider={green,"leaf"},
-}
-local function silkShape(d,k,c)
-	local width=k=="giant" and 1.17 or 0.88
-	d.ball("Poche de soie",width,0.70,0.73,0,0,0,c)
-	d.disc("Embout",0.27,0.17,0.27,0.33,0,mix(c,ivory,0.24))
-	for s=-1,1 do
-		d.line("Écheveau",v(s*0.19,-0.30,-0.17),v(s*0.24,0.29,-0.24),0.076,ivory)
-	end
-	if k=="frost" then gem(d,-0.32,0.19,-0.14,ice,0.45)
-	elseif k=="leaf" or k=="reed" then
-		d.part("Fibre végétale",v(0.42,0.17,0.11),cf(-0.26,0.23,-0.13)*CFrame.Angles(0,0,0.51),green,"wedge")
-	end
-end
-
 local lootForms={
 	gel_art={looks=jellyLooks,build=jellyShape}, vial_art={looks=vialLooks,build=vialShape},
-	bone_art={looks=boneLooks,build=boneShape}, soul_art={looks=soulLooks,build=soulShape},
+	bone_art={looks=boneLooks,build=boneShape},
 	scale_art={looks=scaleLooks,build=scaleShape}, fang_art={looks=fangLooks,build=trophyTooth},
 }
 assign("meat","steak meat boar_meat rabbit_meat venison roast roast_boar jerky")
@@ -1198,7 +933,6 @@ assign("anchor","anchor")
 assign("hardware","chain hinge fitting pulley")
 assign("cloth","towel")
 assign("liquid","oil")
-assign("seal","prise_fake_merchant")
 assign("tablegame","cards board_game")
 assign("hanging_art","painting")
 assign("case","scroll_case")
@@ -1207,35 +941,18 @@ assign("juice","apple_juice berry_juice grape_juice")
 assign("forged_nails","nails copper_nails rivet")
 assign("core","frozen_heart mineral_heart")
 for id in sackTypes do if config.ITEMS[id] then itemForms[id]="sack" end end
-for id,info in config.ITEMS do
-	if info.seed or id:match("^seed_tree_") then
-		assert(seedIdentity[id:sub(6)],id)
-		itemForms[id]="seed_packet"
-	elseif id:match("^prise_") and (info.name or ""):lower():match("^cœur") then
-		itemForms[id]="core"
-	end
-end
-
 for family, spec in lootForms do
 	for id in spec.looks do
 		if config.ITEMS[id] then itemForms[id]=family end
 	end
 end
-for id in silkGlands do
-	if config.ITEMS[id] then itemForms[id]="silk_gland" end
-end
-
 local function itemShape(d,id,kind,c)
 	local loot=lootForms[kind]
 	if loot then
 		local look=loot.looks[id]
 		loot.build(d,look[1],look[2])
-	elseif kind=="silk_gland" then
-		local look=silkGlands[id]
-		silkShape(d,look[2],look[1])
 	elseif kind=="juice" then juice(d,id)
 	elseif kind=="sack" then sack(d,id)
-	elseif kind=="seed_packet" then seedPacket(d,id)
 	elseif kind=="timber" then grainWood(d,id)
 	elseif kind=="core" then core(d,config.ITEMS[id].name,false)
 	elseif kind=="forged_nails" then nails(d,id)
@@ -1299,6 +1016,10 @@ local function itemShape(d,id,kind,c)
 			for s=-1,1,2 do
 				d.line("Ramification",v(0,-0.33,0),v(s*0.32,-0.66,0),0.11,tone)
 				if kind=="root" then d.part("Feuille",v(0.32,0.54,0.07),cf(s*0.20,0.45,0)*CFrame.Angles(0,0,-s*0.34),leaf,"wedge") end
+			end
+			if kind == "root" then
+				d.ball("Tubercule", 0.38, 0.55, 0.32, -0.02, 0.03, 0.013, tone)
+				d.line("Radicelle", v(-0.10,-0.27,-0.03), v(0.16,-0.70,-0.14), 0.075, tone)
 			end
 			if id=="peg" then d.part("Pointe de cheville",v(0.24,0.45,0.22),cf(0.06,0.58,0),wood,"wedge") end
 		end
@@ -1456,6 +1177,8 @@ local function itemShape(d,id,kind,c)
 	elseif kind=="rotten" then
 		d.ball("Aliment gâté",1.18,0.60,0.78,0,0,0,rgb(108,104,69))
 		for i=-1,1 do d.ball("Moisissure",0.26,0.12,0.25,i*0.25,0.27,-0.07,rgb(153,171,101)) end
+		d.ball("Partie desséchée", 0.57, 0.27, 0.42, 0.40, -0.08, -0.12, rgb(112, 75, 58))
+		d.ball("Tache sombre", 0.25, 0.07, 0.24, -0.27, 0.24, 0.19, rgb(68, 72, 45))
 	elseif kind=="fish" then
 		local grilled=id=="grilled_fish"
 		for i=0,grilled and 0 or 1 do
@@ -1540,278 +1263,6 @@ local function itemShape(d,id,kind,c)
 	else error("Silhouette inconnue : "..kind) end
 end
 
-local function classify(slot,name)
-	local function has(...)
-		for _,p in ipairs({...}) do if name:find(p,1,true) then return true end end
-		return false
-	end
-	if slot=="weapon" then
-		if has("arbalète") then return "crossbow" end
-		if has("arc ") then return "bow" end
-		if has("gantelet") then return "gauntlet" end
-		if has("masse-pince") then return "claw" end
-		if has("hallebarde") then return "halberd" end
-		if has("lance","pique") then return "pike" end
-		if has("marteau") then return "hammer" end
-		if has("faux") then return "scythe" end
-		if name:match("^faucille%f[%A]") or name:match("^serpe%f[%A]") then return "sickle" end
-		if has("dague","dard") then return "dagger" end
-		if has("hache") then return "axe" end
-		if has("massue","masse","gourdin") then return "mace" end
-		return "sword"
-	elseif slot=="armor" then
-		if has("bouclier") then return "shield" end
-		if has("épaulière") then return "shoulder" end
-		if has("cape") then return "cape" end
-		if has("manteau","fourré") then return "coat" end
-		if has("maille") then return "mail" end
-		if has("écaille") then return "scale" end
-		if has("élytre") then return "beetle" end
-		if has("tunique","tenue","robe","chemise") then return "tunic" end
-		if has("cuir","brigandine") then return "leather" end
-		return "plate"
-	elseif slot=="hat" then
-		if has("champignon","mycélienne") then return "mushroom" end
-		if has("couronne de bois") then return "antlers" end
-		if has("couronne") then return "crown" end
-		if has("casque","heaume") then return "helmet" end
-		if has("turban") then return "turban" end
-		if has("capuche") then return "hood" end
-		if has("masque") then return "mask" end
-		if has("plume","coiffe") then return "feathered" end
-		if has("fourrure","chapka","bonnet") then return "fur" end
-		return "brim"
-	end
-	if has("botte") then return "boots" end
-	if has("bouclier rond") then return "roundshield" end
-	if has("carapace") then return "shell" end
-	if has("bouclier") then return "shield" end
-	if has("carquois") then return "quiver" end
-	if has("fer à cheval","fers à cheval") then return "horseshoe" end
-	if has("ceinture") then return "belt" end
-	if has("fiole") then return "vial" end
-	if has("gourde") then return "gourd" end
-	if has("filet") then return "net" end
-	if has("sacoche") then return "satchel" end
-	if has("selle") then return "saddle" end
-	if has("panier") then return "basket" end
-	if has("lanterne") then return "lamp" end
-	if has("torche") then return "torch" end
-	if has("brassard") then return "bracer" end
-	if has("jambière") then return "greaves" end
-	if has("gant") then return "gloves" end
-	if has("trousseau") then return "keyring" end
-	if has("météorite") then return "shard" end
-	if has("cœur") then return "heart" end
-	if has("couteau") then return "knife" end
-	if has("faucille") then return "sickle" end
-	if has("marteau") then return "hammer" end
-	if has("anneau","bague","chevalière","bracelet") then return "ring" end
-	if has("croc") then return "fangs" end
-	if has("d'os","lapin") then return "bone" end
-	if has("gelée") then return "gel" end
-	return "pendant"
-end
-
-local function armorSlot(d,c,kind,trim)
-	if kind=="cape" or kind=="mantle" or kind=="splitcape" then
-		local short=kind=="mantle"
-		local height=short and 0.97 or 1.46
-		for s=-1,1,2 do
-			local x=kind=="splitcape" and s*0.39 or s*0.27
-			d.box("Pan de cape",kind=="splitcape" and 0.56 or 0.66,height,0.16,x,-0.13,0,c,s*0.18,cloth)
-			d.box("Bordure",kind=="splitcape" and 0.58 or 0.68,0.102,0.17,x,-0.13-height/2+0.04,-0.009,trim,s*0.18,cloth)
-		end
-		d.box("Col",0.87,0.20,0.24,0,height*0.43,0,mix(c,ivory,0.22),0,cloth)
-		bolt(d,0,height*0.40,-0.14,trim)
-	elseif kind=="boots" or kind=="tallboots" or kind=="sabatons" then
-		local plate=kind=="sabatons"
-		local height=kind=="tallboots" and 1.0 or 0.73
-		for s=-1,1,2 do
-			local x=s*0.31
-			d.box("Tige",0.40,height,0.55,x,height*0.45-0.37,0.12,c,0,plate and metal or leather)
-			d.part("Pied",v(0.42,0.35,0.85),cf(x,-0.29,-0.01),c,plate and "wedge" or nil,plate and metal or leather)
-			d.box("Semelle",0.45,0.10,0.85,x,-0.47,-0.01,dark,0,leather)
-			if plate then for i=0,2 do d.box("Lame de soleret",0.41,0.077,0.09,x,-0.16-i*0.054,-0.12-i*0.117,trim,0,metal) end
-			else
-				d.box("Revers",0.44,0.14,0.58,x,height-0.41,0.12,trim,0,cloth)
-				bolt(d,x,height*0.43-0.20,-0.178,trim)
-			end
-		end
-	elseif kind=="gloves" or kind=="gauntlets" or kind=="fingerless" then
-		local plated=kind=="gauntlets"
-		for s=-1,1,2 do
-			local x=s*0.32
-			d.box("Paume",0.40,0.62,0.27,x,0.03,0,c,s*0.13,plated and metal or leather)
-			d.box("Manchette",0.46,0.22,0.32,x+s*0.042,-0.32,0,trim,s*0.13,plated and metal or cloth)
-			for i=-1,1 do
-				d.box("Doigt",0.095,kind=="fingerless" and 0.16 or 0.34-0.045*math.abs(i),0.13,x+i*0.123,0.37,0,plated and trim or c,s*0.12)
-			end
-			d.box("Pouce",0.15,0.24,0.18,x-s*0.25,0.085,0,c,-s*0.30)
-		end
-	elseif kind=="pauldrons" or kind=="lamellar" or kind=="hornshoulder" then
-		for s=-1,1,2 do
-			local x=s*0.37
-			d.part("Coque d’épaule",v(0.64,0.56,0.61),cf(x,0.18,0)*CFrame.Angles(0,0,-s*0.22),c,"corner",metal)
-			for i=0,kind=="lamellar" and 2 or 1 do
-				d.box("Lame d’épaule",0.58-i*0.065,0.11,0.55,x,-i*0.13,0.01,i%2==0 and trim or c,s*0.20,metal)
-			end
-			if kind=="hornshoulder" then fang(d,v(x+s*0.14,0.54,0),0.65,trim) end
-			bolt(d,x,-0.1,-0.27,trim)
-		end
-	elseif kind=="pants" or kind=="leggings" or kind=="greaves" then
-		local plate=kind=="greaves"
-		local inset=kind=="leggings" and 0.36 or 0.48
-		if not plate then d.box("Ceinture",1.11,0.16,0.46,0,0.57,0,trim,0,leather) end
-		for s=-1,1,2 do
-			local x=s*0.31
-			d.box("Jambe",inset,plate and 1.08 or 1.24,0.42,x,-0.08,0,c,-s*0.10,plate and metal or cloth)
-			d.box("Ourlet",inset+0.055,0.096,0.46,x,-0.61,0,trim,-s*0.10)
-			if plate then d.part("Coquille de genou",v(0.31,0.36,0.15),cf(x,0.07,-0.24),trim,"wedge",metal)
-			else d.box("Couture visible",0.051,1.03,0.038,x+s*inset*0.26,-0.04,-0.23,trim,-s*0.10,cloth) end
-		end
-	else error(kind) end
-end
-
-local function accessoryShape(d,c,kind,trim,style,lower)
-	if kind=="feather" then
-		wing(d,-0.26,0.34,0,c,1)
-		wing(d,0.20,0.28,0,c,-1)
-		d.line("Rachis",v(-0.40,-0.53,0),v(0.12,0.53,0),0.061,trim)
-	elseif kind=="clover" then
-		for i=0,3 do
-			local a=i*math.pi/2+math.pi/4
-			d.ball("Feuille de trèfle",0.39,0.37,0.17,math.sin(a)*0.26,math.cos(a)*0.27,0,rgb(92,153,82))
-		end
-		d.box("Tige",0.083,0.39,0.081,0,-0.40,0,trim,-0.2)
-	elseif kind=="brooch" or kind=="medallion" then
-		d.part("Monture",v(0.17,0.93,0.93),cf()*CFrame.Angles(0,math.pi/2,0),trim,"cylinder",metal)
-		gem(d,0,0,-0.15,c,0.91)
-		if kind=="brooch" then d.line("Fibule",v(-0.37,-0.25,0.135),v(0.46,0.20,0.135),0.062,steel,metal)
-		else d.oval("Bélière",0,0.57,0,0.15,0.17,0.064,trim,metal,8) end
-	elseif kind=="bracelet" or kind=="necklace" then
-		d.oval("Cerclage",0,0,0,kind=="bracelet" and 0.57 or 0.44,kind=="bracelet" and 0.44 or 0.66,0.112,trim,metal)
-		for i=-1,1 do gem(d,i*0.24,kind=="bracelet" and -0.23 or -0.45+math.abs(i)*0.09,-0.11,c,kind=="bracelet" and 0.42 or 0.56) end
-	elseif kind=="pendant" then
-		-- La monture distingue les familles avant que la teinte de la pierre entre en jeu.
-		local pattern=style.mark
-		if lower:find("eaux",1,true) or lower:find("noyé",1,true) then pattern="water"
-		elseif lower:find("orage",1,true) then pattern="lightning"
-		elseif lower:find("blizzard",1,true) or lower:find("brumeglace",1,true) then pattern="frost"
-		elseif lower:find("arbre",1,true) or lower:find("bois",1,true) or lower:find("ronces",1,true) then pattern="leaf"
-		elseif lower:find("ombre",1,true) or lower:find("visage",1,true) then pattern="moon"
-		elseif lower:find("gobelin",1,true) then pattern="fang"
-		elseif lower:find("spectre",1,true) then pattern="spirit"
-		elseif lower:find("roi",1,true) then pattern="crest" end
-		d.oval("Cordon",0,0.27,0,0.52,0.49,0.070,dark,leather)
-		local y=-0.29
-		if pattern=="water" or pattern=="spirit" then
-			d.ball("Pierre en goutte",0.47,0.51,0.24,0,y,0,c)
-			d.ball("Reflet",0.17,0.21,0.07,-0.06,y+0.13,-0.11,mix(c,ivory,0.54))
-			if pattern=="spirit" then d.oval("Halo d’argent",0,y,0,0.31,0.29,0.066,trim,metal,10) end
-		elseif pattern=="leaf" then
-			d.part("Feuille en métal",v(0.47,0.56,0.12),cf(0,y,0)*CFrame.Angles(0,0,-0.47),leaf,"wedge",metal)
-			d.line("Nervure",v(0.13,y-0.24,-0.07),v(-0.15,y+0.20,-0.07),0.045,trim)
-		elseif pattern=="lightning" or pattern=="frost" then
-			local points=pattern=="lightning" and {v(0.12,y+0.22,0),v(-0.10,y,0),v(0.09,y+0.025,0),v(-0.13,y-0.28,0)}
-				or {v(-0.20,y+0.14,0),v(0.13,y+0.05,0),v(-0.09,y-0.24,0)}
-			for i=1,#points-1 do d.line("Éclat",points[i],points[i+1],0.105,trim,metal) end
-			if pattern=="frost" then gem(d,0,y,-0.10,c,0.58) end
-		elseif pattern=="fang" then
-			fang(d,v(-0.11,y+0.17,0),0.70,ivory)
-			fang(d,v(0.15,y+0.15,0),0.49,trim)
-		elseif pattern=="sun" or pattern=="crest" then
-			local t=pattern=="sun" and trim or mix(trim,c,0.30)
-			d.part("Médaillon rond",v(0.14,0.55,0.55),cf(0,y,0)*CFrame.Angles(0,math.pi/2,0),t,"cylinder",metal)
-			for i=0,4 do
-				local a=i*2*math.pi/5
-				d.box("Rayon",0.083,0.10,0.047,math.sin(a)*0.19,y+math.cos(a)*0.19,-0.08,c,-a)
-			end
-		elseif pattern=="moon" then
-			for i=0,7 do
-				local a,b=i*0.55,(i+1)*0.55
-				d.line("Croissant",v(math.cos(a)*0.24,y+math.sin(a)*0.24,0),v(math.cos(b)*0.24,y+math.sin(b)*0.24,0),0.104,trim,metal)
-			end
-			gem(d,0.09,y,-0.05,c,0.44)
-		else
-			d.part("Serti carré",v(0.46,0.46,0.15),cf(0,y,0)*CFrame.Angles(0,0,math.pi/4),trim,nil,metal)
-			gem(d,0,y,-0.13,c,0.74)
-		end
-	else trinket(d,c,kind) end
-end
-
-local function headShape(d,c,kind,trim)
-	if kind=="headband" then
-		d.oval("Bandeau",0,0,0,0.53,0.43,0.18,c,cloth)
-		d.box("Nœud",0.28,0.22,0.22,0.45,-0.14,-0.015,trim,0.19,cloth)
-		d.box("Ruban",0.12,0.42,0.074,0.55,-0.35,0,c,0.31,cloth)
-	elseif kind=="beret" or kind=="tophat" or kind=="toque" or kind=="tricorn" or kind=="magehat" then
-		d.disc("Bord",kind=="magehat" and 1.48 or kind=="toque" and 0.84 or 1.23,0.12,0,-0.24,0,trim,cloth)
-		if kind=="beret" then d.ball("Calotte inclinée",1.31,0.37,1.13,-0.13,0,0,c)
-		elseif kind=="toque" then
-			d.disc("Tour de tête",0.86,0.57,0,0.09,0,c,cloth)
-			d.ball("Plis de toque",1.07,0.45,1.03,0,0.45,0,mix(c,ivory,0.41))
-		elseif kind=="tricorn" then
-			d.ball("Calotte",0.89,0.55,0.87,0,0,0,c)
-			for i=0,2 do
-				local a=i*math.pi*2/3
-				d.part("Bord relevé",v(0.74,0.37,0.14),cf(math.sin(a)*0.47,-0.01,math.cos(a)*0.47)*CFrame.Angles(0,a,0),c,"wedge",cloth)
-			end
-		elseif kind=="magehat" then
-			d.part("Pointe",v(0.85,1.12,0.71),cf(0,0.38,0)*CFrame.Angles(0,0,0.31),c,"wedge",cloth)
-		else
-			d.disc("Fût",0.91,0.85,0,0.19,0,c,cloth)
-			d.disc("Ruban",0.96,0.13,0,-0.09,0,trim,cloth)
-		end
-	elseif kind=="closedhelm" or kind=="cresthelm" or kind=="nasalhelm" then
-		d.ball("Timbre",1.07,1.14,0.97,0,0.03,0,c)
-		d.box("Fente",0.70,0.14,0.08,0,0.06,-0.463,dark)
-		if kind=="cresthelm" then d.box("Crête",0.17,0.54,0.73,0,0.56,0,trim,0,metal)
-		elseif kind=="nasalhelm" then d.box("Nasal",0.12,0.55,0.15,0,-0.07,-0.51,trim,0,metal)
-		else
-			for s=-1,1,2 do d.box("Joue de heaume",0.38,0.57,0.26,s*0.25,-0.20,-0.35,trim,s*0.11,metal) end
-		end
-	else
-		hat(d,c,kind)
-		if kind=="feathered" then
-			for i=0,2 do
-				d.part("Grande plume",v(0.20,0.61,0.09),cf(0.30+i*0.11,0.60+i*0.12,-0.10)*CFrame.Angles(0,0,-0.23-i*0.12),trim,"wedge",cloth)
-			end
-		end
-	end
-end
-
-local function emblem(d,slot,form,style)
-	local color=style.trim
-	local face=({armor=-0.42,hat=-0.47,gloves=-0.17,shoulders=-0.265,legs=-0.24,cape=-0.102,boots=-0.26})[slot]
-	if not face then return end
-	local y=slot=="cape" and 0.19 or slot=="hat" and -0.08 or slot=="armor" and 0.11 or -0.15
-	local x=slot=="gloves" and 0.32 or slot=="shoulders" and -0.36 or slot=="legs" and 0.27 or slot=="boots" and 0.30 or 0
-	if slot=="hat" and (form=="headband" or form=="cresthelm") then return end
-	if style.mark=="gem" then gem(d,x,y,face,color,0.47)
-	elseif style.mark=="leaf" or style.mark=="fang" then
-		d.part("Emblème taillé",v(0.19,0.27,0.06),cf(x,y,face)*CFrame.Angles(0,0,-0.33),color,"wedge")
-	elseif style.mark=="rivets" or style.mark=="stitch" then
-		for i=-1,1 do bolt(d,x+i*0.085,y,face,color) end
-	else
-		d.part("Médaillon de série",v(0.05,0.23,0.23),cf(x,y,face)*CFrame.Angles(0,math.pi/2,0),color,"cylinder",metal)
-	end
-end
-
-local gearEntries = {}
-local function addGear(item)
-	local slot=gear.slotOf(item)
-	local entry=table.clone(item)
-	entry.slot=slot
-	local key=slot..":"..entry.name
-	gearEntries[key]=gearEntries[key] or entry
-end
-for _,r in config.RECIPES do if r.gear then addGear(r.gear) end end
-for _,n in gear.WEAPON_NAMES do addGear({slot="weapon",name=n}) end
-for _,info in gear.ARMORS do addGear({slot="armor",name=info[1]}) end
-for _,info in gear.HATS do addGear({slot="hat",name=info[1],visual=info[2]}) end
-for _,info in gear.TRINKETS do addGear({slot="trinket",name=info[1]}) end
-
 -- Préparer et valider hors de la place avant de remplacer les modèles.
 local pending, result = {}, {}
 local function stage(parent,id,kind,build)
@@ -1826,51 +1277,29 @@ local function stage(parent,id,kind,build)
 	result[id]=kind
 	if #pending%60==0 then task.wait() end
 end
-for id,kind in itemForms do
-	local info=assert(config.ITEMS[id],id)
-	local c=palette(info.name)
-	stage(items,id,kind,function(d) itemShape(d,id,kind,c) end)
+if cibleObjets then
+	for id,kind in itemForms do
+		local existant = items:FindFirstChild(id)
+		if id:match("^seed_") or id:match("^ame_") or id:match("^prise_")
+			or (existant and existant:GetAttribute("PaletteDediee")) then continue end
+		local info = assert(config.ITEMS[id], id)
+		local c = palette(info.name)
+		stage(items, id, kind, function(d)
+			d.model:SetAttribute("PaletteDediee", true)
+			itemShape(d, id, kind, c)
+		end)
+	end
+	for _, entry in pending do
+		local old = items:FindFirstChild(entry.model.Name)
+		if old then old:Destroy() end
+		entry.model.Parent = items
+	end
+	return result
 end
-for key,entry in gearEntries do
-	local c,lower=palette(entry.name)
-	local s=design.style(entry)
-	if entry.design then c=s.color end
-	local kind=design.formOf(entry) or classify(entry.slot,lower)
-	stage(equipment,key,kind,function(d)
-		if entry.slot=="weapon" or kind=="knife" or kind=="sickle" or kind=="hammer" then
-			weapon(d,c,kind,lower:find("long",1,true)~=nil,lower:find("court",1,true)~=nil,entry.design and s or nil)
-			if entry.design then
-				local at=kind=="bow" and v(0.35,0,-0.083)
-					or kind=="crossbow" and v(0,-0.27,-0.16)
-					or v(0,-0.43,-0.093)
-				if s.mark=="gem" then gem(d,at.X,at.Y,at.Z,s.trim,0.45)
-				else
-					d.box("Anneau d’artisan",0.21,0.092,0.047,at.X,at.Y,at.Z,s.trim,0,metal)
-				end
-			end
-		elseif entry.slot=="armor" then
-			armor(d,c,kind=="brigandine" and "leather" or kind,lower)
-			if kind=="brigandine" then for i=-1,1 do bolt(d,i*0.27,0.31,-0.31,s.trim) end end
-		elseif entry.slot=="offhand" then
-			if kind == "torch" then
-				d.box("Manche",0.18,1.43,0.18,0,-0.21,0,wood,-0.15)
-				d.part("Flamme",v(0.38,0.61,0.33),cf(0.14,0.66,0),rgb(243,144,44),"wedge",Enum.Material.Neon)
-			else
-				shield(d,c,kind == "roundshield" and "round" or "shell")
-			end
-		elseif entry.slot=="hat" then headShape(d,c,kind,s.trim)
-		elseif entry.slot~="trinket" then armorSlot(d,c,kind,s.trim)
-		elseif kind=="heart" then core(d,lower,true)
-		elseif kind=="vial" then
-			local antidote=lower:find("antidote",1,true)
-			vialShape(d,antidote and "heal" or "wisp",antidote and moss or amber)
-		else accessoryShape(d,c,kind,s.trim,s,lower) end
-		emblem(d,entry.slot,kind,s)
-		if not entry.design and lower:find("diamant",1,true) and (entry.slot=="weapon" or entry.slot=="hat" or kind=="shield") then
-			gem(d,0,entry.slot=="weapon" and -0.13 or 0.13,-0.25,rgb(158,238,238),0.46)
-		end
-	end)
-end
+
+local http = game:GetService("HttpService")
+local equipmentReport = assert(loadstring(http:GetAsync("http://127.0.0.1:34873/banc?f=visuels_equipement"),
+	"=visuels_equipement"))()
 local tools, toolIcons=SS.Outils,RS.IconesOutils
 local toolVariants={}
 for _,spec in ipairs({{"axe","Hache","Fer"},{"pickaxe","Pioche","Fer"},{"sword","Épée","Lame"}}) do
@@ -1929,4 +1358,4 @@ for i,entry in ipairs(pending) do
 	entry.model.Parent=entry.parent
 	if i%90==0 then task.wait() end
 end
-return game:GetService("HttpService"):JSONEncode({count=#pending,models=result})
+return http:JSONEncode({count = #pending, models = result, equipement = equipmentReport})

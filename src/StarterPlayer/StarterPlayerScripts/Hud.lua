@@ -85,6 +85,29 @@ function Hud.objectViewport(tpl: Model, dim: boolean?, tint: ((BasePart) -> ())?
 	end
 	m.Parent = vf
 	local cf, size = m:GetBoundingBox()
+	if tpl:GetAttribute("EquipementCommun") then
+		local camera = Instance.new("Camera")
+		camera.FieldOfView = 30
+		local aim = Vector3.new(0.28, 0.20, -1).Unit
+		local up = tpl:GetAttribute("ApercuArme") and Vector3.new(-0.38, 1, 0) or Vector3.yAxis
+		local frame = CFrame.lookAt(cf.Position + aim, cf.Position, up)
+		local cone = math.tan(math.rad(15)) * 0.91
+		local distance = 0.1
+		local signs = {-1, 1}
+		for _, x in signs do
+			for _, y in signs do
+				for _, z in signs do
+					local corner = cf:VectorToWorldSpace(Vector3.new(x, y, z) * size / 2)
+					local rel = frame:VectorToObjectSpace(corner)
+					distance = math.max(distance, rel.Z + math.max(math.abs(rel.X), math.abs(rel.Y)) / cone)
+				end
+			end
+		end
+		camera.CFrame = CFrame.lookAt(cf.Position + aim * distance, cf.Position, up)
+		camera.Parent = vf
+		vf.CurrentCamera = camera
+		return vf
+	end
 	if tpl:GetAttribute("ApercuDroit") then
 		local camera = Instance.new("Camera")
 		camera.FieldOfView = 30
@@ -112,15 +135,10 @@ function Hud.objectViewport(tpl: Model, dim: boolean?, tint: ((BasePart) -> ())?
 	return vf
 end
 
-local BLADE_TINTS = {
-	Color3.fromRGB(145, 97, 59), Color3.fromRGB(200, 119, 73), Color3.fromRGB(164, 178, 188),
-	Color3.fromRGB(150, 182, 208), Color3.fromRGB(217, 226, 234), Color3.fromRGB(238, 182, 70),
-	Color3.fromRGB(219, 72, 92), Color3.fromRGB(69, 178, 117), Color3.fromRGB(68, 126, 221), Color3.fromRGB(189, 141, 228),
-}
-
-local FORM_ICONS = { bow = "🏹", crossbow = "🏹", pike = "🔱", halberd = "🔱", spear = "🔱",
+local FORM_ICONS = { bow = "🏹", shortbow = "🏹", longbow = "🏹", crossbow = "🏹", pike = "🔱", longpike = "🔱",
+	halberd = "🔱", javelin = "🔱",
 	staff = "✨", scythe = "🌾", reaper = "🌾", sickle = "🌾", dagger = "🗡️", axe = "⚒️",
-	hammer = "🔨", mace = "🔨", shield = "🛡️", roundshield = "🛡️", torch = "🔥" }
+	hammer = "🔨", mace = "🔨", shield = "🛡️", roundshield = "🛡️", pavise = "🛡️", shellshield = "🛡️", torch = "🔥" }
 
 function Hud.gearIcon(it)
 	local shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
@@ -133,28 +151,21 @@ end
 function Hud.gearThumbnail(it, dim: boolean?): GuiObject?
 	local rs = game:GetService("ReplicatedStorage")
 	local equipment = rs:FindFirstChild("IconesEquipement")
-	local tools = rs:FindFirstChild("IconesOutils")
-	local design = require(rs.Shared:WaitForChild("GearDesign"))
-	local slot, form = design.slotOf(it), design.formOf(it)
-	local template = equipment and it.name and (equipment:FindFirstChild(slot .. ":" .. it.name) or equipment:FindFirstChild(it.name))
-	local icons = require(script.Parent:WaitForChild("IconesPeintes"))
-	local size = UDim2.fromScale(0.92, 0.92)
-	local painted = icons.image("equipement:" .. (it.name or ""), size, dim)
-	if painted then return painted end
-	if not (template and template:GetAttribute("FamilleVisuelle")) then
-		painted = icons.image("equipement:" .. (form or ""), size, dim)
-		if painted then return painted end
+	local shared = rs:WaitForChild("Shared")
+	local gear = require(shared:WaitForChild("Gear"))
+	if not it.name or not gear.SLOTS[gear.slotOf(it)] then return nil end
+	local template = equipment and equipment:FindFirstChild(gear.visualKey(it))
+	if template and template:IsA("Model") and template:GetAttribute("EquipementCommun")
+		and template:GetAttribute("RangVisuel") == (it.rarity or 1) then
+		return Hud.objectViewport(template, dim)
 	end
-	local hue
-	if slot == "weapon" and not template and tools then
-		local key = if form == "axe" then "Hache" elseif form == "mace" then "Gourdin" elseif form == "sword" then "Épée" else nil
-		template = key and tools:FindFirstChild(key)
-		hue = BLADE_TINTS[math.clamp(tonumber(it.visual) or 3, 1, #BLADE_TINTS)]
-	end
-	if not (template and template:IsA("Model")) then return nil end
-	return Hud.objectViewport(template, dim, hue and function(p)
-		if p.Material == Enum.Material.Metal then p.Color = hue end
-	end or nil)
+	-- Pièce de butin, ancienne sauvegarde ou place dont la planche n'a pas
+	-- encore été reconstruite. La vignette reprend la rareté de l'objet porté.
+	local visuals = require(shared:WaitForChild("GearVisuals"))
+	local model = visuals.preview(it)
+	local viewport = Hud.objectViewport(model, dim)
+	model:Destroy()
+	return viewport
 end
 
 function Hud.avatarViewport(character: Model): ViewportFrame?
