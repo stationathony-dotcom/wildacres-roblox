@@ -56,3 +56,13 @@ Questions d'origine :
 1. **Groupe de 5 joueurs** (`Social.MAX_GROUP`) : on le garde, ou on l'ouvre (règle 2) ?
 2. **Paliers hauts des métiers** pêche, élevage, bûcheronnage, commerce : à ajouter (recettes ≥ 30) ?
 3. **Créatures de niveau 7 et 9** rapportent 3 à 6 fois la médiane d'or par minute : voulu (risque élevé) ou à baisser ?
+
+## Objets — vérification complète (21/11, suite)
+
+| Contrôle | Résultat |
+|---|---|
+| Banc `objets` (Edit) : nom, icône affichable, prix, provenance, recettes, doublons | 1 058 objets, 1 309 recettes : **0 échec**. 5 noms en double renommés (Barque d'ornement, Bannière d'avant-poste, Ramure de trophée, Dard de scorpion acéré, Gelée de slime épaisse). Sans provenance, voulu : 9 anciennes pièces `wall*` / `floor2` / `stairs`. |
+| Play : chaque objet utilisable donné puis utilisé (`Joueurs.eat`) | **232 / 232 sans erreur**, console propre. |
+| Play : chaque recette d'objet aux 6 ateliers (juste assez → fabriqué, un de moins → refus) | **596 fabriquées juste, 84 refus de compétence corrects, 0 échec**. Le banc `recettes` lisait `skill` au lieu de `skillRaw` (faux échec du caparaçon) : corrigé. |
+| Play : chaque pièce d'équipement fabricable | **328 fabriquées juste, 0 échec** ; 299 au-delà du niveau du perso de test (non fabriquées pour ne pas toucher sa sauvegarde). |
+| Allure des props (Codex, banc `visuels_props`) | 417 props, 105 signalements → `docs/RAPPORT-BANC-PROPS.md`, tri et corrections en cours (phase 2). |
