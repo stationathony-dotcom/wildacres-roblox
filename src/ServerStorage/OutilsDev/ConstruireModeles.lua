@@ -1,6 +1,6 @@
 --!strict
 -- Construit les modèles du décor dans ServerStorage.Modeles (style « blocs mignons »).
--- À lancer depuis la barre de commande : require(game.ServerStorage.OutilsDev.ConstruireModeles).tout()
+-- En Édition, préférer les fonctions ciblées pour conserver les autres modèles retouchés.
 -- Chaque modèle a une pièce invisible « Base » posée au sol (pivot = point au sol, façade vers +Z).
 -- Une fois construits, les modèles se retouchent librement dans Studio : le jeu les clone tels quels.
 
@@ -253,23 +253,29 @@ function M.biomes()
 	end
 end
 
+local function filon(nom: string, couleur: Color3, mat: Enum.Material)
+	local m = nouveau(nom)
+	P(m, "Pierre", Vector3.new(4, 3, 3.4), Vector3.new(0, 1.3, 0), PIERRE, Mat.Slate, { rot = CFrame.Angles(0, math.rad(12), math.rad(6)) })
+	P(m, "Pierre", Vector3.new(2.6, 2.2, 2.6), Vector3.new(1.6, 1.2, 1.2), rgb(110, 108, 112), Mat.Slate, { rot = CFrame.Angles(math.rad(8), math.rad(35), 0) })
+	local pts = { { 0.8, 2.6, 1.2 }, { -1.2, 1.8, 1.5 }, { 1.9, 1.6, 2.3 }, { -0.4, 0.9, 1.75 }, { 1.2, 2.3, -1.1 }, { -1.6, 2.2, -0.6 } }
+	for i, q in pts do
+		P(m, "Pepite", Vector3.new(1.1, 0.9, 1), Vector3.new(q[1], q[2], q[3]), couleur, mat, { rot = CFrame.Angles(i, i * 0.7, 0), collide = false })
+	end
+	fini(m)
+end
+
+function M.filonOr()
+	dossier = dossierModeles()
+	filon("Filon_Or", rgb(226, 179, 67), Mat.Metal)
+end
+
 -- Artisanat : filons de minerai, argile, four, pièces de construction (grille de 4 studs), lit, lanterne
 function M.artisanat()
 	dossier = dossierModeles()
-	local function filon(nom: string, couleur: Color3, mat: Enum.Material)
-		local m = nouveau(nom)
-		P(m, "Pierre", Vector3.new(4, 3, 3.4), Vector3.new(0, 1.3, 0), PIERRE, Mat.Slate, { rot = CFrame.Angles(0, math.rad(12), math.rad(6)) })
-		P(m, "Pierre", Vector3.new(2.6, 2.2, 2.6), Vector3.new(1.6, 1.2, 1.2), rgb(110, 108, 112), Mat.Slate, { rot = CFrame.Angles(math.rad(8), math.rad(35), 0) })
-		local pts = { { 0.8, 2.6, 1.2 }, { -1.2, 1.8, 1.5 }, { 1.9, 1.6, 2.3 }, { -0.4, 0.9, 1.75 }, { 1.2, 2.3, -1.1 }, { -1.6, 2.2, -0.6 } }
-		for i, q in pts do
-			P(m, "Pepite", Vector3.new(1.1, 0.9, 1), Vector3.new(q[1], q[2], q[3]), couleur, mat, { rot = CFrame.Angles(i, i * 0.7, 0), collide = false })
-		end
-		fini(m)
-	end
 	filon("Filon_Charbon", rgb(34, 32, 36), Mat.Slate)
 	filon("Filon_Cuivre", rgb(214, 124, 72), Mat.Metal)
 	filon("Filon_Fer", rgb(222, 200, 180), Mat.Metal)
-	filon("Filon_Or", rgb(226, 179, 67), Mat.Metal)
+	M.filonOr()
 	do
 		local m = nouveau("Argile")
 		local c1, c2 = rgb(176, 108, 78), rgb(150, 92, 66)
@@ -1249,9 +1255,9 @@ local function etagere(m: Model, pos: Vector3, rot: number)
 	P(m, "Montant", Vector3.new(0.25, 5, 1.2), Vector3.zero, BOIS_FONCE, Mat.Wood, { cf = cf * CFrame.new(-1.9, 2.5, 0) })
 	P(m, "Montant", Vector3.new(0.25, 5, 1.2), Vector3.zero, BOIS_FONCE, Mat.Wood, { cf = cf * CFrame.new(1.9, 2.5, 0) })
 	local couleurs = { rgb(200, 80, 60), rgb(230, 180, 60), rgb(90, 150, 80), rgb(120, 100, 180) }
-	for i = 1, 4 do
-		P(m, "Bocal", Vector3.new(0.6, 0.8, 0.6), Vector3.zero, couleurs[i], Mat.SmoothPlastic, { cf = cf * CFrame.new(-1.5 + (i - 1) * 1, 3.05, 0), collide = false })
-		P(m, "Bocal", Vector3.new(0.6, 0.7, 0.6), Vector3.zero, couleurs[5 - i], Mat.SmoothPlastic, { cf = cf * CFrame.new(-1.5 + (i - 1) * 1, 4.8, 0), collide = false })
+	for i, x in { -1.35, 1.2 } do
+		P(m, "Bocal", Vector3.new(0.65, 0.8, 0.6), Vector3.zero, couleurs[i], Mat.SmoothPlastic, { cf = cf * CFrame.new(x, 3.02, 0), collide = false })
+		P(m, "Bocal", Vector3.new(0.65, 0.7, 0.6), Vector3.zero, couleurs[i + 2], Mat.SmoothPlastic, { cf = cf * CFrame.new(-x, 4.75, 0), collide = false })
 	end
 end
 
@@ -1259,7 +1265,10 @@ local function tapis(m: Model, pos: Vector3, c: Color3)
 	P(m, "Tapis", Vector3.new(5, 0.1, 3.4), pos + Vector3.new(0, 0.05, 0), c, Mat.Fabric, { collide = false })
 end
 
-local function lampe_interieure(base: BasePart, m: Model, pos: Vector3)
+local function lampe_interieure(m: Model, pos: Vector3, plafond: number)
+	local hauteur = plafond - pos.Y - 0.4
+	P(m, "Suspente", Vector3.new(0.14, hauteur + 0.08, 0.14), pos + Vector3.new(0, 0.4 + hauteur / 2, 0),
+		FER, Mat.Metal, { collide = false })
 	local l = P(m, "Lanterne", Vector3.new(0.7, 0.9, 0.7), pos, rgb(255, 214, 120), Mat.Neon, { collide = false })
 	local light = Instance.new("PointLight")
 	light.Range = 22
@@ -1268,6 +1277,33 @@ local function lampe_interieure(base: BasePart, m: Model, pos: Vector3)
 	light.Shadows = true
 	light.Parent = l
 	CollectionService:AddTag(l, "LumiereNuit")
+end
+
+-- Sous un toit ouvert, une ferme rejoint les deux murs. Dans une maison à étage la suspente
+-- se prend directement dans le plafond.
+local function ferme_lanterne(m: Model, largeur: number, hauteur: number, z: number)
+	P(m, "Entrait", Vector3.new(largeur, 0.4, 0.4), Vector3.new(0, hauteur + 0.18, z), BOIS_FONCE, Mat.Wood)
+end
+
+local function enseigne_suspendue(m: Model, pos: Vector3, mot: string)
+	P(m, "Potence", Vector3.new(0.4, 0.4, 2.8), pos + Vector3.new(0, 1.2, 1), BOIS_FONCE, Mat.Wood, { collide = false })
+	local ens = P(m, "Enseigne", Vector3.new(4.4, 1.6, 0.25), pos + Vector3.new(0, 0, 2.1), BOIS_CLAIR, Mat.WoodPlanks, { collide = false })
+	P(m, "Suspente", Vector3.new(0.18, 0.45, 0.18), pos + Vector3.new(0, 0.92, 2.1), FER, Mat.Metal, { collide = false })
+	for _, face in { Enum.NormalId.Front, Enum.NormalId.Back } do
+		local sg = Instance.new("SurfaceGui")
+		sg.Face = face
+		sg.PixelsPerStud = 40
+		sg.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
+		local t = Instance.new("TextLabel")
+		t.Size = UDim2.fromScale(1, 1)
+		t.BackgroundTransparency = 1
+		t.Text = mot
+		t.TextScaled = true
+		t.Font = Enum.Font.Fondamento
+		t.TextColor3 = rgb(60, 36, 18)
+		t.Parent = sg
+		sg.Parent = ens
+	end
 end
 
 -- ---------------------------------------------------------------- Maisons
@@ -1350,7 +1386,7 @@ local function maison(nom: string, o: MaisonOpts): (Model, BasePart)
 				{ cf = cf * CFrame.new(0, -fh / 2 - 0.75, 0.95), collide = false })
 			P(m, "Feuillage", Vector3.new(fw + 0.2, 0.35, 0.6), Vector3.zero, rgb(70, 130, 60), Mat.Grass,
 				{ cf = cf * CFrame.new(0, -fh / 2 - 0.4, 0.95), collide = false })
-			for k = -1, 1 do
+			for _, k in { -1, 1 } do
 				local c = FLEURS[(nFleur + k + 3) % #FLEURS + 1]
 				P(m, "Fleur", Vector3.new(0.7, 0.7, 0.7), Vector3.zero, c, Mat.SmoothPlastic,
 					{ cf = cf * CFrame.new(k * 0.85, -fh / 2 - 0.2, 0.95), collide = false, forme = "Ball" })
@@ -1359,6 +1395,7 @@ local function maison(nom: string, o: MaisonOpts): (Model, BasePart)
 		P(m, "Croisillon", Vector3.new(0.15, fh, 0.3), Vector3.zero, rgb(40, 40, 44), Mat.Metal, { cf = cf * CFrame.new(0, 0, 0.5), collide = false })
 		P(m, "Croisillon", Vector3.new(fw, 0.15, 0.3), Vector3.zero, rgb(40, 40, 44), Mat.Metal, { cf = cf * CFrame.new(0, 0, 0.5), collide = false })
 		P(m, "Appui", Vector3.new(fw + 0.8, 0.35, 0.7), Vector3.zero, PIERRE, Mat.Cobblestone, { cf = cf * CFrame.new(0, -fh / 2 - 0.2, 0.55), collide = false })
+		if pierre then return end
 		P(m, "Cadre", Vector3.new(fw + 0.6, 0.4, 0.5), Vector3.zero, poutre, Mat.Wood, { cf = cf * CFrame.new(0, fh / 2 + 0.2, 0.5), collide = false })
 		for _, sx in { -1, 1 } do
 			P(m, "Volet", Vector3.new(fw / 2 + 0.1, fh + 0.2, 0.18), Vector3.zero, rgb(78, 58, 40), Mat.WoodPlanks,
@@ -1400,7 +1437,7 @@ local function maison(nom: string, o: MaisonOpts): (Model, BasePart)
 			table.insert(list, { x, long / 2 })
 			return list
 		end
-		local z = 0.48
+		local z = 0.14
 		local bas, haut = sansPierre and 0.3 or 2.6, hMur - 0.35
 		-- soubassement de pierre
 		for _, seg in sansPierre and {} or morceaux(bas / 2) do
@@ -1410,7 +1447,7 @@ local function maison(nom: string, o: MaisonOpts): (Model, BasePart)
 			end
 		end
 		-- sablières (horizontales)
-		for _, y in { bas, hMur * 0.58, haut } do
+		for _, y in { bas, haut } do
 			for _, pc in morceaux(y) do
 				if pc[2] - pc[1] > 0.2 then
 					P(m, "Colombage", Vector3.new(pc[2] - pc[1], 0.45, 0.3), Vector3.zero, poutre, Mat.Wood,
@@ -1419,7 +1456,7 @@ local function maison(nom: string, o: MaisonOpts): (Model, BasePart)
 			end
 		end
 		-- poteaux et croix de Saint-André dans la moitié haute
-		local n = math.max(2, math.floor(long / 3.4))
+		local n = math.max(2, math.floor(long / 4.8))
 		local pas = long / n
 		for i = 0, n do
 			local x = math.clamp(-long / 2 + i * pas, -long / 2 + 0.25, long / 2 - 0.25)
@@ -1471,8 +1508,9 @@ local function maison(nom: string, o: MaisonOpts): (Model, BasePart)
 		Dt = D + 2 * JET
 		P(m, "Plafond", Vector3.new(W - 2 * e, 0.3, D - 2 * e), Vector3.new(0, y1 + 0.15, 0), rgb(110, 80, 52), Mat.WoodPlanks)
 		-- solives qui dépassent (on voit l'encorbellement)
-		for i = 0, math.floor(W / 2.6) do
-			local x = -W / 2 + 0.5 + i * ((W - 1) / math.floor(W / 2.6))
+		local intervalles = math.floor(W / 4.4)
+		for i = 0, intervalles do
+			local x = -W / 2 + 0.5 + i * ((W - 1) / intervalles)
 			for _, sz in { -1, 1 } do
 				P(m, "Solive", Vector3.new(0.5, 0.5, JET + 0.6), Vector3.new(x, y1 + 0.1, sz * (D / 2 + JET / 2 - 0.2)), poutre, Mat.Wood, { collide = false })
 			end
@@ -1509,7 +1547,11 @@ local function maison(nom: string, o: MaisonOpts): (Model, BasePart)
 		local cf = CFrame.lookAt(milieu, milieu + dir) * CFrame.new(0, toit.epais / 2, 0)
 		local larg = W + 2 * deb
 		if partiel then
-			P(m, "Toit", Vector3.new(larg * 0.45, toit.epais, long * 0.8), Vector3.zero, o.toit, toit.mat, { cf = cf * CFrame.new(-larg * 0.27, 0, long * 0.1) })
+			local panRestant = cf * CFrame.new(-larg * 0.27, 0, long * 0.1)
+			P(m, "Toit", Vector3.new(larg * 0.45, toit.epais, long * 0.8), Vector3.zero, o.toit, toit.mat, { cf = panRestant })
+			-- Le chevron, au-dessus du long mur intact, s'encastre dans la couverture et la maçonnerie.
+			P(m, "Chevron", Vector3.new(0.55, 1.6, long * 0.8), Vector3.zero, poutre, Mat.Wood,
+				{ cf = cf * CFrame.new(-W / 2 + e / 2, -toit.epais / 2 - 0.55, long * 0.1) })
 		else
 			P(m, "Toit", Vector3.new(larg, toit.epais, long), Vector3.zero, o.toit, toit.mat, { cf = cf })
 			if (o.toitMat or "chaume") == "chaume" then
@@ -1571,7 +1613,7 @@ local function maison(nom: string, o: MaisonOpts): (Model, BasePart)
 	return m, base
 end
 
-local function maisons()
+local function maisons(sansMarche: boolean?)
 	local palettes = {
 		{ nom = "Maison_A", mur = rgb(222, 206, 172), toit = rgb(190, 160, 92), toitMat = "chaume" },
 		{ nom = "Maison_B", mur = rgb(206, 178, 132), toit = rgb(172, 98, 66), toitMat = "tuiles" },
@@ -1584,7 +1626,8 @@ local function maisons()
 		table_chaises(m, Vector3.new(4.5, 1, -3))
 		etagere(m, Vector3.new(8.4, 1, 2), math.rad(-90))
 		tapis(m, Vector3.new(0, 1, 2), rgb(170, 60, 50))
-		lampe_interieure(base, m, Vector3.new(0, 9.4, 0))
+		if i == 3 then ferme_lanterne(m, 22, 10.55, 0) end
+		lampe_interieure(m, Vector3.new(0, 9.4, 0), i == 3 and 10.55 or 10.8)
 		attache(base, "Travail", CFrame.new(2, 1, 1))
 		fini(m)
 	end
@@ -1598,10 +1641,11 @@ local function maisons()
 		etagere(m, Vector3.new(6, 1, -7.6), 0)
 		etagere(m, Vector3.new(-10.4, 1, 1), math.rad(90))
 		lit(m, base, Vector3.new(8.5, 1, 3.5), rgb(150, 60, 110))
-		lampe_interieure(base, m, Vector3.new(0, 10.4, 0))
+		ferme_lanterne(m, 24, 11.55, 0)
+		lampe_interieure(m, Vector3.new(0, 10.4, 0), 11.55)
 		attache(base, "Travail", CFrame.new(0, 1, -5.5))
 		-- Enseigne
-		local ens = P(m, "Enseigne", Vector3.new(6, 1.6, 0.3), Vector3.new(0, 10.2, 9.35), BOIS_CLAIR, Mat.WoodPlanks, { collide = false })
+		local ens = P(m, "Enseigne", Vector3.new(6, 1.6, 0.3), Vector3.new(0, 10.2, 9.12), BOIS_CLAIR, Mat.WoodPlanks, { collide = false })
 		local sg = Instance.new("SurfaceGui")
 		sg.Face = Enum.NormalId.Front
 		sg.PixelsPerStud = 40
@@ -1625,7 +1669,7 @@ local function maisons()
 		P(m, "Bureau", Vector3.new(5, 2.6, 2.4), Vector3.new(4, 2.1, -2), BOIS_FONCE, Mat.WoodPlanks)
 		P(m, "Etoile", Vector3.new(1.6, 1.6, 0.2), Vector3.new(4, 7, -8.1), OR, Mat.Metal, { collide = false, rot = CFrame.Angles(0, 0, math.rad(45)) })
 		-- Cellule dans le coin arrière gauche
-		for i = 0, 6 do
+		for i = 0, 5 do
 			P(m, "Barreau", Vector3.new(0.3, 9, 0.3), Vector3.new(-10 + i * 1.3, 5.3, -1.5), FER, Mat.Metal)
 		end
 		for i = 0, 3 do
@@ -1635,9 +1679,10 @@ local function maisons()
 		P(m, "Paillasse", Vector3.new(3, 0.5, 5), Vector3.new(-7.5, 1.15, -5.5), rgb(214, 186, 100), Mat.Grass, { collide = false })
 		attache(base, "Cellule", CFrame.new(-5.5, 1, -4.5))
 		lit(m, base, Vector3.new(7.5, 1, 4), rgb(120, 90, 60))
-		lampe_interieure(base, m, Vector3.new(0, 9.4, 2))
+		ferme_lanterne(m, 22, 10.55, 2)
+		lampe_interieure(m, Vector3.new(0, 9.4, 2), 10.55)
 		attache(base, "Travail", CFrame.new(4, 1, -4.4))
-		local ens = P(m, "Enseigne", Vector3.new(6, 1.6, 0.3), Vector3.new(-3, 10.2, 9.35), BOIS_CLAIR, Mat.WoodPlanks, { collide = false })
+		local ens = P(m, "Enseigne", Vector3.new(6, 1.6, 0.3), Vector3.new(-3, 10.2, 9.12), BOIS_CLAIR, Mat.WoodPlanks, { collide = false })
 		local sg = Instance.new("SurfaceGui")
 		sg.Face = Enum.NormalId.Front
 		sg.PixelsPerStud = 40
@@ -1653,26 +1698,6 @@ local function maisons()
 		sg.Parent = ens
 		ens.CFrame = ens.CFrame * CFrame.Angles(0, math.rad(180), 0)
 		fini(m)
-	end
-	-- Enseigne pendue (planche sous une potence) avec un mot en écriture médiévale
-	local function enseigne(m: Model, pos: Vector3, mot: string)
-		P(m, "Potence", Vector3.new(0.4, 0.4, 2.6), pos + Vector3.new(0, 1.2, 1.1), BOIS_FONCE, Mat.Wood, { collide = false })
-		local ens = P(m, "Enseigne", Vector3.new(4.4, 1.6, 0.25), pos + Vector3.new(0, 0, 2.2), BOIS_CLAIR, Mat.WoodPlanks, { collide = false })
-		for _, face in { Enum.NormalId.Front, Enum.NormalId.Back } do
-			local sg = Instance.new("SurfaceGui")
-			sg.Face = face
-			sg.PixelsPerStud = 40
-			sg.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
-			local t = Instance.new("TextLabel")
-			t.Size = UDim2.fromScale(1, 1)
-			t.BackgroundTransparency = 1
-			t.Text = mot
-			t.TextScaled = true
-			t.Font = Enum.Font.Fondamento
-			t.TextColor3 = rgb(60, 36, 18)
-			t.Parent = sg
-			sg.Parent = ens
-		end
 	end
 	local function tonneau(m: Model, pos: Vector3)
 		P(m, "Tonneau", Vector3.new(2.4, 2, 2), pos + Vector3.new(0, 1.2, 0), BOIS, Mat.WoodPlanks, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)) })
@@ -1691,14 +1716,18 @@ local function maisons()
 			P(m, "Table", Vector3.new(3, 0.3, 8), Vector3.new(x, 3.1, 2), BOIS_CLAIR, Mat.WoodPlanks)
 			P(m, "PiedTable", Vector3.new(2.6, 2.2, 0.5), Vector3.new(x, 1.9, 2), BOIS, Mat.Wood)
 			for _, s in { -1, 1 } do
-				P(m, "Banc", Vector3.new(1, 0.4, 7.6), Vector3.new(x + s * 2.2, 2, 2), BOIS, Mat.WoodPlanks)
+				local bx = x + s * 2.2
+				P(m, "Banc", Vector3.new(1, 0.4, 7.6), Vector3.new(bx, 2, 2), BOIS, Mat.WoodPlanks)
+				for _, z in { -0.9, 4.9 } do
+					P(m, "PiedBanc", Vector3.new(0.7, 0.9, 0.48), Vector3.new(bx, 1.36, z), BOIS_FONCE, Mat.Wood)
+				end
 			end
 			P(m, "Chope", Vector3.new(0.5, 0.7, 0.5), Vector3.new(x, 3.6, 1), rgb(150, 110, 70), Mat.Wood, { collide = false })
 		end
-		lampe_interieure(base, m, Vector3.new(-4, 10.4, 0))
-		lampe_interieure(base, m, Vector3.new(6, 10.4, 2))
+		lampe_interieure(m, Vector3.new(-4, 10.4, 0), 11.8)
+		lampe_interieure(m, Vector3.new(6, 10.4, 2), 11.8)
 		attache(base, "Travail", CFrame.new(-6, 1, -4))
-		enseigne(m, Vector3.new(7, 9.4, 10.2), "Taverne")
+		enseigne_suspendue(m, Vector3.new(7, 9.4, 10.2), "Taverne")
 		tonneau(m, Vector3.new(-9, 0, 12))
 		tonneau(m, Vector3.new(-11.4, 0, 12.6))
 		fini(m)
@@ -1726,7 +1755,7 @@ local function maisons()
 		tonneau(m, Vector3.new(-2.6, 0, 12))
 		P(m, "Eau", Vector3.new(0.1, 1.8, 1.8), Vector3.new(-2.6, 2.25, 12), rgb(60, 90, 110), Mat.Glass, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)), collide = false })
 		attache(base, "Travail", CFrame.new(0, 1, 9.5))
-		enseigne(m, Vector3.new(-8, 8, 7.2), "Forge")
+		enseigne_suspendue(m, Vector3.new(-7, 8, 7.2), "Forge")
 		reperesFeu(m)
 		fini(m)
 	end
@@ -1750,7 +1779,8 @@ local function maisons()
 		P(m, "Autel", Vector3.new(5, 3, 2.4), Vector3.new(0, 2.3, -11), PIERRE_CLAIRE, Mat.Marble)
 		P(m, "Nappe", Vector3.new(5.2, 0.2, 2.6), Vector3.new(0, 3.9, -11), rgb(236, 228, 210), Mat.Fabric, { collide = false })
 		for _, x in { -1.8, 1.8 } do
-			local c = P(m, "Cierge", Vector3.new(0.3, 1.2, 0.3), Vector3.new(x, 4.6, -11), rgb(245, 240, 225), Mat.SmoothPlastic, { collide = false })
+			P(m, "Cierge", Vector3.new(0.3, 1.2, 0.3), Vector3.new(x, 4.6, -11), rgb(245, 240, 225), Mat.SmoothPlastic, { collide = false })
+			local c = P(m, "Flamme", Vector3.new(0.14, 0.22, 0.14), Vector3.new(x, 5.28, -11), rgb(241, 193, 99), Mat.Neon, { collide = false })
 			local fl = Instance.new("PointLight")
 			fl.Color = rgb(255, 200, 120)
 			fl.Range = 8
@@ -1760,7 +1790,7 @@ local function maisons()
 		fini(m)
 	end
 	-- Marché : trois étals à auvent rayé, caisses de légumes
-	do
+	if not sansMarche then
 		local m = nouveau("Marche_Village")
 		local toiles = { rgb(170, 50, 44), rgb(46, 86, 150), rgb(70, 120, 60) }
 		for i, x in { -7, 0, 7 } do
@@ -1785,7 +1815,7 @@ local function maisons()
 		lit(m, base, Vector3.new(-6, 1, -3.5), rgb(0, 0, 0), true)
 		P(m, "Gravats", Vector3.new(2, 1, 1.6), Vector3.new(7, 1.3, 4), PIERRE, Mat.Cobblestone, { rot = CFrame.Angles(0, 0.4, 0.2) })
 		P(m, "Gravats", Vector3.new(1.4, 0.8, 1.2), Vector3.new(5.6, 1.2, 5.2), PIERRE_CLAIRE, Mat.Cobblestone, { rot = CFrame.Angles(0.3, 0.8, 0) })
-		P(m, "Lierre", Vector3.new(0.2, 5, 4), Vector3.new(-10.5, 4, 2), rgb(70, 120, 60), Mat.Grass, { collide = false })
+		P(m, "Lierre", Vector3.new(0.2, 5, 4), Vector3.new(-10.04, 4, 2), rgb(70, 120, 60), Mat.Grass, { collide = false })
 		attache(base, "CoffreSpot", CFrame.new(2, 1, -5.5))
 		attache(base, "Travail", CFrame.new(0, 1, 0))
 		fini(m)
@@ -1823,6 +1853,29 @@ local function lampadaire()
 	fini(m)
 end
 
+function M.puits()
+	dossier = dossierModeles()
+	local m = nouveau("Puits")
+	local verticale = CFrame.Angles(0, 0, math.rad(90))
+	P(m, "Fondation", Vector3.new(1.7, 4.6, 4.6), Vector3.new(0, -0.25, 0), PIERRE, Mat.Cobblestone,
+		{ forme = "Cylinder", rot = verticale })
+	for i = 0, 11 do
+		local cf = CFrame.Angles(0, i * math.pi / 6, 0) * CFrame.new(0, 1.2, 1.98)
+		P(m, "Margelle", Vector3.new(1.22, 2.4, 0.62), Vector3.zero, PIERRE, Mat.Cobblestone, { cf = cf })
+	end
+	P(m, "Eau", Vector3.new(0.2, 3.6, 3.6), Vector3.new(0, 1.52, 0), rgb(40, 80, 120), Mat.Glass,
+		{ forme = "Cylinder", rot = verticale, collide = false })
+	for _, x in { -2, 2 } do
+		P(m, "Poteau", Vector3.new(0.5, 6, 0.5), Vector3.new(x, 3.4, 0), BOIS, Mat.Wood)
+	end
+	P(m, "Toit", Vector3.new(5.6, 0.5, 3.2), Vector3.zero, rgb(150, 70, 50), Mat.WoodPlanks, { cf = CFrame.new(0, 6.6, 1) * CFrame.Angles(math.rad(-30), 0, 0) })
+	P(m, "Toit", Vector3.new(5.6, 0.5, 3.2), Vector3.zero, rgb(150, 70, 50), Mat.WoodPlanks, { cf = CFrame.new(0, 6.6, -1) * CFrame.Angles(math.rad(30), 0, 0) })
+	P(m, "Treuil", Vector3.new(4, 0.5, 0.5), Vector3.new(0, 5, 0), BOIS_FONCE, Mat.Wood, { forme = "Cylinder" })
+	P(m, "Seau", Vector3.new(0.9, 0.9, 0.9), Vector3.new(0, 3.6, 0), BOIS_CLAIR, Mat.WoodPlanks, { collide = false })
+	P(m, "Corde", Vector3.new(0.08, 0.9, 0.08), Vector3.new(0, 4.45, 0), BOIS, Mat.Fabric, { collide = false })
+	fini(m)
+end
+
 local function decor()
 	do
 		local m = nouveau("Fontaine")
@@ -1844,18 +1897,7 @@ local function decor()
 		pe.Parent = jet
 		fini(m)
 	end
-	do
-		local m = nouveau("Puits")
-		P(m, "Margelle", Vector3.new(4.6, 2.4, 4.6), Vector3.new(0, 1.2, 0), PIERRE, Mat.Cobblestone, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)) })
-		P(m, "Eau", Vector3.new(0.2, 3.6, 3.6), Vector3.new(0, 2, 0), rgb(40, 80, 120), Mat.Glass, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)), collide = false })
-		P(m, "Poteau", Vector3.new(0.5, 6, 0.5), Vector3.new(-2, 3.4, 0), BOIS, Mat.Wood)
-		P(m, "Poteau", Vector3.new(0.5, 6, 0.5), Vector3.new(2, 3.4, 0), BOIS, Mat.Wood)
-		P(m, "Toit", Vector3.new(5.6, 0.5, 3.2), Vector3.zero, rgb(150, 70, 50), Mat.WoodPlanks, { cf = CFrame.new(0, 6.6, 1) * CFrame.Angles(math.rad(-30), 0, 0) })
-		P(m, "Toit", Vector3.new(5.6, 0.5, 3.2), Vector3.zero, rgb(150, 70, 50), Mat.WoodPlanks, { cf = CFrame.new(0, 6.6, -1) * CFrame.Angles(math.rad(30), 0, 0) })
-		P(m, "Treuil", Vector3.new(4, 0.5, 0.5), Vector3.new(0, 5, 0), BOIS_FONCE, Mat.Wood, { forme = "Cylinder" })
-		P(m, "Seau", Vector3.new(0.9, 0.9, 0.9), Vector3.new(0, 3.6, 0), BOIS_CLAIR, Mat.WoodPlanks, { collide = false })
-		fini(m)
-	end
+	M.puits()
 	do
 		lampadaire()
 	end
@@ -1988,27 +2030,8 @@ end
 -- ---------------------------------------------------------------- Village, 2e vague (étape 3C)
 -- Auberge (lits à louer = point de réapparition), écurie, tour de guet, pan de palissade.
 -- Séparé de maisons() : on peut le relancer seul sans écraser les retouches faites dans Studio.
-function M.villages2()
+function M.villages2(sansPalissade: boolean?)
 	dossier = dossierModeles()
-	local function enseigne2(m: Model, pos: Vector3, mot: string)
-		P(m, "Potence", Vector3.new(0.4, 0.4, 2.6), pos + Vector3.new(0, 1.2, 1.1), BOIS_FONCE, Mat.Wood, { collide = false })
-		local ens = P(m, "Enseigne", Vector3.new(4.4, 1.6, 0.25), pos + Vector3.new(0, 0, 2.2), BOIS_CLAIR, Mat.WoodPlanks, { collide = false })
-		for _, face in { Enum.NormalId.Front, Enum.NormalId.Back } do
-			local sg = Instance.new("SurfaceGui")
-			sg.Face = face
-			sg.PixelsPerStud = 40
-			sg.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
-			local t = Instance.new("TextLabel")
-			t.Size = UDim2.fromScale(1, 1)
-			t.BackgroundTransparency = 1
-			t.Text = mot
-			t.TextScaled = true
-			t.Font = Enum.Font.Fondamento
-			t.TextColor3 = rgb(60, 36, 18)
-			t.Parent = sg
-			sg.Parent = ens
-		end
-	end
 	-- Auberge : colombages sur deux niveaux d'apparence, salle commune, quatre lits à louer
 	do
 		local m, base = maison("Auberge", { largeur = 24, profondeur = 18, hauteur = 12, mur = rgb(226, 206, 160), toit = rgb(120, 96, 62), toitMat = "chaume", porteDecal = 0, etage = 8, fleurs = true })
@@ -2017,9 +2040,9 @@ function M.villages2()
 			attache(base, "LitAuberge" .. i, CFrame.new(x, 1, -0.6))
 		end
 		table_chaises(m, Vector3.new(0, 1, 4))
-		lampe_interieure(base, m, Vector3.new(0, 11.4, 0))
+		lampe_interieure(m, Vector3.new(0, 11.4, 0), 12.8)
 		attache(base, "Travail", CFrame.new(-6, 1, 5))
-		enseigne2(m, Vector3.new(6, 9.4, 9.2), "Auberge")
+		enseigne_suspendue(m, Vector3.new(6, 9.4, 9.2), "Auberge")
 		fini(m)
 	end
 	-- Écurie : charpente ouverte sur la façade, stalles, foin, abreuvoir
@@ -2049,7 +2072,7 @@ function M.villages2()
 		P(m, "Abreuvoir", Vector3.new(4, 1.4, 1.6), Vector3.new(-6, 0.7, D / 2 + 2), BOIS, Mat.WoodPlanks)
 		P(m, "Eau", Vector3.new(3.6, 0.2, 1.2), Vector3.new(-6, 1.35, D / 2 + 2), rgb(70, 120, 150), Mat.Glass, { collide = false, transp = 0.25 })
 		attache(m.PrimaryPart, "Travail", CFrame.new(0, 1, 2))
-		enseigne2(m, Vector3.new(7, 7, D / 2), "Écurie")
+		enseigne_suspendue(m, Vector3.new(W / 2 - 7.6, 7, D / 2), "Écurie")
 		fini(m)
 	end
 	-- Tour de guet : quatre piliers, plate-forme, garde-corps, toit pointu, échelle
@@ -2074,7 +2097,8 @@ function M.villages2()
 		for _, x in { -0.9, 0.9 } do
 			P(m, "Montant", Vector3.new(0.3, Hh, 0.3), Vector3.new(x, Hh / 2, 3.4), BOIS, Mat.Wood)
 		end
-		local feu = P(m, "Brasero", Vector3.new(1.2, 0.8, 1.2), Vector3.new(2.2, Hh + 0.7, -2.2), FER, Mat.Metal)
+		P(m, "Brasero", Vector3.new(1.2, 0.8, 1.2), Vector3.new(2.2, Hh + 0.7, -2.2), FER, Mat.Metal)
+		local feu = P(m, "Braise", Vector3.new(0.92, 0.18, 0.92), Vector3.new(2.2, Hh + 1.15, -2.2), rgb(255, 154, 75), Mat.Neon, { collide = false })
 		local l = Instance.new("PointLight")
 		l.Color = rgb(255, 150, 70)
 		l.Range = 22
@@ -2082,7 +2106,7 @@ function M.villages2()
 		fini(m)
 	end
 	-- Pan de palissade (8 studs) : pieux taillés en pointe, traverse
-	do
+	if not sansPalissade then
 		local m = nouveau("Palissade")
 		for i = 0, 4 do -- 5 pieux de 1,6 : léger (une palissade de village en compte des dizaines)
 			local x = -3.2 + i * 1.6
@@ -2115,7 +2139,7 @@ function M.moulin()
 		local d = 12.6 - i * 2
 		P(m, "Toit", Vector3.new(1.2, d, d), Vector3.new(0, 24.8 + i * 1.1, 0), rgb(110, 70, 48), Mat.WoodPlanks, { forme = "Cylinder", rot = UPC })
 	end
-	P(m, "Epi", Vector3.new(0.4, 2.4, 0.4), Vector3.new(0, 32.5, 0), FER, Mat.Metal)
+	P(m, "Epi", Vector3.new(0.4, 2.4, 0.4), Vector3.new(0, 32.05, 0), FER, Mat.Metal)
 	-- porte et fenêtres (vitres allumées le soir)
 	P(m, "Porte", Vector3.new(3.4, 6, 0.6), Vector3.new(0, 4.6, 6.3), rgb(92, 64, 42), Mat.WoodPlanks)
 	P(m, "Linteau", Vector3.new(4.4, 0.7, 0.8), Vector3.new(0, 7.8, 6.3), BOIS_FONCE, Mat.Wood)
@@ -2142,8 +2166,8 @@ function M.moulin()
 		local rot = CFrame.new(hub) * CFrame.Angles(0, 0, math.rad(k * 90 + 20))
 		P(ailes, "Bras", Vector3.new(0.5, 15, 0.5), Vector3.zero, BOIS, Mat.Wood, { cf = rot * CFrame.new(0, 7.8, 0), collide = false })
 		P(ailes, "Toile", Vector3.new(3.4, 10, 0.12), Vector3.zero, rgb(240, 232, 214), Mat.Fabric, { cf = rot * CFrame.new(1.9, 9.4, -0.1), collide = false })
-		for j = 0, 5 do
-			P(ailes, "Latte", Vector3.new(3.8, 0.2, 0.2), Vector3.zero, BOIS, Mat.Wood, { cf = rot * CFrame.new(1.9, 4.6 + j * 2, 0.05), collide = false })
+		for _, y in { 4.6, 9.6, 14.6 } do
+			P(ailes, "Latte", Vector3.new(3.8, 0.2, 0.2), Vector3.zero, BOIS, Mat.Wood, { cf = rot * CFrame.new(1.9, y, 0.05), collide = false })
 		end
 		P(ailes, "Longeron", Vector3.new(0.2, 10.4, 0.2), Vector3.zero, BOIS, Mat.Wood, { cf = rot * CFrame.new(3.7, 9.4, 0.05), collide = false })
 	end
@@ -2167,18 +2191,18 @@ function M.chateau()
 	local ROUGE = rgb(168, 40, 40)
 	local function merlons(x0: number, z0: number, x1: number, z1: number, y: number, ep: number)
 		local d = Vector3.new(x1 - x0, 0, z1 - z0)
-		local n = math.max(1, math.floor(d.Magnitude / 3))
+		local n = math.max(1, math.floor(d.Magnitude / 4.2))
 		local dir = d.Unit
 		for i = 0, n do
 			local pos = Vector3.new(x0, y + 1, z0) + dir * (i * d.Magnitude / n)
-			P(m, "Merlon", Vector3.new(1.6, 2, ep), Vector3.zero, MUR, Mat.Cobblestone,
+			P(m, "Merlon", Vector3.new(1.9, 2, ep), Vector3.zero, MUR, Mat.Cobblestone,
 				{ cf = CFrame.lookAt(pos, pos + Vector3.new(-dir.Z, 0, dir.X)) })
 		end
 	end
 	local function cone(pos: Vector3, d0: number, h: number, couleur: Color3)
-		local n = 7
+		local n = h < 6 and 4 or 5
 		for i = 0, n - 1 do
-			local d = d0 * (1 - i / n)
+			local d = d0 * (1 - i / (n - 1) * (6 / 7))
 			P(m, "Toit", Vector3.new(h / n + 0.05, d, d), pos + Vector3.new(0, i * h / n + h / n / 2, 0), couleur, Mat.Slate, { forme = "Cylinder", rot = UPC })
 		end
 		P(m, "Epi", Vector3.new(0.3, 3, 0.3), pos + Vector3.new(0, h + 1.5, 0), FER, Mat.Metal, { collide = false })
@@ -2321,14 +2345,15 @@ function M.champBle()
 			local t = Instance.new("Model")
 			t.Name = "Touffe"
 			t.Parent = m
-			P(t, "Ble", Vector3.new(1.9, h, 1.5), Vector3.zero, gold:Lerp(rgb(150, 150, 60), 0.18), Mat.Grass, { cf = CFrame.new(x, 0.4 + h / 2, z) * tilt, collide = false })
-			P(t, "Epis", Vector3.new(2.1, 0.9, 1.7), Vector3.zero, gold, Mat.Grass, { cf = CFrame.new(x, 0.4 + h, z) * tilt, collide = false })
+			local hauteur = h + 0.42
+			P(t, "Epis", Vector3.new(1.95, hauteur, 1.58), Vector3.zero, gold, Mat.Grass,
+				{ cf = CFrame.new(x, 0.36 + hauteur / 2, z) * tilt, collide = false, forme = "Wedge" })
 		end
 	end
 	-- clôture : poteaux tous les 4 studs, deux lisses
 	local function cote(a: Vector3, b: Vector3)
 		local d = b - a
-		local n = math.max(1, math.floor(d.Magnitude / 4))
+		local n = math.max(1, math.floor(d.Magnitude / 5.4))
 		for i = 0, n do
 			P(m, "Piquet", Vector3.new(0.6, 3.2, 0.6), a + d * (i / n) + Vector3.new(0, 1.6, 0), BOIS, Mat.Wood)
 		end
@@ -2370,11 +2395,11 @@ function M.herbe()
 end
 
 -- Stations de métier (18/11) : enclume (forge) et métier à tisser
-function M.stations()
+local function stations(corrigeesSeulement: boolean?)
 	dossier = dossierModeles()
 	do
 		local m = nouveau("Enclume")
-		P(m, "Billot", Vector3.new(1.8, 1.6, 1.8), Vector3.new(0, 0.8, 0), BOIS_FONCE, Mat.Wood, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)) })
+		P(m, "Billot", Vector3.new(1.6, 1.8, 1.8), Vector3.new(0, 0.8, 0), BOIS_FONCE, Mat.Wood, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)) })
 		P(m, "Pied", Vector3.new(1.2, 0.5, 0.9), Vector3.new(0, 1.85, 0), FER, Mat.Metal)
 		P(m, "Table", Vector3.new(2.6, 0.6, 1.1), Vector3.new(0, 2.4, 0), FER, Mat.Metal)
 		P(m, "Bigorne", Vector3.new(0.9, 0.5, 0.9), Vector3.zero, FER, Mat.Metal, { forme = "Wedge", cf = CFrame.new(1.75, 2.4, 0) * CFrame.Angles(0, math.rad(90), 0) })
@@ -2382,7 +2407,7 @@ function M.stations()
 		P(m, "Tete", Vector3.new(0.45, 0.35, 0.35), Vector3.zero, FER, Mat.Metal, { collide = false, cf = CFrame.new(-0.3, 2.8, -0.35) * CFrame.Angles(0, math.rad(25), 0) })
 		fini(m)
 	end
-	do
+	if not corrigeesSeulement then
 		local m = nouveau("Metier_Tisser")
 		for _, x in { -1.5, 1.5 } do
 			P(m, "Montant", Vector3.new(0.3, 4, 0.3), Vector3.new(x, 2, -0.8), BOIS, Mat.Wood)
@@ -2402,7 +2427,7 @@ function M.stations()
 	do
 		-- bac de tannage : cuve de planches cerclée, peau tendue sur un cadre, racloir
 		local m = nouveau("Bac_Tannage")
-		P(m, "Cuve", Vector3.new(2.6, 1.6, 2.6), Vector3.new(-0.9, 0.8, 0), BOIS, Mat.WoodPlanks, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)) })
+		P(m, "Cuve", Vector3.new(1.6, 2.6, 2.6), Vector3.new(-0.9, 0.8, 0), BOIS, Mat.WoodPlanks, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)) })
 		P(m, "Eau", Vector3.new(0.1, 2.3, 2.3), Vector3.new(-0.9, 1.55, 0), rgb(110, 84, 50), Mat.SmoothPlastic, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)), collide = false })
 		for _, y in { 0.35, 1.25 } do
 			P(m, "Cercle", Vector3.new(0.15, 2.7, 2.7), Vector3.new(-0.9, y, 0), FER, Mat.Metal, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)), collide = false })
@@ -2429,11 +2454,15 @@ function M.stations()
 		P(m, "Chaudiere", Vector3.new(1.9, 1.9, 1.9), Vector3.new(0, 2, 0), CUIVRE, Mat.Metal, { forme = "Ball" })
 		P(m, "Chapiteau", Vector3.new(0.9, 0.9, 0.9), Vector3.new(0, 3.1, 0), CUIVRE, Mat.Metal, { forme = "Ball" })
 		P(m, "Col", Vector3.new(0.22, 0.22, 2.2), Vector3.zero, CUIVRE, Mat.Metal, { collide = false, cf = CFrame.new(0.9, 3.1, 0) * CFrame.Angles(0, math.rad(90), 0) * CFrame.Angles(math.rad(-20), 0, 0) })
-		P(m, "Serpentin", Vector3.new(0.9, 1.2, 0.9), Vector3.new(2, 1.6, 0), CUIVRE:Lerp(rgb(90, 60, 40), 0.3), Mat.Metal, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)) })
-		P(m, "Fiole", Vector3.new(0.4, 0.5, 0.4), Vector3.new(2, 0.25, 0.7), rgb(140, 230, 140), Mat.Glass, { collide = false, transp = 0.3 })
+		P(m, "Tuyau", Vector3.new(0.2, 1.64, 0.2), Vector3.new(1.92, 2.7, 0), CUIVRE, Mat.Metal, { collide = false })
+		P(m, "Serpentin", Vector3.new(0.9, 1, 0.9), Vector3.new(1.92, 1.6, 0), CUIVRE:Lerp(rgb(90, 60, 40), 0.3), Mat.Metal, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)) })
+		P(m, "Socle", Vector3.new(1.3, 0.4, 1.9), Vector3.new(1.7, 0.2, 0.2), BOIS, Mat.WoodPlanks)
+		P(m, "Support", Vector3.new(0.64, 0.8, 0.64), Vector3.new(1.92, 0.8, 0), BOIS_FONCE, Mat.Wood)
+		P(m, "Bec", Vector3.new(0.18, 0.18, 0.7), Vector3.new(1.92, 1.12, 0.32), CUIVRE, Mat.Metal, { collide = false })
+		P(m, "Fiole", Vector3.new(0.4, 0.5, 0.4), Vector3.new(1.92, 0.65, 0.68), rgb(140, 230, 140), Mat.Glass, { collide = false, transp = 0.3 })
 		fini(m)
 	end
-	do
+	if not corrigeesSeulement then
 		local m = nouveau("Abreuvoir")
 		P(m, "Auge", Vector3.new(3.6, 1, 1.4), Vector3.new(0, 0.9, 0), BOIS, Mat.WoodPlanks)
 		P(m, "Eau", Vector3.new(3.3, 0.1, 1.1), Vector3.new(0, 1.42, 0), rgb(70, 140, 180), Mat.Glass, { collide = false, transp = 0.25 })
@@ -2442,7 +2471,7 @@ function M.stations()
 		end
 		fini(m)
 	end
-	do
+	if not corrigeesSeulement then
 		local m = nouveau("Mangeoire")
 		for _, x in { -1.4, 1.4 } do
 			P(m, "Montant", Vector3.new(0.3, 2.6, 0.3), Vector3.new(x, 1.3, 0), BOIS_FONCE, Mat.Wood)
@@ -2452,6 +2481,10 @@ function M.stations()
 		fini(m)
 	end
 	return true
+end
+
+function M.stations()
+	return stations()
 end
 
 -- Potence à lanterne seule (sans refaire tout le décor)
@@ -2465,6 +2498,19 @@ function M.maisons()
 	dossier = dossierModeles()
 	maisons()
 	return #dossier:GetChildren()
+end
+
+-- Mise à jour Édition ciblée. Les autres modèles et les gabarits des personnages restent en place.
+function M.propsPhase2()
+	dossier = dossierModeles()
+	maisons(true)
+	M.villages2(true)
+	stations(true)
+	M.filonOr()
+	M.puits()
+	M.moulin()
+	M.chateau()
+	M.champBle()
 end
 
 function M.tout()

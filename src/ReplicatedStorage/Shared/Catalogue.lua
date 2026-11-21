@@ -906,7 +906,7 @@ end
 ARCH.bureau = function(m, c)
 	ARCH.table(m, c)
 	P(m, V(0.5, 0.5, 0.5), V(1, 2.95, 0.4), COLORS.N, Mat.Glass)
-	P(m, V(1.2, 0.05, 0.9), V(-0.4, 2.75, 0), CLOTH, Mat.Fabric)
+	P(m, V(1.2, 0.05, 0.9), V(-0.4, 2.75, 0), CLOTH, Mat.Fabric).CanCollide = false
 end
 -- Tourelles (Systemes/Tourelles) : la partie « Tete » pivote vers la cible
 ARCH.tourelle = function(m, c)
@@ -949,20 +949,20 @@ end
 ARCH.foyer = function(m, c)
 	for i = 0, 7 do
 		local a = i / 8 * math.pi * 2
-		P(m, V(0.8, 0.6, 0.8), V(math.cos(a) * 1.4, 0.3, math.sin(a) * 1.4), c, Mat.Cobblestone)
+		P(m, V(0.8, 0.6, 0.8), V(math.cos(a) * 1.4, 0.3, math.sin(a) * 1.4), c, Mat.Cobblestone).Name = "Pierre"
 	end
 	local feu = P(m, V(1, 0.4, 1), V(0, 0.3, 0), COLORS.T, Mat.Neon)
 	feu.CanCollide = false
 	light(feu, 14)
 end
 ARCH.fourpain = function(m, c)
-	P(m, V(4, 4, 4), V(0, 1.6, 0), c, Mat.Brick, "ball")
+	P(m, V(4, 4, 4), V(0, 2, 0), c, Mat.Brick, "ball")
 	P(m, V(4.4, 1, 4.4), V(0, 0.5, 0), STONE, Mat.Cobblestone)
 	P(m, V(1.4, 1.2, 0.4), V(0, 1.4, 1.9), COLORS.N, Mat.Slate)
 end
 ARCH.chaudron = function(m, c)
 	P(m, V(2.6, 2.6, 2.6), V(0, 1.4, 0), c, Mat.Metal, "ball")
-	P(m, V(0.4, 2.2, 2.2), V(0, 2.5, 0), COLORS.V, Mat.Neon, "cyl", UP)
+	P(m, V(0.16, 2.2, 2.2), V(0, 2.5, 0), Color3.fromRGB(78, 97, 52), Mat.Glass, "cyl", UP).CanCollide = false
 	local feu = P(m, V(1.2, 0.3, 1.2), V(0, 0.15, 0), COLORS.T, Mat.Neon)
 	feu.CanCollide = false
 	light(feu, 10)
@@ -1073,7 +1073,7 @@ ARCH.brasero = function(m, c)
 	light(f, 20)
 end
 ARCH.bougie = function(m, c)
-	P(m, V(0.8, 0.2, 0.8), V(0, 0.1, 0), COLORS.O, Mat.Metal, "cyl", UP)
+	P(m, V(0.2, 0.8, 0.8), V(0, 0.1, 0), COLORS.O, Mat.Metal, "cyl", UP)
 	P(m, V(0.9, 0.35, 0.35), V(0, 0.6, 0), c, Mat.SmoothPlastic, "cyl", UP)
 	local f = P(m, V(0.15, 0.25, 0.15), V(0, 1.15, 0), COLORS.Y, Mat.Neon)
 	f.CanCollide = false
@@ -1087,13 +1087,13 @@ ARCH.chandelier = function(m, c)
 	P(m, V(2.4, 0.2, 0.2), V(0, 3, 0), c, Mat.Metal)
 	for _, x in { -1.1, 0, 1.1 } do
 		P(m, V(0.25, 0.6, 0.25), V(x, 3.4, 0), CLOTH, Mat.SmoothPlastic)
-		local f = P(m, V(0.15, 0.25, 0.15), V(x, 3.85, 0), COLORS.Y, Mat.Neon)
+		local f = P(m, V(0.15, 0.25, 0.15), V(x, 3.82, 0), COLORS.Y, Mat.Neon)
 		f.CanCollide = false
+		local l = Instance.new("PointLight")
+		l.Range, l.Brightness = 14, 1 / 3
+		l.Color = Color3.fromRGB(255, 200, 120)
+		l.Parent = f
 	end
-	local l = Instance.new("PointLight")
-	l.Range = 14
-	l.Color = Color3.fromRGB(255, 200, 120)
-	l.Parent = m:GetChildren()[#m:GetChildren()]
 end
 ARCH.tapis = function(m, c)
 	P(m, V(5, 0.1, 3.4), V(0, 0.05, 0), c, Mat.Fabric).CanCollide = false
@@ -1104,17 +1104,28 @@ ARCH.tapis = function(m, c)
 			nil, CFrame.Angles(0, math.pi / 4, 0)).CanCollide = false
 	end
 end
+-- Ces accessoires se posent sur une case. La menuiserie les porte à hauteur de mur.
+local function montant(m, x, hauteur, z)
+	P(m, V(0.24, hauteur, 0.28), V(x, hauteur / 2, z), DARK, Mat.Wood).Name = "Montant"
+end
 ARCH.rideau = function(m, c)
 	P(m, V(4, 0.2, 0.2), V(0, 5.4, 0), DARK, Mat.Wood)
-	P(m, V(1.8, 5, 0.1), V(-1, 2.8, 0.1), c, Mat.Fabric)
-	P(m, V(1.8, 5, 0.1), V(1, 2.8, 0.1), c, Mat.Fabric)
+	for _, s in { -1, 1 } do
+		montant(m, s * 1.92, 5.5, 0)
+		P(m, V(1.8, 5, 0.1), V(s, 2.8, 0.1), c, Mat.Fabric).CanCollide = false
+	end
 end
 ARCH.tenture = function(m, c)
 	P(m, V(3.6, 0.2, 0.2), V(0, 5.4, 0), COLORS.O, Mat.Metal)
-	P(m, V(3.4, 4.4, 0.1), V(0, 3.1, 0.1), c, Mat.Fabric)
-	P(m, V(1.4, 1.4, 0.12), V(0, 3.4, 0.17), COLORS.O, Mat.Fabric)
+	for _, s in { -1, 1 } do montant(m, s * 1.72, 5.5, 0) end
+	P(m, V(3.4, 4.4, 0.1), V(0, 3.1, 0.1), c, Mat.Fabric).CanCollide = false
+	P(m, V(1.4, 1.4, 0.12), V(0, 3.4, 0.17), COLORS.O, Mat.Fabric).CanCollide = false
 end
 ARCH.tableau = function(m, c)
+	for _, s in { -1, 1 } do
+		montant(m, s * 1.2, 3.3, -0.19)
+		P(m, V(0.32, 0.18, 0.9), V(s * 1.2, 0.09, -0.19), DARK, Mat.Wood)
+	end
 	P(m, V(3, 2.4, 0.2), V(0, 3, 0), c, Mat.Metal)
 	P(m, V(2.6, 2, 0.22), V(0, 3, 0.02), Color3.fromRGB(80, 120, 160), Mat.SmoothPlastic)
 	P(m, V(2.6, 0.9, 0.24), V(0, 2.45, 0.03), COLORS.V, Mat.SmoothPlastic)
@@ -1123,7 +1134,7 @@ ARCH.trophee = function(m, c)
 	P(m, V(1.6, 2, 0.3), V(0, 3, 0), DARK, Mat.Wood)
 	P(m, V(0.3, 1.6, 0.3), V(-0.5, 4, 0.2), COLORS.BC, Mat.Wood, nil, CFrame.Angles(0, 0, math.rad(25)))
 	P(m, V(0.3, 1.6, 0.3), V(0.5, 4, 0.2), COLORS.BC, Mat.Wood, nil, CFrame.Angles(0, 0, math.rad(-25)))
-	P(m, V(0.3, 2.2, 0.3), V(0, 1, 0), DARK, Mat.Wood)
+	P(m, V(0.3, 2.2, 0.3), V(0, 1.1, 0), DARK, Mat.Wood)
 end
 ARCH.crane = function(m, c)
 	P(m, V(1.6, 1.4, 1.8), V(0, 0.7, 0), c, Mat.SmoothPlastic, "ball")
@@ -1149,10 +1160,10 @@ ARCH.muret = function(m, c)
 end
 ARCH.palissade = function(m, c)
 	for i = -1.5, 1.5, 0.75 do
-		P(m, V(0.7, 5, 0.7), V(i, 2.5, 0), c, Mat.Wood, "cyl", UP)
-		P(m, V(0.5, 0.5, 0.5), V(i, 5.1, 0), c, Mat.Wood, "ball")
+		P(m, V(5, 0.7, 0.7), V(i, 2.5, 0), c, Mat.Wood, "cyl", UP)
+		P(m, V(0.5, 0.5, 0.5), V(i, 5.12, 0), c, Mat.Wood, "ball")
 	end
-	P(m, V(4, 0.3, 0.3), V(0, 3.6, 0.4), DARK, Mat.Wood)
+	P(m, V(4, 0.3, 0.3), V(0, 3.6, 0.35), DARK, Mat.Wood)
 end
 ARCH.portail = function(m, c)
 	P(m, V(0.4, 3, 0.4), V(-2, 1.5, 0), DARK, Mat.Wood)
@@ -1242,7 +1253,7 @@ ARCH.grue = function(m, c)
 	P(m, V(4, 0.6, 4), V(0, 0.3, 0), DARK, Mat.WoodPlanks)
 	P(m, V(0.8, 10, 0.8), V(0, 5, 0), c, Mat.Wood)
 	P(m, V(0.6, 0.6, 8), V(0, 9.6, 3), c, Mat.Wood)
-	P(m, V(0.1, 5, 0.1), V(0, 7, 6.6), COLORS.Y, Mat.Fabric)
+	P(m, V(0.1, 5, 0.1), V(0, 7, 6.6), COLORS.Y, Mat.Fabric).CanCollide = false
 	P(m, V(0.8, 0.8, 0.8), V(0, 4.4, 6.6), IRON, Mat.Metal)
 end
 ARCH.levier = function(m, c)
@@ -1251,7 +1262,7 @@ ARCH.levier = function(m, c)
 	P(m, V(0.4, 0.4, 0.4), V(0, 2.2, 0.4), COLORS.R, Mat.SmoothPlastic, "ball")
 end
 ARCH.pompe = function(m, c)
-	P(m, V(1.4, 3, 1.4), V(0, 1.5, 0), c, Mat.Metal, "cyl", UP)
+	P(m, V(3, 1.4, 1.4), V(0, 1.5, 0), c, Mat.Metal, "cyl", UP)
 	P(m, V(0.2, 0.2, 2), V(0, 2.8, 0.8), c, Mat.Metal)
 	P(m, V(0.3, 0.3, 1), V(0, 2, -0.9), c, Mat.Metal)
 	P(m, V(2.4, 0.6, 2.4), V(0, 0.3, 0), STONE, Mat.Cobblestone)
@@ -1320,10 +1331,15 @@ ARCH.trappe = function(m, c)
 	P(m, V(0.6, 0.1, 0.6), V(0, 0.35, 1), IRON, Mat.Metal)
 end
 ARCH.volet = function(m, c)
-	P(m, V(1.2, 2.4, 0.15), V(-0.7, 3, 0), c, Mat.WoodPlanks)
-	P(m, V(1.2, 2.4, 0.15), V(0.7, 3, 0), c, Mat.WoodPlanks)
+	for _, s in { -1, 1 } do
+		montant(m, s * 1.36, 4.34, 0)
+		P(m, V(1.2, 2.4, 0.15), V(s * 0.7, 3, 0), c, Mat.WoodPlanks)
+	end
+	P(m, V(2.96, 0.22, 0.32), V(0, 1.8, 0), DARK, Mat.Wood)
+	P(m, V(2.96, 0.22, 0.32), V(0, 4.22, 0), DARK, Mat.Wood)
 end
 ARCH.fenetre = function(m, c)
+	for _, s in { -1, 1 } do montant(m, s * 1.22, 4.52, 0) end
 	P(m, V(2.4, 3, 0.3), V(0, 3, 0), Color3.fromRGB(190, 225, 240), Mat.Glass)
 	P(m, V(2.8, 0.4, 0.5), V(0, 1.4, 0), c, Mat.Cobblestone)
 	P(m, V(0.2, 3, 0.35), V(0, 3, 0), DARK, Mat.Wood)
@@ -1331,10 +1347,12 @@ ARCH.fenetre = function(m, c)
 	P(m, V(2.4, 0.8, 0.3), V(0, 4.8, 0), c, Mat.Cobblestone, "ball")
 end
 ARCH.fenetreronde = function(m, c)
+	for _, s in { -1, 1 } do montant(m, s * 0.94, 2.3, -0.05) end
 	P(m, V(0.3, 2.4, 2.4), V(0, 3, 0), Color3.fromRGB(190, 225, 240), Mat.Glass, "cyl", CFrame.Angles(0, math.rad(90), 0))
 	P(m, V(0.2, 2.8, 2.8), V(0, 3, -0.05), c, Mat.Wood, "cyl", CFrame.Angles(0, math.rad(90), 0))
 end
 ARCH.vitrail = function(m, c)
+	for _, s in { -1, 1 } do montant(m, s * 1.24, 5, 0) end
 	local cols = { COLORS.R, COLORS.BL, COLORS.Y, COLORS.V, c }
 	for i = 0, 2 do
 		for j = 0, 3 do
@@ -1372,8 +1390,12 @@ ARCH.brouette = function(m, c)
 end
 ARCH.traineau = function(m, c)
 	P(m, V(2.4, 0.4, 4), V(0, 1, 0), c, Mat.WoodPlanks)
-	P(m, V(0.2, 0.2, 4.6), V(-1, 0.3, 0.2), IRON, Mat.Metal)
-	P(m, V(0.2, 0.2, 4.6), V(1, 0.3, 0.2), IRON, Mat.Metal)
+	for _, x in { -1, 1 } do
+		P(m, V(0.2, 0.2, 4.6), V(x, 0.1, 0.2), IRON, Mat.Metal)
+		for _, z in { -1.3, 1.3 } do
+			P(m, V(0.22, 0.64, 0.3), V(x, 0.49, z), DARK, Mat.Wood)
+		end
+	end
 	P(m, V(2.4, 1.2, 0.3), V(0, 1.6, -1.9), c, Mat.WoodPlanks)
 end
 ARCH.barque = function(m, c)
@@ -1398,7 +1420,7 @@ ARCH.metier = function(m, c)
 	P(m, V(3.2, 2, 0.05), V(0, 3.7, -1.2), CLOTH, Mat.Fabric)
 end
 ARCH.presse = function(m, c)
-	P(m, V(3, 1.4, 3), V(0, 0.7, 0), c, Mat.WoodPlanks, "cyl", UP)
+	P(m, V(1.4, 3, 3), V(0, 0.7, 0), c, Mat.WoodPlanks, "cyl", UP)
 	P(m, V(0.5, 4, 0.5), V(-1.6, 2, 0), DARK, Mat.Wood)
 	P(m, V(0.5, 4, 0.5), V(1.6, 2, 0), DARK, Mat.Wood)
 	P(m, V(3.6, 0.6, 0.6), V(0, 4, 0), DARK, Mat.Wood)

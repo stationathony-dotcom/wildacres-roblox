@@ -45,7 +45,53 @@ Les captures de contrôle confirment que les viandes, engrenages, coiffes et pri
 - La fleur de `Cactus` rejoint son sommet. Celles de `Pot_Fleurs` rejoignent leurs tiges, qui partent du terreau. Les pépites de `Filon_Or` sont en métal doré mat. Pour mettre à jour des modèles retouchés dans Studio, reporter les trois corrections sur les pièces existantes. [Source des modèles](../src/ServerStorage/OutilsDev/ConstruireModeles.lua)
 - La forme des osselets est partagée entre la génération des miniatures à l’initialisation et le banc de finitions. En Édition, après synchronisation, `require(game.ServerStorage.OutilsDev.ConstruireModelesMiniatures:Clone()).identites(game.ReplicatedStorage)` actualise l’ensemble des miniatures d’identité. [Source des miniatures](../src/ServerStorage/OutilsDev/ConstruireModelesMiniatures.lua) · [Générateur de planches](../tools/bancs/visuels_finitions.luau)
 
-## Lecture du banc Edit
+## Phase 2 · Tri des 105 signalements d’Édition
+
+Le tableau reprend les deux sections du rapport du 21/11. Plusieurs lignes du banc sont regroupées quand elles ont la même cause. Total : **76 défauts**, **29 écarts voulus**. Les nombres d’éléments avant correction viennent du rapport. Les nouveaux nombres sont mesurés sur les constructeurs sur disque. [Rapport d’Édition](RAPPORT-BANC-PROPS.md)
+
+| Prop | Défaut signalé | Vrai / voulu | Correction |
+| --- | --- | --- | --- |
+| `Cat_arched_window`, `Cat_round_window`, `Cat_stained_glass` | Trois fenêtres suspendues de 1,05 à 1,60 stud (3). | Vrai | `Catalogue.apply` leur attribue `grid = "cell"`. `Shop.place` les centre sur la case et `World.buildDeco` prend la hauteur du terrain. Deux montants portent chaque vitrage à sa hauteur. |
+| `Cat_shutter` | Deux battants séparés et suspendus à +1,80 stud (3). | Vrai | Même pose au centre d’une case. Les battants sont reliés par deux traverses et deux montants. |
+| `Cat_curtain`, `Cat_tapestry`, `Cat_painting_wall` | Rideau, tenture et tableau suspendus de 0,30 à 1,80 stud. Quatre étoffes minces avec collision (7). | Vrai | Ces objets se posent eux aussi sur une case. Tringles sur montants, tableau sur pieds, étoffes et motifs traversables. |
+| `Cat_wall_lantern` | Bas à +2,55 studs (1). | Voulu | `Equilibre` lui attribue `wallMount = true`. `Shop.place` la décale de 0,30 stud vers le joueur, au bord de la case et contre la face du mur. Le banc exige la hauteur prévue de 2,55 studs. |
+| `Cat_bread_oven`, `Cat_candle`, `Cat_press`, `Cat_trophy` | Bas sous le pivot de 0,10 à 0,80 stud (4). | Vrai | Dôme remonté, axes des cylindres corrigés pour le bougeoir et le pressoir, pied du trophée au plan du sol. |
+| `Cat_palisade` | Bas à +2,15 studs, cinq têtes et une traverse éloignées des pieux (7). | Vrai | Pieux réellement verticaux. Chaque tête recouvre son pieu et la traverse les relie. |
+| `Cat_sled` | Patins à +0,20 stud, séparés du plateau de 0,40 stud (3). | Vrai | Patins au sol et quatre jambes jusqu’au plateau. |
+| `Cat_water_pump` | Poignée et bec séparés de 0,50 et 0,20 stud (2). | Vrai | Le cylindre vertical monte jusqu’à la poignée et au bec. |
+| `Cat_hearth` | Quatre pierres espacées de 0,19 stud (4). | Voulu | Pierres indépendantes en cercle. Le banc reconnaît leur nom et vérifie qu’elles touchent le sol. |
+| `Cat_cauldron` | Liquide en `Neon` (1). | Vrai | Liquide vert en verre, foyer émissif avec sa lumière. |
+| `Cat_candelabra` | Deux des trois flammes éloignées de l’unique lumière (2). | Voulu | Les trois flammes restent émissives. Chacune porte désormais un tiers de la luminosité d’origine. |
+| `Cat_desk`, `Cat_wood_crane` | Document et corde minces avec collision (2). | Vrai | Document et corde traversables. |
+| `Alambic` | Serpentin et fiole sans appui (2). | Vrai | Le tuyau rejoint le col, le serpentin repose sur son support et le bec débouche au-dessus de la fiole posée sur le socle. |
+| `Bac_Tannage`, `Enclume` | Cuve à −0,50 stud et billot à −0,10 stud (2). | Vrai | Corrigé l’axe vertical des deux cylindres en conservant le niveau de leur surface de travail. |
+| `Boutique`, `Maison_C`, `Bureau_Sherif` | Lanternes isolées de 6,027, 5,871 et 3,287 studs (3). | Vrai | Suspentes prises dans les entraits qui rejoignent les deux murs. Les enseignes de la boutique et du shérif rejoignent aussi leur façade. |
+| `Auberge`, `Maison_A`, `Maison_B`, `Taverne` | Cinq lanternes à 0,95 stud du plafond (5). | Vrai | Suspentes métalliques fixées au plafond. |
+| `Auberge`, `Ecurie`, `Forge`, `Taverne` | Quatre enseignes à 0,20 stud de leur potence (4). | Vrai | Fixation métallique sur chaque enseigne et potences ancrées dans la façade ou le poteau de l’écurie. |
+| `Taverne` | Quatre bancs séparés de 0,40 stud du plancher (4). | Vrai | Deux pieds par banc. |
+| `Moulin_Village` | Épi séparé du toit de 0,40 stud (1). | Vrai | Épi emboîté dans l’anneau supérieur. |
+| `Ruine` | Lierre et pan de toit détachés (2). | Vrai | Lierre ramené sur le mur et chevron en appui sous la couverture. |
+| `Champ_Ble`, `Tableau_Quetes` | Botte isolée de 0,625 stud et caisse isolée de 0,40 stud (2). | Voulu | Elles reposent au sol à côté de la clôture et du tableau. Le banc vérifie le pied de chacune. |
+| `Champ_Ble`, `Sol_Laboure` | Terre à −0,20 et −0,10 stud (2). | Voulu | Le bas de la terre rejoint le terrain, les sillons restent en surface. |
+| `Chateau`, `Puits`, `Embarcadere` | Fondations à −17, −1,10 et −1 stud (3). | Voulu | Socle du château prévu pour une pente. L’embarcadère a des pieux sous le plan d’eau. Le puits garde son ancrage de −1,10 stud avec une fondation distincte, une margelle ronde ouverte, l’eau visible et le seau suspendu au treuil. |
+| `Filon_Charbon`, `Filon_Cuivre`, `Filon_Fer`, `Filon_Or`, `Rocher` | Roche ancrée à −0,40 stud (5). | Voulu | Les roches émergent du terrain. Le banc mesure toujours leur profondeur. |
+| `Filon_Or` | Six pépites `Neon` (6). | Vrai | Métal mat de phase 1 appliqué par le constructeur ciblé. Le rapport mesurait encore l’ancien modèle stocké. |
+| `Roseaux`, `Touffe` | Sept tiges ou brins isolés et deux bases enterrées ou immergées (9). | Voulu | `RegionPlan` pose les roseaux au niveau de l’eau. Les tiges stockées descendent d’environ un demi-stud sous la surface. Les brins de la touffe repartent de la terre. Le banc exige que chaque pied retrouve l’eau ou le sol. |
+| `Chapelle`, `Tour_Guet` | Deux cierges et un brasero éclairent sans flamme ni braise visible (3). | Vrai | Flammes sur les cierges et braises dans le brasero. Les lumières ont une source visible. |
+| `Feu_Camp` | Lumière portée par une pièce invisible (1). | Voulu | La flamme est rendue par l’effet `Fire`. Le banc reconnaît ce porteur s’il a bien un feu actif. |
+| `Auberge`, `Boutique`, `Maison_A`, `Maison_B`, `Maison_C`, `Taverne` | Modèles coûteux (6). | Vrai | Moins de colombages, de solives, de fleurs ou de bocaux selon le modèle. **282 → 238**, **163 → 140**, **263 → 217**, **261 → 215**, **154 → 134**, **297 → 250** respectivement. Les gabarits extérieurs mesurés sont conservés. |
+| `Bureau_Sherif`, `Chapelle`, `Forge` | Modèles coûteux (3). | Vrai | Encadrements de pierre simplifiés et un barreau doublé retiré. **75 → 67**, **74 → 67**, **65 → 57**. |
+| `Chateau`, `Moulin_Village` | Modèles coûteux (2). | Vrai | Créneaux et anneaux de toits moins nombreux. Trois lattes par aile du moulin, qui garde son animation. **237 → 193** et **70 → 58**. |
+| `Champ_Ble` | 201 pièces (1). | Vrai | **110 pièces**, avec une forme d’épis inclinée par touffe et moins de piquets de clôture. Les 88 modèles `Touffe` conservent leur ordre de récolte. |
+| Variantes `Construction/*` | Pièces nominales parfois prises pour des alertes lors de la lecture de l’inventaire. | Voulu | Dans ce rapport, elles figurent sous `MESURES`. Le banc compare toujours les trois axes. Il attend la saillie des volets de 0,10 stud et le diamètre mesuré de 3,71 studs pour les anneaux du toit conique. Une dalle de 4 × 0,5 × 4 ou un mur de 4 × 4 × 0,5 à sa cote reste une mesure. |
+
+## Reconstruction et banc en Édition
+
+Après synchronisation de `src`, exécuter la reconstruction ciblée. Elle régénère ces 20 modèles stockés : `Alambic`, `Auberge`, `Bac_Tannage`, `Boutique`, `Bureau_Sherif`, `Champ_Ble`, `Chapelle`, `Chateau`, `Ecurie`, `Enclume`, `Filon_Or`, `Forge`, `Maison_A`, `Maison_B`, `Maison_C`, `Moulin_Village`, `Puits`, `Ruine`, `Taverne`, `Tour_Guet`. Reporter au besoin les retouches manuelles faites dans Studio sur ces modèles. Les `Cat_*` concernés sont générés par le catalogue à la pose et au chargement de la région.
+
+```lua
+local source = game:GetService("ServerStorage").OutilsDev.ConstruireModeles:Clone(); require(source).propsPhase2(); source:Destroy()
+```
 
 Avec `python tools/sync.py` déjà lancé et les sources synchronisées, exécuter en Édition cette ligne Luau.
 
@@ -53,11 +99,11 @@ Avec `python tools/sync.py` déjà lancé et les sources synchronisées, exécut
 assert(loadstring(game:GetService("HttpService"):GetAsync("http://127.0.0.1:34873/banc?f=visuels_props")))()
 ```
 
-Lire ensuite l’attribut texte `ServerStorage.BancVisuelsProps`. Le rapport commence par le nombre d’objets inspectés, puis donne les signalements par gravité et l’inventaire des mesures. Les modèles de `ServerStorage.Modeles` sont clonés, les `Cat_*` sont générés par le catalogue et chaque variante forme × matière passe par `Batir` avec une région temporaire. Le banc garde les instances temporaires hors du DataModel, cède entre les lots et les détruit. [Banc](../tools/bancs/visuels_props.luau)
+Lire ensuite l’attribut texte `ServerStorage.BancVisuelsProps`. `VERT` signifie zéro signalement et aucune erreur de lecture des références. Le rapport donne ensuite le nombre d’objets inspectés, les signalements par gravité et l’inventaire des mesures. Les modèles stockés sont clonés, les `Cat_*` sont générés par le catalogue et chaque variante forme × matière passe par `Batir` avec une région temporaire. Le banc garde ses références et ses clones hors du DataModel. [Banc](../tools/bancs/visuels_props.luau)
 
 - Le gabarit des constructions vient de `BUILD_SHAPES`. Le banc compare les trois axes et vérifie le bas visible par rapport au plan sous le pivot centré. Pour les modèles stockés, le gabarit vient de `TailleAttendue` si cet attribut existe, puis de la géométrie régénérée par la source dans un dossier isolé. Les autres modèles stockés et les `Cat_*` sont comparés à une plage indicative du plus grand axe.
-- Un écart au plan de plus de 0,10 stud remonte. Le toit de chaume hérité est évalué à sa hauteur prévue. Les appliques apparaissent comme points à examiner. Les lumières de nuit basculent de matériau en jeu et le banc tient compte de leur marquage.
+- Un écart de plus de 0,10 stud au bas prévu remonte. Le toit de chaume hérité et la lanterne murale gardent chacun une hauteur attendue. Les lumières nocturnes et les fenêtres de village gardent leur marquage pour `Clock`. Les budgets de pièces des bâtiments complexes et du champ correspondent aux modèles allégés.
 - L’écart de 0,15 stud est mesuré entre boîtes orientées. Les objets ronds, en coin et les maillages peuvent présenter un vide supplémentaire. Sur les planches, vérifier aussi les éléments posés à même le terrain et les assemblages séparés qui ont leur propre support. Les heuristiques de couleur, de nom de pièce, de collision et de transparence servent à choisir les modèles à regarder en premier.
 - Les nouveaux objets muraux, les décors générés directement dans le monde et les modèles sans capture récente restent à regarder en situation. Vérifier en particulier la pose des échalas, gouttières, lucarnes, volets et caillebotis dont les anciennes planches ne montrent pas les modèles actuels.
 
-En phase 2, reprendre d’abord les erreurs de géométrie et d’appui confirmées par le rapport, puis cadrer côte à côte les échelles, toits, roues et bâtiments d’élevage. Refaire une passe du banc et des captures au sol et à hauteur de joueur, avec un gros plan sur les osselets à la taille d’une case du sac.
+Le contrôle local sur 161 modèles simulés a confirmé les 20 cibles de reconstruction, les appuis des éléments réparés et les 88 touffes du champ. Claude doit encore synchroniser les scripts, reconstruire les modèles stockés, relancer ce banc et `tools/bancs/tout.luau` en Édition, puis commiter. En Play sur le PC fixe, regarder les façades, les éléments suspendus, la pose des fenêtres, le blé récoltable et le rendu nocturne. Les captures de phase 1 à reprendre couvrent notamment les échelles, toits, roues, bâtiments d’élevage et les osselets à la taille d’une case du sac.

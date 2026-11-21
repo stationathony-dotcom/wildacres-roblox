@@ -187,7 +187,51 @@ local GABARITS_CAT = {
 	cabane = { 6, 12 }, grange = { 8, 17 }, grenier = { 5, 13 }, enclos = { 6, 12 },
 	grandetable = { 5, 9 }, roue = { 5, 10 }, table = { 2.5, 5 }, chaise = { 2.5, 4 },
 }
-local APPLIQUES = { tableau = true, lanterne_murale = true, rideau = true, tenture = true }
+-- Écarts voulus. Chaque hauteur reste contrôlée avec la même tolérance que le plan du sol.
+local BAS_ATTENDUS = {
+	Cat_wall_lantern = 2.55, -- Shop.wallMount : potence contre le mur, pivot au niveau du sol.
+	["Modeles/Toit_Chaume"] = 6.925, -- Le toit hérité se pose au-dessus des murs à partir d'un pivot au sol.
+	["Modeles/Chateau"] = -17, -- Fondation profonde pour accrocher la pente.
+	["Modeles/Puits"] = -1.1, -- Fondation sous la margelle.
+	["Modeles/Embarcadere"] = -1, -- Pieux sous la surface de l'eau.
+	["Modeles/Champ_Ble"] = -0.2, -- La planche de terre s'encastre dans le terrain.
+	["Modeles/Sol_Laboure"] = -0.1, -- Les sillons restent visibles tandis que la terre se fond dans le terrain.
+	["Modeles/Filon_Charbon"] = -0.4,
+	["Modeles/Filon_Cuivre"] = -0.4,
+	["Modeles/Filon_Fer"] = -0.4,
+	["Modeles/Filon_Or"] = -0.4,
+	["Modeles/Rocher"] = -0.4, -- Les pierres des filons et du rocher émergent de terre.
+	["Modeles/Touffe"] = -0.2, -- Racines et pieds des brins dans la terre.
+	["Modeles/Roseaux"] = -0.51, -- RegionPlan les place au niveau de l'eau.
+}
+
+-- Éléments autonomes, admis seulement si leur pied atteint le sol ou l'eau.
+local APPUIS_INDEPENDANTS = {
+	Cat_hearth = { Pierre = true }, -- Pierres espacées autour du foyer.
+	["Modeles/Champ_Ble"] = { Botte = true }, -- Botte au sol à côté de la clôture.
+	["Modeles/Tableau_Quetes"] = { Caisse = true }, -- Caisse posée devant le panneau.
+	["Modeles/Roseaux"] = { Tige = true },
+	["Modeles/Touffe"] = { Brin = true },
+}
+
+-- Le pivot et les 88 pieds récoltables expliquent à eux seuls une grande partie du champ.
+-- Les budgets des bâtiments en colombage et du château couvrent la charpente, les pièces
+-- jouables et les tours. Ils restent inférieurs aux nombres du rapport du 21/11.
+local BUDGETS = {
+	Auberge = 238, Boutique = 140, Bureau_Sherif = 67, Champ_Ble = 110,
+	Chapelle = 67, Chateau = 193, Maison_A = 217, Maison_B = 215, Maison_C = 134, Taverne = 250,
+}
+
+-- `size` décrit le volume de grille. Les volets dépassent de 0,10 sur une seule face et le
+-- toit conique est une pile d'anneaux dont la base fait 3,71 de diamètre (anneaux + léger chevauchement).
+local function gabaritConstruction(bloc)
+	if bloc.shapeId == "volets" then return bloc.size + Vector3.new(0, 0, 0.1) end
+	if bloc.shapeId == "toitconique" then
+		local diametre = math.max(0.3, bloc.size.X * (1 - 0.5 / 7))
+		return Vector3.new(diametre, bloc.size.Y + 0.02, diametre)
+	end
+	return bloc.size
+end
 
 local function echelle(attendu, plage, boiteMesuree, construction)
 	if not attendu then
@@ -248,7 +292,8 @@ local function relever(racine, fiche, signaler, mesures)
 			signaler(3, "décor fin avec collision", string.format("%s : CanCollide, ép. %.3f", titre, min))
 		end
 	end
-	if n > 60 then signaler(3, "modèle coûteux", string.format("%d pièces, seuil 60", n)) end
+	local budget = fiche.budget or 60
+	if n > budget then signaler(3, "modèle coûteux", string.format("%d pièces, seuil %d", n, budget)) end
 	if #presents == 0 then
 		signaler(1, "aucune géométrie visible", n .. " pièces")
 		return
@@ -256,20 +301,22 @@ local function relever(racine, fiche, signaler, mesures)
 	local taille = haut - bas
 	local horsGabarit, attendu = echelle(fiche.attendu, fiche.plage, taille, fiche.construction)
 	if horsGabarit then signaler(2, "boîte hors gabarit", vecteur(taille) .. " · " .. attendu) end
-	local ecart = bas.Y - (fiche.basAttendu or 0)
+	local ecart = bas.Y - (BAS_ATTENDUS[fiche.nom] or 0)
 	local basPivot = fiche.construction and bas.Y - pivotReel.Position.Y or bas.Y
-	if math.abs(ecart) > SOL then
+	if math.abs(ecart) > SOL + EPS then
 		local defaut = ecart > 0 and "flotte au-dessus du plan de pose" or "s’enfonce sous le plan de pose"
 		local detail = string.format("bas/pivot %+.2f · écart au plan attendu %+.2f stud", basPivot, ecart)
-		signaler(fiche.applique and 3 or 2, defaut, detail)
+		signaler(2, defaut, detail)
 	end
 	table.insert(mesures, string.format("%s · %s (%s) · bas/pivot %+.2f · écart au plan %+.2f · %d pièces",
 		fiche.nom, vecteur(taille), attendu, basPivot, ecart, n))
 
 	local proches, comparaisons = {}, 0
+	local appuis = APPUIS_INDEPENDANTS[fiche.nom]
 	for i, a in presents do
 		local minimum = math.huge
 		if proches[i] then continue end
+		if appuis and appuis[a.piece.Name] and a.boite.bas.Y <= SOL + EPS then continue end
 		for j, b in presents do
 			if i == j then continue end
 			minimum = math.min(minimum, distanceBoites(a.boite, b.boite, minimum))
@@ -296,21 +343,21 @@ local function relever(racine, fiche, signaler, mesures)
 				associes[i], associe = true, true
 			end
 		end
-		if not associe then
+		-- Un feu de camp possède une flamme en particules portée par une pièce invisible.
+		local feu = porteur and porteur:FindFirstChildWhichIsA("Fire")
+		if not associe and not (feu and feu.Enabled) then
 			signaler(3, "lumière sans Neon visible à proximité", string.format("%s sur %s · portée %.1f", l.Name, porteur and porteur.Name or "?", l.Range))
 		end
 	end
 	for i, e in neons do
-		if not associes[i] and e.piece.Material == Enum.Material.Neon and not CS:HasTag(e.piece, "Fenetre")
-			and not CS:HasTag(e.piece, "LumiereNuit") then
+		if not associes[i] and e.piece.Material == Enum.Material.Neon and not CS:HasTag(e.piece, "Fenetre") then
 			signaler(3, "Neon hors d’un luminaire", e.titre .. " : aucune Light à 0,35 stud")
 		end
 	end
 end
 
 local function references(outils, bac, instances)
-	local module = outils and outils:FindFirstChild("ConstruireModeles")
-	if not module then return {} end
+	local module = assert(outils and outils:FindFirstChild("ConstruireModeles"), "module ConstruireModeles absent")
 	local fabrique = chargerSource(module, {
 		game = { GetService = function(_, service)
 			if service == "ServerStorage" then return bac end
@@ -397,8 +444,7 @@ local function auditer(bac, instances)
 					end
 					local attendu = objet:GetAttribute("TailleAttendue")
 					if typeof(attendu) ~= "Vector3" then attendu = tailles[objet.Name] end
-					local basAttendu = objet.Name == "Toit_Chaume" and 6.925 or 0
-					traiter({ nom = nom, attendu = attendu, plage = { 0.10, 64 }, basAttendu = basAttendu,
+					traiter({ nom = nom, attendu = attendu, plage = { 0.10, 64 }, budget = BUDGETS[objet.Name],
 						limitePiece = math.max(48, attendu and plusGrand(attendu) * 1.15 or 0) }, function()
 						return objet:Clone()
 					end)
@@ -411,7 +457,7 @@ local function auditer(bac, instances)
 	end
 	for nom, spec in config.Catalogue.MODELS do
 		traiter({ nom = nom, plage = GABARITS_CAT[spec.arch] or { 0.25, 16 },
-			applique = APPLIQUES[spec.arch], limitePiece = 16 }, function()
+			limitePiece = 16 }, function()
 			return config.Catalogue.build(nom)
 		end)
 	end
@@ -423,7 +469,7 @@ local function auditer(bac, instances)
 	for _, id in config.BLOCK_ORDER do
 		local bloc = config.BLOCKS[id]
 		formes[bloc.shapeId] = true
-		traiter({ nom = "Construction/" .. id, attendu = bloc.size, construction = true,
+		traiter({ nom = "Construction/" .. id, attendu = gabaritConstruction(bloc), construction = true,
 			limitePiece = math.max(4, plusGrand(bloc.size) * 1.25) }, function()
 			region.state.built = { { id = id, b = id, x = 0, y = bloc.size.Y / 2, z = 0, o = 0 } }
 			batir.onRegionLoad(region)
@@ -448,8 +494,9 @@ local function auditer(bac, instances)
 	end)
 	table.sort(mesures)
 	table.sort(ignores)
-	local lignes = { string.format("Banc visuel des props · %d/%d inspectés · %d signalements · %d personnages exclus",
-		lisibles, total, #ecarts, #ignores) }
+	local verdict = #ecarts == 0 and #avertissements == 0 and "VERT" or "ROUGE"
+	local lignes = { string.format("%s · Banc visuel des props · %d/%d inspectés · %d signalements · %d personnages exclus",
+		verdict, lisibles, total, #ecarts, #ignores) }
 	for _, note in avertissements do table.insert(lignes, note) end
 	local section
 	for _, entree in ecarts do
@@ -476,6 +523,6 @@ task.spawn(function()
 		if not objet.Parent then objet:Destroy() end
 	end
 	bac:Destroy()
-	SS:SetAttribute(ATTR, ok and rapport or ("Échec du banc · " .. tostring(rapport)))
+	SS:SetAttribute(ATTR, ok and rapport or ("ROUGE · Échec du banc · " .. tostring(rapport)))
 end)
 return "Banc lancé · résultat dans ServerStorage." .. ATTR

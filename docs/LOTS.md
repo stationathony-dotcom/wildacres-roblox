@@ -210,8 +210,10 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [~] **X26 · `docs/INTERFACE.md` + planches** — Sur disque · Codex, 21/11 soir. Commandes, carte, pose,
       survol, retour et sons documentés. Les planches peintes complètent le catalogue. À vérifier
       en Studio / Play : vues et nouvelles captures indiquées dans les README.
-- [~] **Vérification des props, phase 1** — en cours — Codex, 21/11. Banc Edit et reprise des défauts évidents sur disque.
-      Relevé dans [`VERIFICATION-PROPS.md`](VERIFICATION-PROPS.md). Phase 2 à réception du rapport de Claude.
+- [x] **Vérification des props, phase 1** — Codex, 21/11 (11afc63, 64b3767). Planches et banc Edit, rapport initial de 417 props reçu.
+- [~] **Vérification des props, phase 2** — sur disque, Codex, 21/11. Les 105 signalements sont tranchés et 20 modèles
+      stockés ont une reconstruction ciblée. Commandes et relevé dans [`VERIFICATION-PROPS.md`](VERIFICATION-PROPS.md).
+      Claude : synchronisation, reconstruction, bancs Édition et commits. En Play : pose, façades, éclairage et récolte du blé.
 
 ## Couloir Claude — les règles et le monde
 
@@ -267,6 +269,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 21/11 · Codex · Props, phase 2 sur disque. 76 défauts traités, 29 écarts voulus, 12 modèles allégés et commande Édition ciblée.
+  Vérifié localement sur des instances simulées. À synchroniser et à mesurer dans Studio, puis à regarder en Play sur le PC fixe.
 
 - 21/11 · Codex · Props, phase 1 sur disque. Banc Edit en lots, relecture des planches, appuis et miniature des osselets corrigés.
   À mesurer en Édition avec Claude, puis relecture des silhouettes et de la pose en situation.
