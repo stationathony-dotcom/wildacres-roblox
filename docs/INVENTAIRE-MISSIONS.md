@@ -545,15 +545,15 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (644) Veau → Vache
 - [x] (645) Mouton → Mouton
 - [x] (646) Agneau → Mouton
-- [x] (647) Chèvre → Chevron de toit
-- [x] (648) Chevreau → Chevron de toit
-- [ ] (649) Cochon
-- [x] (650) Porcelet → Sanglier
+- [x] (647) Chèvre → Chèvre (vendue au fermier dès que le modèle existe)
+- [x] (648) Chevreau → Chèvre
+- [x] (649) Cochon → Cochon
+- [x] (650) Porcelet → Cochon
 - [x] (651) Poule → Poule
 - [x] (652) Coq → Poule
-- [x] (653) Poussin → Pousse
+- [x] (653) Poussin → Poule
 - [x] (654) Canard → Canard sauvage
-- [ ] (655) Oie
+- [x] (655) Oie → Oie
 - [x] (656) Cheval → Cheval
 - [x] (657) Âne → Âne
 - [x] (658) Chien → Chien errant

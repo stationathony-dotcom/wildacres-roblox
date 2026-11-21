@@ -64,7 +64,7 @@ SYNONYMES = {
     "Uniforme": "Tenue de garde", "Équipement de garde": "Insigne de garde", "Blason miniature": "Sceau",
     "Porte renforcée": "Porte de château", "Porte à barreaux": "Grille (Fer)", "Porte de cave": "Trappe",
     "Portail de palissade": "Palissade", "Sac de bât": "Besace en toile", "Voile": "Voilier", "Rame": "Barque",
-    "Veau": "Vache", "Agneau": "Mouton", "Porcelet": "Sanglier", "Coq": "Poule", "Faucon": "Aigle",
+    "Veau": "Vache", "Agneau": "Mouton", "Porcelet": "Cochon", "Chèvre": "Chèvre", "Chevreau": "Chèvre", "Poussin": "Poule", "Coq": "Poule", "Faucon": "Aigle",
     "Souvenir d'un événement": "Jeton d'événement", "Invitation à une foire": "Billet de foire",
     "Pierre ancienne": "Objet d'une ruine", "Fragment de statue ancienne": "Objet d'une ruine",
     "Objet provenant d'une ruine": "Objet d'une ruine", "Marque d'élevage": "lignées des bêtes (/ecurie)",

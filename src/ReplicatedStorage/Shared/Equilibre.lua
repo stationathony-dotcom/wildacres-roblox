@@ -220,6 +220,8 @@ E.HARPOON = { price = 85, needs = { iron_ingot = 1, planks = 2, rope = 1 }, stat
 E.FARM_ANIMALS = {
 	pig = { name = "Cochon", model = "Cochon", product = "truffle", every = 2, price = 190, speed = 3.2, icon = "🐖", bait = "carrot", baitName = "une carotte", verb = "Récolter les truffes", shelter = "Cat_stable", masc = true },
 	goose = { name = "Oie", model = "Oie", product = "feather", every = 1, price = 80, speed = 4, icon = "🦆", bait = "seed", baitName = "des graines", verb = "Ramasser les plumes", shelter = "Cat_henhouse" },
+	-- chèvre : vendue seulement quand le modèle « Chevre » existe (Shop : liste du fermier) — passage Codex
+	goat = { name = "Chèvre", model = "Chevre", product = "milk", every = 2, price = 120, speed = 3.8, icon = "🐐", bait = "fiber", baitName = "de la fibre (herbe)", verb = "Traire", shelter = "Cat_sheepfold" },
 }
 E.TRUFFLE = { name = "Truffe", icon = "🍄", price = 45, food = 12 }
 E.TRUFFLE_OMELETTE = { name = "Omelette aux truffes", icon = "🍳", price = 140, food = 55, needs = { egg = 2, truffle = 1 }, level = 12 }
