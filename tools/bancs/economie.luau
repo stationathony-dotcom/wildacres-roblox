@@ -135,6 +135,9 @@ local md = {
 	"estimé avec les vraies données ; hypothèses en tête du banc. Médiane de toutes les activités : **" .. math.floor(median) .. " or/min**.",
 	"« TROP » = plus de 3 × la médiane, « faible » = moins d'un tiers (une activité ne doit pas rendre les autres inutiles).",
 	"",
+	"**Décidé le 21/11** : les créatures de niveau 7 et 9 restent « TROP » exprès — c'est le gain du risque (combat dur,",
+	"K.O. possible, butin à ramener). La souche et le cactus à mains nues restent faibles : il faut un outil (règle 5).",
+	"",
 	"| Activité | Catégorie | Or / min | Repère | Note |",
 	"|---|---|---|---|---|",
 }
