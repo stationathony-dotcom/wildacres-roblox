@@ -39,6 +39,34 @@ local function curl(part, radius, thick, y, color, material)
 	end
 end
 
+function M.mobilier(replicatedStorage, modeles, config)
+	local icons = folder(replicatedStorage, "IconesObjets")
+	for _, id in {
+		"table_wood", "big_table", "chair", "garden_bench", "shelf", "tool_rack", "bookcase",
+		"rug", "carpet_big", "banner", "clan_banner", "flowerpot", "clay_pot", "planter",
+		"lantern", "wall_torch", "wall_lantern",
+	} do
+		local info = config.ITEMS[id]
+		local nom = info and info.place or (id == "wall_lantern" and "Cat_wall_lantern")
+		if not nom then continue end
+		local source = modeles:FindFirstChild(nom)
+		local image = source and source:Clone() or config.Catalogue.build(nom)
+		if not image then continue end
+		for _, objet in image:GetDescendants() do
+			if objet:IsA("BasePart") then
+				objet.CanCollide, objet.CanQuery, objet.CanTouch = false, false, false
+			elseif objet:IsA("Light") or objet:IsA("Fire") or objet:IsA("ParticleEmitter") or objet:IsA("ProximityPrompt") then
+				objet:Destroy()
+			end
+		end
+		local ancienne = icons:FindFirstChild(id)
+		if ancienne then ancienne:Destroy() end
+		image.Name = id
+		image:SetAttribute("PaletteDediee", true)
+		image.Parent = icons
+	end
+end
+
 function M.identites(replicatedStorage)
 	local icons = folder(replicatedStorage, "IconesObjets")
 	model(icons, "seed_tree_cerisier", function(p)

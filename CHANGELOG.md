@@ -7,6 +7,8 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.3 — 2026-11-21
 
+- **Mobilier** — Dix-sept miniatures reprennent les formes des objets posés. La grande table, l’étagère, le tapis, la bannière et le pot en terre cuite ont des modèles détaillés.
+- **Élevage** — Les modèles de cochon et d’oie sont prêts pour leur intégration à la ferme.
 - **Tableau d’affichage** — Les types d’activités proposés suivent le serveur. Les concours de dressage et d’élevage apparaissent dans la grille.
 - **Cultures** — Le survol affiche la pousse et l’arrosage. À portée de récolte, l’invite indique si la plante est prête ou flétrie.
 - **Parcelles** — Le panneau en main dessine les limites du terrain et affiche son prix avant la pose. Le contour signale les emplacements refusés.

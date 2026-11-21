@@ -825,9 +825,14 @@ ARCH.table = function(m, c)
 	legs(m, 3.4, 2.2, 2.5, DARK)
 end
 ARCH.grandetable = function(m, c)
-	P(m, V(7, 0.3, 2.6), V(0, 2.6, 0), c, Mat.WoodPlanks)
+	for i = -2, 2 do
+		P(m, V(7, 0.3, 0.52), V(0, 2.6, i * 0.52), c:Lerp(DARK, math.abs(i) * 0.065), Mat.WoodPlanks)
+	end
 	legs(m, 7, 2.6, 2.5, DARK)
 	P(m, V(6, 0.25, 0.25), V(0, 0.8, 0), DARK, Mat.Wood)
+	for _, z in { -1.04, 1.04 } do
+		P(m, V(6.7, 0.35, 0.17), V(0, 2.31, z), DARK, Mat.Wood).CanCollide = false
+	end
 end
 ARCH.tabouret = function(m, c)
 	P(m, V(1.2, 1.8, 1.2), V(0, 1.6, 0), c, Mat.WoodPlanks, "cyl", UP)
@@ -866,6 +871,9 @@ ARCH.etagere = function(m, c)
 	end
 	P(m, V(0.2, 4.4, 1), V(-1.7, 2.2, 0), DARK, Mat.Wood)
 	P(m, V(0.2, 4.4, 1), V(1.7, 2.2, 0), DARK, Mat.Wood)
+	for _, h in { 0.25, 4.27 } do
+		P(m, V(3.3, 0.21, 0.12), V(0, h, -0.51), DARK, Mat.Wood).CanCollide = false
+	end
 end
 ARCH.coffret = function(m, c)
 	P(m, V(1.35, 0.46, 0.85), V(0, 0.23, 0), c, Mat.Wood)
@@ -962,8 +970,14 @@ end
 ARCH.banniere = function(m, c)
 	P(m, V(0.3, 7, 0.3), V(0, 3.5, 0), DARK, Mat.Wood)
 	P(m, V(2.4, 0.2, 0.2), V(0, 6.8, 0), DARK, Mat.Wood)
-	P(m, V(2.2, 3.6, 0.1), V(0, 4.9, 0.15), c, Mat.Fabric)
-	P(m, V(1, 1, 0.12), V(0, 5, 0.22), COLORS.O, Mat.Fabric, "wedge")
+	P(m, V(2.2, 3.6, 0.1), V(0, 4.9, 0.15), c, Mat.Fabric).CanCollide = false
+	for _, x in { -1.16, 1.16 } do
+		P(m, V(0.23, 0.23, 0.23), V(x, 6.8, 0), COLORS.O, Mat.Metal, "ball").CanCollide = false
+	end
+	for _, x in { -0.94, 0.94 } do
+		P(m, V(0.09, 3.6, 0.034), V(x, 4.9, 0.218), COLORS.O, Mat.Fabric).CanCollide = false
+	end
+	P(m, V(0.86, 0.86, 0.038), V(0, 5.02, 0.22), COLORS.O, Mat.Fabric, nil, CFrame.Angles(0, 0, math.pi / 4)).CanCollide = false
 end
 ARCH.drapeau = function(m, c)
 	P(m, V(0.25, 9, 0.25), V(0, 4.5, 0), DARK, Mat.Wood)
@@ -1004,8 +1018,10 @@ ARCH.pichet = function(m, c)
 	P(m, V(0.29, 0.11, 0.14), V(0.5, 0.58, 0), c, Mat.CeramicTiles)
 end
 ARCH.pot = function(m, c)
-	P(m, V(1.1, 1.2, 1.2), V(0, 0.55, 0), c, Mat.Sand, "cyl", UP)
-	P(m, V(0.8, 0.8, 0.8), V(0, 1.4, 0), COLORS.V, Mat.Grass, "ball")
+	P(m, V(0.73, 1.1, 1.1), V(0, 0.49, 0), c, Mat.CeramicTiles, "cyl", UP)
+	P(m, V(0.15, 0.98, 0.98), V(0, 0.08, 0), c:Lerp(DARK, 0.25), Mat.CeramicTiles, "cyl", UP)
+	P(m, V(0.15, 1.22, 1.22), V(0, 0.87, 0), c:Lerp(DARK, 0.15), Mat.CeramicTiles, "cyl", UP)
+	P(m, V(0.025, 0.97, 0.97), V(0, 0.95, 0), DARK, Mat.Ground, "cyl", UP).CanCollide = false
 end
 ARCH.jardiniere = function(m, c)
 	P(m, V(3.6, 1, 1.2), V(0, 0.5, 0), c, Mat.WoodPlanks)
@@ -1019,6 +1035,26 @@ ARCH.torche = function(m, c)
 	f.CanCollide = false
 	light(f, 14)
 end
+ARCH.lanterne_murale = function(m, c)
+	P(m, V(0.37, 0.88, 0.12), V(0, 3.27, 0), c, Mat.Metal).CanCollide = false
+	P(m, V(0.12, 0.12, 0.77), V(0, 3.66, 0.4), c, Mat.Metal).CanCollide = false
+	P(m, V(0.10, 0.35, 0.10), V(0, 3.48, 0.75), c, Mat.Metal).CanCollide = false
+	P(m, V(0.65, 0.13, 0.64), V(0, 3.36, 0.75), c, Mat.Metal).CanCollide = false
+	P(m, V(0.62, 0.12, 0.62), V(0, 2.61, 0.75), c, Mat.Metal).CanCollide = false
+	local verre = P(m, V(0.46, 0.66, 0.46), V(0, 2.98, 0.75), Color3.fromRGB(255, 204, 126), Mat.Glass)
+	verre.Transparency, verre.CanCollide = 0.23, false
+	for _, x in { -0.25, 0.25 } do
+		for _, z in { 0.5, 1 } do
+			P(m, V(0.07, 0.78, 0.07), V(x, 2.99, z), c, Mat.Metal).CanCollide = false
+		end
+	end
+	local flamme = P(m, V(0.15, 0.30, 0.15), V(0, 2.93, 0.75), COLORS.Y, Mat.Neon, "ball")
+	flamme.Name, flamme.CanCollide = "Flamme", false
+	local l = Instance.new("PointLight")
+	l.Color, l.Range, l.Brightness = Color3.fromRGB(255, 196, 120), 14, 0.92
+	l.Parent = flamme
+end
+K.MODELS.Cat_wall_lantern = { arch = "lanterne_murale", color = "F" }
 ARCH.brasero = function(m, c)
 	P(m, V(0.4, 2.6, 0.4), V(0, 1.3, 0), c, Mat.Metal)
 	P(m, V(0.6, 2, 2), V(0, 2.8, 0), c, Mat.Metal, "cyl", UP)
@@ -1050,9 +1086,13 @@ ARCH.chandelier = function(m, c)
 	l.Parent = m:GetChildren()[#m:GetChildren()]
 end
 ARCH.tapis = function(m, c)
-	P(m, V(5, 0.1, 3.4), V(0, 0.05, 0), c, Mat.Fabric)
-	P(m, V(4.2, 0.12, 2.6), V(0, 0.06, 0), COLORS.O, Mat.Fabric)
-	P(m, V(3.6, 0.14, 2), V(0, 0.07, 0), c, Mat.Fabric)
+	P(m, V(5, 0.1, 3.4), V(0, 0.05, 0), c, Mat.Fabric).CanCollide = false
+	P(m, V(4.45, 0.05, 2.84), V(0, 0.09, 0), COLORS.O, Mat.Fabric).CanCollide = false
+	P(m, V(4.02, 0.048, 2.4), V(0, 0.12, 0), c, Mat.Fabric).CanCollide = false
+	for i = -1, 1 do
+		P(m, V(0.57, 0.025, 0.57), V(i * 1.23, 0.15, 0), CLOTH, Mat.Fabric,
+			nil, CFrame.Angles(0, math.pi / 4, 0)).CanCollide = false
+	end
 end
 ARCH.rideau = function(m, c)
 	P(m, V(4, 0.2, 0.2), V(0, 5.4, 0), DARK, Mat.Wood)

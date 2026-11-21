@@ -318,10 +318,73 @@ function M.artisanat()
 	end
 end
 
+function M.animauxFerme()
+	dossier = dossierModeles()
+	local function forme(m: Model, nom: string, taille: Vector3, pos: Vector3, couleur: Color3, options: Opts?)
+		local o: Opts = options or {}
+		o.collide = false
+		return P(m, nom, taille, pos, couleur, Mat.SmoothPlastic, o)
+	end
+	local function yeux(m: Model, x: number, y: number, z: number)
+		for _, cote in { -1, 1 } do
+			forme(m, "Œil", Vector3.new(0.17, 0.16, 0.1), Vector3.new(cote * x, y, z), rgb(39, 27, 26))
+		end
+	end
+
+	local cochon = nouveau("Cochon")
+	local rose, groin, sabot = rgb(218, 150, 138), rgb(241, 180, 170), rgb(99, 63, 58)
+	forme(cochon, "Corps", Vector3.new(2.2, 1.7, 3.2), Vector3.new(0, 1.55, 0.2), rose, { forme = "Ball" })
+	forme(cochon, "Tête", Vector3.new(1.55, 1.32, 1.45), Vector3.new(0, 1.6, -1.35), rose, { forme = "Ball" })
+	forme(cochon, "Groin", Vector3.new(0.38, 0.66, 0.94), Vector3.new(0, 1.36, -2.02), groin,
+		{ forme = "Cylinder", rot = CFrame.Angles(0, math.pi / 2, 0) })
+	yeux(cochon, 0.42, 1.77, -1.91)
+	for _, cote in { -1, 1 } do
+		forme(cochon, "Narine", Vector3.new(0.12, 0.15, 0.08), Vector3.new(cote * 0.21, 1.38, -2.22), sabot)
+		forme(cochon, "Oreille", Vector3.new(0.4, 0.58, 0.3), Vector3.new(cote * 0.56, 2.22, -1.32), groin,
+			{ forme = "Wedge", rot = CFrame.Angles(0, 0, -cote * math.rad(24)) })
+		for _, z in { -0.78, 1.03 } do
+			forme(cochon, "Patte", Vector3.new(0.41, 1.04, 0.44), Vector3.new(cote * 0.62, 0.67, z), rose)
+			forme(cochon, "Sabot", Vector3.new(0.43, 0.25, 0.5), Vector3.new(cote * 0.62, 0.13, z), sabot)
+		end
+	end
+	local function pointQueue(a: number): Vector3
+		return Vector3.new(math.cos(a) * 0.22, 1.92 + math.sin(a) * 0.23, 1.62 + a * 0.055)
+	end
+	for i = 0, 7 do
+		local a, b = pointQueue(i * math.pi / 4), pointQueue((i + 1) * math.pi / 4)
+		forme(cochon, "Queue", Vector3.new(0.12, 0.12, (b - a).Magnitude + 0.035), Vector3.zero, rose,
+			{ cf = CFrame.lookAt((a + b) / 2, b) })
+	end
+	fini(cochon)
+
+	local oie = nouveau("Oie")
+	local blanc, plume, orange = rgb(244, 238, 220), rgb(216, 212, 199), rgb(224, 143, 67)
+	forme(oie, "Corps", Vector3.new(1.45, 1.3, 2.65), Vector3.new(0, 1.1, 0.28), blanc, { forme = "Ball" })
+	forme(oie, "Cou bas", Vector3.new(0.59, 1.38, 0.64), Vector3.new(0, 1.88, -0.66), blanc,
+		{ forme = "Ball", rot = CFrame.Angles(math.rad(-32), 0, 0) })
+	forme(oie, "Cou", Vector3.new(0.47, 1.27, 0.51), Vector3.new(0, 2.38, -0.98), blanc, { forme = "Ball" })
+	forme(oie, "Tête", Vector3.new(0.76, 0.69, 0.78), Vector3.new(0, 2.94, -1.05), blanc, { forme = "Ball" })
+	forme(oie, "Bec", Vector3.new(0.52, 0.24, 0.74), Vector3.new(0, 2.81, -1.57), orange,
+		{ forme = "Wedge", rot = CFrame.Angles(0, math.pi, 0) })
+	forme(oie, "Queue", Vector3.new(0.85, 0.34, 1.03), Vector3.new(0, 1.35, 1.5), plume,
+		{ forme = "Wedge", rot = CFrame.Angles(math.rad(8), 0, 0) })
+	yeux(oie, 0.25, 3.03, -1.36)
+	for _, cote in { -1, 1 } do
+		forme(oie, "Aile", Vector3.new(0.36, 0.78, 1.88), Vector3.new(cote * 0.58, 1.21, 0.43), plume,
+			{ forme = "Ball", rot = CFrame.Angles(math.rad(-14), 0, 0) })
+		forme(oie, "Patte", Vector3.new(0.13, 0.69, 0.16), Vector3.new(cote * 0.31, 0.43, 0.12), orange)
+		forme(oie, "Palme", Vector3.new(0.42, 0.16, 0.62), Vector3.new(cote * 0.31, 0.08, -0.09), orange,
+			{ forme = "Wedge", rot = CFrame.Angles(0, cote * math.rad(10), 0) })
+	end
+	fini(oie)
+	return cochon, oie
+end
+
 -- Créatures du monde vivant (ennemis par biome, monstres de nuit, animaux sauvages).
 -- Convention des bêtes : pièce « Base » au sol, tout ancré, sans collision, la tête vers -Z.
 function M.creatures()
 	dossier = dossierModeles()
+	M.animauxFerme()
 	local function Q(m: Instance, nom: string, taille: Vector3, pos: Vector3, couleur: Color3, mat: Enum.Material?, o: Opts?): BasePart
 		local opts: Opts = o or {}
 		opts.collide = false
