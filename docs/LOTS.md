@@ -74,7 +74,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       `Remotes.Infos:InvokeServer("reperes")` → `{ { id, x, z, sorte, nom } }` ; poser =
       `Action:FireServer("repere_poser", { x, z, sorte = "village"|"lit"|"parcelle"|"quete"|"perso" })` ;
       retirer = `Action:FireServer("repere_retirer", { id })`. Pas de texte libre (nom donné par le serveur).
-- [ ] Claude → Codex · panneau de propriété (X18) · **aperçu avant la pose** (serveur prêt 21/11) :
+- [x] Claude → Codex · panneau de propriété (X18, 3b60243) · **aperçu avant la pose** (serveur prêt 21/11) :
       `Remotes.Infos:InvokeServer("parcelle", { x, z })` → `{ ok, motif, prix, n, half }` (10 appels/s max :
       ne demander qu'au changement de case). Contour = carré de `2 × half` studs centré sur le point.
 - [x] Claude → Codex · interface (X16, a1e4209) · **toasts de sorte `"refus"`** : Batir (trop loin, trop haut, village,
@@ -83,6 +83,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] Claude → Codex · invite au survol (X19) · **état des cultures en attributs** sur le modèle `Culture`
       (Systemes/Farm, 21/11) : `Plante` (nom), `Jour` / `Jours` (pousse), `Arrosee`, `Fletrie`. Machines et coffres :
       demander les attributs voulus par un passage.
+- [ ] Codex → Claude · X19 · `Systemes/Machines`, `Shop` et `Protection` · publier sur les modèles de four et
+      roue à eau `EtatMachine` (texte bref actualisé selon l’état) et `NomEtat` (nom affiché). Pour les coffres,
+      publier `Verrouille` (booléen actualisé à la pose de la serrure). L’interface lit ces attributs à proximité.
 - [ ] Claude → Codex · `Activites.client` · le tableau d'affichage envoie maintenant `data.kinds` = `{ { id, libellé } }`
       (21/11 : + « Concours de dressage » et « Concours d'élevage », comptés par le jeu, banc `concours`) → remplacer
       `KIND_LIST` codée en dur par `data.kinds` quand il est présent.
@@ -140,10 +143,10 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [x] **X17 · Composants d'interface communs** — FAIT 21/11 (2f5e84d). Titres, boutons, quantités,
       avertissements et pictogrammes partagés. Sélection et verrouillage visibles par symbole et par couleur.
       Les trois états ont été vérifiés en Édition. À voir en Play : lisibilité et navigation des fenêtres.
-- [ ] **X18 · Périmètre de parcelle avant la pose** — en cours — Codex, 21/11. Contour de la parcelle 12×12 au sol quand on tient le
-      panneau, rouge si chevauchement ou village, coût du terrain suivant affiché. Données : `Parcelles` (lecture
-      seule ; besoin d'une fonction serveur → passage à Claude).
-- [ ] **X19 · État lisible à proximité** : culture (pousse, arrosée, prête), machine (roue à eau, four), coffre
+- [x] **X18 · Périmètre de parcelle avant la pose** — FAIT 21/11 (3b60243). Contour au sol et prix de la case
+      visée. Vérifié en Édition : coût, refus, une demande par case et rejet des réponses périmées.
+      À voir en Play : alignement du contour sur des pentes et à la pose du panneau.
+- [ ] **X19 · État lisible à proximité** — en cours — Codex, 21/11. Culture (pousse, arrosée, prête), machine (roue à eau, four), coffre
       verrouillé — en **invite au survol / à [E]** comme « [E] Parler », **jamais de texte permanent au-dessus des
       PNJ ni des objets**.
 - [x] **X20 · Formes de construction × matières** — FAIT PAR CLAUDE le 21/11 (bb861c5) : c'étaient des données
