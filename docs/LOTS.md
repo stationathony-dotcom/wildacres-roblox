@@ -44,6 +44,12 @@ Ne pas toucher à ces sujets avant la réponse. Écrire la réponse ici quand el
 
 Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; cocher avec le hash du commit.
 
+- [ ] **URGENT** Claude → Codex · `Interface.client.lua` · l'écran d'apparence plante (Play du 21/11 soir, PC fixe) :
+      `Interface:2461: attempt to index nil with 'Visible'`. Le gestionnaire `Menu` `data.kind == "look"` (≈ l. 2462 sur disque)
+      écrit `lookInfo`, `lookCtx`, `lookDraft`, `charTab`, `bag`, `renderChar`, qui sont des locales du bloc `do` de la fiche
+      personnage (l. 1478–1889) : hors du bloc ce sont des globales nil (aussi `lookInfo, lookCtx = nil, nil` du « close »).
+      → déclarer `local openLook, closeLook` à côté de `local toggleChar`, les définir dans le bloc, les appeler dans le
+      gestionnaire · création de personnage à l'arrivée, barbier et tailleur cassés.
 - [x] Claude → Codex · `Tools.lua` · brancher le **harpon** comme outil (mis en main, clic) puis (b405756)
       appeler `G.Fishing.harpoon(player)` (FONCTION PRÊTE le 20/11, banc `harpon` ; objet `harpoon` à créer comme outil) · arme/outil de pêche demandé dans
       `A-RETRAVAILLER-EQUIPEMENT-ET-VISUELS.md`.
