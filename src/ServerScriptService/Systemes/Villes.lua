@@ -24,6 +24,15 @@ function Villes.init(g)
 	folder = ReplicatedStorage:FindFirstChild("Villes") or Instance.new("Folder")
 	folder.Name = "Villes"
 	folder.Parent = ReplicatedStorage
+	-- passage Codex (21/11) : la charte utilisée depuis le sac → même validation que /fonder
+	-- Action:FireServer("ville_fonder", { nom = "…" }) ; réponse par toast (« refus » si impossible)
+	if G.Interact and G.Interact.onAction then
+		G.Interact.onAction("ville_fonder", function(player, data)
+			local nom = type(data) == "table" and type(data.nom) == "string" and data.nom or nil
+			local ok, msg = Villes.found(player, nom)
+			G.Util.toast(player, msg, ok and "big" or "refus")
+		end)
+	end
 end
 
 local function all()
