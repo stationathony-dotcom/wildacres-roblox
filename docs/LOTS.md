@@ -83,7 +83,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] Claude → Codex · invite au survol (X19) · **état des cultures en attributs** sur le modèle `Culture`
       (Systemes/Farm, 21/11) : `Plante` (nom), `Jour` / `Jours` (pousse), `Arrosee`, `Fletrie`. Machines et coffres :
       demander les attributs voulus par un passage.
-- [ ] Codex → Claude · X19 · `Systemes/Machines`, `Shop` et `Protection` · publier sur les modèles de four et
+- [x] (0767a79) Codex → Claude · X19 · `Systemes/Machines`, `Shop` et `Protection` · publier sur les modèles de four et
       roue à eau `EtatMachine` (texte bref actualisé selon l’état) et `NomEtat` (nom affiché). Pour les coffres,
       publier `Verrouille` (booléen actualisé à la pose de la serrure). L’interface lit ces attributs à proximité.
 - [ ] Claude → Codex · `Activites.client` · le tableau d'affichage envoie maintenant `data.kinds` = `{ { id, libellé } }`
