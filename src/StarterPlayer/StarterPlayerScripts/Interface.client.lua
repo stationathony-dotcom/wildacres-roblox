@@ -3890,6 +3890,8 @@ local function game_()
 	PROP_ICON.berries = "🍇"
 	local ProximityPromptService = game:GetService("ProximityPromptService")
 	local shown = {}
+	local EtatsProches = require(script.Parent:WaitForChild("EtatsProches"))
+	EtatsProches.survol(gui, uiScale, player, MOBILE, WindowNav, shown)
 	local function keyText(prompt: ProximityPrompt): string
 		local k = prompt.KeyboardKeyCode
 		if MOBILE then
@@ -3911,6 +3913,7 @@ local function game_()
 		if MOBILE then
 			box.Text = ""
 			box.Activated:Connect(function()
+				if WindowNav.isOpen() then return end
 				prompt:InputHoldBegin()
 				task.delay(prompt.HoldDuration + 0.05, function()
 					prompt:InputHoldEnd()
@@ -3930,11 +3933,21 @@ local function game_()
 		table.insert(conns, prompt.PromptButtonHoldEnded:Connect(function()
 			fill.Size = UDim2.fromScale(1, 0)
 		end))
-		-- le nom de l'objet (petit) quand on survole l'invite de près
-		local obj = prompt.ObjectText ~= "" and prompt.ObjectText or prompt.ActionText
-		local small = label({ Text = obj, TextSize = 11, TextColor3 = C.dim, TextXAlignment = Enum.TextXAlignment.Center, TextStrokeTransparency = 0.5,
+		local small = label({ Text = "", TextSize = 11, TextColor3 = C.dim, TextXAlignment = Enum.TextXAlignment.Center, TextStrokeTransparency = 0.5,
 			Size = UDim2.new(1, 0, 0, 12), Position = UDim2.new(0, 0, 1, -4), Parent = bb })
-		local _ = small
+		local model = EtatsProches.lire(prompt.Parent)
+		local function majDetail()
+			local _, nom, etat = EtatsProches.lire(model)
+			local obj = prompt.ObjectText ~= "" and prompt.ObjectText or (nom or prompt.ActionText)
+			small.Text = etat and (obj .. " · " .. etat) or obj
+			bb.Size = etat and UDim2.fromOffset(228, 65) or UDim2.fromOffset(150, 46)
+			box.Position = etat and UDim2.new(0.5, 0, 0, 20) or UDim2.fromScale(0.5, 0.5)
+			small.Position = etat and UDim2.fromOffset(0, 42) or UDim2.new(0, 0, 1, -4)
+			small.Size = UDim2.new(1, 0, 0, etat and 23 or 12)
+		end
+		majDetail()
+		table.insert(conns, prompt:GetPropertyChangedSignal("ObjectText"):Connect(majDetail))
+		if model then table.insert(conns, model.AttributeChanged:Connect(majDetail)) end
 		shown[prompt] = { bb = bb, conns = conns }
 	end)
 	ProximityPromptService.PromptHidden:Connect(function(prompt: ProximityPrompt)
