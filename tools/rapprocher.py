@@ -309,6 +309,136 @@ def quest_match(entry, code_norm):
     return None
 
 
+IDEES = {'Réputation — Réputation individuelle auprès de chaque village': 'Systemes/Reputation',
+    'Relations PNJ — Amitié, confiance, rivalité, reconnaissance': 'Systemes/RelationsPnj (avis par joueur)',
+    'Dialogue — Dialogues à choix multiples et conséquences': 'dialogues des habitants (Npcs + Shared/Dialogue)',
+    'Missions dynamiques — PNJ qui génèrent des demandes selon les événements': 'pénuries, demandes régionales, rumeurs (Shop.wanted)',
+    'Contrats — Commandes de joueurs, artisans et marchands': 'commandes entre joueurs (/commande) + commandes de village',
+    'Récompenses — Titres, objets uniques, plans, accès et privilèges': "titres, pièces de maître, Plan d'artisan", 'Progression avancée — Déblocages après le niveau 50': 'ABSENT règle 4 : pas de niveau ; rangs de maîtrise + talents de maître',
+    'Succès — Collection de défis et accomplissements': 'succès à compteurs (Social.bump)',
+    'Collection — Bestiaire, recettes, cartes, objets et découvertes': 'livre du bestiaire, carnet de recettes, titres de collection',
+    'Journal — Historique des quêtes, indices et aventures': 'journal [J] + chroniques',
+    'Dormir et se reposer.': 'sommeil (Clock, sommeil collectif)',
+    'Louer une chambre dans une auberge.': 'lits à louer (Villages, auberge)',
+    'Acheter une maison ou un terrain.': 'parcelles (Parcelles)',
+    'Payer des taxes locales.': 'taxe du village (Politique)',
+    'Entretenir ses bâtiments.': 'réparer / reprendre ses pièces (Batir, quête réparer)',
+    'Allumer des torches et des cheminées.': 'torche (main gauche), feu de camp, cheminée',
+    'Utiliser des puits et des fontaines.': "puits (seau d'eau)", 'Faire des feux de camp.': 'Feu de camp',
+    'Participer aux fêtes de village.': 'concours de village (Activites)',
+    'Organiser des mariages entre personnages fictifs.': 'ABSENT : règles Roblox (pas de relations amoureuses entre joueurs)',
+    'Créer des tavernes.': 'construction libre + étals (Ventes)',
+    'Jouer à des jeux de société.': 'Jeu de plateau, Jeu de cartes (E.USES)',
+    'Organiser des foires.': 'foire (Evenements)',
+    'Participer à des tournois.': 'duels consentis (/defi) + concours', "Devenir propriétaire d'une auberge.": 'construction libre + lits + étal',
+    'Employer des PNJ.': 'ouvriers agricoles (Ouvriers)',
+    'Faire transporter des marchandises.': 'diligence + marchandises emballées',
+    'Organiser des convois.': 'diligence (Activites)',
+    'Posséder plusieurs propriétés.': 'parcelles sans plafond (100 × n² or)', "Construire des villages avec d'autres joueurs.": 'villes de joueurs (/fonder, Villes)',
+    '1. Création de guildes.': 'clans (Clans)',
+    '2. Création de familles.': 'ABSENT : règles Roblox (pas de liens familiaux entre joueurs) ; clans à la place',
+    '3. Hiérarchie des clans.': 'grades (Clans)',
+    '4. Chefs et sous-chefs.': 'grades (Clans)',
+    '5. Conseils de clan.': 'Conseil (Politique)',
+    '6. Votes et élections.': 'élections (Politique)',
+    '7. Diplomatie entre clans.': 'ABSENT règle 1 : naît des joueurs',
+    '8. Alliances.': 'ABSENT règle 1 : naît des joueurs',
+    '9. Traités commerciaux.': 'ABSENT règle 1 : commandes entre joueurs à la place',
+    '10. Pactes de non-agression.': 'ABSENT règle 1',
+    '11. Déclaration de conflits.': 'ABSENT règle 1 : pas de guerre déclarée',
+    '12. Gestion des territoires.': 'territoire de clan (Parcelles p.clan) + avant-postes',
+    '13. Construction de villes.': 'villes de joueurs (Villes)',
+    '14. Impôts territoriaux.': 'taxe du village (Politique)',
+    '15. Protection des villages.': 'gardes, palissade, chantiers de village',
+    '16. Gestion des ressources communes.': 'trésor du village (Politique) + chantiers',
+    '17. Système de lois locales.': 'justice : témoins, étoiles, primes (Law)',
+    '18. Primes sur les personnages recherchés.': 'primes (Law)',
+    '19. Réputation politique.': 'réputation par village (Reputation)', "20. Possibilité de devenir dirigeant d'une ville.": 'élections (Politique) + /fonder (Villes)',
+    'Courses de chevaux.': 'courses (Activites)',
+    'Concours de pêche.': 'concours (Activites)',
+    'Concours de cuisine.': 'concours (Activites)',
+    'Concours de construction.': 'concours (Activites)',
+    'Concours agricoles.': 'concours (Activites)',
+    'Chasse au trésor.': 'chasse au trésor (Tresors)',
+    'Jeux de dés.': 'ABSENT règle 10 : pas de jeux de hasard',
+    'Jeux de cartes fictifs.': 'Jeu de cartes (E.USES)', "Tir à l'arc sur cibles fictives.": 'concours de tir (Activites)',
+    'Tournois sportifs.': 'duels (/defi) + concours', "Courses d'obstacles.": 'courses entre villages (Activites)',
+    'Exploration collective.': 'grottes en groupe (Donjons)',
+    'Expéditions en groupe.': 'groupes + chasse en groupe',
+    'Commerce entre joueurs.': 'troc + hôtel des ventes',
+    'Vente aux enchères.': 'enchères (Ventes)', "Expositions d'objets rares.": 'exposer (Activites)',
+    'Organisation de festivals.': 'concours de village (Activites)',
+    'Construction collaborative.': 'confiance « batir » (Util.trusted)',
+    'Création de marchés entre joueurs.': 'étals (Ventes) + chantier « marché » (Chantiers)',
+    'Banques.': 'banque (Economie)',
+    'Coffres bancaires.': 'banque (Economie)',
+    'Comptes personnels.': 'banque (Economie)',
+    'Taxes.': 'taxe du village (Politique)',
+    'Salaires.': "solde de l'armée, paie des ouvriers", 'Loyers.': 'lits à louer, loyer des ouvriers (Ouvriers)',
+    'Boutiques appartenant aux joueurs.': 'étals (Ventes)',
+    'Marchés publics.': 'marché du village (Shop)',
+    'Enchères.': 'enchères (Ventes)',
+    'Contrats commerciaux.': 'commandes entre joueurs (/commande)',
+    'Transport de marchandises.': 'diligence + marchandises emballées', "Coûts d'entretien des propriétés.": 'usure des outils, réparations, serrures à racheter', "Coûts d'entretien des armées.": 'solde et vivres (Armee)',
+    'Rareté régionale des ressources.': 'filons par biome, demandes régionales', "Prix variables selon l'offre et la demande.": 'prix par village, pénuries (Shop)',
+    'Métiers spécialisés.': '11 compétences + 6 voies de talents',
+    'Système de commandes.': 'commandes (Quetes, /commande)', "Protection contre la duplication d'objets.": 'verrous de sauvegarde (Save, banc save_concurrence)', "Limites économiques contre l'inflation.": "plafonds d'or des créatures, flux d'or (/wa or)", 'Compétences — Maîtrise, spécialisations et rangs': 'rangs de maîtrise (Metiers)',
+    'Talents — Branches avancées et choix exclusifs': 'talents de maître exclusifs',
+    'Exploration — Découvertes et récompenses permanentes': 'lieux découverts → stats, voie Explorateur',
+    'Artisanat — Qualité, rareté et réputation': "rareté + renom d'artisan (qualité de façon ABSENTE, règle 10)", 'Agriculture — Variétés et amélioration des cultures': 'sélection des semences (Farm)',
+    'Élevage — Lignées et caractéristiques des animaux': 'lignées des bêtes',
+    'Dressage — Compétences propres aux montures': 'écurie, allure, lignées (Horses)',
+    'Commerce — Réputation commerciale et spécialités': 'réputation par village (prix)',
+    'Justice — Réputation auprès des autorités': 'honneur, étoiles (Law)',
+    'Clans — Grades, responsabilités et titres': 'grades (Clans)',
+    'Sauvegarde fiable des personnages.': 'Save (verrou, instantané)',
+    'Sauvegarde des mondes.': 'Mondes (état global + secteurs)',
+    'Sauvegarde des constructions.': 'secteurs du monde (Mondes)',
+    'Protection contre les duplications.': 'verrous de sauvegarde (Save)',
+    'Gestion des changements de serveur.': 'verrou de serveur 400 s (Mondes, C11)',
+    'Gestion des déconnexions.': 'instantané de départ (Save)',
+    'Protection contre les exploitations de bugs.': 'revue sécurité (banc securite)',
+    'Limitation des actions répétitives abusives.': 'seau de jetons (Interact) + anti-farm',
+    'Modération des joueurs.': '/wa + bannissement maison (Demandes)',
+    'Signalement des comportements problématiques.': '/bug /appel (Demandes)',
+    'Gestion des permissions des clans.': 'grades (Clans)',
+    'Protection des propriétés hors ligne.': 'tourelles, serrures, chiens de garde',
+    'Streaming des régions.': 'chargement par régions (World)',
+    'Limitation des objets actifs.': 'niveau de détail des monstres et armées',
+    'Synchronisation des joueurs.': 'serveur autoritaire (Interact)',
+    'Gestion des serveurs pleins.': 'choix du serveur (Mondes.best)',
+    'Système de récupération après erreur de sauvegarde.': 'reprises et migrations (Save.MIGRATIONS)',
+    'HUD principal.': 'Hud (X1–X3)',
+    'Inventaire.': 'sac (Interface)',
+    'Équipement.': 'fiche Personnage (Gear)',
+    'Compétences.': 'menu commun (X1)',
+    'Talents.': 'talents [K]',
+    'Quêtes.': 'journal [J]',
+    'Carte.': 'Carte.client',
+    'Bestiaire.': 'livre du bestiaire (Livre.client)',
+    'Livre de recettes.': 'carnet de recettes + fiche de recette (X10)',
+    'Journal.': 'journal [J]',
+    'Commerce.': 'HotelVentes.client',
+    'Banque.': 'banque (Economie)',
+    'Construction.': 'mode [V] (Batir)',
+    'Gestion de propriété.': 'panneau de propriété (Parcelles)',
+    'Gestion de monture.': 'écurie (/ecurie)',
+    'Gestion de clan.': 'menu commun (X1)', "Gestion d'armée.": 'ordres à la caserne (b65ef70)',
+    'Paramètres.': 'Paramètres (X11)',
+    'Notifications.': 'notifications du HUD',
+    'Messagerie.': 'courrier (Poste)',
+    'Liste des joueurs.': 'liste Roblox + /classement', "Menu d'interaction contextuel.": 'invites [E] (Interact.onPrompt)',
+    'Tutoriels intégrés.': 'ABSENT règle 1 : sans indication',
+    '2 — Sauvegardes, sécurité et données': 'Save / Mondes / banc securite',
+    '3 — PNJ, dialogues et réputation': 'Npcs / RelationsPnj / Reputation',
+    '4 — Économie et commerce entre joueurs': 'Economie / Ventes',
+    '5 — Exploration et événements dynamiques': 'Evenements / Donjons / Tresors',
+    '6 — Villes, propriétés et politique': 'Villes / Parcelles / Politique',
+    '7 — Activités secondaires': 'Activites',
+    '8 — Progression avancée': 'statXp, rangs, talents',
+    '9 — Interface et accessibilité Roblox': 'lots Codex X1–X14 (2e vague X15–X26 en cours)'}
+DERNIER = 'fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)'
+
 def main():
     write = "--sec" not in sys.argv
     names = game_names()
@@ -326,14 +456,21 @@ def main():
         if h:
             sec = h.group(1).strip()
             continue
-        if sec not in ("liste items.txt", "listes ennemi.txt", "tools/creatures_liste.txt", "liste quetes.txt"):
+        if sec not in ("liste items.txt", "listes ennemi.txt", "tools/creatures_liste.txt", "liste quetes.txt",
+                       "à ne pas oublier.txt", "dernier prompt.txt"):
             continue
         m = re.match(r"^- \[ \] \((\d+)\) (.+)$", l)
         if not m:
             continue
         entry = m.group(2).strip()
         found = None
-        if sec == "liste quetes.txt":
+        if sec == "à ne pas oublier.txt":
+            found = IDEES.get(entry)
+            if found and found.startswith("ABSENT"):
+                found = "volontairement absent : " + found[7:].lstrip(" :")
+        elif sec == "dernier prompt.txt":
+            found = DERNIER
+        elif sec == "liste quetes.txt":
             found = quest_match(entry, code_norm)
         elif sec == "tools/creatures_liste.txt":
             cid = re.match(r"`\w+:(\w+)`", entry)

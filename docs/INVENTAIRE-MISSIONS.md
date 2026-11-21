@@ -4,24 +4,24 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ## dernier prompt.txt
 
-- [ ] (4) 39 nouvelles créatures tirées de listes ennemi.txt :
-- [ ] (5) humains : voleurs, pillards, mercenaires, gardes corrompus ;
-- [ ] (6) bêtes : ours brun, loup polaire, renard enragé, harpie, aigle géant ;
-- [ ] (7) forêt et marais : ent corrompu, gobelins des bois et des marais ;
-- [ ] (8) désert : ver des sables, basilic, momie ;
-- [ ] (9) toundra et nuit : géant de glace, loup des ombres, marcheur sans visage…
-- [ ] (10) 3 nouveaux boss itinérants : Wyverne des neiges, Géant des montagnes, Bête des profondeurs.
-- [ ] (11) Au total : 125 créatures, dont 16 boss.
-- [ ] (14) Exemples : soie des araignées, venin des serpents, crocs des loups, écailles des basilics, essence des spectres, cœur des golems, masques des bandits…
-- [ ] (15) Chances de l'obtenir : 35 % sur une créature normale, 70 % sur une élite. Un boss en donne 2 ou 3.
-- [ ] (16) Chaque matière sert à fabriquer sa propre pièce d'équipement, façon MMORPG :
-- [ ] (17) une arme, une armure, une coiffe ou un bijou selon la bête ;
-- [ ] (18) des stats qui montent avec son niveau et une rareté selon son rang ;
-- [ ] (19) fabriquée à la bonne station : enclume, bac de tannage, mé
-- [ ] (20) Boss : ils lâchent en plus une âme rare (une fois sur deux), qui sert à fabriquer une pièce légendaire à l'enclume.
-- [ ] (23) listes ennemi.txt : environ 250 entrées restent sans créaturres aquatiques, des dragonnets et griffons, des PNJ civils(médecins, prêtres, enfants…) et la faune passive (hérissons, blaireaux, canards…).
-- [ ] (24) liste items.txt : environ 300 éléments sur 813, surtout des de décoration. Une partie existe sous un autre nom.
-- [ ] (25) liste quetes.txt et idee.txt : ce sont des idées à piocher, une sélection est faite.
+- [x] (4) 39 nouvelles créatures tirées de listes ennemi.txt : → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (5) humains : voleurs, pillards, mercenaires, gardes corrompus ; → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (6) bêtes : ours brun, loup polaire, renard enragé, harpie, aigle géant ; → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (7) forêt et marais : ent corrompu, gobelins des bois et des marais ; → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (8) désert : ver des sables, basilic, momie ; → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (9) toundra et nuit : géant de glace, loup des ombres, marcheur sans visage… → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (10) 3 nouveaux boss itinérants : Wyverne des neiges, Géant des montagnes, Bête des profondeurs. → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (11) Au total : 125 créatures, dont 16 boss. → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (14) Exemples : soie des araignées, venin des serpents, crocs des loups, écailles des basilics, essence des spectres, cœur des golems, masques des bandits… → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (15) Chances de l'obtenir : 35 % sur une créature normale, 70 % sur une élite. Un boss en donne 2 ou 3. → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (16) Chaque matière sert à fabriquer sa propre pièce d'équipement, façon MMORPG : → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (17) une arme, une armure, une coiffe ou un bijou selon la bête ; → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (18) des stats qui montent avec son niveau et une rareté selon son rang ; → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (19) fabriquée à la bonne station : enclume, bac de tannage, mé → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (20) Boss : ils lâchent en plus une âme rare (une fois sur deux), qui sert à fabriquer une pièce légendaire à l'enclume. → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (23) listes ennemi.txt : environ 250 entrées restent sans créaturres aquatiques, des dragonnets et griffons, des PNJ civils(médecins, prêtres, enfants…) et la faune passive (hérissons, blaireaux, canards…). → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (24) liste items.txt : environ 300 éléments sur 813, surtout des de décoration. Une partie existe sous un autre nom. → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
+- [x] (25) liste quetes.txt et idee.txt : ce sont des idées à piocher, une sélection est faite. → fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)
 
 ## liste items.txt
 
@@ -2143,171 +2143,171 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### 1. Les systèmes de gameplay manquants
 
-- [ ] (13) Réputation — Réputation individuelle auprès de chaque village
-- [ ] (14) Relations PNJ — Amitié, confiance, rivalité, reconnaissance
-- [ ] (15) Dialogue — Dialogues à choix multiples et conséquences
-- [ ] (16) Missions dynamiques — PNJ qui génèrent des demandes selon les événements
-- [ ] (17) Contrats — Commandes de joueurs, artisans et marchands
-- [ ] (18) Récompenses — Titres, objets uniques, plans, accès et privilèges
-- [ ] (19) Progression avancée — Déblocages après le niveau 50
-- [ ] (20) Succès — Collection de défis et accomplissements
-- [ ] (21) Collection — Bestiaire, recettes, cartes, objets et découvertes
-- [ ] (22) Journal — Historique des quêtes, indices et aventures
+- [x] (13) Réputation — Réputation individuelle auprès de chaque village → Systemes/Reputation
+- [x] (14) Relations PNJ — Amitié, confiance, rivalité, reconnaissance → Systemes/RelationsPnj (avis par joueur)
+- [x] (15) Dialogue — Dialogues à choix multiples et conséquences → dialogues des habitants (Npcs + Shared/Dialogue)
+- [x] (16) Missions dynamiques — PNJ qui génèrent des demandes selon les événements → pénuries, demandes régionales, rumeurs (Shop.wanted)
+- [x] (17) Contrats — Commandes de joueurs, artisans et marchands → commandes entre joueurs (/commande) + commandes de village
+- [x] (18) Récompenses — Titres, objets uniques, plans, accès et privilèges → titres, pièces de maître, Plan d'artisan
+- [x] (19) Progression avancée — Déblocages après le niveau 50 → volontairement absent : règle 4 : pas de niveau ; rangs de maîtrise + talents de maître
+- [x] (20) Succès — Collection de défis et accomplissements → succès à compteurs (Social.bump)
+- [x] (21) Collection — Bestiaire, recettes, cartes, objets et découvertes → livre du bestiaire, carnet de recettes, titres de collection
+- [x] (22) Journal — Historique des quêtes, indices et aventures → journal [J] + chroniques
 
 ### 2. Une véritable vie médiévale
 
-- [ ] (30) Dormir et se reposer.
-- [ ] (31) Louer une chambre dans une auberge.
-- [ ] (32) Acheter une maison ou un terrain.
-- [ ] (33) Payer des taxes locales.
-- [ ] (34) Entretenir ses bâtiments.
-- [ ] (35) Allumer des torches et des cheminées.
-- [ ] (36) Utiliser des puits et des fontaines.
-- [ ] (37) Faire des feux de camp.
-- [ ] (38) Participer aux fêtes de village.
-- [ ] (39) Organiser des mariages entre personnages fictifs.
-- [ ] (40) Créer des tavernes.
-- [ ] (41) Jouer à des jeux de société.
-- [ ] (42) Organiser des foires.
-- [ ] (43) Participer à des tournois.
-- [ ] (44) Devenir propriétaire d'une auberge.
-- [ ] (45) Employer des PNJ.
-- [ ] (46) Faire transporter des marchandises.
-- [ ] (47) Organiser des convois.
-- [ ] (48) Posséder plusieurs propriétés.
-- [ ] (49) Construire des villages avec d'autres joueurs.
+- [x] (30) Dormir et se reposer. → sommeil (Clock, sommeil collectif)
+- [x] (31) Louer une chambre dans une auberge. → lits à louer (Villages, auberge)
+- [x] (32) Acheter une maison ou un terrain. → parcelles (Parcelles)
+- [x] (33) Payer des taxes locales. → taxe du village (Politique)
+- [x] (34) Entretenir ses bâtiments. → réparer / reprendre ses pièces (Batir, quête réparer)
+- [x] (35) Allumer des torches et des cheminées. → torche (main gauche), feu de camp, cheminée
+- [x] (36) Utiliser des puits et des fontaines. → puits (seau d'eau)
+- [x] (37) Faire des feux de camp. → Feu de camp
+- [x] (38) Participer aux fêtes de village. → concours de village (Activites)
+- [x] (39) Organiser des mariages entre personnages fictifs. → volontairement absent : règles Roblox (pas de relations amoureuses entre joueurs)
+- [x] (40) Créer des tavernes. → construction libre + étals (Ventes)
+- [x] (41) Jouer à des jeux de société. → Jeu de plateau, Jeu de cartes (E.USES)
+- [x] (42) Organiser des foires. → foire (Evenements)
+- [x] (43) Participer à des tournois. → duels consentis (/defi) + concours
+- [x] (44) Devenir propriétaire d'une auberge. → construction libre + lits + étal
+- [x] (45) Employer des PNJ. → ouvriers agricoles (Ouvriers)
+- [x] (46) Faire transporter des marchandises. → diligence + marchandises emballées
+- [x] (47) Organiser des convois. → diligence (Activites)
+- [x] (48) Posséder plusieurs propriétés. → parcelles sans plafond (100 × n² or)
+- [x] (49) Construire des villages avec d'autres joueurs. → villes de joueurs (/fonder, Villes)
 
 ### 3. Les systèmes politiques et sociaux
 
-- [ ] (55) 1. Création de guildes.
-- [ ] (56) 2. Création de familles.
-- [ ] (57) 3. Hiérarchie des clans.
-- [ ] (58) 4. Chefs et sous-chefs.
-- [ ] (59) 5. Conseils de clan.
-- [ ] (60) 6. Votes et élections.
-- [ ] (61) 7. Diplomatie entre clans.
-- [ ] (62) 8. Alliances.
-- [ ] (63) 9. Traités commerciaux.
-- [ ] (64) 10. Pactes de non-agression.
-- [ ] (65) 11. Déclaration de conflits.
-- [ ] (66) 12. Gestion des territoires.
-- [ ] (67) 13. Construction de villes.
-- [ ] (68) 14. Impôts territoriaux.
-- [ ] (69) 15. Protection des villages.
-- [ ] (70) 16. Gestion des ressources communes.
-- [ ] (71) 17. Système de lois locales.
-- [ ] (72) 18. Primes sur les personnages recherchés.
-- [ ] (73) 19. Réputation politique.
-- [ ] (74) 20. Possibilité de devenir dirigeant d'une ville.
+- [x] (55) 1. Création de guildes. → clans (Clans)
+- [x] (56) 2. Création de familles. → volontairement absent : règles Roblox (pas de liens familiaux entre joueurs) ; clans à la place
+- [x] (57) 3. Hiérarchie des clans. → grades (Clans)
+- [x] (58) 4. Chefs et sous-chefs. → grades (Clans)
+- [x] (59) 5. Conseils de clan. → Conseil (Politique)
+- [x] (60) 6. Votes et élections. → élections (Politique)
+- [x] (61) 7. Diplomatie entre clans. → volontairement absent : règle 1 : naît des joueurs
+- [x] (62) 8. Alliances. → volontairement absent : règle 1 : naît des joueurs
+- [x] (63) 9. Traités commerciaux. → volontairement absent : règle 1 : commandes entre joueurs à la place
+- [x] (64) 10. Pactes de non-agression. → volontairement absent : règle 1
+- [x] (65) 11. Déclaration de conflits. → volontairement absent : règle 1 : pas de guerre déclarée
+- [x] (66) 12. Gestion des territoires. → territoire de clan (Parcelles p.clan) + avant-postes
+- [x] (67) 13. Construction de villes. → villes de joueurs (Villes)
+- [x] (68) 14. Impôts territoriaux. → taxe du village (Politique)
+- [x] (69) 15. Protection des villages. → gardes, palissade, chantiers de village
+- [x] (70) 16. Gestion des ressources communes. → trésor du village (Politique) + chantiers
+- [x] (71) 17. Système de lois locales. → justice : témoins, étoiles, primes (Law)
+- [x] (72) 18. Primes sur les personnages recherchés. → primes (Law)
+- [x] (73) 19. Réputation politique. → réputation par village (Reputation)
+- [x] (74) 20. Possibilité de devenir dirigeant d'une ville. → élections (Politique) + /fonder (Villes)
 
 ### 4. Des événements mondiaux
 
 
 ### 5. Des activités pour les joueurs
 
-- [ ] (104) Courses de chevaux.
-- [ ] (105) Concours de pêche.
-- [ ] (106) Concours de cuisine.
-- [ ] (107) Concours de construction.
-- [ ] (108) Concours agricoles.
-- [ ] (109) Chasse au trésor.
-- [ ] (110) Jeux de dés.
-- [ ] (111) Jeux de cartes fictifs.
-- [ ] (112) Tir à l'arc sur cibles fictives.
-- [ ] (113) Tournois sportifs.
-- [ ] (114) Courses d'obstacles.
-- [ ] (115) Exploration collective.
-- [ ] (116) Expéditions en groupe.
-- [ ] (117) Commerce entre joueurs.
-- [ ] (118) Vente aux enchères.
-- [ ] (119) Expositions d'objets rares.
+- [x] (104) Courses de chevaux. → courses (Activites)
+- [x] (105) Concours de pêche. → concours (Activites)
+- [x] (106) Concours de cuisine. → concours (Activites)
+- [x] (107) Concours de construction. → concours (Activites)
+- [x] (108) Concours agricoles. → concours (Activites)
+- [x] (109) Chasse au trésor. → chasse au trésor (Tresors)
+- [x] (110) Jeux de dés. → volontairement absent : règle 10 : pas de jeux de hasard
+- [x] (111) Jeux de cartes fictifs. → Jeu de cartes (E.USES)
+- [x] (112) Tir à l'arc sur cibles fictives. → concours de tir (Activites)
+- [x] (113) Tournois sportifs. → duels (/defi) + concours
+- [x] (114) Courses d'obstacles. → courses entre villages (Activites)
+- [x] (115) Exploration collective. → grottes en groupe (Donjons)
+- [x] (116) Expéditions en groupe. → groupes + chasse en groupe
+- [x] (117) Commerce entre joueurs. → troc + hôtel des ventes
+- [x] (118) Vente aux enchères. → enchères (Ventes)
+- [x] (119) Expositions d'objets rares. → exposer (Activites)
 - [ ] (120) Concours de dressage.
-- [ ] (121) Organisation de festivals.
-- [ ] (122) Construction collaborative.
-- [ ] (123) Création de marchés entre joueurs.
+- [x] (121) Organisation de festivals. → concours de village (Activites)
+- [x] (122) Construction collaborative. → confiance « batir » (Util.trusted)
+- [x] (123) Création de marchés entre joueurs. → étals (Ventes) + chantier « marché » (Chantiers)
 
 ### 6. Les systèmes économiques manquants
 
-- [ ] (129) Banques.
-- [ ] (130) Coffres bancaires.
-- [ ] (131) Comptes personnels.
-- [ ] (132) Taxes.
-- [ ] (133) Salaires.
-- [ ] (134) Loyers.
-- [ ] (135) Boutiques appartenant aux joueurs.
-- [ ] (136) Marchés publics.
-- [ ] (137) Enchères.
-- [ ] (138) Contrats commerciaux.
-- [ ] (139) Transport de marchandises.
-- [ ] (140) Coûts d'entretien des propriétés.
-- [ ] (141) Coûts d'entretien des armées.
-- [ ] (142) Rareté régionale des ressources.
-- [ ] (143) Prix variables selon l'offre et la demande.
-- [ ] (144) Métiers spécialisés.
-- [ ] (145) Système de commandes.
-- [ ] (146) Protection contre la duplication d'objets.
-- [ ] (147) Limites économiques contre l'inflation.
+- [x] (129) Banques. → banque (Economie)
+- [x] (130) Coffres bancaires. → banque (Economie)
+- [x] (131) Comptes personnels. → banque (Economie)
+- [x] (132) Taxes. → taxe du village (Politique)
+- [x] (133) Salaires. → solde de l'armée, paie des ouvriers
+- [x] (134) Loyers. → lits à louer, loyer des ouvriers (Ouvriers)
+- [x] (135) Boutiques appartenant aux joueurs. → étals (Ventes)
+- [x] (136) Marchés publics. → marché du village (Shop)
+- [x] (137) Enchères. → enchères (Ventes)
+- [x] (138) Contrats commerciaux. → commandes entre joueurs (/commande)
+- [x] (139) Transport de marchandises. → diligence + marchandises emballées
+- [x] (140) Coûts d'entretien des propriétés. → usure des outils, réparations, serrures à racheter
+- [x] (141) Coûts d'entretien des armées. → solde et vivres (Armee)
+- [x] (142) Rareté régionale des ressources. → filons par biome, demandes régionales
+- [x] (143) Prix variables selon l'offre et la demande. → prix par village, pénuries (Shop)
+- [x] (144) Métiers spécialisés. → 11 compétences + 6 voies de talents
+- [x] (145) Système de commandes. → commandes (Quetes, /commande)
+- [x] (146) Protection contre la duplication d'objets. → verrous de sauvegarde (Save, banc save_concurrence)
+- [x] (147) Limites économiques contre l'inflation. → plafonds d'or des créatures, flux d'or (/wa or)
 
 ### 7. Les systèmes de progression à approfondir
 
-- [ ] (153) Compétences — Maîtrise, spécialisations et rangs
-- [ ] (154) Talents — Branches avancées et choix exclusifs
-- [ ] (155) Exploration — Découvertes et récompenses permanentes
-- [ ] (156) Artisanat — Qualité, rareté et réputation
-- [ ] (157) Agriculture — Variétés et amélioration des cultures
-- [ ] (158) Élevage — Lignées et caractéristiques des animaux
-- [ ] (159) Dressage — Compétences propres aux montures
-- [ ] (160) Commerce — Réputation commerciale et spécialités
-- [ ] (161) Justice — Réputation auprès des autorités
-- [ ] (162) Clans — Grades, responsabilités et titres
+- [x] (153) Compétences — Maîtrise, spécialisations et rangs → rangs de maîtrise (Metiers)
+- [x] (154) Talents — Branches avancées et choix exclusifs → talents de maître exclusifs
+- [x] (155) Exploration — Découvertes et récompenses permanentes → lieux découverts → stats, voie Explorateur
+- [x] (156) Artisanat — Qualité, rareté et réputation → rareté + renom d'artisan (qualité de façon ABSENTE, règle 10)
+- [x] (157) Agriculture — Variétés et amélioration des cultures → sélection des semences (Farm)
+- [x] (158) Élevage — Lignées et caractéristiques des animaux → lignées des bêtes
+- [x] (159) Dressage — Compétences propres aux montures → écurie, allure, lignées (Horses)
+- [x] (160) Commerce — Réputation commerciale et spécialités → réputation par village (prix)
+- [x] (161) Justice — Réputation auprès des autorités → honneur, étoiles (Law)
+- [x] (162) Clans — Grades, responsabilités et titres → grades (Clans)
 
 ### 8. Les systèmes techniques et multijoueurs
 
-- [ ] (170) Sauvegarde fiable des personnages.
-- [ ] (171) Sauvegarde des mondes.
-- [ ] (172) Sauvegarde des constructions.
-- [ ] (173) Protection contre les duplications.
-- [ ] (174) Gestion des changements de serveur.
-- [ ] (175) Gestion des déconnexions.
-- [ ] (176) Protection contre les exploitations de bugs.
-- [ ] (177) Limitation des actions répétitives abusives.
-- [ ] (178) Modération des joueurs.
-- [ ] (179) Signalement des comportements problématiques.
-- [ ] (180) Gestion des permissions des clans.
-- [ ] (181) Protection des propriétés hors ligne.
+- [x] (170) Sauvegarde fiable des personnages. → Save (verrou, instantané)
+- [x] (171) Sauvegarde des mondes. → Mondes (état global + secteurs)
+- [x] (172) Sauvegarde des constructions. → secteurs du monde (Mondes)
+- [x] (173) Protection contre les duplications. → verrous de sauvegarde (Save)
+- [x] (174) Gestion des changements de serveur. → verrou de serveur 400 s (Mondes, C11)
+- [x] (175) Gestion des déconnexions. → instantané de départ (Save)
+- [x] (176) Protection contre les exploitations de bugs. → revue sécurité (banc securite)
+- [x] (177) Limitation des actions répétitives abusives. → seau de jetons (Interact) + anti-farm
+- [x] (178) Modération des joueurs. → /wa + bannissement maison (Demandes)
+- [x] (179) Signalement des comportements problématiques. → /bug /appel (Demandes)
+- [x] (180) Gestion des permissions des clans. → grades (Clans)
+- [x] (181) Protection des propriétés hors ligne. → tourelles, serrures, chiens de garde
 - [ ] (182) Optimisation mobile.
-- [ ] (183) Streaming des régions.
-- [ ] (184) Limitation des objets actifs.
-- [ ] (185) Synchronisation des joueurs.
-- [ ] (186) Gestion des serveurs pleins.
+- [x] (183) Streaming des régions. → chargement par régions (World)
+- [x] (184) Limitation des objets actifs. → niveau de détail des monstres et armées
+- [x] (185) Synchronisation des joueurs. → serveur autoritaire (Interact)
+- [x] (186) Gestion des serveurs pleins. → choix du serveur (Mondes.best)
 - [ ] (187) Tests de charge à 40 joueurs.
-- [ ] (188) Système de récupération après erreur de sauvegarde.
+- [x] (188) Système de récupération après erreur de sauvegarde. → reprises et migrations (Save.MIGRATIONS)
 
 ### 9. L'interface Roblox
 
-- [ ] (194) HUD principal.
-- [ ] (195) Inventaire.
-- [ ] (196) Équipement.
-- [ ] (197) Compétences.
-- [ ] (198) Talents.
-- [ ] (199) Quêtes.
-- [ ] (200) Carte.
-- [ ] (201) Bestiaire.
-- [ ] (202) Livre de recettes.
-- [ ] (203) Journal.
-- [ ] (204) Commerce.
-- [ ] (205) Banque.
-- [ ] (206) Construction.
-- [ ] (207) Gestion de propriété.
-- [ ] (208) Gestion de monture.
-- [ ] (209) Gestion de clan.
-- [ ] (210) Gestion d'armée.
-- [ ] (211) Paramètres.
-- [ ] (212) Notifications.
-- [ ] (213) Messagerie.
-- [ ] (214) Liste des joueurs.
-- [ ] (215) Menu d'interaction contextuel.
-- [ ] (216) Tutoriels intégrés.
+- [x] (194) HUD principal. → Hud (X1–X3)
+- [x] (195) Inventaire. → sac (Interface)
+- [x] (196) Équipement. → fiche Personnage (Gear)
+- [x] (197) Compétences. → menu commun (X1)
+- [x] (198) Talents. → talents [K]
+- [x] (199) Quêtes. → journal [J]
+- [x] (200) Carte. → Carte.client
+- [x] (201) Bestiaire. → livre du bestiaire (Livre.client)
+- [x] (202) Livre de recettes. → carnet de recettes + fiche de recette (X10)
+- [x] (203) Journal. → journal [J]
+- [x] (204) Commerce. → HotelVentes.client
+- [x] (205) Banque. → banque (Economie)
+- [x] (206) Construction. → mode [V] (Batir)
+- [x] (207) Gestion de propriété. → panneau de propriété (Parcelles)
+- [x] (208) Gestion de monture. → écurie (/ecurie)
+- [x] (209) Gestion de clan. → menu commun (X1)
+- [x] (210) Gestion d'armée. → ordres à la caserne (b65ef70)
+- [x] (211) Paramètres. → Paramètres (X11)
+- [x] (212) Notifications. → notifications du HUD
+- [x] (213) Messagerie. → courrier (Poste)
+- [x] (214) Liste des joueurs. → liste Roblox + /classement
+- [x] (215) Menu d'interaction contextuel. → invites [E] (Interact.onPrompt)
+- [x] (216) Tutoriels intégrés. → volontairement absent : règle 1 : sans indication
 
 ### 10. Les grandes fonctionnalités à ajouter
 
@@ -2315,14 +2315,14 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 ### Mon bilan : ce qui manque vraiment
 
 - [ ] (250) 1 — Terminer et tester les systèmes fondamentaux
-- [ ] (251) 2 — Sauvegardes, sécurité et données
-- [ ] (252) 3 — PNJ, dialogues et réputation
-- [ ] (253) 4 — Économie et commerce entre joueurs
-- [ ] (254) 5 — Exploration et événements dynamiques
-- [ ] (255) 6 — Villes, propriétés et politique
-- [ ] (256) 7 — Activités secondaires
-- [ ] (257) 8 — Progression avancée
-- [ ] (258) 9 — Interface et accessibilité Roblox
+- [x] (251) 2 — Sauvegardes, sécurité et données → Save / Mondes / banc securite
+- [x] (252) 3 — PNJ, dialogues et réputation → Npcs / RelationsPnj / Reputation
+- [x] (253) 4 — Économie et commerce entre joueurs → Economie / Ventes
+- [x] (254) 5 — Exploration et événements dynamiques → Evenements / Donjons / Tresors
+- [x] (255) 6 — Villes, propriétés et politique → Villes / Parcelles / Politique
+- [x] (256) 7 — Activités secondaires → Activites
+- [x] (257) 8 — Progression avancée → statXp, rangs, talents
+- [x] (258) 9 — Interface et accessibilité Roblox → lots Codex X1–X14 (2e vague X15–X26 en cours)
 - [ ] (259) 10 — Optimisation et modération
 
 ## tools/creatures_liste.txt
