@@ -70,6 +70,20 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [x] Claude → Codex · écran d'accueil · liste « Mes amis en jeu » : RemoteFunction `Remotes.Mondes`, (f3457d2)
       `InvokeServer("friends")` rend `{ { name, worldId, worldName } }` ; bouton Rejoindre = `InvokeServer("join",
       worldId)` · étape 13 « rejoindre un ami » (serveur prêt, d5a3c76).
+- [ ] Claude → Codex · carte (X15) · **repères gardés par monde** (serveur prêt 21/11, `Systemes/Infos`, banc `infos`) :
+      `Remotes.Infos:InvokeServer("reperes")` → `{ { id, x, z, sorte, nom } }` ; poser =
+      `Action:FireServer("repere_poser", { x, z, sorte = "village"|"lit"|"parcelle"|"quete"|"perso" })` ;
+      retirer = `Action:FireServer("repere_retirer", { id })`. Pas de texte libre (nom donné par le serveur).
+- [ ] Claude → Codex · panneau de propriété (X18) · **aperçu avant la pose** (serveur prêt 21/11) :
+      `Remotes.Infos:InvokeServer("parcelle", { x, z })` → `{ ok, motif, prix, n, half }` (10 appels/s max :
+      ne demander qu'au changement de case). Contour = carré de `2 × half` studs centré sur le point.
+- [ ] Claude → Codex · interface (X16) · **toasts de sorte `"refus"`** : Batir (trop loin, trop haut, village,
+      même pièce, plus dans le sac) et Parcelles (terrain d'autrui, panneau refusé) les envoient maintenant avec
+      `kind = "refus"` → les afficher près du fantôme / du panneau (aujourd'hui : toast normal).
+- [ ] Claude → Codex · invite au survol (X19) · **état des cultures en attributs** sur le modèle `Culture`
+      (Systemes/Farm, 21/11) : `Plante` (nom), `Jour` / `Jours` (pousse), `Arrosee`, `Fletrie`. Machines et coffres :
+      demander les attributs voulus par un passage.
+
 ---
 
 ## Couloir Codex — ce qu'on voit et ce qu'on touche
@@ -196,7 +210,8 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 ## Journal (5 lignes maximum par session)
 
 - 21/11 · Claude : relu les 52 commits Codex du 20/11 (RAS sauf bottes de marais cassées par les 9 emplacements →
-  corrigé dans `Froid` + banc `froid`), C7 fini (torche), 2e vague Codex X15–X26 écrite. Studio MCP déconnecté : bancs à relancer.
+  corrigé dans `Froid` + banc `froid`), C7 fini (torche), 2e vague Codex X15–X26 écrite. Serveur prêt pour X15 / X16 / X18 (`Systemes/Infos`,
+  `Parcelles.check`, toasts « refus »). 50 bancs (economie rouge = sync.py absent).
 
 - 20/11 (3) · Claude : grottes en groupe, or des créatures plafonné, invasion aux combattants, LOD des armées,
   villageois qui fuient les bêtes, se rendre au shérif, duels /defi, trésors /enterrer, amis sur l'accueil (passage
