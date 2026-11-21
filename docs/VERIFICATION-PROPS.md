@@ -1,0 +1,63 @@
+# Vérification des props de Wild Acres
+
+Phase 1 du 21 novembre 2026. Relecture des planches du catalogue, des captures de contrôle et des deux images de Valdor. Le rendu cible repose sur des silhouettes lisibles, du bois brun et mat, de la pierre, des étoffes sobres et une lueur ambrée concentrée dans les lanternes et les foyers. La capture de jeu montre aussi les proportions des clôtures et des potences à hauteur de personnage. [Image cible](../Aventure%20%C3%A0%20Valdor%20dans%20Wild%20Acres.png) · [HUD de Valdor](../images/hud-village-16-9.png)
+
+Les captures datent de passes différentes. Le relevé indique ce qu’on voit sur chaque planche et précise quand le code actuel ou une planche plus récente confirme une évolution. Une vignette recadrée masque la hauteur de pose. [Audit des objets](AUDIT-VISUELS-OBJETS.md) · [Relecture précédente](RELECTURE-PLANCHES-VISUELLES.md)
+
+## Props posables et décor
+
+| Priorité | Prop | Écart visible | Planche |
+| --- | --- | --- | --- |
+| Identité | Grande échelle et échelle courte en bois, rondins ou fer | Le volume en treillis triangulé se lit comme un pylône. Les deux échelles de corde et de bois figurées à côté montrent bien les barreaux qu’on cherche. | [Construction 3](../images/catalogue/01-construction-03.png) · [Construction 6](../images/catalogue/01-construction-06.png) |
+| Identité | Grille en fer et barrières en bois ou en fer | Panneaux pleins dans l’aperçu. Les montants et les vides de la herse voisine rendent sa fonction immédiatement lisible. | [Construction 1](../images/catalogue/01-construction-01.png) · [Construction 3](../images/catalogue/01-construction-03.png) |
+| Identité | Roue à eau | Disque de bois presque plein, avec peu de lecture des pales. `ARCH.roue` construit encore le disque plein. | [Construction 5](../images/catalogue/01-construction-05.png) |
+| Identité | Toit de chaume et toit d’étage | La galette de chaume aux rives plates ressemble à un tapis. La couverture et la rive existent dans le modèle, qui place volontairement son toit au-dessus du pivot. | [Mobilier 2](../images/catalogue/02-mobilier-et-decor-02.png) · [Mobilier 3](../images/catalogue/02-mobilier-et-decor-03.png) |
+| Identité | Étable, écurie, bergerie | Petits volumes fermés dans les vignettes, de silhouette presque identique. Les ouvertures, litières et signes d’usage restent à montrer. Étable et écurie utilisent toutes deux `ARCH.cabane`. | [Cuisine et ferme 1](../images/catalogue/04-cuisine-et-ferme-01.png) · [Cuisine et ferme 4](../images/catalogue/04-cuisine-et-ferme-04.png) |
+| Identité | Torche murale | Tige fine terminée par un carré orange. Il manque l’attache au mur et le volume de la tête. La lanterne murale ajoutée depuis demande sa propre capture. | [Mobilier 3](../images/catalogue/02-mobilier-et-decor-03.png) |
+| Identité | Horloge mécanique | Le petit cadran est presque invisible sur le meuble sombre. L’horloge se confond avec l’armoire sur les planches. | [Mobilier 1](../images/catalogue/02-mobilier-et-decor-01.png) · [Mobilier 2](../images/catalogue/02-mobilier-et-decor-02.png) |
+| Identité | Métier à tisser | Cadre de bois avec une petite bande claire. La chaîne et le tissu en cours de fabrication se lisent mal. | [Mobilier 2](../images/catalogue/02-mobilier-et-decor-02.png) |
+| Identité | Caisse, coffret, coffre et coffre de transport | Les silhouettes rectangulaires se répètent et les signes distinctifs se perdent en petit. La caisse clouée et le coffre renforcé se reconnaissent mieux grâce à leur assemblage et à leur cerclage. | [Mobilier 1](../images/catalogue/02-mobilier-et-decor-01.png) |
+| Identité | Nasse, panier en osier, paniers et caisses de denrées | La nasse a le même profil fermé qu’une caisse. Le panier en osier manque d’anse et de motif tressé. Les caisses et le panier de légumes montrent peu leur contenu. | [Savoir et loisirs 2](../images/catalogue/06-savoir-et-loisirs-02.png) · [Matières 3](../images/catalogue/03-matieres-et-outils-03.png) · [Alchimie et commerce 1](../images/catalogue/05-alchimie-et-commerce-01.png) |
+| Style | Chaudron | Disque vert très lumineux sur un bol sombre. Le liquide utilise `Neon`, tandis que le foyer a sa propre lumière. Vérifier le liquide en Édition avant de reprendre la couleur. | [Mobilier 1](../images/catalogue/02-mobilier-et-decor-01.png) |
+| Style | Drapeau, bannière et bannière de clan | L’étoffe du drapeau lit comme une petite feuille blanche autour d’un poteau presque invisible. Les deux bannières paraissent étroites sur la planche. Il faut revoir l’angle puis la surface d’étoffe affichée. | [Mobilier 1](../images/catalogue/02-mobilier-et-decor-01.png) · [Bannière de clan](../images/catalogue/05-alchimie-et-commerce-01.png) |
+| Style | Pot de terre cuite et jardinière | Le pot ressemble à une motte surmontée d’une boule verte. Le code actuel du pot de catalogue dessine un corps, un rebord et de la terre. La jardinière reste une caisse garnie de trois boules. Demander de nouvelles vues en situation. | [Mobilier 2](../images/catalogue/02-mobilier-et-decor-02.png) |
+| Construction | Escalier droit, mur courbe, rondins et panneaux de verre | Les marches droites et la courbe sont masquées par l’angle. Les variantes en rondins se lisent comme du bois plein. Le verre ressemble à un panneau opaque. | [Construction 1](../images/catalogue/01-construction-01.png) · [Construction 2](../images/catalogue/01-construction-02.png) · [Construction 4](../images/catalogue/01-construction-04.png) |
+| Construction | Échelle de corde, pont-levis et trappe | Les barreaux de corde se lisent, mais les points de fixation et l’épaisseur des ferrures des pièces mobiles se perdent à cette échelle. | [Construction 5](../images/catalogue/01-construction-05.png) · [Construction 6](../images/catalogue/01-construction-06.png) |
+| Décor | Clôture, potence à lanterne et blé de Valdor | La capture de jeu rend le blé très cubique et uniforme, avec des masses presque continues. La cible montre des épis et des tiges. Le poteau brun fonctionne dans les deux vues, mais la cage de la lanterne et sa liaison sont beaucoup plus lisibles dans la cible. | [HUD de Valdor](../images/hud-village-16-9.png) · [Image cible](../Aventure%20%C3%A0%20Valdor%20dans%20Wild%20Acres.png) |
+
+L’enclume, l’alambic de catalogue, le tonneau et l’étal se reconnaissent dans les vignettes. Les nouvelles formes et variantes de matière, les captures voisines de terrain et certains objets du décor de village demandent un relevé dédié. [Planches du mobilier](../images/catalogue/02-mobilier-et-decor-01.png) · [Catalogue et atlas du 21/11](../images/catalogue/README.md)
+
+## Miniatures du sac à contrôler en marge des props
+
+| Miniatures | Observation et état | Planche |
+| --- | --- | --- |
+| Osselets (`dice`) | Deux dés à points dans la capture, alors que l’objet est devenu un jeu d’adresse en os. Forme d’osselets corrigée sur disque, nouvelle capture à prendre. | [Savoir et loisirs 1, case 25](../images/catalogue/06-savoir-et-loisirs-01.png) |
+| Cartes et documents, ruban de compétition | Carte, contrat, billet et lettre montrent les mêmes traits sur un rouleau. Le ruban se lit comme une pile de papier ou de tissu. | [Savoir et loisirs 1](../images/catalogue/06-savoir-et-loisirs-01.png) · [Savoir et loisirs 2](../images/catalogue/06-savoir-et-loisirs-02.png) |
+| Appâts, anguille, chou, melon, courge, tartes et tourte | Les appâts semblent être des graines. L’anguille reste courte. Les légumes côtelés et les trois tartes se confondent à petite taille. Le poisson fumé évoque encore une cale de bois sur la capture détaillée. | [Cuisine et ferme 1](../images/catalogue/04-cuisine-et-ferme-01.png) · [Cuisine et ferme 3](../images/catalogue/04-cuisine-et-ferme-03.png) · [Cuisine et ferme 4](../images/catalogue/04-cuisine-et-ferme-04.png) · [Contrôle matières et cuisine](../images/catalogue/10-matieres-et-cuisine.jpg) |
+| Graines, fil, cuir souple, crochet et hameçon | Étiquettes de graines proches avec signes très petits. Les deux fils partagent leur bobine et le cuir souple ressemble à une planche. Crochet et hameçon ont le même petit fer coudé. | [Cuisine et ferme 2](../images/catalogue/04-cuisine-et-ferme-02.png) · [Matières 2](../images/catalogue/03-matieres-et-outils-02.png) |
+| Bijoux, fioles et herbes | Anneaux de commerce trop proches entre eux, tubes de fioles et bouquets d’herbes répétitifs. | [Alchimie 1](../images/catalogue/05-alchimie-et-commerce-01.png) · [Alchimie 2](../images/catalogue/05-alchimie-et-commerce-02.png) · [Butin 5](../images/catalogue/07-butin-et-reliques-05.png) · [Butin 8](../images/catalogue/07-butin-et-reliques-08.png) |
+
+Les captures de contrôle confirment que les viandes, engrenages, coiffes et principales silhouettes d’armes ont déjà reçu une reprise. Les planches de butin et d’équipement montrent surtout des répétitions de séries. Les plastrons de cœur, colliers de crocs, talismans et massues d’os restent suivis dans la relecture des miniatures. [Contrôles 9 à 11](../images/catalogue/README.md) · [Relecture des planches](RELECTURE-PLANCHES-VISUELLES.md)
+
+## Correctifs sur disque
+
+- La traverse de `Cat_big_table` rejoint les pieds. Les têtes et les pieds des lits ainsi que `Cat_vase_deco` touchent le sol. Les volumes de `Cat_sculpture` se rejoignent. La toile du drapeau laisse passer le joueur. Les pièces génériques s’appellent `Élément`.
+- La fleur de `Cactus` rejoint son sommet. Celles de `Pot_Fleurs` rejoignent leurs tiges, qui partent du terreau. Les pépites de `Filon_Or` sont en métal doré mat. Pour mettre à jour des modèles retouchés dans Studio, reporter les trois corrections sur les pièces existantes. [Source des modèles](../src/ServerStorage/OutilsDev/ConstruireModeles.lua)
+- La forme des osselets est partagée entre la génération des miniatures à l’initialisation et le banc de finitions. En Édition, après synchronisation, `require(game.ServerStorage.OutilsDev.ConstruireModelesMiniatures:Clone()).identites(game.ReplicatedStorage)` actualise l’ensemble des miniatures d’identité. [Source des miniatures](../src/ServerStorage/OutilsDev/ConstruireModelesMiniatures.lua) · [Générateur de planches](../tools/bancs/visuels_finitions.luau)
+
+## Lecture du banc Edit
+
+Avec `python tools/sync.py` déjà lancé et les sources synchronisées, exécuter en Édition cette ligne Luau.
+
+```lua
+assert(loadstring(game:GetService("HttpService"):GetAsync("http://127.0.0.1:34873/banc?f=visuels_props")))()
+```
+
+Lire ensuite l’attribut texte `ServerStorage.BancVisuelsProps`. Le rapport commence par le nombre d’objets inspectés, puis donne les signalements par gravité et l’inventaire des mesures. Les modèles de `ServerStorage.Modeles` sont clonés, les `Cat_*` sont générés par le catalogue et chaque variante forme × matière passe par `Batir` avec une région temporaire. Le banc garde les instances temporaires hors du DataModel, cède entre les lots et les détruit. [Banc](../tools/bancs/visuels_props.luau)
+
+- Le gabarit des constructions vient de `BUILD_SHAPES`. Le banc compare les trois axes et vérifie le bas visible par rapport au plan sous le pivot centré. Pour les modèles stockés, le gabarit vient de `TailleAttendue` si cet attribut existe, puis de la géométrie régénérée par la source dans un dossier isolé. Les autres modèles stockés et les `Cat_*` sont comparés à une plage indicative du plus grand axe.
+- Un écart au plan de plus de 0,10 stud remonte. Le toit de chaume hérité est évalué à sa hauteur prévue. Les appliques apparaissent comme points à examiner. Les lumières de nuit basculent de matériau en jeu et le banc tient compte de leur marquage.
+- L’écart de 0,15 stud est mesuré entre boîtes orientées. Les objets ronds, en coin et les maillages peuvent présenter un vide supplémentaire. Sur les planches, vérifier aussi les éléments posés à même le terrain et les assemblages séparés qui ont leur propre support. Les heuristiques de couleur, de nom de pièce, de collision et de transparence servent à choisir les modèles à regarder en premier.
+- Les nouveaux objets muraux, les décors générés directement dans le monde et les modèles sans capture récente restent à regarder en situation. Vérifier en particulier la pose des échalas, gouttières, lucarnes, volets et caillebotis dont les anciennes planches ne montrent pas les modèles actuels.
+
+En phase 2, reprendre d’abord les erreurs de géométrie et d’appui confirmées par le rapport, puis cadrer côte à côte les échelles, toits, roues et bâtiments d’élevage. Refaire une passe du banc et des captures au sol et à hauteur de joueur, avec un gros plan sur les osselets à la taille d’une case du sac.
