@@ -16,6 +16,13 @@ local SOURCES = {
 	-- résistance 2 : deux coups à la main, un seul avec une houe ; la compétence accélère
 	Champ_Ble = { item = "wheat", n = { 1, 2 }, bonus = "seed_wheat", bonusP = 0.25, regrow = 3, skill = "agriculture", tough = 2, tool = "hoe" },
 }
+-- décor naturel du plan (dossier « Decor » de la région, règle 6 : tout est ramassable) : le modèle ENTIER
+-- est une touffe ; clé stable = attribut DecoIdx posé par World. Les tirages du plan ne changent pas.
+local DECOR = {
+	Roseaux = { item = "reeds", n = { 1, 2 }, regrow = 3, skill = "agriculture", tough = 1 },
+	Nenuphar = { item = "flower", n = { 1, 1 }, regrow = 4, skill = "agriculture", tough = 1 },
+}
+Moissons.DECOR = DECOR
 local GAP = 0.25 -- s entre deux coups d'un même joueur
 local lastHit = {}
 local REACH = 14 -- studs entre le joueur et la touffe
@@ -71,6 +78,31 @@ function Moissons.onRegionLoad(reg)
 					shown(e, d == nil)
 				end
 			end
+		end
+	end
+	local deco = reg.folder and reg.folder:FindFirstChild("Decor")
+	for _, m in deco and deco:GetChildren() or {} do
+		local src = DECOR[m.Name]
+		local idx = m:GetAttribute("DecoIdx")
+		if src and idx and m:IsA("Model") then
+			local key = "d|" .. idx
+			local id = reg.key .. "|" .. key
+			local parts = {}
+			for _, p in m:GetDescendants() do
+				if p:IsA("BasePart") then
+					table.insert(parts, p)
+					p:SetAttribute("RecolteId", id)
+					CollectionService:AddTag(p, "Recoltable")
+				end
+			end
+			local e = { parts = parts, reg = reg, key = key, src = src, pos = m:GetPivot().Position, model = m, hits = 0 }
+			live[id] = e
+			local d = st.moisson[key]
+			if d and G.world.day >= d + src.regrow then
+				st.moisson[key] = nil
+				d = nil
+			end
+			shown(e, d == nil)
 		end
 	end
 end

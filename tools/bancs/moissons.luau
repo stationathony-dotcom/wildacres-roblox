@@ -94,5 +94,37 @@ reg.houses["v:Champ_Ble"].model = champ2
 M.onRegionLoad(reg)
 local q = champ2:FindFirstChild("Touffe"):FindFirstChildWhichIsA("BasePart")
 check("rechargée : toujours récoltée", q.Transparency == 1)
+-- décor naturel du plan (règle 6) : roseaux et nénuphars du dossier Decor, le modèle entier = une touffe
+local regD = { key = "2,0", state = {}, houses = {}, folder = Instance.new("Folder") }
+regD.folder.Parent = f
+local decoF = Instance.new("Folder")
+decoF.Name = "Decor"
+decoF.Parent = regD.folder
+local ros = SS.Modeles.Roseaux:Clone()
+ros:SetAttribute("DecoIdx", 7)
+ros:PivotTo(CFrame.new(100, 0, 0))
+ros.Parent = decoF
+local nen = SS.Modeles.Nenuphar:Clone()
+nen:SetAttribute("DecoIdx", 8)
+nen:PivotTo(CFrame.new(104, 0, 0))
+nen.Parent = decoF
+local esc = Instance.new("Model")
+esc.Name = "Escalier"
+esc.Parent = decoF
+M.onRegionLoad(regD)
+local rp = ros:FindFirstChildWhichIsA("BasePart")
+local rid = rp:GetAttribute("RecolteId")
+check("roseaux : marqués récoltables", rid == "2,0|d|7" and game:GetService("CollectionService"):HasTag(rp, "Recoltable"))
+check("escalier du décor : pas récoltable", esc:GetAttribute("RecolteId") == nil)
+rootPos = Vector3.new(101, 3, 0)
+local r0 = got.reeds or 0
+task.wait(0.3)
+actions.recolter_clic(PL, { id = rid })
+check("roseaux : un clic à la main → roseaux au sol", (got.reeds or 0) > r0 and rp.Transparency == 1)
+check("roseaux : état gardé sous la clé du décor", regD.state.moisson["d|7"] == G.world.day)
+local fl0 = got.flower or 0
+task.wait(0.3)
+actions.recolter_clic(PL, { id = nen:FindFirstChildWhichIsA("BasePart"):GetAttribute("RecolteId") })
+check("nénuphar : donne une fleur", (got.flower or 0) == fl0 + 1)
 f:Destroy()
 return (ok and "OK " or "ÉCHEC ") .. #res .. " vérifications\n" .. table.concat(res, "\n")
