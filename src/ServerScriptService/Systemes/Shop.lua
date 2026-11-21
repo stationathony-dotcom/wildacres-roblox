@@ -898,6 +898,14 @@ local function buildPlaced(reg, d)
 	if d.item == "training_dummy" then
 		model:SetAttribute("Mannequin", true) -- cible du tir (Systemes/Combat)
 	end
+	if info.wallMount then
+		-- lanterne murale : allumée la nuit (Clock), les ombres la fuient (Protection.lightNear)
+		local flamme = model:FindFirstChild("Flamme", true)
+		if flamme and flamme:IsA("BasePart") then
+			game:GetService("CollectionService"):AddTag(flamme, "LumiereNuit")
+			G.Clock.seasonize(model)
+		end
+	end
 	if info.claim and G.Parcelles then
 		G.Parcelles.decorate(model, d.x, d.z)
 	end
@@ -984,6 +992,8 @@ function Shop.slotOf(item: string, x: number, z: number): string
 	local layer = "objet"
 	if item == "door" then
 		layer = "porte" -- une porte se pose dans l'ouverture d'un mur avec porte
+	elseif info and info.wallMount then
+		layer = "applique" -- lanterne murale : contre un mur, une par face
 	elseif info and info.dy then
 		layer = (info.grid == "edge" and "bord" or (item == "roof2" and "toit" or "sol")) .. "2" -- étage
 	elseif info and info.grid == "edge" then
@@ -1023,6 +1033,15 @@ function Shop.place(player: Player, item: string)
 			x, z, yaw = mx + math.sign(flat.X) * CELL / 2, mz, 90
 		else
 			x, z, yaw = mx, mz + math.sign(flat.Z) * CELL / 2, 0
+		end
+		if info.wallMount then
+			-- applique : décollée du mur vers le joueur (le mur fait 0,5 d'épaisseur), potence tournée vers lui
+			local sx, sz = math.sign(flat.X), math.sign(flat.Z)
+			if yaw == 90 then
+				x, yaw = x - sx * 0.3, -90 * sx
+			else
+				z, yaw = z - sz * 0.3, sz > 0 and 180 or 0
+			end
 		end
 	elseif info.grid == "cell" then
 		-- case devant soi, tourné vers soi (quart de tour)

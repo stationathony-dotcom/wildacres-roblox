@@ -212,6 +212,9 @@ E.NEW_ITEMS = {
 }
 -- Harpon de pêche (outil déclaré par Codex dans Config sans prix ni recette, passage du 20/11)
 E.HARPOON = { price = 85, needs = { iron_ingot = 1, planks = 2, rope = 1 }, station = "anvil", level = 6 }
+-- Lanterne murale (passage Codex X21, modèle Cat_wall_lantern) : posée contre un mur, s'allume la nuit,
+-- les ombres rôdeuses n'approchent pas (Protection.lightNear)
+E.WALL_LANTERN = { price = 30, needs = { iron_ingot = 1, glass = 1, candle_wax = 1, iron_ring = 1 }, station = "bench", level = 4 }
 
 -- Outils de métier gardés dans le SAC : + niveaux de compétence tant qu'on les a (Joueurs.skill), au plus
 -- E.BAG_CAP par compétence. Ils ne débloquent rien (les déblocages lisent Joueurs.skillRaw).
@@ -454,6 +457,13 @@ function E.apply(C)
 		I.harpoon.price = h.price
 		table.insert(R, { item = "harpoon", needs = table.clone(h.needs), station = h.station, cat = "outils", skill = { "artisanat", h.level } })
 		note("harpon : prix et recette")
+	end
+	local wl = E.WALL_LANTERN
+	if not I.wall_lantern and known(C, wl.needs) then
+		I.wall_lantern = { name = "Lanterne murale", icon = "🏮", price = wl.price, place = "Cat_wall_lantern", grid = "edge", wallMount = true,
+			desc = "Se pose contre un mur, du côté où l'on se tient. S'allume la nuit : les ombres n'approchent pas." }
+		table.insert(R, { item = "wall_lantern", needs = table.clone(wl.needs), station = wl.station, cat = "decoration", skill = { "artisanat", wl.level } })
+		note("nouvel objet wall_lantern")
 	end
 	for id, b in E.BAG_TOOLS do
 		if I[id] then
