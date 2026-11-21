@@ -36,3 +36,21 @@ Les 46 planches 16:9 rassemblent 930 objets et 576 équipements nommés. Les ape
 - [Objets prioritaires](09-identites-corrigees.jpg). Noyau, fragment de ruine, laine, couronnes, turban, carreaux, insignes, talisman, chair et oreille.
 - [Matières et cuisine](10-matieres-et-cuisine.jpg). Les rangées présentent les viandes crues, les quatre préparations, les poissons et engrenages, puis le lingot, la lampe et les plantes.
 - [Équipements](11-equipements-corriges.jpg). Armes et faucille, torses, coiffes et bottes, puis bouclier, torche, collier et lame venimeuse.
+
+## Planches de la deuxième vague du 21 novembre
+
+| Planche | Aperçus |
+| --- | --- |
+| [Charpente et structure](../icones/atlas-structure-brouillon.png) | 16 formes, du poteau rond au balcon |
+| [Ouvertures, harnachement et mobilier](../icones/atlas-construction-brouillon.png) | 10 formes, bride, selle de guerre, grande table, banc, étagère et tapis |
+| [Équipements](../icones/atlas-equipement.png) | Armes, protections, accessoires et vêtements |
+| [Matières et mobilier](../icones/atlas-matieres-mobilier.png) | Butin, ressources, lanterne murale et objets à poser |
+| [Truffe et omelette](../icones/atlas-truffe.png) | Truffe noire et omelette aux truffes |
+
+Les planches peintes complètent les captures du catalogue Édition ci-dessus. Les noms des cellules
+et la publication sont documentés avec les PNG. [Ordre des cases et publication](../icones/README.md).
+Les cinq premiers atlas sont réunis à la taille des cases de l’interface pour vérifier les silhouettes. [Contrôle à 36 px](../icones/controle-36px.png).
+
+Pour la prochaine capture Studio, relever les nouvelles formes et matières, les miniatures de
+mobilier et de lanterne murale, puis le périmètre de parcelle et les repères de carte.
+[Écrans et contrôles en Play](../../docs/INTERFACE.md).

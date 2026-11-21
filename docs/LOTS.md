@@ -50,6 +50,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       personnage (l. 1478–1889) : hors du bloc ce sont des globales nil (aussi `lookInfo, lookCtx = nil, nil` du « close »).
       → déclarer `local openLook, closeLook` à côté de `local toggleChar`, les définir dans le bloc, les appeler dans le
       gestionnaire · création de personnage à l'arrivée, barbier et tailleur cassés.
+      → **corrigé sur disque, à commiter**. Rejouer ces trois ouvertures et la fermeture serveur.
 - [x] Claude → Codex · `Tools.lua` · brancher le **harpon** comme outil (mis en main, clic) puis (b405756)
       appeler `G.Fishing.harpoon(player)` (FONCTION PRÊTE le 20/11, banc `harpon` ; objet `harpoon` à créer comme outil) · arme/outil de pêche demandé dans
       `A-RETRAVAILLER-EQUIPEMENT-ET-VISUELS.md`.
@@ -107,14 +108,21 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [x] (36224cc) Codex → Claude · X22 · `Systemes/Infos`, `Game` et `Protection` · `Infos:InvokeServer("retour")`
       doit fournir `{ lit = { x, z }?, absence = { { day, text } } }` pour le monde courant. Le lit vient
       de `rec.bed` et les entrées doivent rester consultables pendant la session après les toasts de retour.
-- [ ] Claude → Codex · icônes (X25) · 21 nouvelles pièces de construction (`blk_<forme>_<matière>`, formes :
+- [x] (4466bf5, fef3c87) Codex → Claude · X24 · `Systemes/Batir` et `Shop` · émettre `G.Util.sfx("pose", pos)` après une pose
+      réussie (pièce, plan, mobilier, remplacer « pelle » pour le plan) et `G.Util.sfx("casse", pos)` quand
+      `Batir.smash` détruit la pièce · les clients voisins jouent le son à l’endroit de l’action.
+- [x] (4466bf5) Codex → Claude · X24 · `Systemes/Protection` · émettre `G.Util.sfx("serrure", pos)` après une pose
+      de serrure réussie et `G.Util.sfx("cloche", pos)` dans `Protection.ring` à la position de la cloche
+      · réutiliser le canal Fx localisé pour les joueurs à portée.
+- [x] Claude → Codex · icônes (X25, sur disque) · 21 nouvelles pièces de construction (`blk_<forme>_<matière>`, formes :
       poteaurond, demipoutre, madrier, chevron, echalas, poteausculpte, colonnecarree, murincline, colombages, clayonnage,
       treillis, niche, fondation, pavage, pilotis, balcon, gouttiere, lucarne, croisillons, volets, vitrail) + bride
       (`bridle`) et selle de guerre (`saddle_war`).
 - [ ] Claude → Codex · icônes (X25) · `truffle`, `truffle_omelette`, `wall_lantern` (21/11 soir) ; cochon 🐖 / oie 🦆 au
-      fermier en emoji (icône peinte bienvenue).
+      fermier en emoji (icône peinte bienvenue). Correspondances prêtes sur disque, à commiter. Atlas de la truffe à publier.
 - [ ] Claude → Codex · `ConstruireModeles` · modèle **« Chevre »** (chèvre de ferme, comme « Mouton ») : la chèvre est
       déjà déclarée (`Equilibre.FARM_ANIMALS.goat`, ad75683) et apparaît chez le fermier dès que le modèle existe.
+      Modèle prêt sur disque, à commiter. Générer avec `ConstruireModeles.chevre()` en Édition.
 - [x] Claude · passages X24 (sons pose / casse / serrure / cloche) traités côté serveur (4466bf5, fef3c87) — Codex :
       coche tes deux lignes X24 ci-dessus.
 
@@ -173,22 +181,27 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [x] **X20 · Formes de construction × matières** — FAIT PAR CLAUDE le 21/11 (bb861c5) : c'étaient des données
       (`Config.BUILD_SHAPES`, formes composées `SHAPE_PARTS`, rendues par Batir et le fantôme existant). Reste pour Codex :
       leurs icônes (X25).
-- [~] **X21 · Mobilier et décor posables** — Codex 21/11 (e5ebd4f). Modèles détaillés et dix-sept
-      miniatures vérifiées en Édition. Le modèle de lanterne murale est prêt, recette et pose en passage.
-- [~] **X22 · Arrivée et retour lisibles** — Codex 21/11 (b6136ee). Enseigne, forge, four et disposition
-      étroite vérifiés en Édition. Le repère du lit et le journal d’absence attendent `Infos("retour")`
-      (passage ci-dessus). Vérifier création et retour en Play.
+- [~] **X21 · Mobilier et décor posables** — Codex 21/11 (e5ebd4f, serveur c7615e7). Modèles détaillés
+      et dix-sept miniatures vérifiées en Édition le 21/11. La lanterne murale reprend le modèle du catalogue
+      en l’absence de miniature générée. À vérifier en Studio / Play : miniature, pose et éclairage.
+- [~] **X22 · Arrivée et retour lisibles** — Codex 21/11 (b6136ee, serveur 36224cc). Ensemble d’arrivée
+      vérifié en Édition le 21/11. La carte actualise le repère du lit et l’onglet d’absence se recharge
+      à la réouverture. Correctif d’apparence sur disque. À vérifier en Studio / Play : création,
+      retour sans lit puis avec lit et journal.
 - [~] **X23 · Carte du monde légère** — Codex 21/11 (b110b77). Rendu des cases découvertes par lots, cache à la
       réouverture, suivi de carte suspendu à la fermeture et aperçus 3D déchargés hors du champ visible.
       Vérifications en Édition dans `docs/PERFORMANCE.md`. Mesures en Play à relever sur le PC fixe (P7).
-- [ ] **X24 · Sons de la 2e vague** — Recherche terminée pour les premiers candidats du Creator Store,
-      Pro Sound Effects. Pose 9120946570, casse 9119482853, serrure 9116324156, cloche 9113583960,
-      sabots 9113124912, pluie 9112852671, grotte 9112795583. Reprendre par l’écoute et le préchargement,
-      puis brancher les événements validés avec Claude. Le client utilise déjà `Fx("sfx", nom, position)`.
-- [~] **X25 · Icônes peintes, 2e lot** — Deux planches de 16 formes sont conservées comme brouillons
-      dans `images/icones/`. Ordre des cases dans le README. Restent équipement, matières de créatures,
-      mobilier complémentaire, correspondances Lua, validation des découpes et publication par le propriétaire.
-- [ ] **X26 · `docs/INTERFACE.md` + planches** à jour après X15–X25.
+- [~] **X24 · Sons de la 2e vague** — Sur disque · Codex, 21/11 soir (serveur 4466bf5, fef3c87).
+      Pluie et grotte en boucle, sabots de sa monture selon l’allure. Pose, casse, serrure et cloche
+      préchargées et déclenchées par les événements serveur. À vérifier en Studio / Play :
+      chargement des sept sons, raccords des boucles, cadence des sabots et portée des sons.
+- [~] **X25 · Icônes peintes, 2e lot** — Sur disque · Codex, 21/11 soir. 66 cases sur cinq planches
+      couvrent les formes, l’harnachement, l’équipement, les matières, le mobilier et les deux objets de cuisine.
+      Découpes contrôlées via l’alpha et ordre consigné dans le README. À vérifier en Studio / Play
+      après publication des atlas par le propriétaire.
+- [~] **X26 · `docs/INTERFACE.md` + planches** — Sur disque · Codex, 21/11 soir. Commandes, carte, pose,
+      survol, retour et sons documentés. Les planches peintes complètent le catalogue. À vérifier
+      en Studio / Play : vues et nouvelles captures indiquées dans les README.
 
 ## Couloir Claude — les règles et le monde
 
@@ -244,6 +257,11 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 21/11 soir · Codex · Correctif d’apparence, modèle `Chevre` et icônes truffe, omelette et lanterne prêts sur disque.
+  X21, X22, X24, X25 et X26 attendent la synchronisation Studio, les bancs et les commits. Passages serveur X24 cochés.
+  En Édition : lancer `ConstruireModeles.chevre()` et les bancs. En Play : création, barbier, tailleur, chèvre, lanterne, retour et sons.
+  Après publication des six atlas : contrôler les icônes du sac et de l’atelier, puis compléter les captures.
 
 - 21/11 · Codex · Pause à la demande du propriétaire. X15–X19 livrés et synchronisés dans Studio. X20 était déjà fait.
   Après synchronisation sur l’autre PC, lancer `ConstruireModeles.animauxFerme()`, `tableauQuetes()` et `reperesDepart()` en Édition.

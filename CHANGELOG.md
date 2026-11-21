@@ -11,6 +11,14 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 - **Ferme** — Le fermier vend le cochon (il trouve des truffes, mets cher et omelette aux truffes au four) et l’oie (plumes pour flèches et javelots). La chèvre (lait) suivra dès que son modèle existe. Une bête achetée à la fois : on ne paie plus plusieurs fois pour une seule.
 - **Sons** — On entend la pose d’une pièce, d’un plan ou d’un meuble, la casse d’un mur, la pose d’une serrure et la cloche d’alarme, à l’endroit de l’action.
 - **Retour** — Le serveur donne à l’interface la position de son lit et le journal de l’absence, relisible pendant toute la session.
+- **Apparence** — La fiche s’ouvre à la création du personnage, chez le barbier et chez le tailleur. La fermeture serveur efface la sélection en cours.
+- **Ferme** — La chèvre a son propre modèle, avec des cornes recourbées et une barbiche.
+- **Interface et planches** — La référence décrit les nouveaux repères, la construction, les états au survol, le retour et les contrôles à vérifier en Play.
+- **Retour** — Le repère du lit est actualisé à l’ouverture de la carte. Le journal d’absence se recharge quand on y revient.
+- **Mobilier** — La lanterne murale reprend la forme du modèle posé dans le sac et l’atelier.
+- **Icônes peintes** — Cinq nouvelles planches illustrent les formes de construction, l’harnachement, l’équipement, les matières, le mobilier, la truffe et son omelette. Les miniatures et pictogrammes servent de secours avant publication.
+- **Sons** — La pluie et la grotte ont leur boucle et les sabots de la monture suivent l’allure. Les sons de pose, de casse, de serrure et de cloche se jouent à portée de l’action.
+
 - **Carte et inventaire** — La carte dessine les régions découvertes par lots. Le sac charge les miniatures 3D visibles au défilement.
 - **Arrivée** — La place du village a une enseigne lisible des deux côtés. La lueur de la forge et la fumée du four servent de repères. Les rangées de couleurs défilent sur les petits écrans.
 - **Retour** — La carte réserve un repère pour le lit et le journal de quêtes ouvre un onglet dédié aux événements survenus en l’absence du joueur.
