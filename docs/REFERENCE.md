@@ -1,7 +1,7 @@
 # Wild Acres — fiche de référence (générée)
 
 Générée par `tools/bancs/reference.luau` depuis les données du jeu : **ne pas modifier à la main**, relancer le banc.
-Contenu : 966 objets, 1211 recettes, 23 cultures, 168 créatures, 11 compétences.
+Contenu : 1052 objets, 1296 recettes, 23 cultures, 168 créatures, 11 compétences.
 
 Règles : tout objet est **échangeable** (troc, étal, hôtel des ventes, courrier, coffre) — aucun objet lié au
 personnage (décision étape 4B : économie entre joueurs, monde bac à sable). L'équipement porté s'échange une fois retiré.
@@ -15,7 +15,7 @@ Rareté = obtention réelle (`Catalogue.assignRarity`) : prix, et pour ce qui ne
 
 ## Objets
 
-Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 32
+Raretés : commun 752 · peu commun 39 · rare 161 · épique 68 · légendaire 32
 
 ### Graines (23)
 
@@ -45,7 +45,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🌱 Graines (Seigle) | `seed_rye` | commun | 8 | boutique | usage direct |
 | 🌱 Graines (Tomate) | `seed_tomato` | commun | 15 | boutique | usage direct |
 
-### Nourriture et boissons (108)
+### Nourriture et boissons (110)
 
 | Objet | id | Rareté | Valeur | Obtention | Usages |
 |---|---|---|---|---|---|
@@ -101,6 +101,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🧅 Oignon | `onion` | commun | 30 | récolte | 3 recettes, usage direct |
 | 🧅 Oignons au vinaigre | `pickled_onions` | rare | 181 | atelier | usage direct |
 | 🍳 Omelette | `omelette` | commun | 60 | four | usage direct |
+| 🍳 Omelette aux truffes | `truffle_omelette` | rare | 140 | four | usage direct |
 | 🌾 Orge | `barley` | commun | 22 | récolte | 1 recette, usage direct |
 | 🍞 Pain | `bread` | commun | 70 | four | 2 recettes, usage direct |
 | 🍞 Pain complet | `whole_bread` | rare | 97 | four | 1 recette, usage direct |
@@ -144,6 +145,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🍵 Tisane du soir | `evening_tea` | commun | 38 | atelier | usage direct |
 | 🍅 Tomate | `tomato` | commun | 45 | récolte | 1 recette, usage direct |
 | 🥧 Tourte à la viande | `meat_pie` | rare | 170 | four | 1 recette, usage direct |
+| 🍄 Truffe | `truffle` | commun | 45 | élevage | 1 recette, usage direct |
 | 🐟 Truite | `fish_3` | commun | 24 | butin | usage direct |
 | 🥩 Viande crue | `meat` | commun | 8 | butin | 5 recettes, usage direct |
 | 🥩 Viande de cerf | `venison` | commun | 16 | chasse, butin | 1 recette, usage direct |
@@ -156,7 +158,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 💪 Élixir de vigueur | `vigor_elixir` | rare | 184 | atelier | usage direct |
 | 🌙 Élixir lunaire | `elixir_lunaire` | épique | 300 | atelier | usage direct |
 | 🌙 Élixir nocturne | `night_elixir` | rare | 200 | atelier | usage direct |
-| 🥚 Œuf | `egg` | commun | 15 | élevage | 5 recettes, usage direct |
+| 🥚 Œuf | `egg` | commun | 15 | élevage | 6 recettes, usage direct |
 
 ### Objets de valeur et collection (46)
 
@@ -209,7 +211,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🟢 Émeraude | `emerald` | épique | 280 | minage, trésor | 1 recette, usage direct |
 | 📜 Étui à parchemins | `scroll_case` | peu commun | 30 | établi | 1 recette, usage direct |
 
-### Objets posés et mobilier (120)
+### Objets posés et mobilier (121)
 
 | Objet | id | Rareté | Valeur | Obtention | Usages |
 |---|---|---|---|---|---|
@@ -276,6 +278,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🕰️ Horloge mécanique | `clock` | commun | — | établi | usage direct |
 | 🌷 Jardinière | `planter` | commun | — | atelier | usage direct |
 | 🏮 Lanterne | `lantern` | commun | — | établi | usage direct |
+| 🏮 Lanterne murale | `wall_lantern` | rare | 84 | établi | usage direct |
 | 🕹️ Levier | `lever` | commun | — | atelier | usage direct |
 | 🛏️ Lit | `bed` | commun | — | établi | usage direct |
 | 🛏️ Lit double | `double_bed` | commun | — | établi | usage direct |
@@ -334,7 +337,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🧰 Étagère à outils | `tool_rack` | commun | — | atelier | usage direct |
 | 🏪 Étal de marché | `stall` | commun | — | établi | usage direct |
 
-### Objets utilisables (114)
+### Objets utilisables (115)
 
 | Objet | id | Rareté | Valeur | Obtention | Usages |
 |---|---|---|---|---|---|
@@ -387,7 +390,6 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | ⭐ Insigne de shérif | `sheriff_badge` | rare | 200 | événement | usage direct |
 | 💰 Jeton d'événement | `event_token` | peu commun | 30 | événement | usage direct |
 | 🃏 Jeu de cartes | `cards` | peu commun | 36 | atelier | usage direct |
-| 🎲 Jeu de dés | `dice` | commun | 10 | atelier | usage direct |
 | ♟️ Jeu de plateau | `board_game` | peu commun | 40 | atelier | usage direct |
 | 🧸 Jouet en bois | `wood_toy` | peu commun | 20 | atelier | usage direct |
 | 📔 Journal d'un voyageur | `traveler_journal` | commun | — | événement | usage direct |
@@ -417,10 +419,12 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🍒 Noyau de cerise | `seed_tree_cerisier` | commun | 6 | abattage | usage direct |
 | 🏺 Objet d'une ruine | `ruin_piece` | rare | 150 | événement | usage direct |
 | ❔ Objet perdu | `lost_item` | peu commun | 30 | événement, cueillette, butin | usage direct |
+| 🦴 Osselets | `dice` | commun | 10 | atelier | usage direct |
 | 🏺 Outre en cuir | `waterskin` | commun | 31 | établi | usage direct |
 | 📜 Page ancienne | `old_page` | commun | 15 | minage, événement, fouille, trésor | 1 recette, usage direct |
 | 🧺 Panier de légumes | `veg_basket` | rare | 201 | atelier | usage direct |
 | 🌸 Parfum | `perfume` | rare | 90 | atelier | usage direct |
+| 🎼 Partition | `music_sheet` | commun | 22 | établi | usage direct |
 | 💈 Peigne | `comb` | commun | 8 | établi | usage direct |
 | 📐 Plan d'artisan | `craftsman_plan` | commun | — | événement | usage direct |
 | 🌲 Pomme de pin (sapin) | `seed_tree_sapin` | commun | 4 | abattage | usage direct |
@@ -442,7 +446,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🧼 Savon | `soap` | commun | 17 | atelier | usage direct |
 | 🔴 Sceau | `seal` | peu commun | 44 | établi | usage direct |
 | 👑 Sceau royal | `royal_seal` | épique | 500 | événement, butin, boss | usage direct |
-| 💧 Seau d'eau | `bucket` | commun | 22 | code:Machines | 2 recettes, usage direct |
+| 💧 Seau d'eau | `bucket` | commun | 22 | code:Cascades | 2 recettes, usage direct |
 | 🧺 Seau vide | `bucket_empty` | commun | 38 | atelier | 1 recette, usage direct |
 | 🧺 Serviette en lin | `towel` | rare | 111 | atelier | usage direct |
 | 🧿 Talisman | `talisman` | peu commun | — | événement | usage direct |
@@ -479,7 +483,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | ⚔️ Épée forgée en acier | `sword_steel` | épique | 530 | atelier | 1 recette, usage direct |
 | 💎 Épée sertie de diamant | `sword_diamond` | légendaire | 2300 | atelier | usage direct |
 
-### Pièces de construction (169)
+### Pièces de construction (249)
 
 | Objet | id | Rareté | Valeur | Obtention | Usages |
 |---|---|---|---|---|---|
@@ -487,6 +491,10 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🌉 Arche (Brique) | `blk_arche_brique` | commun | 27 | établi | usage direct |
 | 🌉 Arche (Pierre taillée) | `blk_arche_taille` | commun | 27 | établi | usage direct |
 | 🌉 Arche (Pierre) | `blk_arche_pierre` | commun | 18 | établi | usage direct |
+| 🏠 Balcon (Bois) | `blk_balcon_bois` | commun | 7 | atelier | usage direct |
+| 🏠 Balcon (Pierre taillée) | `blk_balcon_taille` | commun | 20 | établi | usage direct |
+| 🏠 Balcon (Pierre) | `blk_balcon_pierre` | commun | 14 | établi | usage direct |
+| 🏠 Balcon (Pin) | `blk_balcon_pin` | commun | 7 | atelier | usage direct |
 | ➖ Barrière (Bois) | `blk_barriere_bois` | commun | 3 | atelier | usage direct |
 | ➖ Barrière (Fer) | `blk_barriere_fer` | commun | 50 | établi | usage direct |
 | ⬛ Bloc (Bois) | `blk_bloc_bois` | commun | 5 | atelier | usage direct |
@@ -497,9 +505,14 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | ⬛ Bloc (Rondins) | `blk_bloc_rondin` | commun | 9 | atelier | usage direct |
 | ⬛ Bloc (Torchis) | `blk_bloc_torchis` | commun | 9 | atelier | usage direct |
 | ⬛ Bloc (Verre) | `blk_bloc_verre` | commun | 18 | établi | usage direct |
+| 🧱 Caillebotis (Bois) | `blk_caillebotis_bois` | commun | 5 | atelier | usage direct |
+| 🧱 Caillebotis (Pin) | `blk_caillebotis_pin` | commun | 5 | atelier | usage direct |
 | 🏛️ Chapiteau (Bois) | `blk_chapiteau_bois` | commun | 5 | atelier | usage direct |
 | 🏛️ Chapiteau (Pierre taillée) | `blk_chapiteau_taille` | commun | 14 | établi | usage direct |
 | 🏛️ Chapiteau (Pierre) | `blk_chapiteau_pierre` | commun | 9 | établi | usage direct |
+| 🔺 Chevron de toit (Bois) | `blk_chevron_bois` | commun | 3 | atelier | usage direct |
+| 🔺 Chevron de toit (Pin) | `blk_chevron_pin` | commun | 3 | atelier | usage direct |
+| 🔺 Chevron de toit (Rondins) | `blk_chevron_rondin` | commun | 5 | atelier | usage direct |
 | 🧱 Cloison (Bois) | `blk_mince_bois` | commun | 3 | atelier | usage direct |
 | 🧱 Cloison (Torchis) | `blk_mince_torchis` | commun | 5 | atelier | usage direct |
 | 🧱 Cloison (Verre) | `blk_mince_verre` | commun | 9 | établi | usage direct |
@@ -512,6 +525,10 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🏛️ Colonne (Brique) | `blk_colonne_brique` | commun | 27 | établi | usage direct |
 | 🏛️ Colonne (Pierre taillée) | `blk_colonne_taille` | commun | 27 | établi | usage direct |
 | 🏛️ Colonne (Pierre) | `blk_colonne_pierre` | commun | 18 | établi | usage direct |
+| 🏛️ Colonne carrée (Bois) | `blk_colonnecarree_bois` | commun | 9 | atelier | usage direct |
+| 🏛️ Colonne carrée (Brique) | `blk_colonnecarree_brique` | commun | 27 | établi | usage direct |
+| 🏛️ Colonne carrée (Pierre taillée) | `blk_colonnecarree_taille` | commun | 27 | établi | usage direct |
+| 🏛️ Colonne carrée (Pierre) | `blk_colonnecarree_pierre` | commun | 18 | établi | usage direct |
 | 🏰 Créneaux (Bois) | `blk_creneaux_bois` | commun | 7 | atelier | usage direct |
 | 🏰 Créneaux (Brique) | `blk_creneaux_brique` | commun | 20 | établi | usage direct |
 | 🏰 Créneaux (Pierre taillée) | `blk_creneaux_taille` | commun | 20 | établi | usage direct |
@@ -524,6 +541,10 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🟫 Dalle (Pierre) | `blk_dalle_pierre` | commun | 5 | établi | usage direct |
 | 🟫 Dalle (Pisé) | `blk_dalle_pise` | commun | 3 | atelier | usage direct |
 | 🟫 Dalle (Tuiles) | `blk_dalle_tuile` | commun | 7 | établi | usage direct |
+| 📏 Demi-poutre (Bois) | `blk_demipoutre_bois` | commun | 3 | atelier | usage direct |
+| 📏 Demi-poutre (Fer) | `blk_demipoutre_fer` | commun | 50 | établi | usage direct |
+| 📏 Demi-poutre (Pin) | `blk_demipoutre_pin` | commun | 3 | atelier | usage direct |
+| 📏 Demi-poutre (Rondins) | `blk_demipoutre_rondin` | commun | 5 | atelier | usage direct |
 | 🔵 Dôme (Ardoise) | `blk_dome_ardoise` | commun | 22 | établi | usage direct |
 | 🔵 Dôme (Brique) | `blk_dome_brique` | commun | 33 | établi | usage direct |
 | 🔵 Dôme (Fer) | `blk_dome_fer` | épique | 248 | établi | usage direct |
@@ -539,6 +560,28 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🌀 Escalier en colimaçon (Bois) | `blk_colimacon_bois` | commun | 18 | atelier | usage direct |
 | 🌀 Escalier en colimaçon (Pierre taillée) | `blk_colimacon_taille` | commun | 53 | établi | usage direct |
 | 🌀 Escalier en colimaçon (Pierre) | `blk_colimacon_pierre` | commun | 36 | établi | usage direct |
+| 🪟 Fenêtre avec vitrail (Brique) | `blk_vitrail_brique` | commun | 49 | établi | usage direct |
+| 🪟 Fenêtre avec vitrail (Pierre taillée) | `blk_vitrail_taille` | commun | 49 | établi | usage direct |
+| 🪟 Fenêtre avec vitrail (Pierre) | `blk_vitrail_pierre` | commun | 42 | établi | usage direct |
+| 🪟 Fenêtre avec volets (Bois) | `blk_volets_bois` | commun | 11 | atelier | usage direct |
+| 🪟 Fenêtre avec volets (Brique) | `blk_volets_brique` | commun | 25 | établi | usage direct |
+| 🪟 Fenêtre avec volets (Pierre taillée) | `blk_volets_taille` | commun | 25 | établi | usage direct |
+| 🪟 Fenêtre avec volets (Pierre) | `blk_volets_pierre` | commun | 18 | établi | usage direct |
+| 🪟 Fenêtre avec volets (Rondins) | `blk_volets_rondin` | commun | 18 | atelier | usage direct |
+| 🪟 Fenêtre avec volets (Torchis) | `blk_volets_torchis` | commun | 18 | atelier | usage direct |
+| 🪟 Fenêtre à croisillons (Bois) | `blk_croisillons_bois` | commun | 18 | atelier | usage direct |
+| 🪟 Fenêtre à croisillons (Brique) | `blk_croisillons_brique` | commun | 31 | établi | usage direct |
+| 🪟 Fenêtre à croisillons (Pierre taillée) | `blk_croisillons_taille` | commun | 31 | établi | usage direct |
+| 🪟 Fenêtre à croisillons (Pierre) | `blk_croisillons_pierre` | commun | 25 | établi | usage direct |
+| 🪟 Fenêtre à croisillons (Rondins) | `blk_croisillons_rondin` | commun | 25 | atelier | usage direct |
+| 🪟 Fenêtre à croisillons (Torchis) | `blk_croisillons_torchis` | commun | 25 | atelier | usage direct |
+| ⬛ Fondation (Bois) | `blk_fondation_bois` | commun | 9 | atelier | usage direct |
+| ⬛ Fondation (Gravier) | `blk_fondation_gravier` | commun | 9 | atelier | usage direct |
+| ⬛ Fondation (Pierre taillée) | `blk_fondation_taille` | commun | 27 | établi | usage direct |
+| ⬛ Fondation (Pierre) | `blk_fondation_pierre` | commun | 18 | établi | usage direct |
+| ⬛ Fondation (Rondins) | `blk_fondation_rondin` | commun | 18 | atelier | usage direct |
+| 📏 Gouttière (Bois) | `blk_gouttiere_bois` | commun | 3 | atelier | usage direct |
+| 📏 Gouttière (Fer) | `blk_gouttiere_fer` | commun | 50 | établi | usage direct |
 | 🧱 Grand mur (Bois) | `blk_grandmur_bois` | commun | 11 | atelier | usage direct |
 | 🧱 Grand mur (Brique) | `blk_grandmur_brique` | commun | 33 | établi | usage direct |
 | 🧱 Grand mur (Pierre taillée) | `blk_grandmur_taille` | commun | 33 | établi | usage direct |
@@ -560,6 +603,14 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 📏 Linteau (Fer) | `blk_linteau_fer` | commun | 50 | établi | usage direct |
 | 📏 Linteau (Pierre taillée) | `blk_linteau_taille` | commun | 7 | établi | usage direct |
 | 📏 Linteau (Pierre) | `blk_linteau_pierre` | commun | 5 | établi | usage direct |
+| 🏠 Lucarne (Ardoise) | `blk_lucarne_ardoise` | commun | 22 | établi | usage direct |
+| 🏠 Lucarne (Bardeaux) | `blk_lucarne_bardeau` | commun | 22 | établi | usage direct |
+| 🏠 Lucarne (Bois) | `blk_lucarne_bois` | commun | 16 | atelier | usage direct |
+| 🏠 Lucarne (Chaume) | `blk_lucarne_chaume` | commun | 16 | atelier | usage direct |
+| 🏠 Lucarne (Tuiles) | `blk_lucarne_tuile` | commun | 29 | établi | usage direct |
+| 📏 Madrier (Bois) | `blk_madrier_bois` | commun | 3 | atelier | usage direct |
+| 📏 Madrier (Pin) | `blk_madrier_pin` | commun | 3 | atelier | usage direct |
+| 📏 Madrier (Rondins) | `blk_madrier_rondin` | commun | 5 | atelier | usage direct |
 | 📐 Marche (Bois) | `blk_marche_bois` | commun | 3 | atelier | usage direct |
 | 📐 Marche (Pierre taillée) | `blk_marche_taille` | commun | 7 | établi | usage direct |
 | 📐 Marche (Pierre) | `blk_marche_pierre` | commun | 5 | établi | usage direct |
@@ -571,6 +622,10 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🔳 Mur avec fenêtre (Pisé) | `blk_murfenetre_pise` | commun | 7 | atelier | usage direct |
 | 🔳 Mur avec fenêtre (Rondins) | `blk_murfenetre_rondin` | commun | 14 | atelier | usage direct |
 | 🔳 Mur avec fenêtre (Torchis) | `blk_murfenetre_torchis` | commun | 14 | atelier | usage direct |
+| 🧱 Mur avec niche (Brique) | `blk_niche_brique` | commun | 20 | établi | usage direct |
+| 🧱 Mur avec niche (Pierre taillée) | `blk_niche_taille` | commun | 20 | établi | usage direct |
+| 🧱 Mur avec niche (Pierre) | `blk_niche_pierre` | commun | 14 | établi | usage direct |
+| 🧱 Mur avec niche (Torchis) | `blk_niche_torchis` | commun | 14 | atelier | usage direct |
 | 🚪 Mur avec porte | `wall_door` | commun | — | ? | usage direct |
 | 🚪 Mur avec porte (Bois) | `blk_murporte_bois` | commun | 7 | atelier | usage direct |
 | 🚪 Mur avec porte (Brique) | `blk_murporte_brique` | commun | 20 | établi | usage direct |
@@ -588,7 +643,17 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🖼️ Mur d'étage avec fenêtre | `wall2_window` | commun | — | ? | usage direct |
 | 🧱 Mur de briques | `wall_brick` | commun | — | ? | usage direct |
 | 🧱 Mur de pierre | `wall_stone` | commun | — | ? | usage direct |
+| 🧺 Mur en clayonnage (Bois) | `blk_clayonnage_bois` | commun | 5 | atelier | usage direct |
+| 🧺 Mur en clayonnage (Rondins) | `blk_clayonnage_rondin` | commun | 9 | atelier | usage direct |
 | 🚪 Mur en planches | `wall` | commun | — | ? | usage direct |
+| 🧱 Mur incliné (Brique) | `blk_murincline_brique` | commun | 20 | établi | usage direct |
+| 🧱 Mur incliné (Pierre taillée) | `blk_murincline_taille` | commun | 20 | établi | usage direct |
+| 🧱 Mur incliné (Pierre) | `blk_murincline_pierre` | commun | 14 | établi | usage direct |
+| 🧱 Mur incliné (Pisé) | `blk_murincline_pise` | commun | 7 | atelier | usage direct |
+| 🧱 Mur incliné (Torchis) | `blk_murincline_torchis` | commun | 14 | atelier | usage direct |
+| 🏠 Mur à colombages (Brique) | `blk_colombages_brique` | commun | 25 | établi | usage direct |
+| 🏠 Mur à colombages (Pisé) | `blk_colombages_pise` | commun | 11 | atelier | usage direct |
+| 🏠 Mur à colombages (Torchis) | `blk_colombages_torchis` | commun | 18 | atelier | usage direct |
 | 🏰 Mur à meurtrière (Brique) | `blk_meurtriere_brique` | commun | 20 | établi | usage direct |
 | 🏰 Mur à meurtrière (Pierre taillée) | `blk_meurtriere_taille` | commun | 20 | établi | usage direct |
 | 🏰 Mur à meurtrière (Pierre) | `blk_meurtriere_pierre` | commun | 14 | établi | usage direct |
@@ -606,6 +671,10 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🧱 Pan de mur (Rondins) | `blk_mur_rondin` | commun | 14 | atelier | usage direct |
 | 🧱 Pan de mur (Torchis) | `blk_mur_torchis` | commun | 14 | atelier | usage direct |
 | 🧱 Pan de mur (Verre) | `blk_mur_verre` | commun | 27 | établi | usage direct |
+| 🟫 Pavage irrégulier (Brique) | `blk_pavage_brique` | commun | 14 | établi | usage direct |
+| 🟫 Pavage irrégulier (Gravier) | `blk_pavage_gravier` | commun | 5 | atelier | usage direct |
+| 🟫 Pavage irrégulier (Pierre taillée) | `blk_pavage_taille` | commun | 14 | établi | usage direct |
+| 🟫 Pavage irrégulier (Pierre) | `blk_pavage_pierre` | commun | 9 | établi | usage direct |
 | 🔺 Pente de toit (Ardoise) | `blk_pente_ardoise` | commun | 14 | établi | usage direct |
 | 🔺 Pente de toit (Bardeaux) | `blk_pente_bardeau` | commun | 14 | établi | usage direct |
 | 🔺 Pente de toit (Bois) | `blk_pente_bois` | commun | 7 | atelier | usage direct |
@@ -631,10 +700,20 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🏛️ Pilier rond (Rondins) | `blk_pilier_rondin` | commun | 9 | atelier | usage direct |
 | 🟫 Plancher | `floor` | commun | — | code:Shop | usage direct |
 | 🟫 Plancher d'étage | `floor2` | commun | — | ? | usage direct |
+| 🛖 Plateforme sur pilotis (Bois) | `blk_pilotis_bois` | commun | 11 | atelier | usage direct |
+| 🛖 Plateforme sur pilotis (Pin) | `blk_pilotis_pin` | commun | 11 | atelier | usage direct |
+| 🛖 Plateforme sur pilotis (Rondins) | `blk_pilotis_rondin` | commun | 22 | atelier | usage direct |
 | 🚪 Porte en bois | `door` | commun | — | établi | usage direct |
 | 🏛️ Poteau (Bois) | `blk_poteau_bois` | commun | 3 | atelier | usage direct |
 | 🏛️ Poteau (Fer) | `blk_poteau_fer` | commun | 50 | établi | usage direct |
 | 🏛️ Poteau (Rondins) | `blk_poteau_rondin` | commun | 5 | atelier | usage direct |
+| 🏛️ Poteau rond (Bois) | `blk_poteaurond_bois` | commun | 3 | atelier | usage direct |
+| 🏛️ Poteau rond (Pin) | `blk_poteaurond_pin` | commun | 3 | atelier | usage direct |
+| 🏛️ Poteau rond (Rondins) | `blk_poteaurond_rondin` | commun | 5 | atelier | usage direct |
+| 🏛️ Poteau sculpté (Bois) | `blk_poteausculpte_bois` | commun | 5 | atelier | usage direct |
+| 🏛️ Poteau sculpté (Pierre taillée) | `blk_poteausculpte_taille` | commun | 14 | établi | usage direct |
+| 🏛️ Poteau sculpté (Pierre) | `blk_poteausculpte_pierre` | commun | 9 | établi | usage direct |
+| 🏛️ Poteau sculpté (Pin) | `blk_poteausculpte_pin` | commun | 5 | atelier | usage direct |
 | 📏 Poutre (Bois) | `blk_poutre_bois` | commun | 3 | atelier | usage direct |
 | 📏 Poutre (Fer) | `blk_poutre_fer` | commun | 50 | établi | usage direct |
 | 📏 Poutre (Pierre) | `blk_poutre_pierre` | commun | 5 | établi | usage direct |
@@ -649,40 +728,46 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | ⛺ Toit conique (Tuiles) | `blk_toitconique_tuile` | commun | 33 | établi | usage direct |
 | 🏠 Toit d'étage | `roof2` | commun | — | code:Shop | usage direct |
 | 🏠 Toit de chaume | `roof` | commun | — | code:Shop | usage direct |
+| 🔲 Treillis (Bois) | `blk_treillis_bois` | commun | 5 | atelier | usage direct |
+| 🔲 Treillis (Fer) | `blk_treillis_fer` | rare | 100 | établi | usage direct |
+| 🔲 Treillis (Pin) | `blk_treillis_pin` | commun | 5 | atelier | usage direct |
+| 📏 Échalas (Bois) | `blk_echalas_bois` | commun | 3 | atelier | usage direct |
+| 📏 Échalas (Pin) | `blk_echalas_pin` | commun | 3 | atelier | usage direct |
 | 🧱 Échelle (Bois) | `blk_echelle_bois` | commun | 5 | atelier | usage direct |
 | 🧱 Échelle (Fer) | `blk_echelle_fer` | rare | 100 | établi | usage direct |
 | 🧱 Échelle (Rondins) | `blk_echelle_rondin` | commun | 9 | atelier | usage direct |
 
-### Ressources et matières (365)
+### Ressources et matières (367)
 
 | Objet | id | Rareté | Valeur | Obtention | Usages |
 |---|---|---|---|---|---|
-| 🔩 Acier | `steel` | rare | 115 | four, butin | 110 recettes |
+| 🔩 Acier | `steel` | rare | 115 | four, butin | 111 recettes |
 | 🔩 Acier damassé | `damascus_steel` | épique | 269 | four | 2 recettes |
 | 📌 Aiguille à coudre | `sewing_needle` | commun | 60 | atelier | code:Equilibre |
 | 🦇 Aile membraneuse de chauve-souris des cavernes | `prise_cave_bat` | commun | 16 | code:Prises | 1 recette |
 | 🦇 Aile membraneuse de chauve-souris géante | `prise_giant_bat` | commun | 21 | code:Prises | 1 recette |
 | 🏺 Amphore | `amphora` | commun | 40 | four | 3 recettes |
-| ⭕ Anneau métallique | `iron_ring` | commun | 13 | four, butin | 42 recettes |
+| ⭕ Anneau métallique | `iron_ring` | commun | 13 | four, butin | 44 recettes |
 | 🐛 Appâts | `bait` | commun | 2 | atelier, butin | code:Equilibre |
-| 🟤 Argile | `clay` | commun | 4 | butin | 12 recettes |
+| 🟤 Argile | `clay` | commun | 4 | butin | 17 recettes |
 | 🟤 Argile préparée | `prepared_clay` | commun | 10 | atelier | 7 recettes |
 | 🍽️ Assiette | `plate` | commun | 10 | four | code:GearDesign |
 | 🍽️ Assiette en bois | `wood_plate` | commun | 2 | établi | code:Joueurs |
 | 📜 Avis de recherche de chasseur de primes | `prise_bounty_hunter` | commun | 36 | code:Prises | 1 recette |
 | 🦯 Barre de fer | `iron_bar` | rare | 100 | four | 31 recettes |
-| 🌲 Bois | `wood` | commun | 2 | butin | 29 recettes |
+| 🌲 Bois | `wood` | commun | 2 | butin | 38 recettes |
 | 🦌 Bois de cerf | `prise_deer` | commun | 11 | code:Prises | 1 recette |
 | 🦌 Bois de cerf | `antler` | commun | 24 | butin | 2 recettes |
 | 🦌 Bois de cerf corrompu | `prise_corrupted_stag` | commun | 31 | code:Prises | 1 recette |
 | 🦌 Bois de cerf spectral | `prise_spectral_stag` | commun | 31 | code:Prises | 1 recette |
 | 🥣 Bol | `bowl` | commun | 8 | four | 1 recette |
 | 🐫 Bosse de graisse de chameau | `prise_camel` | commun | 11 | code:Prises | 1 recette |
-| 🔘 Boucle | `buckle` | commun | 14 | atelier | 18 recettes |
-| 🕯️ Bougie (cire) | `candle_wax` | commun | 10 | atelier | 2 recettes |
+| 🔘 Boucle | `buckle` | commun | 14 | atelier | 19 recettes |
+| 🕯️ Bougie (cire) | `candle_wax` | commun | 10 | atelier | 3 recettes |
 | 🍾 Bouteille en verre | `bottle` | commun | 12 | four | 3 recettes |
 | 🌿 Branches | `branches` | commun | 1 | abattage | 10 recettes |
-| 🧱 Brique | `brick` | commun | 6 | four | 23 recettes |
+| 🐴 Bride et rênes | `bridle` | commun | 63 | atelier | code:Equilibre |
+| 🧱 Brique | `brick` | commun | 6 | four | 32 recettes |
 | 🌼 Camomille | `chamomile` | commun | 6 | cueillette | 3 recettes |
 | 🌑 Cape d'ombre de rôdeur obscur | `prise_dark_prowler` | commun | 31 | code:Prises | 1 recette |
 | 🐢 Carapace de tortue ancienne | `prise_ancient_turtle` | rare | 96 | code:Prises | 1 recette |
@@ -732,7 +817,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🗝️ Crochet de cambrioleur | `prise_burglar` | commun | 21 | code:Prises | 1 recette |
 | 🏺 Cruche | `jug` | commun | 22 | four | code:Shop |
 | 🥄 Cuillère en bois | `spoon` | commun | 1 | atelier | code:Shop |
-| 🟫 Cuir | `leather` | commun | 14 | atelier, butin | 161 recettes |
+| 🟫 Cuir | `leather` | commun | 14 | atelier, butin | 163 recettes |
 | 🟫 Cuir souple | `soft_leather` | commun | 51 | atelier | 108 recettes |
 | 💠 Cœur d'ent corrompu | `prise_corrupted_ent` | rare | 111 | code:Prises | 1 recette |
 | 💠 Cœur de colosse de pierre | `prise_stone_golem` | rare | 126 | code:Prises | 1 recette |
@@ -749,15 +834,15 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 💠 Cœur du Colosse de Verre | `prise_glass_colossus` | épique | 276 | code:Prises | 2 recettes |
 | 💠 Cœur du Gardien des Moissons | `prise_harvest_warden` | rare | 216 | code:Prises | 2 recettes |
 | ❄️ Cœur gelé | `frozen_heart` | légendaire | 600 | boss | 1 recette |
-| 🦂 Dard de scorpion | `stinger` | commun | 25 | butin | 1 recette |
 | 🦂 Dard de scorpion | `prise_scorpion` | commun | 26 | code:Prises | 1 recette |
+| 🦂 Dard de scorpion | `stinger` | commun | 25 | butin | 1 recette |
 | 🦷 Dent | `tooth` | commun | 6 | chasse, butin, boss | 1 recette |
 | 🦷 Dent de monstre | `monster_tooth` | commun | 60 | chasse, butin | 2 recettes |
 | 🐗 Défense de sanglier | `prise_boar` | commun | 16 | code:Prises | 1 recette |
 | 🐗 Défense de sanglier colossal | `prise_colossal_boar` | rare | 96 | code:Prises | 1 recette |
 | 🐗 Défense de sanglier des marécages | `prise_swamp_boar` | commun | 26 | code:Prises | 1 recette |
 | 🐗 Défense de sanglier givré | `prise_frost_boar` | commun | 31 | code:Prises | 1 recette |
-| 🖋️ Encre | `ink` | commun | 8 | atelier | 49 recettes |
+| 🖋️ Encre | `ink` | commun | 8 | atelier | 50 recettes |
 | 🖋️ Encrier | `inkwell` | commun | 18 | établi | 1 recette |
 | ⚙️ Engrenage en bois | `gear_wood` | commun | 14 | établi | 4 recettes |
 | ⚙️ Engrenage en fer | `gear_iron` | rare | 149 | atelier | 4 recettes |
@@ -784,7 +869,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🗡️ Faux de mante religieuse géante | `prise_giant_mantis` | commun | 31 | code:Prises | 1 recette |
 | 🧾 Faux sceau de faux marchand | `prise_fake_merchant` | commun | 21 | code:Prises | 1 recette |
 | 🔩 Ferrure | `fitting` | commun | 21 | atelier | 1 recette |
-| 🌿 Fibre | `fiber` | commun | 1 | butin | 15 recettes |
+| 🌿 Fibre | `fiber` | commun | 1 | butin | 16 recettes |
 | 🧶 Fil de laine | `wool_thread` | commun | 22 | atelier | 23 recettes |
 | 🧵 Fil de lin | `linen_thread` | commun | 30 | atelier | 40 recettes |
 | 🕸️ Filet de pêche | `fishing_net` | rare | 120 | établi | code:Equilibre |
@@ -810,8 +895,8 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🟢 Gelée de golem de vase | `prise_mud_golem` | rare | 96 | code:Prises | 1 recette |
 | 🟢 Gelée de méduse des marais | `prise_freshwater_jellyfish` | commun | 21 | code:Prises | 1 recette |
 | 🟢 Gelée de sangsue géante | `prise_leech` | commun | 21 | code:Prises | 1 recette |
-| 🟢 Gelée de slime | `prise_slime` | commun | 11 | code:Prises | 1 recette |
 | 🟢 Gelée de slime | `slime_gel` | commun | 6 | butin, boss | 2 recettes |
+| 🟢 Gelée de slime | `prise_slime` | commun | 11 | code:Prises | 1 recette |
 | 🟢 Gelée de slime bleu | `prise_slime_blue` | commun | 16 | code:Prises | 1 recette |
 | 🟢 Gelée du Roi des Slimes | `prise_boss_slime` | rare | 186 | code:Prises | 2 recettes |
 | 🟢 Gelée du Roi des marais | `prise_marsh_king` | épique | 276 | code:Prises | 2 recettes |
@@ -827,7 +912,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🥤 Gobelet en bois | `wood_cup` | commun | 6 | atelier | 4 recettes |
 | 🌰 Graine ancienne | `ancient_seed` | rare | 150 | boss | 1 recette |
 | 🥓 Graisse | `fat` | commun | 18 | atelier, butin | 4 recettes |
-| ⛰️ Gravier | `gravel` | commun | 2 | atelier, minage | 1 recette |
+| ⛰️ Gravier | `gravel` | commun | 2 | atelier, minage | 3 recettes |
 | 🐻 Griffe d'ours | `prise_bear` | commun | 31 | code:Prises | 1 recette |
 | 🐻 Griffe d'ours blanc | `prise_polar_bear` | commun | 36 | code:Prises | 1 recette |
 | 🐻 Griffe d'ours brun | `prise_brown_bear` | commun | 31 | code:Prises | 1 recette |
@@ -853,7 +938,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🥈 Lingot d'argent | `silver_ingot` | rare | 80 | four | 42 recettes |
 | 🥇 Lingot d'or | `gold_ingot` | rare | 120 | four | 64 recettes |
 | 🥉 Lingot de cuivre | `copper_ingot` | commun | 30 | four | 164 recettes |
-| 🔩 Lingot de fer | `iron_ingot` | commun | 45 | four | 170 recettes |
+| 🔩 Lingot de fer | `iron_ingot` | commun | 45 | four | 174 recettes |
 | 🔒 Loquet en bois | `lock_1` | commun | 20 | atelier | revente |
 | 🥄 Louche | `ladle` | commun | 18 | établi | code:Shop |
 | 🌱 Mandragore | `mandrake` | rare | 120 | cueillette, butin | 2 recettes |
@@ -894,11 +979,9 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🦴 Os massif du Géant des montagnes | `prise_mountain_giant` | épique | 306 | code:Prises | 2 recettes |
 | 💀 Os maudit de goule | `prise_ghoul` | commun | 26 | code:Prises | 1 recette |
 | 💀 Os maudit de momie ancienne | `prise_mummy` | commun | 36 | code:Prises | 1 recette |
-| 💀 Os maudit de squelette ancien | `prise_ancient_skeleton` | commun | 31 | code:Prises | 1 recette |
-| 💀 Os maudit de squelette errant | `prise_skeleton` | commun | 21 | code:Prises | 1 recette |
 | 🌾 Paille | `straw` | commun | 8 | atelier | 13 recettes |
 | 🌾 Paille maudite d'épouvantail maudit | `prise_scarecrow` | commun | 21 | code:Prises | 1 recette |
-| 📄 Papier | `paper` | commun | 4 | établi | 21 recettes |
+| 📄 Papier | `paper` | commun | 4 | établi | 22 recettes |
 | 📜 Parchemin vierge | `parchment` | commun | 8 | établi | 6 recettes |
 | 🐇 Patte de lapin | `prise_rabbit` | commun | 11 | code:Prises | 1 recette |
 | 🟫 Peau brute | `raw_hide` | commun | 10 | chasse, butin, boss | 2 recettes |
@@ -906,13 +989,13 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🐺 Peau de loup | `wolf_pelt` | commun | 28 | chasse, boss, butin | 1 recette |
 | 🟫 Peau raclée | `scraped_hide` | commun | 16 | atelier | 1 recette |
 | 🐍 Peau visqueuse d'anguille monstrueuse | `prise_monster_eel` | commun | 31 | code:Prises | 1 recette |
-| ⛰️ Pierre | `stone` | commun | 2 | butin, boss | 88 recettes |
+| ⛰️ Pierre | `stone` | commun | 2 | butin, boss | 109 recettes |
 | ✨ Pierre lumineuse | `glowstone` | rare | 120 | minage, butin | 2 recettes |
 | 🦀 Pince de crabe géant | `prise_giant_crab` | commun | 31 | code:Prises | 1 recette |
 | ⛏️ Piolet | `ice_pick` | rare | 110 | atelier | code:Equilibre |
-| 🌲 Planches | `planks` | commun | 2 | atelier, boutique | 207 recettes |
+| 🌲 Planches | `planks` | commun | 2 | atelier, boutique | 248 recettes |
 | 🪵 Planches de chêne fines | `fine_planks` | commun | 40 | établi | 1 recette |
-| 🐦 Plume | `feather` | commun | 5 | butin, boss | 13 recettes |
+| 🐦 Plume | `feather` | commun | 5 | élevage, butin, boss | 13 recettes |
 | 🐦 Plume d'écriture | `quill` | commun | 3 | atelier | 1 recette |
 | 🐦 Plume de flamant | `prise_flamingo` | commun | 11 | code:Prises | 1 recette |
 | 🐦 Plume de pingouin | `prise_penguin` | commun | 11 | code:Prises | 1 recette |
@@ -946,7 +1029,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🧹 Râteau | `rake` | commun | 20 | établi | code:Equilibre |
 | 🟧 Résine | `resin` | commun | 8 | abattage, butin | 34 recettes |
 | 🏜️ Sable | `sand` | commun | 1 | butin | 3 recettes |
-| 🎗️ Sangles | `leather_strap` | commun | 8 | atelier | 42 recettes |
+| 🎗️ Sangles | `leather_strap` | commun | 8 | atelier | 43 recettes |
 | 🌿 Sauge | `sage` | commun | 8 | cueillette | 3 recettes |
 | 🔴 Sceau de cire | `wax_seal` | commun | 10 | atelier | 5 recettes |
 | 🧾 Sceau de contrebande de contrebandier | `prise_smuggler` | commun | 26 | code:Prises | 1 recette |
@@ -954,6 +1037,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🧂 Sel | `salt` | commun | 8 | minage, butin | 8 recettes |
 | 🏇 Selle de course | `saddle_race` | épique | 320 | atelier | code:Equilibre |
 | 🐎 Selle de cuir | `saddle_leather` | rare | 173 | atelier | code:Equilibre |
+| 🛡️ Selle de guerre | `saddle_war` | épique | 240 | atelier | code:Equilibre |
 | 🔒 Serrure de cuivre | `lock_2` | commun | 70 | établi | revente |
 | 🔐 Serrure de fer | `lock_3` | rare | 149 | établi | revente |
 | 🔐 Serrure à secret (or) | `lock_4` | épique | 364 | établi | revente |
@@ -966,8 +1050,8 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🍄 Spores du Roi Mycélien | `prise_mycelian_king` | épique | 246 | code:Prises | 2 recettes |
 | 🍬 Sucre | `sugar` | commun | 66 | four | 2 recettes |
 | 🍽️ Tamis | `sieve` | commun | 50 | établi | code:Equilibre |
-| 🎨 Teinture | `dye` | commun | 10 | atelier | 15 recettes |
-| 🟫 Terre | `dirt` | commun | 1 | butin | 9 recettes |
+| 🎨 Teinture | `dye` | commun | 10 | atelier | 18 recettes |
+| 🟫 Terre | `dirt` | commun | 1 | butin | 11 recettes |
 | 🌿 Thym | `thyme` | commun | 6 | cueillette | 1 recette |
 | 🧵 Tissu | `cloth` | commun | 25 | atelier | 78 recettes |
 | 🧶 Tissu de laine | `wool_cloth` | commun | 73 | atelier | 37 recettes |
@@ -983,7 +1067,7 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🐍 Venin de serpent marin | `prise_sea_serpent` | rare | 111 | code:Prises | 1 recette |
 | 🐍 Venin de serpent venimeux | `prise_snake` | commun | 16 | code:Prises | 1 recette |
 | 🐍 Venin de ver des sables | `prise_sand_worm` | rare | 96 | code:Prises | 1 recette |
-| 🖼️ Verre | `glass` | commun | 8 | four | 39 recettes |
+| 🖼️ Verre | `glass` | commun | 8 | four | 54 recettes |
 | 🏺 Vinaigre de pomme | `vinegar` | commun | 66 | atelier | 1 recette |
 | 🔮 Âme de Brumeglace | `ame_brumeglace` | légendaire | 800 | code:Prises | 1 recette |
 | 🔮 Âme de Vargor | `ame_vargor` | légendaire | 760 | code:Prises | 1 recette |
@@ -1010,6 +1094,8 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | 🐉 Écailles de la Wyverne des neiges | `prise_snow_wyvern` | épique | 306 | code:Prises | 2 recettes |
 | 🐊 Écailles de lézard des tourbières | `prise_bog_lizard` | commun | 21 | code:Prises | 1 recette |
 | 🐉 Écailles de wyverne | `prise_wyvern` | rare | 111 | code:Prises | 1 recette |
+| 🗿 Éclat de gisant ancien | `prise_ancient_skeleton` | commun | 31 | code:Prises | 1 recette |
+| 🗿 Éclat de gisant errant | `prise_skeleton` | commun | 21 | code:Prises | 1 recette |
 | 🗿 Éclat de pierre de gargouille animée | `prise_gargoyle` | commun | 36 | code:Prises | 1 recette |
 | 💎 Éclat de verre vivant | `glass_shard` | épique | 350 | boss | 1 recette |
 | 🟫 Écorce | `bark` | commun | 2 | abattage | 2 recettes |
@@ -1216,7 +1302,10 @@ Raretés : commun 670 · peu commun 39 · rare 158 · épique 67 · légendaire 
 | Bête | Prix | Produit | Tous les |
 |---|---|---|---|
 | Poule | 60 | 🥚 Œuf | 1 |
+| Cochon | 190 | 🍄 Truffe | 2 |
 | Mouton | 160 | 🧶 Laine | 3 |
+| Oie | 80 | 🐦 Plume | 1 |
+| Chèvre | 120 | 🥛 Lait | 2 |
 | Vache | 220 | 🥛 Lait | 1 |
 
 ## Dressage (bêtes sauvages)
@@ -1275,7 +1364,7 @@ laisse de 70 studs puis retour au foyer ; réapparition au bout de 3 jours (boss
 | Braconnier | `poacher` | 3 | 120 | 14 | spore | forêt rousse (jour), prairie (jour) | 🦌 Peau de cerf 1–1 (50 %), 🥩 Viande de cerf 1–2 (60 %), 🐛 Appâts 2–4 (50 %) | 0 |
 | Épouvantail maudit | `scarecrow` | 3 | 170 | 20 | charge, nuit | génération | 🌿 Fibre 2–4 (100 %), ✨ Poussière de feu follet 1–1 (30 %), 🌱 Graines (Citrouille) 1–2 (25 %) | 0 |
 | Ombre rôdeuse | `shade` | 3 | 80 | 14 | charge, nuit, lumière | génération | ✨ Poussière de feu follet 1–2 (80 %), 🦴 Os 1–2 (50 %) | 0 |
-| Squelette errant | `skeleton` | 3 | 110 | 16 | charge, nuit | génération | 🦴 Os 2–4 (100 %), 🟠 Pièce de cuivre 1–3 (40 %) | 0 |
+| Gisant errant | `skeleton` | 3 | 110 | 16 | charge, nuit | génération | ⛰️ Pierre 2–4 (100 %), 🟠 Pièce de cuivre 1–3 (40 %) | 0 |
 | Araignée géante | `spider` | 3 | 150 | 14 | spore | génération | 🕸️ Soie d'araignée 1–3 (100 %) | 0 |
 | Gobelin des marais | `swamp_goblin` | 3 | 110 | 13 | charge | marais (jour) | 🟠 Pièce de cuivre 1–3 (100 %), 🦴 Os 1–1 (40 %) | 1 |
 | Feu follet | `wisp` | 3 | 70 | 14 | spore | génération | ✨ Poussière de feu follet 1–2 (100 %) | 0 |
@@ -1311,7 +1400,7 @@ laisse de 70 studs puis retour au foyer ; réapparition au bout de 3 jours (boss
 | Spectre errant | `wandering_spectre` | 4 | 130 | 18 | charge, nuit, lumière | prairie (nuit) | 🦴 Os 1–1 (40 %) | 0 |
 | Serpent des eaux | `water_snake` | 4 | 120 | 18 | charge | marais (jour) | 🐉 Écailles 2–3 (90 %), ⚪ Perle 1–1 (5 %) | 0 |
 | Loup blanc | `wolf_white` | 4 | 130 | 16 | charge, meute 3 | génération | 🦊 Fourrure 1–2 (90 %), 🥩 Viande crue 1–2 (90 %) | 0 |
-| Squelette ancien | `ancient_skeleton` | 5 | 200 | 22 | charge, nuit | génération | 🦴 Os 2–4 (100 %), 💰 Pièce ancienne 1–1 (30 %) | 0 |
+| Gisant ancien | `ancient_skeleton` | 5 | 200 | 22 | charge, nuit | génération | ⛰️ Pierre 2–4 (100 %), 💰 Pièce ancienne 1–1 (30 %) | 0 |
 | Ours | `bear` | 5 | 320 | 28 | charge, neutre | génération | 🦊 Fourrure 2–3 (100 %), 🥩 Viande crue 3–4 (100 %), 🍯 Miel 1–2 (50 %) | 0 |
 | Scarabée cuirassé | `beetle` | 5 | 260 | 18 | charge | désert (jour), grottes désert | 🐉 Écailles 1–2 (60 %), 💠 Pierre colorée 1–1 (30 %) | 0 |
 | Sorcier des ronces | `bramble_witch` | 5 | 160 | 20 | spore | forêt rousse (jour) | 🌿 Ortie 2–4 (100 %), 🧪 Fiole d'extrait 1–1 (30 %), 🌱 Mandragore 1–1 (8 %) | 3 |
@@ -1418,7 +1507,7 @@ Lu dans le code (`addSkillXp` / `addSkillXpCapped`). Les gestes réversibles son
 
 ### 🌾 Agriculture — Cultures plus difficiles, récoltes doubles (7 sources)
 
-- `Farm:474` — `G.Joueurs.addSkillXp(player, "agriculture", 3 + (Config.CROPS[st.crop].days or 3))`
+- `Farm:480` — `G.Joueurs.addSkillXp(player, "agriculture", 3 + (Config.CROPS[st.crop].days or 3))`
 - `Fauche:87` — `G.Joueurs.addSkillXp(player, "agriculture", 1)`
 - `Props:362` — `G.Joueurs.addSkillXp(player, "agriculture", 3)`
 - `Props:645` — `G.Joueurs.addSkillXp(player, "agriculture", 2)`
@@ -1433,7 +1522,7 @@ Lu dans le code (`addSkillXp` / `addSkillXpCapped`). Les gestes réversibles son
 ### ⛏️ Minage — Fer au niv. 12, or au niv. 25, minerai en plus (3 sources)
 
 - `Donjons:586` — `G.Joueurs.addSkillXp(player, "minage", 8)`
-- `Evenements:448` — `G.Joueurs.addSkillXp(player, "minage", 4)`
+- `Evenements:565` — `G.Joueurs.addSkillXp(player, "minage", 4)`
 - `Props:756` — `G.Joueurs.addSkillXp(player, "minage", 4 + math.floor((k.skill or 0) / 2))`
 
 ### 🎣 Pêche — Poissons rares, touches plus fréquentes (4 sources)
@@ -1449,41 +1538,43 @@ Lu dans le code (`addSkillXp` / `addSkillXpCapped`). Les gestes réversibles son
 
 ### ⚒️ Artisanat — Outils de fer, serrures, équipement (7 sources)
 
-- `Batir:188` — `G.Joueurs.addSkillXpCapped(player, "artisanat", 1, "pose", 150)`
-- `Batir:424` — `G.Joueurs.addSkillXpCapped(player, "artisanat", #todo, "pose", 150)`
+- `Batir:202` — `G.Joueurs.addSkillXpCapped(player, "artisanat", 1, "pose", 150)`
+- `Batir:438` — `G.Joueurs.addSkillXpCapped(player, "artisanat", #todo, "pose", 150)`
 - `Demolir:318` — `G.Joueurs.addSkillXp(player, "artisanat", 4)`
-- `QuetesLieux:488` — `G.Joueurs.addSkillXp(player, "artisanat", 3)`
-- `Shop:689` — `G.Joueurs.addSkillXp(player, "artisanat", G.Chantiers.craftXp(player, 10 + (r.skill and r.skill[2] or 0)))`
-- `Shop:695` — `G.Joueurs.addSkillXp(player, "artisanat", G.Chantiers.craftXp(player, 8))`
-- `Shop:798` — `G.Joueurs.addSkillXp(player, "artisanat", G.Chantiers.craftXp(player, 3))`
+- `QuetesLieux:566` — `G.Joueurs.addSkillXp(player, "artisanat", 3)`
+- `Shop:695` — `G.Joueurs.addSkillXp(player, "artisanat", G.Chantiers.craftXp(player, 10 + (r.skill and r.skill[2] or 0)))`
+- `Shop:701` — `G.Joueurs.addSkillXp(player, "artisanat", G.Chantiers.craftXp(player, 8))`
+- `Shop:804` — `G.Joueurs.addSkillXp(player, "artisanat", G.Chantiers.craftXp(player, 3))`
 
-### ⚔️ Combat — +1 % de dégâts par niveau (4 sources)
+### ⚔️ Combat — +1 % de dégâts par niveau (5 sources)
 
 - `Combat:139` — `G.Joueurs.addSkillXpCapped(player, "combat", 2, "mannequin", 150)`
-- `Combat:315` — `G.Joueurs.addSkillXp(player, "combat", 1)`
+- `Combat:316` — `G.Joueurs.addSkillXp(player, "combat", 1)`
 - `Enemies:827` — `G.Joueurs.addSkillXp(player, "combat", 4 * k.level)`
 - `Enemies:856` — `G.Joueurs.addSkillXp(p, "combat", 4 * en.k.level)`
+- `QuetesLieux:575` — `G.Joueurs.addSkillXp(player, "combat", 2)`
 
 ### 🎣 Crochetage — Serrures plus dures, crochets qui cassent moins (2 sources)
 
-- `Protection:199` — `G.Joueurs.addSkillXp(player, "crochetage", (practice and 3 or 9) * tier)`
-- `Protection:202` — `G.Joueurs.addSkillXp(player, "crochetage", (practice and 1 or 2) * tier)`
+- `Protection:218` — `G.Joueurs.addSkillXp(player, "crochetage", (practice and 3 or 9) * tier)`
+- `Protection:221` — `G.Joueurs.addSkillXp(player, "crochetage", (practice and 1 or 2) * tier)`
 
 ### 🐾 Dressage — Bêtes plus sauvages, mini-jeu plus facile (5 sources)
 
-- `Compagnons:207` — `G.Joueurs.addSkillXp(player, "dressage", 12 * t.diff)`
-- `Compagnons:211` — `G.Joueurs.addSkillXp(player, "dressage", 3 * t.diff)`
+- `Compagnons:219` — `G.Joueurs.addSkillXp(player, "dressage", 12 * t.diff)`
+- `Compagnons:224` — `G.Joueurs.addSkillXp(player, "dressage", 3 * t.diff)`
 - `Horses:300` — `G.Joueurs.addSkillXp(player, "dressage", 3 * diff)`
 - `Horses:304` — `G.Joueurs.addSkillXp(player, "dressage", 12 * diff)`
-- `Horses:580` — `G.Joueurs.addSkillXp(player, "dressage", 20)`
+- `Horses:584` — `G.Joueurs.addSkillXp(player, "dressage", 20)`
 
-### 🐄 Élevage — Produits des bêtes plus souvent (6 sources)
+### 🐄 Élevage — Produits des bêtes plus souvent (7 sources)
 
-- `Animals:224` — `G.Joueurs.addSkillXp(player, "elevage", 5)`
-- `Compagnons:265` — `G.Joueurs.addSkillXp(player, "elevage", 6)`
-- `Compagnons:351` — `G.Joueurs.addSkillXp(owner, "elevage", 15)`
-- `Joueurs:751` — `J.addSkillXp(player, "elevage", 2)`
-- `Machines:154` — `G.Joueurs.addSkillXp(player, "elevage", 4)`
+- `Animals:227` — `G.Joueurs.addSkillXp(player, "elevage", 5)`
+- `Animals:326` — `G.Joueurs.addSkillXp(player, "elevage", 2)`
+- `Compagnons:278` — `G.Joueurs.addSkillXp(player, "elevage", 6)`
+- `Compagnons:364` — `G.Joueurs.addSkillXp(owner, "elevage", 15)`
+- `Joueurs:755` — `J.addSkillXp(player, "elevage", 2)`
+- `Machines:157` — `G.Joueurs.addSkillXp(player, "elevage", 4)`
 - `Nids:143` — `G.Joueurs.addSkillXp(player, "elevage", 2)`
 
 ### 💰 Commerce — Ventes et commandes mieux payées (+0,5 % / +1 % par niveau) (12 sources)
@@ -1493,82 +1584,87 @@ Lu dans le code (`addSkillXp` / `addSkillXpCapped`). Les gestes réversibles son
 - `Economie:305` — `G.Joueurs.addSkillXpCapped(p, "commerce", 6, "echange", 5)`
 - `Economie:404` — `G.Joueurs.addSkillXp(player, "commerce", 12 + o.n)`
 - `Economie:682` — `G.Joueurs.addSkillXp(owner, "commerce", 2 + math.floor(cost / 30))`
-- `Joueurs:699` — `J.addSkillXp(player, "commerce", 1)`
-- `Joueurs:795` — `J.addSkillXp(player, "commerce", 10 * mult)`
+- `Joueurs:703` — `J.addSkillXp(player, "commerce", 1)`
+- `Joueurs:799` — `J.addSkillXp(player, "commerce", 10 * mult)`
 - `Politique:225` — `G.Joueurs.addSkillXp(player, "commerce", 1)`
 - `Poste:471` — `G.Joueurs.addSkillXp(player, "commerce", 2)`
-- `Shop:521` — `G.Joueurs.addSkillXp(player, "commerce", 1 + math.floor(total / 25))`
+- `Shop:527` — `G.Joueurs.addSkillXp(player, "commerce", 1 + math.floor(total / 25))`
 - `Ventes:299` — `G.Joueurs.addSkillXp(player, "commerce", 2)`
 - `Ventes:325` — `G.Joueurs.addSkillXp(player, "commerce", 2)`
 
 ### Compétence choisie à l'exécution
 
-- `Joueurs:364` — `J.addSkillXp(player, skill, amount)`
-- `Moissons:154` — `G.Joueurs.addSkillXp(player, src.skill, 1)`
-- `Shop:727` — `G.Joueurs.addSkillXp(player, skillName, 3 + math.floor((r.skill and r.skill[2] or 0) / 3))`
+- `Joueurs:368` — `J.addSkillXp(player, skill, amount)`
+- `Moissons:186` — `G.Joueurs.addSkillXp(player, src.skill, 1)`
+- `Shop:733` — `G.Joueurs.addSkillXp(player, skillName, 3 + math.floor((r.skill and r.skill[2] or 0) / 3))`
 
 ## Or : entrées et sorties
 
 Lu dans le code : `add(…, "gold", …)` crée de l'or, `take(…, "gold", …)` en détruit (ou le déplace vers un autre joueur).
 Le journal serveur (`Economie`) mesure les flux réels par monde.
 
-### Entrées d'or (20)
+### Entrées d'or (23)
 
-- `Activites:182` — `G.Joueurs.add(player, "gold", prize)`
+- `Activites:193` — `G.Joueurs.add(player, "gold", prize)`
 - `Admin:566` — `G.Joueurs.add(o.from, "gold", o.price)`
 - `Admin:690` — `G.Joueurs.add(player, "gold", c.price)`
 - `Clans:215` — `G.Joueurs.add(player, "gold", FOUND_COST, true)`
+- `Duels:67` — `G.Joueurs.add(winner, "gold", d.stake * 2, true)`
+- `Duels:79` — `G.Joueurs.add(p, "gold", d.stake, true)`
 - `Economie:400` — `G.Joueurs.add(player, "gold", reward, true)`
 - `Economie:640` — `G.Joueurs.add(player, "gold", n, true)`
 - `Enemies:761` — `G.Joueurs.add(player, "gold", math.max(1, math.min(gold, math.random(math.floor(cap * 0.6), math.ceil(cap * 1.4)))))`
-- `Evenements:472` — `G.Joueurs.add(player, "gold", 40, true)`
-- `Evenements:521` — `G.Joueurs.add(p, "gold", 120, true)`
-- `Game:382` — `G.Joueurs.add(hunter, "gold", bounty, true)`
+- `Evenements:554` — `G.Joueurs.add(player, "gold", math.random(4, 9), true)`
+- `Evenements:589` — `G.Joueurs.add(player, "gold", 40, true)`
+- `Evenements:638` — `G.Joueurs.add(p, "gold", 120, true)`
+- `Game:392` — `G.Joueurs.add(hunter, "gold", bounty, true)`
 - `Ilots:160` — `G.Joueurs.add(player, "gold", math.random(30, 80))`
-- `Joueurs:769` — `J.add(player, "gold", n)`
+- `Joueurs:773` — `J.add(player, "gold", n)`
 - `Journal:101` — `G.Joueurs.add(player, "gold", 20 * dec, true)`
-- `Journal:207` — `G.Joueurs.add(player, "gold", math.floor(math.random(80, 200) * (hunter and 1.5 or 1)))`
-- `Mondes:851` — `G.Joueurs.add(p, "gold", t.cost, true)`
+- `Journal:211` — `G.Joueurs.add(player, "gold", math.floor(math.random(80, 200) * (hunter and 1.5 or 1)))`
+- `Mondes:894` — `G.Joueurs.add(p, "gold", t.cost, true)`
 - `Poste:293` — `G.Joueurs.add(player, "gold", p.gold, true)`
 - `Poste:412` — `G.Joueurs.add(player, "gold", POSTAGE, true)`
 - `Quetes:580` — `G.Joueurs.add(player, "gold", q.gold)`
-- `Shop:519` — `G.Joueurs.add(player, "gold", total, true)`
-- `Shop:1092` — `G.Joueurs.add(player, "gold", d.stall.till, true)`
+- `Shop:525` — `G.Joueurs.add(player, "gold", total, true)`
+- `Shop:1122` — `G.Joueurs.add(player, "gold", d.stall.till, true)`
 
-### Sorties d'or (39)
+### Sorties d'or (41)
 
-- `Activites:173` — `if prize > 0 and not G.Joueurs.take(player, "gold", prize) then`
+- `Activites:184` — `if prize > 0 and not G.Joueurs.take(player, "gold", prize) then`
 - `Admin:562` — `if o.price > 0 and not G.Joueurs.take(player, "gold", o.price) then`
 - `Admin:647` — `if not G.Joueurs.take(player, "gold", price) then`
 - `Armee:301` — `if G.Joueurs.take(player, "gold", total) then`
 - `Avatar:370` — `if not G.Joueurs.take(player, "gold", cost) then`
 - `Clans:209` — `if not G.Joueurs.take(player, "gold", FOUND_COST) then`
+- `Duels:112` — `G.Joueurs.take(player, "gold", stake)`
+- `Duels:113` — `G.Joueurs.take(from, "gold", stake)`
 - `Economie:514` — `if item ~= "gold" and not G.Joueurs.take(player, "gold", 2) then`
 - `Economie:545` — `if not G.Joueurs.take(player, "gold", cost) then`
 - `Economie:658` — `if not G.Joueurs.take(player, "gold", cost) then`
-- `Game:423` — `G.Joueurs.take(player, "gold", lost)`
-- `Game:449` — `G.Joueurs.take(player, "gold", fine)`
+- `Game:433` — `G.Joueurs.take(player, "gold", lost)`
+- `Game:460` — `G.Joueurs.take(player, "gold", fine)`
 - `Horses:261` — `if not G.Joueurs.take(player, "gold", price) then`
-- `Horses:457` — `if not G.Joueurs.take(player, "gold", Horses.STABLE_FEE) then`
-- `Horses:489` — `if not G.Joueurs.take(player, "gold", Horses.STABLE_FEE) then`
-- `Horses:565` — `G.Joueurs.take(player, "gold", c.gold)`
-- `Joueurs:91` — `J.take(player, "gold", cost)`
+- `Horses:461` — `if not G.Joueurs.take(player, "gold", Horses.STABLE_FEE) then`
+- `Horses:493` — `if not G.Joueurs.take(player, "gold", Horses.STABLE_FEE) then`
+- `Horses:569` — `G.Joueurs.take(player, "gold", c.gold)`
+- `Joueurs:95` — `J.take(player, "gold", cost)`
 - `Metiers:1150` — `if not G.Joueurs.take(player, "gold", HEAL_COST) then`
 - `Metiers:1160` — `if not G.Joueurs.take(player, "gold", BLESS_COST) then`
 - `Metiers:1188` — `if not G.Joueurs.take(player, "gold", cost) then`
 - `Metiers:1199` — `if not G.Joueurs.take(player, "gold", ALMS_COST) then`
 - `Metiers:1233` — `if not G.Joueurs.take(player, "gold", nxt.gold) then`
 - `Metiers:1265` — `if not G.Joueurs.take(player, "gold", t.price) then`
-- `Mondes:932` — `if not travelling[p] and G.Joueurs.take(p, "gold", cost) then`
+- `Mondes:975` — `if not travelling[p] and G.Joueurs.take(p, "gold", cost) then`
 - `Ouvriers:28` — `if not G.Joueurs.take(player, "gold", cost) then`
-- `Parcelles:141` — `G.Joueurs.take(player, "gold", price)`
+- `Parcelles:153` — `if not G.Joueurs.take(player, "gold", price) then`
 - `Politique:218` — `if not G.Joueurs.take(player, "gold", n) then`
 - `Poste:400` — `G.Joueurs.take(player, "gold", POSTAGE)`
 - `Poste:442` — `G.Joueurs.take(player, "gold", fee)`
 - `Poste:462` — `if not G.Joueurs.take(player, "gold", l.price) then`
 - `Shop:74` — `if not G.Joueurs.take(player, "gold", rent) then`
-- `Shop:459` — `if not G.Joueurs.take(player, "gold", entry.price * n) then`
-- `Shop:824` — `if not G.Joueurs.take(player, "gold", total) then`
+- `Shop:463` — `if not G.Joueurs.take(player, "gold", entry.price * n) then`
+- `Shop:830` — `if not G.Joueurs.take(player, "gold", total) then`
 - `Ventes:220` — `G.Joueurs.take(player, "gold", fee)`
 - `Ventes:240` — `G.Joueurs.take(player, "gold", fee)`
 - `Ventes:253` — `G.Joueurs.take(player, "gold", fee)`
