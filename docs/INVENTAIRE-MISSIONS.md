@@ -28,678 +28,678 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### 1. Bois et charpente
 
-- [ ] (9) Rondin de chêne
-- [ ] (10) Rondin de pin
-- [ ] (11) Poutre carrée
-- [ ] (12) Poutre ronde
-- [ ] (13) Poutre taillée
-- [ ] (14) Poutre courbée
-- [ ] (15) Demi-poutre
-- [ ] (16) Poteau
-- [ ] (17) Poteau sculpté
-- [ ] (18) Planche brute
-- [ ] (19) Planche rabotée
-- [ ] (20) Madrier
-- [ ] (21) Traverse
-- [ ] (22) Solive
-- [ ] (23) Chevron
-- [ ] (24) Équerre en bois
-- [ ] (25) Treillis
-- [ ] (26) Claie en bois
-- [ ] (27) Échalas
-- [ ] (28) Perche
+- [x] (9) Rondin de chêne → Rondin de chêne
+- [x] (10) Rondin de pin → Rondin de pin
+- [x] (11) Poutre carrée → Poutre
+- [x] (12) Poutre ronde → Poteau rond
+- [x] (13) Poutre taillée → Poutre (Pierre taillée)
+- [x] (14) Poutre courbée → Arche
+- [x] (15) Demi-poutre → Demi-poutre
+- [x] (16) Poteau → Poteau
+- [x] (17) Poteau sculpté → Poteau sculpté
+- [x] (18) Planche brute → Planches
+- [x] (19) Planche rabotée → Planches
+- [x] (20) Madrier → Madrier
+- [x] (21) Traverse → Traverse
+- [x] (22) Solive → Solive
+- [x] (23) Chevron → Chevron de toit
+- [x] (24) Équerre en bois → Linteau
+- [x] (25) Treillis → Treillis
+- [x] (26) Claie en bois → Treillis
+- [x] (27) Échalas → Échalas
+- [x] (28) Perche → Échalas
 
 ### 2. Murs et construction
 
-- [ ] (32) Mur en rondins
-- [ ] (33) Mur en planches
-- [ ] (34) Mur à colombages
-- [ ] (35) Mur en torchis
-- [ ] (36) Mur en pierre brute
-- [ ] (37) Mur en pierre taillée
-- [ ] (38) Mur en briques
-- [ ] (39) Mur en terre
-- [ ] (40) Mur en pisé
-- [ ] (41) Mur en clayonnage
-- [ ] (42) Mur en palissade
-- [ ] (43) Demi-mur
-- [ ] (44) Mur arrondi
-- [ ] (45) Mur triangulaire
-- [ ] (46) Mur incliné
-- [ ] (47) Mur avec meurtrière
-- [ ] (48) Mur avec niche
-- [ ] (49) Mur avec fenêtre
-- [ ] (50) Mur avec ouverture de porte
+- [x] (32) Mur en rondins → Grand mur (Rondins)
+- [x] (33) Mur en planches → Mur_Planches
+- [x] (34) Mur à colombages → Mur à colombages
+- [x] (35) Mur en torchis → Grand mur (Torchis)
+- [x] (36) Mur en pierre brute → Pan de mur (Pierre)
+- [x] (37) Mur en pierre taillée → Grand mur (Pierre taillée)
+- [x] (38) Mur en briques → Mur_Briques
+- [x] (39) Mur en terre → Pan de mur (Pisé)
+- [x] (40) Mur en pisé → Grand mur (Pisé)
+- [x] (41) Mur en clayonnage → Mur en clayonnage
+- [x] (42) Mur en palissade → Palissade
+- [x] (43) Demi-mur → Muret
+- [x] (44) Mur arrondi → Mur courbe
+- [x] (45) Mur triangulaire → Pignon (mur triangulaire)
+- [x] (46) Mur incliné → Mur incliné
+- [x] (47) Mur avec meurtrière → Mur à meurtrière
+- [x] (48) Mur avec niche → Mur avec niche
+- [x] (49) Mur avec fenêtre → Mur_Fenetre
+- [x] (50) Mur avec ouverture de porte → Mur avec porte
 
 ### 3. Sols et fondations
 
-- [ ] (54) Terre battue
-- [ ] (55) Sol en herbe
-- [ ] (56) Sol en gravier
-- [ ] (57) Sol en sable
-- [ ] (58) Sol en planches
-- [ ] (59) Plancher en chêne
-- [ ] (60) Plancher en pin
-- [ ] (61) Dalle de pierre
-- [ ] (62) Pavé
-- [ ] (63) Pavage irrégulier
-- [ ] (64) Fondation en pierre
-- [ ] (65) Fondation en bois
-- [ ] (66) Plateforme sur pilotis
-- [ ] (67) Terrasse
-- [ ] (68) Balcon
-- [ ] (69) Passerelle
-- [ ] (70) Caillebotis
+- [x] (54) Terre battue → Dalle (Pisé)
+- [x] (55) Sol en herbe → Dalle (Herbe)
+- [x] (56) Sol en gravier → Dalle (Gravier)
+- [x] (57) Sol en sable → Dalle (Sable)
+- [x] (58) Sol en planches → Dalle (Bois)
+- [x] (59) Plancher en chêne → Planches de chêne fines
+- [x] (60) Plancher en pin → Grande dalle (Pin)
+- [x] (61) Dalle de pierre → Dalle (Pierre)
+- [x] (62) Pavé → Pave
+- [x] (63) Pavage irrégulier → Pavage irrégulier
+- [x] (64) Fondation en pierre → Fondation (Pierre)
+- [x] (65) Fondation en bois → Fondation (Bois)
+- [x] (66) Plateforme sur pilotis → Plateforme sur pilotis
+- [x] (67) Terrasse → Terrain
+- [x] (68) Balcon → Balcon
+- [x] (69) Passerelle → Où est-il passé…
+- [x] (70) Caillebotis → Caillou
 
 ### 4. Toitures médiévales
 
-- [ ] (74) Toit en chaume
-- [ ] (75) Toit en bardeaux
-- [ ] (76) Toit en ardoise
-- [ ] (77) Toit en tuiles
-- [ ] (78) Toit en planches
-- [ ] (79) Toit plat
-- [ ] (80) Panneau incliné
-- [ ] (81) Panneau triangulaire
-- [ ] (82) Panneau trapézoïdal
-- [ ] (83) Faîtage
-- [ ] (84) Chevron
-- [ ] (85) Lucarne
-- [ ] (86) Auvent
-- [ ] (87) Toit conique
-- [ ] (88) Toit arrondi
-- [ ] (89) Coupole
-- [ ] (90) Gouttière en bois
-- [ ] (91) Rive de toiture
+- [x] (74) Toit en chaume → Toit_Chaume
+- [x] (75) Toit en bardeaux → Coin de toit (Bardeaux)
+- [x] (76) Toit en ardoise → Coin de toit (Ardoise)
+- [x] (77) Toit en tuiles → Coin de toit (Tuiles)
+- [x] (78) Toit en planches → Pente de toit (Bois)
+- [x] (79) Toit plat → Dalle
+- [x] (80) Panneau incliné → Pente de toit
+- [x] (81) Panneau triangulaire → Pignon
+- [x] (82) Panneau trapézoïdal → Pente raide
+- [x] (83) Faîtage → Faitage
+- [x] (84) Chevron → Chevron de toit
+- [x] (85) Lucarne → Lucarne
+- [x] (86) Auvent → Auvent
+- [x] (87) Toit conique → Toit conique
+- [x] (88) Toit arrondi → Dôme
+- [x] (89) Coupole → Dôme
+- [x] (90) Gouttière en bois → Gouttière (Bois)
+- [x] (91) Rive de toiture → Linteau
 
 ### 5. Portes, fenêtres et ouvertures
 
-- [ ] (95) Porte en bois simple
-- [ ] (96) Porte renforcée
-- [ ] (97) Porte de grange
-- [ ] (98) Porte double
-- [ ] (99) Porte à barreaux
-- [ ] (100) Porte de château
-- [ ] (101) Porte de cave
-- [ ] (102) Trappe en bois
-- [ ] (103) Volet
-- [ ] (104) Fenêtre carrée
-- [ ] (105) Fenêtre ronde
-- [ ] (106) Fenêtre arquée
-- [ ] (107) Fenêtre à croisillons
-- [ ] (108) Fenêtre avec volets
-- [ ] (109) Fenêtre avec vitrail
-- [ ] (110) Meurtrière
-- [ ] (111) Grille en fer
-- [ ] (112) Herse
-- [ ] (113) Portail de palissade
+- [x] (95) Porte en bois simple → Porte
+- [x] (96) Porte renforcée → Porte de château
+- [x] (97) Porte de grange → Porte de grange
+- [x] (98) Porte double → Porte double
+- [x] (99) Porte à barreaux → Grille (Fer)
+- [x] (100) Porte de château → Porte de château
+- [x] (101) Porte de cave → Trappe
+- [x] (102) Trappe en bois → Trappe en bois
+- [x] (103) Volet → Volet
+- [x] (104) Fenêtre carrée → Mur avec fenêtre
+- [x] (105) Fenêtre ronde → Fenêtre ronde
+- [x] (106) Fenêtre arquée → Fenêtre arquée
+- [x] (107) Fenêtre à croisillons → Fenêtre à croisillons
+- [x] (108) Fenêtre avec volets → Fenêtre avec volets
+- [x] (109) Fenêtre avec vitrail → Fenêtre avec vitrail
+- [x] (110) Meurtrière → Meurtrière
+- [x] (111) Grille en fer → Grille (Fer)
+- [x] (112) Herse → Herse
+- [x] (113) Portail de palissade → Palissade
 
 ### 6. Escaliers, arches et formes
 
-- [ ] (117) Marche en bois
-- [ ] (118) Marche en pierre
-- [ ] (119) Escalier droit
-- [ ] (120) Escalier tournant
-- [ ] (121) Escalier en colimaçon
-- [ ] (122) Échelle en bois
-- [ ] (123) Échelle de corde
-- [ ] (124) Rampe
-- [ ] (125) Rambarde
-- [ ] (126) Garde-corps
-- [ ] (127) Arche en pierre
-- [ ] (128) Arche en bois
-- [ ] (129) Colonne ronde
-- [ ] (130) Colonne carrée
-- [ ] (131) Pilier
-- [ ] (132) Chapiteau
-- [ ] (133) Socle
-- [ ] (134) Dôme
-- [ ] (135) Demi-dôme
-- [ ] (136) Escalier de tour
-- [ ] (137) Pont-levis
+- [x] (117) Marche en bois → Marche (Bois)
+- [x] (118) Marche en pierre → Marche (Pierre)
+- [x] (119) Escalier droit → Escalier droit
+- [x] (120) Escalier tournant → Escalier en colimaçon
+- [x] (121) Escalier en colimaçon → Escalier en colimaçon
+- [x] (122) Échelle en bois → Échelle (Bois)
+- [x] (123) Échelle de corde → Échelle de corde
+- [x] (124) Rampe → Rampe
+- [x] (125) Rambarde → Barrière
+- [x] (126) Garde-corps → Barrière
+- [x] (127) Arche en pierre → Arche (Pierre)
+- [x] (128) Arche en bois → Arche (Bois)
+- [x] (129) Colonne ronde → Colonne
+- [x] (130) Colonne carrée → Colonne carrée
+- [x] (131) Pilier → Pilier
+- [x] (132) Chapiteau → Chapiteau
+- [x] (133) Socle → Socle
+- [x] (134) Dôme → Dôme
+- [x] (135) Demi-dôme → Dôme
+- [x] (136) Escalier de tour → Escalier en colimaçon
+- [x] (137) Pont-levis → Pont-levis
 
 ### 7. Éléments métalliques et assemblages
 
-- [ ] (141) Clou en fer
-- [ ] (142) Clou en cuivre
-- [ ] (143) Cheville en bois
-- [ ] (144) Charnière en fer
-- [ ] (145) Gond
-- [ ] (146) Verrou
-- [ ] (147) Serrure
-- [ ] (148) Chaîne
-- [ ] (149) Crochet
-- [ ] (150) Anneau métallique
-- [ ] (151) Ferrure
-- [ ] (152) Équerre en fer
-- [ ] (153) Barre de fer
-- [ ] (154) Grille
-- [ ] (155) Pointes de palissade
-- [ ] (156) Cloche
-- [ ] (157) Boucle
-- [ ] (158) Rivet
+- [x] (141) Clou en fer → Clous
+- [x] (142) Clou en cuivre → Clous de cuivre
+- [x] (143) Cheville en bois → Chevilles en bois
+- [x] (144) Charnière en fer → Charnière
+- [x] (145) Gond → Charnière
+- [x] (146) Verrou → Verrouillé.
+- [x] (147) Serrure → Serrure
+- [x] (148) Chaîne → Chaîne
+- [x] (149) Crochet → Crochet
+- [x] (150) Anneau métallique → Anneau métallique
+- [x] (151) Ferrure → Ferrure
+- [x] (152) Équerre en fer → Ferrure
+- [x] (153) Barre de fer → Barre de fer
+- [x] (154) Grille → Grille
+- [x] (155) Pointes de palissade → Palissade
+- [x] (156) Cloche → Cloche
+- [x] (157) Boucle → Boucle
+- [x] (158) Rivet → Rivet
 
 ### 8. Mobilier médiéval
 
-- [ ] (162) Table
-- [ ] (163) Grande table
-- [ ] (164) Chaise
-- [ ] (165) Banc
-- [ ] (166) Tabouret
-- [ ] (167) Lit simple
-- [ ] (168) Lit double
-- [ ] (169) Paillasse
-- [ ] (170) Armoire
-- [ ] (171) Coffre
-- [ ] (172) Coffre renforcé
-- [ ] (173) Étagère
-- [ ] (174) Bibliothèque
-- [ ] (175) Comptoir
-- [ ] (176) Bureau
-- [ ] (177) Établi
-- [ ] (178) Cheminée
-- [ ] (179) Foyer
-- [ ] (180) Four à pain
-- [ ] (181) Four de cuisson
-- [ ] (182) Chaudron
-- [ ] (183) Bassine
-- [ ] (184) Baril
-- [ ] (185) Tonneau
-- [ ] (186) Étagère à outils
-- [ ] (187) Porte-armure
+- [x] (162) Table → Table
+- [x] (163) Grande table → Grande table
+- [x] (164) Chaise → Chaise
+- [x] (165) Banc → Banc
+- [x] (166) Tabouret → Tabouret
+- [x] (167) Lit simple → Lit
+- [x] (168) Lit double → Lit double
+- [x] (169) Paillasse → Paille
+- [x] (170) Armoire → Armoire
+- [x] (171) Coffre → Coffre
+- [x] (172) Coffre renforcé → Coffre renforcé
+- [x] (173) Étagère → Étagère
+- [x] (174) Bibliothèque → Bibliothèque
+- [x] (175) Comptoir → Comptoir
+- [x] (176) Bureau → Bureau
+- [x] (177) Établi → Étable
+- [x] (178) Cheminée → Chemise
+- [x] (179) Foyer → Foyer
+- [x] (180) Four à pain → Four à pain
+- [x] (181) Four de cuisson → Four
+- [x] (182) Chaudron → Chaudron
+- [x] (183) Bassine → Bassin
+- [x] (184) Baril → Baril
+- [x] (185) Tonneau → Tonneau
+- [x] (186) Étagère à outils → Étagère à outils
+- [x] (187) Porte-armure → Porte-armure
 
 ### 9. Fermes et élevage
 
-- [ ] (191) Clôture en bois
-- [ ] (192) Clôture en pierre
-- [ ] (193) Palissade
-- [ ] (194) Barrière
-- [ ] (195) Portail de ferme
-- [ ] (196) Étable
-- [ ] (197) Écurie
-- [ ] (198) Poulailler
-- [ ] (199) Porcherie
-- [ ] (200) Bergerie
-- [ ] (201) Grange
-- [ ] (202) Grenier
-- [ ] (203) Mangeoire
-- [ ] (204) Abreuvoir
-- [ ] (205) Râtelier à foin
-- [ ] (206) Puits
-- [ ] (207) Auge
-- [ ] (208) Échelle de grange
-- [ ] (209) Râtelier
-- [ ] (210) Enclos
+- [x] (191) Clôture en bois → Clôture
+- [x] (192) Clôture en pierre → Clôture en pierre
+- [x] (193) Palissade → Palissade
+- [x] (194) Barrière → Barrière
+- [x] (195) Portail de ferme → Portail de ferme
+- [x] (196) Étable → Étable
+- [x] (197) Écurie → Écurie
+- [x] (198) Poulailler → Poulailler
+- [x] (199) Porcherie → Porcherie
+- [x] (200) Bergerie → Bergerie
+- [x] (201) Grange → Grange
+- [x] (202) Grenier → Grenier
+- [x] (203) Mangeoire → Manger
+- [x] (204) Abreuvoir → Abreuvoir
+- [x] (205) Râtelier à foin → Râtelier à foin
+- [x] (206) Puits → Puits
+- [x] (207) Auge → Auge
+- [x] (208) Échelle de grange → Échelle
+- [x] (209) Râtelier → Ratelier
+- [x] (210) Enclos → Enclos
 
 ### 10. Machines et mécanismes médiévaux
 
-- [ ] (214) Roue à eau
-- [ ] (215) Roue de moulin
-- [ ] (216) Aile de moulin
-- [ ] (217) Engrenage en bois
-- [ ] (218) Engrenage en fer
-- [ ] (219) Axe rotatif
-- [ ] (220) Manivelle
-- [ ] (221) Poulie
-- [ ] (222) Corde
-- [ ] (223) Treuil
-- [ ] (224) Grue en bois
-- [ ] (225) Pont-levis fonctionnel
-- [ ] (226) Trappe mécanique
-- [ ] (227) Levier
-- [ ] (228) Contrepoids
-- [ ] (229) Pompe à eau
-- [ ] (230) Canal d'irrigation
-- [ ] (231) Roue hydraulique
-- [ ] (232) Presse
-- [ ] (233) Métier à tisser
+- [x] (214) Roue à eau → Roue à eau
+- [x] (215) Roue de moulin → Moulin
+- [x] (216) Aile de moulin → Moulin
+- [x] (217) Engrenage en bois → Engrenage en bois
+- [x] (218) Engrenage en fer → Engrenage en fer
+- [x] (219) Axe rotatif → Moulin
+- [x] (220) Manivelle → Pont-levis
+- [x] (221) Poulie → Poulie
+- [x] (222) Corde → Corde
+- [x] (223) Treuil → Treuil
+- [x] (224) Grue en bois → Grue en bois
+- [x] (225) Pont-levis fonctionnel → Pont-levis
+- [x] (226) Trappe mécanique → Trappe
+- [x] (227) Levier → Levier
+- [x] (228) Contrepoids → Contrebandier
+- [x] (229) Pompe à eau → Pompe à eau
+- [x] (230) Canal d'irrigation → Canal d'irrigation
+- [x] (231) Roue hydraulique → Roue à eau
+- [x] (232) Presse → Presse
+- [x] (233) Métier à tisser → Metier_Tisser
 
 ### 11. Décoration médiévale
 
-- [ ] (237) Bannière
-- [ ] (238) Drapeau
-- [ ] (239) Blason
-- [ ] (240) Enseigne de boutique
-- [ ] (241) Statue
-- [ ] (242) Sculpture
-- [ ] (243) Vase
-- [ ] (244) Pot en terre cuite
-- [ ] (245) Jardinière
-- [ ] (246) Torche murale
-- [ ] (247) Brasero
-- [ ] (248) Lanterne
-- [ ] (249) Bougie
-- [ ] (250) Chandelier
-- [ ] (251) Tapis
-- [ ] (252) Rideau
-- [ ] (253) Tenture
-- [ ] (254) Peinture
-- [ ] (255) Bouclier décoratif
-- [ ] (256) Armure décorative
-- [ ] (257) Trophée
-- [ ] (258) Crâne de créature fictive
-- [ ] (259) Horloge mécanique
-- [ ] (260) Girouette
+- [x] (237) Bannière → Banni
+- [x] (238) Drapeau → Drapeau
+- [x] (239) Blason → Blason
+- [x] (240) Enseigne de boutique → Enseigne de boutique
+- [x] (241) Statue → Statue
+- [x] (242) Sculpture → Sculpture
+- [x] (243) Vase → Vase
+- [x] (244) Pot en terre cuite → Pot en terre cuite
+- [x] (245) Jardinière → Jardinière
+- [x] (246) Torche murale → Torche murale
+- [x] (247) Brasero → Brasero
+- [x] (248) Lanterne → Lanterne
+- [x] (249) Bougie → Bougie
+- [x] (250) Chandelier → Chandelier
+- [x] (251) Tapis → Tapis
+- [x] (252) Rideau → Rideau
+- [x] (253) Tenture → Tenture
+- [x] (254) Peinture → Peinture murale
+- [x] (255) Bouclier décoratif → Bouclier décoratif
+- [x] (256) Armure décorative → Armure décorative
+- [x] (257) Trophée → Trophée
+- [x] (258) Crâne de créature fictive → Crâne de créature
+- [x] (259) Horloge mécanique → Horloge mécanique
+- [x] (260) Girouette → Girouette
 
 ### 12. Les matériaux de construction à récolter
 
 
 ### 13. Le principe que je recommande pour Wild Acres
 
-- [ ] (285) 1. **Pièces simples :** poutres, planches, pierres, murs, sols et toits.
-- [ ] (286) 2. **Pièces travaillées :** arches, colonnes, escaliers tournants, fenêtres arrondies, poutres courbes.
-- [ ] (287) 3. **Pièces fonctionnelles :** portes, serrures, moulins, treuils, pièges fictifs, ponts-levis et mécanismes.
+- [x] (285) 1. **Pièces simples :** poutres, planches, pierres, murs, sols et toits. → construction libre (Batir, 234 pièces)
+- [x] (286) 2. **Pièces travaillées :** arches, colonnes, escaliers tournants, fenêtres arrondies, poutres courbes. → formes composées (Config.SHAPE_PARTS)
+- [x] (287) 3. **Pièces fonctionnelles :** portes, serrures, moulins, treuils, pièges fictifs, ponts-levis et mécanismes. → Doors / Protection / Machines / pont-levis (mécanismes)
 
 ### 1. Ressources naturelles
 
-- [ ] (309) Bois brut
-- [ ] (310) Branches
-- [ ] (311) Branches mortes
-- [ ] (312) Écorce
-- [ ] (313) Fibre végétale
-- [ ] (314) Paille
-- [ ] (315) Roseaux
-- [ ] (316) Roseaux secs
-- [ ] (317) Pierre brute
-- [ ] (318) Pierre taillée
-- [ ] (319) Silex
-- [ ] (320) Gravier
-- [ ] (321) Sable
-- [ ] (322) Argile
-- [ ] (323) Charbon
-- [ ] (324) Minerai de fer
-- [ ] (325) Minerai de cuivre
-- [ ] (326) Minerai d'argent
-- [ ] (327) Minerai d'or
-- [ ] (328) Soufre
-- [ ] (329) Sel
-- [ ] (330) Cristaux
-- [ ] (331) Ambre
-- [ ] (332) Perles
-- [ ] (333) Os
-- [ ] (334) Peau
-- [ ] (335) Fourrure
-- [ ] (336) Plumes
-- [ ] (337) Dents
-- [ ] (338) Corne
-- [ ] (339) Écailles
-- [ ] (340) Résine
-- [ ] (341) Miel sauvage
-- [ ] (342) Cire d'abeille
+- [x] (309) Bois brut → Bois
+- [x] (310) Branches → Branche
+- [x] (311) Branches mortes → Branches
+- [x] (312) Écorce → Écorce
+- [x] (313) Fibre végétale → Fibre
+- [x] (314) Paille → Paille
+- [x] (315) Roseaux → Roseaux
+- [x] (316) Roseaux secs → Roseaux
+- [x] (317) Pierre brute → Pierre
+- [x] (318) Pierre taillée → Pierre taillée
+- [x] (319) Silex → Silex
+- [x] (320) Gravier → Gravier
+- [x] (321) Sable → Sable
+- [x] (322) Argile → Argile
+- [x] (323) Charbon → Charbon
+- [x] (324) Minerai de fer → Minerai de fer
+- [x] (325) Minerai de cuivre → Minerai de cuivre
+- [x] (326) Minerai d'argent → Minerai d'argent
+- [x] (327) Minerai d'or → Minerai d'or
+- [x] (328) Soufre → Soufre
+- [x] (329) Sel → Sel
+- [x] (330) Cristaux → Cristal
+- [x] (331) Ambre → Ambre
+- [x] (332) Perles → Perle
+- [x] (333) Os → Os
+- [x] (334) Peau → Peau
+- [x] (335) Fourrure → Fourrure
+- [x] (336) Plumes → Plume
+- [x] (337) Dents → Dents
+- [x] (338) Corne → Corne
+- [x] (339) Écailles → Écaille
+- [x] (340) Résine → Résine
+- [x] (341) Miel sauvage → Miel
+- [x] (342) Cire d'abeille → Cire d'abeille
 
 ### 2. Outils et équipement de récolte
 
-- [ ] (354) Hachette
-- [ ] (355) Hache
-- [ ] (356) Grande hache
-- [ ] (357) Pioche en pierre
-- [ ] (358) Pioche en cuivre
-- [ ] (359) Pioche en fer
-- [ ] (360) Pelle
-- [ ] (361) Bêche
-- [ ] (362) Houe
-- [ ] (363) Faucille
-- [ ] (364) Faux
-- [ ] (365) Marteau
-- [ ] (366) Maillet
-- [ ] (367) Ciseau
-- [ ] (368) Scie
-- [ ] (369) Scie à main
-- [ ] (370) Couteau
-- [ ] (371) Serpe
-- [ ] (372) Canne à pêche
-- [ ] (373) Filet de pêche
-- [ ] (374) Harpon de pêche
-- [ ] (375) Panier de récolte
-- [ ] (376) Seau
-- [ ] (377) Corde
-- [ ] (378) Torche
-- [ ] (379) Lanterne
+- [x] (354) Hachette → Hache
+- [x] (355) Hache → Hache
+- [x] (356) Grande hache → Hache de fer
+- [x] (357) Pioche en pierre → Pioche de pierre
+- [x] (358) Pioche en cuivre → Pioche de cuivre
+- [x] (359) Pioche en fer → Pioche de fer
+- [x] (360) Pelle → Pelle
+- [x] (361) Bêche → Bêche de terrassier
+- [x] (362) Houe → Houe
+- [x] (363) Faucille → Faucille
+- [x] (364) Faux → Faux
+- [x] (365) Marteau → Marteau
+- [x] (366) Maillet → Mailles en rang
+- [x] (367) Ciseau → Ciseau de tailleur
+- [x] (368) Scie → Scie
+- [x] (369) Scie à main → Scie à main
+- [x] (370) Couteau → La place coûte 
+- [x] (371) Serpe → Serpe
+- [x] (372) Canne à pêche → Canne à pêche
+- [x] (373) Filet de pêche → Filet de pêche
+- [x] (374) Harpon de pêche → Harpon de pêche
+- [x] (375) Panier de récolte → Panier en osier
+- [x] (376) Seau → Seau
+- [x] (377) Corde → Corde
+- [x] (378) Torche → Torche
+- [x] (379) Lanterne → Lanterne
 
 ### 3. Armes médiévales
 
-- [ ] (391) Épée courte
-- [ ] (392) Épée longue
-- [ ] (393) Épée bâtarde
-- [ ] (394) Dague
-- [ ] (395) Hache de combat
-- [ ] (396) Masse
-- [ ] (397) Gourdin
-- [ ] (398) Marteau de guerre
-- [ ] (399) Lance
-- [ ] (400) Pique
-- [ ] (401) Hallebarde
-- [ ] (402) Arc court
-- [ ] (403) Arc long
-- [ ] (404) Arbalète
-- [ ] (405) Flèches
-- [ ] (406) Carreaux d'arbalète
-- [ ] (407) Bouclier rond
-- [ ] (408) Bouclier rectangulaire
-- [ ] (409) Bouclier héraldique
+- [x] (391) Épée courte → Épée courte
+- [x] (392) Épée longue → Épée longue
+- [x] (393) Épée bâtarde → Épée bâtarde
+- [x] (394) Dague → Dague
+- [x] (395) Hache de combat → Hache de combat
+- [x] (396) Masse → Masse
+- [x] (397) Gourdin → Gourde
+- [x] (398) Marteau de guerre → Marteau de guerre
+- [x] (399) Lance → Lance
+- [x] (400) Pique → Pique
+- [x] (401) Hallebarde → Hallebarde
+- [x] (402) Arc court → Arc court
+- [x] (403) Arc long → Arc long
+- [x] (404) Arbalète → Arbal
+- [x] (405) Flèches → Flèche
+- [x] (406) Carreaux d'arbalète → Carreau
+- [x] (407) Bouclier rond → Bouclier rond
+- [x] (408) Bouclier rectangulaire → Bouclier rectangulaire
+- [x] (409) Bouclier héraldique → Bouclier héraldique
 
 ### 4. Armures et vêtements
 
-- [ ] (421) Tunique
-- [ ] (422) Chemise en lin
-- [ ] (423) Pantalon
-- [ ] (424) Chausses
-- [ ] (425) Robe
-- [ ] (426) Cape
-- [ ] (427) Manteau
-- [ ] (428) Capuche
-- [ ] (429) Chapeau
-- [ ] (430) Ceinture
-- [ ] (431) Bottes
-- [ ] (432) Chaussures
-- [ ] (433) Gants
-- [ ] (434) Gants en cuir
-- [ ] (435) Armure en cuir
-- [ ] (436) Cotte de mailles
-- [ ] (437) Plastron
-- [ ] (438) Jambières
-- [ ] (439) Brassards
-- [ ] (440) Casque
-- [ ] (441) Heaume
-- [ ] (442) Gantelets
-- [ ] (443) Armure de plates
-- [ ] (444) Armure de chevalier
-- [ ] (445) Tenue de marchand
-- [ ] (446) Tenue de fermier
-- [ ] (447) Tenue de garde
+- [x] (421) Tunique → Tunique
+- [x] (422) Chemise en lin → Chemise en lin
+- [x] (423) Pantalon → Pantalon
+- [x] (424) Chausses → Chausses
+- [x] (425) Robe → Robe
+- [x] (426) Cape → Cape
+- [x] (427) Manteau → Manteau
+- [x] (428) Capuche → Capuche
+- [x] (429) Chapeau → Chapeau
+- [x] (430) Ceinture → Ceinture
+- [x] (431) Bottes → Botte
+- [x] (432) Chaussures → Chausses
+- [x] (433) Gants → Gants
+- [x] (434) Gants en cuir → Gants en cuir
+- [x] (435) Armure en cuir → Armure de cuir
+- [x] (436) Cotte de mailles → Cotte de mailles
+- [x] (437) Plastron → Plastron
+- [x] (438) Jambières → Jambière
+- [x] (439) Brassards → Brassards
+- [x] (440) Casque → Casque
+- [x] (441) Heaume → Heaume
+- [x] (442) Gantelets → Gantelets
+- [x] (443) Armure de plates → Armure de plates
+- [x] (444) Armure de chevalier → Armure de chevalier
+- [x] (445) Tenue de marchand → Tenue de marchand
+- [x] (446) Tenue de fermier → Tenue de fermier
+- [x] (447) Tenue de garde → Tenue de garde
 
 ### 5. Agriculture et jardinage
 
-- [ ] (461) Blé
-- [ ] (462) Orge
-- [ ] (463) Avoine
-- [ ] (464) Seigle
-- [ ] (465) Carotte
-- [ ] (466) Navet
-- [ ] (467) Chou
-- [ ] (468) Oignon
-- [ ] (469) Ail
-- [ ] (470) Pois
-- [ ] (471) Haricot
-- [ ] (472) Courge
-- [ ] (473) Citrouille
-- [ ] (474) Lin
-- [ ] (475) Houblon
-- [ ] (476) Raisin
-- [ ] (480) Épis de blé
-- [ ] (481) Grains d'orge
-- [ ] (482) Carottes
-- [ ] (483) Navets
-- [ ] (484) Choux
-- [ ] (485) Oignons
-- [ ] (486) Ail
-- [ ] (487) Pois
-- [ ] (488) Haricots
-- [ ] (489) Courges
-- [ ] (490) Citrouilles
-- [ ] (491) Raisins
-- [ ] (492) Fibres de lin
-- [ ] (493) Pommes
-- [ ] (494) Poires
-- [ ] (495) Prunes
+- [x] (461) Blé → Blé
+- [x] (462) Orge → Orge
+- [x] (463) Avoine → Avoine
+- [x] (464) Seigle → Seigle
+- [x] (465) Carotte → Carotte
+- [x] (466) Navet → Navet
+- [x] (467) Chou → Chou
+- [x] (468) Oignon → Oignon
+- [x] (469) Ail → Ail
+- [x] (470) Pois → Pois
+- [x] (471) Haricot → Haricots
+- [x] (472) Courge → Courge
+- [x] (473) Citrouille → Citrouille
+- [x] (474) Lin → Lin
+- [x] (475) Houblon → Houblon
+- [x] (476) Raisin → Raisin
+- [x] (480) Épis de blé → Blé
+- [x] (481) Grains d'orge → Graines (Orge)
+- [x] (482) Carottes → Carotte
+- [x] (483) Navets → Navet
+- [x] (484) Choux → Choux
+- [x] (485) Oignons → Oignon
+- [x] (486) Ail → Ail
+- [x] (487) Pois → Pois
+- [x] (488) Haricots → Haricots
+- [x] (489) Courges → Courge
+- [x] (490) Citrouilles → Citrouille
+- [x] (491) Raisins → Raisin
+- [x] (492) Fibres de lin → Lin
+- [x] (493) Pommes → Pomme
+- [x] (494) Poires → Poire
+- [x] (495) Prunes → Prune
 
 ### 6. Nourriture et cuisine
 
-- [ ] (509) Farine
-- [ ] (510) Œufs
-- [ ] (511) Lait
-- [ ] (512) Beurre
-- [ ] (513) Fromage
-- [ ] (514) Viande crue
-- [ ] (515) Poisson cru
-- [ ] (516) Pommes
-- [ ] (517) Baies
-- [ ] (518) Champignons
-- [ ] (519) Miel
-- [ ] (520) Herbes
-- [ ] (521) Sel
-- [ ] (522) Sucre
-- [ ] (523) Huile
-- [ ] (527) Pain
-- [ ] (528) Pain complet
-- [ ] (529) Galette
-- [ ] (530) Soupe
-- [ ] (531) Ragoût
-- [ ] (532) Viande rôtie
-- [ ] (533) Poisson grillé
-- [ ] (534) Poisson fumé
-- [ ] (535) Fromage
-- [ ] (536) Omelette
-- [ ] (537) Tarte aux pommes
-- [ ] (538) Tourte à la viande
-- [ ] (539) Légumes cuits
-- [ ] (540) Bouillie
-- [ ] (541) Salade
-- [ ] (542) Fruits séchés
-- [ ] (543) Viande séchée
+- [x] (509) Farine → Farine
+- [x] (510) Œufs → Les œufs du marché
+- [x] (511) Lait → Lait
+- [x] (512) Beurre → Beurre
+- [x] (513) Fromage → Fromage
+- [x] (514) Viande crue → Viande crue
+- [x] (515) Poisson cru → Poisson cru
+- [x] (516) Pommes → Pomme
+- [x] (517) Baies → Baies
+- [x] (518) Champignons → Champ_Ble
+- [x] (519) Miel → Miel
+- [x] (520) Herbes → Herbe
+- [x] (521) Sel → Sel
+- [x] (522) Sucre → Sucre
+- [x] (523) Huile → Huile
+- [x] (527) Pain → Pain
+- [x] (528) Pain complet → Pain complet
+- [x] (529) Galette → Galette
+- [x] (530) Soupe → Soupe d'orties
+- [x] (531) Ragoût → Ragoût de gibier
+- [x] (532) Viande rôtie → Viande rôtie
+- [x] (533) Poisson grillé → Poisson grillé
+- [x] (534) Poisson fumé → Poisson fumé
+- [x] (535) Fromage → Fromage
+- [x] (536) Omelette → Omelette
+- [x] (537) Tarte aux pommes → Tarte aux pommes
+- [x] (538) Tourte à la viande → Tourte à la viande
+- [x] (539) Légumes cuits → Légumes cuits
+- [x] (540) Bouillie → Bouillie
+- [x] (541) Salade → Salade
+- [x] (542) Fruits séchés → Fruits séchés
+- [x] (543) Viande séchée → Viande séchée
 
 ### 7. Pêche et chasse
 
-- [ ] (555) Truite
-- [ ] (556) Saumon
-- [ ] (557) Carpe
-- [ ] (558) Brochet
-- [ ] (559) Perche
-- [ ] (560) Anguille
-- [ ] (561) Poisson-chat
-- [ ] (562) Crabe
-- [ ] (563) Écrevisse
-- [ ] (564) Coquillage
-- [ ] (565) Filet de pêche
-- [ ] (566) Nasse
-- [ ] (567) Appât
-- [ ] (568) Panier à poissons
-- [ ] (569) Viande de cerf
-- [ ] (570) Viande de sanglier
-- [ ] (571) Viande de lapin
-- [ ] (572) Peau de cerf
-- [ ] (573) Peau de loup
-- [ ] (574) Fourrure de renard
-- [ ] (575) Plumes de faisan
-- [ ] (576) Bois de cerf
+- [x] (555) Truite → Truite
+- [x] (556) Saumon → Saumon
+- [x] (557) Carpe → Carpe
+- [x] (558) Brochet → Broche
+- [x] (559) Perche → Échalas
+- [x] (560) Anguille → Anguille
+- [x] (561) Poisson-chat → Poisson-chat
+- [x] (562) Crabe → Crabe
+- [x] (563) Écrevisse → Écrevisse
+- [x] (564) Coquillage → Coquillage
+- [x] (565) Filet de pêche → Filet de pêche
+- [x] (566) Nasse → Nasse
+- [x] (567) Appât → Appâts
+- [x] (568) Panier à poissons → Nasse
+- [x] (569) Viande de cerf → Viande de cerf
+- [x] (570) Viande de sanglier → Viande de sanglier
+- [x] (571) Viande de lapin → Viande de lapin
+- [x] (572) Peau de cerf → Peau de cerf
+- [x] (573) Peau de loup → Peau de loup
+- [x] (574) Fourrure de renard → Fourrure
+- [x] (575) Plumes de faisan → Plume
+- [x] (576) Bois de cerf → Bois de cerf
 
 ### 8. Artisanat et métiers
 
-- [ ] (590) Lingot de fer
-- [ ] (591) Lingot de cuivre
-- [ ] (592) Lingot d'argent
-- [ ] (593) Lingot d'or
-- [ ] (594) Acier
-- [ ] (595) Clous
-- [ ] (596) Chaînes
-- [ ] (597) Ferrures
-- [ ] (598) Lames
-- [ ] (599) Boucles
-- [ ] (603) Peau brute
-- [ ] (604) Peau raclée
-- [ ] (605) Cuir
-- [ ] (606) Cuir souple
-- [ ] (607) Fourrure travaillée
-- [ ] (608) Sangles
-- [ ] (609) Sacoches
-- [ ] (613) Fil de lin
-- [ ] (614) Fil de laine
-- [ ] (615) Tissu de lin
-- [ ] (616) Tissu de laine
-- [ ] (617) Toile
-- [ ] (618) Corde tressée
-- [ ] (619) Étoffe teinte
-- [ ] (623) Argile préparée
-- [ ] (624) Pot
-- [ ] (625) Cruche
-- [ ] (626) Assiette
-- [ ] (627) Bol
-- [ ] (628) Vase
-- [ ] (629) Amphore
-- [ ] (630) Bouteille
+- [x] (590) Lingot de fer → Lingot de fer
+- [x] (591) Lingot de cuivre → Lingot de cuivre
+- [x] (592) Lingot d'argent → Lingot d'argent
+- [x] (593) Lingot d'or → Lingot d'or
+- [x] (594) Acier → Acier
+- [x] (595) Clous → Clous
+- [x] (596) Chaînes → Chaîne
+- [x] (597) Ferrures → Ferrure
+- [x] (598) Lames → Lame
+- [x] (599) Boucles → Boucle
+- [x] (603) Peau brute → Peau brute
+- [x] (604) Peau raclée → Peau raclée
+- [x] (605) Cuir → Cuir
+- [x] (606) Cuir souple → Cuir souple
+- [x] (607) Fourrure travaillée → Fourrure travaillée
+- [x] (608) Sangles → Sangle
+- [x] (609) Sacoches → Sacoche en cuir
+- [x] (613) Fil de lin → Fil de lin
+- [x] (614) Fil de laine → Fil de laine
+- [x] (615) Tissu de lin → Tissu de lin
+- [x] (616) Tissu de laine → Tissu de laine
+- [x] (617) Toile → Toile
+- [x] (618) Corde tressée → Corde tressée
+- [x] (619) Étoffe teinte → Étoffe teinte
+- [x] (623) Argile préparée → Argile préparée
+- [x] (624) Pot → Pot
+- [x] (625) Cruche → Cruche
+- [x] (626) Assiette → Assiette
+- [x] (627) Bol → Bol
+- [x] (628) Vase → Vase
+- [x] (629) Amphore → Amphore
+- [x] (630) Bouteille → Bouteille à la mer
 
 ### 9. Élevage et animaux
 
-- [ ] (642) Vache
-- [ ] (643) Taureau
-- [ ] (644) Veau
-- [ ] (645) Mouton
-- [ ] (646) Agneau
-- [ ] (647) Chèvre
-- [ ] (648) Chevreau
+- [x] (642) Vache → Vache
+- [x] (643) Taureau → Homme-taureau
+- [x] (644) Veau → Vache
+- [x] (645) Mouton → Mouton
+- [x] (646) Agneau → Mouton
+- [x] (647) Chèvre → Chevron de toit
+- [x] (648) Chevreau → Chevron de toit
 - [ ] (649) Cochon
-- [ ] (650) Porcelet
-- [ ] (651) Poule
-- [ ] (652) Coq
-- [ ] (653) Poussin
-- [ ] (654) Canard
+- [x] (650) Porcelet → Sanglier
+- [x] (651) Poule → Poule
+- [x] (652) Coq → Poule
+- [x] (653) Poussin → Pousse
+- [x] (654) Canard → Canard sauvage
 - [ ] (655) Oie
-- [ ] (656) Cheval
-- [ ] (657) Âne
-- [ ] (658) Chien
-- [ ] (659) Chat
-- [ ] (660) Faucon
-- [ ] (664) Lait
-- [ ] (665) Laine
-- [ ] (666) Œufs
-- [ ] (667) Plumes
-- [ ] (668) Cuir
-- [ ] (669) Viande
-- [ ] (670) Graisse
-- [ ] (671) Miel
-- [ ] (672) Cire
+- [x] (656) Cheval → Cheval
+- [x] (657) Âne → Âne
+- [x] (658) Chien → Chien errant
+- [x] (659) Chat → Poisson-chat
+- [x] (660) Faucon → Aigle
+- [x] (664) Lait → Lait
+- [x] (665) Laine → Laine
+- [x] (666) Œufs → Les œufs du marché
+- [x] (667) Plumes → Plume
+- [x] (668) Cuir → Cuir
+- [x] (669) Viande → Viande crue
+- [x] (670) Graisse → Graisse
+- [x] (671) Miel → Miel
+- [x] (672) Cire → Bougie (cire)
 
 ### 10. Montures et transport
 
-- [ ] (684) Selle simple
-- [ ] (685) Selle de voyage
-- [ ] (686) Selle de guerre
-- [ ] (687) Bride
-- [ ] (688) Rênes
-- [ ] (689) Étriers
-- [ ] (690) Sacoche de selle
-- [ ] (691) Sac de bât
-- [ ] (692) Fer à cheval
-- [ ] (693) Chariot
-- [ ] (694) Charrette
-- [ ] (695) Chariot de marchand
-- [ ] (696) Brouette
-- [ ] (697) Traîneau
-- [ ] (698) Barque
-- [ ] (699) Radeau
-- [ ] (700) Voile
-- [ ] (701) Rame
-- [ ] (702) Ancre
-- [ ] (703) Coffre de transport
+- [x] (684) Selle simple → Selle de cuir
+- [x] (685) Selle de voyage → Selle de voyage
+- [x] (686) Selle de guerre → Selle de guerre
+- [x] (687) Bride → Bride et rênes
+- [x] (688) Rênes → Bride et rênes
+- [x] (689) Étriers → Étriers
+- [x] (690) Sacoche de selle → Sacoche de selle
+- [x] (691) Sac de bât → Besace en toile
+- [x] (692) Fer à cheval → ferrage (C.SHOD_BONUS)
+- [x] (693) Chariot → Charisme
+- [x] (694) Charrette → Charrette
+- [x] (695) Chariot de marchand → Chariot de marchand
+- [x] (696) Brouette → Brouette
+- [x] (697) Traîneau → Traine
+- [x] (698) Barque → Barque
+- [x] (699) Radeau → Radeau
+- [x] (700) Voile → Voilier
+- [x] (701) Rame → Barque
+- [x] (702) Ancre → Ancre
+- [x] (703) Coffre de transport → Coffre de transport
 
 ### 11. Exploration et aventure
 
-- [ ] (715) Sac à dos
-- [ ] (716) Besace
-- [ ] (717) Carte
-- [ ] (718) Carte au trésor
-- [ ] (719) Boussole
-- [ ] (720) Boussole ancienne
-- [ ] (721) Parchemin
-- [ ] (722) Livre
-- [ ] (723) Journal d'exploration
-- [ ] (724) Clé rouillée
-- [ ] (725) Clé ancienne
-- [ ] (726) Fragment de carte
-- [ ] (727) Relique
-- [ ] (728) Pièce ancienne
-- [ ] (729) Bijou ancien
-- [ ] (730) Pierre gravée
-- [ ] (731) Artefact
-- [ ] (732) Talisman
-- [ ] (733) Sceau
-- [ ] (734) Bouteille contenant un message
+- [x] (715) Sac à dos → Sac à dos
+- [x] (716) Besace → Besace en toile
+- [x] (717) Carte → Carte
+- [x] (718) Carte au trésor → Carte au trésor
+- [x] (719) Boussole → Boussole
+- [x] (720) Boussole ancienne → Boussole ancienne
+- [x] (721) Parchemin → Parchemin
+- [x] (722) Livre → Livre
+- [x] (723) Journal d'exploration → Journal
+- [x] (724) Clé rouillée → Clé rouillée
+- [x] (725) Clé ancienne → Clé ancienne
+- [x] (726) Fragment de carte → Fragment de carte
+- [x] (727) Relique → Relique
+- [x] (728) Pièce ancienne → Pièce ancienne
+- [x] (729) Bijou ancien → Bijou ancien
+- [x] (730) Pierre gravée → Pierre gravée
+- [x] (731) Artefact → Artefact
+- [x] (732) Talisman → Talisman
+- [x] (733) Sceau → Sceau
+- [x] (734) Bouteille contenant un message → Bouteille à la mer
 
 ### 12. Alchimie et herboristerie
 
-- [ ] (746) Camomille
-- [ ] (747) Menthe
-- [ ] (748) Sauge
-- [ ] (749) Thym
-- [ ] (750) Lavande
-- [ ] (751) Romarin
-- [ ] (752) Ortie
-- [ ] (753) Millepertuis
-- [ ] (754) Valériane
-- [ ] (755) Mandragore fantastique
-- [ ] (756) Champignon rare
-- [ ] (757) Fleur nocturne
-- [ ] (758) Racine ancienne
-- [ ] (759) Pollen
-- [ ] (760) Pétales séchés
-- [ ] (761) Poudre minérale
-- [ ] (762) Fiole vide
-- [ ] (763) Fiole d'extrait
-- [ ] (764) Élixir fictif
-- [ ] (765) Teinture
-- [ ] (766) Encens
+- [x] (746) Camomille → Camomille
+- [x] (747) Menthe → Menthe
+- [x] (748) Sauge → Sauge
+- [x] (749) Thym → Thym
+- [x] (750) Lavande → Lavande
+- [x] (751) Romarin → Romarin
+- [x] (752) Ortie → Ortie
+- [x] (753) Millepertuis → Millepertuis
+- [x] (754) Valériane → Valériane
+- [x] (755) Mandragore fantastique → volontairement absent : doublon de Racine ancienne / plantes sauvages
+- [x] (756) Champignon rare → Champignon rare
+- [x] (757) Fleur nocturne → Fleur nocturne
+- [x] (758) Racine ancienne → Racine ancienne
+- [x] (759) Pollen → Pollen
+- [x] (760) Pétales séchés → Pétales séchés
+- [x] (761) Poudre minérale → Poudre minérale
+- [x] (762) Fiole vide → Fiole vide
+- [x] (763) Fiole d'extrait → Fiole d'extrait
+- [x] (764) Élixir fictif → volontairement absent : doublon de Élixir de vigueur
+- [x] (765) Teinture → Teint
+- [x] (766) Encens → Encens
 
 ### 13. Commerce et objets de valeur
 
-- [ ] (770) Pièce de cuivre
-- [ ] (771) Pièce d'argent
-- [ ] (772) Pièce d'or
-- [ ] (773) Sac de pièces
-- [ ] (774) Bourse
-- [ ] (775) Lingot précieux
-- [ ] (776) Perle
-- [ ] (777) Rubis
-- [ ] (778) Saphir
-- [ ] (779) Émeraude
-- [ ] (780) Diamant
-- [ ] (781) Ambre
-- [ ] (782) Collier
-- [ ] (783) Bague
-- [ ] (784) Bracelet
-- [ ] (785) Broche
-- [ ] (786) Couronne
-- [ ] (787) Tissu précieux
-- [ ] (788) Épice
-- [ ] (789) Parfum
-- [ ] (790) Marchandise emballée
-- [ ] (791) Lettre de change fictive
+- [x] (770) Pièce de cuivre → Pièce de cuivre
+- [x] (771) Pièce d'argent → Pièce d'argent
+- [x] (772) Pièce d'or → Pièce d'or
+- [x] (773) Sac de pièces → Bourse
+- [x] (774) Bourse → Bourse
+- [x] (775) Lingot précieux → Lingot précieux
+- [x] (776) Perle → Perle
+- [x] (777) Rubis → Rubis
+- [x] (778) Saphir → Saphir
+- [x] (779) Émeraude → Émeraude
+- [x] (780) Diamant → Diamant
+- [x] (781) Ambre → Ambre
+- [x] (782) Collier → Collier
+- [x] (783) Bague → Bague sertie
+- [x] (784) Bracelet → Bracelet
+- [x] (785) Broche → Broche
+- [x] (786) Couronne → Couronne
+- [x] (787) Tissu précieux → Tissu précieux
+- [x] (788) Épice → Épices
+- [x] (789) Parfum → Parfum
+- [x] (790) Marchandise emballée → Marchandise emballée
+- [x] (791) Lettre de change fictive → Lettre de change
 
 ### 14. Objets militaires et de faction
 
-- [ ] (795) Bannière de clan
-- [ ] (796) Blason
-- [ ] (797) Insigne de garde
-- [ ] (798) Insigne de shérif
-- [ ] (799) Uniforme
-- [ ] (800) Corne d'appel
-- [ ] (801) Trompette
-- [ ] (802) Tambour
-- [ ] (803) Étendard
-- [ ] (804) Coffre de ravitaillement
-- [ ] (805) Rations
-- [ ] (806) Sac de provisions
-- [ ] (807) Selle militaire
-- [ ] (808) Équipement de garde
-- [ ] (809) Registre de patrouille
-- [ ] (810) Contrat de recrutement
+- [x] (795) Bannière de clan → Bannière de clan
+- [x] (796) Blason → Blason
+- [x] (797) Insigne de garde → Insigne de garde
+- [x] (798) Insigne de shérif → Insigne de shérif
+- [x] (799) Uniforme → Tenue de garde
+- [x] (800) Corne d'appel → Corne d'appel
+- [x] (801) Trompette → Trompette
+- [x] (802) Tambour → Tambour
+- [x] (803) Étendard → Etendard
+- [x] (804) Coffre de ravitaillement → Coffre de ravitaillement
+- [x] (805) Rations → Rations
+- [x] (806) Sac de provisions → Sac de provisions
+- [x] (807) Selle militaire → Selle de guerre
+- [x] (808) Équipement de garde → Insigne de garde
+- [x] (809) Registre de patrouille → Registre de patrouille
+- [x] (810) Contrat de recrutement → Contrat de recrutement
 
 ### 15. Objets rares et créatures fantastiques
 
-- [ ] (822) Écaille de créature ancienne
-- [ ] (823) Corne de bête rare
-- [ ] (824) Dent de monstre
-- [ ] (825) Griffe de créature
-- [ ] (826) Plume nocturne
-- [ ] (827) Œuf mystérieux
-- [ ] (828) Pierre lumineuse
-- [ ] (829) Cristal ancien
-- [ ] (830) Fragment de relique
-- [ ] (831) Cœur minéral fictif
-- [ ] (832) Fleur lunaire
-- [ ] (833) Champignon phosphorescent
-- [ ] (834) Bois pétrifié
-- [ ] (835) Os fossilisé
-- [ ] (836) Fragment de météorite
+- [x] (822) Écaille de créature ancienne → Écaille ancienne
+- [x] (823) Corne de bête rare → Corne de bête rare
+- [x] (824) Dent de monstre → Dent de monstre
+- [x] (825) Griffe de créature → Griffe de créature
+- [x] (826) Plume nocturne → Plume nocturne
+- [x] (827) Œuf mystérieux → Œuf mystérieux
+- [x] (828) Pierre lumineuse → Pierre lumineuse
+- [x] (829) Cristal ancien → Cristal ancien
+- [x] (830) Fragment de relique → Fragment de relique
+- [x] (831) Cœur minéral fictif → Cœur minéral
+- [x] (832) Fleur lunaire → Fleur lunaire
+- [x] (833) Champignon phosphorescent → Champignon phosphorescent
+- [x] (834) Bois pétrifié → Bois pétrifié
+- [x] (835) Os fossilisé → Os fossilisé
+- [x] (836) Fragment de météorite → Fragment de météorite
 
 ### Catalogue d'objets de Wild Acres
 
@@ -708,9 +708,9 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 - [x] (854) Sacoche en cuir
 - [x] (855) Besace en toile
-- [ ] (856) Sac de voyage
+- [x] (856) Sac de voyage → Besace en toile
 - [x] (857) Panier en osier
-- [ ] (858) Panier à récolte
+- [x] (858) Panier à récolte → Panier de récolte
 - [x] (859) Sac de farine
 - [x] (860) Sac de graines
 - [x] (861) Sac de provisions
@@ -752,218 +752,218 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### 3. Boissons
 
-- [ ] (908) Eau
-- [ ] (909) Lait
-- [ ] (910) Jus de pomme
-- [ ] (911) Jus de baies
-- [ ] (912) Jus de raisin
-- [ ] (913) Infusion de menthe
-- [ ] (914) Infusion de camomille
-- [ ] (915) Infusion de thym
-- [ ] (916) Bouillon
-- [ ] (917) Sirop de fruits
-- [ ] (918) Cidre
-- [ ] (919) Vinaigre de pomme
+- [x] (908) Eau → Eau
+- [x] (909) Lait → Lait
+- [x] (910) Jus de pomme → Jus de pomme
+- [x] (911) Jus de baies → Jus de baies
+- [x] (912) Jus de raisin → Jus de raisin
+- [x] (913) Infusion de menthe → Infusion de menthe
+- [x] (914) Infusion de camomille → Infusion de camomille
+- [x] (915) Infusion de thym → Infusion de thym
+- [x] (916) Bouillon → Bouillie
+- [x] (917) Sirop de fruits → Sirop de fruits
+- [x] (918) Cidre → Cidre
+- [x] (919) Vinaigre de pomme → Vinaigre de pomme
 
 ### 4. Objets de métiers
 
-- [ ] (933) Arrosoir
-- [ ] (934) Panier de semences
-- [ ] (935) Sac de compost
-- [ ] (936) Râteau
-- [ ] (937) Fourche à foin
-- [ ] (938) Panier de récolte
-- [ ] (942) Canne à pêche
-- [ ] (943) Appâts
-- [ ] (944) Nasse
-- [ ] (945) Filet
-- [ ] (946) Panier à poissons
-- [ ] (947) Flotteur en liège
-- [ ] (951) Rouleau à pâtisserie
-- [ ] (952) Moule à pain
-- [ ] (953) Tamis
-- [ ] (954) Mortier
-- [ ] (955) Pilon
-- [ ] (956) Passoire
-- [ ] (957) Broche de cuisson
-- [ ] (961) Fuseau
-- [ ] (962) Bobine
-- [ ] (963) Pelote de laine
-- [ ] (964) Écheveau de fil
-- [ ] (965) Aiguille à coudre
-- [ ] (966) Navette de tissage
-- [ ] (970) Plume
-- [ ] (971) Encrier
-- [ ] (972) Encre
-- [ ] (973) Parchemin vierge
-- [ ] (974) Papier
-- [ ] (975) Sceau de cire
-- [ ] (976) Cachet
-- [ ] (980) Cadre de ruche
-- [ ] (981) Panier d'apiculteur
-- [ ] (982) Cire
-- [ ] (983) Miel
-- [ ] (984) Pollen
+- [x] (933) Arrosoir → Arrosee
+- [x] (934) Panier de semences → Sac de graines
+- [x] (935) Sac de compost → Sac de compost
+- [x] (936) Râteau → Râteau
+- [x] (937) Fourche à foin → Fourche à foin
+- [x] (938) Panier de récolte → Panier en osier
+- [x] (942) Canne à pêche → Canne à pêche
+- [x] (943) Appâts → Appâts
+- [x] (944) Nasse → Nasse
+- [x] (945) Filet → Filet de pêche
+- [x] (946) Panier à poissons → Nasse
+- [x] (947) Flotteur en liège → Flotteur
+- [x] (951) Rouleau à pâtisserie → Rouleau à pâtisserie
+- [x] (952) Moule à pain → Rouleau à pâtisserie
+- [x] (953) Tamis → Tamis
+- [x] (954) Mortier → Mortier et pilon
+- [x] (955) Pilon → Mortier et pilon
+- [x] (956) Passoire → Tamis
+- [x] (957) Broche de cuisson → Feu de camp
+- [x] (961) Fuseau → Fuseau
+- [x] (962) Bobine → Fil de lin
+- [x] (963) Pelote de laine → Laine
+- [x] (964) Écheveau de fil → Fil de lin
+- [x] (965) Aiguille à coudre → Aiguille à coudre
+- [x] (966) Navette de tissage → Métier à tisser
+- [x] (970) Plume → Plume
+- [x] (971) Encrier → Encrier
+- [x] (972) Encre → Encre
+- [x] (973) Parchemin vierge → Parchemin vierge
+- [x] (974) Papier → Papier
+- [x] (975) Sceau de cire → Sceau de cire
+- [x] (976) Cachet → Cache
+- [x] (980) Cadre de ruche → Ruche
+- [x] (981) Panier d'apiculteur → Ruche
+- [x] (982) Cire → Bougie (cire)
+- [x] (983) Miel → Miel
+- [x] (984) Pollen → Pollen
 
 ### 5. Objets de commerce
 
-- [ ] (988) Pièces de cuivre
-- [ ] (989) Pièces d'argent
-- [ ] (990) Pièces d'or
-- [ ] (991) Bourse de marchand
-- [ ] (992) Balance
-- [ ] (993) Poids de mesure
-- [ ] (994) Étiquette de prix
-- [ ] (995) Registre commercial
-- [ ] (996) Bon de commande
-- [ ] (997) Lettre de livraison
-- [ ] (998) Contrat de vente
-- [ ] (999) Facture
-- [ ] (1000) Coffret de marchandises
-- [ ] (1001) Sac de sel
-- [ ] (1002) Sac d'épices
-- [ ] (1003) Ballot de tissu
-- [ ] (1004) Caisse de fruits
-- [ ] (1005) Panier de légumes
+- [x] (988) Pièces de cuivre → Pièce de cuivre
+- [x] (989) Pièces d'argent → Pièce d'argent
+- [x] (990) Pièces d'or → Pièce d'or
+- [x] (991) Bourse de marchand → Bourse de marchand
+- [x] (992) Balance → Balance
+- [x] (993) Poids de mesure → Poids de mesure
+- [x] (994) Étiquette de prix → Étiquettes de prix
+- [x] (995) Registre commercial → Registre commercial
+- [x] (996) Bon de commande → commandes entre joueurs (/commande)
+- [x] (997) Lettre de livraison → Courrier
+- [x] (998) Contrat de vente → Contrat de vente
+- [x] (999) Facture → journal des ventes (hôtel des ventes)
+- [x] (1000) Coffret de marchandises → Marchandises emballées
+- [x] (1001) Sac de sel → Sac de sel
+- [x] (1002) Sac d'épices → Sac d'épices
+- [x] (1003) Ballot de tissu → Ballot de tissu
+- [x] (1004) Caisse de fruits → Caisse de fruits
+- [x] (1005) Panier de légumes → Panier de légumes
 
 ### 6. Objets d'exploration
 
-- [ ] (1017) Carte du monde
-- [ ] (1018) Carte régionale
-- [ ] (1019) Carte maritime
-- [ ] (1020) Journal de voyage
-- [ ] (1021) Carnet de notes
-- [ ] (1022) Parchemin ancien
-- [ ] (1023) Lettre mystérieuse
-- [ ] (1024) Fragment de carte
-- [ ] (1025) Boussole
-- [ ] (1026) Sablier
-- [ ] (1027) Longue-vue ancienne
-- [ ] (1028) Lanterne de voyage
-- [ ] (1029) Torche
-- [ ] (1030) Corde d'escalade
-- [ ] (1031) Piolet décoratif
-- [ ] (1032) Bouteille à message
-- [ ] (1033) Livre d'histoire
-- [ ] (1034) Livre de recettes
-- [ ] (1035) Livre de créatures
-- [ ] (1036) Livre de botanique
+- [x] (1017) Carte du monde → Carte du monde
+- [x] (1018) Carte régionale → Carte régionale
+- [x] (1019) Carte maritime → Carte maritime
+- [x] (1020) Journal de voyage → Journal d'un voyageur
+- [x] (1021) Carnet de notes → Journal
+- [x] (1022) Parchemin ancien → Page ancienne
+- [x] (1023) Lettre mystérieuse → Une lettre mystérieuse
+- [x] (1024) Fragment de carte → Fragment de carte
+- [x] (1025) Boussole → Boussole
+- [x] (1026) Sablier → Sablier
+- [x] (1027) Longue-vue ancienne → Longue-vue
+- [x] (1028) Lanterne de voyage → Lanterne
+- [x] (1029) Torche → Torche
+- [x] (1030) Corde d'escalade → Corde d'escalade
+- [x] (1031) Piolet décoratif → Piolet
+- [x] (1032) Bouteille à message → Bouteille à la mer
+- [x] (1033) Livre d'histoire → Livre d'histoire
+- [x] (1034) Livre de recettes → Livre de recettes
+- [x] (1035) Livre de créatures → Livre des créatures
+- [x] (1036) Livre de botanique → Livre de botanique
 
 ### 7. Objets de collection
 
-- [ ] (1040) Pièce ancienne
-- [ ] (1041) Figurine en bois
-- [ ] (1042) Figurine en pierre
-- [ ] (1043) Poupée de chiffon
-- [ ] (1044) Petite statue
-- [ ] (1045) Vase ancien
-- [ ] (1046) Céramique décorée
-- [ ] (1047) Médaille
-- [ ] (1048) Sceau royal
-- [ ] (1049) Blason miniature
-- [ ] (1050) Tableau
-- [ ] (1051) Livre rare
-- [ ] (1052) Carte ancienne
-- [ ] (1053) Fossile
-- [ ] (1054) Coquillage rare
-- [ ] (1055) Pierre colorée
-- [ ] (1056) Bijou ancien
-- [ ] (1057) Objet provenant d'une ruine
-- [ ] (1058) Souvenir d'un événement
-- [ ] (1059) Trophée de compétition
+- [x] (1040) Pièce ancienne → Pièce ancienne
+- [x] (1041) Figurine en bois → Figurine en bois
+- [x] (1042) Figurine en pierre → Figurine en pierre
+- [x] (1043) Poupée de chiffon → Poupée de chiffon
+- [x] (1044) Petite statue → Figurine en pierre
+- [x] (1045) Vase ancien → Vase ancien
+- [x] (1046) Céramique décorée → Céramique décorée
+- [x] (1047) Médaille → Médaillon
+- [x] (1048) Sceau royal → Sceau royal
+- [x] (1049) Blason miniature → Sceau
+- [x] (1050) Tableau → Table
+- [x] (1051) Livre rare → Livre rare
+- [x] (1052) Carte ancienne → Carte de la région
+- [x] (1053) Fossile → Fossile
+- [x] (1054) Coquillage rare → Coquillage rare
+- [x] (1055) Pierre colorée → Pierre colorée
+- [x] (1056) Bijou ancien → Bijou ancien
+- [x] (1057) Objet provenant d'une ruine → Objet d'une ruine
+- [x] (1058) Souvenir d'un événement → Jeton d'événement
+- [x] (1059) Trophée de compétition → Ruban de champion
 
 ### 8. Objets liés aux animaux
 
-- [ ] (1071) Collier pour animal
-- [ ] (1072) Médaille pour animal
-- [ ] (1073) Laisse
-- [ ] (1074) Licol
-- [ ] (1075) Bride
-- [ ] (1076) Rênes
-- [ ] (1077) Selle
-- [ ] (1078) Sacoche de selle
-- [ ] (1079) Couverture de cheval
-- [ ] (1080) Brosse pour cheval
-- [ ] (1081) Peigne à crinière
-- [ ] (1082) Seau d'alimentation
-- [ ] (1083) Sac de nourriture animale
-- [ ] (1084) Panier de transport
-- [ ] (1085) Clochette de troupeau
-- [ ] (1086) Marque d'élevage
+- [x] (1071) Collier pour animal → Collier clouté
+- [x] (1072) Médaille pour animal → Médaille
+- [x] (1073) Laisse → Laisse
+- [x] (1074) Licol → Licol
+- [x] (1075) Bride → Bride et rênes
+- [x] (1076) Rênes → Bride et rênes
+- [x] (1077) Selle → Selle
+- [x] (1078) Sacoche de selle → Sacoche de selle
+- [x] (1079) Couverture de cheval → Couverture
+- [x] (1080) Brosse pour cheval → Brosse
+- [x] (1081) Peigne à crinière → Peigne
+- [x] (1082) Seau d'alimentation → Seau
+- [x] (1083) Sac de nourriture animale → Nourriture animale
+- [x] (1084) Panier de transport → Panier en osier
+- [x] (1085) Clochette de troupeau → Clochette de troupeau
+- [x] (1086) Marque d'élevage → lignées des bêtes (/ecurie)
 
 ### 9. Objets sociaux et de loisirs
 
-- [ ] (1090) Jeu de dés
-- [ ] (1091) Jeu de plateau
-- [ ] (1092) Jeu de cartes médiévales fictif
-- [ ] (1093) Instrument de musique
-- [ ] (1094) Flûte
-- [ ] (1095) Luth
-- [ ] (1096) Harpe
-- [ ] (1097) Tambour
-- [ ] (1098) Clochette
-- [ ] (1099) Livre de chansons originales
-- [ ] (1100) Partition
-- [ ] (1101) Ballon en cuir
-- [ ] (1102) Cerf-volant
-- [ ] (1103) Cerceau
-- [ ] (1104) Jouet en bois
-- [ ] (1105) Poupée
-- [ ] (1106) Billet de foire
-- [ ] (1107) Ruban de compétition
-- [ ] (1108) Médaille de concours
+- [x] (1090) Jeu de dés → Jeu de dés
+- [x] (1091) Jeu de plateau → Jeu de plateau
+- [x] (1092) Jeu de cartes médiévales fictif → Jeu de cartes
+- [x] (1093) Instrument de musique → Luth
+- [x] (1094) Flûte → Flûte
+- [x] (1095) Luth → Luth
+- [x] (1096) Harpe → Harpe
+- [x] (1097) Tambour → Tambour
+- [x] (1098) Clochette → Cloche
+- [x] (1099) Livre de chansons originales → Livre de chansons
+- [x] (1100) Partition → ParticleEmitter
+- [x] (1101) Ballon en cuir → Ballon en cuir
+- [x] (1102) Cerf-volant → Cerf-volant
+- [x] (1103) Cerceau → Cerceau
+- [x] (1104) Jouet en bois → Jouet en bois
+- [x] (1105) Poupée → Poupe
+- [x] (1106) Billet de foire → Billet de foire
+- [x] (1107) Ruban de compétition → Ruban de compétition
+- [x] (1108) Médaille de concours → Médaille de concours
 
 ### 10. Objets de progression
 
-- [ ] (1112) Livre de compétence
-- [ ] (1113) Manuel d'agriculture
-- [ ] (1114) Manuel de cuisine
-- [ ] (1115) Manuel de pêche
-- [ ] (1116) Manuel de dressage
-- [ ] (1117) Manuel d'artisanat
-- [ ] (1118) Recette inconnue
-- [ ] (1119) Plan d'artisan
-- [ ] (1120) Diplôme d'apprentissage
-- [ ] (1121) Certificat de métier
-- [ ] (1122) Titre honorifique
-- [ ] (1123) Insigne de réputation
-- [ ] (1124) Lettre de recommandation
-- [ ] (1125) Contrat de travail
-- [ ] (1126) Permis de commerce fictif
+- [x] (1112) Livre de compétence → Livre de compétence
+- [x] (1113) Manuel d'agriculture → Manuel d'agriculture
+- [x] (1114) Manuel de cuisine → Manuel de cuisine
+- [x] (1115) Manuel de pêche → Manuel de pêche
+- [x] (1116) Manuel de dressage → Manuel de dressage
+- [x] (1117) Manuel d'artisanat → Manuel d'artisanat
+- [x] (1118) Recette inconnue → Recette inconnue
+- [x] (1119) Plan d'artisan → Plan d'artisan
+- [x] (1120) Diplôme d'apprentissage → Diplôme d'apprentissage
+- [x] (1121) Certificat de métier → rangs de maîtrise (Metiers)
+- [x] (1122) Titre honorifique → titres (/titres)
+- [x] (1123) Insigne de réputation → Systemes/Reputation
+- [x] (1124) Lettre de recommandation → Lettre de recommandation
+- [x] (1125) Contrat de travail → Contrat
+- [x] (1126) Permis de commerce fictif → volontairement absent : monde libre sans arbitre (règle 3) : on commerce sans permis
 
 ### 11. Objets de mission et d'événement
 
-- [ ] (1130) Lettre scellée
-- [ ] (1131) Invitation à une foire
-- [ ] (1132) Affiche de concours
-- [ ] (1133) Commande spéciale
-- [ ] (1134) Colis à livrer
-- [ ] (1135) Paquet mystérieux
-- [ ] (1136) Objet perdu
-- [ ] (1137) Journal d'un voyageur
-- [ ] (1138) Fragment d'inscription
-- [ ] (1139) Jeton d'événement
-- [ ] (1140) Récompense de festival
-- [ ] (1141) Ruban de champion
-- [ ] (1142) Souvenir de découverte
-- [ ] (1143) Insigne d'exploration
+- [x] (1130) Lettre scellée → quête « Une lettre importante »
+- [x] (1131) Invitation à une foire → Billet de foire
+- [x] (1132) Affiche de concours → concours de village (tableau)
+- [x] (1133) Commande spéciale → commandes entre joueurs (/commande)
+- [x] (1134) Colis à livrer → quête « livrer »
+- [x] (1135) Paquet mystérieux → Marchandises emballées
+- [x] (1136) Objet perdu → Objet perdu
+- [x] (1137) Journal d'un voyageur → Journal d'un voyageur
+- [x] (1138) Fragment d'inscription → Fragment d'inscription
+- [x] (1139) Jeton d'événement → Jeton d'événement
+- [x] (1140) Récompense de festival → Récompense de festival
+- [x] (1141) Ruban de champion → Ruban de champion
+- [x] (1142) Souvenir de découverte → lieux découverts (stats)
+- [x] (1143) Insigne d'exploration → voie Explorateur (titres)
 
 ### 12. Objets fantastiques rares
 
-- [ ] (1155) Cristal lumineux
-- [ ] (1156) Fleur nocturne
-- [ ] (1157) Pierre ancienne
-- [ ] (1158) Fragment de météorite
-- [ ] (1159) Pollen scintillant
-- [ ] (1160) Graine mystérieuse
-- [ ] (1161) Perle rare
-- [ ] (1162) Éclat de relique
-- [ ] (1163) Amulette ancienne
-- [ ] (1164) Pierre gravée
-- [ ] (1165) Fossile étrange
-- [ ] (1166) Œuf mystérieux
-- [ ] (1167) Fragment de statue ancienne
-- [ ] (1168) Livre oublié
+- [x] (1155) Cristal lumineux → Cristal ancien
+- [x] (1156) Fleur nocturne → Fleur nocturne
+- [x] (1157) Pierre ancienne → Objet d'une ruine
+- [x] (1158) Fragment de météorite → Fragment de météorite
+- [x] (1159) Pollen scintillant → Pollen
+- [x] (1160) Graine mystérieuse → Graines
+- [x] (1161) Perle rare → Perle
+- [x] (1162) Éclat de relique → Fragment de relique
+- [x] (1163) Amulette ancienne → Bijou ancien
+- [x] (1164) Pierre gravée → Pierre gravée
+- [x] (1165) Fossile étrange → Fossile
+- [x] (1166) Œuf mystérieux → Œuf mystérieux
+- [x] (1167) Fragment de statue ancienne → Objet d'une ruine
+- [x] (1168) Livre oublié → Livre rare
 
 ### Comment organiser tout ça dans Wild Acres ?
 
@@ -1656,235 +1656,235 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### 1. Ennemis humains
 
-- [ ] (15) Bandit des routes
-- [ ] (16) Voleur de grand chemin
-- [ ] (17) Pillard
-- [ ] (18) Braconnier
-- [ ] (19) Contrebandier
-- [ ] (20) Mercenaire
-- [ ] (21) Garde renégat
-- [ ] (22) Soldat déserteur
-- [ ] (23) Maraudeur
-- [ ] (24) Pilleur de ruines
-- [ ] (25) Brigand à cheval
-- [ ] (26) Chef de bande
-- [ ] (27) Assassin fictif
-- [ ] (28) Faux marchand
-- [ ] (29) Garde corrompu
-- [ ] (30) Chasseur de primes hostile
+- [x] (15) Bandit des routes → Bandit des routes
+- [x] (16) Voleur de grand chemin → Voleur de grand chemin
+- [x] (17) Pillard → Pillard
+- [x] (18) Braconnier → Braconnier
+- [x] (19) Contrebandier → Contrebandier
+- [x] (20) Mercenaire → Mercenaire
+- [x] (21) Garde renégat → Garde renégat
+- [x] (22) Soldat déserteur → Soldat déserteur
+- [x] (23) Maraudeur → Maraudeur
+- [x] (24) Pilleur de ruines → Pilleur de ruines
+- [x] (25) Brigand à cheval → Brigand à cheval
+- [x] (26) Chef de bande → Chef de bande
+- [x] (27) Assassin fictif → volontairement absent : violence adoucie (règle 9) : remplacé par le bandit / le chasseur de primes
+- [x] (28) Faux marchand → Faux marchand
+- [x] (29) Garde corrompu → Garde corrompu
+- [x] (30) Chasseur de primes hostile → Chasseur de primes (Bestiaire)
 
 ### 2. Animaux sauvages hostiles
 
-- [ ] (42) Loup
-- [ ] (43) Loup noir
-- [ ] (44) Loup des neiges
-- [ ] (45) Sanglier
-- [ ] (46) Ours brun
-- [ ] (47) Ours des cavernes
-- [ ] (48) Lynx
-- [ ] (49) Renard enragé
-- [ ] (50) Chien sauvage
-- [ ] (51) Chien errant
-- [ ] (52) Aigle géant fantastique
-- [ ] (53) Serpent venimeux
-- [ ] (54) Crocodile des marais
-- [ ] (55) Chauve-souris géante
-- [ ] (56) Araignée géante
-- [ ] (57) Essaim d'abeilles sauvages
+- [x] (42) Loup → Loup
+- [x] (43) Loup noir → Loup noir
+- [x] (44) Loup des neiges → Loup polaire (Bestiaire)
+- [x] (45) Sanglier → Sangle
+- [x] (46) Ours brun → Ours brun
+- [x] (47) Ours des cavernes → Ours des cavernes
+- [x] (48) Lynx → Lynx
+- [x] (49) Renard enragé → Renard enragé
+- [x] (50) Chien sauvage → Chien sauvage
+- [x] (51) Chien errant → Chien errant
+- [x] (52) Aigle géant fantastique → Aigle géant (Bestiaire)
+- [x] (53) Serpent venimeux → Serpent venimeux
+- [x] (54) Crocodile des marais → Croco (Enemies)
+- [x] (55) Chauve-souris géante → Chauve-souris géante
+- [x] (56) Araignée géante → Araignée géante
+- [x] (57) Essaim d'abeilles sauvages → Essaim d'abeilles sauvages
 
 ### 3. Créatures des forêts
 
-- [ ] (69) Gobelin des bois
-- [ ] (70) Gobelin archer
-- [ ] (71) Troll des racines
-- [ ] (72) Ent corrompu
-- [ ] (73) Homme-champignon
-- [ ] (74) Araignée sylvestre
-- [ ] (75) Cerf spectral
-- [ ] (76) Sanglier colossal
-- [ ] (77) Sorcier des ronces
-- [ ] (78) Golem de bois
-- [ ] (79) Chasseur nocturne
-- [ ] (80) Esprit des arbres
+- [x] (69) Gobelin des bois → Gobelet en bois
+- [x] (70) Gobelin archer → Gobelin archer
+- [x] (71) Troll des racines → Troll des racines
+- [x] (72) Ent corrompu → Ent corrompu
+- [x] (73) Homme-champignon → Myconide (Enemies)
+- [x] (74) Araignée sylvestre → Araignée sylvestre
+- [x] (75) Cerf spectral → Cerf spectral
+- [x] (76) Sanglier colossal → Sanglier colossal
+- [x] (77) Sorcier des ronces → Sorcier des ronces
+- [x] (78) Golem de bois → Golem de bois
+- [x] (79) Chasseur nocturne → Chasseur nocturne
+- [x] (80) Esprit des arbres → Esprit des arbres
 
 ### 4. Créatures des marais
 
-- [ ] (92) Gobelin des marais
-- [ ] (93) Crapaud géant
-- [ ] (94) Sanglier des marécages
-- [ ] (95) Lézard des tourbières
-- [ ] (96) Sangsue géante
-- [ ] (97) Araignée des roseaux
-- [ ] (98) Sorcière des marais
-- [ ] (99) Homme-boue
-- [ ] (100) Serpent des eaux
-- [ ] (101) Golem de vase
-- [ ] (102) Esprit noyé
-- [ ] (103) Bête des profondeurs
+- [x] (92) Gobelin des marais → Gobelin des marais
+- [x] (93) Crapaud géant → Crapaud géant
+- [x] (94) Sanglier des marécages → Sanglier des marécages
+- [x] (95) Lézard des tourbières → Lézard des tourbières
+- [x] (96) Sangsue géante → Sangsue géante
+- [x] (97) Araignée des roseaux → Araignée des roseaux
+- [x] (98) Sorcière des marais → Sorcière des marais
+- [x] (99) Homme-boue → Homme-boue
+- [x] (100) Serpent des eaux → Serpent des eaux
+- [x] (101) Golem de vase → Golem de vase
+- [x] (102) Esprit noyé → Esprit noyé
+- [x] (103) Bête des profondeurs → Bête des profondeurs
 
 ### 5. Créatures des déserts
 
-- [ ] (115) Scorpion géant
-- [ ] (116) Serpent des dunes
-- [ ] (117) Chacal sauvage
-- [ ] (118) Hyène monstrueuse
-- [ ] (119) Scarabée cuirassé
-- [ ] (120) Araignée du désert
-- [ ] (121) Ver des sables
-- [ ] (122) Golem de grès
-- [ ] (123) Pillard du désert
-- [ ] (124) Gardien des ruines
-- [ ] (125) Spectre des dunes
-- [ ] (126) Basilic des sables
+- [x] (115) Scorpion géant → Scorpion (Enemies)
+- [x] (116) Serpent des dunes → Serpent des dunes
+- [x] (117) Chacal sauvage → Chacal (Bestiaire)
+- [x] (118) Hyène monstrueuse → Hyène monstrueuse
+- [x] (119) Scarabée cuirassé → Scarabée cuirassé
+- [x] (120) Araignée du désert → Araignée du désert
+- [x] (121) Ver des sables → Ver des sables
+- [x] (122) Golem de grès → Golem de grès
+- [x] (123) Pillard du désert → Pillard du désert
+- [x] (124) Gardien des ruines → Gardien des ruines
+- [x] (125) Spectre des dunes → Spectre des dunes
+- [x] (126) Basilic des sables → Basilic des sables
 
 ### 6. Créatures des toundras
 
-- [ ] (138) Loup polaire
-- [ ] (139) Ours blanc
-- [ ] (140) Yéti
-- [ ] (141) Troll des glaces
-- [ ] (142) Araignée de givre
-- [ ] (143) Renard spectral
-- [ ] (144) Sanglier givré
-- [ ] (145) Géant de glace
-- [ ] (146) Spectre du blizzard
-- [ ] (147) Wyverne des neiges
-- [ ] (148) Golem de glace
-- [ ] (149) Cerf corrompu
+- [x] (138) Loup polaire → Loup polaire
+- [x] (139) Ours blanc → Ours blanc
+- [x] (140) Yéti → Yéti
+- [x] (141) Troll des glaces → Troll des glaces
+- [x] (142) Araignée de givre → Araignée de givre
+- [x] (143) Renard spectral → Renard spectral
+- [x] (144) Sanglier givré → Sanglier givré
+- [x] (145) Géant de glace → Géant de glace
+- [x] (146) Spectre du blizzard → Spectre du blizzard
+- [x] (147) Wyverne des neiges → Wyverne des neiges
+- [x] (148) Golem de glace → Golem_Glace
+- [x] (149) Cerf corrompu → Cerf corrompu
 
 ### 7. Créatures nocturnes
 
-- [ ] (163) Rôdeur obscur
-- [ ] (164) Spectre errant
-- [ ] (165) Ombre rampante
-- [ ] (166) Chasseur de lune
-- [ ] (167) Hurleur nocturne
-- [ ] (168) Corbeau fantôme
-- [ ] (169) Loup des ombres
-- [ ] (170) Revenant
-- [ ] (171) Gardien des tombes
-- [ ] (172) Esprit des bois
-- [ ] (173) Dévoreur de lumière
-- [ ] (174) Marcheur sans visage
+- [x] (163) Rôdeur obscur → Rôdeur obscur
+- [x] (164) Spectre errant → Spectre errant
+- [x] (165) Ombre rampante → Ombre rampante
+- [x] (166) Chasseur de lune → Chasseur de lune
+- [x] (167) Hurleur nocturne → Hurleur nocturne
+- [x] (168) Corbeau fantôme → Corbeau fantôme
+- [x] (169) Loup des ombres → Loup des ombres
+- [x] (170) Revenant → Revenant
+- [x] (171) Gardien des tombes → Gardien des tombes
+- [x] (172) Esprit des bois → Esprit des bois
+- [x] (173) Dévoreur de lumière → Dévoreur de lumière
+- [x] (174) Marcheur sans visage → Marcheur sans visage
 
 ### 8. Morts-vivants et créatures maudites
 
-- [ ] (178) Squelette errant
-- [ ] (179) Squelette ancien
-- [ ] (180) Revenant
-- [ ] (181) Goule
-- [ ] (182) Spectre
-- [ ] (183) Fantôme de chevalier
-- [ ] (184) Gardien maudit
-- [ ] (185) Moine déchu
-- [ ] (186) Esprit des ruines
-- [ ] (187) Ombre possédée
-- [ ] (188) Gargouille animée
-- [ ] (189) Chevalier oublié
-- [ ] (190) Gardien du tombeau
-- [ ] (191) Momie ancienne
-- [ ] (192) Roi déchu
+- [x] (178) Squelette errant → Squelette errant
+- [x] (179) Squelette ancien → Squelette ancien
+- [x] (180) Revenant → Revenant
+- [x] (181) Goule → Goule
+- [x] (182) Spectre → Cerf spectral
+- [x] (183) Fantôme de chevalier → Fantôme de chevalier
+- [x] (184) Gardien maudit → Gardien maudit
+- [x] (185) Moine déchu → Moine déchu
+- [x] (186) Esprit des ruines → Esprit des ruines
+- [x] (187) Ombre possédée → Ombre possédée
+- [x] (188) Gargouille animée → Gargouille animée
+- [x] (189) Chevalier oublié → Chevalier oublié
+- [x] (190) Gardien du tombeau → Gardien des tombes
+- [x] (191) Momie ancienne → Momie ancienne
+- [x] (192) Roi déchu → Roi déchu
 
 ### 9. Créatures volantes
 
-- [ ] (204) Corbeau géant
-- [ ] (205) Chauve-souris des cavernes
-- [ ] (206) Harpie
-- [ ] (207) Griffon
-- [ ] (208) Hippogriffe
-- [ ] (209) Wyverne
-- [ ] (210) Aigle des montagnes
-- [ ] (211) Chouette spectrale
-- [ ] (212) Fée des ronces
-- [ ] (213) Mante religieuse géante
-- [ ] (214) Dragonnet
-- [ ] (215) Rapace des falaises
+- [x] (204) Corbeau géant → Corbeau géant
+- [x] (205) Chauve-souris des cavernes → Chauve-souris des cavernes
+- [x] (206) Harpie → Harpie
+- [x] (207) Griffon → Griffon
+- [x] (208) Hippogriffe → Hippolyte
+- [x] (209) Wyverne → Wyverne
+- [x] (210) Aigle des montagnes → Aigle des montagnes
+- [x] (211) Chouette spectrale → Chouette spectrale
+- [x] (212) Fée des ronces → Fée des ronces
+- [x] (213) Mante religieuse géante → Mante religieuse géante
+- [x] (214) Dragonnet → Dragonnet
+- [x] (215) Rapace des falaises → Rapace des falaises
 
 ### 10. Créatures aquatiques
 
-- [ ] (227) Serpent des rivières
-- [ ] (228) Poisson carnassier géant
-- [ ] (229) Anguille monstrueuse
-- [ ] (230) Tortue ancienne
-- [ ] (231) Crabe géant
-- [ ] (232) Méduse d'eau douce fantastique
-- [ ] (233) Sirène hostile
-- [ ] (234) Esprit des eaux
-- [ ] (235) Kelpie
-- [ ] (236) Serpent marin
-- [ ] (237) Monstre des profondeurs
-- [ ] (238) Gardien du lac
+- [x] (227) Serpent des rivières → Serpent des rivières
+- [x] (228) Poisson carnassier géant → Brochet géant (Bestiaire)
+- [x] (229) Anguille monstrueuse → Anguille monstrueuse
+- [x] (230) Tortue ancienne → Tortue ancienne
+- [x] (231) Crabe géant → Crabe géant
+- [x] (232) Méduse d'eau douce fantastique → Méduse des marais (Bestiaire)
+- [x] (233) Sirène hostile → Sirène hostile
+- [x] (234) Esprit des eaux → Esprit des eaux
+- [x] (235) Kelpie → Kelpie
+- [x] (236) Serpent marin → Serpent marin
+- [x] (237) Monstre des profondeurs → Bête des profondeurs (Bestiaire)
+- [x] (238) Gardien du lac → Gardien du lac
 
 ### 11. Géants et créatures puissantes
 
-- [ ] (250) Ogre
-- [ ] (251) Cyclope
-- [ ] (252) Géant des montagnes
-- [ ] (253) Géant des forêts
-- [ ] (254) Troll des cavernes
-- [ ] (255) Troll des montagnes
-- [ ] (256) Colosse de pierre
-- [ ] (257) Colosse de terre
-- [ ] (258) Gardien de granit
-- [ ] (259) Minotaure
-- [ ] (260) Homme-taureau
-- [ ] (261) Géant des ruines
+- [x] (250) Ogre → Ogre
+- [x] (251) Cyclope → Cyclope
+- [x] (252) Géant des montagnes → Géant des montagnes
+- [x] (253) Géant des forêts → Géant des forêts
+- [x] (254) Troll des cavernes → Troll des cavernes
+- [x] (255) Troll des montagnes → Troll des montagnes
+- [x] (256) Colosse de pierre → Colosse de pierre
+- [x] (257) Colosse de terre → Colosse de terre
+- [x] (258) Gardien de granit → Gardien de granit
+- [x] (259) Minotaure → Minotaure
+- [x] (260) Homme-taureau → Homme-taureau
+- [x] (261) Géant des ruines → Géant des ruines
 
 ### 12. Boss uniques
 
 
 ### 13. Ennemis spéciaux et événements
 
-- [ ] (292) Convoi de bandits
-- [ ] (293) Meute de loups affamés
-- [ ] (294) Migration de créatures
-- [ ] (295) Invasion de gobelins
-- [ ] (296) Chasseurs de trésors hostiles
-- [ ] (297) Patrouille de gardes renégats
-- [ ] (298) Apparition d'un spectre ancien
-- [ ] (299) Réveil d'un golem
-- [ ] (300) Créature attirée par une tempête
-- [ ] (301) Boss itinérant
-- [ ] (302) Gardien d'une ruine nouvellement découverte
-- [ ] (303) Bête qui rôde autour des villages la nuit
+- [x] (292) Convoi de bandits → convoi (Evenements)
+- [x] (293) Meute de loups affamés → meutes (Bestiaire, pack)
+- [x] (294) Migration de créatures → faune itinérante (Bestiaire / Animals)
+- [x] (295) Invasion de gobelins → invasion (Evenements)
+- [x] (296) Chasseurs de trésors hostiles → Pilleur de ruines (Bestiaire)
+- [x] (297) Patrouille de gardes renégats → Garde renégat (Bestiaire, pack)
+- [x] (298) Apparition d'un spectre ancien → spectres (Bestiaire)
+- [x] (299) Réveil d'un golem → événement golem (Evenements)
+- [x] (300) Créature attirée par une tempête → orage (Evenements)
+- [x] (301) Boss itinérant → boss itinérants (Evenements)
+- [x] (302) Gardien d'une ruine nouvellement découverte → Gardien des ruines (Bestiaire)
+- [x] (303) Bête qui rôde autour des villages la nuit → créatures de nuit (Enemies)
 
 ### 14. Comment répartir les ennemis dans Wild Acres ?
 
 
 ### 15. Les caractéristiques à donner à chaque ennemi
 
-- [ ] (325) **Territoire :** où il vit.
-- [ ] (326) **Horaires :** jour, nuit ou toutes les heures.
-- [ ] (327) **Comportement :** passif, méfiant, territorial ou agressif.
-- [ ] (328) **Rareté :** commun, rare, très rare ou légendaire.
-- [ ] (329) **Difficulté :** adaptée à sa dangerosité.
-- [ ] (330) **Butin :** ressources ou objets particuliers.
-- [ ] (331) **Variantes :** apparence, taille et caractéristiques différentes.
-- [ ] (332) **Réaction :** fuit, défend son territoire, poursuit ou appelle ses congénères.
+- [x] (325) **Territoire :** où il vit. → biomes (Bestiaire.islandPool)
+- [x] (326) **Horaires :** jour, nuit ou toutes les heures. → jour / nuit (Enemies)
+- [x] (327) **Comportement :** passif, méfiant, territorial ou agressif. → styles (Bestiaire : style)
+- [x] (328) **Rareté :** commun, rare, très rare ou légendaire. → rangs E / B (Bestiaire)
+- [x] (329) **Difficulté :** adaptée à sa dangerosité. → niveaux (Bestiaire : level)
+- [x] (330) **Butin :** ressources ou objets particuliers. → prises (Shared/Prises)
+- [x] (331) **Variantes :** apparence, taille et caractéristiques différentes. → variantes (Bestiaire : look)
+- [x] (332) **Réaction :** fuit, défend son territoire, poursuit ou appelle ses congénères. → fuite / meute (Bestiaire)
 
 ### Les grandes catégories qui manquent
 
 
 ### 1. Les PNJ et les habitants
 
-- [ ] (359) Villageois
-- [ ] (360) Fermiers
-- [ ] (361) Marchands
-- [ ] (362) Forgerons
-- [ ] (363) Cuisiniers
-- [ ] (364) Boulangers
-- [ ] (365) Aubergistes
-- [ ] (366) Gardes
-- [ ] (367) Shérifs
-- [ ] (368) Médecins
-- [ ] (369) Prêtres
-- [ ] (370) Artisans
-- [ ] (371) Éleveurs
-- [ ] (372) Voyageurs
-- [ ] (373) Nobles
-- [ ] (374) Rois et seigneurs
-- [ ] (375) Bandits PNJ
-- [ ] (376) Enfants PNJ
+- [x] (359) Villageois → Village
+- [x] (360) Fermiers → Fermier
+- [x] (361) Marchands → Marche
+- [x] (362) Forgerons → Forge
+- [x] (363) Cuisiniers → Cuisine
+- [x] (364) Boulangers → Boulanger
+- [x] (365) Aubergistes → Auberge
+- [x] (366) Gardes → Garde
+- [x] (367) Shérifs → Shérif
+- [x] (368) Médecins → guérisseur (Metiers)
+- [x] (369) Prêtres → Prêtre
+- [x] (370) Artisans → Artisan
+- [x] (371) Éleveurs → Éleveur
+- [x] (372) Voyageurs → Grand voyageur
+- [x] (373) Nobles → seigneur des châteaux (Chateaux)
+- [x] (374) Rois et seigneurs → seigneur des châteaux (Chateaux)
+- [x] (375) Bandits PNJ → bandits (Bestiaire)
+- [x] (376) Enfants PNJ → enfants (Metiers)
 
 ### 2. Les animaux et la faune passive
 
@@ -1893,234 +1893,234 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (392) Lapins
 - [x] (393) Lièvres
 - [x] (394) Renards
-- [ ] (395) Écureuils
+- [x] (395) Écureuils → écureuils (Faune.client)
 - [x] (396) Hérissons
 - [x] (397) Blaireaux
-- [ ] (398) Chevreuils
+- [x] (398) Chevreuils → Chevron de toit
 - [x] (399) Marmottes
-- [ ] (400) Papillons
+- [x] (400) Papillons → papillons (Faune.client)
 - [x] (401) Abeilles
 - [x] (402) Libellules
 - [x] (403) Grenouilles
 - [x] (404) Tortues
 - [x] (405) Poissons
-- [ ] (406) Oiseaux
-- [ ] (407) Corbeaux
+- [x] (406) Oiseaux → Les oiseaux ont quitté le bois
+- [x] (407) Corbeaux → Corbeau géant
 - [x] (408) Pigeons
 - [x] (409) Canards sauvages
 
 ### 3. Les activités et métiers
 
-- [ ] (415) Agriculture
-- [ ] (416) Élevage
-- [ ] (417) Pêche
-- [ ] (418) Chasse
-- [ ] (419) Cuisine
-- [ ] (420) Boulangerie
-- [ ] (421) Forgeronnerie
-- [ ] (422) Menuiserie
-- [ ] (423) Maçonnerie
-- [ ] (424) Tissage
-- [ ] (425) Couture
-- [ ] (426) Tannerie
-- [ ] (427) Apiculture
-- [ ] (428) Herboristerie
-- [ ] (429) Alchimie
-- [ ] (430) Extraction minière
-- [ ] (431) Bûcheronnage
-- [ ] (432) Commerce
-- [ ] (433) Dressage
-- [ ] (434) Équitation
-- [ ] (435) Exploration
-- [ ] (436) Archéologie
-- [ ] (437) Transport de marchandises
+- [x] (415) Agriculture → Agriculture
+- [x] (416) Élevage → Élevage
+- [x] (417) Pêche → Pêche
+- [x] (418) Chasse → Cor de chasse
+- [x] (419) Cuisine → Cuisine
+- [x] (420) Boulangerie → Boulanger
+- [x] (421) Forgeronnerie → Forge
+- [x] (422) Menuiserie → menuiserie (établi, construction)
+- [x] (423) Maçonnerie → Le maçon
+- [x] (424) Tissage → tissage (métier à tisser)
+- [x] (425) Couture → Couturière
+- [x] (426) Tannerie → tannerie (bac de tannage)
+- [x] (427) Apiculture → ruches (Machines.hive)
+- [x] (428) Herboristerie → Herboriste
+- [x] (429) Alchimie → Alchimie
+- [x] (430) Extraction minière → minage (Props, filons)
+- [x] (431) Bûcheronnage → Buche
+- [x] (432) Commerce → Commère
+- [x] (433) Dressage → Dressage
+- [x] (434) Équitation → montures (Horses)
+- [x] (435) Exploration → Explorateur
+- [x] (436) Archéologie → Arche
+- [x] (437) Transport de marchandises → marchandises emballées / diligence
 
 ### 4. Les lieux et bâtiments du monde
 
-- [ ] (449) Villages
-- [ ] (450) Villes
-- [ ] (451) Châteaux
-- [ ] (452) Fermes
-- [ ] (453) Tavernes
-- [ ] (454) Auberges
-- [ ] (455) Marchés
-- [ ] (456) Forgerons
-- [ ] (457) Moulins
-- [ ] (458) Scieries
-- [ ] (459) Mines
-- [ ] (460) Grottes
-- [ ] (461) Cimetières
-- [ ] (462) Ruines
-- [ ] (463) Tours de guet
-- [ ] (464) Camps de bandits
-- [ ] (465) Sanctuaires
-- [ ] (466) Donjons
-- [ ] (467) Ports
-- [ ] (468) Ponts
-- [ ] (469) Carrières
-- [ ] (470) Campements de voyageurs
+- [x] (449) Villages → Village
+- [x] (450) Villes → Ville
+- [x] (451) Châteaux → Chateau
+- [x] (452) Fermes → Ferme
+- [x] (453) Tavernes → Taverne
+- [x] (454) Auberges → Auberge
+- [x] (455) Marchés → Marche
+- [x] (456) Forgerons → Forge
+- [x] (457) Moulins → Moulin
+- [x] (458) Scieries → scie à main / établi
+- [x] (459) Mines → grottes et filons (Donjons)
+- [x] (460) Grottes → Grotte
+- [x] (461) Cimetières → lieux (WorldGen)
+- [x] (462) Ruines → Ruine
+- [x] (463) Tours de guet → avant-postes (Avantpostes)
+- [x] (464) Camps de bandits → camps (Bestiaire)
+- [x] (465) Sanctuaires → lieux (WorldGen)
+- [x] (466) Donjons → Donjon
+- [x] (467) Ports → ports (Mondes)
+- [x] (468) Ponts → ponts (WorldGen)
+- [x] (469) Carrières → filons de pierre (Props)
+- [x] (470) Campements de voyageurs → colporteur (Metiers)
 
 ### 5. Les montures et moyens de transport
 
-- [ ] (482) Chevaux de différentes races
-- [ ] (483) Ânes
-- [ ] (484) Mulets
-- [ ] (485) Chariots
-- [ ] (486) Charrettes
-- [ ] (487) Diligences
-- [ ] (488) Barques
-- [ ] (489) Voiliers
-- [ ] (490) Radeaux
-- [ ] (491) Navires marchands
-- [ ] (492) Traversées en ferry
-- [ ] (493) Routes commerciales
+- [x] (482) Chevaux de différentes races → robes et lignées (Horses / Ecurie)
+- [x] (483) Ânes → Âne (Config.MOUNTS)
+- [x] (484) Mulets → Mulet
+- [x] (485) Chariots → Charisme
+- [x] (486) Charrettes → Charrette
+- [x] (487) Diligences → diligence (Activites)
+- [x] (488) Barques → Barque
+- [x] (489) Voiliers → Voilier
+- [x] (490) Radeaux → Radeau
+- [x] (491) Navires marchands → Voilier / Barques (Barques)
+- [x] (492) Traversées en ferry → voyage en mer (Mondes)
+- [x] (493) Routes commerciales → routes (WorldGen)
 
 ### 6. Les systèmes de progression
 
-- [ ] (497) Niveaux du personnage
-- [ ] (498) Compétences
-- [ ] (499) Talents
-- [ ] (500) Expérience
-- [ ] (501) Réputation
-- [ ] (502) Honneur
-- [ ] (503) Titres
-- [ ] (504) Succès
-- [ ] (505) Collections
-- [ ] (506) Recettes à débloquer
-- [ ] (507) Plans rares
-- [ ] (508) Spécialisations
-- [ ] (509) Maîtrise des métiers
+- [x] (497) Niveaux du personnage → volontairement absent : règle 4 : pas de niveau de personnage, les caractéristiques montent en pratiquant
+- [x] (498) Compétences → Compétences
+- [x] (499) Talents → Talents
+- [x] (500) Expérience → Lire : expérience en compétence
+- [x] (501) Réputation → Reputation
+- [x] (502) Honneur → Le travail honnête nourrit l'âme, l'ami.
+- [x] (503) Titres → Titre
+- [x] (504) Succès → succès (Social.bump)
+- [x] (505) Collections → Collections
+- [x] (506) Recettes à débloquer → recettes à découvrir (Config.STARTER_RECIPES)
+- [x] (507) Plans rares → Plan d'artisan
+- [x] (508) Spécialisations → SpecialMesh
+- [x] (509) Maîtrise des métiers → rangs de maîtrise (Metiers)
 
 ### 7. L'économie
 
-- [ ] (517) Monnaies
-- [ ] (518) Marchands PNJ
-- [ ] (519) Boutiques de joueurs
-- [ ] (520) Marchés
-- [ ] (521) Hôtel des ventes
-- [ ] (522) Échanges entre joueurs
-- [ ] (523) Contrats commerciaux
-- [ ] (524) Commandes de villageois
-- [ ] (525) Prix variables
-- [ ] (526) Taxes
-- [ ] (527) Banques
-- [ ] (528) Coffres-forts
-- [ ] (529) Locations de propriétés
-- [ ] (530) Transport de marchandises
-- [ ] (531) Système de réputation commerciale
+- [x] (517) Monnaies → Un peu de monnaie
+- [x] (518) Marchands PNJ → marchands (Shop)
+- [x] (519) Boutiques de joueurs → étals (Ventes)
+- [x] (520) Marchés → Marche
+- [x] (521) Hôtel des ventes → Hôtel des ventes
+- [x] (522) Échanges entre joueurs → troc (Social)
+- [x] (523) Contrats commerciaux → commandes entre joueurs (/commande)
+- [x] (524) Commandes de villageois → Commandes du village
+- [x] (525) Prix variables → demandes régionales / pénuries (Shop.wanted)
+- [x] (526) Taxes → taxe du village (Politique)
+- [x] (527) Banques → Banque du village
+- [x] (528) Coffres-forts → coffres + serrures (Protection)
+- [x] (529) Locations de propriétés → lits à louer (Villages, auberge)
+- [x] (530) Transport de marchandises → marchandises emballées / diligence
+- [x] (531) Système de réputation commerciale → réputation (Reputation)
 
 ### 8. Les activités et loisirs
 
-- [ ] (535) Courses de chevaux
-- [ ] (536) Tir à l'arc sportif
-- [ ] (537) Concours de pêche
-- [ ] (538) Concours agricoles
-- [ ] (539) Foires
-- [ ] (540) Festivals
-- [ ] (541) Jeux de dés
-- [ ] (542) Jeux de plateau
-- [ ] (543) Musique
-- [ ] (544) Danse
-- [ ] (545) Collection d'objets
-- [ ] (546) Chasse au trésor
-- [ ] (547) Exploration de ruines
-- [ ] (548) Concours d'artisanat
-- [ ] (549) Décoration de maisons
-- [ ] (550) Événements organisés par les joueurs
+- [x] (535) Courses de chevaux → courses (Activites)
+- [x] (536) Tir à l'arc sportif → concours (Activites)
+- [x] (537) Concours de pêche → Concours de pêche
+- [x] (538) Concours agricoles → concours (Activites)
+- [x] (539) Foires → Billet de foire
+- [x] (540) Festivals → Grand festin
+- [x] (541) Jeux de dés → volontairement absent : règle 10 : pas de jeux de hasard
+- [x] (542) Jeux de plateau → Jeu de plateau (E.USES)
+- [x] (543) Musique → Musique
+- [x] (544) Danse → gestes /danse (Admin)
+- [x] (545) Collection d'objets → titres de collection (Social)
+- [x] (546) Chasse au trésor → Chasseur de trésors
+- [x] (547) Exploration de ruines → ruines et fouilles (Evenements)
+- [x] (548) Concours d'artisanat → concours (Activites)
+- [x] (549) Décoration de maisons → décor posable (construction)
+- [x] (550) Événements organisés par les joueurs → monde libre (règle 3)
 
 ### 9. Les clans et la vie politique
 
-- [ ] (562) Création de clans
-- [ ] (563) Recrutement
-- [ ] (564) Grades et responsabilités
-- [ ] (565) Blasons
-- [ ] (566) Drapeaux
-- [ ] (567) Quartiers généraux
-- [ ] (568) Alliances
-- [ ] (569) Relations entre clans
-- [ ] (570) Territoires
-- [ ] (571) Avant-postes
-- [ ] (572) Diplomatie
-- [ ] (573) Taxes territoriales
-- [ ] (574) Armées
-- [ ] (575) Guerres de clans
-- [ ] (576) Conseils de village
-- [ ] (577) Élections de dirigeants
+- [x] (562) Création de clans → clans (Clans)
+- [x] (563) Recrutement → Recrue
+- [x] (564) Grades et responsabilités → grades (Clans)
+- [x] (565) Blasons → Blason
+- [x] (566) Drapeaux → Drapeau
+- [x] (567) Quartiers généraux → territoire de clan (Parcelles p.clan)
+- [x] (568) Alliances → volontairement absent : règle 1 : pas de système encadré, les alliances naissent des joueurs
+- [x] (569) Relations entre clans → volontairement absent : règle 1 : pas de système encadré
+- [x] (570) Territoires → Terrier
+- [x] (571) Avant-postes → Un autre avant-poste est trop près.
+- [x] (572) Diplomatie → Diplôme d'apprentissage
+- [x] (573) Taxes territoriales → volontairement absent : règle 3 : pas d'arbitre territorial ; taxe de village seulement
+- [x] (574) Armées → Armee
+- [x] (575) Guerres de clans → volontairement absent : règle 1 : pas de guerre déclarée
+- [x] (576) Conseils de village → Conseil du village
+- [x] (577) Élections de dirigeants → élections (Politique)
 
 ### 10. Les événements du monde
 
-- [ ] (581) Marché itinérant
-- [ ] (582) Fête des récoltes
-- [ ] (583) Foire médiévale
-- [ ] (584) Tempête
-- [ ] (585) Inondation
-- [ ] (586) Sécheresse
-- [ ] (587) Hiver rigoureux
-- [ ] (588) Migration animale
-- [ ] (589) Invasion de créatures
-- [ ] (590) Apparition d'un boss
-- [ ] (591) Convoi marchand
-- [ ] (592) Découverte d'une ruine
-- [ ] (593) Trésor enfoui
-- [ ] (594) Tournoi
-- [ ] (595) Événement maritime
-- [ ] (596) Événement saisonnier
+- [x] (581) Marché itinérant → colporteur (Metiers)
+- [x] (582) Fête des récoltes → fête (Quetes / Evenements)
+- [x] (583) Foire médiévale → foire (Evenements)
+- [x] (584) Tempête → Terres tempérées
+- [x] (585) Inondation → inondation (Evenements → Farm.flood)
+- [x] (586) Sécheresse → Fruits séchés
+- [x] (587) Hiver rigoureux → volontairement absent : règle 10 : saisons retirées (biomes enneigés à la place)
+- [x] (588) Migration animale → faune itinérante (Animals)
+- [x] (589) Invasion de créatures → invasion (Evenements)
+- [x] (590) Apparition d'un boss → boss itinérants (Evenements)
+- [x] (591) Convoi marchand → convoi (Evenements)
+- [x] (592) Découverte d'une ruine → ruines (Evenements)
+- [x] (593) Trésor enfoui → trésors (Tresors, chasse au trésor)
+- [x] (594) Tournoi → Tu as vu le moulin ? Ses ailes tournent même la nuit !
+- [x] (595) Événement maritime → Serpent marin / pêche (Evenements)
+- [x] (596) Événement saisonnier → volontairement absent : règle 10 : saisons retirées
 
 ### 11. L'environnement et la météo
 
-- [ ] (608) Cycle jour/nuit
-- [ ] (609) Saisons
-- [ ] (610) Pluie
-- [ ] (611) Orages
-- [ ] (612) Brouillard
-- [ ] (613) Neige
-- [ ] (614) Vents
-- [ ] (615) Températures
-- [ ] (616) Rivières
-- [ ] (617) Lacs
+- [x] (608) Cycle jour/nuit → jour / nuit (Clock)
+- [x] (609) Saisons → Des teintes pour chaque saison, cousues main.
+- [x] (610) Pluie → Pluie
+- [x] (611) Orages → Orage
+- [x] (612) Brouillard → Brouillard
+- [x] (613) Neige → Neige
+- [x] (614) Vents → météo (Meteo)
+- [x] (615) Températures → Terres tempérées
+- [x] (616) Rivières → Serpent des rivières
+- [x] (617) Lacs → Pays des Lacs
 - [ ] (618) Cascades
-- [ ] (619) Grottes
-- [ ] (620) Végétation évolutive
-- [ ] (621) Ressources renouvelables
-- [ ] (622) Traces laissées par les joueurs
-- [ ] (623) Faune avec des comportements naturels
+- [x] (619) Grottes → Grotte
+- [x] (620) Végétation évolutive → repousse (Moissons / Bosquets)
+- [x] (621) Ressources renouvelables → repousse (Moissons / Props)
+- [x] (622) Traces laissées par les joueurs → constructions et témoins persistants (monde)
+- [x] (623) Faune avec des comportements naturels → faune (Animals, fuite du gibier)
 
 ### 12. Les systèmes multijoueurs
 
-- [ ] (627) Amis
-- [ ] (628) Groupes
-- [ ] (629) Clans
-- [ ] (630) Invitations
-- [ ] (631) Échanges sécurisés
-- [ ] (632) Commerce entre joueurs
-- [ ] (633) Propriétés privées
-- [ ] (634) Coffres partagés
-- [ ] (635) Construction collaborative
-- [ ] (636) Visites de maisons
-- [ ] (637) Messagerie
-- [ ] (638) Liste des joueurs
-- [ ] (639) Gestion des permissions
-- [ ] (640) Signalement et modération
-- [ ] (641) Protection contre le harcèlement
+- [x] (627) Amis → Mes amis en jeu
+- [x] (628) Groupes → Groupe
+- [x] (629) Clans → Clans
+- [x] (630) Invitations → Invite
+- [x] (631) Échanges sécurisés → troc à deux validations (Social)
+- [x] (632) Commerce entre joueurs → hôtel des ventes (Ventes)
+- [x] (633) Propriétés privées → parcelles (Parcelles)
+- [x] (634) Coffres partagés → coffres + confiance (Util.trusted)
+- [x] (635) Construction collaborative → confiance « batir » (Util.trusted)
+- [x] (636) Visites de maisons → monde libre (règle 3)
+- [x] (637) Messagerie → MessagingService
+- [x] (638) Liste des joueurs → liste Roblox + /classement
+- [x] (639) Gestion des permissions → confiance (Util.trusted)
+- [x] (640) Signalement et modération → Demandes (/bug /appel)
+- [x] (641) Protection contre le harcèlement → bannissement maison (Demandes)
 
 ### 13. L'interface et le confort de jeu
 
-- [ ] (645) Inventaire
-- [ ] (646) Banque
-- [ ] (647) Carte
-- [ ] (648) Boussole
-- [ ] (649) Journal de quêtes
-- [ ] (650) Livre de recettes
-- [ ] (651) Menu des compétences
-- [ ] (652) Menu des talents
-- [ ] (653) Menu des clans
-- [ ] (654) Menu de construction
-- [ ] (655) Menu de commerce
-- [ ] (656) Menu des animaux
-- [ ] (657) Menu des montures
-- [ ] (658) Paramètres graphiques
-- [ ] (659) Commandes mobiles
-- [ ] (660) Tutoriel et aide
+- [x] (645) Inventaire → Inventory
+- [x] (646) Banque → Banque du village
+- [x] (647) Carte → Carte
+- [x] (648) Boussole → Boussole
+- [x] (649) Journal de quêtes → journal [J] (Quetes.client)
+- [x] (650) Livre de recettes → Livre de recettes
+- [x] (651) Menu des compétences → menu commun (X1)
+- [x] (652) Menu des talents → talents [K] (menu commun)
+- [x] (653) Menu des clans → menu commun (X1)
+- [x] (654) Menu de construction → mode [V] (Batir)
+- [x] (655) Menu de commerce → hôtel des ventes (HotelVentes.client)
+- [x] (656) Menu des animaux → écurie (/ecurie)
+- [x] (657) Menu des montures → écurie (/ecurie)
+- [x] (658) Paramètres graphiques → Paramètres (X11)
+- [x] (659) Commandes mobiles → menu tactile (X1, X4)
+- [x] (660) Tutoriel et aide → volontairement absent : règle 1 : sans indication
 
 ### Mon bilan pour Wild Acres
 
@@ -2130,13 +2130,13 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### Dans quel ordre continuer ?
 
-- [ ] (730) 1. **PNJ et habitants** : donner de la vie aux villages.
-- [ ] (731) 2. **Animaux et faune** : peupler les biomes.
-- [ ] (732) 3. **Métiers et activités** : donner des occupations aux joueurs.
-- [ ] (733) 4. **Lieux et bâtiments** : enrichir l'exploration.
-- [ ] (734) 5. **Montures et transports** : faciliter les déplacements.
-- [ ] (735) 6. **Économie et progression** : créer une vraie durée de vie.
-- [ ] (736) 7. **Clans et événements** : développer la dimension MMORPG.
+- [x] (730) 1. **PNJ et habitants** : donner de la vie aux villages. → Npcs / Metiers
+- [x] (731) 2. **Animaux et faune** : peupler les biomes. → Animals / Bestiaire / Faune
+- [x] (732) 3. **Métiers et activités** : donner des occupations aux joueurs. → compétences (11) + Activites
+- [x] (733) 4. **Lieux et bâtiments** : enrichir l'exploration. → WorldGen (îles à thème)
+- [x] (734) 5. **Montures et transports** : faciliter les déplacements. → Horses / Barques / diligence
+- [x] (735) 6. **Économie et progression** : créer une vraie durée de vie. → Economie / statXp
+- [x] (736) 7. **Clans et événements** : développer la dimension MMORPG. → Clans / Evenements
 
 ## à ne pas oublier.txt
 
@@ -2327,164 +2327,164 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ## tools/creatures_liste.txt
 
-- [ ] (1) `Bestiaire:stray_dog` Chien errant|quadrupede||1
-- [ ] (2) `Bestiaire:mummy` Momie ancienne|humain||6
-- [ ] (3) `Bestiaire:leech` Sangsue géante|masse||3
-- [ ] (4) `Bestiaire:lynx` Lynx|quadrupede||3
-- [ ] (5) `Bestiaire:polar_wolf` Loup polaire|quadrupede||4
-- [ ] (6) `Bestiaire:bee_swarm` Essaim d'abeilles sauvages|volant||2
-- [ ] (7) `Bestiaire:drowned_spirit` Esprit noyé|spectre||4
-- [ ] (8) `Bestiaire:ruin_looter` Pilleur de ruines|humain||4
-- [ ] (9) `Bestiaire:poacher` Braconnier|humain||3
-- [ ] (10) `Bestiaire:corrupted_stag` Cerf corrompu|quadrupede||5
-- [ ] (11) `Bestiaire:deserter` Soldat déserteur|humain||5
-- [ ] (12) `Bestiaire:rabid_fox` Renard enragé|quadrupede||2
-- [ ] (13) `Bestiaire:minotaur` Minotaure|humain|E|9
-- [ ] (14) `Bestiaire:marauder` Maraudeur|humain||4
-- [ ] (15) `Bestiaire:bramble_witch` Sorcier des ronces|humain||5
-- [ ] (16) `Bestiaire:sand_worm` Ver des sables|serpent|E|6
-- [ ] (17) `Bestiaire:desert_spider` Araignée du désert|insecte||4
-- [ ] (18) `Bestiaire:ruin_guardian` Gardien des ruines|golem|E|7
-- [ ] (19) `Bestiaire:faceless_walker` Marcheur sans visage|spectre||6
-- [ ] (20) `Bestiaire:renegade_guard` Garde renégat|humain||5
-- [ ] (21) `Bestiaire:cave_bear` Ours des cavernes|quadrupede|E|7
-- [ ] (22) `Bestiaire:gargoyle` Gargouille animée|volant||6
-- [ ] (23) `Bestiaire:skeleton` Squelette errant|humain||3
-- [ ] (24) `Bestiaire:smuggler` Contrebandier|humain||4
-- [ ] (25) `Bestiaire:root_troll` Troll des racines|humain|E|7
-- [ ] (26) `Bestiaire:giant_eagle` Aigle géant|volant||4
-- [ ] (27) `Bestiaire:giant_bat` Chauve-souris géante|volant||3
-- [ ] (28) `Bestiaire:fallen_monk` Moine déchu|humain||5
-- [ ] (29) `Bestiaire:sandstone_golem` Golem de grès|golem|E|7
-- [ ] (30) `Bestiaire:beetle` Scarabée cuirassé|insecte||5
-- [ ] (31) `Bestiaire:wood_goblin` Gobelin des bois|humain||3
-- [ ] (32) `Bestiaire:frost_troll` Troll des glaces|humain|E|8
-- [ ] (33) `Bestiaire:sylvan_spider` Araignée sylvestre|insecte||4
-- [ ] (34) `Bestiaire:bandit` Bandit des routes|humain||3
-- [ ] (35) `Bestiaire:bramble_mother` Mère des Ronces|golem|B|9
-- [ ] (36) `Bestiaire:corrupted_ent` Ent corrompu|golem|E|7
-- [ ] (37) `Bestiaire:harpy` Harpie|volant||5
-- [ ] (38) `Bestiaire:blizzard_spectre` Spectre du blizzard|spectre||6
-- [ ] (39) `Bestiaire:desert_raider` Pillard du désert|humain||5
-- [ ] (40) `Bestiaire:giant_crow` Corbeau géant|volant||3
-- [ ] (41) `Bestiaire:bounty_hunter` Chasseur de primes|humain||6
-- [ ] (42) `Bestiaire:highwayman` Voleur de grand chemin|humain||3
-- [ ] (43) `Bestiaire:cave_troll` Troll des cavernes|humain|E|8
-- [ ] (44) `Bestiaire:vargor` Vargor, le Roi des loups|quadrupede|B|9
-- [ ] (45) `Bestiaire:cyclops` Cyclope|humain|E|8
-- [ ] (46) `Bestiaire:ancient_skeleton` Squelette ancien|humain||5
-- [ ] (47) `Bestiaire:creeping_shadow` Ombre rampante|masse||5
-- [ ] (48) `Bestiaire:jackal` Chacal|quadrupede||2
-- [ ] (49) `Bestiaire:ghost_crow` Corbeau fantôme|volant||4
-- [ ] (50) `Bestiaire:shadow_wolf` Loup des ombres|quadrupede||5
-- [ ] (51) `Bestiaire:stone_golem` Colosse de pierre|golem|E|8
-- [ ] (52) `Bestiaire:wood_golem` Golem de bois|golem||6
-- [ ] (53) `Bestiaire:sand_basilisk` Basilic des sables|quadrupede||6
-- [ ] (54) `Bestiaire:ice_giant` Géant de glace|humain|E|9
-- [ ] (55) `Bestiaire:spectral_fox` Renard spectral|quadrupede||4
-- [ ] (56) `Bestiaire:spectral_stag` Cerf spectral|quadrupede||5
-- [ ] (57) `Bestiaire:brown_bear` Ours brun|quadrupede||5
-- [ ] (58) `Bestiaire:mud_golem` Golem de vase|golem|E|6
-- [ ] (59) `Bestiaire:reed_spider` Araignée des roseaux|insecte||4
-- [ ] (60) `Bestiaire:snake` Serpent venimeux|serpent||2
-- [ ] (61) `Bestiaire:wild_dog` Chien sauvage|quadrupede||2
-- [ ] (62) `Bestiaire:revenant` Revenant|spectre||4
-- [ ] (63) `Bestiaire:swamp_goblin` Gobelin des marais|humain||3
-- [ ] (64) `Bestiaire:tree_spirit` Esprit des arbres|spectre||5
-- [ ] (65) `Bestiaire:polar_bear` Ours blanc|quadrupede||6
-- [ ] (66) `Bestiaire:marsh_king` Roi des marais|masse|B|9
-- [ ] (67) `Bestiaire:colossal_boar` Sanglier colossal|quadrupede|E|6
-- [ ] (68) `Bestiaire:corrupt_guard` Garde corrompu|humain||5
-- [ ] (69) `Bestiaire:goblin_archer` Gobelin archer|humain||4
-- [ ] (70) `Bestiaire:fake_merchant` Faux marchand|humain||3
-- [ ] (71) `Bestiaire:mercenary` Mercenaire|humain||6
-- [ ] (72) `Bestiaire:bandit_chief` Chef de bande|humain|E|7
-- [ ] (73) `Bestiaire:ghost_knight` Fantôme de chevalier|spectre|E|6
-- [ ] (74) `Bestiaire:crownless_king` Le Roi sans couronne|spectre|B|10
-- [ ] (75) `Bestiaire:swamp_boar` Sanglier des marécages|quadrupede||4
-- [ ] (76) `Bestiaire:water_snake` Serpent des eaux|serpent||4
-- [ ] (77) `Bestiaire:royal_scarab` Scarabée royal|insecte|B|10
-- [ ] (78) `Bestiaire:ogre` Ogre|humain|E|8
-- [ ] (79) `Bestiaire:brumeglace` Brumeglace|spectre|B|10
-- [ ] (80) `Bestiaire:cave_spider` Araignée des cavernes|insecte||4
-- [ ] (81) `Bestiaire:pillager` Pillard|humain||4
-- [ ] (82) `Bestiaire:ghoul` Goule|humain||4
-- [ ] (83) `Bestiaire:frost_spider` Araignée de givre|insecte||5
-- [ ] (84) `Bestiaire:frost_boar` Sanglier givré|quadrupede||5
-- [ ] (85) `Bestiaire:swamp_witch` Sorcière des marais|humain||6
-- [ ] (86) `Bestiaire:dune_spectre` Spectre des dunes|spectre||5
-- [ ] (87) `Bestiaire:mud_man` Homme-boue|masse||4
-- [ ] (88) `Bestiaire:bog_lizard` Lézard des tourbières|quadrupede||3
-- [ ] (89) `Bestiaire:dune_snake` Serpent des dunes|serpent||4
-- [ ] (90) `Bestiaire:black_wolf` Loup noir|quadrupede||4
-- [ ] (91) `Bestiaire:hyena` Hyène monstrueuse|quadrupede||5
-- [ ] (92) `Enemies:flamingo` Flamant|Flamant||1
-- [ ] (93) `Enemies:boss_goblin` Chef Gobelin|Chef_Gobelin|B|10
-- [ ] (94) `Enemies:fox` Renard|Renard||1
-- [ ] (95) `Enemies:mycelian_king` Roi Mycélien|Roi_Mycelien|B|8
-- [ ] (96) `Enemies:scorpion` Scorpion|Scorpion||4
-- [ ] (97) `Enemies:yeti` Yéti|Yeti|E|7
-- [ ] (98) `Enemies:slime_blue` Slime bleu|Slime_Bleu||2
-- [ ] (99) `Enemies:croc` Croco|Croco||4
-- [ ] (100) `Enemies:penguin` Pingouin|Pingouin||1
-- [ ] (101) `Enemies:camel` Chameau|Chameau||1
-- [ ] (102) `Enemies:rabbit` Lapin|Lapin||1
-- [ ] (103) `Enemies:boss_slime` Roi des Slimes|Roi_Slimes|B|6
-- [ ] (104) `Enemies:wolf` Loup|Loup||2
-- [ ] (105) `Enemies:slime` Slime|Slime||1
-- [ ] (106) `Enemies:ice_sleeper` Dormeur des Glaces|Dormeur_Glaces|B|10
-- [ ] (107) `Enemies:burglar` Cambrioleur|Cambrioleur||3
-- [ ] (108) `Enemies:myconid` Myconide|Myconide||3
-- [ ] (109) `Enemies:spider` Araignée géante|Araignee||3
-- [ ] (110) `Enemies:bear` Ours|Ours||5
-- [ ] (111) `Enemies:glass_colossus` Colosse de Verre|Colosse_Verre|B|9
-- [ ] (112) `Enemies:harvest_warden` Gardien des Moissons|Gardien_Moissons|B|7
-- [ ] (113) `Enemies:wolf_white` Loup blanc|Loup_Blanc||4
-- [ ] (114) `Enemies:boss_myconid` Myconide Ancien|Myconide_Ancien|B|8
-- [ ] (115) `Enemies:boar` Sanglier|Sanglier||2
-- [ ] (116) `Enemies:ice_golem` Golem de glace|Golem_Glace||6
-- [ ] (117) `Enemies:toad` Crapaud géant|Crapaud||2
-- [ ] (118) `Enemies:wisp` Feu follet|Feu_Follet||3
-- [ ] (119) `Enemies:shade` Ombre rôdeuse|Ombre||3
-- [ ] (120) `Enemies:scarecrow` Épouvantail maudit|Epouvantail_Maudit||3
-- [ ] (121) `Enemies:deer` Cerf|Cerf||1
-- [ ] (122) `Enemies:goblin` Gobelin|Gobelin||4
-- [ ] (123) `Bestiaire:dark_prowler` Rôdeur obscur|humain||5
-- [ ] (124) `Bestiaire:wandering_spectre` Spectre errant|spectre||4
-- [ ] (125) `Bestiaire:moon_hunter` Chasseur de lune|humain||6
-- [ ] (126) `Bestiaire:night_howler` Hurleur nocturne|quadrupede||5
-- [ ] (127) `Bestiaire:tomb_warden` Gardien des tombes|golem|E|7
-- [ ] (128) `Bestiaire:light_eater` Dévoreur de lumière|masse||6
-- [ ] (129) `Bestiaire:cursed_warden` Gardien maudit|humain|E|7
-- [ ] (130) `Bestiaire:ruin_spirit` Esprit des ruines|spectre||5
-- [ ] (131) `Bestiaire:possessed_shade` Ombre possédée|spectre||6
-- [ ] (132) `Bestiaire:forgotten_knight` Chevalier oublié|humain|E|8
-- [ ] (133) `Bestiaire:cave_bat` Chauve-souris des cavernes|volant||2
-- [ ] (134) `Bestiaire:griffin` Griffon|volant|E|7
-- [ ] (135) `Bestiaire:hippogriff` Hippogriffe|volant||6
-- [ ] (136) `Bestiaire:wyvern` Wyverne|volant|E|7
-- [ ] (137) `Bestiaire:mountain_eagle` Aigle des montagnes|volant||4
-- [ ] (138) `Bestiaire:spectral_owl` Chouette spectrale|volant||4
-- [ ] (139) `Bestiaire:bramble_fairy` Fée des ronces|volant||4
-- [ ] (140) `Bestiaire:giant_mantis` Mante religieuse géante|insecte||5
-- [ ] (141) `Bestiaire:drakeling` Dragonnet|quadrupede|E|6
-- [ ] (142) `Bestiaire:cliff_raptor` Rapace des falaises|volant||4
-- [ ] (143) `Bestiaire:river_serpent` Serpent des rivières|serpent||4
-- [ ] (144) `Bestiaire:monster_eel` Anguille monstrueuse|serpent||5
-- [ ] (145) `Bestiaire:ancient_turtle` Tortue ancienne|quadrupede|E|6
-- [ ] (146) `Bestiaire:giant_crab` Crabe géant|insecte||5
-- [ ] (147) `Bestiaire:hostile_siren` Sirène hostile|spectre||6
-- [ ] (148) `Bestiaire:water_spirit` Esprit des eaux|spectre||5
-- [ ] (149) `Bestiaire:kelpie` Kelpie|quadrupede||6
-- [ ] (150) `Bestiaire:lake_guardian` Gardien du lac|golem|E|7
-- [ ] (151) `Bestiaire:forest_giant` Géant des forêts|humain|E|8
-- [ ] (152) `Bestiaire:mountain_troll` Troll des montagnes|humain|E|8
-- [ ] (153) `Bestiaire:earth_colossus` Colosse de terre|golem|E|8
-- [ ] (154) `Bestiaire:granite_warden` Gardien de granit|golem|E|8
-- [ ] (155) `Bestiaire:bull_man` Homme-taureau|humain|E|7
-- [ ] (156) `Bestiaire:ruin_giant` Géant des ruines|humain|E|9
-- [ ] (157) `Bestiaire:night_stalker` Chasseur nocturne|humain||5
-- [ ] (158) `Bestiaire:woods_spirit` Esprit des bois|spectre||5
-- [ ] (159) `Bestiaire:snow_wyvern` Wyverne des neiges|volant|B|10
-- [ ] (160) `Bestiaire:mountain_giant` Géant des montagnes|humain|B|10
-- [ ] (161) `Bestiaire:deep_beast` Bête des profondeurs|serpent|B|10
+- [x] (1) `Bestiaire:stray_dog` Chien errant|quadrupede||1 → Bestiaire
+- [x] (2) `Bestiaire:mummy` Momie ancienne|humain||6 → Bestiaire
+- [x] (3) `Bestiaire:leech` Sangsue géante|masse||3 → Bestiaire
+- [x] (4) `Bestiaire:lynx` Lynx|quadrupede||3 → Bestiaire
+- [x] (5) `Bestiaire:polar_wolf` Loup polaire|quadrupede||4 → Bestiaire
+- [x] (6) `Bestiaire:bee_swarm` Essaim d'abeilles sauvages|volant||2 → Bestiaire
+- [x] (7) `Bestiaire:drowned_spirit` Esprit noyé|spectre||4 → Bestiaire
+- [x] (8) `Bestiaire:ruin_looter` Pilleur de ruines|humain||4 → Bestiaire
+- [x] (9) `Bestiaire:poacher` Braconnier|humain||3 → Bestiaire
+- [x] (10) `Bestiaire:corrupted_stag` Cerf corrompu|quadrupede||5 → Bestiaire
+- [x] (11) `Bestiaire:deserter` Soldat déserteur|humain||5 → Bestiaire
+- [x] (12) `Bestiaire:rabid_fox` Renard enragé|quadrupede||2 → Bestiaire
+- [x] (13) `Bestiaire:minotaur` Minotaure|humain|E|9 → Bestiaire
+- [x] (14) `Bestiaire:marauder` Maraudeur|humain||4 → Bestiaire
+- [x] (15) `Bestiaire:bramble_witch` Sorcier des ronces|humain||5 → Bestiaire
+- [x] (16) `Bestiaire:sand_worm` Ver des sables|serpent|E|6 → Bestiaire
+- [x] (17) `Bestiaire:desert_spider` Araignée du désert|insecte||4 → Bestiaire
+- [x] (18) `Bestiaire:ruin_guardian` Gardien des ruines|golem|E|7 → Bestiaire
+- [x] (19) `Bestiaire:faceless_walker` Marcheur sans visage|spectre||6 → Bestiaire
+- [x] (20) `Bestiaire:renegade_guard` Garde renégat|humain||5 → Bestiaire
+- [x] (21) `Bestiaire:cave_bear` Ours des cavernes|quadrupede|E|7 → Bestiaire
+- [x] (22) `Bestiaire:gargoyle` Gargouille animée|volant||6 → Bestiaire
+- [x] (23) `Bestiaire:skeleton` Squelette errant|humain||3 → Bestiaire
+- [x] (24) `Bestiaire:smuggler` Contrebandier|humain||4 → Bestiaire
+- [x] (25) `Bestiaire:root_troll` Troll des racines|humain|E|7 → Bestiaire
+- [x] (26) `Bestiaire:giant_eagle` Aigle géant|volant||4 → Bestiaire
+- [x] (27) `Bestiaire:giant_bat` Chauve-souris géante|volant||3 → Bestiaire
+- [x] (28) `Bestiaire:fallen_monk` Moine déchu|humain||5 → Bestiaire
+- [x] (29) `Bestiaire:sandstone_golem` Golem de grès|golem|E|7 → Bestiaire
+- [x] (30) `Bestiaire:beetle` Scarabée cuirassé|insecte||5 → Bestiaire
+- [x] (31) `Bestiaire:wood_goblin` Gobelin des bois|humain||3 → Bestiaire
+- [x] (32) `Bestiaire:frost_troll` Troll des glaces|humain|E|8 → Bestiaire
+- [x] (33) `Bestiaire:sylvan_spider` Araignée sylvestre|insecte||4 → Bestiaire
+- [x] (34) `Bestiaire:bandit` Bandit des routes|humain||3 → Bestiaire
+- [x] (35) `Bestiaire:bramble_mother` Mère des Ronces|golem|B|9 → Bestiaire
+- [x] (36) `Bestiaire:corrupted_ent` Ent corrompu|golem|E|7 → Bestiaire
+- [x] (37) `Bestiaire:harpy` Harpie|volant||5 → Bestiaire
+- [x] (38) `Bestiaire:blizzard_spectre` Spectre du blizzard|spectre||6 → Bestiaire
+- [x] (39) `Bestiaire:desert_raider` Pillard du désert|humain||5 → Bestiaire
+- [x] (40) `Bestiaire:giant_crow` Corbeau géant|volant||3 → Bestiaire
+- [x] (41) `Bestiaire:bounty_hunter` Chasseur de primes|humain||6 → Bestiaire
+- [x] (42) `Bestiaire:highwayman` Voleur de grand chemin|humain||3 → Bestiaire
+- [x] (43) `Bestiaire:cave_troll` Troll des cavernes|humain|E|8 → Bestiaire
+- [x] (44) `Bestiaire:vargor` Vargor, le Roi des loups|quadrupede|B|9 → Bestiaire
+- [x] (45) `Bestiaire:cyclops` Cyclope|humain|E|8 → Bestiaire
+- [x] (46) `Bestiaire:ancient_skeleton` Squelette ancien|humain||5 → Bestiaire
+- [x] (47) `Bestiaire:creeping_shadow` Ombre rampante|masse||5 → Bestiaire
+- [x] (48) `Bestiaire:jackal` Chacal|quadrupede||2 → Bestiaire
+- [x] (49) `Bestiaire:ghost_crow` Corbeau fantôme|volant||4 → Bestiaire
+- [x] (50) `Bestiaire:shadow_wolf` Loup des ombres|quadrupede||5 → Bestiaire
+- [x] (51) `Bestiaire:stone_golem` Colosse de pierre|golem|E|8 → Bestiaire
+- [x] (52) `Bestiaire:wood_golem` Golem de bois|golem||6 → Bestiaire
+- [x] (53) `Bestiaire:sand_basilisk` Basilic des sables|quadrupede||6 → Bestiaire
+- [x] (54) `Bestiaire:ice_giant` Géant de glace|humain|E|9 → Bestiaire
+- [x] (55) `Bestiaire:spectral_fox` Renard spectral|quadrupede||4 → Bestiaire
+- [x] (56) `Bestiaire:spectral_stag` Cerf spectral|quadrupede||5 → Bestiaire
+- [x] (57) `Bestiaire:brown_bear` Ours brun|quadrupede||5 → Bestiaire
+- [x] (58) `Bestiaire:mud_golem` Golem de vase|golem|E|6 → Bestiaire
+- [x] (59) `Bestiaire:reed_spider` Araignée des roseaux|insecte||4 → Bestiaire
+- [x] (60) `Bestiaire:snake` Serpent venimeux|serpent||2 → Bestiaire
+- [x] (61) `Bestiaire:wild_dog` Chien sauvage|quadrupede||2 → Bestiaire
+- [x] (62) `Bestiaire:revenant` Revenant|spectre||4 → Bestiaire
+- [x] (63) `Bestiaire:swamp_goblin` Gobelin des marais|humain||3 → Bestiaire
+- [x] (64) `Bestiaire:tree_spirit` Esprit des arbres|spectre||5 → Bestiaire
+- [x] (65) `Bestiaire:polar_bear` Ours blanc|quadrupede||6 → Bestiaire
+- [x] (66) `Bestiaire:marsh_king` Roi des marais|masse|B|9 → Bestiaire
+- [x] (67) `Bestiaire:colossal_boar` Sanglier colossal|quadrupede|E|6 → Bestiaire
+- [x] (68) `Bestiaire:corrupt_guard` Garde corrompu|humain||5 → Bestiaire
+- [x] (69) `Bestiaire:goblin_archer` Gobelin archer|humain||4 → Bestiaire
+- [x] (70) `Bestiaire:fake_merchant` Faux marchand|humain||3 → Bestiaire
+- [x] (71) `Bestiaire:mercenary` Mercenaire|humain||6 → Bestiaire
+- [x] (72) `Bestiaire:bandit_chief` Chef de bande|humain|E|7 → Bestiaire
+- [x] (73) `Bestiaire:ghost_knight` Fantôme de chevalier|spectre|E|6 → Bestiaire
+- [x] (74) `Bestiaire:crownless_king` Le Roi sans couronne|spectre|B|10 → Bestiaire
+- [x] (75) `Bestiaire:swamp_boar` Sanglier des marécages|quadrupede||4 → Bestiaire
+- [x] (76) `Bestiaire:water_snake` Serpent des eaux|serpent||4 → Bestiaire
+- [x] (77) `Bestiaire:royal_scarab` Scarabée royal|insecte|B|10 → Bestiaire
+- [x] (78) `Bestiaire:ogre` Ogre|humain|E|8 → Bestiaire
+- [x] (79) `Bestiaire:brumeglace` Brumeglace|spectre|B|10 → Bestiaire
+- [x] (80) `Bestiaire:cave_spider` Araignée des cavernes|insecte||4 → Bestiaire
+- [x] (81) `Bestiaire:pillager` Pillard|humain||4 → Bestiaire
+- [x] (82) `Bestiaire:ghoul` Goule|humain||4 → Bestiaire
+- [x] (83) `Bestiaire:frost_spider` Araignée de givre|insecte||5 → Bestiaire
+- [x] (84) `Bestiaire:frost_boar` Sanglier givré|quadrupede||5 → Bestiaire
+- [x] (85) `Bestiaire:swamp_witch` Sorcière des marais|humain||6 → Bestiaire
+- [x] (86) `Bestiaire:dune_spectre` Spectre des dunes|spectre||5 → Bestiaire
+- [x] (87) `Bestiaire:mud_man` Homme-boue|masse||4 → Bestiaire
+- [x] (88) `Bestiaire:bog_lizard` Lézard des tourbières|quadrupede||3 → Bestiaire
+- [x] (89) `Bestiaire:dune_snake` Serpent des dunes|serpent||4 → Bestiaire
+- [x] (90) `Bestiaire:black_wolf` Loup noir|quadrupede||4 → Bestiaire
+- [x] (91) `Bestiaire:hyena` Hyène monstrueuse|quadrupede||5 → Bestiaire
+- [x] (92) `Enemies:flamingo` Flamant|Flamant||1 → Bestiaire
+- [x] (93) `Enemies:boss_goblin` Chef Gobelin|Chef_Gobelin|B|10 → Bestiaire
+- [x] (94) `Enemies:fox` Renard|Renard||1 → Bestiaire
+- [x] (95) `Enemies:mycelian_king` Roi Mycélien|Roi_Mycelien|B|8 → Bestiaire
+- [x] (96) `Enemies:scorpion` Scorpion|Scorpion||4 → Bestiaire
+- [x] (97) `Enemies:yeti` Yéti|Yeti|E|7 → Bestiaire
+- [x] (98) `Enemies:slime_blue` Slime bleu|Slime_Bleu||2 → Bestiaire
+- [x] (99) `Enemies:croc` Croco|Croco||4 → Bestiaire
+- [x] (100) `Enemies:penguin` Pingouin|Pingouin||1 → Bestiaire
+- [x] (101) `Enemies:camel` Chameau|Chameau||1 → Bestiaire
+- [x] (102) `Enemies:rabbit` Lapin|Lapin||1 → Bestiaire
+- [x] (103) `Enemies:boss_slime` Roi des Slimes|Roi_Slimes|B|6 → Bestiaire
+- [x] (104) `Enemies:wolf` Loup|Loup||2 → Bestiaire
+- [x] (105) `Enemies:slime` Slime|Slime||1 → Bestiaire
+- [x] (106) `Enemies:ice_sleeper` Dormeur des Glaces|Dormeur_Glaces|B|10 → Bestiaire
+- [x] (107) `Enemies:burglar` Cambrioleur|Cambrioleur||3 → Bestiaire
+- [x] (108) `Enemies:myconid` Myconide|Myconide||3 → Bestiaire
+- [x] (109) `Enemies:spider` Araignée géante|Araignee||3 → Bestiaire
+- [x] (110) `Enemies:bear` Ours|Ours||5 → Bestiaire
+- [x] (111) `Enemies:glass_colossus` Colosse de Verre|Colosse_Verre|B|9 → Bestiaire
+- [x] (112) `Enemies:harvest_warden` Gardien des Moissons|Gardien_Moissons|B|7 → Bestiaire
+- [x] (113) `Enemies:wolf_white` Loup blanc|Loup_Blanc||4 → Bestiaire
+- [x] (114) `Enemies:boss_myconid` Myconide Ancien|Myconide_Ancien|B|8 → Bestiaire
+- [x] (115) `Enemies:boar` Sanglier|Sanglier||2 → Bestiaire
+- [x] (116) `Enemies:ice_golem` Golem de glace|Golem_Glace||6 → Bestiaire
+- [x] (117) `Enemies:toad` Crapaud géant|Crapaud||2 → Bestiaire
+- [x] (118) `Enemies:wisp` Feu follet|Feu_Follet||3 → Bestiaire
+- [x] (119) `Enemies:shade` Ombre rôdeuse|Ombre||3 → Bestiaire
+- [x] (120) `Enemies:scarecrow` Épouvantail maudit|Epouvantail_Maudit||3 → Bestiaire
+- [x] (121) `Enemies:deer` Cerf|Cerf||1 → Bestiaire
+- [x] (122) `Enemies:goblin` Gobelin|Gobelin||4 → Bestiaire
+- [x] (123) `Bestiaire:dark_prowler` Rôdeur obscur|humain||5 → Bestiaire
+- [x] (124) `Bestiaire:wandering_spectre` Spectre errant|spectre||4 → Bestiaire
+- [x] (125) `Bestiaire:moon_hunter` Chasseur de lune|humain||6 → Bestiaire
+- [x] (126) `Bestiaire:night_howler` Hurleur nocturne|quadrupede||5 → Bestiaire
+- [x] (127) `Bestiaire:tomb_warden` Gardien des tombes|golem|E|7 → Bestiaire
+- [x] (128) `Bestiaire:light_eater` Dévoreur de lumière|masse||6 → Bestiaire
+- [x] (129) `Bestiaire:cursed_warden` Gardien maudit|humain|E|7 → Bestiaire
+- [x] (130) `Bestiaire:ruin_spirit` Esprit des ruines|spectre||5 → Bestiaire
+- [x] (131) `Bestiaire:possessed_shade` Ombre possédée|spectre||6 → Bestiaire
+- [x] (132) `Bestiaire:forgotten_knight` Chevalier oublié|humain|E|8 → Bestiaire
+- [x] (133) `Bestiaire:cave_bat` Chauve-souris des cavernes|volant||2 → Bestiaire
+- [x] (134) `Bestiaire:griffin` Griffon|volant|E|7 → Bestiaire
+- [x] (135) `Bestiaire:hippogriff` Hippogriffe|volant||6 → Bestiaire
+- [x] (136) `Bestiaire:wyvern` Wyverne|volant|E|7 → Bestiaire
+- [x] (137) `Bestiaire:mountain_eagle` Aigle des montagnes|volant||4 → Bestiaire
+- [x] (138) `Bestiaire:spectral_owl` Chouette spectrale|volant||4 → Bestiaire
+- [x] (139) `Bestiaire:bramble_fairy` Fée des ronces|volant||4 → Bestiaire
+- [x] (140) `Bestiaire:giant_mantis` Mante religieuse géante|insecte||5 → Bestiaire
+- [x] (141) `Bestiaire:drakeling` Dragonnet|quadrupede|E|6 → Bestiaire
+- [x] (142) `Bestiaire:cliff_raptor` Rapace des falaises|volant||4 → Bestiaire
+- [x] (143) `Bestiaire:river_serpent` Serpent des rivières|serpent||4 → Bestiaire
+- [x] (144) `Bestiaire:monster_eel` Anguille monstrueuse|serpent||5 → Bestiaire
+- [x] (145) `Bestiaire:ancient_turtle` Tortue ancienne|quadrupede|E|6 → Bestiaire
+- [x] (146) `Bestiaire:giant_crab` Crabe géant|insecte||5 → Bestiaire
+- [x] (147) `Bestiaire:hostile_siren` Sirène hostile|spectre||6 → Bestiaire
+- [x] (148) `Bestiaire:water_spirit` Esprit des eaux|spectre||5 → Bestiaire
+- [x] (149) `Bestiaire:kelpie` Kelpie|quadrupede||6 → Bestiaire
+- [x] (150) `Bestiaire:lake_guardian` Gardien du lac|golem|E|7 → Bestiaire
+- [x] (151) `Bestiaire:forest_giant` Géant des forêts|humain|E|8 → Bestiaire
+- [x] (152) `Bestiaire:mountain_troll` Troll des montagnes|humain|E|8 → Bestiaire
+- [x] (153) `Bestiaire:earth_colossus` Colosse de terre|golem|E|8 → Bestiaire
+- [x] (154) `Bestiaire:granite_warden` Gardien de granit|golem|E|8 → Bestiaire
+- [x] (155) `Bestiaire:bull_man` Homme-taureau|humain|E|7 → Bestiaire
+- [x] (156) `Bestiaire:ruin_giant` Géant des ruines|humain|E|9 → Bestiaire
+- [x] (157) `Bestiaire:night_stalker` Chasseur nocturne|humain||5 → Bestiaire
+- [x] (158) `Bestiaire:woods_spirit` Esprit des bois|spectre||5 → Bestiaire
+- [x] (159) `Bestiaire:snow_wyvern` Wyverne des neiges|volant|B|10 → Bestiaire
+- [x] (160) `Bestiaire:mountain_giant` Géant des montagnes|humain|B|10 → Bestiaire
+- [x] (161) `Bestiaire:deep_beast` Bête des profondeurs|serpent|B|10 → Bestiaire
