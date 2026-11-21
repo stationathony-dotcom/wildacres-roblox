@@ -291,6 +291,7 @@ do
 		G.Util.finds = function() end
 		G.Joueurs.stats = function() return {} end
 		G.Joueurs.skill = function() return 1 end
+		G.Joueurs.skillRaw = function() return 1 end
 		P.GetAttribute = function() return nil end
 		P.SetAttribute = function() end
 		Fishing.init(G)

@@ -36,7 +36,7 @@ local function pickFish(player: Player, baited: boolean?, at: Vector3?): number
 	local luck = G.Joueurs.stats(player).chance or 0
 	local pool, total = {}, 0
 	for i, f in Config.FISH do
-		local ok = (not f.biomes or table.find(f.biomes, biome) ~= nil) and (f.skill or 0) <= G.Joueurs.skill(player, "peche")
+		local ok = (not f.biomes or table.find(f.biomes, biome) ~= nil) and (f.skill or 0) <= G.Joueurs.skillRaw(player, "peche") -- déblocage : compétence entraînée seulement (règle 4)
 		if ok then
 			local w = f.weight
 			if f.weight <= 15 then

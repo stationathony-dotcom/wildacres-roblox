@@ -864,7 +864,7 @@ function J.revealRecipes(player: Player, cat: string?, n: number): boolean
 	for _, r in G.Config.RECIPES do
 		local key = G.Config.recipeKey(r)
 		if not J.knows(player, key) and (not cat or r.cat == cat) then
-			local lvl = r.skill and J.skill(player, r.skill[1]) or 0
+			local lvl = r.skill and J.skillRaw(player, r.skill[1]) or 0 -- règle 4 : niveau entraîné
 			if not r.skill or lvl + 6 >= r.skill[2] then
 				table.insert(pool, key)
 			end
