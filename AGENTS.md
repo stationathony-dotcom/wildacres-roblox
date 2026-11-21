@@ -21,6 +21,8 @@ respecte. En cas de doute : ne pas le faire, le noter dans `docs/LOTS.md` § « 
    système encadré (pas de guerre de clans « déclarée »). On découvre sur place (habitants, panneaux,
    bruits, lueurs). Les quêtes sont **facultatives** et données **uniquement** par un habitant ou un
    tableau de village, jamais à distance.
+   *Exception (21/11)* : les messages d'administration (`/wa annonce`, compte à rebours de `/wa ferme`) vont à
+   tout le serveur — c'est de l'exploitation, pas du jeu.
 2. **Pas de plafond arbitraire.** On est limité par ses ressources (or, nourriture, solde, place),
    jamais par un nombre maximum (armée, compagnons, parcelles, banque, champs, cases du sac).
 3. **Monde libre, sans arbitre.** On peut construire chez les autres, se battre partout, voler. Ne
