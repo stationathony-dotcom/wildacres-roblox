@@ -16,6 +16,7 @@ local player = Players.LocalPlayer
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Config = require(Shared:WaitForChild("Config"))
 local Gear = require(Shared:WaitForChild("Gear"))
+local ApercuPose = require(script.Parent:WaitForChild("ApercuPose"))
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 
 local MOBILE = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
@@ -198,24 +199,31 @@ local toastBox = new("Frame", {
 }, { new("UIListLayout", { Padding = UDim.new(0, 6), HorizontalAlignment = Enum.HorizontalAlignment.Center, SortOrder = Enum.SortOrder.LayoutOrder }) })
 local toastN = 0
 local hudNotify = nil -- en jeu : les gains vont dans les notifications du HUD (bas-droite)
+local placementRefusal = ApercuPose.refus(gui, MOBILE and 240 or 300)
 
 local function toast(text: string, kind: string?)
+	if kind == "refus" and not WindowNav.isOpen() and placementRefusal.show(text) then
+		return
+	end
 	if hudNotify and (kind == "gain" or kind == "loot") then
 		hudNotify(text, kind)
 		return
 	end
 	toastN += 1
 	local big = kind == "big"
-	local color = kind == "danger" and C.red or (big and C.gold or C.text)
+	local urgent = kind == "danger"
+	local color = (urgent or kind == "refus") and C.red or (big and C.gold or C.text)
 	local t = label({
-		Text = text, TextColor3 = color, TextSize = big and 22 or 16, Font = big and TITLE or BODY,
+		Text = urgent and "⚠  " .. text or text, TextColor3 = color, TextSize = big and 22 or 16, Font = big and TITLE or BODY,
 		TextXAlignment = Enum.TextXAlignment.Center, AutomaticSize = Enum.AutomaticSize.Y,
-		Size = UDim2.new(1, 0, 0, 0), BackgroundTransparency = 0.25, BackgroundColor3 = C.panel, LayoutOrder = toastN, Parent = toastBox, ZIndex = 20,
+		Size = UDim2.new(1, 0, 0, 0), BackgroundTransparency = 0.25, BackgroundColor3 = C.panel,
+		LayoutOrder = urgent and -toastN or toastN, Parent = toastBox, ZIndex = 20,
 	})
 	corner(8).Parent = t
 	pad(8).Parent = t
-	local life = big and 5 or 3.5
+	local life = urgent and 7 or (big and 5 or 3.5)
 	task.delay(life, function()
+		if not t.Parent then return end
 		local tw = TweenService:Create(t, TweenInfo.new(0.5), { TextTransparency = 1, BackgroundTransparency = 1 })
 		tw:Play()
 		tw.Completed:Wait()
@@ -223,13 +231,13 @@ local function toast(text: string, kind: string?)
 	end)
 	local kids = {}
 	for _, c in toastBox:GetChildren() do
-		if c:IsA("TextLabel") then
+		if c:IsA("TextLabel") and (c.LayoutOrder < 0) == urgent then
 			table.insert(kids, c)
 		end
 	end
-	if #kids > 5 then
+	if #kids > (urgent and 3 or 5) then
 		table.sort(kids, function(a, b)
-			return a.LayoutOrder < b.LayoutOrder
+			return math.abs(a.LayoutOrder) < math.abs(b.LayoutOrder)
 		end)
 		kids[1]:Destroy()
 	end
@@ -452,7 +460,13 @@ local function game_()
 	hudNotify = function(text: string, kind: string?)
 		local n, icon, name = string.match(text, "^%+(%d+) (%S+) (.+)$")
 		if n then
-			hud:notify(icon, "+" .. n .. " " .. name)
+			if name:match(" %(%d+%)$") then
+				hud:notify(icon, "+" .. n .. " " .. name)
+			else
+				hud:gain(icon, name, tonumber(n))
+			end
+		elseif kind == "gain" and text:match("^%+%d+ 💰$") then
+			hud:gain("💰", "Or", tonumber(text:match("%d+")))
 		elseif kind == "loot" then
 			hud:notify("⚔️", "Équipement trouvé", (string.gsub(text, "^Équipement trouvé : ", "")), Color3.fromRGB(190, 120, 255))
 		else
@@ -1016,6 +1030,12 @@ local function game_()
 		if info.food or info.use or info.lock then
 			send("eat", { item = id })
 		elseif info.place then
+			if info.claim then
+				local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+				if root then
+					placementRefusal.remember(ApercuPose.caseDevant(root, Config.CELL))
+				end
+			end
 			send("place", { item = id })
 		end
 	end
@@ -3499,25 +3519,25 @@ local function game_()
 	local buildRot, buildFlip = 0, false
 	local ghost = nil
 	local ghostCF = nil
-	-- petit rappel des gestes, en icônes, au-dessus de la barre rapide
+	-- Commandes de construction au-dessus de la barre rapide.
 	local buildHint = new("Frame", {
 		Size = UDim2.fromOffset(0, 30), AutomaticSize = Enum.AutomaticSize.X, Position = UDim2.new(0.5, 0, 1, MOBILE and -168 or -100), AnchorPoint = Vector2.new(0.5, 1),
 		BackgroundColor3 = Color3.fromRGB(26, 20, 16), BackgroundTransparency = 0.2, Visible = false, Parent = gui, ZIndex = 12,
-	}, { corner(6), pad(4), new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 10), VerticalAlignment = Enum.VerticalAlignment.Center }) })
+	}, { corner(6), pad(4), new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, MOBILE and 6 or 10), VerticalAlignment = Enum.VerticalAlignment.Center }) })
 	local buildCount = nil
-	local function keycap(parent, key: string, icon: string)
-		local f = new("Frame", { Size = UDim2.fromOffset(0, 22), AutomaticSize = Enum.AutomaticSize.X, BackgroundTransparency = 1, Parent = parent, ZIndex = 13 },
-			{ new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 3), VerticalAlignment = Enum.VerticalAlignment.Center }) })
-		new("TextLabel", { Text = key, Font = BOLD, TextSize = 12, TextColor3 = Color3.fromRGB(20, 16, 12), BackgroundColor3 = Color3.fromRGB(230, 220, 200),
-			Size = UDim2.fromOffset(key == "🖱" and 22 or 20, 20), Parent = f, ZIndex = 14 }, { corner(4) })
-		label({ Text = icon, TextSize = 16, Size = UDim2.fromOffset(22, 20), Parent = f, ZIndex = 14 })
-	end
 	if not MOBILE then
 		buildCount = label({ Text = "", Font = BOLD, TextSize = 14, TextColor3 = C.gold, Size = UDim2.fromOffset(0, 22), AutomaticSize = Enum.AutomaticSize.X, Parent = buildHint, ZIndex = 13 })
-		keycap(buildHint, "🖱", "⬇️")
-		keycap(buildHint, "R", "🔄")
-		keycap(buildHint, "Z", "🔃")
-		keycap(buildHint, "X", "↩️")
+		local commands = label({ Text = "", Font = BOLD, TextSize = 13, TextWrapped = false, Size = UDim2.fromOffset(0, 22),
+			AutomaticSize = Enum.AutomaticSize.X, Parent = buildHint, ZIndex = 13 })
+		local function showCommands(input)
+			commands.Text = input.Name:match("^Gamepad")
+				and "RT Poser · RB Tourner · LB Retourner · X Reprendre · B Annuler"
+				or "Clic Poser · R Tourner · Z Retourner · X Reprendre · V Annuler"
+		end
+		showCommands(UserInputService:GetLastInputType())
+		UserInputService.LastInputTypeChanged:Connect(showCommands)
+	else
+		buildHint.Size = UDim2.fromOffset(0, 48)
 	end
 
 	local function haveBlock(): number
@@ -3600,7 +3620,8 @@ local function game_()
 
 	local function aim(): RaycastResult?
 		local cam = workspace.CurrentCamera
-		local pos = MOBILE and (cam.ViewportSize / 2) or UserInputService:GetMouseLocation()
+		local centered = MOBILE or UserInputService:GetLastInputType().Name:match("^Gamepad")
+		local pos = centered and (cam.ViewportSize / 2) or UserInputService:GetMouseLocation()
 		local ray = cam:ViewportPointToRay(pos.X, pos.Y)
 		local params = RaycastParams.new()
 		params.FilterType = Enum.RaycastFilterType.Exclude
@@ -3616,12 +3637,15 @@ local function game_()
 		if not building or not ghost or not buildBlock then
 			return
 		end
-		local hit = aim()
+		local open = WindowNav.isOpen()
+		buildHint.Visible = not open
+		local hit = not open and aim()
 		if not hit then
-			ghost.Transparency = 1
+			ghost.Parent = nil
 			ghostCF = nil
 			return
 		end
+		if not ghost.Parent then ghost.Parent = workspace end
 		local b = Config.BLOCKS[buildBlock]
 		local rot = CFrame.Angles(0, math.rad(90 * buildRot), 0) * (buildFlip and CFrame.Angles(0, 0, math.pi) or CFrame.identity)
 		-- demi-épaisseur de la pièce le long de la normale visée : on la colle contre la surface
@@ -3652,6 +3676,7 @@ local function game_()
 			return
 		end
 		local p = ghostCF.Position
+		placementRefusal.remember(p)
 		send("build_place", { b = buildBlock, x = p.X, y = p.Y, z = p.Z, r = buildRot, f = buildFlip })
 	end
 	local function removeNow()
@@ -3672,28 +3697,32 @@ local function game_()
 		end)
 	end)
 	UserInputService.InputBegan:Connect(function(input, processed)
-		if processed or not building then
+		if processed or not building or WindowNav.isOpen() then
 			return
 		end
-		if input.UserInputType == Enum.UserInputType.MouseButton1 and not MOBILE then
+		if (input.UserInputType == Enum.UserInputType.MouseButton1 and not MOBILE) or input.KeyCode == Enum.KeyCode.ButtonR2 then
 			placeNow()
-		elseif input.KeyCode == Enum.KeyCode.R then
+		elseif input.KeyCode == Enum.KeyCode.R or input.KeyCode == Enum.KeyCode.ButtonR1 then
 			buildRot = (buildRot + 1) % 4
-		elseif input.KeyCode == Enum.KeyCode.Z then
+		elseif input.KeyCode == Enum.KeyCode.Z or input.KeyCode == Enum.KeyCode.ButtonL1 then
 			buildFlip = not buildFlip
-		elseif input.KeyCode == Enum.KeyCode.X then
+		elseif input.KeyCode == Enum.KeyCode.X or input.KeyCode == Enum.KeyCode.ButtonX then
 			removeNow()
+		elseif input.KeyCode == Enum.KeyCode.ButtonB then
+			selectSlot(0)
 		end
 	end)
 	if MOBILE then
-		for _, a in { { "⬇️", C.green, placeNow }, { "🔄", C.panel2, function()
+		for _, a in { { "Poser", C.green, placeNow }, { "Tourner", C.panel2, function()
 			buildRot = (buildRot + 1) % 4
-		end }, { "🔃", C.panel2, function()
+		end }, { "Inverser", C.panel2, function()
 			buildFlip = not buildFlip
-		end }, { "↩️", C.red, removeNow } } do
+		end }, { "Reprendre", C.panel2, removeNow }, { "Annuler", C.red, function()
+			selectSlot(0)
+		end } } do
 			local b = button(a[1], a[2], a[3])
-			b.Size = UDim2.fromOffset(52, 40)
-			b.TextSize = 20
+			b.Size = UDim2.fromOffset(58, 40)
+			b.TextSize = 12
 			b.ZIndex = 13
 			b.Parent = buildHint
 		end
@@ -3703,6 +3732,11 @@ local function game_()
 		end)
 	end
 	local function toggleBuild()
+		if WindowNav.isOpen() then return end
+		if building then
+			selectSlot(0)
+			return
+		end
 		-- [V] : prend en main la première pièce de construction de la barre rapide
 		for i = 1, HOT do
 			local id = hotSlots[i]
@@ -4120,7 +4154,7 @@ local function game_()
 			send("mg_press")
 		elseif k == Enum.KeyCode.H then
 			send("whistle")
-		elseif k == Enum.KeyCode.G or k == Enum.KeyCode.X then
+		elseif k == Enum.KeyCode.G or (k == Enum.KeyCode.X and not building) then
 			context()
 		elseif k == Enum.KeyCode.LeftControl then
 			toggleCrouch()

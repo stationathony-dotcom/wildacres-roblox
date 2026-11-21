@@ -389,6 +389,7 @@ function Hud.build(parent: Instance, opts)
 	self.notes = new("Frame", { Name = "Notifications", Size = UDim2.fromOffset(300, 400), Position = UDim2.new(1, -14, 1, -110), AnchorPoint = Vector2.new(1, 1), BackgroundTransparency = 1, Parent = root },
 		{ new("UIListLayout", { Padding = UDim.new(0, 8), VerticalAlignment = Enum.VerticalAlignment.Bottom, HorizontalAlignment = Enum.HorizontalAlignment.Right, SortOrder = Enum.SortOrder.LayoutOrder }) })
 	self.noteN = 0
+	self.gainNotes = {}
 	return self
 end
 
@@ -475,7 +476,7 @@ function Hud:notify(icon: string, title: string, sub: string?, color: Color3?, l
 	local disc = new("Frame", { Size = UDim2.fromOffset(42, 42), Position = UDim2.new(0, 10, 0.5, 0), AnchorPoint = Vector2.new(0, 0.5), BackgroundColor3 = Color3.fromRGB(20, 22, 28), Parent = card },
 		{ corner(UDim.new(0.5, 0)), stroke(color or GOLD, 2) })
 	text({ Text = icon, TextSize = 24, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), Parent = disc })
-	text({ Text = title, Font = BOLD, TextSize = 18, TextColor3 = color or GOLD, TextTruncate = Enum.TextTruncate.AtEnd, Size = UDim2.new(1, -70, 0, 24),
+	local heading = text({ Text = title, Font = BOLD, TextSize = 18, TextColor3 = color or GOLD, TextTruncate = Enum.TextTruncate.AtEnd, Size = UDim2.new(1, -70, 0, 24),
 		Position = UDim2.fromOffset(62, sub and 8 or 11), Parent = card })
 	if sub then
 		text({ Text = sub, TextSize = 14, TextColor3 = DIM, TextTruncate = Enum.TextTruncate.AtEnd, Size = UDim2.new(1, -70, 0, 20), Position = UDim2.fromOffset(62, 34), Parent = card })
@@ -492,12 +493,40 @@ function Hud:notify(icon: string, title: string, sub: string?, color: Color3?, l
 		end)
 		kids[1]:Destroy()
 	end
-	task.delay(life or 4.5, function()
-		if card.Parent then
+	local duration = life or 4.5
+	local expires = os.clock() + duration
+	local function expire()
+		if not card.Parent then return end
+		local remaining = expires - os.clock()
+		if remaining > 0 then
+			task.delay(remaining, expire)
+		else
 			card:Destroy()
 		end
+	end
+	task.delay(duration, expire)
+	return card, function(updatedTitle)
+		heading.Text = updatedTitle
+		expires = os.clock() + duration
+	end
+end
+
+function Hud:gain(icon: string, name: string, amount: number)
+	local key = icon .. " " .. name
+	local entry = self.gainNotes[key]
+	if entry and entry.card.Parent then
+		entry.amount += amount
+		entry.update(string.format("+%d %s", entry.amount, name))
+		return
+	end
+	local card, update = self:notify(icon, string.format("+%d %s", amount, name))
+	entry = { amount = amount, card = card, update = update }
+	self.gainNotes[key] = entry
+	card.Destroying:Connect(function()
+		if self.gainNotes[key] == entry then
+			self.gainNotes[key] = nil
+		end
 	end)
-	return card
 end
 
 return Hud
