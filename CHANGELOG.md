@@ -7,6 +7,7 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.3 — 2026-11-21
 
+- **Décor** — Les osselets ont leur propre miniature. La table, les lits et plusieurs petits décors retrouvent leurs appuis. Les pépites d’or ont un reflet métallique.
 - **Justice** — Un PNJ assommé retrouvé n’accuse plus tout le serveur : seul le joueur vu sur place prend des étoiles ; la nouvelle ne court que dans la région.
 - **Créatures** — Les squelettes deviennent des gisants, statues de tombeau qui se lèvent la nuit (créatures originales).
 - **Récolte** — Roseaux et nénuphars se ramassent au clic et repoussent.

@@ -312,7 +312,7 @@ craftsman_plan|Plan d'artisan|📐|0|u:recette:artisanat|-|
 diploma|Diplôme d'apprentissage|📜|80|v|parchment1 ink1 wax_seal1 #artisanat:20|savoir
 recommendation|Lettre de recommandation|✉️|60|v|parchment1 ink1 wax_seal1 #commerce:8|savoir
 # ---------- Loisirs et social
-dice|Jeu de dés|🎲|10|v|bone2|loisirs
+dice|Osselets|🦴|10|v|bone2|loisirs
 board_game|Jeu de plateau|♟️|40|v|planks3 stone2|loisirs
 cards|Jeu de cartes|🃏|30|v|paper6 ink1|loisirs
 flute|Flûte|🎶|40|u:musique|reeds3 @bench|loisirs
@@ -774,6 +774,7 @@ local function P(m: Model, size: Vector3, pos: Vector3, color: Color3, mat: Enum
 			p.Shape = Enum.PartType.Cylinder
 		end
 	end
+	p.Name = "Élément"
 	p.Size = size
 	p.CFrame = CFrame.new(pos) * (rot or CFrame.identity)
 	p.Color = color
@@ -829,7 +830,10 @@ ARCH.grandetable = function(m, c)
 		P(m, V(7, 0.3, 0.52), V(0, 2.6, i * 0.52), c:Lerp(DARK, math.abs(i) * 0.065), Mat.WoodPlanks)
 	end
 	legs(m, 7, 2.6, 2.5, DARK)
-	P(m, V(6, 0.25, 0.25), V(0, 0.8, 0), DARK, Mat.Wood)
+	P(m, V(6.6, 0.25, 0.25), V(0, 0.8, 0), DARK, Mat.Wood)
+	for _, x in { -3.3, 3.3 } do
+		P(m, V(0.25, 0.25, 2.2), V(x, 0.8, 0), DARK, Mat.Wood)
+	end
 	for _, z in { -1.04, 1.04 } do
 		P(m, V(6.7, 0.35, 0.17), V(0, 2.31, z), DARK, Mat.Wood).CanCollide = false
 	end
@@ -847,14 +851,20 @@ ARCH.lit = function(m, c)
 	P(m, V(2.6, 0.8, 5), V(0, 0.6, 0), DARK, Mat.Wood)
 	P(m, V(2.4, 0.4, 3.6), V(0, 1.2, 0.5), c, Mat.Fabric)
 	P(m, V(2.4, 0.4, 1), V(0, 1.2, -1.8), CLOTH, Mat.Fabric)
-	P(m, V(2.6, 1.6, 0.3), V(0, 1.2, -2.5), DARK, Mat.Wood)
+	P(m, V(2.6, 2, 0.3), V(0, 1, -2.5), DARK, Mat.Wood)
+	for _, x in { -1.12, 1.12 } do
+		P(m, V(0.3, 0.24, 0.3), V(x, 0.12, 2.22), DARK, Mat.Wood)
+	end
 end
 ARCH.litdouble = function(m, c)
 	P(m, V(4.6, 0.8, 5), V(0, 0.6, 0), DARK, Mat.Wood)
 	P(m, V(4.4, 0.4, 3.6), V(0, 1.2, 0.5), c, Mat.Fabric)
 	P(m, V(1.8, 0.4, 1), V(-1.1, 1.2, -1.8), CLOTH, Mat.Fabric)
 	P(m, V(1.8, 0.4, 1), V(1.1, 1.2, -1.8), CLOTH, Mat.Fabric)
-	P(m, V(4.6, 2.2, 0.3), V(0, 1.4, -2.5), DARK, Mat.Wood)
+	P(m, V(4.6, 2.5, 0.3), V(0, 1.25, -2.5), DARK, Mat.Wood)
+	for _, x in { -2.12, 2.12 } do
+		P(m, V(0.3, 0.24, 0.3), V(x, 0.12, 2.22), DARK, Mat.Wood)
+	end
 end
 ARCH.paillasse = function(m, c)
 	P(m, V(2.4, 0.5, 4.6), V(0, 0.25, 0), c, Mat.Grass)
@@ -981,7 +991,7 @@ ARCH.banniere = function(m, c)
 end
 ARCH.drapeau = function(m, c)
 	P(m, V(0.25, 9, 0.25), V(0, 4.5, 0), DARK, Mat.Wood)
-	P(m, V(0.1, 2, 3), V(0, 7.8, 1.5), c, Mat.Fabric)
+	P(m, V(0.1, 2, 3), V(0, 7.8, 1.5), c, Mat.Fabric).CanCollide = false
 end
 ARCH.blason = function(m, c)
 	P(m, V(0.3, 3, 2.4), V(0, 2.2, 0), c, Mat.WoodPlanks)
@@ -1002,11 +1012,11 @@ ARCH.statue = function(m, c)
 end
 ARCH.sculpture = function(m, c)
 	P(m, V(1.6, 1, 1.6), V(0, 0.5, 0), STONE, Mat.Cobblestone)
-	P(m, V(1.4, 1.4, 1.4), V(0, 1.8, 0), c, Mat.Marble, "ball")
-	P(m, V(0.8, 0.8, 0.8), V(0.3, 2.9, 0.2), c, Mat.Marble, "ball")
+	P(m, V(1.4, 1.4, 1.4), V(0, 1.65, 0), c, Mat.Marble, "ball")
+	P(m, V(0.8, 0.8, 0.8), V(0.22, 2.69, 0.12), c, Mat.Marble, "ball")
 end
 ARCH.vase = function(m, c)
-	P(m, V(1.4, 1.6, 1.4), V(0, 0.9, 0), c, Mat.Sand, "ball")
+	P(m, V(1.4, 1.6, 1.4), V(0, 0.8, 0), c, Mat.Sand, "ball")
 	P(m, V(0.8, 0.7, 0.7), V(0, 1.9, 0), c, Mat.Sand, "cyl", UP)
 end
 ARCH.pichet = function(m, c)
@@ -1420,7 +1430,11 @@ function K.build(name: string): Model?
 	base.CanTouch = false
 	base.Parent = m
 	m.PrimaryPart = base
-	fn(m, COLORS[spec.color] or WOOD)
+	local ok, erreur = pcall(fn, m, COLORS[spec.color] or WOOD)
+	if not ok then
+		m:Destroy()
+		error(erreur, 0)
+	end
 	return m
 end
 

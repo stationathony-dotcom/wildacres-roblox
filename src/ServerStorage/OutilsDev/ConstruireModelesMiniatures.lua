@@ -67,8 +67,26 @@ function M.mobilier(replicatedStorage, modeles, config)
 	end
 end
 
+-- Quatre petits os articulaires, avec deux lobes inégaux et un étranglement central.
+function M.formeOsselets(part)
+	local os, patine = rgb(225, 209, 173), rgb(196, 174, 133)
+	for _, pose in {
+		C(-0.34, 0, -0.25) * CFrame.Angles(0, 0.45, 0),
+		C(0.29, 0, -0.27) * CFrame.Angles(0.10, -0.36, 0),
+		C(-0.26, 0, 0.32) * CFrame.Angles(0, -0.52, 0),
+		C(0.36, 0, 0.27) * CFrame.Angles(0, 0.66, -0.10),
+	} do
+		part("Col de l’os", V(0.24, 0.20, 0.36), pose * C(0, 0.12, 0), patine, "Ball")
+		part("Lobe large", V(0.36, 0.27, 0.28), pose * C(-0.035, 0.14, -0.15), os, "Ball")
+		part("Lobe court", V(0.29, 0.23, 0.22), pose * C(0.035, 0.12, 0.16), os, "Ball")
+	end
+end
+
 function M.identites(replicatedStorage)
 	local icons = folder(replicatedStorage, "IconesObjets")
+	local osselets = model(icons, "dice", M.formeOsselets)
+	osselets:SetAttribute("ApercuDroit", true)
+	osselets:SetAttribute("PaletteDediee", true)
 	model(icons, "seed_tree_cerisier", function(p)
 		p("Noyau", V(0.94, 0.56, 0.74), C(), rgb(167, 106, 59), "Ball")
 		p("Suture", V(0.64, 0.05, 0.06), C(0, 0.27, 0), rgb(101, 59, 38), "Ball")

@@ -210,6 +210,8 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [~] **X26 · `docs/INTERFACE.md` + planches** — Sur disque · Codex, 21/11 soir. Commandes, carte, pose,
       survol, retour et sons documentés. Les planches peintes complètent le catalogue. À vérifier
       en Studio / Play : vues et nouvelles captures indiquées dans les README.
+- [~] **Vérification des props, phase 1** — en cours — Codex, 21/11. Banc Edit et reprise des défauts évidents sur disque.
+      Relevé dans [`VERIFICATION-PROPS.md`](VERIFICATION-PROPS.md). Phase 2 à réception du rapport de Claude.
 
 ## Couloir Claude — les règles et le monde
 
@@ -265,6 +267,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 21/11 · Codex · Props, phase 1 sur disque. Banc Edit en lots, relecture des planches, appuis et miniature des osselets corrigés.
+  À mesurer en Édition avec Claude, puis relecture des silhouettes et de la pose en situation.
 
 - 21/11 · Codex · Vérification sur disque dans `docs/VERIFICATION-INTERFACE.md`. Invites clavier/tactile/manette, pictogrammes de secours, garde du butin et retrait des deux anciens modèles.
   Quatre passages serveur ouverts. À vérifier en Play : commandes et affichage des invites, butin près d’une invite Y, publication des atlas, audio et aperçus.

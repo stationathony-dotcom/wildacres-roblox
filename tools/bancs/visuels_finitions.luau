@@ -1,5 +1,9 @@
 -- À lancer dans Studio Edit après visuels_objets. Produit les miniatures affinées du catalogue.
 local RS, SS = game.ReplicatedStorage, game.ServerStorage
+local sourceMiniatures = SS.OutilsDev.ConstruireModelesMiniatures:Clone()
+local okMiniatures, miniatures = pcall(require, sourceMiniatures)
+sourceMiniatures:Destroy()
+assert(okMiniatures, miniatures)
 local shared = RS.Shared:Clone()
 shared.Parent = SS
 local ok, config, gear, design = pcall(function()
@@ -1170,7 +1174,7 @@ assign("boat","barque voilier")
 assign("kite","kite")
 assign("figurine","wood_figurine stone_figurine wood_toy rag_doll")
 assign("instrument","harp lute drum flute")
-assign("dice","dice")
+assign("osselets","dice")
 assign("horn","antler")
 assign("shell","golden_carapace")
 assign("skinscale","ancient_scale black_scale scales")
@@ -1405,14 +1409,10 @@ local function itemShape(d,id,kind,c)
 			d.ball("Rosace",0.25,0.25,0.065,0,-0.09,-0.203,dark)
 			for i=-1,1 do d.line("Corde",v(i*0.061,-0.35,-0.221),v(i*0.061,0.81,-0.105),0.027,ivory) end
 		end
-	elseif kind=="dice" then
-		for s=-1,1,2 do
-			d.box("Dé",0.59,0.59,0.59,s*0.34,0,0,ivory)
-			for _,x in ipairs({-0.15,0.15}) do
-				for _,z in ipairs({-0.15,0.15}) do d.ball("Point",0.092,0.035,0.092,s*0.34+x,0.30,z,dark) end
-			end
-			d.ball("Point",0.105,0.105,0.035,s*0.34,0,-0.30,dark)
-		end
+	elseif kind=="osselets" then
+		miniatures.formeOsselets(function(nom, taille, pose, couleur, forme)
+			d.part(nom, taille, pose, couleur, forme:lower())
+		end)
 	elseif kind=="horn" then
 		hat(d,c,"antlers")
 	elseif kind=="shell" then shield(d,mix(c,brass,0.45),"shell")

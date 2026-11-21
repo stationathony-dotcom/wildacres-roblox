@@ -229,7 +229,7 @@ function M.biomes()
 		P(m, "BrasG2", Vector3.new(1, 2.4, 1), Vector3.new(-2.2, 4.1, 0), v, Mat.Grass)
 		P(m, "BrasD", Vector3.new(1.6, 1, 1), Vector3.new(1.4, 2.2, 0), v, Mat.Grass)
 		P(m, "BrasD2", Vector3.new(1, 1.8, 1), Vector3.new(2, 3, 0), v2, Mat.Grass)
-		P(m, "Fleur", Vector3.new(0.7, 0.4, 0.7), Vector3.new(0, 6.9, 0), rgb(240, 120, 160), Mat.SmoothPlastic, { collide = false })
+		P(m, "Fleur", Vector3.new(0.7, 0.4, 0.7), Vector3.new(0, 6.77, 0), rgb(240, 120, 160), Mat.SmoothPlastic, { collide = false })
 		fini(m)
 	end
 	do
@@ -269,7 +269,7 @@ function M.artisanat()
 	filon("Filon_Charbon", rgb(34, 32, 36), Mat.Slate)
 	filon("Filon_Cuivre", rgb(214, 124, 72), Mat.Metal)
 	filon("Filon_Fer", rgb(222, 200, 180), Mat.Metal)
-	filon("Filon_Or", rgb(250, 206, 60), Mat.Neon)
+	filon("Filon_Or", rgb(226, 179, 67), Mat.Metal)
 	do
 		local m = nouveau("Argile")
 		local c1, c2 = rgb(176, 108, 78), rgb(150, 92, 66)
@@ -930,8 +930,11 @@ function M.securite()
 		P(m, "Pot", Vector3.new(1.2, 1, 1.2), Vector3.new(0, 0.5, 0), rgb(180, 100, 70), Mat.SmoothPlastic)
 		P(m, "Terre", Vector3.new(1, 0.1, 1), Vector3.new(0, 1.0, 0), rgb(80, 56, 36), Mat.Ground, { collide = false })
 		for i, c in { rgb(240, 120, 160), rgb(250, 220, 80), rgb(150, 120, 230) } do
-			P(m, "Fleur", Vector3.new(0.4, 0.4, 0.4), Vector3.new(-0.3 + i * 0.2, 1.5 + (i % 2) * 0.2, (i % 2) * 0.2 - 0.1), c, Mat.SmoothPlastic, { collide = false })
-			P(m, "Tige", Vector3.new(0.1, 0.5, 0.1), Vector3.new(-0.3 + i * 0.2, 1.2, (i % 2) * 0.2 - 0.1), rgb(70, 140, 60), Mat.SmoothPlastic, { collide = false })
+			local x, z = -0.3 + i * 0.2, (i % 2) * 0.2 - 0.1
+			local y = 1.5 + (i % 2) * 0.2
+			local haut = y - 0.15
+			P(m, "Fleur", Vector3.new(0.4, 0.4, 0.4), Vector3.new(x, y, z), c, Mat.SmoothPlastic, { collide = false })
+			P(m, "Tige", Vector3.new(0.1, haut - 1, 0.1), Vector3.new(x, (1 + haut) / 2, z), rgb(70, 140, 60), Mat.SmoothPlastic, { collide = false })
 		end
 		fini(m)
 	end
