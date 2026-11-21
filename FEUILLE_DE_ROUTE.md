@@ -55,7 +55,7 @@ banque agrandissable sans fin, champs sans limite.
 
 ## Phase 3 — Une société
 
-- [x] Groupes (5, invite [U], surbrillance + distance, +10 % XP ensemble)
+- [x] Groupes (sans limite depuis le 21/11, règle 2 ; invite [U], surbrillance + distance, +10 % XP ensemble)
 - [x] Clans : nom + tag filtrés, 6 grades, coffre commun atomique (UpdateAsync), journal, invite [J], panneau [L], tag dans la liste des joueurs
 - [x] Auberge : les lits des joueurs se louent 15 or la nuit (payé par courrier), point de réapparition du locataire
 - [x] Courrier entre joueurs (objets / or, même hors ligne ou autre monde, 5 or de port, sans texte libre)

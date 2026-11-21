@@ -317,7 +317,8 @@ end
 
 -- ----------------------------------------------------------------- Groupes
 
-local MAX_GROUP = 5
+-- règle 2 (21/11) : plus de groupe limité à 5 ; seule borne = la capacité d'un monde (technique)
+local MAX_GROUP = 40
 
 local function publish(group)
 	local names = {}
