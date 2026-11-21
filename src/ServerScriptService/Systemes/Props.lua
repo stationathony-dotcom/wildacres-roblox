@@ -110,7 +110,14 @@ local function shake(model: Model)
 end
 
 -- Joue l'animation d'outil si l'outil est en main
+-- geste du joueur selon l'outil (client Gestes) : abattre, piocher, creuser, pêcher, arroser
+local GESTE_OUTIL = { axe = "abattre", pickaxe = "piocher", shovel = "creuser", spade = "creuser", hoe = "creuser",
+	rod = "pecher", harpoon = "lancer", can = "arroser", sword = "taille", club = "lourd" }
 function Props.swing(player: Player, itemId: string?)
+	local base = itemId and G.Config.baseOf and G.Config.baseOf(itemId) or itemId
+	if base and GESTE_OUTIL[base] then
+		G.Util.geste(player, GESTE_OUTIL[base])
+	end
 	local char = player.Character
 	local tool = char and char:FindFirstChildOfClass("Tool")
 	if tool and (not itemId or tool:GetAttribute("ItemId") == itemId) then

@@ -248,6 +248,11 @@ local SFX = {
 	serrure = { id = "rbxassetid://9116324156", len = 0.55, vol = 0.45 },
 	cloche = { id = "rbxassetid://9113583960", len = 1.4, vol = 0.7 },
 	sabots = { id = "rbxassetid://9113124912", len = 0.28, vol = 0.35 },
+	-- 21/11 : impacts des coups selon l'arme (Combat.attack)
+	impact_lame = { id = "rbxassetid://9119747138", len = 0.45, vol = 0.6 },
+	impact_sourd = { id = "rbxassetid://9113960751", len = 0.5, vol = 0.7 },
+	impact_poing = { id = "rbxassetid://9119062782", len = 0.4, vol = 0.6 },
+	impact_metal = { id = "rbxassetid://9119072660", len = 0.5, vol = 0.55 },
 }
 local lastSfx = {}
 

@@ -42,7 +42,7 @@ local POSES = {
 			LeftShoulder = X(55 * w), LeftElbow = X(-50 * w),
 		}
 	end },
-	manger = { dur = 1.2, p = function(t, w)
+	manger = { dur = 1.2, son = "bouchee", sonA = 0.25, p = function(t, w)
 		local bite = (sin(t * pi * 3) + 1) / 2 -- deux bouchées
 		return {
 			Neck = X(-6 * w * bite),
@@ -62,6 +62,101 @@ local POSES = {
 	end },
 	commerce = { dur = 0.7, p = function(t, w)
 		return { RightShoulder = X(55 * w), RightElbow = X(-35 * w), Neck = X(-8 * w) }
+	end },
+	-- 21/11 : combat et outils (Combat.attack / shoot, Props.swing). Armement (0 → 0,35 de la durée) puis frappe.
+	taille = { dur = 0.5, son = "fendre", p = function(t, w) -- épée, sabre : coup en diagonale
+		local k = math.clamp(t / 0.5, 0, 1)
+		local arme, frappe = math.min(1, k / 0.35), math.max(0, (k - 0.35) / 0.65)
+		return {
+			Waist = CFrame.Angles(0, rad((25 * arme - 55 * frappe) * w), 0),
+			RightShoulder = XZ((130 * arme - 70 * frappe) * w, (35 * arme - 60 * frappe) * w), RightElbow = X(-(40 * arme - 30 * frappe) * w),
+			LeftShoulder = X(25 * w),
+		}
+	end },
+	estoc = { dur = 0.42, son = "fendre", p = function(t, w) -- dague, lance : coup droit vers l'avant
+		local k = math.clamp(t / 0.42, 0, 1)
+		local arme, frappe = math.min(1, k / 0.4), math.max(0, (k - 0.4) / 0.6)
+		return {
+			Waist = CFrame.Angles(rad(-8 * frappe * w), rad(20 * arme * w - 30 * frappe * w), 0),
+			RightShoulder = X((60 + 30 * frappe) * w), RightElbow = X(-(95 * arme - 90 * frappe) * w),
+			RightHip = X(-10 * frappe * w), LeftHip = X(25 * frappe * w),
+		}
+	end },
+	lourd = { dur = 0.75, son = "lourd", p = function(t, w) -- hache, masse, marteau, espadon : à deux mains, par-dessus la tête
+		local k = math.clamp(t / 0.75, 0, 1)
+		local arme, frappe = math.min(1, k / 0.45), math.max(0, (k - 0.45) / 0.55)
+		local lift = 160 * arme - 120 * frappe
+		return {
+			Waist = X((8 * arme - 30 * frappe) * w), Neck = X(-10 * frappe * w),
+			RightShoulder = X(lift * w), LeftShoulder = X(lift * w), RightElbow = X(-30 * w), LeftElbow = X(-30 * w),
+			RightKnee = X(-20 * frappe * w), LeftKnee = X(-20 * frappe * w),
+		}
+	end },
+	poing = { dur = 0.35, son = "poing", p = function(t, w) -- à mains nues : direct du droit
+		local k = math.clamp(t / 0.35, 0, 1)
+		local arme, frappe = math.min(1, k / 0.35), math.max(0, (k - 0.35) / 0.65)
+		return {
+			Waist = CFrame.Angles(0, rad((15 * arme - 30 * frappe) * w), 0),
+			RightShoulder = X((70 + 20 * frappe) * w), RightElbow = X(-(110 * arme - 100 * frappe) * w),
+			LeftShoulder = X(60 * w), LeftElbow = X(-110 * w), -- garde
+		}
+	end },
+	tir = { dur = 0.85, son = "corde", sonA = 0.55, p = function(t, w) -- arc, arbalète : bander puis lâcher
+		local tend = math.min(1, t / 0.55)
+		local lache = t > 0.55 and 1 or 0
+		return {
+			Waist = CFrame.Angles(0, rad(-25 * w), 0), Neck = CFrame.Angles(0, rad(20 * w), 0),
+			LeftShoulder = XZ(90 * w, -10 * w), LeftElbow = X(-5 * w),
+			RightShoulder = X((90 - 5 * lache) * w), RightElbow = X(-(40 + 80 * tend - 60 * lache) * w),
+		}
+	end },
+	lancer = { dur = 0.6, son = "fendre", p = function(t, w) -- javelot, couteau, hache de jet, fronde, harpon
+		local k = math.clamp(t / 0.6, 0, 1)
+		local arme, frappe = math.min(1, k / 0.5), math.max(0, (k - 0.5) / 0.5)
+		return {
+			Waist = CFrame.Angles(rad(-15 * frappe * w), rad((30 * arme - 50 * frappe) * w), 0),
+			RightShoulder = X((150 * arme - 60 * frappe) * w), RightElbow = X(-(70 * arme - 60 * frappe) * w),
+			LeftShoulder = X(50 * w), RightHip = X(-15 * frappe * w), LeftHip = X(25 * frappe * w),
+		}
+	end },
+	abattre = { dur = 0.7, son = "lourd", p = function(t, w) -- hache de bûcheron : coup horizontal dans le tronc
+		local k = math.clamp(t / 0.7, 0, 1)
+		local arme, frappe = math.min(1, k / 0.45), math.max(0, (k - 0.45) / 0.55)
+		return {
+			Waist = CFrame.Angles(rad(-8 * w), rad((40 * arme - 70 * frappe) * w), 0),
+			RightShoulder = XZ(85 * w, (60 * arme - 70 * frappe) * w), LeftShoulder = XZ(80 * w, (40 * arme - 60 * frappe) * w),
+			RightElbow = X(-25 * w), LeftElbow = X(-35 * w), RightKnee = X(-15 * w), LeftKnee = X(-15 * w),
+		}
+	end },
+	piocher = { dur = 0.7, son = "lourd", p = function(t, w) -- pioche : par-dessus l'épaule, vers le sol
+		local k = math.clamp(t / 0.7, 0, 1)
+		local arme, frappe = math.min(1, k / 0.45), math.max(0, (k - 0.45) / 0.55)
+		local lift = 150 * arme - 140 * frappe
+		return {
+			Waist = X((10 * arme - 40 * frappe) * w), Neck = X(-15 * frappe * w),
+			RightShoulder = X(lift * w), LeftShoulder = X((lift - 15) * w), RightElbow = X(-25 * w), LeftElbow = X(-40 * w),
+			RightKnee = X(-25 * frappe * w), LeftKnee = X(-25 * frappe * w),
+		}
+	end },
+	creuser = { dur = 0.8, p = function(t, w) -- pelle, houe : on enfonce puis on soulève
+		local s = (sin(t * pi * 2.5) + 1) / 2
+		return {
+			Waist = X(-(25 + 15 * s) * w), Neck = X(-10 * w),
+			RightShoulder = X((45 + 25 * s) * w), LeftShoulder = X((60 + 20 * s) * w), RightElbow = X(-30 * w), LeftElbow = X(-20 * w),
+			RightKnee = X(-25 * w), LeftKnee = X(-30 * w), RightHip = X(15 * w), LeftHip = X(15 * w),
+		}
+	end },
+	pecher = { dur = 0.9, son = "fendre", sonA = 0.4, p = function(t, w) -- lancer de ligne
+		local k = math.clamp(t / 0.9, 0, 1)
+		local arme, lance = math.min(1, k / 0.4), math.max(0, (k - 0.4) / 0.6)
+		return {
+			RightShoulder = X((140 * arme - 80 * lance) * w), RightElbow = X(-(50 * arme - 30 * lance) * w),
+			Waist = X((6 * arme - 12 * lance) * w), LeftShoulder = X(30 * w),
+		}
+	end },
+	arroser = { dur = 1.0, p = function(t, w) -- arrosoir penché, petit balancement
+		local s = sin(t * pi * 3) * 8
+		return { RightShoulder = XZ(55 * w, (10 + s) * w), RightElbow = X(-15 * w), Waist = X(-12 * w), Neck = X(-15 * w) }
 	end },
 	-- 19/11 : gestes de loisir (commandes /danse, /salut, /applaudir, /reverence)
 	danse = { dur = 6, p = function(t, w)
@@ -225,6 +320,37 @@ RunService.RenderStepped:Connect(function()
 	end
 end)
 
+-- Sons des gestes (bibliothèque Roblox) : sifflement de l'arme, bouchée… joués au corps du personnage,
+-- hauteur un peu variée à chaque fois. `deb`/`len` : on n'en joue qu'un morceau court.
+local SONS = {
+	fendre = { id = "rbxassetid://9120717850", deb = 0.05, len = 0.35, vol = 0.55, pitch = 1.25 }, -- lame qui fend l'air
+	lourd = { id = "rbxassetid://9120717850", deb = 0.05, len = 0.5, vol = 0.65, pitch = 0.8 }, -- arme lourde
+	poing = { id = "rbxassetid://9120717850", deb = 0.05, len = 0.22, vol = 0.4, pitch = 1.6 },
+	corde = { id = "rbxassetid://9120717850", deb = 0.0, len = 0.25, vol = 0.5, pitch = 2.2 }, -- corde lâchée
+	bouchee = { id = "rbxassetid://137096768206416", deb = 0, len = 0.6, vol = 0.5, pitch = 1 },
+}
+local function jouerSon(char: Model, nom: string)
+	local s = SONS[nom]
+	local root = s and char:FindFirstChild("HumanoidRootPart")
+	if not root then
+		return
+	end
+	-- même réglage que les autres bruitages (Paramètres → attribut VolAmbiance du joueur local)
+	local v = Players.LocalPlayer:GetAttribute("VolAmbiance")
+	local vol = (type(v) == "number" and math.clamp(v, 0, 1) or 0.6) / 0.6
+	local snd = Instance.new("Sound")
+	snd.SoundId = s.id
+	snd.Volume = s.vol * vol
+	snd.PlaybackSpeed = s.pitch * (0.92 + math.random() * 0.16)
+	snd.TimePosition = s.deb
+	snd.RollOffMaxDistance = 60
+	snd.Parent = root
+	snd:Play()
+	task.delay(s.len / snd.PlaybackSpeed, function()
+		snd:Destroy()
+	end)
+end
+
 local function watch(player: Player)
 	player:GetAttributeChangedSignal("Geste"):Connect(function()
 		local v = player:GetAttribute("Geste")
@@ -235,6 +361,9 @@ local function watch(player: Player)
 			local r = rigOf(char)
 			r.gesture = { pose = pose, t0 = os.clock() } -- un nouveau geste remplace l'ancien
 			r.dirty = true
+			if pose.son then
+				task.delay(pose.sonA or 0.15, jouerSon, char, pose.son) -- au moment de la frappe
+			end
 		end
 	end)
 	player.CharacterRemoving:Connect(function(char)

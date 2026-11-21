@@ -189,6 +189,32 @@ local function rangedWeapon(player: Player)
 end
 Combat.rangedWeapon = rangedWeapon
 
+-- Famille de geste et de son de l'attaque (client Gestes : taille, estoc, lourd, poing, tir, lancer).
+-- Outil tenu (hache, pioche…) d'abord, sinon la forme de l'arme portée (Shared/GearDesign), sinon le poing.
+local FAMILLE_FORME = {
+	sword = "taille", saber = "taille", scythe = "taille", reaper = "taille", greatsword = "lourd", dagger = "estoc",
+	pike = "estoc", longpike = "estoc", halberd = "lourd", javelin = "lancer", axe = "lourd", mace = "lourd",
+	hammer = "lourd", club = "lourd", staff = "lourd", bow = "tir", shortbow = "tir", longbow = "tir", crossbow = "tir",
+}
+local IMPACT = { taille = "impact_lame", estoc = "impact_lame", lourd = "impact_sourd", poing = "impact_poing", tir = "impact_lame", lancer = "impact_lame" }
+local function famille(player: Player, itemId: string?): string
+	local base = itemId and G.Config.baseOf and G.Config.baseOf(itemId)
+	if base == "sword" then
+		return "taille"
+	elseif base == "club" or base == "axe" or base == "pickaxe" or base == "hammer" then
+		return "lourd"
+	end
+	local prof = G.Joueurs.get(player)
+	local w = prof and prof.equipped and prof.equipped.weapon
+	if not w then
+		return "poing"
+	end
+	local okD, Design = pcall(require, game:GetService("ReplicatedStorage").Shared.GearDesign)
+	local form = okD and Design.formOf(w) or nil
+	return FAMILLE_FORME[form or ""] or "taille"
+end
+Combat.famille = famille
+
 local function arrowFx(from: Vector3, to: Vector3)
 	local d = to - from
 	if d.Magnitude < 1 then
@@ -306,6 +332,7 @@ function Combat.shoot(player: Player, targetId: string?)
 			end
 		end
 	end
+	G.Util.geste(player, (ammoOf == "javelin" or ammoOf == "throwing_knife" or ammoOf == "throwing_axe" or ammoOf == "stone") and "lancer" or "tir")
 	G.Util.sfx("coup", root.Position)
 	if not best then
 		arrowFx(from, from + look * Combat.RANGE)
@@ -340,7 +367,8 @@ function Combat.attack(player: Player, itemId: string?, targetId: string?)
 	if not root or player:GetAttribute("Carrying") then
 		return
 	end
-	G.Props.swing(player)
+	local fam = famille(player, itemId)
+	G.Util.geste(player, fam) -- geste du coup (client Gestes), son de l'arme dans le vide compris
 	Combat.swoosh(player)
 	local dmg = Combat.damageOf(player, itemId)
 	local look = root.CFrame.LookVector
@@ -402,6 +430,10 @@ function Combat.attack(player: Player, itemId: string?, targetId: string?)
 		if base == "sword" or base == "club" or base == "axe" or base == "pickaxe" then
 			G.Joueurs.wearTool(player, base)
 		end
+	end
+	local at = (best.pos or (best.root and best.root.Position) or (G.Util.root(best) and G.Util.root(best).Position)) or root.Position
+	if typeof(at) == "Vector3" then
+		G.Util.sfx(IMPACT[fam] or "impact_lame", at) -- le coup porte : lame, choc sourd ou poing
 	end
 	applyHit(player, best, kind, dmg, root)
 end

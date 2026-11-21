@@ -42,6 +42,7 @@ local side = enemyAt(O + Vector3.new(30, 0, 0), "cote")
 local hits = {}
 local bag = { arrow = 0 }
 local toasts = {}
+local gestes
 local prof = { equipped = { weapon = { name = "Arc court", power = 3 } } }
 local P = { Parent = true, Character = Instance.new("Model") } -- un vrai joueur a toujours un Character (filtre du raycast)
 function P:GetAttribute()
@@ -50,7 +51,7 @@ end
 local G = {
 	Config = { ITEMS = { sword = { weapon = 2 } }, baseOf = function() return nil end },
 	Interact = { onAction = function() end, onPrompt = function() end },
-	Util = { root = function() return root end, toast = function(_, t) table.insert(toasts, t) end, sfx = function() end },
+	Util = { root = function() return root end, toast = function(_, t) table.insert(toasts, t) end, sfx = function() end, geste = function(_, k) gestes = (gestes or "") .. k .. " " end },
 	Joueurs = {
 		get = function() return prof end,
 		take = function(_, i, n) if (bag[i] or 0) < n then return false end bag[i] -= n return true end,
@@ -104,6 +105,7 @@ Combat.attack(P, nil, nil)
 task.wait(0.8)
 check("hors de portée (70 studs) : pas de touche", #hits == n0)
 check("la cible de côté n'est pas visée", not table.find(hits, "cote"))
+check("chaque tir joue le geste « tir » (client Gestes)", gestes ~= nil and string.find(gestes, "tir") ~= nil)
 
 folder:Destroy()
 mod:Destroy()
