@@ -64,6 +64,18 @@ end
 
 Compagnons.recordsOf = petsOf -- lu par le livre des animaux (Livres)
 
+-- Chien de berger (21/11, « liste quetes.txt » 457) : un canidé apprivoisé qui SUIT son maître
+-- rassemble ses bêtes de ferme quand il en mène une (Animals.lead)
+Compagnons.HERDERS = { wolf = true, wolf_white = true, stray_dog = true }
+function Compagnons.herder(player: Player): boolean
+	for _, rec in petsOf(G.Util.pid(player)) or {} do
+		if rec.mode == "follow" and Compagnons.HERDERS[rec.kind] then
+			return true
+		end
+	end
+	return false
+end
+
 -- bêtes seulement (les soldats ont leur propre plafond, voir Armee)
 function Compagnons.count(player: Player): number
 	local n = 0

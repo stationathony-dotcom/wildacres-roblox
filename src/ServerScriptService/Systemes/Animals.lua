@@ -228,6 +228,8 @@ function Animals.collect(player: Player, id: string)
 	refreshPrompt(a)
 end
 
+Animals.HERD_R = 25 -- studs : rayon dans lequel le chien de berger rassemble les bêtes
+
 -- Mener une bête (la sienne) ou l'appâter (celle d'un autre : vol)
 function Animals.lead(player: Player, id: string)
 	local a = find(id)
@@ -237,6 +239,20 @@ function Animals.lead(player: Player, id: string)
 	if a.leader then
 		if a.leader ~= player then
 			return
+		end
+		-- troupeau mené avec un chien : on installe toutes les bêtes rassemblées au même endroit
+		if a.herd then
+			for _, b in Animals.list do
+				if b ~= a and b.leader == player and b.herd then
+					b.herd = nil
+					b.leader = nil
+					b.home = b.pos
+					b.pen = nil
+					b.state.x, b.state.z = math.floor(b.pos.X), math.floor(b.pos.Z)
+					refreshPrompt(b)
+				end
+			end
+			a.herd = nil
 		end
 		a.leader = nil
 		-- installée là où on la laisse : elle y reste
@@ -290,7 +306,25 @@ function Animals.lead(player: Player, id: string)
 		a.state.owner = a.owner
 	end
 	a.leader = player
-	G.Util.toast(player, a.k.name .. " te suit. Appuie de nouveau [R] pour l'installer quelque part.")
+	-- chien de berger : il rassemble les autres bêtes à toi autour (pas celles des autres)
+	local gathered = 0
+	if G.Compagnons and rawget(G.Compagnons, "herder") and G.Compagnons.herder(player) then
+		for _, b in Animals.list do
+			if b ~= a and not b.leader and b.owner and G.Util.owns(player, b.owner) and (b.pos - a.pos).Magnitude <= Animals.HERD_R then
+				b.leader = player
+				b.herd = true
+				refreshPrompt(b)
+				gathered += 1
+			end
+		end
+		a.herd = gathered > 0 or nil
+	end
+	if gathered > 0 then
+		G.Util.toast(player, "🐕 Ton chien rassemble le troupeau : " .. (gathered + 1) .. " bêtes te suivent. [R] pour les installer.")
+		G.Joueurs.addSkillXp(player, "elevage", 2)
+	else
+		G.Util.toast(player, a.k.name .. " te suit. Appuie de nouveau [R] pour l'installer quelque part.")
+	end
 	refreshPrompt(a)
 end
 
