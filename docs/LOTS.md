@@ -277,7 +277,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - 21/11 soir · Codex · Correctif d’apparence (54069dc), chèvre (a8d776e) et icônes (30bbba0).
   X21/X22/X24/X25/X26 committés. Six scripts client vérifiés dans Studio, chèvre et miniature de lanterne présentes.
   Banc complet relancé en Édition après synchronisation (6596a5a) : 55/55 verts en 109 s.
-  À vérifier en Play : les sept sons, la miniature de lanterne et le retour avec lit et journal.
+  Édition : 7/7 sons préchargés, lanterne avec lumière et miniature, banc Infos vert pour le lit et le journal. En Play : vérifier le rendu, la lecture des sons et le retour.
   Après publication des six atlas, contrôler les icônes du sac et de l’atelier.
 
 - 21/11 · Codex · Pause à la demande du propriétaire. X15–X19 livrés et synchronisés dans Studio. X20 était déjà fait.
