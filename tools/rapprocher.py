@@ -352,7 +352,7 @@ QUETES_TITRES = {'La maison idéale': 'concours de construction (Activites), jug
     'La ferme en difficulté': 'sortes « apporter » / « récolter »',
     'Le troupeau dispersé': 'sorte « retrouver » (QuetesLieux)',
     'Le chantier urgent': 'sorte « réparer » (QuetesLieux)',
-    'La route encombrée': 'pas encore : dégager un passage (arbres / rochers tombés) — à proposer',
+    'La route encombrée': 'événement « route encombrée » (Evenements, 21/11)',
     'Le coffre découvert': "sorte « enquêter » (fin d'enquête : coffre)", 'La récolte imprévue': 'sorte « récolter »',
     'La cargaison perdue': 'sorte « retrouver » (« Une livraison a disparu »)',
     'La mine abandonnée': 'grottes (Donjons) + sorte « visiter »',

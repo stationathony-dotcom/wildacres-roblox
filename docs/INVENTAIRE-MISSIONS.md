@@ -1598,7 +1598,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (642) 515. **La ferme en difficulté** — Une exploitation a besoin d'aide. → sortes « apporter » / « récolter »
 - [x] (643) 516. **Le troupeau dispersé** — Des animaux se sont éloignés de leur enclos. → sorte « retrouver » (QuetesLieux)
 - [x] (644) 517. **Le chantier urgent** — Un bâtiment doit être réparé rapidement. → sorte « réparer » (QuetesLieux)
-- [ ] (645) 518. **La route encombrée** — Un passage doit être dégagé.
+- [x] (645) 518. **La route encombrée** — Un passage doit être dégagé. → événement « route encombrée » (Evenements, 21/11)
 - [x] (646) 519. **Le coffre découvert** — Un PNJ a trouvé un coffre et demande de l'aide pour l'identifier. → sorte « enquêter » (fin d'enquête : coffre)
 - [x] (647) 520. **La récolte imprévue** — Une récolte exceptionnelle nécessite des bras supplémentaires. → sorte « récolter »
 - [x] (648) 521. **La cargaison perdue** — Une livraison a disparu sur une route. → sorte « retrouver » (« Une livraison a disparu »)
