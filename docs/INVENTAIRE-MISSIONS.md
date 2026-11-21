@@ -1525,7 +1525,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (567) 454. **Le cheval bien équipé** — Installer une selle et des sacoches. → sorte « bâtir / étal (QuetesLieux) »
 - [x] (568) 455. **Le concours équestre** — Participer à une épreuve avec sa monture. → sorte « concours / courses (Activites) »
 - [x] (569) 456. **Le chien fidèle** — Apprendre une commande à son chien. → ordres des compagnons (Compagnons)
-- [ ] (570) 457. **Le chien de berger** — Guider un troupeau avec un chien.
+- [x] (570) 457. **Le chien de berger** — Guider un troupeau avec un chien. → chien de berger (Animals.lead + Compagnons.herder, 21/11)
 - [x] (571) 458. **Le compagnon explorateur** — Découvrir une région avec son compagnon. → sorte « découvrir / visiter (QuetesLieux) »
 - [x] (572) 459. **Le compagnon retrouvé** — Retrouver un compagnon qui s'est éloigné. → sorte « retrouver (QuetesLieux) »
 - [x] (573) 460. **Le dresseur débutant** — Apprendre plusieurs commandes à un animal. → ordres des compagnons (Compagnons)

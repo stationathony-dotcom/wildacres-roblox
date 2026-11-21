@@ -346,7 +346,7 @@ QUETES_TITRES = {'La maison idéale': 'concours de construction (Activites), jug
     'Le biologiste amateur': 'livre du bestiaire (Livres)',
     'Le commerce entre biomes': 'demandes régionales (Shop.wanted) + troc',
     'Les chroniques de Wild Acres': 'chroniques / pages anciennes (Chroniques)', "L'architecte du royaume": 'concours de construction (Activites)',
-    'Le chien de berger': 'pas encore : mener un troupeau avec un chien (Animals.lead + Compagnons) — à proposer',
+    'Le chien de berger': 'chien de berger (Animals.lead + Compagnons.herder, 21/11)',
     'La carte des marées': 'volontairement absent : pas de marées (îles fixes)',
     'Le marchand ambulant': 'colporteur (Metiers) + sorte « escorter »',
     'La ferme en difficulté': 'sortes « apporter » / « récolter »',
