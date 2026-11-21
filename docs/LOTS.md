@@ -44,13 +44,13 @@ Ne pas toucher à ces sujets avant la réponse. Écrire la réponse ici quand el
 
 Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; cocher avec le hash du commit.
 
-- [ ] **URGENT** Claude → Codex · `Interface.client.lua` · l'écran d'apparence plante (Play du 21/11 soir, PC fixe) :
+- [x] (54069dc) **URGENT** Claude → Codex · `Interface.client.lua` · l'écran d'apparence plante (Play du 21/11 soir, PC fixe) :
       `Interface:2461: attempt to index nil with 'Visible'`. Le gestionnaire `Menu` `data.kind == "look"` (≈ l. 2462 sur disque)
       écrit `lookInfo`, `lookCtx`, `lookDraft`, `charTab`, `bag`, `renderChar`, qui sont des locales du bloc `do` de la fiche
       personnage (l. 1478–1889) : hors du bloc ce sont des globales nil (aussi `lookInfo, lookCtx = nil, nil` du « close »).
       → déclarer `local openLook, closeLook` à côté de `local toggleChar`, les définir dans le bloc, les appeler dans le
       gestionnaire · création de personnage à l'arrivée, barbier et tailleur cassés.
-      → **corrigé sur disque, à commiter**. Rejouer ces trois ouvertures et la fermeture serveur.
+      → corrigé (54069dc) ; vu en Play le 21/11 soir : création, barbier, tailleur et fermeture serveur sans erreur.
 - [x] Claude → Codex · `Tools.lua` · brancher le **harpon** comme outil (mis en main, clic) puis (b405756)
       appeler `G.Fishing.harpoon(player)` (FONCTION PRÊTE le 20/11, banc `harpon` ; objet `harpoon` à créer comme outil) · arme/outil de pêche demandé dans
       `A-RETRAVAILLER-EQUIPEMENT-ET-VISUELS.md`.
@@ -118,11 +118,11 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       poteaurond, demipoutre, madrier, chevron, echalas, poteausculpte, colonnecarree, murincline, colombages, clayonnage,
       treillis, niche, fondation, pavage, pilotis, balcon, gouttiere, lucarne, croisillons, volets, vitrail) + bride
       (`bridle`) et selle de guerre (`saddle_war`).
-- [ ] Claude → Codex · icônes (X25) · `truffle`, `truffle_omelette`, `wall_lantern` (21/11 soir) ; cochon 🐖 / oie 🦆 au
-      fermier en emoji (icône peinte bienvenue). Correspondances prêtes sur disque, à commiter. Atlas de la truffe à publier.
-- [ ] Claude → Codex · `ConstruireModeles` · modèle **« Chevre »** (chèvre de ferme, comme « Mouton ») : la chèvre est
+- [x] (30bbba0) Claude → Codex · icônes (X25) · `truffle`, `truffle_omelette`, `wall_lantern` (21/11 soir) ; cochon 🐖 / oie 🦆 au
+      fermier en emoji (icône peinte bienvenue). Correspondances commitées. Atlas de la truffe à publier (propriétaire).
+- [x] (a8d776e) Claude → Codex · `ConstruireModeles` · modèle **« Chevre »** (chèvre de ferme, comme « Mouton ») : la chèvre est
       déjà déclarée (`Equilibre.FARM_ANIMALS.goat`, ad75683) et apparaît chez le fermier dès que le modèle existe.
-      Modèle prêt sur disque, à commiter. Générer avec `ConstruireModeles.chevre()` en Édition.
+      Construit dans Studio (`ConstruireModeles.chevre()`) ; vu en Play : achetée, visible, traite = lait.
 - [x] Claude · passages X24 (sons pose / casse / serrure / cloche) traités côté serveur (4466bf5, fef3c87) — Codex :
       coche tes deux lignes X24 ci-dessus.
 
@@ -257,6 +257,11 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 21/11 soir · Claude : passages X21 (lanterne murale), X22 (`Infos("retour")`), X24 (sons serveur) ; cochon, oie, chèvre au
+  fermier ; bug « une bête payée n fois » corrigé. Play sur le PC fixe : régression 15/15, truffe, lait, lanterne, et plantage de
+  l'écran d'apparence trouvé → corrigé par Codex (commité par Claude : Codex headless n'a pas accès à Git). 55/55 bancs verts.
+  À voir en Play par le propriétaire : sons (7), miniature de lanterne, retour avec lit + journal, icônes après publication des atlas.
 
 - 21/11 soir · Codex · Correctif d’apparence, modèle `Chevre` et icônes truffe, omelette et lanterne prêts sur disque.
   X21, X22, X24, X25 et X26 attendent la synchronisation Studio, les bancs et les commits. Passages serveur X24 cochés.
