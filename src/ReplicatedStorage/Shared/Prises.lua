@@ -5,8 +5,8 @@
 -- Enemies (butin). Ne pas éditer à la main : relancer le générateur.
 local P = {}
 P.KINDS = {
-	ancient_skeleton = { mat = "prise_ancient_skeleton", name = "Os maudit de squelette ancien", icon = "💀", price = 31, rank = "-", level = 5, n = 3, needs = { iron_ingot = 2, planks = 1 }, station = "anvil", skill = 10,
-		gear = { slot = "weapon", name = "Masse d'os de squelette ancien", rarity = 2, stats = { force = 3, charisme = 3 }, power = 4, visual = "4" } },
+	ancient_skeleton = { mat = "prise_ancient_skeleton", name = "Éclat de gisant ancien", icon = "🗿", price = 31, rank = "-", level = 5, n = 3, needs = { iron_ingot = 2, planks = 1 }, station = "anvil", skill = 10,
+		gear = { slot = "weapon", name = "Masse de pierre de gisant ancien", rarity = 2, stats = { force = 3, charisme = 3 }, power = 4, visual = "4" } },
 	ancient_turtle = { mat = "prise_ancient_turtle", name = "Carapace de tortue ancienne", icon = "🐢", price = 96, rank = "E", level = 6, n = 2, needs = { leather = 3, rope = 1 }, station = "tannery", skill = 12,
 		gear = { slot = "armor", name = "Bouclier-carapace de tortue ancienne", rarity = 3, stats = { defense = 4, vitesse = 4 } } },
 	assassin = { mat = "prise_assassin", name = "Essence d'assassin de l'ombre", icon = "👻", price = 36, rank = "-", level = 6, n = 3, needs = { rope = 1, copper_ingot = 1 }, station = "bench", skill = 12,
@@ -275,8 +275,8 @@ P.KINDS = {
 		gear = { slot = "trinket", name = "Talisman d'essence d'ombre rôdeuse", rarity = 1, stats = { force = 2, discretion = 2 } } },
 	shadow_wolf = { mat = "prise_shadow_wolf", name = "Croc de loup des ombres", icon = "🐺", price = 31, rank = "-", level = 5, n = 3, needs = { rope = 1, copper_ingot = 1 }, station = "bench", skill = 10,
 		gear = { slot = "trinket", name = "Collier de crocs de loup des ombres", rarity = 2, stats = { force = 3, vitesse = 3 } } },
-	skeleton = { mat = "prise_skeleton", name = "Os maudit de squelette errant", icon = "💀", price = 21, rank = "-", level = 3, n = 3, needs = { iron_ingot = 2, planks = 1 }, station = "anvil", skill = 6,
-		gear = { slot = "weapon", name = "Masse d'os de squelette errant", rarity = 1, stats = { force = 2, charisme = 2 }, power = 3, visual = "3" } },
+	skeleton = { mat = "prise_skeleton", name = "Éclat de gisant errant", icon = "🗿", price = 21, rank = "-", level = 3, n = 3, needs = { iron_ingot = 2, planks = 1 }, station = "anvil", skill = 6,
+		gear = { slot = "weapon", name = "Masse de pierre de gisant errant", rarity = 1, stats = { force = 2, charisme = 2 }, power = 3, visual = "3" } },
 	slime = { mat = "prise_slime", name = "Gelée de slime", icon = "🟢", price = 11, rank = "-", level = 1, n = 3, needs = { rope = 1, copper_ingot = 1 }, station = "bench", skill = 2,
 		gear = { slot = "trinket", name = "Amulette de gelée de slime", rarity = 1, stats = { force = 1, vie = 1 } } },
 	slime_blue = { mat = "prise_slime_blue", name = "Gelée de slime bleu", icon = "🟢", price = 16, rank = "-", level = 2, n = 3, needs = { rope = 1, copper_ingot = 1 }, station = "bench", skill = 4,

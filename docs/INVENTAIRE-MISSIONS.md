@@ -1769,8 +1769,8 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### 8. Morts-vivants et créatures maudites
 
-- [x] (178) Squelette errant → Squelette errant
-- [x] (179) Squelette ancien → Squelette ancien
+- [x] (178) Squelette errant → Gisant errant (règle 9 : pas de squelette classique)
+- [x] (179) Squelette ancien → Gisant ancien (règle 9)
 - [x] (180) Revenant → Revenant
 - [x] (181) Goule → Goule
 - [x] (182) Spectre → Cerf spectral
@@ -2349,7 +2349,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (20) `Bestiaire:renegade_guard` Garde renégat|humain||5 → Bestiaire
 - [x] (21) `Bestiaire:cave_bear` Ours des cavernes|quadrupede|E|7 → Bestiaire
 - [x] (22) `Bestiaire:gargoyle` Gargouille animée|volant||6 → Bestiaire
-- [x] (23) `Bestiaire:skeleton` Squelette errant|humain||3 → Bestiaire
+- [x] (23) `Bestiaire:skeleton` Squelette errant|humain||3 → Bestiaire (Gisant errant)
 - [x] (24) `Bestiaire:smuggler` Contrebandier|humain||4 → Bestiaire
 - [x] (25) `Bestiaire:root_troll` Troll des racines|humain|E|7 → Bestiaire
 - [x] (26) `Bestiaire:giant_eagle` Aigle géant|volant||4 → Bestiaire
@@ -2372,7 +2372,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (43) `Bestiaire:cave_troll` Troll des cavernes|humain|E|8 → Bestiaire
 - [x] (44) `Bestiaire:vargor` Vargor, le Roi des loups|quadrupede|B|9 → Bestiaire
 - [x] (45) `Bestiaire:cyclops` Cyclope|humain|E|8 → Bestiaire
-- [x] (46) `Bestiaire:ancient_skeleton` Squelette ancien|humain||5 → Bestiaire
+- [x] (46) `Bestiaire:ancient_skeleton` Squelette ancien|humain||5 → Bestiaire (Gisant ancien)
 - [x] (47) `Bestiaire:creeping_shadow` Ombre rampante|masse||5 → Bestiaire
 - [x] (48) `Bestiaire:jackal` Chacal|quadrupede||2 → Bestiaire
 - [x] (49) `Bestiaire:ghost_crow` Corbeau fantôme|volant||4 → Bestiaire

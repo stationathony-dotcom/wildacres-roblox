@@ -97,8 +97,10 @@ local KINDS = {
 	blizzard_spectre = { name = "Spectre du blizzard", form = "spectre", look = { "W", "BL" }, hp = 160, dmg = 22, speed = 14, level = 6, style = "charge", radius = 1.3, night = true,
 		loot = { { "ice_crystal", 1, 2, 0.8 }, { "wisp_dust", 1, 1, 0.5 } } },
 	-- morts-vivants (la nuit)
-	skeleton = { name = "Squelette errant", form = "humain", look = { "W", "W", weapon = "epee", squelette = true }, hp = 110, dmg = 16, speed = 11, level = 3, style = "charge", radius = 1.2, night = true,
-		loot = { { "bone", 2, 4, 1 }, { "copper_coin", 1, 3, 0.4 } } },
+	-- règle 9 (pas de squelettes classiques) : « skeleton » / « ancient_skeleton » sont devenus des GISANTS, statues de
+	-- tombeau qui se lèvent la nuit (ids gardés pour les sauvegardes, journaux et butins)
+	skeleton = { name = "Gisant errant", form = "humain", look = { "PC", "P", peau = "PC", pierre = true, weapon = "epee" }, hp = 110, dmg = 16, speed = 11, level = 3, style = "charge", radius = 1.2, night = true,
+		loot = { { "stone", 2, 4, 1 }, { "copper_coin", 1, 3, 0.4 } } },
 	ghoul = { name = "Goule", form = "humain", look = { "V", "N", peau = "V", courbe = true }, hp = 150, dmg = 20, speed = 13, level = 4, style = "charge", radius = 1.3, night = true,
 		loot = { { "rotten", 2, 3, 1 }, { "bone", 1, 2, 0.6 }, { "claw", 1, 1, 0.3 } } },
 	revenant = { name = "Revenant", form = "spectre", look = { "BL", "W" }, hp = 130, dmg = 20, speed = 14, level = 4, style = "charge", radius = 1.2, night = true, fearsLight = true,
@@ -199,8 +201,8 @@ local KINDS = {
 		loot = { { "feather", 1, 3, 1 } } },
 	creeping_shadow = { name = "Ombre rampante", form = "masse", look = { "N", "N", long = true }, hp = 160, dmg = 20, speed = 10, level = 5, style = "hop", radius = 1.4, night = true, fearsLight = true,
 		loot = { { "bone", 1, 2, 0.5 } } },
-	ancient_skeleton = { name = "Squelette ancien", form = "humain", look = { "PC", "W", weapon = "hache", squelette = true }, hp = 200, dmg = 22, speed = 11, level = 5, style = "charge", radius = 1.3, night = true,
-		loot = { { "bone", 2, 4, 1 }, { "ancient_coin", 1, 1, 0.3 } } },
+	ancient_skeleton = { name = "Gisant ancien", form = "humain", look = { "P", "F", peau = "P", pierre = true, weapon = "hache" }, hp = 200, dmg = 22, speed = 11, level = 5, style = "charge", radius = 1.3, night = true,
+		loot = { { "stone", 2, 4, 1 }, { "ancient_coin", 1, 1, 0.3 } } },
 	fallen_monk = { name = "Moine déchu", form = "humain", look = { "BF", "N", weapon = "baton", hood = true }, hp = 170, dmg = 22, speed = 11, level = 5, style = "spore", radius = 1.3, night = true,
 		proj = { color = Color3.fromRGB(140, 90, 200), size = 1 }, loot = { { "relic_fragment", 1, 1, 0.4 }, { "copper_coin", 1, 4, 1 } }, gold = 2 },
 	mummy = { name = "Momie ancienne", form = "humain", look = { "T", "Y", courbe = true }, hp = 220, dmg = 22, speed = 10, level = 6, style = "charge", radius = 1.3, night = true,
@@ -485,7 +487,7 @@ FORMES.humain = function(m, o)
 	local s = (o.scale or 1) * (o.petit and 0.75 or 1)
 	local cloth, dark = C[o[1]] or C.R, C[o[2]] or C.BF
 	local skin = o.squelette and C.W or (o.peau and C[o.peau] or SKIN)
-	local mat = o.squelette and Mat.SmoothPlastic or Mat.Fabric
+	local mat = o.squelette and Mat.SmoothPlastic or (o.pierre and Mat.Slate or Mat.Fabric)
 	local legH, torso = 2.2 * s, V(2 * s, 2.2 * s, 1.1 * s)
 	local lean = o.courbe and CFrame.Angles(math.rad(-18), 0, 0) or CFrame.identity
 	for _, sx in { -1, 1 } do
