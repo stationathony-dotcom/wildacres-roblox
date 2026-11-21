@@ -13,6 +13,13 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 - **Notifications** — Les gains identiques se cumulent dans une seule carte. Les alertes de danger gardent leur place en tête des messages.
 - **Carte du monde** — Cinq types de repères personnels sauvegardés par monde. La légende sert à choisir le type, et la liste permet de retrouver et de retirer un repère même si plusieurs se superposent.
 - **Torche** — La fiche d’équipement indique que la torche éclaire les grottes lorsqu’elle est tenue en main gauche.
+- **Boue et grottes** (Claude) — Les bottes de marais servent de nouveau (emplacement « bottes ») ; une torche en main gauche éclaire les grottes.
+- **Construction** (Claude) — 21 pièces de plus : colombages, clayonnage, treillis, balcon, plateforme sur pilotis, lucarne, fenêtres à croisillons, à volets, à vitrail, pavage, fondation, poteau sculpté… et 4 matières de sol (gravier, sable, herbe, pin). Une pose refusée dit pourquoi.
+- **Serveur pour l'interface** (Claude) — Aperçu du terrain avant de planter le panneau, repères de carte gardés par monde, état des cultures lisible au survol.
+- **Montures** (Claude) — Bride et rênes (+4 % d'allure) et selle de guerre.
+- **Tableau d'affichage** (Claude) — Concours de dressage et concours d'élevage, comptés par le jeu.
+- **Quêtes** (Claude) — Trois sortes de plus : ronde (patrouille, lanternes à rallumer), faire connaissance avec des habitants, avoir un troupeau.
+- **Monde** (Claude) — Routes encombrées à dégager (hache, pioche), cascades sur les falaises (on y remplit son seau), chien de berger : un loup apprivoisé rassemble tes bêtes quand tu en mènes une.
 
 ## 0.2.2 — 2026-11-20
 - **Direction visuelle** : contrôle en mode Edit des formes du catalogue et de la palette du village.
