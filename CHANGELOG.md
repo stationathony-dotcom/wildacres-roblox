@@ -7,6 +7,7 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.3 — 2026-11-21
 
+- **Tableau d’affichage** — Les types d’activités proposés suivent le serveur. Les concours de dressage et d’élevage apparaissent dans la grille.
 - **Cultures** — Le survol affiche la pousse et l’arrosage. À portée de récolte, l’invite indique si la plante est prête ou flétrie.
 - **Parcelles** — Le panneau en main dessine les limites du terrain et affiche son prix avant la pose. Le contour signale les emplacements refusés.
 - **Interface** — Titres, boutons et avertissements partagent leurs composants. Les états de sélection et de verrouillage associent un symbole au changement de couleur.

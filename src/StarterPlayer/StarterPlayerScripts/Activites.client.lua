@@ -180,13 +180,22 @@ render = function(d)
 		end
 	end
 	section("Organiser")
-	local r1 = row(96) -- 3 lignes de 3 types
+	local kinds = type(d.kinds) == "table" and d.kinds or KIND_LIST
+	local first, selected
+	for _, kind in kinds do
+		first = first or kind[1]
+		if form.kind == kind[1] then selected = kind[1] end
+	end
+	form.kind = selected or first
+	local r1 = row(math.max(36, math.ceil(#kinds / 3) * 30 + 6))
 	label(r1, "Type", UDim2.fromOffset(100, 36), 13, TEXT, true).Position = UDim2.fromOffset(8, 0)
-	for i, k in KIND_LIST do
-		local b = button(r1, k[2], UDim2.fromOffset(118, 26), form.kind == k[1] and GOLD or OFF, function()
+	for i, k in kinds do
+		local b = button(r1, k[2], UDim2.fromOffset(118, 26), OFF, function()
 			form.kind = k[1]
 			render(current)
 		end)
+		Composants.etatBouton(b, k[2], form.kind == k[1] and "selectionne" or nil, OFF)
+		b.TextTruncate = Enum.TextTruncate.AtEnd
 		b.Position = UDim2.fromOffset(120 + ((i - 1) % 3) * 122, 5 + ((i - 1) // 3) * 30)
 	end
 	local r2 = row(36)
@@ -207,9 +216,13 @@ render = function(d)
 	local r5 = row(52)
 	label(r5, "La cagnotte est bloquée tout de suite (tu as " .. d.gold .. " 💰) et rendue si tu annules ou si personne ne gagne.",
 		UDim2.new(1, -150, 1, 0), 11, DIM).Position = UDim2.fromOffset(8, 0)
-	button(r5, "Afficher", UDim2.fromOffset(130, 36), GREEN, function()
-		act("act_creer", { kind = form.kind, delay = form.delay, dur = form.dur, prize = form.prize })
-	end).Position = UDim2.new(1, -136, 0, 8)
+	local submit = button(r5, "Afficher", UDim2.fromOffset(130, 36), GREEN, function()
+		if form.kind then
+			act("act_creer", { kind = form.kind, delay = form.delay, dur = form.dur, prize = form.prize })
+		end
+	end)
+	if not form.kind then Composants.etatBouton(submit, "Afficher", "verrouille") end
+	submit.Position = UDim2.new(1, -136, 0, 8)
 end
 
 Remotes:WaitForChild("Menu").OnClientEvent:Connect(function(data)
