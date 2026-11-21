@@ -4,6 +4,7 @@
 --   2. un ingrédient retiré → rien n'est fabriqué, rien n'est consommé, le message liste le manque.
 -- Recettes à compétence trop haute pour le perso de test : on vérifie seulement le REFUS (on ne monte
 -- pas les compétences : ce serait écrit dans la vraie sauvegarde du compte). Équipement : hors banc.
+-- Le seuil lu est skillRaw (règle 4 : l'équipement ne débloque pas une recette).
 -- Résultat : nombre de recettes OK, et chaque échec en clair.
 local D = game.ServerStorage:WaitForChild("DbgAppel", 20)
 task.wait(6)
@@ -61,7 +62,7 @@ for i, r in Config.RECIPES do
 		skipped += 1
 		continue
 	end
-	if r.skill and call("Joueurs.skill", p, r.skill[1]) < r.skill[2] then
+	if r.skill and call("Joueurs.skillRaw", p, r.skill[1]) < r.skill[2] then
 		-- refus attendu, rien de consommé
 		for item, n in r.needs do
 			call("Joueurs.add", p, concrete(item), n)
