@@ -1,5 +1,5 @@
 --!strict
--- Construit les modèles du décor dans ServerStorage.Modeles (style « blocs mignons »).
+-- Construit les modèles du décor dans ServerStorage.Modeles.
 -- En Édition, préférer les fonctions ciblées pour conserver les autres modèles retouchés.
 -- Chaque modèle a une pièce invisible « Base » posée au sol (pivot = point au sol, façade vers +Z).
 -- Une fois construits, les modèles se retouchent librement dans Studio : le jeu les clone tels quels.
@@ -270,6 +270,1271 @@ function M.filonOr()
 end
 
 -- Artisanat : filons de minerai, argile, four, pièces de construction (grille de 4 studs), lit, lanterne
+-- ---------------------------------------------------------------- Props de Valdor
+
+local Vp = Vector3.new
+local VERTICALE = CFrame.Angles(0, 0, math.pi / 2)
+local FACE_PROP = CFrame.Angles(0, math.pi / 2, 0)
+local PASSE = math.pi * 2
+local CHAUME = rgb(200, 158, 74)
+local LIN = rgb(223, 211, 179)
+local GARANCE = rgb(151, 58, 47)
+local EAU_PROP = rgb(66, 114, 131)
+local CALCAIRE = rgb(181, 173, 157)
+
+local function teinteProp(c: Color3, i: number): Color3
+	return c:Lerp(i % 2 == 0 and BOIS_FONCE or BOIS_CLAIR, (i % 3) * 0.10)
+end
+
+local function lienProp(m: Model, nom: string, a: Vector3, b: Vector3, w: number, h: number,
+	c: Color3, mat: Enum.Material, collide: boolean?)
+	local delta = b - a
+	local up = math.abs(delta.Unit.Y) > 0.98 and Vp(0, 0, 1) or Vp(0, 1, 0)
+	P(m, nom, Vp(w, h, delta.Magnitude + 0.035), Vector3.zero, c, mat,
+		{ cf = CFrame.lookAt((a + b) / 2, b, up), collide = collide })
+end
+
+local function cylProp(m: Model, nom: string, diam: number, ep: number, pos: Vector3, c: Color3,
+	mat: Enum.Material, rot: CFrame?, collide: boolean?): BasePart
+	return P(m, nom, Vp(ep, diam, diam), pos, c, mat, { forme = "Cylinder", rot = rot or VERTICALE, collide = collide })
+end
+
+local function rivetProp(m: Model, pos: Vector3, d: number, c: Color3?)
+	P(m, "Rivet", Vp(d, d, d), pos, c or FER, Mat.Metal, { forme = "Ball", collide = false })
+end
+
+local function lamesProp(m: Model, nom: string, taille: Vector3, pos: Vector3, n: number, axe: string, c: Color3)
+	local largeur = (axe == "X" and taille.X or axe == "Y" and taille.Y or taille.Z) / n
+	for i = 1, n do
+		local d, ep = (i - (n + 1) / 2) * largeur, largeur - 0.02
+		local dims = axe == "X" and Vp(ep, taille.Y, taille.Z)
+			or axe == "Y" and Vp(taille.X, ep, taille.Z) or Vp(taille.X, taille.Y, ep)
+		local decalage = axe == "X" and Vp(d, 0, 0) or axe == "Y" and Vp(0, d, 0) or Vp(0, 0, d)
+		P(m, nom, dims, pos + decalage, teinteProp(c, i), Mat.WoodPlanks)
+	end
+end
+
+local function cercleProp(m: Model, nom: string, centre: Vector3, r: number, n: number, ep: number,
+	c: Color3, mat: Enum.Material, vertical: boolean?)
+	for i = 0, n - 1 do
+		local a, b = i * PASSE / n, (i + 1) * PASSE / n
+		local function point(angle: number): Vector3
+			local u, v = math.cos(angle) * r, math.sin(angle) * r
+			return centre + (vertical and Vp(u, v, 0) or Vp(u, 0, v))
+		end
+		lienProp(m, nom, point(a), point(b), ep, ep, c, mat, false)
+	end
+end
+
+local function pierreRonde(m: Model, nom: string, centre: Vector3, r: number, n: number, h: number,
+	ep: number, phase: number, claire: boolean?)
+	for i = 0, n - 1 do
+		local a = i * PASSE / n + phase
+		local w = 2 * (r + ep * 0.25) * math.tan(math.pi / n)
+		P(m, nom, Vp(w, h - i % 3 * 0.025, ep),
+			centre + Vp(math.sin(a) * r, i % 3 * 0.0125, math.cos(a) * r),
+			(claire and CALCAIRE or PIERRE):Lerp(PIERRE_CLAIRE, i % 3 * 0.20),
+			i % 2 == 0 and Mat.Slate or Mat.Cobblestone, { rot = CFrame.Angles(0, a, 0) })
+	end
+end
+
+local function toitureProp(m: Model, w: number, d: number, y: number, montee: number, z: number, chaume: boolean)
+	local demi = d / 2 - 0.1
+	local pente = math.atan(montee / demi)
+	local longueur = math.sqrt(demi ^ 2 + montee ^ 2)
+	for _, s in { -1, 1 } do
+		for i = 1, 4 do
+			local t = (i - 0.5) / 4
+			local couleur = chaume and CHAUME or rgb(133, 79, 56)
+			P(m, chaume and "Chaume" or "Bardeaux", Vp(w, chaume and 0.33 or 0.21, longueur / 4 + 0.08),
+				Vp(0, y + montee * (1 - t), z + s * demi * t), teinteProp(couleur, i),
+				chaume and Mat.Grass or Mat.WoodPlanks, { rot = CFrame.Angles(s * pente, 0, 0) })
+		end
+	end
+	P(m, "Faîtage", Vp(w, 0.19, 0.26), Vp(0, y + montee - 0.02, z), BOIS_FONCE, Mat.Wood)
+end
+
+local function lumiereProp(m: Model, nom: string, pos: Vector3, taille: Vector3, portee: number, intensite: number,
+	nuit: boolean?): BasePart
+	local f = P(m, nom, taille, pos, rgb(255, 177, 72), Mat.Neon, { forme = "Ball", collide = false })
+	local l = Instance.new("PointLight")
+	l.Range, l.Brightness, l.Color = portee, intensite, rgb(255, 194, 117)
+	l.Shadows = true
+	l.Parent = f
+	if nuit then CollectionService:AddTag(f, "LumiereNuit") end
+	return f
+end
+
+local function lanterneProp(m: Model, nom: string, position: Vector3, echelle: number, range: number, luminosite: number)
+	local function p(x: number, y: number, z: number): Vector3
+		return position + Vp(x, y, z) * echelle
+	end
+	P(m, "Fond", Vp(0.92, 0.14, 0.92) * echelle, p(0, -0.54, 0), FER, Mat.Metal, { collide = false })
+	P(m, "Chapeau", Vp(0.97, 0.18, 0.97) * echelle, p(0, 0.55, 0), FER, Mat.Metal, { collide = false })
+	P(m, "Couronnement", Vp(0.58, 0.13, 0.58) * echelle, p(0, 0.69, 0), FER, Mat.Metal, { collide = false })
+	P(m, "Verre", Vp(0.72, 1.05, 0.72) * echelle, position, rgb(231, 166, 92), Mat.Glass,
+		{ collide = false, transp = 0.36 })
+	for _, x in { -0.375, 0.375 } do
+		for _, z in { -0.375, 0.375 } do
+			P(m, "Montant", Vp(0.083, 1.11, 0.083) * echelle, p(x, 0, z), FER, Mat.Metal, { collide = false })
+		end
+	end
+	return lumiereProp(m, nom, p(0, -0.18, 0), Vp(0.26, 0.55, 0.26) * echelle, range, luminosite, true)
+end
+
+local PROPS_VALDOR: { [string]: () -> () } = {}
+
+function PROPS_VALDOR.Lampadaire()
+	local m = nouveau("Lampadaire")
+	P(m, "Pied", Vp(2.18, 0.36, 2.17), Vp(0, 0.18, 0), PIERRE, Mat.Cobblestone)
+	for i = 1, 4 do
+		local x, z = i % 2 == 0 and -0.54 or 0.54, i < 3 and -0.52 or 0.52
+		P(m, "Moellon", Vp(1.09, 0.45, 1.04), Vp(x, 0.55, z), i % 2 == 0 and PIERRE or CALCAIRE, Mat.Slate)
+	end
+	P(m, "Chaperon", Vp(2.01, 0.24, 2.04), Vp(0, 0.88, 0), CALCAIRE, Mat.Slate)
+	P(m, "Poteau", Vp(0.98, 10.98, 0.99), Vp(0, 6.38, 0), BOIS, Mat.Wood)
+	P(m, "Cap", Vp(1.27, 0.27, 1.26), Vp(0, 11.72, 0), BOIS_FONCE, Mat.Wood)
+	P(m, "Bras", Vp(0.8, 0.74, 4.38), Vp(0, 10.98, 1.9), BOIS, Mat.Wood)
+	lienProp(m, "JambeDeForce", Vp(0, 8.92, 0.38), Vp(0, 10.76, 2.59), 0.48, 0.52, BOIS_FONCE, Mat.Wood)
+	for _, y in { 9.11, 10.98 } do
+		P(m, "Ferrure", Vp(1.05, 0.29, 1.02), Vp(0, y, 0.06), FER, Mat.Metal, { collide = false })
+		for _, x in { -0.52, 0.52 } do rivetProp(m, Vp(x, y, 0.52), 0.15) end
+	end
+	for i = 0, 2 do
+		cercleProp(m, "Chaine", Vp(0, 10.49 - i * 0.30, 3.60), 0.215, 6, 0.11, FER, Mat.Metal, true)
+	end
+	lanterneProp(m, "Lanterne", Vp(0, 8.5, 3.60), 1.54, 28, 1.7)
+	fini(m)
+end
+
+function PROPS_VALDOR.Lanterne()
+	local m = nouveau("Lanterne")
+	P(m, "Semelle", Vp(0.62, 0.26, 0.59), Vp(0, 0.13, 0), PIERRE, Mat.Slate)
+	P(m, "Poteau", Vp(0.34, 4.76, 0.33), Vp(0, 2.62, 0), BOIS, Mat.Wood)
+	P(m, "Potence", Vp(0.32, 0.24, 1.38), Vp(0, 4.87, 0.54), BOIS_FONCE, Mat.Wood)
+	lienProp(m, "Jambe de force", Vp(0, 4.16, 0.08), Vp(0, 4.82, 0.86), 0.14, 0.15, BOIS, Mat.Wood, false)
+	cercleProp(m, "Bélière", Vp(0, 4.61, 1.1), 0.17, 6, 0.075, FER, Mat.Metal, true)
+	local l = lanterneProp(m, "Flamme", Vp(0, 4.05, 1.1), 0.85, 22, 1.6)
+	local light = l:FindFirstChildOfClass("PointLight")
+	if light then light.Enabled = false end
+	fini(m)
+end
+
+function PROPS_VALDOR.Puits()
+	local m = nouveau("Puits")
+	cylProp(m, "Fondation", 4.62, 1.48, Vp(0, -0.36, 0), PIERRE, Mat.Cobblestone)
+	pierreRonde(m, "Assise", Vp(0, 0.63, 0), 1.98, 12, 0.59, 0.62, 0)
+	pierreRonde(m, "Margelle", Vp(0, 1.15, 0), 1.99, 12, 0.49, 0.72, math.pi / 12, true)
+	local eau = cylProp(m, "Eau", 3.7, 0.08, Vp(0, 0.83, 0), EAU_PROP, Mat.Glass, nil, false)
+	eau.Transparency = 0.22
+	for _, x in { -2.04, 2.04 } do
+		P(m, "Poteau", Vp(0.49, 6.18, 0.5), Vp(x, 3.52, 0), BOIS, Mat.Wood)
+		P(m, "Sabot", Vp(0.6, 0.32, 0.61), Vp(x, 1.36, 0), FER, Mat.Metal, { collide = false })
+		P(m, "Poinçon", Vp(0.34, 1.18, 0.34), Vp(x, 7.08, 0), BOIS_FONCE, Mat.Wood)
+		for _, z in { -1.03, 1.03 } do
+			lienProp(m, "Chevron", Vp(x, 6.22, z * 2.29), Vp(x, 7.62, 0), 0.24, 0.23, BOIS_FONCE, Mat.Wood)
+		end
+	end
+	P(m, "Entrait", Vp(4.62, 0.24, 0.26), Vp(0, 6.49, 0), BOIS_FONCE, Mat.Wood)
+	toitureProp(m, 5.58, 5.01, 6.2, 1.38, 0, true)
+	cylProp(m, "Treuil", 0.46, 4.17, Vp(0, 5, 0), BOIS_FONCE, Mat.Wood, CFrame.identity)
+	cylProp(m, "Bobine", 0.66, 0.68, Vp(0, 5, 0), LIN, Mat.Fabric, CFrame.identity, false)
+	lienProp(m, "Manivelle", Vp(2.22, 5, 0), Vp(2.27, 4.61, 0.28), 0.14, 0.13, FER, Mat.Metal, false)
+	cylProp(m, "Poignée", 0.17, 0.37, Vp(2.31, 4.61, 0.28), BOIS, Mat.Wood, CFrame.identity, false)
+	cylProp(m, "Seau", 0.8, 0.61, Vp(0, 3.63, 0), BOIS_CLAIR, Mat.WoodPlanks, nil, false)
+	for _, y in { 3.42, 3.86 } do cylProp(m, "Cercle", 0.84, 0.08, Vp(0, y, 0), FER, Mat.Metal, nil, false) end
+	P(m, "Corde", Vp(0.08, 1.03, 0.08), Vp(0, 4.27, 0.27), LIN, Mat.Fabric, { collide = false })
+	lienProp(m, "Anse", Vp(0, 3.83, -0.32), Vp(0, 4.01, 0.27), 0.071, 0.073, FER, Mat.Metal, false)
+	fini(m)
+end
+
+function PROPS_VALDOR.Fontaine()
+	local m = nouveau("Fontaine")
+	cylProp(m, "Bassin", 7.58, 0.32, Vp(0, 0.16, 0), PIERRE, Mat.Cobblestone)
+	pierreRonde(m, "Assise", Vp(0, 0.57, 0), 3.53, 12, 0.56, 0.7, 0)
+	pierreRonde(m, "Margelle", Vp(0, 1.10, 0), 3.54, 12, 0.5, 0.86, math.pi / 12, true)
+	cylProp(m, "Eau", 6.69, 0.12, Vp(0, 0.94, 0), EAU_PROP, Mat.Glass, nil, false).Transparency = 0.24
+	cylProp(m, "Socle", 2.03, 1.18, Vp(0, 0.63, 0), CALCAIRE, Mat.Cobblestone)
+	cylProp(m, "Colonne", 1.37, 3.42, Vp(0, 2.8, 0), PIERRE, Mat.Slate)
+	for _, y in { 1.28, 3.81, 4.42 } do
+		cylProp(m, "Bague", y == 4.42 and 1.96 or 1.62, 0.20, Vp(0, y, 0), CALCAIRE, Mat.Slate)
+	end
+	cylProp(m, "Vasque", 2.48, 0.48, Vp(0, 4.7, 0), PIERRE_CLAIRE, Mat.Slate)
+	cylProp(m, "Vasque", 3.19, 0.36, Vp(0, 5.02, 0), CALCAIRE, Mat.Slate)
+	pierreRonde(m, "Bord de vasque", Vp(0, 5.30, 0), 1.51, 10, 0.26, 0.24, 0, true)
+	cylProp(m, "EauHaut", 2.83, 0.09, Vp(0, 5.26, 0), EAU_PROP, Mat.Glass, nil, false).Transparency = 0.24
+	cylProp(m, "Bec", 0.48, 0.46, Vp(0, 5.44, 0), CALCAIRE, Mat.Slate)
+	local jet = P(m, "Jet", Vp(0.30, 0.12, 0.30), Vp(0, 5.72, 0), EAU_PROP, Mat.Glass,
+		{ collide = false, transp = 0.32 })
+	local pe = Instance.new("ParticleEmitter")
+	pe.Color = ColorSequence.new(rgb(199, 220, 225))
+	pe.Size = NumberSequence.new(0.28, 0.09)
+	pe.Transparency = NumberSequence.new(0.25, 0.86)
+	pe.Speed, pe.Lifetime, pe.Rate = NumberRange.new(5, 7), NumberRange.new(0.5, 0.7), 35
+	pe.SpreadAngle, pe.Acceleration = Vector2.new(17, 17), Vp(0, -24, 0)
+	pe.Parent = jet
+	fini(m)
+end
+
+function PROPS_VALDOR.Panneau()
+	local m = nouveau("Panneau")
+	for _, x in { -2.40, 2.4 } do
+		P(m, "Sabot", Vp(0.55, 0.23, 0.56), Vp(x, 0.115, 0), PIERRE, Mat.Slate)
+		P(m, "Poteau", Vp(0.39, 4.65, 0.4), Vp(x, 2.55, 0), BOIS, Mat.Wood)
+		P(m, "Tête taillée", Vp(0.46, 0.25, 0.43), Vp(x, 4.87, 0), BOIS_FONCE, Mat.Wood, { forme = "Wedge" })
+		for _, y in { 3.22, 4.55 } do rivetProp(m, Vp(x, y, 0.216), 0.14) end
+	end
+	lamesProp(m, "Bardage", Vp(5.76, 1.71, 0.27), Vp(0, 3.9, 0), 4, "Y", BOIS_CLAIR)
+	local planche = P(m, "Planche", Vp(5.24, 1.24, 0.34), Vp(0, 3.9, 0), rgb(186, 142, 93), Mat.WoodPlanks)
+	for _, y in { 3.1, 4.71 } do
+		P(m, "Traverse", Vp(5.8, 0.17, 0.38), Vp(0, y, 0), BOIS_FONCE, Mat.Wood)
+	end
+	for _, face in { Enum.NormalId.Front, Enum.NormalId.Back } do
+		local sg = Instance.new("SurfaceGui")
+		sg.Name, sg.Face, sg.PixelsPerStud = "Texte", face, 40
+		sg.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
+		local t = Instance.new("TextLabel")
+		t.Name, t.Size, t.Position = "Nom", UDim2.fromScale(0.94, 0.86), UDim2.fromScale(0.03, 0.07)
+		t.BackgroundTransparency, t.Text, t.TextScaled = 1, "Village", true
+		t.Font, t.TextColor3 = Enum.Font.Fondamento, rgb(65, 38, 24)
+		t.Parent, sg.Parent = sg, planche
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Tonneaux()
+	local m = nouveau("Tonneaux")
+	for i, p in { Vp(0, 0, 0), Vp(2.02, 0, 0.26), Vp(0.92, 0, 1.82) } do
+		local h, diam = 2.62 - (i - 1) * 0.39, 2.05 - (i - 1) * 0.13
+		local c = i % 2 == 0 and BOIS_CLAIR or BOIS
+		for j, t in { { 0.16, 0.87, 0.32 }, { 0.49, 1, 0.39 }, { 0.83, 0.86, 0.34 } } do
+			cylProp(m, "Douelles", diam * t[2], h * t[3], p + Vp(0, h * t[1], 0), teinteProp(c, j), Mat.WoodPlanks)
+		end
+		cylProp(m, "Fond du fût", diam * 0.76, 0.07, p + Vp(0, h, 0), BOIS_FONCE, Mat.Wood)
+		lamesProp(m, "Lame", Vp(diam * 0.59, 0.05, diam * 0.51), p + Vp(0, h + 0.022, 0), 3, "Z", c)
+		for _, t in { 0.25, 0.76 } do
+			local y = h * t
+			cylProp(m, "Cercle", diam * 0.98, 0.125, p + Vp(0, y, 0), FER, Mat.Metal, nil, false)
+			for _, x in { -0.31, 0.29 } do rivetProp(m, p + Vp(x, y, diam * 0.46), 0.105) end
+		end
+		cylProp(m, "Bonde", 0.18, 0.08, p + Vp(0.16, h + 0.048, 0), BOIS_CLAIR, Mat.Wood)
+	end
+	fini(m)
+end
+
+local function caisseProp(m: Model, p: Vector3, size: number, c: Color3, ouverte: boolean)
+	P(m, "Fond", Vp(size, size * 0.13, size), p + Vp(0, size * 0.065, 0), BOIS_FONCE, Mat.WoodPlanks)
+	for _, s in { -1, 1 } do
+		lamesProp(m, "Bordage", Vp(size, size * 0.84, 0.13), p + Vp(0, size * 0.55, s * (size / 2 - 0.065)), 2, "Y", c)
+		lamesProp(m, "Bordage", Vp(0.13, size * 0.84, size - 0.18), p + Vp(s * (size / 2 - 0.065), size * 0.55, 0), 2, "Y", c)
+		for _, x in { -0.43, 0.43 } do
+			P(m, "Cornière", Vp(0.20, size, 0.20), p + Vp(size * x, size / 2, s * size * 0.43), BOIS_FONCE, Mat.Wood)
+		end
+	end
+	if ouverte then
+		P(m, "Fond garni", Vp(size * 0.86, size * 0.10, size * 0.83), p + Vp(0, size * 0.82, 0), BOIS, Mat.Wood)
+	else
+		lamesProp(m, "Couvercle", Vp(size, size * 0.11, size), p + Vp(0, size * 0.96, 0), 3, "X", c)
+		lienProp(m, "Écharpe", p + Vp(-size * 0.42, size * 0.18, size * 0.50),
+			p + Vp(size * 0.42, size * 0.86, size * 0.50), 0.17, 0.11, BOIS_FONCE, Mat.Wood, false)
+	end
+end
+
+function PROPS_VALDOR.Caisses()
+	local m = nouveau("Caisses")
+	caisseProp(m, Vector3.zero, 2.37, BOIS_CLAIR, false)
+	caisseProp(m, Vp(2.03, 0, 0.35), 1.84, BOIS, true)
+	caisseProp(m, Vp(0.32, 2.37, -0.1), 1.68, BOIS, false)
+	for i = 0, 4 do
+		local x, z = 1.58 + i % 3 * 0.47, 0.04 + math.floor(i / 3) * 0.64
+		P(m, "Choux", Vp(0.58, 0.56, 0.55), Vp(x, 1.74, z), rgb(106 + i * 3, 133 + i * 3, 68),
+			Mat.Grass, { forme = "Ball", collide = false })
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Epouvantail()
+	local m = nouveau("Epouvantail")
+	P(m, "Poteau", Vp(0.41, 6, 0.39), Vp(0, 3, 0), BOIS_FONCE, Mat.Wood)
+	lienProp(m, "Bras", Vp(-2.38, 4.49, 0), Vp(2.34, 4.14, -0.04), 0.30, 0.31, BOIS, Mat.Wood)
+	P(m, "Chemise", Vp(1.97, 2.13, 1.06), Vp(0, 4.06, 0.02), GARANCE, Mat.Fabric,
+		{ rot = CFrame.Angles(0, 0, -0.05), collide = false })
+	for _, s in { -1, 1 } do
+		P(m, "Manche", Vp(1.43, 0.67, 0.68), Vp(s * 1.57, 4.36 - s * 0.11, 0.04), GARANCE, Mat.Fabric,
+			{ rot = CFrame.Angles(0, 0, -0.075), collide = false })
+		for i = 0, 2 do
+			lienProp(m, "Paille", Vp(s * 2.12, 4.35 - s * 0.11, 0), Vp(s * (2.60 - i * 0.067), 4.17 - s * 0.10 + i * 0.16, i * 0.085),
+				0.085, 0.085, CHAUME, Mat.Grass, false)
+		end
+	end
+	P(m, "Ceinture", Vp(1.99, 0.17, 1.10), Vp(0, 3.41, 0.02), BOIS_FONCE, Mat.Fabric, { collide = false })
+	P(m, "Rapiéçage", Vp(0.53, 0.52, 0.08), Vp(-0.45, 3.88, 0.55), LIN, Mat.Fabric, { collide = false })
+	P(m, "Cou", Vp(0.59, 0.43, 0.58), Vp(0.04, 5.19, 0), LIN, Mat.Fabric, { collide = false })
+	P(m, "Tete", Vp(1.43, 1.46, 1.33), Vp(0.10, 5.90, 0), LIN, Mat.Fabric, { forme = "Ball", collide = false })
+	for _, x in { -0.23, 0.42 } do rivetProp(m, Vp(x, 6.03, 0.58), 0.19, BOIS_FONCE) end
+	cylProp(m, "Chapeau", 2.53, 0.2, Vp(0.1, 6.57, 0), CHAUME, Mat.Grass,
+		CFrame.Angles(0, 0, math.pi / 2 - 0.13), false)
+	cylProp(m, "Calotte", 1.32, 0.60, Vp(0.13, 6.91, 0), CHAUME, Mat.Grass, nil, false)
+	cylProp(m, "Galon", 1.35, 0.13, Vp(0.13, 6.74, 0), BOIS_FONCE, Mat.Fabric, nil, false)
+	fini(m)
+end
+
+
+function PROPS_VALDOR.Botte_Foin()
+	local m = nouveau("Botte_Foin")
+	P(m, "Cœur de botte", Vp(3.77, 1.97, 2.52), Vp(0, 0.985, 0), CHAUME, Mat.Grass)
+	for i = 0, 4 do
+		local y = 0.69 + i * 0.355
+		local t = i % 3
+		P(m, "Gerbe", Vp(3.92 - t * 0.12, 0.51, 2.75 - t * 0.13), Vp(i % 2 * 0.071, y, 0.04 * t),
+			CHAUME:Lerp(i % 2 == 0 and BOIS_CLAIR or BOIS, t * 0.12), Mat.Grass,
+			{ rot = CFrame.Angles(0, (t - 1) * 0.018, 0) })
+	end
+	for _, x in { -0.94, 0.89 } do
+		local a, b, c, d = Vp(x, 0.12, -1.31), Vp(x, 2.26, -1.29), Vp(x, 2.35, 1.25), Vp(x, 0.19, 1.32)
+		lienProp(m, "Lien", a, b, 0.075, 0.093, BOIS_FONCE, Mat.Fabric, false)
+		lienProp(m, "Lien", b, c, 0.075, 0.093, BOIS_FONCE, Mat.Fabric, false)
+		lienProp(m, "Lien", c, d, 0.075, 0.093, BOIS_FONCE, Mat.Fabric, false)
+		rivetProp(m, Vp(x, 2.34, 0.4), 0.14, BOIS_CLAIR)
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Boite_Lettres()
+	local m = nouveau("Boite_Lettres")
+	P(m, "Semelle", Vp(0.68, 0.24, 0.65), Vp(0, 0.12, 0), PIERRE, Mat.Cobblestone)
+	P(m, "Poteau", Vp(0.39, 3.03, 0.41), Vp(0, 1.74, 0), BOIS, Mat.Wood)
+	lamesProp(m, "Boite", Vp(1.58, 1.41, 1.17), Vp(0, 3.83, 0), 5, "X", BOIS)
+	P(m, "Battant", Vp(1.38, 1.29, 0.08), Vp(0, 3.83, -0.60), BOIS_CLAIR, Mat.Wood)
+	P(m, "Fente", Vp(1.02, 0.13, 0.067), Vp(0, 4.08, -0.65), rgb(37, 32, 31), Mat.Metal, { collide = false })
+	cylProp(m, "Sceau", 0.40, 0.075, Vp(0, 3.63, -0.66), GARANCE, Mat.CeramicTiles, FACE_PROP, false)
+	for _, y in { 3.33, 4.26 } do
+		P(m, "Ferrure", Vp(1.53, 0.11, 0.08), Vp(0, y, -0.65), FER, Mat.Metal, { collide = false })
+		for _, x in { -0.61, 0.61 } do rivetProp(m, Vp(x, y, -0.69), 0.08) end
+	end
+	toitureProp(m, 1.96, 1.64, 4.52, 0.36, 0, false)
+	fini(m)
+end
+
+function PROPS_VALDOR.Cloture()
+	local m = nouveau("Cloture")
+	P(m, "Sabot", Vp(0.51, 0.24, 0.51), Vp(-2, 0.12, 0), PIERRE, Mat.Slate)
+	P(m, "Poteau", Vp(0.50, 2.82, 0.49), Vp(-2, 1.65, 0), BOIS, Mat.Wood)
+	P(m, "Tête taillée", Vp(0.49, 0.23, 0.49), Vp(-2, 3.075, 0), BOIS_FONCE, Mat.Wood, { forme = "Wedge" })
+	for i, y in { 1.11, 2.24 } do
+		local a, b = Vp(-2.04, y, 0), Vp(2.08, y + (i == 1 and -0.05 or 0.09), 0)
+		lienProp(m, "Lisse", a, b, 0.27, 0.31, teinteProp(BOIS_CLAIR, i), Mat.WoodPlanks)
+		rivetProp(m, Vp(-1.99, y, 0.258), 0.11)
+		P(m, "Tenon", Vp(0.32, 0.20, 0.29), Vp(-2.10, y, 0), BOIS_FONCE, Mat.Wood)
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Feu_Camp()
+	local m = nouveau("Feu_Camp")
+	cylProp(m, "Cendres", 3.12, 0.12, Vp(0, 0.06, 0), rgb(65, 57, 49), Mat.Slate)
+	pierreRonde(m, "Pierre", Vp(0, 0.25, 0), 1.57, 10, 0.5, 0.68, 0.14)
+	for i = 0, 3 do
+		local a = i * math.pi / 4 + 0.12
+		local d = i % 2 == 0 and 0.36 or 0.29
+		cylProp(m, "Buche", d, 2.1 - i * 0.19, Vp(0, 0.22 + i * 0.09, 0), BOIS_FONCE, Mat.Wood,
+			CFrame.Angles(0, a, 0))
+	end
+	local f = lumiereProp(m, "Flamme", Vp(0, 0.64, 0.02), Vp(0.36, 0.46, 0.41), 20, 2)
+	local fire = Instance.new("Fire")
+	fire.Size, fire.Heat, fire.Parent = 3, 6, f
+	fini(m)
+end
+
+local function coffreProp(nom: string, c: Color3, colFer: Color3)
+	local m = nouveau(nom)
+	lamesProp(m, "Caisse", Vp(3, 1.55, 1.99), Vp(0, 0.775, 0), 5, "X", c)
+	lamesProp(m, "Couvercle", Vp(3.08, 0.34, 2.08), Vp(0, 1.68, 0), 5, "X", c)
+	lamesProp(m, "Bombé", Vp(3.07, 0.33, 1.73), Vp(0, 1.95, 0), 5, "X", BOIS_CLAIR)
+	lamesProp(m, "Faîtage", Vp(3.03, 0.18, 1.2), Vp(0, 2.17, 0), 5, "X", c)
+	for _, x in { -1.04, 1.04 } do
+		for _, z in { -1, 1 } do
+			P(m, "Cerclage", Vp(0.23, 1.65, 0.10), Vp(x, 0.89, z), colFer, Mat.Metal, { collide = false })
+			lienProp(m, "Cerclage", Vp(x, 1.68, z), Vp(x, 2.27, z * 0.56), 0.22, 0.086, colFer, Mat.Metal, false)
+		end
+		P(m, "Cerclage", Vp(0.22, 0.087, 1.16), Vp(x, 2.28, 0), colFer, Mat.Metal, { collide = false })
+		for _, y in { 0.28, 1.42 } do rivetProp(m, Vp(x, y, 1.06), 0.12, OR) end
+	end
+	P(m, "Serrure", Vp(0.44, 0.49, 0.14), Vp(0, 1.59, 1.06), OR, Mat.Metal, { collide = false })
+	P(m, "Entrée", Vp(0.09, 0.16, 0.05), Vp(0, 1.61, 1.14), FER, Mat.Metal, { collide = false })
+	fini(m)
+end
+
+function PROPS_VALDOR.Coffre_Joueur()
+	coffreProp("Coffre_Joueur", BOIS, FER)
+end
+
+function PROPS_VALDOR.Coffre()
+	coffreProp("Coffre", BOIS, rgb(163, 116, 50))
+end
+
+function PROPS_VALDOR.Etabli()
+	local m = nouveau("Etabli")
+	lamesProp(m, "Plateau", Vp(4.38, 0.38, 2.38), Vp(0, 3.05, 0), 5, "Z", BOIS_CLAIR)
+	for _, x in { -1.88, 1.88 } do
+		for _, z in { -0.88, 0.88 } do
+			P(m, "Pied", Vp(0.42, 2.92, 0.43), Vp(x, 1.46, z), BOIS, Mat.Wood)
+			rivetProp(m, Vp(x, 2.65, z + math.sign(z) * 0.21), 0.14)
+		end
+		P(m, "Entretoise", Vp(0.31, 0.29, 1.94), Vp(x, 0.68, 0), BOIS_FONCE, Mat.Wood)
+	end
+	for _, z in { -0.89, 0.89 } do
+		P(m, "Traverse", Vp(4.1, 0.35, 0.22), Vp(0, 2.73, z), BOIS_FONCE, Mat.Wood)
+	end
+	P(m, "Entretoise", Vp(3.83, 0.24, 0.28), Vp(0, 0.68, 0), BOIS_FONCE, Mat.Wood)
+	P(m, "Scie", Vp(1.65, 0.061, 0.46), Vp(-0.69, 3.27, 0.11), PIERRE_CLAIRE, Mat.Metal, { collide = false })
+	P(m, "Poignée de scie", Vp(0.47, 0.18, 0.51), Vp(-1.63, 3.31, 0.12), BOIS_FONCE, Mat.Wood, { collide = false })
+	for i = 0, 6 do
+		P(m, "Dent de scie", Vp(0.13, 0.061, 0.14), Vp(-1.39 + i * 0.22, 3.27, 0.39), PIERRE_CLAIRE, Mat.Metal,
+			{ forme = "Wedge", collide = false })
+	end
+	lienProp(m, "Marteau", Vp(1.08, 3.29, 0.50), Vp(1.33, 3.36, -0.55), 0.17, 0.17, BOIS, Mat.Wood, false)
+	P(m, "Tete", Vp(0.72, 0.32, 0.36), Vp(1.33, 3.39, -0.54), FER, Mat.Metal, { collide = false })
+	fini(m)
+end
+
+function PROPS_VALDOR.Enclume()
+	local m = nouveau("Enclume")
+	cylProp(m, "Billot", 1.77, 1.58, Vp(0, 0.79, 0), BOIS, Mat.Wood)
+	cylProp(m, "Coupe", 1.68, 0.09, Vp(0, 1.58, 0), BOIS_CLAIR, Mat.Wood)
+	for _, y in { 0.25, 1.26 } do
+		cylProp(m, "Cerclage", 1.82, 0.13, Vp(0, y, 0), FER, Mat.Metal, nil, false)
+		for _, x in { -0.48, 0.44 } do rivetProp(m, Vp(x, y, 0.79), 0.11) end
+	end
+	P(m, "Pied", Vp(1.48, 0.29, 1.04), Vp(0, 1.72, 0), FER, Mat.Metal)
+	P(m, "Taille", Vp(0.96, 0.53, 0.73), Vp(-0.05, 2.01, 0), FER, Mat.Metal)
+	P(m, "Table", Vp(2.49, 0.32, 1.08), Vp(0, 2.34, 0), FER, Mat.Metal)
+	P(m, "Face", Vp(2.26, 0.074, 0.97), Vp(-0.07, 2.51, 0), rgb(108, 104, 97), Mat.Metal, { collide = false })
+	P(m, "Bigorne", Vp(0.86, 0.38, 1.03), Vp(1.60, 2.35, 0), FER, Mat.Metal, { forme = "Wedge", rot = CFrame.Angles(0, -math.pi / 2, 0) })
+	lienProp(m, "Marteau", Vp(-0.82, 2.60, 0.37), Vp(-0.50, 2.69, -0.32), 0.17, 0.16, BOIS, Mat.Wood, false)
+	P(m, "Tete", Vp(0.47, 0.29, 0.30), Vp(-0.5, 2.70, -0.31), FER, Mat.Metal, { collide = false })
+	fini(m)
+end
+
+function PROPS_VALDOR.Fourneau()
+	local m = nouveau("Fourneau")
+	P(m, "Sole", Vp(3.4, 0.31, 2.98), Vp(0, 0.155, 0), PIERRE, Mat.Cobblestone)
+	P(m, "Corps", Vp(3.28, 3.03, 1.28), Vp(0, 1.76, -0.7), CALCAIRE, Mat.Cobblestone)
+	for i = 0, 4 do
+		for _, s in { -1, 1 } do
+			local w = 0.73 + i % 3 * 0.074
+			P(m, "Jambage", Vp(w, 0.49, 2.70 - i % 2 * 0.07), Vp(s * (1.64 - w / 2), 0.50 + i * 0.49, 0.085),
+				i % 2 == 0 and CALCAIRE or PIERRE, Mat.Slate)
+		end
+	end
+	P(m, "Bouche", Vp(1.54, 1.2, 0.21), Vp(0, 1.02, -0.02), rgb(48, 40, 36), Mat.Slate)
+	for i = 0, 6 do
+		local a = i * math.pi / 6
+		P(m, "Claveau", Vp(0.34, 0.38, 0.39), Vp(math.cos(a) * 0.81, 1.04 + math.sin(a) * 0.64, 1.24),
+			teinteProp(rgb(150, 97, 72), i), Mat.Brick, { rot = CFrame.Angles(0, 0, a - math.pi / 2) })
+	end
+	P(m, "Linteau", Vp(3.24, 0.41, 2.69), Vp(0, 2.53, 0), PIERRE, Mat.Cobblestone)
+	P(m, "Corniche", Vp(3.4, 0.25, 2.97), Vp(0, 2.86, 0), CALCAIRE, Mat.Slate)
+	P(m, "Dessus", Vp(2.8, 0.48, 2.32), Vp(0, 3.14, -0.13), PIERRE, Mat.Cobblestone)
+	for i = 0, 3 do
+		P(m, "Moellon", Vp(1.04 - i * 0.042, 0.47, 1.06 - i % 2 * 0.058), Vp(0.69, 3.59 + i * 0.46, -0.56),
+			i % 2 == 0 and CALCAIRE or PIERRE, Mat.Slate)
+	end
+	P(m, "Cheminee", Vp(1.15, 0.22, 1.13), Vp(0.69, 5.31, -0.56), PIERRE, Mat.Cobblestone)
+	P(m, "Cendres", Vp(1.34, 0.23, 1.33), Vp(0, 0.41, 0.66), FER, Mat.Slate, { collide = false })
+	lumiereProp(m, "Braise", Vp(0, 0.64, 1.06), Vp(1.03, 0.37, 0.51), 12, 1.5)
+	reperesFeu(m)
+	fini(m)
+end
+
+function PROPS_VALDOR.Metier_Tisser()
+	local m = nouveau("Metier_Tisser")
+	for _, x in { -1.48, 1.48 } do
+		P(m, "Patin", Vp(0.33, 0.24, 3.18), Vp(x, 0.12, 0.38), BOIS_FONCE, Mat.Wood)
+		P(m, "Montant", Vp(0.29, 3.82, 0.28), Vp(x, 2.05, -0.79), BOIS, Mat.Wood)
+		P(m, "Montant", Vp(0.29, 2.25, 0.27), Vp(x, 1.27, 0.78), BOIS, Mat.Wood)
+		P(m, "Longeron", Vp(0.23, 0.29, 1.89), Vp(x, 2.23, 0), BOIS_FONCE, Mat.Wood)
+		lienProp(m, "Écharpe", Vp(x, 0.21, 0.70), Vp(x, 2.29, -0.73), 0.17, 0.17, BOIS_FONCE, Mat.Wood, false)
+	end
+	local haut, bas = Vp(0, 3.73, -0.79), Vp(0, 2.24, 0.78)
+	for _, a in { haut, bas } do cylProp(m, "Ensouple", 0.38, 3.32, a, BOIS_FONCE, Mat.Wood, CFrame.identity) end
+	for i = -6, 6 do
+		local dx = Vp(i * 0.195, 0.13, 0)
+		lienProp(m, "Fil de chaîne", haut + dx, bas + dx, 0.037, 0.042, LIN, Mat.Fabric, false)
+	end
+	local rot = CFrame.Angles(math.atan(1.49 / 1.57), 0, 0)
+	P(m, "Toile", Vp(2.61, 0.085, 1.19), Vp(0, 2.75, 0.40), GARANCE, Mat.Fabric, { collide = false, rot = rot })
+	P(m, "Galon", Vp(2.61, 0.09, 0.13), Vp(0, 2.54, 0.62), OR, Mat.Fabric, { collide = false, rot = rot })
+	P(m, "Navette", Vp(0.83, 0.16, 0.16), Vp(0.38, 2.84, 0.4), BOIS_CLAIR, Mat.Wood, { collide = false })
+	for _, x in { -1.06, 1.06 } do
+		P(m, "PiedBanc", Vp(0.24, 1.18, 0.29), Vp(x, 0.59, 1.75), BOIS, Mat.Wood)
+	end
+	P(m, "Banc", Vp(2.42, 0.21, 0.81), Vp(0, 1.23, 1.78), BOIS_CLAIR, Mat.WoodPlanks)
+	P(m, "Entretoise", Vp(2.17, 0.16, 0.18), Vp(0, 0.62, 1.76), BOIS_FONCE, Mat.Wood)
+	fini(m)
+end
+
+function PROPS_VALDOR.Bac_Tannage()
+	local m = nouveau("Bac_Tannage")
+	P(m, "Semelle", Vp(3.82, 0.22, 0.36), Vp(-0.18, 0.11, 0), BOIS_FONCE, Mat.Wood)
+	cylProp(m, "Cuve", 2.34, 0.46, Vp(-0.87, 0.24, 0), BOIS_FONCE, Mat.Wood)
+	for i = 0, 11 do
+		local a = i * PASSE / 12
+		P(m, "Douelle", Vp(0.65, 1.31, 0.15), Vp(-0.87 + math.sin(a) * 1.19, 0.84, math.cos(a) * 1.19),
+			teinteProp(BOIS, i), Mat.WoodPlanks, { rot = CFrame.Angles(0, a, 0) })
+	end
+	for _, y in { 0.40, 1.32 } do cercleProp(m, "Cercle", Vp(-0.87, y, 0), 1.27, 10, 0.12, FER, Mat.Metal) end
+	cylProp(m, "Eau", 2.32, 0.094, Vp(-0.87, 1.24, 0), rgb(110, 78, 44), Mat.Glass, nil, false).Transparency = 0.21
+	for _, z in { -0.88, 0.88 } do
+		P(m, "Cadre", Vp(0.29, 2.94, 0.28), Vp(1.40, 1.57, z), BOIS_FONCE, Mat.Wood)
+		P(m, "Pied", Vp(0.36, 0.25, 0.4), Vp(1.4, 0.125, z), BOIS, Mat.Wood)
+		for _, y in { 1.12, 2.52 } do
+			lienProp(m, "Ligature", Vp(1.45, y, z), Vp(1.45, y - 0.1, z * 0.68), 0.065, 0.065, LIN, Mat.Fabric, false)
+		end
+	end
+	for _, y in { 0.44, 2.95 } do P(m, "Traverse", Vp(0.23, 0.21, 2.08), Vp(1.4, y, 0), BOIS, Mat.Wood) end
+	for i = 0, 2 do
+		P(m, "Peau", Vp(0.1, 2.27 - i % 2 * 0.1, 0.51), Vp(1.45, 1.60, (i - 1) * 0.45),
+			rgb(174 - i * 7, 121 - i * 4, 78), Mat.Fabric, { collide = false })
+	end
+	P(m, "Racloir", Vp(0.78, 0.11, 0.25), Vp(-0.82, 1.51, 1.18), FER, Mat.Metal, { collide = false })
+	P(m, "Poignée", Vp(0.25, 0.17, 0.19), Vp(-1.30, 1.52, 1.18), BOIS_CLAIR, Mat.Wood, { collide = false })
+	fini(m)
+end
+
+function PROPS_VALDOR.Alambic()
+	local m = nouveau("Alambic")
+	local cuivre = rgb(173, 104, 62)
+	P(m, "Socle", Vp(3.66, 0.30, 2.15), Vp(0.71, 0.15, 0), BOIS_FONCE, Mat.Wood)
+	pierreRonde(m, "Foyer", Vp(0, 0.59, 0), 0.83, 7, 0.68, 0.48, 0.15)
+	lumiereProp(m, "Braise", Vp(0, 0.88, 0), Vp(0.97, 0.24, 0.97), 8, 0.8)
+	P(m, "Chaudiere", Vp(1.85, 1.63, 1.85), Vp(0, 1.73, 0), cuivre, Mat.Metal, { forme = "Ball" })
+	cylProp(m, "Cerclage", 1.72, 0.11, Vp(0, 1.99, 0), rgb(115, 69, 48), Mat.Metal, nil, false)
+	cylProp(m, "Chapiteau", 0.89, 0.24, Vp(0, 2.45, 0), cuivre, Mat.Metal)
+	P(m, "Chapiteau", Vp(0.73, 0.58, 0.73), Vp(0, 2.72, 0), cuivre, Mat.Metal, { forme = "Ball" })
+	local a, b, c, d = Vp(0.18, 2.85, 0), Vp(0.65, 3.28, 0), Vp(1.45, 3.43, 0), Vp(1.91, 3.12, 0)
+	lienProp(m, "Col", a, b, 0.20, 0.20, cuivre, Mat.Metal, false)
+	lienProp(m, "Col", b, c, 0.19, 0.19, cuivre, Mat.Metal, false)
+	lienProp(m, "Col", c, d, 0.19, 0.19, cuivre, Mat.Metal, false)
+	lienProp(m, "Tuyau", d, Vp(1.91, 1.86, 0), 0.17, 0.18, cuivre, Mat.Metal, false)
+	cylProp(m, "Support", 0.91, 1.51, Vp(1.91, 1.02, 0), BOIS, Mat.Wood)
+	for i = 0, 5 do
+		cylProp(m, "Serpentin", 0.96, 0.085, Vp(1.91, 1.10 + i * 0.14, 0), cuivre, Mat.Metal, nil, false)
+	end
+	lienProp(m, "Bec", Vp(1.91, 1.17, 0.35), Vp(1.91, 1.02, 0.72), 0.16, 0.16, cuivre, Mat.Metal, false)
+	P(m, "Fiole", Vp(0.47, 0.54, 0.47), Vp(1.91, 0.59, 0.71), rgb(131, 166, 131), Mat.Glass,
+		{ forme = "Ball", collide = false, transp = 0.28 })
+	cylProp(m, "Col de fiole", 0.24, 0.18, Vp(1.91, 0.9, 0.71), rgb(131, 166, 131), Mat.Glass, nil, false)
+	fini(m)
+end
+
+local function augeProp(nom: string, eau: boolean)
+	local m = nouveau(nom)
+	local niveau, longueur = eau and 0.86 or 1.75, eau and 3.57 or 3.18
+	for _, x in { -longueur * 0.4, longueur * 0.4 } do
+		P(m, "Patin", Vp(0.35, 0.27, 1.22), Vp(x, 0.135, 0), BOIS_FONCE, Mat.Wood)
+		P(m, "Montant", Vp(0.26, niveau, 0.31), Vp(x, niveau / 2, 0), BOIS, Mat.Wood)
+	end
+	lamesProp(m, "Fond", Vp(longueur, 0.25, 0.88), Vp(0, niveau - 0.1, 0), 3, "Z", BOIS)
+	for _, z in { -1, 1 } do
+		P(m, "Paroi", Vp(longueur, 0.53, 0.18), Vp(0, niveau + 0.16, z * 0.51), BOIS, Mat.WoodPlanks,
+			{ rot = CFrame.Angles(z * 0.25, 0, 0) })
+		P(m, "Rebord", Vp(longueur, 0.13, 0.17), Vp(0, niveau + 0.41, z * 0.57), BOIS_FONCE, Mat.Wood)
+		for _, x in { -longueur * 0.42, longueur * 0.42 } do rivetProp(m, Vp(x, niveau + 0.25, z * 0.61), 0.11) end
+	end
+	for _, x in { -longueur * 0.478, longueur * 0.478 } do
+		P(m, "Joue", Vp(0.16, 0.49, 1.19), Vp(x, niveau + 0.14, 0), BOIS_CLAIR, Mat.Wood)
+	end
+	if eau then
+		P(m, "Eau", Vp(longueur - 0.23, 0.06, 1.0), Vp(0, niveau + 0.22, 0), EAU_PROP, Mat.Glass, { collide = false, transp = 0.23 })
+	else
+		for i = 0, 4 do
+			P(m, "Foin", Vp(0.69, 0.58 + i % 3 * 0.10, 0.91), Vp((i - 2) * 0.55, niveau + 0.45, i % 2 * 0.09),
+				teinteProp(CHAUME, i), Mat.Grass, { forme = "Ball", collide = false })
+		end
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Abreuvoir() augeProp("Abreuvoir", true) end
+function PROPS_VALDOR.Mangeoire() augeProp("Mangeoire", false) end
+
+
+function PROPS_VALDOR.Lit_Joueur()
+	local m = nouveau("Lit_Joueur")
+	for _, x in { -1.16, 1.16 } do
+		for _, z in { -2.29, 2.16 } do
+			local h = z < 0 and 1.79 or 0.85
+			P(m, "Pied", Vp(0.27, h, 0.31), Vp(x, h / 2, z), BOIS_FONCE, Mat.Wood)
+			rivetProp(m, Vp(x, 0.67, z + 0.15), 0.12)
+		end
+		P(m, "Longeron", Vp(0.21, 0.32, 4.58), Vp(x, 0.59, -0.03), BOIS, Mat.Wood)
+	end
+	lamesProp(m, "Sommier", Vp(2.58, 0.26, 4.75), Vp(0, 0.77, -0.02), 6, "Z", BOIS)
+	lamesProp(m, "Tete", Vp(2.57, 1.02, 0.22), Vp(0, 1.24, -2.30), 5, "X", BOIS)
+	P(m, "Traverse", Vp(2.58, 0.19, 0.28), Vp(0, 1.73, -2.3), BOIS_FONCE, Mat.Wood)
+	P(m, "Traverse", Vp(2.57, 0.25, 0.26), Vp(0, 0.72, 2.18), BOIS_FONCE, Mat.Wood)
+	P(m, "Matelas", Vp(2.31, 0.37, 4.38), Vp(0, 1.08, -0.02), LIN, Mat.Fabric)
+	P(m, "Couverture", Vp(2.39, 0.23, 2.75), Vp(0, 1.30, 0.75), GARANCE, Mat.Fabric, { collide = false })
+	P(m, "Galon", Vp(2.39, 0.06, 0.15), Vp(0, 1.428, -0.58), OR, Mat.Fabric, { collide = false })
+	P(m, "Oreiller", Vp(1.56, 0.38, 0.83), Vp(-0.08, 1.45, -1.61), LIN, Mat.Fabric,
+		{ forme = "Ball", collide = false })
+	fini(m)
+end
+
+function PROPS_VALDOR.Porte()
+	local m = nouveau("Porte")
+	lamesProp(m, "Battant", Vp(2.5, 5.5, 0.3), Vp(0, 2.75, 0), 5, "X", BOIS)
+	for _, y in { 0.71, 4.62 } do
+		P(m, "Traverse", Vp(2.49, 0.23, 0.16), Vp(0, y, -0.11), BOIS_FONCE, Mat.Wood, { collide = false })
+		P(m, "Pentures", Vp(0.93, 0.19, 0.06), Vp(-0.77, y, 0.173), FER, Mat.Metal, { collide = false })
+		for _, x in { -1.1, -0.53 } do rivetProp(m, Vp(x, y, 0.211), 0.09) end
+	end
+	lienProp(m, "Écharpe", Vp(-1.02, 0.71, -0.18), Vp(1.05, 4.62, -0.18), 0.20, 0.12, BOIS_FONCE, Mat.Wood, false)
+	P(m, "Platine", Vp(0.32, 0.48, 0.10), Vp(0.88, 2.75, 0.17), FER, Mat.Metal, { collide = false })
+	cercleProp(m, "Poignee", Vp(0.88, 2.76, 0.24), 0.14, 6, 0.05, FER, Mat.Metal, true)
+	fini(m)
+end
+
+function PROPS_VALDOR.Cloche_Alarme()
+	local m = nouveau("Cloche_Alarme")
+	P(m, "Socle", Vp(0.70, 0.33, 0.72), Vp(0, 0.165, 0), PIERRE, Mat.Slate)
+	P(m, "Poteau", Vp(0.39, 5.31, 0.4), Vp(0, 2.85, 0), BOIS, Mat.Wood)
+	P(m, "Potence", Vp(0.33, 0.28, 1.58), Vp(0, 5.37, 0.59), BOIS_FONCE, Mat.Wood)
+	lienProp(m, "Jambe de force", Vp(0, 4.46, 0.12), Vp(0, 5.27, 0.82), 0.18, 0.18, BOIS, Mat.Wood, false)
+	cylProp(m, "Bélière", 0.25, 0.27, Vp(0, 5.17, 1.21), FER, Mat.Metal, nil, false)
+	local bronze = rgb(161, 113, 54)
+	for i, profil in { { 4.20, 1.1, 0.17 }, { 4.36, 0.86, 0.23 }, { 4.61, 0.73, 0.31 }, { 4.90, 0.62, 0.29 } } do
+		cylProp(m, "Cloche", profil[2], profil[3], Vp(0, profil[1], 1.21), teinteProp(bronze, i), Mat.Metal, nil, false)
+	end
+	cylProp(m, "Bord", 1.12, 0.08, Vp(0, 4.14, 1.21), OR, Mat.Metal, nil, false)
+	cylProp(m, "Battant", 0.10, 0.42, Vp(0, 4.19, 1.21), FER, Mat.Metal, nil, false)
+	P(m, "Pommeau", Vp(0.2, 0.22, 0.21), Vp(0, 3.99, 1.21), FER, Mat.Metal, { forme = "Ball", collide = false })
+	rivetProp(m, Vp(0, 5.37, 0.23), 0.13)
+	fini(m)
+end
+
+local function cadreTable(m: Model, w: number, d: number, h: number)
+	for _, x in { -w / 2 + 0.22, w / 2 - 0.22 } do
+		for _, z in { -d / 2 + 0.2, d / 2 - 0.2 } do
+			P(m, "Pied", Vp(0.27, h, 0.27), Vp(x, h / 2, z), BOIS_FONCE, Mat.Wood)
+		end
+		P(m, "Entretoise", Vp(0.23, 0.19, d - 0.20), Vp(x, h * 0.39, 0), BOIS, Mat.Wood)
+	end
+	for _, z in { -d / 2 + 0.21, d / 2 - 0.21 } do
+		P(m, "Ceinture", Vp(w - 0.22, 0.23, 0.17), Vp(0, h - 0.06, z), BOIS_FONCE, Mat.Wood)
+	end
+end
+
+function PROPS_VALDOR.Table_Bois()
+	local m = nouveau("Table_Bois")
+	cadreTable(m, 3.38, 2.19, 2.46)
+	lamesProp(m, "Plateau", Vp(3.39, 0.29, 2.19), Vp(0, 2.59, 0), 5, "Z", BOIS_CLAIR)
+	for _, x in { -1.48, 1.48 } do
+		rivetProp(m, Vp(x, 2.40, 0.99), 0.093)
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Chaise()
+	local m = nouveau("Chaise")
+	cadreTable(m, 1.58, 1.58, 1.49)
+	lamesProp(m, "Assise", Vp(1.59, 0.23, 1.58), Vp(0, 1.59, 0), 4, "X", BOIS_CLAIR)
+	for _, x in { -0.59, 0.59 } do
+		P(m, "Montant", Vp(0.23, 1.91, 0.23), Vp(x, 2.51, 0.64), BOIS_FONCE, Mat.Wood)
+	end
+	for _, y in { 2.17, 2.74, 3.27 } do
+		P(m, "Dossier", Vp(1.50, 0.22, 0.21), Vp(0, y, 0.64), BOIS, Mat.Wood)
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Banc()
+	local m = nouveau("Banc")
+	cadreTable(m, 3.98, 1.18, 1.38)
+	lamesProp(m, "Assise", Vp(3.99, 0.28, 1.19), Vp(0, 1.49, 0), 3, "Z", BOIS_CLAIR)
+	P(m, "Traverse", Vp(3.71, 0.18, 0.23), Vp(0, 0.54, 0), BOIS_FONCE, Mat.Wood)
+	fini(m)
+end
+
+function PROPS_VALDOR.Tapis()
+	local m = nouveau("Tapis")
+	P(m, "Trame", Vp(3.56, 0.08, 3.44), Vp(0, 0.04, 0), GARANCE, Mat.Fabric, { collide = false })
+	for _, z in { -1.53, 1.53 } do
+		P(m, "Galon", Vp(3.42, 0.028, 0.14), Vp(0, 0.08, z), OR, Mat.Fabric, { collide = false })
+		for i = -3, 3 do
+			P(m, "Frange", Vp(0.09, 0.033, 0.18), Vp(i * 0.48, 0.048, z * 1.12), LIN, Mat.Fabric, { collide = false })
+		end
+	end
+	for _, x in { -1.62, 1.62 } do
+		P(m, "Galon", Vp(0.13, 0.028, 3.10), Vp(x, 0.08, 0), OR, Mat.Fabric, { collide = false })
+	end
+	for _, profil in { { 1.31, 0.092, OR }, { 0.91, 0.108, GARANCE }, { 0.48, 0.122, LIN } } do
+		P(m, "Médaillon", Vp(profil[1], 0.024, profil[1]), Vp(0, profil[2], 0), profil[3], Mat.Fabric,
+			{ rot = CFrame.Angles(0, math.pi / 4, 0), collide = false })
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Pot_Fleurs()
+	local m = nouveau("Pot_Fleurs")
+	local terreCuite = rgb(174, 94, 57)
+	for i, profil in { { 0.075, 0.92, 0.15 }, { 0.25, 1.02, 0.23 }, { 0.51, 1.09, 0.31 }, { 0.79, 1.15, 0.27 } } do
+		cylProp(m, "Pot", profil[2], profil[3], Vp(0, profil[1], 0), teinteProp(terreCuite, i), Mat.CeramicTiles)
+	end
+	cercleProp(m, "Rebord", Vp(0, 0.92, 0), 0.53, 9, 0.15, terreCuite, Mat.CeramicTiles)
+	cylProp(m, "Terre", 1.02, 0.09, Vp(0, 0.88, 0), BOIS_FONCE, Mat.Ground, nil, false)
+	for i, c in { GARANCE, CHAUME, rgb(139, 102, 149) } do
+		local x, z = (i - 2) * 0.25, i % 2 * 0.30 - 0.16
+		local h = Vp(x * 1.46, 1.48 + i % 2 * 0.18, z)
+		lienProp(m, "Tige", Vp(x, 0.87, z), h, 0.074, 0.073, rgb(79, 117, 65), Mat.Grass, false)
+		P(m, "Feuille", Vp(0.33, 0.12, 0.17), Vp(x - 0.09, 1.15, z), rgb(93, 125, 65), Mat.Grass,
+			{ forme = "Ball", collide = false })
+		for j = 0, 2 do
+			local a = j * PASSE / 3
+			P(m, "Fleur", Vp(0.23, 0.18, 0.22), h + Vp(math.cos(a) * 0.1, 0, math.sin(a) * 0.1),
+				c, Mat.Fabric, { forme = "Ball", collide = false })
+		end
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Etagere()
+	local m = nouveau("Etagere")
+	for _, x in { -1.39, 1.39 } do
+		P(m, "Montant", Vp(0.22, 4.39, 0.24), Vp(x, 2.195, 0.49), BOIS_FONCE, Mat.Wood)
+		P(m, "Montant", Vp(0.22, 4.39, 0.24), Vp(x, 2.195, -0.39), BOIS, Mat.Wood)
+	end
+	for i = 0, 3 do
+		lamesProp(m, "Rayon", Vp(3.0, 0.18, 1.19), Vp(0, 0.3 + i * 1.27, 0.08), 3, "Z", BOIS_CLAIR)
+	end
+	P(m, "Fond", Vp(2.74, 4.13, 0.19), Vp(0, 2.20, 0.59), BOIS, Mat.WoodPlanks)
+	P(m, "Corniche", Vp(3.04, 0.21, 1.23), Vp(0, 4.31, 0.08), BOIS_FONCE, Mat.Wood)
+	local cols = { GARANCE, rgb(56, 86, 145), rgb(86, 113, 59) }
+	for i = 0, 7 do
+		local h = 0.54 + i % 3 * 0.13
+		P(m, "Livre", Vp(0.29, h, 0.68), Vp(-1.19 + i * 0.32, 1.66 + h / 2, 0.04), cols[i % 3 + 1],
+			Mat.Fabric, { collide = false })
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Etal()
+	local m = nouveau("Etal")
+	lamesProp(m, "Comptoir", Vp(4.36, 2.33, 1.96), Vp(0, 1.165, 0), 7, "X", BOIS)
+	lamesProp(m, "Plateau", Vp(4.45, 0.31, 2.02), Vp(0, 2.45, 0), 4, "Z", BOIS_CLAIR)
+	for _, x in { -2.08, 2.08 } do
+		P(m, "Montant", Vp(0.28, 5.54, 0.29), Vp(x, 2.77, 0.80), BOIS_FONCE, Mat.Wood)
+		lienProp(m, "Jambe de force", Vp(x, 4.76, 0.79), Vp(x, 5.33, -0.87), 0.16, 0.16, BOIS, Mat.Wood, false)
+	end
+	P(m, "Entrait", Vp(4.42, 0.21, 0.22), Vp(0, 5.51, 0.79), BOIS_FONCE, Mat.Wood)
+	P(m, "Tringle", Vp(4.42, 0.17, 0.19), Vp(0, 5.18, -0.92), BOIS_FONCE, Mat.Wood)
+	for i = 0, 5 do
+		local x, c = (i - 2.5) * 0.747, i % 2 == 0 and GARANCE or LIN
+		P(m, "Auvent", Vp(0.75, 0.14, 2.55), Vp(x, 5.46, 0.27), c, Mat.Fabric,
+			{ rot = CFrame.Angles(-0.19, 0, 0), collide = false })
+		P(m, "Lambrequin", Vp(0.74, 0.27 + i % 2 * 0.043, 0.088), Vp(x, 5.12, -0.98), c, Mat.Fabric, { collide = false })
+	end
+	P(m, "Caisse", Vp(0.85, 0.29, 0.62), Vp(1.39, 2.73, 0.24), BOIS_FONCE, Mat.Wood)
+	for i = 0, 2 do
+		P(m, "Pommes", Vp(0.27, 0.29, 0.29), Vp(1.17 + i * 0.22, 2.99, 0.25 + i % 2 * 0.13), GARANCE,
+			Mat.Grass, { forme = "Ball", collide = false })
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Serrure_Entrainement()
+	local m = nouveau("Serrure_Entrainement")
+	P(m, "Semelle", Vp(1.60, 0.25, 1.19), Vp(0, 0.125, 0), PIERRE, Mat.Cobblestone)
+	lamesProp(m, "Pied", Vp(1.48, 2.36, 1.08), Vp(0, 1.39, 0), 4, "X", BOIS)
+	for _, y in { 0.49, 2.42 } do P(m, "Traverse", Vp(1.52, 0.24, 1.15), Vp(0, y, 0), BOIS_FONCE, Mat.Wood) end
+	P(m, "Plaque", Vp(1.31, 1.12, 0.13), Vp(0, 2.04, -0.59), FER, Mat.Metal, { collide = false })
+	for _, x in { -0.49, 0.49 } do
+		for _, y in { 1.66, 2.42 } do rivetProp(m, Vp(x, y, -0.669), 0.13, OR) end
+	end
+	cylProp(m, "Rosace", 0.52, 0.085, Vp(0, 2.02, -0.664), OR, Mat.Metal, FACE_PROP, false)
+	P(m, "Trou", Vp(0.115, 0.27, 0.038), Vp(0, 2.02, -0.714), rgb(38, 35, 31), Mat.Metal, { collide = false })
+	fini(m)
+end
+
+
+function PROPS_VALDOR.Moulin()
+	local m = nouveau("Moulin")
+	cylProp(m, "Soubassement", 5.0, 0.44, Vp(0, 0.22, 0), PIERRE, Mat.Cobblestone)
+	for i = 0, 7 do
+		cylProp(m, "Assise", 4.98 - i * 0.118, 1.23, Vp(0, 0.91 + i * 1.21, 0),
+			i % 3 == 0 and PIERRE_CLAIRE or CALCAIRE, i % 2 == 0 and Mat.Cobblestone or Mat.Slate)
+	end
+	for i = 0, 5 do
+		cylProp(m, "Bardeaux", 5.59 - i * 0.92, 0.41, Vp(0, 10.07 + 0.34 * i, 0),
+			teinteProp(rgb(118, 76, 56), i), Mat.WoodPlanks)
+	end
+	P(m, "Porte", Vp(1.53, 2.57, 0.24), Vp(0, 1.33, -2.37), BOIS, Mat.WoodPlanks)
+	for _, x in { -0.86, 0.86 } do
+		P(m, "Jambage", Vp(0.24, 2.82, 0.28), Vp(x, 1.41, -2.29), PIERRE, Mat.Slate)
+	end
+	P(m, "Linteau", Vp(1.93, 0.19, 0.36), Vp(0, 2.74, -2.27), PIERRE_CLAIRE, Mat.Slate)
+	P(m, "Axe", Vp(0.52, 0.52, 1.83), Vp(0, 8.5, -2.93), BOIS_FONCE, Mat.Wood)
+	local centre = Vp(0, 8.5, -3.77)
+	cylProp(m, "Moyeu", 0.71, 0.32, centre, FER, Mat.Metal, FACE_PROP, false)
+	for i = 0, 3 do
+		local a = i * math.pi / 2 + math.pi / 4
+		local dir, cote = Vp(math.cos(a), math.sin(a), 0), Vp(-math.sin(a), math.cos(a), 0)
+		lienProp(m, "Aile", centre, centre + dir * 5.14, 0.21, 0.23, BOIS_FONCE, Mat.Wood, false)
+		lienProp(m, "Longeron", centre + dir * 1.56 + cote * 0.92, centre + dir * 4.92 + cote * 0.92,
+			0.13, 0.14, BOIS, Mat.Wood, false)
+		for _, dist in { 1.56, 3.25, 4.92 } do
+			lienProp(m, "Traverse d’aile", centre + dir * dist, centre + dir * dist + cote * 0.99,
+				0.13, 0.14, BOIS, Mat.Wood, false)
+		end
+		P(m, "Voile", Vp(3.42, 0.89, 0.055), centre + dir * 3.23 + cote * 0.47 + Vp(0, 0, -0.073),
+			LIN, Mat.Fabric, { rot = CFrame.Angles(0, 0, a), collide = false })
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Arroseur()
+	local m = nouveau("Arroseur")
+	P(m, "Semelle", Vp(1.24, 0.18, 1.87), Vp(0, 0.09, 0.48), PIERRE, Mat.Slate)
+	cylProp(m, "Pied", 0.47, 0.29, Vp(0, 0.24, 0), FER, Mat.Metal)
+	cylProp(m, "Tige", 0.24, 1.24, Vp(0, 0.99, 0), FER, Mat.Metal)
+	for i, profil in { { 0.31, 0.98, 0.29 }, { 0.54, 1.21, 0.31 }, { 0.80, 0.99, 0.26 } } do
+		cylProp(m, "Reservoir", profil[2], profil[3], Vp(0, profil[1], 0.9), teinteProp(BOIS, i), Mat.WoodPlanks)
+	end
+	for _, y in { 0.37, 0.72 } do cylProp(m, "Cercle", 1.17, 0.09, Vp(0, y, 0.9), FER, Mat.Metal, nil, false) end
+	local cuivre = rgb(156, 106, 62)
+	lienProp(m, "Conduite", Vp(0, 0.85, 0.89), Vp(0, 1.23, 0.0), 0.12, 0.12, cuivre, Mat.Metal, false)
+	cylProp(m, "Tete", 0.37, 0.25, Vp(0, 1.64, 0), cuivre, Mat.Metal)
+	for i = 0, 2 do
+		local a = i * PASSE / 3
+		local b = Vp(math.cos(a) * 0.52, 1.71, math.sin(a) * 0.52)
+		lienProp(m, "Buse", Vp(0, 1.64, 0), b, 0.11, 0.11, cuivre, Mat.Metal, false)
+		rivetProp(m, b, 0.15, FER)
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Ruche()
+	local m = nouveau("Ruche")
+	P(m, "Socle", Vp(1.76, 0.24, 1.74), Vp(0, 0.12, 0), BOIS, Mat.WoodPlanks)
+	for i, profil in { { 0.38, 1.49, 0.29 }, { 0.60, 1.76, 0.26 }, { 0.84, 1.81, 0.26 },
+		{ 1.07, 1.72, 0.25 }, { 1.29, 1.53, 0.24 }, { 1.5, 1.32, 0.23 }, { 1.69, 1.07, 0.23 },
+		{ 1.88, 0.76, 0.2 }, { 2.02, 0.43, 0.14 } } do
+		cylProp(m, "Paille", profil[2], profil[3], Vp(0, profil[1], 0), teinteProp(CHAUME, i), Mat.Grass)
+	end
+	P(m, "Planche d’envol", Vp(0.64, 0.12, 0.34), Vp(0, 0.71, -0.86), BOIS, Mat.Wood)
+	P(m, "Trou", Vp(0.36, 0.19, 0.11), Vp(0, 0.83, -0.90), BOIS_FONCE, Mat.Wood, { collide = false })
+	fini(m)
+end
+
+function PROPS_VALDOR.Caserne()
+	local m = nouveau("Caserne")
+	P(m, "Socle", Vp(12, 0.88, 10), Vp(0, 0.44, 0), PIERRE, Mat.Cobblestone)
+	for i = 0, 4 do
+		P(m, "Murs", Vp(11.02, 1.28, 9.02), Vp(0, 1.52 + i * 1.21, 0),
+			i % 2 == 0 and CALCAIRE or PIERRE_CLAIRE, i % 2 == 0 and Mat.Cobblestone or Mat.Slate)
+	end
+	lamesProp(m, "Porte", Vp(2.58, 4.04, 0.18), Vp(0, 2.97, -4.58), 5, "X", BOIS_FONCE)
+	for _, y in { 1.99, 4.12 } do P(m, "Pentures", Vp(2.57, 0.22, 0.07), Vp(0, y, -4.69), FER, Mat.Metal, { collide = false }) end
+	for _, x in { -1.40, 1.40 } do
+		P(m, "Jambage", Vp(0.33, 4.40, 0.41), Vp(x, 2.99, -4.53), PIERRE, Mat.Slate)
+	end
+	P(m, "Linteau", Vp(3.22, 0.36, 0.47), Vp(0, 5.13, -4.54), PIERRE, Mat.Slate)
+	toitureProp(m, 11.94, 9.88, 7.04, 1.23, 0, false)
+	for _, x in { -5.48, 5.48 } do
+		for _, z in { -4.48, 4.48 } do
+			P(m, "Tour", Vp(1.86, 8.18, 1.86), Vp(x, 4.09, z), PIERRE, Mat.Cobblestone)
+			P(m, "Corniche", Vp(2.02, 0.28, 2.02), Vp(x, 8.10, z), CALCAIRE, Mat.Slate)
+			for _, i in { -1, 1 } do
+				for _, j in { -1, 1 } do
+					P(m, "Créneau", Vp(0.52, 0.74, 0.52), Vp(x + i * 0.70, 8.56, z + j * 0.70), PIERRE_CLAIRE, Mat.Cobblestone)
+				end
+			end
+		end
+	end
+	P(m, "Mat", Vp(0.22, 4.54, 0.24), Vp(0, 10.27, 0), BOIS_FONCE, Mat.Wood)
+	for i = 0, 3 do
+		local h = 1.39 - i * 0.17
+		P(m, "Drapeau", Vp(0.13, h, 0.59), Vp(i % 2 * 0.045, 12.33 - h / 2, 0.32 + i * 0.54),
+			i % 2 == 0 and GARANCE or GARANCE:Lerp(BOIS_FONCE, 0.11), Mat.Fabric, { collide = false })
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Embarcadere()
+	local m = nouveau("Embarcadere")
+	lamesProp(m, "Ponton", Vp(3.98, 0.33, 9.98), Vp(0, 0.63, 0), 12, "Z", BOIS_CLAIR)
+	for _, x in { -1.80, 1.80 } do
+		P(m, "Longeron", Vp(0.29, 0.33, 9.92), Vp(x, 0.41, 0), BOIS_FONCE, Mat.Wood)
+		for _, z in { -4, 0, 4 } do
+			P(m, "Pieu", Vp(0.48, 2.03, 0.47), Vp(x, 0.015, z), BOIS, Mat.Wood)
+			cylProp(m, "Cercle", 0.61, 0.16, Vp(x, 0.84, z), FER, Mat.Metal, nil, false)
+		end
+	end
+	P(m, "Quille", Vp(1.14, 0.31, 5.66), Vp(3.45, 0.155, 0), BOIS_FONCE, Mat.Wood)
+	for _, x in { 2.39, 4.51 } do
+		lamesProp(m, "Virure", Vp(0.29, 0.82, 4.15), Vp(x, 0.65, 0), 3, "Y", BOIS)
+		for _, s in { -1, 1 } do
+			lienProp(m, "Étrave", Vp(x, 0.68, s * 2.02), Vp(3.45, 0.68, s * 2.97), 0.25, 0.81, BOIS, Mat.Wood)
+		end
+	end
+	for _, z in { -1.51, 0, 1.51 } do
+		P(m, "Banc", Vp(2.37, 0.18, 0.26), Vp(3.45, 0.99, z), BOIS_CLAIR, Mat.Wood)
+	end
+	P(m, "Mat", Vp(0.23, 4.92, 0.23), Vp(3.45, 3.46, 0), BOIS_FONCE, Mat.Wood)
+	lienProp(m, "Vergue", Vp(3.45, 5.5, -1.35), Vp(3.45, 5.11, 1.41), 0.12, 0.13, BOIS, Mat.Wood, false)
+	for i = 0, 4 do
+		local z = (i - 2) * 0.51
+		P(m, "Voile", Vp(0.13, 2.75 - i * 0.11, 0.52), Vp(3.49 + math.sin(i) * 0.07, 4.0 + i * 0.021, z), LIN, Mat.Fabric, { collide = false })
+	end
+	lienProp(m, "Amarre", Vp(1.8, 0.91, -4), Vp(3.45, 0.91, -2.82), 0.073, 0.073, LIN, Mat.Fabric, false)
+	P(m, "PiedPanneau", Vp(0.27, 2.08, 0.29), Vp(0, 1.66, -4.58), BOIS_FONCE, Mat.Wood)
+	lamesProp(m, "Panneau", Vp(2.22, 1.02, 0.18), Vp(0, 2.60, -4.58), 3, "Y", BOIS)
+	fini(m)
+end
+
+function PROPS_VALDOR.Plancher()
+	local m = nouveau("Plancher")
+	lamesProp(m, "Planches", Vp(4, 0.4, 4), Vp(0, 0.2, 0), 7, "X", BOIS_CLAIR)
+	for _, z in { -1.7, 1.7 } do
+		P(m, "Solive", Vp(4, 0.16, 0.23), Vp(0, 0.08, z), BOIS_FONCE, Mat.Wood)
+		for x = -1.55, 1.55, 0.62 do rivetProp(m, Vp(x, 0.404, z), 0.077) end
+	end
+	fini(m)
+end
+
+local function murBoise(nom: string, porte: boolean, fenetre: boolean)
+	local m = nouveau(nom)
+	for _, x in { -2, 2 } do
+		P(m, "Poteau", Vp(0.6, 7.2, 0.6), Vp(x, 3.6, 0), BOIS_FONCE, Mat.Wood)
+		for _, y in { 0.43, 6.75 } do
+			P(m, "Bride", Vp(0.63, 0.19, 0.63), Vp(x, y, 0), FER, Mat.Metal, { collide = false })
+			rivetProp(m, Vp(x, y, 0.325), 0.124)
+		end
+	end
+	if porte then
+		lamesProp(m, "Linteau", Vp(3.97, 1.4, 0.49), Vp(0, 6.3, 0), 7, "X", BOIS_CLAIR)
+		for _, x in { -1.65, 1.65 } do
+			lamesProp(m, "Montant", Vp(0.7, 5.62, 0.49), Vp(x, 2.81, 0), 2, "X", BOIS)
+		end
+	elseif fenetre then
+		lamesProp(m, "Bas", Vp(3.99, 2.6, 0.49), Vp(0, 1.3, 0), 8, "X", BOIS_CLAIR)
+		lamesProp(m, "Haut", Vp(3.99, 1.8, 0.49), Vp(0, 6.1, 0), 8, "X", BOIS_CLAIR)
+		for _, x in { -1.55, 1.55 } do lamesProp(m, "Cote", Vp(0.9, 2.61, 0.49), Vp(x, 3.9, 0), 2, "X", BOIS) end
+		P(m, "Vitre", Vp(2.2, 2.62, 0.11), Vp(0, 3.9, 0), rgb(156, 190, 207), Mat.Glass, { transp = 0.46 })
+		P(m, "Croisillon", Vp(2.26, 0.14, 0.30), Vp(0, 3.90, 0), BOIS_FONCE, Mat.Wood)
+		P(m, "Croisillon", Vp(0.14, 2.62, 0.30), Vp(0, 3.90, 0), BOIS_FONCE, Mat.Wood)
+		for _, y in { 2.57, 5.20 } do P(m, "Cadre", Vp(2.35, 0.21, 0.64), Vp(0, y, 0), BOIS_FONCE, Mat.Wood) end
+	else
+		lamesProp(m, "Mur", Vp(3.99, 7, 0.5), Vp(0, 3.5, 0), 8, "X", BOIS_CLAIR)
+	end
+	for _, y in { porte and 5.66 or 0.23, 6.89 } do
+		P(m, "Traverse", Vp(4.01, 0.21, 0.58), Vp(0, y, 0), BOIS_FONCE, Mat.Wood)
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Mur_Planches() murBoise("Mur_Planches", false, false) end
+function PROPS_VALDOR.Mur_Porte() murBoise("Mur_Porte", true, false) end
+function PROPS_VALDOR.Mur_Fenetre() murBoise("Mur_Fenetre", false, true) end
+
+local function murMaconne(nom: string, c: Color3, mat: Enum.Material, rangs: number)
+	local m = nouveau(nom)
+	for _, x in { -2, 2 } do
+		P(m, "Poteau", Vp(0.6, 7.2, 0.6), Vp(x, 3.6, 0), BOIS_FONCE, Mat.Wood)
+	end
+	local h = 7 / rangs
+	for i = 0, rangs - 1 do
+		local joint = i % 2 == 0 and { 1.05, 1.67, 1.28 } or { 0.78, 1.22, 0.87, 1.13 }
+		local x = -2
+		for j, w in joint do
+			P(m, "Moellon", Vp(w - 0.026, h, 0.48 + (j + i) % 3 * 0.014), Vp(x + w / 2, h * (i + 0.5), 0),
+				c:Lerp(PIERRE, (i + j) % 3 * 0.12), mat)
+			x += w
+		end
+	end
+	P(m, "Arase", Vp(4.03, 0.17, 0.58), Vp(0, 6.97, 0), c, mat)
+	fini(m)
+end
+
+function PROPS_VALDOR.Mur_Pierre() murMaconne("Mur_Pierre", CALCAIRE, Mat.Slate, 7) end
+function PROPS_VALDOR.Mur_Briques() murMaconne("Mur_Briques", rgb(153, 87, 65), Mat.Brick, 10) end
+
+function PROPS_VALDOR.Toit_Chaume()
+	local m = nouveau("Toit_Chaume")
+	-- Le dessous conserve sa cote pour s'emboîter sur les anciens murs.
+	P(m, "Rive", Vp(4.79, 0.25, 4.79), Vp(0, 7.05, 0), BOIS_FONCE, Mat.Wood)
+	for _, z in { -1.75, 1.75 } do
+		P(m, "Chevron", Vp(4.71, 0.19, 0.30), Vp(0, 7.22, z), BOIS, Mat.Wood)
+	end
+	toitureProp(m, 4.71, 4.71, 7.27, 1.14, 0, true)
+	fini(m)
+end
+
+function PROPS_VALDOR.Escalier_Bois()
+	local m = nouveau("Escalier_Bois")
+	for i = 0, 7 do
+		local y, z = 0.44 + i * 0.92, 1.75 - i * 0.50
+		P(m, "Marche", Vp(3.59, 0.88, 0.50), Vp(0, y, z), teinteProp(BOIS_CLAIR, i), Mat.WoodPlanks)
+		P(m, "Nez", Vp(3.61, 0.13, 0.11), Vp(0, y + 0.36, z + 0.18), BOIS_FONCE, Mat.Wood)
+	end
+	for _, x in { -1.71, 1.71 } do
+		lienProp(m, "Limon", Vp(x, 0.33, 1.76), Vp(x, 6.77, -1.77), 0.23, 0.32, BOIS_FONCE, Mat.Wood, false)
+	end
+	fini(m)
+end
+
+-- Petit décor de sol. Les noms et le pivot continuent d'identifier les ressources au chargement.
+function PROPS_VALDOR.Rocher()
+	local m = nouveau("Rocher")
+	P(m, "Pierre", Vp(4.04, 2.9, 3.57), Vp(0, 1.05, 0), PIERRE, Mat.Slate,
+		{ forme = "Ball", rot = CFrame.Angles(0, 0.12, 0) })
+	for i, taille in { Vp(2.71, 1.42, 2.14), Vp(1.52, 1.25, 1.86), Vp(2.03, 0.83, 2.0) } do
+		local p = ({ Vp(1.26, 1.0, 0.68), Vp(-1.54, 0.51, -0.63), Vp(0.20, 1.76, 0.48) })[i]
+		P(m, "Éclat", taille, p, i == 2 and CALCAIRE or PIERRE_CLAIRE, i == 1 and Mat.Rock or Mat.Slate,
+			{ forme = i == 3 and "Wedge" or "Ball", rot = CFrame.Angles(0.04, i * 0.71, 0.1) })
+	end
+	for _, p in { Vp(-0.42, 2.46, -0.15), Vp(0.27, 2.44, 0.18), Vp(0.96, 1.78, 0.84) } do
+		P(m, "Mousse", Vp(0.83, 0.16, 0.77), p, rgb(95, 118, 70), Mat.Grass, { forme = "Ball", collide = false })
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Caillou()
+	local m = nouveau("Caillou")
+	P(m, "Pierre", Vp(1.16, 0.59, 0.88), Vp(0, 0.295, 0), PIERRE, Mat.Rock,
+		{ forme = "Ball", rot = CFrame.Angles(0, 0.38, 0), collide = false })
+	P(m, "Éclat", Vp(0.67, 0.26, 0.59), Vp(0.28, 0.38, 0.17), CALCAIRE, Mat.Slate,
+		{ forme = "Wedge", rot = CFrame.Angles(0, -0.68, 0), collide = false })
+	P(m, "Éclat", Vp(0.57, 0.29, 0.46), Vp(0.63, 0.15, 0.19), PIERRE_CLAIRE, Mat.Slate,
+		{ forme = "Ball", collide = false })
+	fini(m)
+end
+
+function PROPS_VALDOR.Branche()
+	local m = nouveau("Branche")
+	lienProp(m, "Bois", Vp(-1.36, 0.165, -0.25), Vp(0.39, 0.215, 0.03), 0.27, 0.25, BOIS_FONCE, Mat.Wood, false)
+	lienProp(m, "Fourche", Vp(0.15, 0.21, 0.02), Vp(1.14, 0.19, -0.31), 0.19, 0.18, BOIS, Mat.Wood, false)
+	lienProp(m, "Fourche", Vp(0.15, 0.21, 0.02), Vp(0.72, 0.16, 0.68), 0.14, 0.15, BOIS, Mat.Wood, false)
+	lienProp(m, "Brindille", Vp(0.44, 0.19, 0.31), Vp(0.19, 0.13, 0.67), 0.089, 0.083, BOIS, Mat.Wood, false)
+	lienProp(m, "Écorce fendue", Vp(-1.31, 0.20, -0.25), Vp(-0.93, 0.31, -0.19), 0.085, 0.023, BOIS_CLAIR, Mat.Wood, false)
+	fini(m)
+end
+
+function PROPS_VALDOR.Buisson()
+	local m = nouveau("Buisson")
+	P(m, "Feuilles", Vp(3.15, 2.44, 2.9), Vp(0, 1.22, 0), rgb(78, 116, 64), Mat.Grass, { forme = "Ball" })
+	for i, p in { Vp(-1.02, 1.28, -0.12), Vp(0.92, 1.62, 0.03), Vp(-0.25, 2.1, -0.48),
+		Vp(0.4, 1.10, 0.87), Vp(-0.5, 1.74, 0.64), Vp(0.47, 2.19, -0.32) } do
+		P(m, "Feuilles", Vp(1.34, 1.38 + i % 2 * 0.23, 1.31), p, rgb(76 + i * 4, 112 + i * 3, 61 + i % 3 * 5),
+			Mat.Grass, { forme = "Ball", collide = false })
+	end
+	for i, p in { Vp(-1.27, 1.44, 0.62), Vp(-0.64, 2.0, 1.09), Vp(0.51, 1.39, 1.46),
+		Vp(1.38, 1.58, 0.74), Vp(0.34, 2.50, 0.16), Vp(1.04, 1.75, -0.68) } do
+		for j = 0, 1 do
+			P(m, "Baie", Vp(0.23, 0.24, 0.22), p + Vp(j * 0.14, -j * 0.13, 0.06),
+				rgb(148 + j * 17, 51 + i % 3 * 6, 56), Mat.Grass, { forme = "Ball", collide = false })
+		end
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Tronc_Couche()
+	local m = nouveau("Tronc_Couche")
+	cylProp(m, "Bois", 1.68, 4.45, Vp(-0.04, 0.84, 0), BOIS_FONCE, Mat.Wood, CFrame.identity)
+	for _, x in { -2.31, 2.24 } do
+		for i = 1, 3 do
+			cylProp(m, "Cerne", 1.50 - i * 0.32, 0.065, Vp(x + math.sign(x) * i * 0.035, 0.84 + i * 0.015, 0.02 * i),
+				i % 2 == 0 and BOIS or BOIS_CLAIR, Mat.Wood, CFrame.identity, false)
+		end
+	end
+	lienProp(m, "Nœud", Vp(-0.87, 1.23, 0.31), Vp(-0.51, 1.91, 0.73), 0.41, 0.32, BOIS_FONCE, Mat.Wood, false)
+	for i = 0, 3 do
+		P(m, "Mousse", Vp(0.83, 0.19, 0.67), Vp(-0.73 + i * 0.55, 1.63 - i % 2 * 0.045, i % 2 * 0.17),
+			rgb(84 + i * 4, 117, 64), Mat.Grass, { forme = "Ball", collide = false })
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Fleurs()
+	local m = nouveau("Fleurs")
+	for i, p in { Vp(0, 0, 0), Vp(0.33, 0, 0.17), Vp(-0.37, 0, 0.19), Vp(0.11, 0, -0.33) } do
+		local h = p + Vp(p.X * 0.9, 0.67 + i % 3 * 0.159, p.Z * 0.93)
+		lienProp(m, "Tige", p * 0.33 + Vp(0, 0.03, 0), h, 0.065, 0.061, rgb(86, 119, 65), Mat.Grass, false)
+		lienProp(m, "Feuille", (p + h) / 2, (p + h) / 2 + Vp(i % 2 == 0 and -0.2 or 0.21, 0.19, 0.05),
+			0.11, 0.065, rgb(104, 134, 73), Mat.Grass, false)
+		for j = 0, 3 do
+			local a = j * PASSE / 4
+			P(m, "Petale", Vp(0.179, 0.12, 0.17), h + Vp(math.cos(a) * 0.11, 0.04, math.sin(a) * 0.11),
+				i % 2 == 0 and LIN or CHAUME, Mat.Fabric, { forme = "Ball", collide = false })
+		end
+		cylProp(m, "Cœur", 0.15, 0.079, h + Vp(0, 0.048, 0), OR, Mat.Fabric, nil, false)
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Champignon()
+	local m = nouveau("Champignon")
+	for i, p in { Vp(0, 0, 0), Vp(0.51, 0, 0.21), Vp(-0.33, 0, -0.38) } do
+		local h, d = 0.84 - i * 0.163, 0.98 - i * 0.196
+		cylProp(m, "Pied", d * 0.31, h, p + Vp(0, h / 2, 0), LIN, Mat.Sand, nil, false)
+		cylProp(m, "Lamelles", d, 0.08, p + Vp(0, h - 0.065, 0), rgb(186, 157, 117), Mat.Sand, nil, false)
+		P(m, "Chapeau", Vp(d, d * 0.47, d * 0.94), p + Vp(0, h + 0.044, 0), GARANCE, Mat.Sand,
+			{ forme = "Ball", collide = false })
+		for j = -1, 1 do
+			P(m, "Moucheture", Vp(d * 0.13, 0.036, d * 0.113), p + Vp(d * j * 0.22, h + d * 0.25, d * (j % 2) * 0.09),
+				LIN, Mat.Sand, { forme = "Ball", collide = false })
+		end
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Touffe()
+	local m = nouveau("Touffe")
+	for i = 1, 7 do
+		local a = i * 2.4
+		local r = i % 3 * 0.13
+		local tige = Vp(math.cos(a), 0, math.sin(a))
+		lienProp(m, "Brin", tige * r + Vp(0, -0.18, 0), tige * (r + 0.14) + Vp(0, 0.52 + i % 4 * 0.18, 0),
+			0.105, 0.067, rgb(84 + i * 3, 123 + i * 3, 68), Mat.Grass, false)
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Sol_Laboure()
+	local m = nouveau("Sol_Laboure")
+	P(m, "Terre", Vp(3.8, 0.4, 3.8), Vp(0, 0.1, 0), rgb(109, 77, 53), Mat.Ground, { collide = false })
+	for i = -1, 1 do
+		for j = -1, 1 do
+			P(m, "Sillon", Vp(1.22, 0.19 + (i + j) % 3 * 0.044, 0.47), Vp(j * 1.19, 0.35, i * 1.10 + (i + j) % 2 * 0.061),
+				rgb(95 + j * 4, 62 + j * 2, 43), Mat.Ground, { forme = "Ball", collide = false })
+		end
+	end
+	fini(m)
+end
+
+function PROPS_VALDOR.Terre_Retournee()
+	local m = nouveau("Terre_Retournee")
+	P(m, "Terre", Vp(2.89, 0.39, 4.80), Vp(0, 0.19, 0), rgb(104, 73, 51), Mat.Ground,
+		{ forme = "Ball", collide = false })
+	for i = -2, 2 do
+		P(m, "Motte", Vp(1.33, 0.18 + i % 2 * 0.05, 1.46), Vp(i % 2 * 0.18 - 0.08, 0.29, i * 0.76),
+			rgb(110 + i * 3, 73 + i * 2, 51), Mat.Ground, { forme = "Ball", collide = false })
+	end
+	fini(m)
+end
+
+-- Tableau de village : deux poteaux, un auvent et une planche couverte de parchemins.
+-- L'invite se fixe à « Planche ».
+local function construireTableauQuetes(): Model
+	local m = nouveau("Tableau_Quetes")
+	local PARCH = rgb(236, 220, 176)
+	for _, x in { -3.2, 3.2 } do
+		P(m, "Socle", Vp(0.98, 0.44, 0.96), Vp(x, 0.22, 0), PIERRE, Mat.Cobblestone)
+		P(m, "Poteau", Vp(0.76, 7.25, 0.76), Vp(x, 4.02, 0), BOIS, Mat.Wood)
+		rivetProp(m, Vp(x, 5.98, 0.39), 0.15)
+	end
+	P(m, "Planche", Vp(6.2, 3.8, 0.29), Vp(0, 4, 0), BOIS_CLAIR, Mat.WoodPlanks)
+	lamesProp(m, "Bardage", Vp(6.2, 3.86, 0.09), Vp(0, 4, 0.153), 5, "X", BOIS_CLAIR)
+	P(m, "Cadre", Vector3.new(6.6, 0.4, 0.6), Vector3.new(0, 6.05, 0), BOIS_FONCE, Mat.Wood)
+	P(m, "Cadre", Vector3.new(6.6, 0.4, 0.6), Vector3.new(0, 1.95, 0), BOIS_FONCE, Mat.Wood)
+	toitureProp(m, 7.78, 2.52, 7.52, 0.77, 0, false)
+	P(m, "Entrait", Vp(7.11, 0.29, 0.28), Vp(0, 7.57, 0), BOIS_FONCE, Mat.Wood)
+	for _, x in { -3.2, 3.2 } do
+		P(m, "Poinçon", Vp(0.24, 0.73, 0.25), Vp(x, 7.94, 0), BOIS_FONCE, Mat.Wood)
+		for _, z in { -1.16, 1.16 } do
+			lienProp(m, "Chevron", Vp(x, 7.51, z), Vp(x, 8.28, 0), 0.18, 0.17, BOIS, Mat.Wood)
+		end
+	end
+	-- parchemins épinglés (légèrement de travers) et leurs cachets
+	local spots = { { -2.1, 4.9, 4 }, { -0.4, 5.1, -6 }, { 1.6, 4.8, 7 }, { -1.5, 3.1, -3 }, { 1.69, 3.2, -8 } }
+	for i, sp in spots do
+		local cf = CFrame.new(sp[1], sp[2], 0.24) * CFrame.Angles(0, 0, math.rad(sp[3]))
+		P(m, "Parchemin", Vector3.new(1.3, 1.5, 0.06), Vector3.zero, PARCH:Lerp(rgb(214, 196, 150), (i % 3) / 3), Mat.Fabric, { cf = cf, collide = false })
+		P(m, "Lignes", Vector3.new(0.9, 0.08, 0.02), Vector3.zero, rgb(120, 100, 80), Mat.Fabric, { cf = cf * CFrame.new(0, 0.3, 0.04), collide = false })
+		P(m, "Lignes", Vector3.new(0.9, 0.08, 0.02), Vector3.zero, rgb(120, 100, 80), Mat.Fabric, { cf = cf * CFrame.new(0, 0.05, 0.04), collide = false })
+		P(m, "Cachet", Vector3.new(0.12, 0.3, 0.3), Vector3.zero, GARANCE, Mat.CeramicTiles,
+			{ cf = cf * CFrame.new(0, -0.45, 0.05) * CFrame.Angles(0, math.rad(90), 0), forme = "Cylinder", collide = false })
+	end
+	local enseigneVillage = P(m, "Enseigne", Vector3.new(6.0, 0.88, 0.36), Vector3.new(0, 6.84, 0),
+		BOIS_FONCE, Mat.WoodPlanks, { collide = false })
+	for _, face in { Enum.NormalId.Front, Enum.NormalId.Back } do
+		local surface = Instance.new("SurfaceGui")
+		surface.Face, surface.LightInfluence, surface.MaxDistance = face, 0.45, 95
+		surface.CanvasSize = Vector2.new(480, 72)
+		surface.Parent = enseigneVillage
+		local nom = Instance.new("TextLabel")
+		nom.BackgroundTransparency, nom.TextScaled = 1, true
+		nom.Size, nom.Position = UDim2.fromScale(0.94, 0.77), UDim2.fromScale(0.03, 0.115)
+		nom.Font, nom.TextColor3, nom.Text = Enum.Font.Fondamento, PARCH, "Place du village"
+		nom.Parent = surface
+	end
+	P(m, "Caisse", Vp(1.6, 1.15, 1.2), Vp(2.6, 0.575, 1.045), BOIS_CLAIR, Mat.WoodPlanks)
+	lamesProp(m, "Couvercle", Vp(1.57, 0.12, 1.20), Vp(2.6, 1.17, 1.045), 3, "X", BOIS)
+	for _, x in { 1.94, 3.25 } do
+		P(m, "Cornière", Vp(0.19, 1.15, 0.15), Vp(x, 0.585, 1.605), BOIS_FONCE, Mat.Wood)
+		rivetProp(m, Vp(x, 1.05, 1.685), 0.11)
+	end
+	attache(m.PrimaryPart, "Devant", CFrame.new(0, 0, 4))
+	fini(m)
+	return m
+end
+
+function PROPS_VALDOR.Tableau_Quetes() construireTableauQuetes() end
+
+function M.tableauQuetes()
+	dossier = dossierModeles()
+	return construireTableauQuetes()
+end
+
+local NOMS_SOL = {
+	"Rocher", "Caillou", "Branche", "Buisson", "Tronc_Couche", "Fleurs", "Champignon",
+	"Touffe", "Coffre", "Sol_Laboure", "Terre_Retournee",
+}
+
+local NOMS_ARTISANAT = {
+	"Fourneau", "Plancher", "Mur_Planches", "Mur_Porte", "Mur_Pierre", "Mur_Briques", "Toit_Chaume", "Lit_Joueur", "Lanterne",
+}
+local NOMS_SECURITE = {
+	"Porte", "Cloche_Alarme", "Mur_Fenetre", "Escalier_Bois", "Table_Bois", "Chaise", "Tapis", "Pot_Fleurs",
+	"Etagere", "Banc", "Moulin", "Arroseur", "Ruche", "Caserne", "Embarcadere", "Etal", "Serrure_Entrainement",
+}
+local NOMS_DECOR = {
+	"Fontaine", "Puits", "Lampadaire", "Panneau", "Tonneaux", "Caisses", "Epouvantail", "Botte_Foin", "Boite_Lettres",
+	"Cloture", "Feu_Camp", "Etabli", "Coffre_Joueur",
+}
+local NOMS_STATIONS = { "Enclume", "Metier_Tisser", "Bac_Tannage", "Alambic", "Abreuvoir", "Mangeoire" }
+
+local function reconstruireProps(noms: {string})
+	dossier = dossierModeles()
+	for _, nom in noms do PROPS_VALDOR[nom]() end
+end
+
+-- Édition : un nom cible uniquement ce modèle. Sans nom, reconstruire le lot.
+function M.propsValdor(nom: string?): number
+	if nom then
+		local construire = assert(PROPS_VALDOR[nom], "Prop de Valdor inconnu : " .. nom)
+		dossier = dossierModeles()
+		construire()
+		return 1
+	end
+	dossier = dossierModeles()
+	local n = 0
+	for _, construire in PROPS_VALDOR do
+		construire()
+		n += 1
+	end
+	return n
+end
+
+function M.puits() M.propsValdor("Puits") end
+
+local function decor() reconstruireProps(NOMS_DECOR) end
+
+
+
+-- Fin des props de Valdor.
+
 function M.artisanat()
 	dossier = dossierModeles()
 	filon("Filon_Charbon", rgb(34, 32, 36), Mat.Slate)
@@ -284,73 +1549,7 @@ function M.artisanat()
 		P(m, "Motte", Vector3.new(1.8, 1, 1.8), Vector3.new(-1.4, 0.5, -0.7), c2, Mat.Mud, { rot = CFrame.Angles(0, 0.5, 0.1) })
 		fini(m)
 	end
-	do
-		local m = nouveau("Fourneau")
-		P(m, "Corps", Vector3.new(3.4, 3.4, 3), Vector3.new(0, 1.7, 0), PIERRE, Mat.Cobblestone)
-		P(m, "Bouche", Vector3.new(1.6, 1.2, 0.2), Vector3.new(0, 1.1, 1.45), rgb(30, 22, 18), Mat.SmoothPlastic, { collide = false })
-		local feu = P(m, "Braise", Vector3.new(1.3, 0.4, 0.2), Vector3.new(0, 0.7, 1.52), rgb(255, 120, 40), Mat.Neon, { collide = false })
-		local light = Instance.new("PointLight")
-		light.Range = 10
-		light.Brightness = 1.5
-		light.Color = rgb(255, 150, 70)
-		light.Parent = feu
-		P(m, "Cheminee", Vector3.new(1, 2, 1), Vector3.new(0.8, 4.4, -0.6), PIERRE_CLAIRE, Mat.Cobblestone)
-		reperesFeu(m)
-		fini(m)
-	end
-	-- Construction : pivot au sol, au centre de la case ; un mur occupe le bord +Z... posé au bord de la case
-	do
-		local m = nouveau("Plancher")
-		P(m, "Planches", Vector3.new(4, 0.4, 4), Vector3.new(0, 0.2, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		fini(m)
-	end
-	local function mur(nom: string, couleur: Color3, mat: Enum.Material, porte: boolean)
-		local m = nouveau(nom)
-		if porte then
-			P(m, "Montant", Vector3.new(0.7, 7, 0.5), Vector3.new(-1.65, 3.5, 0), couleur, mat)
-			P(m, "Montant", Vector3.new(0.7, 7, 0.5), Vector3.new(1.65, 3.5, 0), couleur, mat)
-			P(m, "Linteau", Vector3.new(4, 1.4, 0.5), Vector3.new(0, 6.3, 0), couleur, mat)
-		else
-			P(m, "Mur", Vector3.new(4, 7, 0.5), Vector3.new(0, 3.5, 0), couleur, mat)
-		end
-		P(m, "Poteau", Vector3.new(0.6, 7.2, 0.6), Vector3.new(-2, 3.6, 0), BOIS_FONCE, Mat.Wood)
-		P(m, "Poteau", Vector3.new(0.6, 7.2, 0.6), Vector3.new(2, 3.6, 0), BOIS_FONCE, Mat.Wood)
-		fini(m)
-	end
-	mur("Mur_Planches", BOIS_CLAIR, Mat.WoodPlanks, false)
-	mur("Mur_Porte", BOIS_CLAIR, Mat.WoodPlanks, true)
-	mur("Mur_Pierre", PIERRE_CLAIRE, Mat.Cobblestone, false)
-	mur("Mur_Briques", rgb(176, 92, 70), Mat.Brick, false)
-	do
-		local m = nouveau("Toit_Chaume")
-		P(m, "Chaume", Vector3.new(4.6, 0.7, 4.6), Vector3.new(0, 7.45, 0), rgb(214, 182, 96), Mat.Grass)
-		P(m, "Rive", Vector3.new(4.8, 0.25, 4.8), Vector3.new(0, 7.05, 0), BOIS_FONCE, Mat.Wood)
-		fini(m)
-	end
-	do
-		local m = nouveau("Lit_Joueur")
-		P(m, "Cadre", Vector3.new(2.6, 0.9, 4.8), Vector3.new(0, 0.45, 0), BOIS, Mat.Wood)
-		P(m, "Matelas", Vector3.new(2.3, 0.4, 4.4), Vector3.new(0, 1.1, 0), rgb(240, 236, 226), Mat.Fabric)
-		P(m, "Couverture", Vector3.new(2.4, 0.3, 2.8), Vector3.new(0, 1.35, 0.8), rgb(180, 60, 60), Mat.Fabric)
-		P(m, "Oreiller", Vector3.new(1.6, 0.4, 0.8), Vector3.new(0, 1.45, -1.7), rgb(250, 250, 245), Mat.Fabric)
-		P(m, "Tete", Vector3.new(2.6, 1.8, 0.3), Vector3.new(0, 0.9, -2.35), BOIS_FONCE, Mat.Wood)
-		fini(m)
-	end
-	do
-		local m = nouveau("Lanterne")
-		P(m, "Poteau", Vector3.new(0.35, 5, 0.35), Vector3.new(0, 2.5, 0), BOIS_FONCE, Mat.Wood)
-		P(m, "Potence", Vector3.new(0.3, 0.3, 1.4), Vector3.new(0, 4.9, 0.55), BOIS_FONCE, Mat.Wood)
-		P(m, "Cage", Vector3.new(0.9, 1, 0.9), Vector3.new(0, 4.2, 1.1), FER, Mat.Metal, { collide = false, transp = 0.2 })
-		local l = P(m, "Flamme", Vector3.new(0.5, 0.6, 0.5), Vector3.new(0, 4.2, 1.1), rgb(200, 180, 140), Mat.SmoothPlastic, { collide = false })
-		local light = Instance.new("PointLight")
-		light.Range = 22
-		light.Brightness = 1.6
-		light.Color = rgb(255, 200, 120)
-		light.Enabled = false
-		light.Parent = l
-		CollectionService:AddTag(l, "LumiereNuit")
-		fini(m)
-	end
+	reconstruireProps(NOMS_ARTISANAT)
 end
 
 function M.animauxFerme()
@@ -798,23 +1997,7 @@ function M.securite()
 		opts.collide = false
 		return P(m, nom, taille, pos, couleur, mat or Mat.SmoothPlastic, opts)
 	end
-	do
-		-- porte : se pose sur un bord de case, dans l'ouverture d'un « mur avec porte »
-		local m = nouveau("Porte")
-		P(m, "Battant", Vector3.new(2.5, 5.5, 0.3), Vector3.new(0, 2.75, 0), BOIS, Mat.WoodPlanks)
-		P(m, "Traverse", Vector3.new(2.5, 0.3, 0.36), Vector3.new(0, 1.4, 0), BOIS_FONCE, Mat.Wood, { collide = false })
-		P(m, "Traverse", Vector3.new(2.5, 0.3, 0.36), Vector3.new(0, 4.2, 0), BOIS_FONCE, Mat.Wood, { collide = false })
-		P(m, "Poignee", Vector3.new(0.2, 0.2, 0.5), Vector3.new(0.9, 2.8, 0), FER, Mat.Metal, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Cloche_Alarme")
-		P(m, "Poteau", Vector3.new(0.4, 5.5, 0.4), Vector3.new(0, 2.75, 0), BOIS_FONCE, Mat.Wood)
-		P(m, "Potence", Vector3.new(0.3, 0.3, 1.6), Vector3.new(0, 5.4, 0.6), BOIS_FONCE, Mat.Wood, { collide = false })
-		P(m, "Cloche", Vector3.new(1.1, 1.2, 1.1), Vector3.new(0, 4.6, 1.2), OR, Mat.Metal, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)), collide = false })
-		P(m, "Battant", Vector3.new(0.25, 0.5, 0.25), Vector3.new(0, 3.9, 1.2), FER, Mat.Metal, { collide = false })
-		fini(m)
-	end
+	reconstruireProps(NOMS_SECURITE)
 	-- boss itinérants : grandes silhouettes reconnaissables
 	do
 		local m = nouveau("Gardien_Moissons")
@@ -882,134 +2065,6 @@ function M.securite()
 		end
 		fini(m)
 	end
-	-- pièces de construction et mobilier
-	do
-		local m = nouveau("Mur_Fenetre")
-		P(m, "Bas", Vector3.new(4, 2.6, 0.5), Vector3.new(0, 1.3, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		P(m, "Haut", Vector3.new(4, 1.8, 0.5), Vector3.new(0, 6.1, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		for _, sx in { -1, 1 } do
-			P(m, "Cote", Vector3.new(0.9, 2.6, 0.5), Vector3.new(sx * 1.55, 3.9, 0), BOIS_CLAIR, Mat.WoodPlanks)
-			P(m, "Poteau", Vector3.new(0.6, 7.2, 0.6), Vector3.new(sx * 2, 3.6, 0), BOIS_FONCE, Mat.Wood)
-		end
-		P(m, "Vitre", Vector3.new(2.2, 2.6, 0.1), Vector3.new(0, 3.9, 0), rgb(190, 225, 240), Mat.Glass, { transp = 0.5 })
-		P(m, "Croisillon", Vector3.new(0.15, 2.6, 0.2), Vector3.new(0, 3.9, 0), BOIS_FONCE, Mat.Wood, { collide = false })
-		fini(m)
-	end
-	do
-		-- escalier : monte d'un étage (7,4 studs) sur une case, marches de 0,9
-		local m = nouveau("Escalier_Bois")
-		for i = 0, 7 do
-			P(m, "Marche", Vector3.new(3.6, 0.9, 0.5), Vector3.new(0, 0.45 + i * 0.92, 1.75 - i * 0.5), BOIS_CLAIR, Mat.WoodPlanks)
-		end
-		P(m, "Limon", Vector3.new(0.3, 0.6, 5), Vector3.new(-1.85, 3.6, 0), BOIS_FONCE, Mat.Wood, { collide = false, rot = CFrame.Angles(math.rad(58), 0, 0) })
-		fini(m)
-	end
-	do
-		local m = nouveau("Table_Bois")
-		P(m, "Plateau", Vector3.new(3.4, 0.3, 2.2), Vector3.new(0, 2.6, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		for _, sx in { -1, 1 } do
-			for _, sz in { -1, 1 } do
-				P(m, "Pied", Vector3.new(0.3, 2.45, 0.3), Vector3.new(sx * 1.45, 1.22, sz * 0.85), BOIS, Mat.Wood)
-			end
-		end
-		fini(m)
-	end
-	do
-		local m = nouveau("Chaise")
-		P(m, "Assise", Vector3.new(1.6, 0.25, 1.6), Vector3.new(0, 1.6, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		P(m, "Dossier", Vector3.new(1.6, 1.8, 0.2), Vector3.new(0, 2.6, 0.7), BOIS_CLAIR, Mat.WoodPlanks)
-		for _, sx in { -1, 1 } do
-			for _, sz in { -1, 1 } do
-				P(m, "Pied", Vector3.new(0.2, 1.5, 0.2), Vector3.new(sx * 0.65, 0.75, sz * 0.65), BOIS, Mat.Wood)
-			end
-		end
-		fini(m)
-	end
-	do
-		local m = nouveau("Tapis")
-		P(m, "Tapis", Vector3.new(3.6, 0.1, 3.6), Vector3.new(0, 0.05, 0), rgb(170, 50, 50), Mat.Fabric, { collide = false })
-		P(m, "Motif", Vector3.new(2.4, 0.11, 2.4), Vector3.new(0, 0.06, 0), rgb(230, 190, 90), Mat.Fabric, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Pot_Fleurs")
-		P(m, "Pot", Vector3.new(1.2, 1, 1.2), Vector3.new(0, 0.5, 0), rgb(180, 100, 70), Mat.SmoothPlastic)
-		P(m, "Terre", Vector3.new(1, 0.1, 1), Vector3.new(0, 1.0, 0), rgb(80, 56, 36), Mat.Ground, { collide = false })
-		for i, c in { rgb(240, 120, 160), rgb(250, 220, 80), rgb(150, 120, 230) } do
-			local x, z = -0.3 + i * 0.2, (i % 2) * 0.2 - 0.1
-			local y = 1.5 + (i % 2) * 0.2
-			local haut = y - 0.15
-			P(m, "Fleur", Vector3.new(0.4, 0.4, 0.4), Vector3.new(x, y, z), c, Mat.SmoothPlastic, { collide = false })
-			P(m, "Tige", Vector3.new(0.1, haut - 1, 0.1), Vector3.new(x, (1 + haut) / 2, z), rgb(70, 140, 60), Mat.SmoothPlastic, { collide = false })
-		end
-		fini(m)
-	end
-	do
-		local m = nouveau("Etagere")
-		P(m, "Fond", Vector3.new(3, 4.4, 0.2), Vector3.new(0, 2.2, 0.6), BOIS, Mat.WoodPlanks)
-		for i = 0, 3 do
-			P(m, "Planche", Vector3.new(3, 0.2, 1.2), Vector3.new(0, 0.3 + i * 1.3, 0.1), BOIS_CLAIR, Mat.WoodPlanks)
-		end
-		for i = 0, 5 do
-			P(m, "Livre", Vector3.new(0.3, 0.9, 0.8), Vector3.new(-1.2 + i * 0.45, 2.1, 0.1), ({ rgb(160, 50, 50), rgb(50, 90, 150), rgb(60, 120, 60) })[i % 3 + 1], Mat.SmoothPlastic, { collide = false })
-		end
-		fini(m)
-	end
-	do
-		local m = nouveau("Banc")
-		P(m, "Assise", Vector3.new(4, 0.3, 1.2), Vector3.new(0, 1.5, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		for _, sx in { -1, 1 } do
-			P(m, "Pied", Vector3.new(0.4, 1.4, 1), Vector3.new(sx * 1.6, 0.7, 0), BOIS, Mat.Wood)
-		end
-		fini(m)
-	end
-	-- inventions
-	do
-		local m = nouveau("Moulin")
-		P(m, "Tour", Vector3.new(5, 10, 5), Vector3.new(0, 5, 0), PIERRE_CLAIRE, Mat.Cobblestone)
-		P(m, "Toit", Vector3.new(5.6, 2, 5.6), Vector3.new(0, 11, 0), rgb(120, 60, 50), Mat.WoodPlanks)
-		P(m, "Axe", Vector3.new(0.6, 0.6, 1.4), Vector3.new(0, 8.5, -3.1), BOIS_FONCE, Mat.Wood)
-		for i = 0, 3 do
-			local a = i * math.pi / 2 + math.pi / 4
-			P(m, "Aile", Vector3.new(1.2, 5.5, 0.15), Vector3.new(math.cos(a) * 2.6, 8.5 + math.sin(a) * 2.6, -3.8), rgb(240, 232, 214), Mat.Fabric,
-				{ collide = false, rot = CFrame.Angles(0, 0, a - math.pi / 2) })
-		end
-		P(m, "Porte", Vector3.new(1.6, 2.6, 0.2), Vector3.new(0, 1.3, -2.55), BOIS, Mat.WoodPlanks, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Arroseur")
-		P(m, "Pied", Vector3.new(0.4, 1.6, 0.4), Vector3.new(0, 0.8, 0), FER, Mat.Metal)
-		P(m, "Reservoir", Vector3.new(1.4, 1, 1.4), Vector3.new(0, 0.5, 0.9), rgb(120, 90, 60), Mat.Wood)
-		P(m, "Tete", Vector3.new(1.2, 0.3, 0.3), Vector3.new(0, 1.7, 0), rgb(200, 130, 70), Mat.Metal, { collide = false })
-		P(m, "Buse", Vector3.new(0.3, 0.3, 1.2), Vector3.new(0, 1.7, 0), rgb(200, 130, 70), Mat.Metal, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Ruche")
-		P(m, "Socle", Vector3.new(1.8, 0.6, 1.8), Vector3.new(0, 0.3, 0), BOIS, Mat.Wood)
-		for i = 0, 3 do
-			local w = 1.8 - i * 0.35
-			P(m, "Paille", Vector3.new(w, 0.5, w), Vector3.new(0, 0.85 + i * 0.45, 0), rgb(214, 182, 96), Mat.Grass)
-		end
-		P(m, "Trou", Vector3.new(0.4, 0.3, 0.1), Vector3.new(0, 0.9, -0.85), rgb(40, 30, 20), Mat.SmoothPlastic, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Caserne")
-		P(m, "Socle", Vector3.new(12, 1, 10), Vector3.new(0, 0.5, 0), PIERRE, Mat.Cobblestone)
-		P(m, "Murs", Vector3.new(11, 6, 9), Vector3.new(0, 4, 0), PIERRE_CLAIRE, Mat.Cobblestone)
-		P(m, "Porte", Vector3.new(2.6, 4, 0.3), Vector3.new(0, 3, -4.6), BOIS_FONCE, Mat.WoodPlanks)
-		P(m, "Toit", Vector3.new(12, 1, 10), Vector3.new(0, 7.5, 0), rgb(120, 60, 50), Mat.WoodPlanks)
-		for _, sx in { -1, 1 } do
-			for _, sz in { -1, 1 } do
-				P(m, "Tour", Vector3.new(2, 9, 2), Vector3.new(sx * 5.5, 4.5, sz * 4.5), PIERRE, Mat.Cobblestone)
-			end
-		end
-		P(m, "Mat", Vector3.new(0.3, 5, 0.3), Vector3.new(0, 10.5, 0), BOIS_FONCE, Mat.Wood)
-		P(m, "Drapeau", Vector3.new(0.1, 1.6, 2.4), Vector3.new(0, 12, 1.2), rgb(190, 40, 40), Mat.Fabric, { collide = false })
-		fini(m)
-	end
 	local function soldat(nom: string, tunique: Color3, casque: Color3, extra: (Model) -> ())
 		local m = nouveau(nom)
 		local peau = rgb(226, 186, 150)
@@ -1038,42 +2093,6 @@ function M.securite()
 		P(m, "Bouclier", Vector3.new(0.3, 2.2, 1.8), Vector3.new(-1.6, 3, -0.4), rgb(160, 40, 40), Mat.Metal, { collide = false })
 		P(m, "Lance", Vector3.new(0.25, 5, 0.25), Vector3.new(1.5, 3.4, -0.3), BOIS_FONCE, Mat.Wood, { collide = false })
 	end)
-	do
-		-- embarcadère : ponton, barque, panneau
-		local m = nouveau("Embarcadere")
-		P(m, "Ponton", Vector3.new(4, 0.4, 10), Vector3.new(0, 0.6, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		for _, sx in { -1, 1 } do
-			for _, sz in { -4, 0, 4 } do
-				P(m, "Pieu", Vector3.new(0.5, 2, 0.5), Vector3.new(sx * 1.8, 0, sz), BOIS_FONCE, Mat.Wood)
-			end
-		end
-		P(m, "Coque", Vector3.new(2.6, 1.2, 6), Vector3.new(3.6, 0.6, 0), rgb(120, 76, 44), Mat.Wood)
-		P(m, "Interieur", Vector3.new(2, 0.3, 5), Vector3.new(3.6, 1.1, 0), rgb(90, 58, 34), Mat.WoodPlanks, { collide = false })
-		P(m, "Mat", Vector3.new(0.3, 5, 0.3), Vector3.new(3.6, 3.5, 0), BOIS_FONCE, Mat.Wood)
-		P(m, "Voile", Vector3.new(0.1, 3.4, 2.8), Vector3.new(3.6, 4, 0.2), rgb(240, 232, 214), Mat.Fabric, { collide = false })
-		P(m, "Panneau", Vector3.new(2.2, 1.2, 0.2), Vector3.new(0, 2.6, -4.6), BOIS, Mat.WoodPlanks)
-		P(m, "PiedPanneau", Vector3.new(0.3, 2.2, 0.3), Vector3.new(0, 1.3, -4.6), BOIS_FONCE, Mat.Wood)
-		fini(m)
-	end
-	do
-		local m = nouveau("Etal")
-		P(m, "Comptoir", Vector3.new(4.4, 2.6, 2), Vector3.new(0, 1.3, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		for _, sx in { -1, 1 } do
-			P(m, "Montant", Vector3.new(0.3, 5.6, 0.3), Vector3.new(sx * 2.1, 2.8, 0.8), BOIS_FONCE, Mat.Wood)
-		end
-		for i = 0, 5 do
-			P(m, "Auvent", Vector3.new(0.75, 0.2, 2.6), Vector3.new(-1.9 + i * 0.75, 5.6, 0.3), (i % 2 == 0) and rgb(200, 60, 60) or rgb(245, 240, 230), Mat.Fabric, { collide = false, rot = CFrame.Angles(math.rad(-12), 0, 0) })
-		end
-		P(m, "Caisse", Vector3.new(0.9, 0.6, 0.6), Vector3.new(1.4, 2.9, 0.3), OR, Mat.Metal, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Serrure_Entrainement")
-		P(m, "Pied", Vector3.new(1.6, 2.6, 1.2), Vector3.new(0, 1.3, 0), BOIS, Mat.Wood)
-		P(m, "Plaque", Vector3.new(1.4, 1.4, 0.2), Vector3.new(0, 2.2, -0.7), FER, Mat.Metal, { collide = false })
-		P(m, "Trou", Vector3.new(0.25, 0.5, 0.1), Vector3.new(0, 2.1, -0.82), rgb(20, 20, 20), Mat.SmoothPlastic, { collide = false })
-		fini(m)
-	end
 	-- Cambrioleur : bipède masqué en noir avec un sac
 	do
 		local m = nouveau("Cambrioleur")
@@ -1127,99 +2146,7 @@ end
 
 -- ---------------------------------------------------------------- Petits objets du sol
 
-local function sol()
-	do
-		local m = nouveau("Rocher")
-		P(m, "Pierre", Vector3.new(4, 3, 3.4), Vector3.new(0, 1.3, 0), PIERRE, Mat.Slate, { rot = CFrame.Angles(0, math.rad(12), math.rad(6)) })
-		P(m, "Pierre", Vector3.new(2.6, 2.2, 2.6), Vector3.new(1.6, 1.2, 1.2), PIERRE_CLAIRE, Mat.Slate, { rot = CFrame.Angles(math.rad(8), math.rad(35), 0) })
-		P(m, "Pierre", Vector3.new(1.6, 1.4, 1.6), Vector3.new(-1.8, 0.6, 1.2), PIERRE, Mat.Slate, { rot = CFrame.Angles(0, math.rad(20), math.rad(-10)) })
-		P(m, "Mousse", Vector3.new(2.4, 0.3, 1.8), Vector3.new(-0.3, 2.85, -0.2), rgb(96, 140, 70), Mat.Grass, { rot = CFrame.Angles(0, math.rad(12), math.rad(6)), collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Caillou")
-		P(m, "Pierre", Vector3.new(1.1, 0.6, 0.9), Vector3.new(0, 0.3, 0), PIERRE_CLAIRE, Mat.Slate, { rot = CFrame.Angles(0, math.rad(25), 0), collide = false })
-		P(m, "Pierre", Vector3.new(0.6, 0.4, 0.6), Vector3.new(0.7, 0.2, 0.4), PIERRE, Mat.Slate, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Branche")
-		P(m, "Bois", Vector3.new(2.6, 0.32, 0.32), Vector3.new(0, 0.16, 0), BOIS, Mat.Wood, { rot = CFrame.Angles(0, math.rad(20), 0), collide = false })
-		P(m, "Bois", Vector3.new(1, 0.24, 0.24), Vector3.new(0.4, 0.14, 0.45), BOIS, Mat.Wood, { rot = CFrame.Angles(0, math.rad(-35), 0), collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Buisson")
-		local v1, v2 = rgb(70, 132, 58), rgb(84, 148, 66)
-		P(m, "Feuilles", Vector3.new(3.2, 2.4, 3), Vector3.new(0, 1.2, 0), v1, Mat.Grass)
-		P(m, "Feuilles", Vector3.new(2.2, 1.8, 2.2), Vector3.new(0.9, 2.3, 0.3), v2, Mat.Grass, { collide = false })
-		P(m, "Feuilles", Vector3.new(1.8, 1.6, 1.8), Vector3.new(-0.9, 2.1, -0.4), v2, Mat.Grass, { collide = false })
-		local baies = { Vector3.new(1.62, 1.4, 0.6), Vector3.new(1.62, 0.8, -0.8), Vector3.new(-0.5, 1.7, 1.52), Vector3.new(0.7, 1, 1.52), Vector3.new(-1.62, 1.1, 0.2), Vector3.new(0.3, 2.9, 1.42), Vector3.new(-0.6, 0.9, -1.52) }
-		for _, b in baies do
-			P(m, "Baie", Vector3.new(0.5, 0.5, 0.5), b, rgb(196, 40, 60), Mat.SmoothPlastic, { collide = false })
-		end
-		fini(m)
-	end
-	do
-		local m = nouveau("Tronc_Couche")
-		P(m, "Bois", Vector3.new(5, 1.7, 1.7), Vector3.new(0, 0.85, 0), BOIS, Mat.Wood, { forme = "Cylinder" })
-		P(m, "Coupe", Vector3.new(0.1, 1.5, 1.5), Vector3.new(2.52, 0.85, 0), BOIS_CLAIR, Mat.Wood, { forme = "Cylinder", collide = false })
-		P(m, "Coupe", Vector3.new(0.1, 1.5, 1.5), Vector3.new(-2.52, 0.85, 0), BOIS_CLAIR, Mat.Wood, { forme = "Cylinder", collide = false })
-		P(m, "Mousse", Vector3.new(2, 0.2, 1), Vector3.new(0.5, 1.7, 0), rgb(96, 140, 70), Mat.Grass, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Fleurs")
-		local pos = { Vector3.new(0, 0, 0), Vector3.new(0.7, 0, 0.4), Vector3.new(-0.5, 0, 0.6), Vector3.new(0.2, 0, -0.7) }
-		for i, p in pos do
-			local h = 0.7 + (i % 2) * 0.3
-			P(m, "Tige", Vector3.new(0.12, h, 0.12), p + Vector3.new(0, h / 2, 0), rgb(70, 140, 60), Mat.SmoothPlastic, { collide = false })
-			P(m, "Petale", Vector3.new(0.45, 0.3, 0.45), p + Vector3.new(0, h + 0.1, 0), rgb(240, 220, 80), Mat.SmoothPlastic, { collide = false })
-		end
-		fini(m)
-	end
-	do
-		local m = nouveau("Champignon")
-		P(m, "Pied", Vector3.new(0.4, 0.6, 0.4), Vector3.new(0, 0.3, 0), rgb(240, 232, 214), Mat.SmoothPlastic, { collide = false })
-		P(m, "Chapeau", Vector3.new(1, 0.45, 1), Vector3.new(0, 0.75, 0), rgb(200, 50, 46), Mat.SmoothPlastic, { collide = false })
-		P(m, "Point", Vector3.new(0.2, 0.06, 0.2), Vector3.new(0.2, 1.0, 0.15), rgb(255, 255, 255), Mat.SmoothPlastic, { collide = false })
-		P(m, "Point", Vector3.new(0.16, 0.06, 0.16), Vector3.new(-0.22, 1.0, -0.12), rgb(255, 255, 255), Mat.SmoothPlastic, { collide = false })
-		P(m, "Pied", Vector3.new(0.3, 0.4, 0.3), Vector3.new(0.6, 0.2, 0.3), rgb(240, 232, 214), Mat.SmoothPlastic, { collide = false })
-		P(m, "Chapeau", Vector3.new(0.7, 0.3, 0.7), Vector3.new(0.6, 0.5, 0.3), rgb(200, 50, 46), Mat.SmoothPlastic, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Touffe")
-		for i = 1, 5 do
-			local a = i * 1.3
-			P(m, "Brin", Vector3.new(0.16, 0.9 + (i % 3) * 0.25, 0.16), Vector3.new(math.cos(a) * 0.35, 0.5, math.sin(a) * 0.35), rgb(96, 160, 70), Mat.Grass,
-				{ rot = CFrame.Angles(math.cos(a) * 0.3, 0, math.sin(a) * 0.3), collide = false })
-		end
-		fini(m)
-	end
-	do
-		local m = nouveau("Coffre")
-		P(m, "Caisse", Vector3.new(3, 1.8, 2), Vector3.new(0, 0.9, 0), BOIS, Mat.WoodPlanks)
-		P(m, "Couvercle", Vector3.new(3.1, 0.7, 2.1), Vector3.new(0, 2.15, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		P(m, "Cerclage", Vector3.new(0.3, 2.6, 2.14), Vector3.new(-1.1, 1.25, 0), OR, Mat.Metal, { collide = false })
-		P(m, "Cerclage", Vector3.new(0.3, 2.6, 2.14), Vector3.new(1.1, 1.25, 0), OR, Mat.Metal, { collide = false })
-		P(m, "Serrure", Vector3.new(0.5, 0.6, 0.15), Vector3.new(0, 1.7, 1.08), OR, Mat.Metal, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Sol_Laboure")
-		P(m, "Terre", Vector3.new(3.8, 0.4, 3.8), Vector3.new(0, 0.1, 0), rgb(110, 76, 50), Mat.Ground, { collide = false })
-		for i = -1, 1 do
-			P(m, "Sillon", Vector3.new(3.6, 0.15, 0.5), Vector3.new(0, 0.33, i * 1.15), rgb(92, 62, 40), Mat.Ground, { collide = false })
-		end
-		fini(m)
-	end
-	do
-		local m = nouveau("Terre_Retournee") -- tombe discrète / trou rebouché
-		P(m, "Terre", Vector3.new(3, 0.5, 5), Vector3.new(0, 0.15, 0), rgb(104, 72, 48), Mat.Ground, { collide = false })
-		fini(m)
-	end
-end
+local function sol() reconstruireProps(NOMS_SOL) end
 
 -- ---------------------------------------------------------------- Mobilier
 
@@ -1825,208 +2752,6 @@ end
 -- ---------------------------------------------------------------- Décor de village et de ferme
 
 -- Potence à lanterne (Lampadaire des villages)
-local function lampadaire()
-	-- potence à lanterne (image cible) : gros poteau équarri, bras et jambe de force, lanterne
-	-- de fer à vitres chaudes suspendue par une chaîne ; pied de pierre
-	local m = nouveau("Lampadaire")
-	P(m, "Pied", Vector3.new(2.2, 1, 2.2), Vector3.new(0, 0.5, 0), PIERRE, Mat.Cobblestone)
-	P(m, "Poteau", Vector3.new(1, 11, 1), Vector3.new(0, 6, 0), BOIS, Mat.Wood)
-	P(m, "Cap", Vector3.new(1.3, 0.5, 1.3), Vector3.new(0, 11.6, 0), BOIS_FONCE, Mat.Wood, { collide = false })
-	P(m, "Bras", Vector3.new(0.8, 0.8, 4.4), Vector3.new(0, 11, 1.9), BOIS, Mat.Wood, { collide = false })
-	P(m, "JambeDeForce", Vector3.new(0.5, 0.5, 2.8), Vector3.zero, BOIS_FONCE, Mat.Wood,
-		{ cf = CFrame.new(0, 9.8, 1.05) * CFrame.Angles(math.rad(-45), 0, 0), collide = false })
-	P(m, "Chaine", Vector3.new(0.15, 1, 0.15), Vector3.new(0, 10.1, 3.6), FER, Mat.Metal, { collide = false })
-	P(m, "Chapeau", Vector3.new(1.6, 0.35, 1.6), Vector3.new(0, 9.5, 3.6), FER, Mat.Metal, { collide = false })
-	P(m, "Pointe", Vector3.new(0.9, 0.35, 0.9), Vector3.new(0, 9.8, 3.6), FER, Mat.Metal, { collide = false })
-	local l = P(m, "Lanterne", Vector3.new(1.1, 1.5, 1.1), Vector3.new(0, 8.5, 3.6), rgb(255, 214, 120), Mat.Neon, { collide = false })
-	for _, c in { { -0.6, -0.6 }, { 0.6, -0.6 }, { -0.6, 0.6 }, { 0.6, 0.6 } } do
-		P(m, "Montant", Vector3.new(0.18, 1.6, 0.18), Vector3.new(c[1], 8.5, 3.6 + c[2]), FER, Mat.Metal, { collide = false })
-	end
-	P(m, "Fond", Vector3.new(1.4, 0.25, 1.4), Vector3.new(0, 7.65, 3.6), FER, Mat.Metal, { collide = false })
-	local light = Instance.new("PointLight")
-	light.Range = 28
-	light.Brightness = 1.7
-	light.Color = rgb(255, 200, 130)
-	light.Shadows = true
-	light.Parent = l
-	CollectionService:AddTag(l, "LumiereNuit")
-	fini(m)
-end
-
-function M.puits()
-	dossier = dossierModeles()
-	local m = nouveau("Puits")
-	local verticale = CFrame.Angles(0, 0, math.rad(90))
-	P(m, "Fondation", Vector3.new(1.7, 4.6, 4.6), Vector3.new(0, -0.25, 0), PIERRE, Mat.Cobblestone,
-		{ forme = "Cylinder", rot = verticale })
-	for i = 0, 11 do
-		local cf = CFrame.Angles(0, i * math.pi / 6, 0) * CFrame.new(0, 1.2, 1.98)
-		P(m, "Margelle", Vector3.new(1.22, 2.4, 0.62), Vector3.zero, PIERRE, Mat.Cobblestone, { cf = cf })
-	end
-	P(m, "Eau", Vector3.new(0.2, 3.6, 3.6), Vector3.new(0, 1.52, 0), rgb(40, 80, 120), Mat.Glass,
-		{ forme = "Cylinder", rot = verticale, collide = false })
-	for _, x in { -2, 2 } do
-		P(m, "Poteau", Vector3.new(0.5, 6, 0.5), Vector3.new(x, 3.4, 0), BOIS, Mat.Wood)
-	end
-	P(m, "Toit", Vector3.new(5.6, 0.5, 3.2), Vector3.zero, rgb(150, 70, 50), Mat.WoodPlanks, { cf = CFrame.new(0, 6.6, 1) * CFrame.Angles(math.rad(-30), 0, 0) })
-	P(m, "Toit", Vector3.new(5.6, 0.5, 3.2), Vector3.zero, rgb(150, 70, 50), Mat.WoodPlanks, { cf = CFrame.new(0, 6.6, -1) * CFrame.Angles(math.rad(30), 0, 0) })
-	P(m, "Treuil", Vector3.new(4, 0.5, 0.5), Vector3.new(0, 5, 0), BOIS_FONCE, Mat.Wood, { forme = "Cylinder" })
-	P(m, "Seau", Vector3.new(0.9, 0.9, 0.9), Vector3.new(0, 3.6, 0), BOIS_CLAIR, Mat.WoodPlanks, { collide = false })
-	P(m, "Corde", Vector3.new(0.08, 0.9, 0.08), Vector3.new(0, 4.45, 0), BOIS, Mat.Fabric, { collide = false })
-	fini(m)
-end
-
-local function decor()
-	do
-		local m = nouveau("Fontaine")
-		P(m, "Bassin", Vector3.new(8, 1.6, 8), Vector3.new(0, 0.8, 0), PIERRE_CLAIRE, Mat.Cobblestone)
-		P(m, "Eau", Vector3.new(6.8, 0.3, 6.8), Vector3.new(0, 1.5, 0), rgb(86, 160, 214), Mat.Glass, { collide = false, transp = 0.2 })
-		P(m, "Colonne", Vector3.new(1.4, 4, 1.4), Vector3.new(0, 3, 0), PIERRE, Mat.Cobblestone)
-		P(m, "Vasque", Vector3.new(3.4, 0.8, 3.4), Vector3.new(0, 5.2, 0), PIERRE_CLAIRE, Mat.Cobblestone)
-		P(m, "EauHaut", Vector3.new(2.8, 0.2, 2.8), Vector3.new(0, 5.65, 0), rgb(86, 160, 214), Mat.Glass, { collide = false, transp = 0.2 })
-		local jet = P(m, "Jet", Vector3.new(0.4, 0.4, 0.4), Vector3.new(0, 6, 0), rgb(200, 230, 255), Mat.SmoothPlastic, { collide = false, transp = 1 })
-		local pe = Instance.new("ParticleEmitter")
-		pe.Color = ColorSequence.new(rgb(200, 230, 255))
-		pe.Size = NumberSequence.new(0.35, 0.1)
-		pe.Transparency = NumberSequence.new(0.2, 0.8)
-		pe.Speed = NumberRange.new(5, 7)
-		pe.SpreadAngle = Vector2.new(18, 18)
-		pe.Acceleration = Vector3.new(0, -24, 0)
-		pe.Lifetime = NumberRange.new(0.5, 0.7)
-		pe.Rate = 40
-		pe.Parent = jet
-		fini(m)
-	end
-	M.puits()
-	do
-		lampadaire()
-	end
-	do
-		local m = nouveau("Panneau")
-		P(m, "Poteau", Vector3.new(0.4, 5, 0.4), Vector3.new(-2.4, 2.5, 0), BOIS, Mat.Wood)
-		P(m, "Poteau", Vector3.new(0.4, 5, 0.4), Vector3.new(2.4, 2.5, 0), BOIS, Mat.Wood)
-		local planche = P(m, "Planche", Vector3.new(5.8, 1.8, 0.3), Vector3.new(0, 3.9, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		for _, face in { Enum.NormalId.Front, Enum.NormalId.Back } do
-			local sg = Instance.new("SurfaceGui")
-			sg.Name = "Texte"
-			sg.Face = face
-			sg.PixelsPerStud = 40
-			sg.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
-			local t = Instance.new("TextLabel")
-			t.Name = "Nom"
-			t.Size = UDim2.fromScale(0.94, 0.86)
-			t.Position = UDim2.fromScale(0.03, 0.07)
-			t.BackgroundTransparency = 1
-			t.Text = "Village"
-			t.TextScaled = true
-			t.Font = Enum.Font.Fondamento
-			t.TextColor3 = rgb(70, 40, 20)
-			t.Parent = sg
-			sg.Parent = planche
-		end
-		fini(m)
-	end
-	do
-		local m = nouveau("Tonneaux")
-		for i, p in { Vector3.new(0, 0, 0), Vector3.new(2.1, 0, 0.3), Vector3.new(1, 0, 1.9) } do
-			P(m, "Tonneau", Vector3.new(2.6, 2, 2), p + Vector3.new(0, 1.3, 0), BOIS, Mat.WoodPlanks, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)) })
-			P(m, "Cercle", Vector3.new(0.2, 2.08, 2.08), p + Vector3.new(0, 0.6, 0), FER, Mat.Metal, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)), collide = false })
-			P(m, "Cercle", Vector3.new(0.2, 2.08, 2.08), p + Vector3.new(0, 2, 0), FER, Mat.Metal, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)), collide = false })
-		end
-		fini(m)
-	end
-	do
-		local m = nouveau("Caisses")
-		P(m, "Caisse", Vector3.new(2.4, 2.4, 2.4), Vector3.new(0, 1.2, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		P(m, "Caisse", Vector3.new(2, 2, 2), Vector3.new(2.3, 1, 0.4), BOIS, Mat.WoodPlanks, { rot = CFrame.Angles(0, 0.3, 0) })
-		P(m, "Caisse", Vector3.new(1.8, 1.8, 1.8), Vector3.new(0.4, 3.3, 0.1), BOIS, Mat.WoodPlanks, { rot = CFrame.Angles(0, -0.2, 0) })
-		P(m, "Choux", Vector3.new(1.6, 0.6, 1.6), Vector3.new(0, 2.6, 0), rgb(130, 190, 90), Mat.Grass, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Epouvantail")
-		P(m, "Poteau", Vector3.new(0.4, 6, 0.4), Vector3.new(0, 3, 0), BOIS, Mat.Wood)
-		P(m, "Bras", Vector3.new(4.4, 0.35, 0.35), Vector3.new(0, 4.4, 0), BOIS, Mat.Wood)
-		P(m, "Chemise", Vector3.new(2, 2.2, 1), Vector3.new(0, 4, 0), rgb(170, 60, 50), Mat.Fabric, { collide = false })
-		P(m, "Manche", Vector3.new(1.4, 0.8, 0.8), Vector3.new(-1.6, 4.4, 0), rgb(170, 60, 50), Mat.Fabric, { collide = false })
-		P(m, "Manche", Vector3.new(1.4, 0.8, 0.8), Vector3.new(1.6, 4.4, 0), rgb(170, 60, 50), Mat.Fabric, { collide = false })
-		P(m, "Paille", Vector3.new(0.6, 0.6, 0.6), Vector3.new(-2.4, 4.3, 0), rgb(220, 190, 90), Mat.Grass, { collide = false })
-		P(m, "Paille", Vector3.new(0.6, 0.6, 0.6), Vector3.new(2.4, 4.3, 0), rgb(220, 190, 90), Mat.Grass, { collide = false })
-		P(m, "Tete", Vector3.new(1.5, 1.5, 1.5), Vector3.new(0, 5.9, 0), rgb(214, 190, 140), Mat.Fabric, { collide = false })
-		P(m, "Oeil", Vector3.new(0.25, 0.25, 0.1), Vector3.new(-0.35, 6.1, 0.76), rgb(30, 30, 30), Mat.SmoothPlastic, { collide = false })
-		P(m, "Oeil", Vector3.new(0.25, 0.25, 0.1), Vector3.new(0.35, 6.1, 0.76), rgb(30, 30, 30), Mat.SmoothPlastic, { collide = false })
-		P(m, "Chapeau", Vector3.new(2.6, 0.2, 2.6), Vector3.new(0, 6.7, 0), rgb(220, 190, 90), Mat.Grass, { collide = false })
-		P(m, "Chapeau", Vector3.new(1.5, 0.8, 1.5), Vector3.new(0, 7.1, 0), rgb(220, 190, 90), Mat.Grass, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Botte_Foin")
-		P(m, "Foin", Vector3.new(4, 2.4, 2.8), Vector3.new(0, 1.2, 0), rgb(222, 192, 96), Mat.Grass)
-		P(m, "Lien", Vector3.new(0.2, 2.5, 2.9), Vector3.new(-1, 1.2, 0), rgb(150, 110, 60), Mat.Fabric, { collide = false })
-		P(m, "Lien", Vector3.new(0.2, 2.5, 2.9), Vector3.new(1, 1.2, 0), rgb(150, 110, 60), Mat.Fabric, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Boite_Lettres")
-		P(m, "Poteau", Vector3.new(0.4, 3.2, 0.4), Vector3.new(0, 1.6, 0), BOIS, Mat.Wood)
-		P(m, "Boite", Vector3.new(1.6, 1.4, 1.2), Vector3.new(0, 3.8, 0), BOIS, Mat.WoodPlanks)
-		P(m, "Toit", Vector3.new(2, 0.2, 1.6), Vector3.zero, BOIS_FONCE, Mat.WoodPlanks, { cf = CFrame.new(0, 4.75, 0.3) * CFrame.Angles(math.rad(20), 0, 0) })
-		P(m, "Fente", Vector3.new(1, 0.15, 0.1), Vector3.new(0, 4.1, -0.62), rgb(20, 16, 14), Mat.SmoothPlastic, { collide = false })
-		P(m, "Sceau", Vector3.new(0.1, 0.5, 0.5), Vector3.new(0, 3.6, -0.62), rgb(150, 30, 30), Mat.SmoothPlastic, { collide = false, forme = "Cylinder", rot = CFrame.Angles(0, math.rad(90), 0) })
-		P(m, "Cerclage", Vector3.new(1.7, 0.15, 1.3), Vector3.new(0, 3.3, 0), FER, Mat.Metal, { collide = false })
-		fini(m)
-	end
-	do
-		-- Segment de clôture de 4 studs selon X
-		local m = nouveau("Cloture")
-		P(m, "Poteau", Vector3.new(0.5, 3.2, 0.5), Vector3.new(-2, 1.6, 0), BOIS, Mat.Wood)
-		P(m, "Lisse", Vector3.new(4.2, 0.4, 0.25), Vector3.new(0, 2.4, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		P(m, "Lisse", Vector3.new(4.2, 0.4, 0.25), Vector3.new(0, 1.2, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		fini(m)
-	end
-	do
-		local m = nouveau("Feu_Camp")
-		for i = 0, 3 do
-			P(m, "Buche", Vector3.new(2.4, 0.5, 0.5), Vector3.new(0, 0.35, 0), BOIS, Mat.Wood, { rot = CFrame.Angles(0, i * math.pi / 4, 0) })
-		end
-		for i = 0, 7 do
-			local a = i / 8 * math.pi * 2
-			P(m, "Pierre", Vector3.new(0.7, 0.5, 0.7), Vector3.new(math.cos(a) * 1.6, 0.25, math.sin(a) * 1.6), PIERRE, Mat.Slate)
-		end
-		local f = P(m, "Flamme", Vector3.new(0.8, 0.8, 0.8), Vector3.new(0, 0.8, 0), rgb(255, 150, 40), Mat.Neon, { collide = false, transp = 1 })
-		local fire = Instance.new("Fire")
-		fire.Size = 3
-		fire.Heat = 6
-		fire.Parent = f
-		local light = Instance.new("PointLight")
-		light.Range = 20
-		light.Brightness = 2
-		light.Color = rgb(255, 160, 80)
-		light.Parent = f
-		fini(m)
-	end
-	do
-		local m = nouveau("Etabli")
-		P(m, "Plateau", Vector3.new(4.4, 0.5, 2.4), Vector3.new(0, 3, 0), BOIS_CLAIR, Mat.WoodPlanks)
-		for _, sx in { -1, 1 } do
-			for _, sz in { -1, 1 } do
-				P(m, "Pied", Vector3.new(0.5, 2.8, 0.5), Vector3.new(sx * 1.9, 1.4, sz * 0.9), BOIS, Mat.Wood)
-			end
-		end
-		P(m, "Scie", Vector3.new(2, 0.1, 0.6), Vector3.new(-0.6, 3.3, 0.2), rgb(190, 190, 200), Mat.Metal, { collide = false })
-		P(m, "Marteau", Vector3.new(0.3, 0.3, 1.4), Vector3.new(1.2, 3.4, -0.2), BOIS, Mat.Wood, { collide = false })
-		P(m, "Tete", Vector3.new(0.8, 0.4, 0.4), Vector3.new(1.2, 3.45, -0.8), FER, Mat.Metal, { collide = false })
-		fini(m)
-	end
-	do
-		local m = nouveau("Coffre_Joueur")
-		P(m, "Caisse", Vector3.new(3, 1.8, 2), Vector3.new(0, 0.9, 0), rgb(150, 100, 60), Mat.WoodPlanks)
-		P(m, "Couvercle", Vector3.new(3.1, 0.7, 2.1), Vector3.new(0, 2.15, 0), rgb(180, 130, 80), Mat.WoodPlanks)
-		P(m, "Cerclage", Vector3.new(0.3, 2.6, 2.14), Vector3.new(0, 1.25, 0), FER, Mat.Metal, { collide = false })
-		fini(m)
-	end
-end
-
 -- ---------------------------------------------------------------- Village, 2e vague (étape 3C)
 -- Auberge (lits à louer = point de réapparition), écurie, tour de guet, pan de palissade.
 -- Séparé de maisons() : on peut le relancer seul sans écraser les retouches faites dans Studio.
@@ -2282,50 +3007,6 @@ function M.chateau()
 	return m
 end
 
--- Tableau de village : deux poteaux, un auvent et une planche couverte de parchemins.
--- L'invite se fixe à « Planche ».
-function M.tableauQuetes()
-	dossier = dossierModeles()
-	local m = nouveau("Tableau_Quetes")
-	local PARCH = rgb(236, 220, 176)
-	for _, x in { -3.2, 3.2 } do
-		P(m, "Poteau", Vector3.new(0.8, 7.6, 0.8), Vector3.new(x, 3.8, 0), BOIS, Mat.Wood)
-	end
-	P(m, "Planche", Vector3.new(6.2, 3.8, 0.4), Vector3.new(0, 4, 0), BOIS_CLAIR, Mat.WoodPlanks)
-	P(m, "Cadre", Vector3.new(6.6, 0.4, 0.6), Vector3.new(0, 6.05, 0), BOIS_FONCE, Mat.Wood)
-	P(m, "Cadre", Vector3.new(6.6, 0.4, 0.6), Vector3.new(0, 1.95, 0), BOIS_FONCE, Mat.Wood)
-	-- auvent à deux pans
-	P(m, "Auvent", Vector3.new(7.8, 0.3, 1.6), Vector3.zero, rgb(110, 70, 48), Mat.WoodPlanks, { cf = CFrame.new(0, 7.9, 0.6) * CFrame.Angles(math.rad(28), 0, 0) })
-	P(m, "Auvent", Vector3.new(7.8, 0.3, 1.6), Vector3.zero, rgb(110, 70, 48), Mat.WoodPlanks, { cf = CFrame.new(0, 7.9, -0.6) * CFrame.Angles(math.rad(-28), 0, 0) })
-	-- parchemins épinglés (légèrement de travers) et leurs cachets
-	local spots = { { -2.1, 4.9, 4 }, { -0.4, 5.1, -6 }, { 1.6, 4.8, 7 }, { -1.5, 3.1, -3 }, { 0.6, 3.2, 5 }, { 2.3, 3.3, -8 } }
-	for i, sp in spots do
-		local cf = CFrame.new(sp[1], sp[2], 0.24) * CFrame.Angles(0, 0, math.rad(sp[3]))
-		P(m, "Parchemin", Vector3.new(1.3, 1.5, 0.06), Vector3.zero, PARCH:Lerp(rgb(214, 196, 150), (i % 3) / 3), Mat.Fabric, { cf = cf, collide = false })
-		P(m, "Lignes", Vector3.new(0.9, 0.08, 0.02), Vector3.zero, rgb(120, 100, 80), Mat.SmoothPlastic, { cf = cf * CFrame.new(0, 0.3, 0.04), collide = false })
-		P(m, "Lignes", Vector3.new(0.9, 0.08, 0.02), Vector3.zero, rgb(120, 100, 80), Mat.SmoothPlastic, { cf = cf * CFrame.new(0, 0.05, 0.04), collide = false })
-		P(m, "Cachet", Vector3.new(0.12, 0.3, 0.3), Vector3.zero, rgb(170, 30, 30), Mat.SmoothPlastic,
-			{ cf = cf * CFrame.new(0, -0.45, 0.05) * CFrame.Angles(0, math.rad(90), 0), forme = "Cylinder", collide = false })
-	end
-	local enseigneVillage = P(m, "Enseigne", Vector3.new(6.0, 0.88, 0.36), Vector3.new(0, 6.84, 0),
-		BOIS_FONCE, Mat.WoodPlanks, { collide = false })
-	for _, face in { Enum.NormalId.Front, Enum.NormalId.Back } do
-		local surface = Instance.new("SurfaceGui")
-		surface.Face, surface.LightInfluence, surface.MaxDistance = face, 0.45, 95
-		surface.CanvasSize = Vector2.new(480, 72)
-		surface.Parent = enseigneVillage
-		local nom = Instance.new("TextLabel")
-		nom.BackgroundTransparency, nom.TextScaled = 1, true
-		nom.Size, nom.Position = UDim2.fromScale(0.94, 0.77), UDim2.fromScale(0.03, 0.115)
-		nom.Font, nom.TextColor3, nom.Text = Enum.Font.Fondamento, PARCH, "Place du village"
-		nom.Parent = surface
-	end
-	P(m, "Caisse", Vector3.new(1.6, 1.2, 1.2), Vector3.new(2.6, 0.6, 1.4), BOIS_CLAIR, Mat.WoodPlanks)
-	attache(m.PrimaryPart, "Devant", CFrame.new(0, 0, 4))
-	fini(m)
-	return m
-end
-
 -- Champ de blé doré de village (décor, image cible) : terre labourée, blé dense en rangs, clôture
 -- de rondins sur trois côtés, ouverte devant (+Z). Chaque touffe se récolte au clic (Moissons).
 function M.champBle()
@@ -2346,8 +3027,10 @@ function M.champBle()
 			t.Name = "Touffe"
 			t.Parent = m
 			local hauteur = h + 0.42
-			P(t, "Epis", Vector3.new(1.95, hauteur, 1.58), Vector3.zero, gold, Mat.Grass,
-				{ cf = CFrame.new(x, 0.36 + hauteur / 2, z) * tilt, collide = false, forme = "Wedge" })
+			local largeur = 1.33 + (ix + iz) % 3 * 0.13
+			local azimut = CFrame.Angles(0, ((ix * 5 + iz * 7) % 13) * math.pi / 7, 0)
+			P(t, "Epis", Vp(largeur, hauteur, 0.86 + ix % 2 * 0.19), Vector3.zero, gold, Mat.Grass,
+				{ cf = CFrame.new(x, 0.36 + hauteur / 2, z) * tilt * azimut, collide = false, forme = "Wedge" })
 		end
 	end
 	-- clôture : poteaux tous les 4 studs, deux lisses
@@ -2355,7 +3038,9 @@ function M.champBle()
 		local d = b - a
 		local n = math.max(1, math.floor(d.Magnitude / 5.4))
 		for i = 0, n do
-			P(m, "Piquet", Vector3.new(0.6, 3.2, 0.6), a + d * (i / n) + Vector3.new(0, 1.6, 0), BOIS, Mat.Wood)
+			local hPiquet = 3.18 + i % 3 * 0.046
+			P(m, "Piquet", Vp(0.59, hPiquet, 0.59), a + d * (i / n) + Vp(0, hPiquet / 2, 0),
+				teinteProp(BOIS, i), Mat.Wood)
 		end
 		for _, y in { 1.2, 2.4 } do
 			local mid = (a + b) / 2 + Vector3.new(0, y, 0)
@@ -2366,10 +3051,13 @@ function M.champBle()
 	cote(Vector3.new(-hx, 0, -hz), Vector3.new(hx, 0, -hz))
 	cote(Vector3.new(-hx, 0, -hz), Vector3.new(-hx, 0, hz))
 	cote(Vector3.new(hx, 0, -hz), Vector3.new(hx, 0, hz))
-	P(m, "Botte", Vector3.new(2.4, 1.6, 1.6), Vector3.new(hx + 2, 0.8, hz - 2), rgb(222, 186, 96), Mat.Grass)
+	P(m, "Botte", Vp(2.4, 1.6, 1.6), Vp(hx + 2, 0.8, hz - 2), CHAUME, Mat.Grass,
+		{ forme = "Ball", rot = CFrame.Angles(0, 0.09, 0) })
 	fini(m)
 	return m
 end
+
+function PROPS_VALDOR.Champ_Ble() M.champBle() end
 
 -- Plante sauvage (herboristerie, Systemes/Herbes) : touffe de feuilles et petites fleurs « Fleur »
 -- recolorées selon la plante (camomille blanche, millepertuis jaune, mandragore violette…)
@@ -2396,102 +3084,13 @@ end
 
 -- Stations de métier (18/11) : enclume (forge) et métier à tisser
 local function stations(corrigeesSeulement: boolean?)
-	dossier = dossierModeles()
-	do
-		local m = nouveau("Enclume")
-		P(m, "Billot", Vector3.new(1.6, 1.8, 1.8), Vector3.new(0, 0.8, 0), BOIS_FONCE, Mat.Wood, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)) })
-		P(m, "Pied", Vector3.new(1.2, 0.5, 0.9), Vector3.new(0, 1.85, 0), FER, Mat.Metal)
-		P(m, "Table", Vector3.new(2.6, 0.6, 1.1), Vector3.new(0, 2.4, 0), FER, Mat.Metal)
-		P(m, "Bigorne", Vector3.new(0.9, 0.5, 0.9), Vector3.zero, FER, Mat.Metal, { forme = "Wedge", cf = CFrame.new(1.75, 2.4, 0) * CFrame.Angles(0, math.rad(90), 0) })
-		P(m, "Marteau", Vector3.new(0.18, 0.18, 1.4), Vector3.zero, BOIS, Mat.Wood, { collide = false, cf = CFrame.new(-0.6, 2.8, 0.3) * CFrame.Angles(0, math.rad(25), 0) })
-		P(m, "Tete", Vector3.new(0.45, 0.35, 0.35), Vector3.zero, FER, Mat.Metal, { collide = false, cf = CFrame.new(-0.3, 2.8, -0.35) * CFrame.Angles(0, math.rad(25), 0) })
-		fini(m)
-	end
-	if not corrigeesSeulement then
-		local m = nouveau("Metier_Tisser")
-		for _, x in { -1.5, 1.5 } do
-			P(m, "Montant", Vector3.new(0.3, 4, 0.3), Vector3.new(x, 2, -0.8), BOIS, Mat.Wood)
-			P(m, "Montant", Vector3.new(0.3, 2.4, 0.3), Vector3.new(x, 1.2, 0.8), BOIS, Mat.Wood)
-			P(m, "Longeron", Vector3.new(0.25, 0.25, 1.9), Vector3.new(x, 2.3, 0), BOIS_FONCE, Mat.Wood)
-		end
-		P(m, "Ensouple", Vector3.new(3.3, 0.35, 0.35), Vector3.new(0, 3.8, -0.8), BOIS_FONCE, Mat.Wood)
-		P(m, "Ensouple", Vector3.new(3.3, 0.35, 0.35), Vector3.new(0, 2.3, 0.8), BOIS_FONCE, Mat.Wood)
-		P(m, "Fils", Vector3.new(2.8, 0.05, 1.9), Vector3.zero, rgb(236, 226, 200), Mat.Fabric, { collide = false, cf = CFrame.new(0, 3.05, 0) * CFrame.Angles(math.rad(-38), 0, 0) })
-		P(m, "Toile", Vector3.new(2.8, 0.06, 0.7), Vector3.new(0, 2.36, 0.45), rgb(170, 60, 50), Mat.Fabric, { collide = false })
-		P(m, "Banc", Vector3.new(2, 0.3, 0.8), Vector3.new(0, 1.3, 1.9), BOIS_CLAIR, Mat.WoodPlanks)
-		for _, x in { -0.8, 0.8 } do
-			P(m, "PiedBanc", Vector3.new(0.25, 1.2, 0.25), Vector3.new(x, 0.6, 1.9), BOIS, Mat.Wood)
-		end
-		fini(m)
-	end
-	do
-		-- bac de tannage : cuve de planches cerclée, peau tendue sur un cadre, racloir
-		local m = nouveau("Bac_Tannage")
-		P(m, "Cuve", Vector3.new(1.6, 2.6, 2.6), Vector3.new(-0.9, 0.8, 0), BOIS, Mat.WoodPlanks, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)) })
-		P(m, "Eau", Vector3.new(0.1, 2.3, 2.3), Vector3.new(-0.9, 1.55, 0), rgb(110, 84, 50), Mat.SmoothPlastic, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)), collide = false })
-		for _, y in { 0.35, 1.25 } do
-			P(m, "Cercle", Vector3.new(0.15, 2.7, 2.7), Vector3.new(-0.9, y, 0), FER, Mat.Metal, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)), collide = false })
-		end
-		for _, z in { -0.9, 0.9 } do
-			P(m, "Cadre", Vector3.new(0.25, 3, 0.25), Vector3.new(1.4, 1.5, z), BOIS_FONCE, Mat.Wood)
-		end
-		P(m, "Traverse", Vector3.new(0.25, 0.25, 2.1), Vector3.new(1.4, 2.9, 0), BOIS_FONCE, Mat.Wood)
-		P(m, "Peau", Vector3.new(0.08, 2.2, 1.6), Vector3.new(1.45, 1.75, 0), rgb(176, 128, 84), Mat.Fabric, { collide = false })
-		P(m, "Racloir", Vector3.new(0.7, 0.12, 0.25), Vector3.new(-0.9, 1.65, 1.3), FER, Mat.Metal, { collide = false })
-		fini(m)
-	end
-	do
-		-- alambic : chaudière de cuivre sur un foyer, col de cygne, serpentin et fiole
-		local m = nouveau("Alambic")
-		local CUIVRE = rgb(196, 112, 64)
-		P(m, "Foyer", Vector3.new(2.2, 1, 2.2), Vector3.new(0, 0.5, 0), PIERRE, Mat.Cobblestone)
-		local braise = P(m, "Braise", Vector3.new(1, 0.2, 1), Vector3.new(0, 1.05, 0), rgb(255, 120, 40), Mat.Neon, { collide = false })
-		local light = Instance.new("PointLight")
-		light.Range = 8
-		light.Brightness = 0.8
-		light.Color = rgb(255, 150, 80)
-		light.Parent = braise
-		P(m, "Chaudiere", Vector3.new(1.9, 1.9, 1.9), Vector3.new(0, 2, 0), CUIVRE, Mat.Metal, { forme = "Ball" })
-		P(m, "Chapiteau", Vector3.new(0.9, 0.9, 0.9), Vector3.new(0, 3.1, 0), CUIVRE, Mat.Metal, { forme = "Ball" })
-		P(m, "Col", Vector3.new(0.22, 0.22, 2.2), Vector3.zero, CUIVRE, Mat.Metal, { collide = false, cf = CFrame.new(0.9, 3.1, 0) * CFrame.Angles(0, math.rad(90), 0) * CFrame.Angles(math.rad(-20), 0, 0) })
-		P(m, "Tuyau", Vector3.new(0.2, 1.64, 0.2), Vector3.new(1.92, 2.7, 0), CUIVRE, Mat.Metal, { collide = false })
-		P(m, "Serpentin", Vector3.new(0.9, 1, 0.9), Vector3.new(1.92, 1.6, 0), CUIVRE:Lerp(rgb(90, 60, 40), 0.3), Mat.Metal, { forme = "Cylinder", rot = CFrame.Angles(0, 0, math.rad(90)) })
-		P(m, "Socle", Vector3.new(1.3, 0.4, 1.9), Vector3.new(1.7, 0.2, 0.2), BOIS, Mat.WoodPlanks)
-		P(m, "Support", Vector3.new(0.64, 0.8, 0.64), Vector3.new(1.92, 0.8, 0), BOIS_FONCE, Mat.Wood)
-		P(m, "Bec", Vector3.new(0.18, 0.18, 0.7), Vector3.new(1.92, 1.12, 0.32), CUIVRE, Mat.Metal, { collide = false })
-		P(m, "Fiole", Vector3.new(0.4, 0.5, 0.4), Vector3.new(1.92, 0.65, 0.68), rgb(140, 230, 140), Mat.Glass, { collide = false, transp = 0.3 })
-		fini(m)
-	end
-	if not corrigeesSeulement then
-		local m = nouveau("Abreuvoir")
-		P(m, "Auge", Vector3.new(3.6, 1, 1.4), Vector3.new(0, 0.9, 0), BOIS, Mat.WoodPlanks)
-		P(m, "Eau", Vector3.new(3.3, 0.1, 1.1), Vector3.new(0, 1.42, 0), rgb(70, 140, 180), Mat.Glass, { collide = false, transp = 0.25 })
-		for _, x in { -1.5, 1.5 } do
-			P(m, "Pied", Vector3.new(0.4, 0.5, 1.2), Vector3.new(x, 0.25, 0), BOIS_FONCE, Mat.Wood)
-		end
-		fini(m)
-	end
-	if not corrigeesSeulement then
-		local m = nouveau("Mangeoire")
-		for _, x in { -1.4, 1.4 } do
-			P(m, "Montant", Vector3.new(0.3, 2.6, 0.3), Vector3.new(x, 1.3, 0), BOIS_FONCE, Mat.Wood)
-		end
-		P(m, "Ratelier", Vector3.new(3.2, 1.2, 1), Vector3.zero, BOIS, Mat.WoodPlanks, { cf = CFrame.new(0, 1.7, 0) * CFrame.Angles(math.rad(-15), 0, 0) })
-		P(m, "Foin", Vector3.new(2.8, 0.7, 0.8), Vector3.new(0, 2.3, 0.1), rgb(214, 182, 96), Mat.Grass, { collide = false })
-		fini(m)
-	end
+	reconstruireProps(corrigeesSeulement and { "Enclume", "Bac_Tannage", "Alambic" } or NOMS_STATIONS)
 	return true
 end
 
-function M.stations()
-	return stations()
-end
+function M.stations() return stations() end
 
--- Potence à lanterne seule (sans refaire tout le décor)
-function M.lampadaire()
-	dossier = dossierModeles()
-	lampadaire()
-end
+function M.lampadaire() M.propsValdor("Lampadaire") end
 
 -- Maisons seules (Maison_A/B/C, boutique, shérif, taverne, forge, chapelle, ruine…)
 function M.maisons()

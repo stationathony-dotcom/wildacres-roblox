@@ -148,7 +148,8 @@ local ANGLAIS = {
 	part = true, wedgepart = true, cornerwedgepart = true, meshpart = true, trusspart = true,
 	wood = true, plank = true, stone = true, rock = true, wall = true, floor = true, roof = true,
 	window = true, door = true, handle = true, frame = true, beam = true, pole = true, post = true,
-	top = true, bottom = true, front = true, back = true, left = true, right = true, wheel = true,
+	-- « front » retiré : c'est aussi un mot français (le front du crâne de créature)
+	top = true, bottom = true, back = true, left = true, right = true, wheel = true,
 	seat = true, leg = true, leaf = true, leaves = true, flower = true, flame = true, light = true,
 	glass = true, cloth = true, banner = true, sign = true, hinge = true, trim = true,
 }
