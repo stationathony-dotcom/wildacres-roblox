@@ -88,7 +88,8 @@ Villes.filter = filter -- remplaçable par les bancs
 
 function Villes.found(player: Player, name: string?): (boolean, string)
 	name = name and string.gsub(name, "^%s+", ""):gsub("%s+$", "") or ""
-	if #name < 3 or #name > 24 then
+	local len = utf8.len(name) or #name -- en lettres, pas en octets (accents)
+	if len < 3 or len > 24 then
 		return false, "/fonder <nom>  (3 à 24 lettres) — il faut une Charte de ville dans ton sac."
 	end
 	if (G.Joueurs.count(player, "charter") or 0) < 1 then
