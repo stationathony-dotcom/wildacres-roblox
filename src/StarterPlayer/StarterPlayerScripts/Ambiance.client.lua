@@ -260,6 +260,8 @@ local SFX = {
 	cri_humain = { id = "rbxassetid://86995398443904", len = 0.6, vol = 0.55 }, -- brigand, soldat… qui frappe
 	chute = { id = "rbxassetid://124795269302947", len = 0.8, vol = 0.6 }, -- créature abattue
 	equiper = { id = "rbxassetid://73469074692385", len = 0.7, vol = 0.5 }, -- pièce d'équipement enfilée
+	poule = { id = "rbxassetid://125408037908664", len = 0.8, vol = 0.4 }, -- œufs ramassés
+	chevre = { id = "rbxassetid://71122513280039", len = 0.9, vol = 0.4 }, -- chèvre traite
 }
 local lastSfx = {}
 

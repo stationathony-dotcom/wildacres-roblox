@@ -332,6 +332,7 @@ function Horses.mount(player: Player, h)
 	local seat = assise and (h.model.PrimaryPart.CFrame:PointToObjectSpace(assise.WorldPosition).Y) or 5.2
 	riding[player] = h
 	h.mounted = true
+	G.Util.sfx("sabots", root.Position) -- en selle : la bête piaffe
 	for _, p in h.prompts do
 		p.Enabled = false
 	end

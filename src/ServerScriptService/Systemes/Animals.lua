@@ -192,6 +192,8 @@ function Animals.buy(player: Player, kind: string)
 	return true
 end
 
+local CRI = { cow = "vache", sheep = "mouton", chicken = "poule", goat = "chevre" } -- son à la collecte (Ambiance.client)
+
 function Animals.collect(player: Player, id: string)
 	local a = find(id)
 	if not a or not a.state.product then
@@ -218,6 +220,13 @@ function Animals.collect(player: Player, id: string)
 		n = math.max(1, n - 1)
 	end
 	G.Joueurs.add(player, k.product, n)
+	-- traire, tondre, ramasser les œufs : on se penche, la bête répond
+	if G.Util.geste then
+		G.Util.geste(player, "cueillir")
+	end
+	if G.Util.sfx then
+		G.Util.sfx(CRI[a.kind] or "ramasser", a.pos + Vector3.new(0, 2, 0))
+	end
 	if not stolen and G.Quetes and rawget(G.Quetes, "note") then
 		G.Quetes.note(player, "collecter", k.product, n)
 	end

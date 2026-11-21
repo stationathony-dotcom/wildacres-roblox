@@ -109,6 +109,12 @@ function Law.crime(player: Player, kind: string, pos: Vector3, victimId: string?
 		end
 	end
 	lastCrime[player][kind] = now
+	-- le témoin crie (« Au voleur ! » s'entend) : le joueur SAIT qu'il a été vu
+	local w = ws[1]
+	local wm = w and w.model and w.model.Parent and w.model.PrimaryPart
+	if G.Util.sfx and wm then
+		G.Util.sfx("cri_humain", wm.Position + Vector3.new(0, 2, 0))
+	end
 	G.Reputation.crime(player, kind, pos) -- le village proche l'apprend (Systemes/Reputation)
 	-- alerte : les commerces de la région ferment un moment (Npcs : « trade » refusé)
 	local creg = G.World.regionAt(pos)
