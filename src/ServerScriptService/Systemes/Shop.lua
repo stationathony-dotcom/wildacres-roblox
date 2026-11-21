@@ -340,9 +340,10 @@ local function catalog(player: Player, e)
 		end
 	elseif role == "farmer" then
 		local ICON = { chicken = "🐔", cow = "🐄", sheep = "🐑" }
-		for _, kind in { "chicken", "goose", "sheep", "pig", "cow" } do
+		local modeles = game:GetService("ServerStorage"):FindFirstChild("Modeles")
+		for _, kind in { "chicken", "goose", "sheep", "goat", "pig", "cow" } do
 			local a = Config.ANIMALS[kind]
-			if a then
+			if a and modeles and modeles:FindFirstChild(a.model) then
 				table.insert(buy, { item = "animal:" .. kind, price = Shop.buyPrice(player, e, a.price), name = a.name, icon = a.icon or ICON[kind] or "🐾" })
 			end
 		end
@@ -445,8 +446,8 @@ function Shop.buy(player: Player, item: string, n: number)
 		return
 	end
 	local info = Config.ITEMS[item]
-	if info and info.tool then
-		n = 1
+	if (info and info.tool) or string.sub(item, 1, 7) == "animal:" then
+		n = 1 -- une bête à la fois (sinon n fois le prix pour une seule)
 	end
 	-- gens de métier : stock réel (ce que les joueurs leur ont apporté)
 	if e.data.metier then
@@ -1093,6 +1094,7 @@ function Shop.place(player: Player, item: string)
 	end
 	table.insert(reg.state.placed, d)
 	buildPlaced(reg, d)
+	G.Util.sfx("pose", pos)
 	G.Joueurs.sync(player)
 end
 
