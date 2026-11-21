@@ -148,11 +148,13 @@ function Batir.place(player: Player, data)
 		r = math.clamp(math.floor(tonumber(data.r) or 0), 0, 3), f = data.f == true or nil, o = G.Util.pid(player),
 	}
 	local pos = Vector3.new(d.x, d.y, d.z)
+	-- refus : toast de sorte « refus » (lot X16 : l'interface l'affiche près du fantôme)
 	if (pos - root.Position).Magnitude > 26 then
+		G.Util.toast(player, "Trop loin : approche-toi pour poser.", "refus")
 		return
 	end
 	if d.y < Config.Y_MIN or d.y > Config.Y_MAX + 60 then
-		G.Util.toast(player, "Trop haut ou trop bas.")
+		G.Util.toast(player, "Trop haut ou trop bas.", "refus")
 		return
 	end
 	local reg = G.World.regionAt(pos)
@@ -163,7 +165,7 @@ function Batir.place(player: Player, data)
 	local cx, cz = math.floor(d.x / Config.CELL), math.floor(d.z / Config.CELL)
 	local i = G.WG.idx(cx - reg.plan.x0, cz - reg.plan.z0)
 	if (reg.plan.poiW[i] or 0) > 0.3 then
-		G.Util.toast(player, "On ne bâtit pas au milieu d'un village ou d'une ferme.")
+		G.Util.toast(player, "On ne bâtit pas au milieu d'un village ou d'une ferme.", "refus")
 		return
 	end
 	if not G.Parcelles.canBuild(player, pos) then
@@ -173,12 +175,13 @@ function Batir.place(player: Player, data)
 	reg.state.built = reg.state.built or {}
 	for _, o in reg.state.built do
 		if o.b == d.b and math.abs(o.x - d.x) < 0.3 and math.abs(o.y - d.y) < 0.3 and math.abs(o.z - d.z) < 0.3 and (o.r or 0) == d.r then
+			G.Util.toast(player, "Il y a déjà la même pièce ici.", "refus")
 			return
 		end
 	end
 	-- la pièce se fabrique à l'atelier ; ici on en pose une du sac
 	if not G.Joueurs.take(player, b.item, 1) then
-		G.Util.toast(player, "Plus de « " .. b.name .. " » dans ton sac : fabrique-en à l'atelier.")
+		G.Util.toast(player, "Plus de « " .. b.name .. " » dans ton sac : fabrique-en à l'atelier.", "refus")
 		return
 	end
 	table.insert(reg.state.built, d)

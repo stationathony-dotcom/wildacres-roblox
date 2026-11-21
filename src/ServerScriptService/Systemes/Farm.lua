@@ -112,9 +112,15 @@ local function render(entry)
 			end
 		end
 	end
+	-- état lisible au survol (lot X19, l'interface l'affiche en invite, jamais en texte permanent)
+	model:SetAttribute("Arrosee", st.watered == true)
 	if st.crop then
 		makePlant(model, CFrame.new(entry.x, y + 0.2, entry.z), st.crop, st.stage or 0, st.withered)
 		local crop = Config.CROPS[st.crop]
+		model:SetAttribute("Plante", crop.name)
+		model:SetAttribute("Jour", math.min(st.stage or 0, crop.days))
+		model:SetAttribute("Jours", crop.days)
+		model:SetAttribute("Fletrie", st.withered == true)
 		if (st.stage or 0) >= crop.days and not st.withered then
 			local owner = entry.owner
 			local npcOwned = owner and owner ~= "wild" and not G.Util.isPlayerId(owner)
