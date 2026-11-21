@@ -605,6 +605,11 @@ C.BUILD_MATERIALS = {
 	{ id = "ardoise", name = "Ardoise", item = "stone", mat = Enum.Material.Slate, color = Color3.fromRGB(70, 74, 86), hp = 10, mult = 2 },
 	{ id = "bardeau", name = "Bardeaux", item = "planks", mat = Enum.Material.WoodPlanks, color = Color3.fromRGB(110, 76, 48), hp = 5, mult = 2 },
 	{ id = "fer", name = "Fer", item = "iron_ingot", mat = Enum.Material.Metal, color = Color3.fromRGB(92, 94, 100), hp = 16, mult = 1 },
+	-- 21/11 (« liste items.txt » : sols et fondations)
+	{ id = "gravier", name = "Gravier", item = "gravel", mat = Enum.Material.Pebble, color = Color3.fromRGB(150, 145, 135), hp = 5, mult = 1 },
+	{ id = "sable", name = "Sable", item = "sand", mat = Enum.Material.Sand, color = Color3.fromRGB(222, 200, 150), hp = 2, mult = 2 },
+	{ id = "herbe", name = "Herbe", item = "dirt", mat = Enum.Material.Grass, color = Color3.fromRGB(104, 150, 62), hp = 3, mult = 1 },
+	{ id = "pin", name = "Pin", item = "planks", mat = Enum.Material.WoodPlanks, color = Color3.fromRGB(206, 170, 118), hp = 4, mult = 1 },
 }
 C.BUILD_SHAPES = {
 	{ id = "bloc", name = "Bloc", shape = "block", size = Vector3.new(2, 2, 2), cost = 2, mats = { "bois", "pierre", "brique", "verre", "rondin", "taille", "torchis", "pise" } },
@@ -644,6 +649,29 @@ C.BUILD_SHAPES = {
 	{ id = "pignon", name = "Pignon (mur triangulaire)", shape = "gable", size = Vector3.new(4, 2, 0.5), cost = 2, mats = { "bois", "pierre", "brique", "torchis", "pise", "taille" } },
 	{ id = "creneaux", name = "Créneaux", shape = "battlement", size = Vector3.new(4, 1.6, 0.8), cost = 3, mats = { "pierre", "taille", "brique", "bois" } },
 	{ id = "chapiteau", name = "Chapiteau", shape = "capital", size = Vector3.new(2.2, 1, 2.2), cost = 2, mats = { "pierre", "taille", "bois" } },
+	-- 21/11 (lot C6, « liste items.txt » : charpente, murs, sols, toits, ouvertures). `extra` = ingrédients en plus
+	-- de la matière ; sous-pièce « dark » = bois sombre (poutres, volets), « glass » = verre coloré (vitrail).
+	{ id = "poteaurond", name = "Poteau rond", shape = "pillar", size = Vector3.new(0.7, 4, 0.7), cost = 1, mats = { "bois", "rondin", "pin" } },
+	{ id = "demipoutre", name = "Demi-poutre", shape = "block", size = Vector3.new(0.6, 0.3, 4), cost = 1, mats = { "bois", "rondin", "pin", "fer" } },
+	{ id = "madrier", name = "Madrier", shape = "block", size = Vector3.new(0.3, 1.2, 4), cost = 1, mats = { "bois", "pin", "rondin" } },
+	{ id = "chevron", name = "Chevron de toit", shape = "wedge", size = Vector3.new(0.5, 0.5, 4), cost = 1, mats = { "bois", "pin", "rondin" } },
+	{ id = "echalas", name = "Échalas", shape = "block", size = Vector3.new(0.2, 3, 0.2), cost = 1, mats = { "bois", "pin" } },
+	{ id = "poteausculpte", name = "Poteau sculpté", shape = "carvedpost", size = Vector3.new(0.9, 4, 0.9), cost = 2, mats = { "bois", "pin", "pierre", "taille" } },
+	{ id = "colonnecarree", name = "Colonne carrée", shape = "block", size = Vector3.new(1.2, 8, 1.2), cost = 4, mats = { "pierre", "taille", "brique", "bois" } },
+	{ id = "murincline", name = "Mur incliné", shape = "wedge", size = Vector3.new(4, 4, 1), cost = 3, mats = { "pierre", "taille", "brique", "pise", "torchis" } },
+	{ id = "colombages", name = "Mur à colombages", shape = "timberwall", size = Vector3.new(4, 4, 0.5), cost = 3, mats = { "torchis", "pise", "brique" }, extra = { planks = 2 } },
+	{ id = "clayonnage", name = "Mur en clayonnage", shape = "wattle", size = Vector3.new(4, 3, 0.4), cost = 2, mats = { "bois", "rondin" } },
+	{ id = "treillis", name = "Treillis", shape = "lattice", size = Vector3.new(4, 4, 0.2), cost = 2, mats = { "bois", "pin", "fer" } },
+	{ id = "niche", name = "Mur avec niche", shape = "nichewall", size = Vector3.new(4, 4, 0.8), cost = 3, mats = { "pierre", "taille", "brique", "torchis" } },
+	{ id = "fondation", name = "Fondation", shape = "block", size = Vector3.new(4, 1, 4), cost = 4, mats = { "pierre", "taille", "bois", "rondin", "gravier" } },
+	{ id = "pavage", name = "Pavage irrégulier", shape = "paving", size = Vector3.new(4, 0.4, 4), cost = 2, mats = { "pierre", "taille", "brique", "gravier" } },
+	{ id = "pilotis", name = "Plateforme sur pilotis", shape = "stilts", size = Vector3.new(4, 4, 4), cost = 5, mats = { "bois", "rondin", "pin" } },
+	{ id = "balcon", name = "Balcon", shape = "balcony", size = Vector3.new(4, 1.6, 2), cost = 3, mats = { "bois", "pin", "pierre", "taille" } },
+	{ id = "gouttiere", name = "Gouttière", shape = "block", size = Vector3.new(4, 0.3, 0.5), cost = 1, mats = { "bois", "fer" } },
+	{ id = "lucarne", name = "Lucarne", shape = "dormer", size = Vector3.new(2, 2.4, 2), cost = 3, mats = { "bois", "chaume", "tuile", "ardoise", "bardeau" }, extra = { glass = 1 } },
+	{ id = "croisillons", name = "Fenêtre à croisillons", shape = "crosswindow", size = Vector3.new(4, 4, 0.5), cost = 3, mats = { "bois", "pierre", "brique", "torchis", "taille", "rondin" }, extra = { planks = 1, glass = 1 } },
+	{ id = "volets", name = "Fenêtre avec volets", shape = "shutterwall", size = Vector3.new(4, 4, 0.5), cost = 3, mats = { "bois", "pierre", "brique", "torchis", "taille", "rondin" }, extra = { planks = 2 } },
+	{ id = "vitrail", name = "Fenêtre avec vitrail", shape = "stainedwall", size = Vector3.new(4, 4, 0.5), cost = 3, mats = { "pierre", "taille", "brique" }, extra = { glass = 2, dye = 1 } },
 }
 
 -- Formes composées : liste de { taille, décalage } dans le repère de la pièce (centre = 0).
@@ -776,6 +804,161 @@ C.SHAPE_PARTS.capital = function(size: Vector3)
 		{ Vector3.new(size.Y * 0.6, size.X * 0.75, size.Z * 0.75), CFrame.new(0, -size.Y * 0.2, 0) * VERT, "cyl" },
 	}
 end
+-- 21/11 (lot C6) : formes de la liste. sp[4] = "dark" (bois sombre) ou "glass" (verre coloré), lu par Batir.
+C.SHAPE_PARTS.timberwall = function(size: Vector3)
+	local w, h, t = size.X, size.Y, size.Z
+	local b, z = 0.3, t / 2 + 0.06 -- poutres en saillie sur la face avant
+	local diag = math.sqrt((w / 2) ^ 2 + h ^ 2)
+	return {
+		{ Vector3.new(w, h, t), CFrame.new(0, 0, 0) },
+		{ Vector3.new(b, h, 0.14), CFrame.new(-w / 2 + b / 2, 0, z), nil, "dark" },
+		{ Vector3.new(b, h, 0.14), CFrame.new(w / 2 - b / 2, 0, z), nil, "dark" },
+		{ Vector3.new(b, h, 0.14), CFrame.new(0, 0, z), nil, "dark" },
+		{ Vector3.new(w, b, 0.14), CFrame.new(0, h / 2 - b / 2, z), nil, "dark" },
+		{ Vector3.new(w, b, 0.14), CFrame.new(0, -h / 2 + b / 2, z), nil, "dark" },
+		{ Vector3.new(b, diag * 0.98, 0.14), CFrame.new(-w / 4, 0, z) * CFrame.Angles(0, 0, math.atan2(w / 2, h)), nil, "dark" },
+		{ Vector3.new(b, diag * 0.98, 0.14), CFrame.new(w / 4, 0, z) * CFrame.Angles(0, 0, -math.atan2(w / 2, h)), nil, "dark" },
+	}
+end
+C.SHAPE_PARTS.wattle = function(size: Vector3)
+	local out = {}
+	for _, x in { -size.X / 2 + 0.15, 0, size.X / 2 - 0.15 } do -- trois piquets
+		table.insert(out, { Vector3.new(size.Y, 0.22, 0.22), CFrame.new(x, 0, 0) * VERT, "cyl", "dark" })
+	end
+	local n = 7
+	for k = 0, n - 1 do -- baguettes tressées, une sur deux décalée
+		local y = -size.Y / 2 + (k + 0.5) * size.Y / n
+		local dz = (k % 2 == 0) and 0.08 or -0.08
+		table.insert(out, { Vector3.new(size.X, size.Y / n * 0.8, 0.12), CFrame.new(0, y, dz) })
+	end
+	return out
+end
+C.SHAPE_PARTS.lattice = function(size: Vector3)
+	local out, n = {}, 5
+	local t = size.Z
+	local cadre = 0.18
+	for k = 1, n - 1 do -- lattes croisées
+		local x = -size.X / 2 + k * size.X / n
+		local y = -size.Y / 2 + k * size.Y / n
+		table.insert(out, { Vector3.new(0.12, size.Y, t * 0.6), CFrame.new(x, 0, 0) })
+		table.insert(out, { Vector3.new(size.X, 0.12, t * 0.6), CFrame.new(0, y, 0.02) })
+	end
+	for _, s in { -1, 1 } do -- cadre
+		table.insert(out, { Vector3.new(cadre, size.Y, t), CFrame.new(s * (size.X / 2 - cadre / 2), 0, 0) })
+		table.insert(out, { Vector3.new(size.X, cadre, t), CFrame.new(0, s * (size.Y / 2 - cadre / 2), 0) })
+	end
+	return out
+end
+C.SHAPE_PARTS.nichewall = function(size: Vector3)
+	-- mur percé d'une niche de 1,6 × 1,6, fermée au fond (épaisseur arrière 0,2)
+	local out = holed(size, 1.6, 1.6, 1.2)
+	local back = 0.2
+	table.insert(out, { Vector3.new(1.6, 1.6, back), CFrame.new(0, -size.Y / 2 + 1.2 + 0.8, -size.Z / 2 + back / 2) })
+	return out
+end
+C.SHAPE_PARTS.paving = function(size: Vector3)
+	-- dalles inégales (dessin fixe : la même pièce a toujours le même pavage)
+	local out = {}
+	local rows = { { 1.3, 1.5, 1.2 }, { 0.9, 1.6, 1.5 }, { 1.5, 1.1, 1.4 } }
+	local d = size.Z / #rows
+	for r, row in rows do
+		local x = -size.X / 2
+		for c, w in row do
+			local hh = size.Y * (0.8 + ((r * 3 + c) % 3) * 0.1)
+			table.insert(out, { Vector3.new(w - 0.08, hh, d - 0.08), CFrame.new(x + w / 2, -size.Y / 2 + hh / 2, -size.Z / 2 + (r - 0.5) * d) })
+			x += w
+		end
+	end
+	return out
+end
+C.SHAPE_PARTS.stilts = function(size: Vector3)
+	local deck = 0.5
+	local out = { { Vector3.new(size.X, deck, size.Z), CFrame.new(0, size.Y / 2 - deck / 2, 0) } }
+	local legH = size.Y - deck
+	for _, sx in { -1, 1 } do
+		for _, sz in { -1, 1 } do
+			table.insert(out, { Vector3.new(legH, 0.5, 0.5), CFrame.new(sx * (size.X / 2 - 0.3), -size.Y / 2 + legH / 2, sz * (size.Z / 2 - 0.3)) * VERT, "cyl", "dark" })
+		end
+	end
+	return out
+end
+C.SHAPE_PARTS.balcony = function(size: Vector3)
+	local deck = 0.4
+	local railH = size.Y - deck
+	local out = { { Vector3.new(size.X, deck, size.Z), CFrame.new(0, -size.Y / 2 + deck / 2, 0) } }
+	-- garde-corps : main courante sur trois côtés + balustres
+	local top = size.Y / 2 - 0.1
+	table.insert(out, { Vector3.new(size.X, 0.2, 0.2), CFrame.new(0, top, size.Z / 2 - 0.1) })
+	for _, s in { -1, 1 } do
+		table.insert(out, { Vector3.new(0.2, 0.2, size.Z), CFrame.new(s * (size.X / 2 - 0.1), top, 0) })
+	end
+	for k = 0, 6 do
+		local x = -size.X / 2 + 0.1 + k * (size.X - 0.2) / 6
+		table.insert(out, { Vector3.new(0.14, railH, 0.14), CFrame.new(x, -size.Y / 2 + deck + railH / 2, size.Z / 2 - 0.1) })
+	end
+	return out
+end
+C.SHAPE_PARTS.dormer = function(size: Vector3)
+	local wallH = size.Y * 0.55
+	local roofH = size.Y - wallH
+	local out = holed(Vector3.new(size.X, wallH, 0.3), 1, 0.9, 0.3)
+	for _, sp in out do -- la façade à l'avant de la pièce
+		sp[2] = CFrame.new(0, -size.Y / 2 + wallH / 2, size.Z / 2 - 0.15) * sp[2]
+	end
+	table.insert(out, { Vector3.new(1, 0.9, 0.06), CFrame.new(0, -size.Y / 2 + 0.3 + 0.45, size.Z / 2 - 0.15), nil, "glass" })
+	-- petit toit à deux pentes : deux coins dos à dos
+	local hw = size.X / 2
+	for _, s in { -1, 1 } do
+		table.insert(out, { Vector3.new(size.Z, roofH, hw), CFrame.new(s * hw / 2, size.Y / 2 - roofH / 2, 0) * CFrame.Angles(0, -s * math.pi / 2, 0), "wedge" })
+	end
+	return out
+end
+local function windowWith(size: Vector3, extra)
+	local out = holed(size, 1.6, 1.4, 1.6)
+	local cy = -size.Y / 2 + 1.6 + 0.7
+	for _, sp in extra(cy) do
+		table.insert(out, sp)
+	end
+	return out
+end
+C.SHAPE_PARTS.crosswindow = function(size: Vector3)
+	return windowWith(size, function(cy)
+		return {
+			{ Vector3.new(1.6, 1.4, 0.05), CFrame.new(0, cy, 0), nil, "glass" },
+			{ Vector3.new(0.12, 1.4, 0.16), CFrame.new(0, cy, 0), nil, "dark" },
+			{ Vector3.new(1.6, 0.12, 0.16), CFrame.new(0, cy, 0), nil, "dark" },
+		}
+	end)
+end
+C.SHAPE_PARTS.shutterwall = function(size: Vector3)
+	return windowWith(size, function(cy)
+		local z = size.Z / 2 + 0.06
+		return {
+			{ Vector3.new(0.8, 1.4, 0.08), CFrame.new(-1.2, cy, z), nil, "dark" },
+			{ Vector3.new(0.8, 1.4, 0.08), CFrame.new(1.2, cy, z), nil, "dark" },
+		}
+	end)
+end
+C.SHAPE_PARTS.stainedwall = function(size: Vector3)
+	return windowWith(size, function(cy)
+		return {
+			{ Vector3.new(1.6, 1.4, 0.06), CFrame.new(0, cy, 0), nil, "glass" },
+			{ Vector3.new(0.08, 1.4, 0.1), CFrame.new(-0.4, cy, 0), nil, "dark" },
+			{ Vector3.new(0.08, 1.4, 0.1), CFrame.new(0.4, cy, 0), nil, "dark" },
+			{ Vector3.new(1.6, 0.08, 0.1), CFrame.new(0, cy + 0.3, 0), nil, "dark" },
+		}
+	end)
+end
+C.SHAPE_PARTS.carvedpost = function(size: Vector3)
+	local d = size.X
+	return {
+		{ Vector3.new(size.Y, d * 0.7, d * 0.7), CFrame.new(0, 0, 0) * VERT, "cyl" },
+		{ Vector3.new(d, 0.35, d), CFrame.new(0, -size.Y / 2 + 0.175, 0) }, -- socle
+		{ Vector3.new(d, 0.35, d), CFrame.new(0, size.Y / 2 - 0.175, 0) }, -- tête
+		{ Vector3.new(0.25, d * 0.85, d * 0.85), CFrame.new(0, size.Y * 0.25, 0) * VERT, "cyl" }, -- bagues sculptées
+		{ Vector3.new(0.25, d * 0.85, d * 0.85), CFrame.new(0, -size.Y * 0.25, 0) * VERT, "cyl" },
+	}
+end
 -- crée une sous-pièce (serveur et fantôme) : bloc, cylindre ou coin selon sp[3]
 function C.makeSubPart(sp)
 	local c
@@ -801,6 +984,9 @@ for _, m in C.BUILD_MATERIALS do
 				id = id, name = sh.name .. " (" .. m.name .. ")", shape = sh.shape, size = sh.size, mat = m.mat, color = m.color,
 				transp = m.transp, hp = m.hp, cost = { [m.item] = sh.cost * m.mult }, material = m.id, shapeId = sh.id,
 			}
+			for it, n in sh.extra or {} do -- 21/11 : ingrédients en plus (vitre, poutres…)
+				C.BLOCKS[id].cost[it] = (C.BLOCKS[id].cost[it] or 0) + n
+			end
 			table.insert(C.BLOCK_ORDER, id)
 		end
 	end
@@ -882,8 +1068,11 @@ local SHAPE_ICON = {
 	marche = "📐", barriere = "➖", grille = "🔲", arche = "🌉", murcourbe = "🧱",
 	escalier = "📐", colimacon = "🌀", dome = "🔵", toitconique = "⛺", murfenetre = "🔳", murporte = "🚪",
 	meurtriere = "🏰", pignon = "🔺", creneaux = "🏰", chapiteau = "🏛️",
+	poteaurond = "🏛️", demipoutre = "📏", madrier = "📏", chevron = "🔺", echalas = "📏", poteausculpte = "🏛️", colonnecarree = "🏛️",
+	murincline = "🧱", colombages = "🏠", clayonnage = "🧺", treillis = "🔲", niche = "🧱", fondation = "⬛", pavage = "🟫",
+	pilotis = "🛖", balcon = "🏠", gouttiere = "📏", lucarne = "🏠", croisillons = "🪟", volets = "🪟", vitrail = "🪟",
 }
-local HAND_MATS = { bois = true, rondin = true, chaume = true, torchis = true, pise = true }
+local HAND_MATS = { bois = true, rondin = true, chaume = true, torchis = true, pise = true, pin = true, gravier = true, sable = true, herbe = true }
 for _, id in C.BLOCK_ORDER do
 	local b = C.BLOCKS[id]
 	local item = "blk_" .. id

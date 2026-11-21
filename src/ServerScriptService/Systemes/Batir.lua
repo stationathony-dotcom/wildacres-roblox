@@ -60,6 +60,16 @@ local function makePart(d, parent: Instance)
 			if b.transp then
 				c.Transparency = b.transp
 			end
+			-- sous-pièces d'accent (21/11) : poutres / volets en bois sombre, vitre colorée
+			if sp[4] == "dark" then
+				c.Material = Enum.Material.Wood
+				c.Color = Color3.fromRGB(78, 52, 34)
+				c.Transparency = 0
+			elseif sp[4] == "glass" then
+				c.Material = Enum.Material.Glass
+				c.Color = b.shape == "stainedwall" and Color3.fromRGB(150, 70, 160) or Color3.fromRGB(190, 225, 240)
+				c.Transparency = 0.4
+			end
 			c:SetAttribute("Built", d.id)
 			c:SetAttribute("Owner", d.o)
 			c.Parent = p
