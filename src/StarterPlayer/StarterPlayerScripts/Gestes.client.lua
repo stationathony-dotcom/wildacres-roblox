@@ -92,13 +92,18 @@ local POSES = {
 			RightKnee = X(-20 * frappe * w), LeftKnee = X(-20 * frappe * w),
 		}
 	end },
-	poing = { dur = 0.35, son = "poing", p = function(t, w) -- à mains nues : direct du droit
-		local k = math.clamp(t / 0.35, 0, 1)
-		local arme, frappe = math.min(1, k / 0.35), math.max(0, (k - 0.35) / 0.65)
+	poing = { dur = 0.38, son = "poing", sonA = 0.12, p = function(t, w, n) -- à mains nues : direct, un poing puis l'autre
+		local k = math.clamp(t / 0.38, 0, 1)
+		local arme, frappe = math.min(1, k / 0.3), math.max(0, (k - 0.3) / 0.7)
+		local gauche = (n or 0) % 2 == 1
+		local frappeur, garde = gauche and "Left" or "Right", gauche and "Right" or "Left"
+		local s = gauche and -1 or 1 -- le buste tourne vers le poing qui part
 		return {
-			Waist = CFrame.Angles(0, rad((15 * arme - 30 * frappe) * w), 0),
-			RightShoulder = X((70 + 20 * frappe) * w), RightElbow = X(-(110 * arme - 100 * frappe) * w),
-			LeftShoulder = X(60 * w), LeftElbow = X(-110 * w), -- garde
+			Waist = CFrame.Angles(rad(-10 * frappe * w), rad(s * (25 * arme - 45 * frappe) * w), 0),
+			Neck = CFrame.Angles(0, rad(-s * 15 * frappe * w), 0),
+			[frappeur .. "Shoulder"] = X((60 * arme + 35 * frappe) * w), [frappeur .. "Elbow"] = X(-(120 * arme - 115 * frappe) * w),
+			[garde .. "Shoulder"] = X(70 * w), [garde .. "Elbow"] = X(-120 * w), -- garde haute
+			[garde .. "Hip"] = X(20 * frappe * w), [frappeur .. "Knee"] = X(-15 * frappe * w), -- on avance d'un pas
 		}
 	end },
 	tir = { dur = 0.85, son = "corde", sonA = 0.55, p = function(t, w) -- arc, arbalète : bander puis lâcher
@@ -299,7 +304,7 @@ RunService.RenderStepped:Connect(function()
 					else
 						active = true
 						local w = math.min(ease(t / 0.15), ease((g.pose.dur - t) / 0.2))
-						local ok, res = pcall(g.pose.p, t, w)
+						local ok, res = pcall(g.pose.p, t, w, g.n)
 						if ok then
 							for name, cf in res do
 								offs[name] = (offs[name] or CFrame.identity) * cf
@@ -359,7 +364,7 @@ local function watch(player: Player)
 		local pose = kind and POSES[kind]
 		if pose and char and char.Parent then
 			local r = rigOf(char)
-			r.gesture = { pose = pose, t0 = os.clock() } -- un nouveau geste remplace l'ancien
+			r.gesture = { pose = pose, t0 = os.clock(), n = tonumber(string.match(v, ":(%d+)$")) } -- un nouveau geste remplace l'ancien
 			r.dirty = true
 			if pose.son then
 				task.delay(pose.sonA or 0.15, jouerSon, char, pose.son) -- au moment de la frappe

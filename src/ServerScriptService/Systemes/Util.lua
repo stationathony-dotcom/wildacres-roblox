@@ -224,10 +224,11 @@ end
 
 -- Geste du joueur (cueillir, fabriquer, manger, batir, commerce) : tous les clients l'animent
 -- (StarterPlayerScripts/Gestes). Un compteur relance le même geste deux fois de suite.
-local gesteN = 0
+-- Compteur PAR joueur : sa parité alterne les poings (Gestes : gauche, droite, gauche…).
+local gesteN = setmetatable({}, { __mode = "k" })
 function U.geste(player: Player, kind: string)
-	gesteN += 1
-	player:SetAttribute("Geste", kind .. ":" .. gesteN)
+	gesteN[player] = (gesteN[player] or 0) + 1
+	player:SetAttribute("Geste", kind .. ":" .. gesteN[player])
 end
 
 function U.nearestPlayer(pos: Vector3, maxDist: number?): (Player?, number)

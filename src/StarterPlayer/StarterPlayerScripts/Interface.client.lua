@@ -4030,7 +4030,12 @@ local function game_()
 	end
 	local function strikeAim(touchPos: Vector3?): boolean
 		local rid, pid, m, deco = recolteVisee(touchPos)
-		if rid then
+		if rid and string.sub(rid, 1, 3) == "fh|" then
+			-- herbe haute (partout au sol) : on la fauche ET on donne le coup, pour que le clic
+			-- « dans le vide » se voie toujours (geste de l'arme ou du poing, côté serveur)
+			send("recolter_clic", { id = rid })
+			return false
+		elseif rid then
 			send("recolter_clic", { id = rid })
 		elseif pid then
 			send("prop_clic", { id = pid })
@@ -4170,20 +4175,57 @@ local function game_()
 
 	-- aide clavier (PC) / boutons (mobile)
 	if not MOBILE then
-		-- raccourcis : touche + icône (on comprend à la vue)
+		-- aide CONTEXTUELLE (21/11, demande du propriétaire : la rangée fixe de touches était
+		-- illisible) : rien n'est affiché tant qu'aucune touche n'est utile ; sinon « touche + mot »
+		-- pour ce qui est faisable maintenant. Le clic (action principale) n'a pas besoin d'aide ;
+		-- la liste complète des touches est dans Paramètres [O].
 		local keys = new("Frame", { Size = UDim2.fromOffset(0, 24), AutomaticSize = Enum.AutomaticSize.X, Position = UDim2.new(0.5, 0, 1, -2), AnchorPoint = Vector2.new(0.5, 1),
-			BackgroundTransparency = 1, Parent = gui }, { new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 12), VerticalAlignment = Enum.VerticalAlignment.Center }) })
-		for _, kk in { { "V", "🧱", "Construire" }, { "Gauche", "👊", "Clic gauche : attaquer ou utiliser l’outil" }, { "Droit", "◎", "Clic droit : sélectionner une cible" }, { "H", "🐴", "Cheval" }, { "G", "🙌", "Lâcher / descendre" }, { "Q", "✋", "Ramasser tout autour" }, { "Ctrl", "🤫", "S'accroupir" } } do
-			local f = new("TextButton", { Text = "", Size = UDim2.fromOffset(0, 22), AutomaticSize = Enum.AutomaticSize.X, BackgroundTransparency = 1, Parent = keys },
-				{ new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 3), VerticalAlignment = Enum.VerticalAlignment.Center }) })
-			new("TextLabel", { Text = kk[1], Font = BOLD, TextSize = 11, TextColor3 = Color3.fromRGB(20, 16, 12), BackgroundColor3 = Color3.fromRGB(225, 215, 195),
-				Size = UDim2.fromOffset(math.max(18, #kk[1] * 7 + 6), 18), Parent = f }, { corner(4) })
-			label({ Text = kk[2], TextSize = 15, Size = UDim2.fromOffset(20, 20), Parent = f })
-			f.MouseEnter:Connect(function()
-				showTip({ { kk[3], C.text, 14 } })
-			end)
-			f.MouseLeave:Connect(hideTip)
+			BackgroundTransparency = 1, Parent = gui }, { new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 14), VerticalAlignment = Enum.VerticalAlignment.Center }) })
+		local shown = ""
+		local function aide(list)
+			local sig = table.concat(list, "|")
+			if sig == shown then return end
+			shown = sig
+			for _, c in keys:GetChildren() do
+				if c:IsA("GuiObject") then c:Destroy() end
+			end
+			for i = 1, #list, 2 do
+				local f = new("Frame", { Size = UDim2.fromOffset(0, 22), AutomaticSize = Enum.AutomaticSize.X, BackgroundColor3 = Color3.fromRGB(24, 19, 15), BackgroundTransparency = 0.25, Parent = keys },
+					{ corner(6), new("UIPadding", { PaddingLeft = UDim.new(0, 3), PaddingRight = UDim.new(0, 8) }),
+						new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 6), VerticalAlignment = Enum.VerticalAlignment.Center }) })
+				new("TextLabel", { Text = list[i], Font = BOLD, TextSize = 12, TextColor3 = Color3.fromRGB(20, 16, 12), BackgroundColor3 = Color3.fromRGB(225, 215, 195),
+					Size = UDim2.fromOffset(math.max(18, #list[i] * 7 + 8), 18), Parent = f }, { corner(4) })
+				label({ Text = list[i + 1], TextSize = 13, Size = UDim2.fromOffset(0, 20), AutomaticSize = Enum.AutomaticSize.X, Parent = f })
+			end
 		end
+		task.spawn(function()
+			while gui.Parent do
+				local l = {}
+				if not building then
+					if player:GetAttribute("Riding") then
+						table.insert(l, "G") table.insert(l, "Descendre de cheval")
+					elseif player:GetAttribute("Carrying") then
+						table.insert(l, "G") table.insert(l, "Lâcher")
+					end
+					local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+					local sol = workspace:FindFirstChild("ButinAuSol")
+					if root and sol then
+						for _, d in sol:GetChildren() do
+							local ok, pos = pcall(function() return d:GetPivot().Position end)
+							if ok and (pos - root.Position).Magnitude <= 10 then
+								table.insert(l, "Q") table.insert(l, "Tout ramasser")
+								break
+							end
+						end
+					end
+					if crouch then
+						table.insert(l, "Ctrl") table.insert(l, "Se relever")
+					end
+				end
+				aide(l)
+				task.wait(0.25)
+			end
+		end)
 	else
 		local pad_ = new("Frame", { Size = UDim2.fromOffset(200, 200), Position = UDim2.new(1, -16, 1, -150), AnchorPoint = Vector2.new(1, 1), BackgroundTransparency = 1, Parent = gui })
 		local function round(text: string, x: number, y: number, color: Color3, fn)

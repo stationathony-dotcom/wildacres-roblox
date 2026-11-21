@@ -549,7 +549,7 @@ do
 	body.Name = "Réglages"
 	body.Size, body.Position = UDim2.new(1, 0, 1, -50), UDim2.fromOffset(0, 42)
 	body.BackgroundTransparency, body.BorderSizePixel = 1, 0
-	body.CanvasSize, body.ScrollBarThickness = UDim2.fromOffset(0, 482), 4
+	body.CanvasSize, body.ScrollBarThickness = UDim2.fromOffset(0, 760), 4
 	body.ScrollingDirection = Enum.ScrollingDirection.Y
 	body.Parent = panel
 	require(script.Parent:WaitForChild("MiseEnPage")).bind(panel)
@@ -592,6 +592,23 @@ do
 	local help = txt(body, "Dans le chat : /bloquer <pseudo> · /debloquer · /autoriser <pseudo> coffres|batir · /retirer <pseudo> · /autorises\n[O] Paramètres · [M] Carte",
 		UDim2.new(1, -28, 0, 44), UDim2.fromOffset(14, 394), 11, Color3.fromRGB(150, 140, 120))
 	help.TextWrapped = true
+	-- toutes les touches, en mots (la barre rapide n'affiche plus que celles utiles sur le moment)
+	txt(body, "⌨️ Touches", UDim2.new(1, -28, 0, 20), UDim2.fromOffset(14, 446), 13)
+	local touches = {
+		{ "Clic", "Action principale : frapper, récolter, ramasser, ouvrir" },
+		{ "Clic droit", "Choisir une cible" },
+		{ "1 à 9", "Prendre l'objet de la barre rapide" },
+		{ "Maj", "Courir" }, { "Ctrl", "S'accroupir / se relever" },
+		{ "Q", "Ramasser tout autour" }, { "G", "Lâcher / descendre de cheval" },
+		{ "H", "Siffler son cheval" }, { "V", "Construire" },
+		{ "B", "Sac" }, { "P", "Personnage" }, { "K", "Compétences" }, { "J", "Journal" },
+		{ "M", "Carte" }, { "L", "Clan" }, { "C", "Atelier" }, { "O", "Paramètres" },
+	}
+	for i, k in touches do
+		local y = 470 + (i - 1) * 16
+		txt(body, k[1], UDim2.fromOffset(80, 16), UDim2.fromOffset(14, y), 12, GOLD)
+		txt(body, k[2], UDim2.new(1, -110, 0, 16), UDim2.fromOffset(96, y), 12, Color3.fromRGB(200, 190, 170))
+	end
 	render = function()
 		volRow:ClearAllChildren()
 		for i = 0, 5 do
