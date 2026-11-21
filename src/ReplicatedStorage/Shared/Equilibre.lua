@@ -182,6 +182,9 @@ E.NEW_ITEMS = {
 	{ "saddle_leather", "Selle de cuir", "🐎", 120, { leather = 4, buckle = 2, wool_cloth = 1 }, 1, "tannery", 6 },
 	{ "saddle_race", "Selle de course", "🏇", 320, { soft_leather = 3, silver_ingot = 1, buckle = 2 }, 1, "tannery", 18 },
 	{ "stirrups", "Étriers", "🔗", 80, { iron_ingot = 2, leather_strap = 2 }, 1, "anvil", 8 },
+	-- 21/11 (« liste items.txt », montures) : bride et rênes, selle de guerre
+	{ "bridle", "Bride et rênes", "🐴", 60, { leather = 2, leather_strap = 2, iron_ring = 1 }, 1, "tannery", 5 },
+	{ "saddle_war", "Selle de guerre", "🛡️", 240, { leather = 5, steel = 1, buckle = 2 }, 1, "tannery", 14 },
 	-- flèches meilleures (Combat.shoot : AMMO_DMG), tirées en premier
 	{ "arrow_iron", "Flèche à pointe de fer", "🏹", 4, { branches = 1, iron_ingot = 1, feather = 1 }, 8, "anvil", 10 },
 	{ "arrow_barbed", "Flèche barbelée", "🏹", 7, { branches = 1, steel = 1, feather = 2 }, 8, "anvil", 20 },
@@ -234,8 +237,9 @@ function E.bagToolBonus(inv, skill: string): number
 	end
 	return math.min(E.BAG_CAP, n)
 end
-E.TACK = { saddle_race = 1.15, saddle_leather = 1.08 } -- la meilleure selle compte ; étriers en plus
+E.TACK = { saddle_race = 1.15, saddle_war = 1.1, saddle_leather = 1.08 } -- la meilleure selle compte ; étriers en plus
 E.STIRRUPS = 1.05
+E.BRIDLE = 1.04 -- bride et rênes dans le sac (Horses.mount)
 E.HORSE_BLANKET = 1.03 -- couverture dans le sac : la monture garde mieux son allure (Horses)
 -- armes de jet (emplacement Arme, tir à distance) : { nom, rareté, stats, dégâts, munition, ingrédients, niveau }
 E.RANGED_GEAR = {

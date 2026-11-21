@@ -379,6 +379,9 @@ function Horses.mount(player: Player, h)
 		if G.Joueurs.has(player, "stirrups") then
 			tack *= Eq.STIRRUPS or 1
 		end
+		if G.Joueurs.has(player, "bridle") then
+			tack *= Eq.BRIDLE or 1
+		end
 		-- couverture de cheval dans le sac (« liste items.txt » ; elle tenait chaud au cavalier avant le 20/11)
 		if G.Joueurs.has(player, "blanket") then
 			tack *= Eq.HORSE_BLANKET or 1

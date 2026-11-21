@@ -21,7 +21,7 @@ local USED_BY_CODE = {
 	throwing_knife = true, stone = true, bait = true, plate = true, wood_plate = true, table_fork = true, table_knife = true,
 	jug = true, ladle = true, spoon = true, quill = true, scales_tool = true, weights = true, blanket = true,
 	glow_mushroom = true, lantern = true, miner_lamp = true, compass = true, old_compass = true, charter = true,
-	dog_collar = true, spiked_collar = true, pet_harness = true, saddle_leather = true, saddle_race = true, stirrups = true,
+	dog_collar = true, spiked_collar = true, pet_harness = true, saddle_leather = true, saddle_race = true, saddle_war = true, stirrups = true, bridle = true,
 	bracelet = true, brooch = true, necklace = true, backpack = true, map_world = true, parchment = true, lockpick = true,
 }
 for id in E.TACK or {} do
