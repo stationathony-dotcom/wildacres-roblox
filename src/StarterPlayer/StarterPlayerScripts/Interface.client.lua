@@ -864,27 +864,35 @@ local function game_()
 		if not info then
 			return false
 		end
-		if IconesPeintes.add(id, cell, UDim2.fromScale(0.9, 0.9), zi, dim) then return true end
+		local painted = IconesPeintes.add(id, cell, UDim2.fromScale(0.9, 0.9), zi, dim)
 		local tpl = nil
-		if info.tool and iconFolder then
-			local name = TOOL_ICON[id] or TOOL_ICON[info.base or ""] or (Config.baseOf and TOOL_ICON[Config.baseOf(id)])
-			tpl = iconFolder:FindFirstChild(id) or (name and iconFolder:FindFirstChild(name))
-		elseif objFolder then
-			tpl = objFolder:FindFirstChild(id)
-		end
-		if not tpl then
-			return false
-		end
-		local tier = Config.tierOf and Config.tierOf(id) or 0
-		local tint = not tpl:GetAttribute("PaletteDediee") and Config.TOOL_TINTS[tier]
-		local vf = Hud.objectViewport(tpl, dim, tint and function(d: BasePart)
-			-- outils de cuivre / fer : la partie métallique prend la couleur du palier
-			if d.Material == Enum.Material.Metal or d.Material == Enum.Material.Slate or d.Material == Enum.Material.Rock then
-				d.Color = tint
+		if not painted then
+			local temporaire = false
+			if info.tool and iconFolder then
+				local name = TOOL_ICON[id] or TOOL_ICON[info.base or ""] or (Config.baseOf and TOOL_ICON[Config.baseOf(id)])
+				tpl = iconFolder:FindFirstChild(id) or (name and iconFolder:FindFirstChild(name))
+			elseif objFolder then
+				tpl = objFolder:FindFirstChild(id)
 			end
-		end or nil)
-		vf.ZIndex = zi
-		vf.Parent = cell
+			if not tpl and id == "wall_lantern" then
+				tpl = Config.Catalogue.build(info.place)
+				temporaire = tpl ~= nil
+			end
+			if not tpl then
+				return false
+			end
+			local tier = Config.tierOf and Config.tierOf(id) or 0
+			local tint = not tpl:GetAttribute("PaletteDediee") and Config.TOOL_TINTS[tier]
+			local vf = Hud.objectViewport(tpl, dim, tint and function(d: BasePart)
+				-- outils de cuivre / fer : la partie métallique prend la couleur du palier
+				if d.Material == Enum.Material.Metal or d.Material == Enum.Material.Slate or d.Material == Enum.Material.Rock then
+					d.Color = tint
+				end
+			end or nil)
+			if temporaire then tpl:Destroy() end
+			vf.ZIndex = zi
+			vf.Parent = cell
+		end
 		-- barre d'usure de l'outil (façon Minecraft) : verte → rouge, cachée quand l'outil est neuf
 		if info.tool then
 			local base = Config.baseOf and Config.baseOf(id) or id
@@ -1466,7 +1474,7 @@ local function game_()
 	end)
 
 	-- ---------------------------------------------------------------- Fiche personnage (façon WoW) [P]
-	local toggleChar
+	local toggleChar, openLook, closeLook
 	do
 	-- Gauche : l'équipement porté autour du personnage + l'équipement dans le sac.
 	-- Droite : onglets Caractéristiques / Compétences / Collections / Titres.
@@ -1476,7 +1484,7 @@ local function game_()
 		chance = "Butin, pêche, trouvailles", charisme = "Prix, avis des PNJ", discretion = "Moins vu des témoins" }
 	STAT_ICON.discretion = "🌑"
 	local charTab = "stats"
-	local lookCtx, lookInfo = nil, nil -- écran d'apparence ouvert par le serveur (création, barbier, tailleur)
+	local lookInfo = nil -- écran d'apparence ouvert par le serveur (création, barbier, tailleur)
 	local lookDraft = nil -- apparence en cours de choix (onglet Apparence)
 	local bag = new("Frame", {
 		Name = "Perso", Size = UDim2.fromOffset(760, 440), Position = UDim2.fromScale(0.5, 0.5), AnchorPoint = Vector2.new(0.5, 0.5),
@@ -1547,7 +1555,7 @@ local function game_()
 		}, { corner(4) })
 		stroke(r and r.color or Color3.fromRGB(70, 60, 50), r and 2 or 1).Parent = cell
 		if it then
-			local preview = Hud.gearViewport(it)
+			local preview = Hud.gearThumbnail(it)
 			if preview then
 				cell.Text = ""
 				preview.ZIndex, preview.Parent = 9, cell
@@ -1863,8 +1871,20 @@ local function game_()
 			end
 		end
 	end
+	openLook = function(data)
+		-- Création à l'arrivée, barbier ou tailleur (Avatar.open).
+		lookInfo = data
+		lookDraft = nil
+		closeAll()
+		charTab = "look"
+		bag.Visible = true
+		renderChar()
+	end
+	closeLook = function()
+		lookInfo, lookDraft = nil, nil
+	end
 	toggleChar = function()
-		lookInfo, lookCtx = nil, nil -- ouverte à la main : l'apparence se consulte seulement
+		closeLook() -- ouverte à la main : l'apparence se consulte seulement
 		local v = not bag.Visible
 		closeAll()
 		hideTip()
@@ -1943,7 +1963,7 @@ local function game_()
 				if entry.recipe.item then
 					toolIcon(entry.recipe.item, cell, 9, not entry.available)
 				elseif entry.recipe.gear then
-					local vf = Hud.gearViewport(entry.recipe.gear, not entry.available)
+					local vf = Hud.gearThumbnail(entry.recipe.gear, not entry.available)
 					if vf then vf.ZIndex, vf.Parent = 9, cell end
 				end
 				entry.preview = cell:FindFirstChild("IconePeinte") or cell:FindFirstChildOfClass("ViewportFrame")
@@ -2115,7 +2135,7 @@ local function game_()
 			if r.item and toolIcon(r.item, out, 9, not stationOk) then
 				out.Text = ""
 			elseif r.gear then
-				local preview = Hud.gearViewport(r.gear, not stationOk)
+				local preview = Hud.gearThumbnail(r.gear, not stationOk)
 				if preview then
 					out.Text = ""
 					preview.ZIndex, preview.Parent = 9, out
@@ -2269,6 +2289,7 @@ local function game_()
 	end)
 	end
 
+	do
 	-- ---------------------------------------------------------------- Coffre de rangement
 	local chest, chestBody, chestTitle = makePanel("Coffre", "📦 Coffre", UDim2.fromOffset(640, 480))
 	local chestData = nil
@@ -2452,14 +2473,7 @@ local function game_()
 			chest.Visible = true
 			renderChest()
 		elseif data.kind == "look" then
-			-- création à l'arrivée, barbier ou tailleur (Avatar.open) : la fiche s'ouvre sur l'apparence
-			lookInfo = data
-			lookCtx = data.ctx
-			lookDraft = nil
-			closeAll()
-			charTab = "look"
-			bag.Visible = true
-			renderChar()
+			openLook(data)
 		elseif data.kind == "shop" then
 			local wasOpen = shop.Visible
 			shopData = data
@@ -2470,7 +2484,7 @@ local function game_()
 			shop.Visible = true
 			renderShop()
 		elseif data.kind == "close" then
-			lookInfo, lookCtx = nil, nil
+			closeLook()
 			closeAll() -- le serveur ferme la fenêtre (trop loin du comptoir, coffre disparu…)
 		end
 	end)
@@ -2520,6 +2534,7 @@ local function game_()
 		end
 	end)
 
+	end
 	-- ---------------------------------------------------------------- Talents (façon World of Warcraft)
 	-- Une colonne par voie ; les paliers se débloquent avec les points déjà dépensés dans la voie.
 	local TALENT_ICONS = {
