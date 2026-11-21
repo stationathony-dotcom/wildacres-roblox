@@ -459,10 +459,12 @@ function Batir.givePlan(player: Player, name: string, target: Player): (boolean,
 	for _ in tprof.plans do
 		count += 1
 	end
-	local tname = name
+	-- le nom est vu par l'autre joueur : filtre de texte Roblox obligatoire (sinon nom neutre)
+	local seen = G.Villes and rawget(G.Villes, "filter") and G.Villes.filter(player, name)
+	local tname = planName(seen) or "plan"
 	local k = 2
 	while tprof.plans[tname] do
-		tname = string.sub(name, 1, 17) .. "_" .. k
+		tname = string.sub(planName(seen) or "plan", 1, 17) .. "_" .. k
 		k += 1
 	end
 	if count >= PLAN_MAX then
