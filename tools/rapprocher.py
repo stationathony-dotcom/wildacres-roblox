@@ -287,7 +287,8 @@ VERBE_SORTE = {
     "dresser": "apprivoiser (Quetes)", "miner": "miner (Quetes)", "extraire": "miner (Quetes)", "abattre": "abattre (Quetes)",
     "couper": "abattre (Quetes)", "vendre": "vendre (Quetes)", "collecter": "collecter (Quetes)", "naviguer": "naviguer (Quetes)",
     "contribuer": "chantiers de village (Chantiers)", "nourrir": "apporter (Quetes)", "proteger": "escorter (QuetesLieux)",
-    "defendre": "invasion / chantiers (Evenements)",
+    "defendre": "invasion / chantiers (Evenements)", "presenter": "concours (Activites : dressage, élevage, cuisine…)",
+    "exposer": "concours / exposer (Activites)", "organiser": "tableau d'affichage (Activites)", "remporter": "concours (Activites)",
 }
 
 
@@ -437,6 +438,7 @@ IDEES = {'Réputation — Réputation individuelle auprès de chaque village': '
     '7 — Activités secondaires': 'Activites',
     '8 — Progression avancée': 'statXp, rangs, talents',
     '9 — Interface et accessibilité Roblox': 'lots Codex X1–X14 (2e vague X15–X26 en cours)'}
+IDEES["Concours de dressage."] = "concours de dressage (Activites, 21/11)"
 DERNIER = 'fait (créatures et prises, 20/11 ; bestiaire complet : 168 créatures)'
 
 def main():

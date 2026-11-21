@@ -1046,7 +1046,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (82) 59. **Le marchand de bétail** — Livrer deux animaux. → sorte « livrer (QuetesLieux) »
 - [x] (83) 60. **Le vétérinaire** — Apporter des produits de soin pour animaux. → repris tel quel (Quetes)
 - [ ] (84) 61. **Un élevage réputé** — Faire grandir plusieurs animaux.
-- [ ] (85) 62. **Le concours agricole** — Présenter un animal au concours.
+- [x] (85) 62. **Le concours agricole** — Présenter un animal au concours. → sorte « concours (Activites : dressage, élevage, cuisine…) »
 - [x] (86) 63. **Le cheval sauvage** — Repérer un cheval dans la nature. → sorte « visiter (QuetesLieux) »
 - [ ] (87) 64. **Une monture fidèle** — Apprendre à monter un cheval.
 - [x] (88) 65. **Le meilleur élevage** — Obtenir une récompense pour son élevage. → sorte « apporter (Quetes) »
@@ -1163,7 +1163,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (202) 155. **La migration des troupeaux** — Suivre un troupeau pendant son déplacement. → sorte « escorter / enquêter (QuetesLieux) »
 - [x] (203) 156. **L'animal blessé** — Apporter des fournitures au soigneur pour aider un animal. → sorte « apporter (Quetes) »
 - [x] (204) 157. **Le gardien du refuge** — Nourrir et surveiller les animaux d'un refuge. → sorte « apporter (Quetes) »
-- [ ] (205) 158. **Le concours du bestiaire** — Présenter les observations de plusieurs espèces.
+- [x] (205) 158. **Le concours du bestiaire** — Présenter les observations de plusieurs espèces. → sorte « concours (Activites : dressage, élevage, cuisine…) »
 - [x] (206) 159. **Une espèce introuvable** — Découvrir une espèce encore inconnue du joueur. → sorte « découvrir / visiter (QuetesLieux) »
 - [ ] (207) 160. **Le maître naturaliste** — Compléter une collection d'observations d'un biome.
 
@@ -1233,7 +1233,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### 13. Quêtes de justice, gardes et réputation
 
-- [ ] (277) 216. **Le recrutement** — Se présenter auprès du capitaine de la garde.
+- [x] (277) 216. **Le recrutement** — Se présenter auprès du capitaine de la garde. → sorte « concours (Activites : dressage, élevage, cuisine…) »
 - [ ] (278) 217. **La patrouille du matin** — Effectuer une patrouille dans le village.
 - [x] (279) 218. **La route dangereuse** — Escorter un marchand sur une route. → sorte « escorter (QuetesLieux) »
 - [x] (280) 219. **Le vol au marché** — Retrouver le responsable d'un vol. → sorte « retrouver (QuetesLieux) »
@@ -1286,7 +1286,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [ ] (327) 260. **Le capitaine** — Effectuer plusieurs voyages maritimes.
 - [x] (328) 261. **La carte marine** — Découvrir plusieurs points de navigation. → sorte « découvrir / visiter (QuetesLieux) »
 - [x] (329) 262. **Les îles lointaines** — Explorer une île éloignée. → sorte « visiter (QuetesLieux) »
-- [ ] (330) 263. **La diligence** — Organiser un voyage en diligence.
+- [x] (330) 263. **La diligence** — Organiser un voyage en diligence. → sorte « tableau d'affichage (Activites) »
 - [x] (331) 264. **Le relais routier** — Trouver ou construire un point de repos sur une route. → sorte « retrouver (QuetesLieux) »
 - [x] (332) 265. **Le grand explorateur** — Visiter tous les moyens de transport disponibles. → sorte « visiter (QuetesLieux) »
 
@@ -1300,10 +1300,10 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [ ] (341) 271. **La mission commune** — Accomplir une quête à trois joueurs ou plus.
 - [x] (342) 272. **Le messager du clan** — Transmettre un message à un autre clan. → sorte « lettre (Quetes) »
 - [ ] (343) 273. **Le recrutement** — Accueillir de nouveaux membres.
-- [ ] (344) 274. **Le tournoi amical** — Organiser une compétition entre membres.
+- [x] (344) 274. **Le tournoi amical** — Organiser une compétition entre membres. → sorte « tableau d'affichage (Activites) »
 - [x] (345) 275. **La réserve collective** — Réunir des ressources pour le clan. → sorte « apporter (Quetes) »
 - [ ] (346) 276. **Le chef responsable** — Répartir des tâches entre les membres.
-- [ ] (347) 277. **La réunion** — Organiser une réunion dans le quartier général.
+- [x] (347) 277. **La réunion** — Organiser une réunion dans le quartier général. → sorte « tableau d'affichage (Activites) »
 - [ ] (348) 278. **L'ambassadeur** — Rencontrer un autre clan.
 - [ ] (349) 279. **L'accord commercial** — Échanger des ressources avec un autre clan.
 - [ ] (350) 280. **Le pacte d'amitié** — Conclure une alliance.
@@ -1318,8 +1318,8 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [ ] (359) 286. **Le premier recrue** — Recruter un premier soldat fictif.
 - [x] (360) 287. **La caserne** — Construire une caserne. → sorte « bâtir (Quetes) »
 - [x] (361) 288. **L'équipement des recrues** — Fournir du matériel à plusieurs recrues. → sorte « apporter (Quetes) »
-- [ ] (362) 289. **Le quartier-maître** — Organiser les réserves de l'armée.
-- [ ] (363) 290. **Les exercices** — Organiser une activité d'entraînement.
+- [x] (362) 289. **Le quartier-maître** — Organiser les réserves de l'armée. → sorte « tableau d'affichage (Activites) »
+- [x] (363) 290. **Les exercices** — Organiser une activité d'entraînement. → sorte « tableau d'affichage (Activites) »
 - [x] (364) 291. **La tour de guet** — Construire un poste d'observation. → sorte « bâtir (Quetes) »
 - [x] (365) 292. **La frontière** — Explorer les limites d'un territoire. → sorte « visiter (QuetesLieux) »
 - [x] (366) 293. **Le poste avancé** — Installer un campement dans une zone éloignée. → sorte « bâtir / étal (QuetesLieux) »
@@ -1342,11 +1342,11 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (383) 307. **La soirée à l'auberge** — Participer à une activité sociale. → sorte « concours / courses (Activites) »
 - [x] (384) 308. **Le conteur** — Écouter trois histoires racontées par des PNJ. → sorte « enquêter (QuetesLieux) »
 - [x] (385) 309. **La chasse au trésor collective** — Résoudre une énigme avec d'autres joueurs. → sorte « enquêter (QuetesLieux) »
-- [ ] (386) 310. **Le concours de décoration** — Présenter une maison décorée.
+- [x] (386) 310. **Le concours de décoration** — Présenter une maison décorée. → sorte « concours (Activites : dressage, élevage, cuisine…) »
 - [x] (387) 311. **Le mariage des voisins** — Aider à préparer une célébration fictive. → sorte « fabriquer (Quetes, cuisine) »
 - [x] (388) 312. **Le musicien du village** — Participer à une représentation. → sorte « concours / courses (Activites) »
 - [x] (389) 313. **Le tournoi de lancer** — Participer à un jeu d'adresse. → sorte « concours / courses (Activites) »
-- [ ] (390) 314. **Le champion du village** — Remporter une compétition locale.
+- [x] (390) 314. **Le champion du village** — Remporter une compétition locale. → sorte « concours (Activites) »
 - [x] (391) 315. **La grande fête** — Participer à plusieurs activités d'un festival. → sorte « concours / courses (Activites) »
 
 ### 19. Quêtes d'événements et de festivals
@@ -1357,11 +1357,11 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [ ] (398) 319. **Le festival des lanternes** — Allumer des lanternes dans plusieurs rues.
 - [x] (399) 320. **Le concours de cuisine** — Préparer un plat pour un jury. → sorte « fabriquer (Quetes, cuisine) »
 - [x] (400) 321. **La course des montures** — Participer à une course. → sorte « concours / courses (Activites) »
-- [ ] (401) 322. **La foire artisanale** — Exposer trois objets fabriqués.
+- [x] (401) 322. **La foire artisanale** — Exposer trois objets fabriqués. → sorte « concours / exposer (Activites) »
 - [x] (402) 323. **La fête de la pêche** — Réussir un défi de pêche. → sorte « concours / courses (Activites) »
 - [x] (403) 324. **Le concours de construction** — Construire selon un thème imposé. → sorte « bâtir (Quetes) »
 - [x] (404) 325. **La fête de la musique** — Trouver les musiciens dispersés dans le village. → sorte « retrouver (QuetesLieux) »
-- [ ] (405) 326. **Le festival des animaux** — Présenter des animaux d'élevage.
+- [x] (405) 326. **Le festival des animaux** — Présenter des animaux d'élevage. → sorte « concours (Activites : dressage, élevage, cuisine…) »
 - [x] (406) 327. **La journée des explorateurs** — Découvrir plusieurs lieux signalés. → sorte « découvrir / visiter (QuetesLieux) »
 - [x] (407) 328. **Le tournoi des clans** — Participer à des épreuves entre clans. → sorte « concours / courses (Activites) »
 - [x] (408) 329. **La grande parade** — Préparer une monture ou un char décoré. → sorte « fabriquer (Quetes, cuisine) »
@@ -1369,7 +1369,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (410) 331. **Le concours de décoration hivernale** — Décorer une habitation. → sorte « bâtir (Quetes) »
 - [x] (411) 332. **Le repas communautaire** — Apporter des ingrédients pour un banquet. → sorte « apporter (Quetes) »
 - [x] (412) 333. **La course aux trésors** — Trouver plusieurs coffres temporaires. → sorte « retrouver (QuetesLieux) »
-- [ ] (413) 334. **Le festival des métiers** — Présenter ses compétences professionnelles.
+- [x] (413) 334. **Le festival des métiers** — Présenter ses compétences professionnelles. → sorte « concours (Activites : dressage, élevage, cuisine…) »
 - [x] (414) 335. **La célébration du royaume** — Participer à une grande fête organisée sur plusieurs villages. → sorte « concours / courses (Activites) »
 
 ### 20. Quêtes propres aux biomes
@@ -1532,7 +1532,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [ ] (574) 461. **La ménagerie** — Posséder plusieurs espèces de compagnons.
 - [x] (575) 462. **Le compagnon rare** — Trouver un animal particulièrement rare. → sorte « retrouver (QuetesLieux) »
 - [ ] (576) 463. **Le gardien du refuge** — Aider un refuge à accueillir de nouveaux animaux.
-- [ ] (577) 464. **Le concours de dressage** — Présenter un compagnon devant un jury.
+- [x] (577) 464. **Le concours de dressage** — Présenter un compagnon devant un jury. → sorte « concours (Activites : dressage, élevage, cuisine…) »
 - [x] (578) 465. **Le lien exceptionnel** — Atteindre un haut niveau de confiance avec un compagnon. → réputation par village (Reputation)
 
 ### 27. Quêtes de navigation et de vie maritime
@@ -1547,7 +1547,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (589) 473. **Le navigateur** — Atteindre trois destinations maritimes. → sorte « visiter (QuetesLieux) »
 - [x] (590) 474. **La cargaison mouillée** — Retrouver et livrer une cargaison endommagée. → sorte « retrouver (QuetesLieux) »
 - [x] (591) 475. **Le chantier du port** — Fournir les matériaux nécessaires à l'agrandissement du port. → sorte « apporter (Quetes) »
-- [ ] (592) 476. **La flotte commerciale** — Organiser plusieurs livraisons en bateau.
+- [x] (592) 476. **La flotte commerciale** — Organiser plusieurs livraisons en bateau. → sorte « tableau d'affichage (Activites) »
 - [x] (593) 477. **Le capitaine expérimenté** — Réussir un voyage maritime difficile. → sorte « concours / courses (Activites) »
 - [x] (594) 478. **La crique cachée** — Découvrir un passage côtier secret. → sorte « découvrir / visiter (QuetesLieux) »
 - [x] (595) 479. **Les îlots oubliés** — Visiter plusieurs petites îles. → sorte « visiter (QuetesLieux) »
@@ -2221,7 +2221,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (117) Commerce entre joueurs. → troc + hôtel des ventes
 - [x] (118) Vente aux enchères. → enchères (Ventes)
 - [x] (119) Expositions d'objets rares. → exposer (Activites)
-- [ ] (120) Concours de dressage.
+- [x] (120) Concours de dressage. → concours de dressage (Activites, 21/11)
 - [x] (121) Organisation de festivals. → concours de village (Activites)
 - [x] (122) Construction collaborative. → confiance « batir » (Util.trusted)
 - [x] (123) Création de marchés entre joueurs. → étals (Ventes) + chantier « marché » (Chantiers)

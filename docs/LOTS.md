@@ -83,6 +83,16 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] Claude → Codex · invite au survol (X19) · **état des cultures en attributs** sur le modèle `Culture`
       (Systemes/Farm, 21/11) : `Plante` (nom), `Jour` / `Jours` (pousse), `Arrosee`, `Fletrie`. Machines et coffres :
       demander les attributs voulus par un passage.
+- [ ] Claude → Codex · `Activites.client` · le tableau d'affichage envoie maintenant `data.kinds` = `{ { id, libellé } }`
+      (21/11 : + « Concours de dressage » et « Concours d'élevage », comptés par le jeu, banc `concours`) → remplacer
+      `KIND_LIST` codée en dur par `data.kinds` quand il est présent.
+- [ ] Claude → Codex · `ConstruireModeles` · **cochon** et **oie** de ferme (dernières entrées de `liste items.txt`) :
+      modèles « Cochon » et « Oie » comme « Poule » / « Vache » · Claude ajoutera `C.ANIMALS` (produits : truffes ?
+      plumes / œufs d'oie) dès que les modèles existent.
+- [ ] Claude → Codex · icônes (X25) · 21 nouvelles pièces de construction (`blk_<forme>_<matière>`, formes :
+      poteaurond, demipoutre, madrier, chevron, echalas, poteausculpte, colonnecarree, murincline, colombages, clayonnage,
+      treillis, niche, fondation, pavage, pilotis, balcon, gouttiere, lucarne, croisillons, volets, vitrail) + bride
+      (`bridle`) et selle de guerre (`saddle_war`).
 
 ---
 
@@ -121,7 +131,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 
 ### 2e vague Codex (écrite le 21/11) — finir ce que le joueur voit
 
-- [ ] **X15 · Repères sur la carte** (`AUDIT-PRODUIT.md` ordre 6). Le joueur pose / retire ses repères (village
+- [ ] **X15 · Repères sur la carte** — en cours — Codex, 21/11. (`AUDIT-PRODUIT.md` ordre 6). Le joueur pose / retire ses repères (village
       connu, lit, parcelle, ville où rendre une quête), légende, minicarte ≠ carte du monde. Repères gardés côté
       client (`Preferences`) ; s'il faut les sauver dans le profil → passage à Claude. *Fini quand* : poser,
       retirer, reconnexion = repères toujours là.
@@ -138,9 +148,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] **X19 · État lisible à proximité** : culture (pousse, arrosée, prête), machine (roue à eau, four), coffre
       verrouillé — en **invite au survol / à [E]** comme « [E] Parler », **jamais de texte permanent au-dessus des
       PNJ ni des objets**.
-- [ ] **X20 · Formes de construction × matières** (reste du lot C6) : `liste items.txt` § construction —
-      escaliers, arches, demi-murs, colonnes, rambardes, volets, en bois / pierre / brique / chaume. Modèles +
-      fantôme `Batir` ; donner la liste à Claude (passage) pour les recettes, prix et usages dans `Equilibre`.
+- [x] **X20 · Formes de construction × matières** — FAIT PAR CLAUDE le 21/11 (bb861c5) : c'étaient des données
+      (`Config.BUILD_SHAPES`, formes composées `SHAPE_PARTS`, rendues par Batir et le fantôme existant). Reste pour Codex :
+      leurs icônes (X25).
 - [ ] **X21 · Mobilier et décor posables** (reste C6) : tables, bancs, étagères, tapis, bannières, pots,
       lanternes murales… Modèles + miniatures ; passage à Claude pour recettes. Règle 7 : rien sans usage.
 - [ ] **X22 · Arrivée et retour lisibles** (`AUDIT-PRODUIT` « Arrivée et retour ») : sans tutoriel (règle 1) —
