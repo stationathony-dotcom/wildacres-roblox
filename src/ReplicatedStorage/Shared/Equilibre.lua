@@ -214,6 +214,15 @@ E.NEW_ITEMS = {
 E.HARPOON = { price = 85, needs = { iron_ingot = 1, planks = 2, rope = 1 }, station = "anvil", level = 6 }
 -- Lanterne murale (passage Codex X21, modèle Cat_wall_lantern) : posée contre un mur, s'allume la nuit,
 -- les ombres rôdeuses n'approchent pas (Protection.lightNear)
+-- Bêtes de ferme neuves (passage Codex, modèles « Cochon » / « Oie », e5ebd4f) : achetées au fermier,
+-- elles produisent comme la poule ou la vache. Le cochon fouille des truffes (mets cher, omelette aux
+-- truffes) ; l'oie perd des plumes (flèches, javelots). `bait` = appât pour attirer celle d'un autre.
+E.FARM_ANIMALS = {
+	pig = { name = "Cochon", model = "Cochon", product = "truffle", every = 2, price = 190, speed = 3.2, icon = "🐖", bait = "carrot", baitName = "une carotte", verb = "Récolter les truffes", shelter = "Cat_stable", masc = true },
+	goose = { name = "Oie", model = "Oie", product = "feather", every = 1, price = 80, speed = 4, icon = "🦆", bait = "seed", baitName = "des graines", verb = "Ramasser les plumes", shelter = "Cat_henhouse" },
+}
+E.TRUFFLE = { name = "Truffe", icon = "🍄", price = 45, food = 12 }
+E.TRUFFLE_OMELETTE = { name = "Omelette aux truffes", icon = "🍳", price = 140, food = 55, needs = { egg = 2, truffle = 1 }, level = 12 }
 E.WALL_LANTERN = { price = 30, needs = { iron_ingot = 1, glass = 1, candle_wax = 1, iron_ring = 1 }, station = "bench", level = 4 }
 
 -- Outils de métier gardés dans le SAC : + niveaux de compétence tant qu'on les a (Joueurs.skill), au plus
@@ -457,6 +466,27 @@ function E.apply(C)
 		I.harpoon.price = h.price
 		table.insert(R, { item = "harpoon", needs = table.clone(h.needs), station = h.station, cat = "outils", skill = { "artisanat", h.level } })
 		note("harpon : prix et recette")
+	end
+	-- bêtes de ferme neuves : truffe (nouvel objet) + omelette aux truffes, puis les bêtes elles-mêmes
+	if not I.truffle then
+		local t = E.TRUFFLE
+		I.truffle = { name = t.name, icon = t.icon, price = t.price, food = t.food }
+		note("nouvel objet truffle")
+	end
+	local to = E.TRUFFLE_OMELETTE
+	if not I.truffle_omelette and known(C, to.needs) then
+		I.truffle_omelette = { name = to.name, icon = to.icon, price = to.price, food = to.food }
+		table.insert(R, { item = "truffle_omelette", needs = table.clone(to.needs), station = "furnace", cat = "cuisine", skill = { "cuisine", to.level } })
+		note("nouvel objet truffle_omelette")
+	end
+	if C.ANIMALS then
+		for kind, a in E.FARM_ANIMALS do
+			if not C.ANIMALS[kind] and I[a.product] then
+				C.ANIMALS[kind] = table.clone(a)
+				C.PRODUCT_VERB[a.product] = C.PRODUCT_VERB[a.product] or a.verb
+				note("bête de ferme " .. kind)
+			end
+		end
 	end
 	local wl = E.WALL_LANTERN
 	if not I.wall_lantern and known(C, wl.needs) then

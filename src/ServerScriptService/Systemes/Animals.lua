@@ -280,10 +280,12 @@ function Animals.lead(player: Player, id: string)
 		return
 	end
 	if not G.Util.owns(player, a.owner) then
-		local bait = ({ chicken = "seed_parsnip", cow = "fiber", sheep = "fiber" })[a.kind]
-		local baitName = ({ chicken = "des graines", cow = "de la fibre (herbe)", sheep = "de la fibre (herbe)" })[a.kind]
+		-- appât : graines pour la volaille, herbe pour le bétail, ou celui que déclare la bête (Equilibre.FARM_ANIMALS)
+		local seedy = a.kind == "chicken" or a.k.bait == "seed"
+		local bait = ({ chicken = "seed_parsnip", cow = "fiber", sheep = "fiber" })[a.kind] or (seedy and "seed_parsnip") or a.k.bait or "fiber"
+		local baitName = ({ chicken = "des graines", cow = "de la fibre (herbe)", sheep = "de la fibre (herbe)" })[a.kind] or a.k.baitName or "de la fibre (herbe)"
 		local has = G.Joueurs.has(player, bait)
-		if a.kind == "chicken" and not has then
+		if seedy and not has then
 			for _, crop in Config.CROP_ORDER do
 				if G.Joueurs.has(player, "seed_" .. crop) then
 					bait = "seed_" .. crop
@@ -526,6 +528,12 @@ function Animals.newDay()
 	local troughs, feeders = {}, {}
 	-- abris (18/11) : une bête près de SON abri produit aussi un jour plus tôt
 	local SHELTER = { Cat_henhouse = { chicken = true }, Cat_stable = { cow = true, sheep = true }, Cat_sheepfold = { sheep = true } }
+	for kind, k in Config.ANIMALS do
+		if k.shelter then
+			SHELTER[k.shelter] = SHELTER[k.shelter] or {}
+			SHELTER[k.shelter][kind] = true
+		end
+	end
 	local shelters = {}
 	for _, reg in G.World.loaded do
 		for _, m in reg.placedModels or {} do

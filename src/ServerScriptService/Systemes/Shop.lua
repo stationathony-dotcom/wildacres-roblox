@@ -339,9 +339,12 @@ local function catalog(player: Player, e)
 			end
 		end
 	elseif role == "farmer" then
-		for _, kind in { "chicken", "sheep", "cow" } do
+		local ICON = { chicken = "🐔", cow = "🐄", sheep = "🐑" }
+		for _, kind in { "chicken", "goose", "sheep", "pig", "cow" } do
 			local a = Config.ANIMALS[kind]
-			table.insert(buy, { item = "animal:" .. kind, price = Shop.buyPrice(player, e, a.price), name = a.name, icon = kind == "chicken" and "🐔" or (kind == "cow" and "🐄" or "🐑") })
+			if a then
+				table.insert(buy, { item = "animal:" .. kind, price = Shop.buyPrice(player, e, a.price), name = a.name, icon = a.icon or ICON[kind] or "🐾" })
+			end
 		end
 		for id, crop in Config.CROPS do
 			if table.find(crop.biomes, biome) then
@@ -463,7 +466,9 @@ function Shop.buy(player: Player, item: string, n: number)
 	if string.sub(item, 1, 7) == "animal:" then
 		local kind = string.sub(item, 8)
 		G.Animals.buy(player, kind)
-		G.Util.toast(player, Config.ANIMALS[kind].name .. " achetée ! Elle te suit : mène-la où tu veux et appuie [R] pour l'installer.", "big")
+		local a = Config.ANIMALS[kind]
+		G.Util.toast(player, a.masc and (a.name .. " acheté ! Il te suit : mène-le où tu veux et appuie [R] pour l'installer.")
+			or (a.name .. " achetée ! Elle te suit : mène-la où tu veux et appuie [R] pour l'installer."), "big")
 	else
 		G.Joueurs.add(player, item, n)
 	end

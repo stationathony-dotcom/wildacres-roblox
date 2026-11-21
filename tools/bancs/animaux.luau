@@ -48,6 +48,17 @@ end
 check("livre : places affichées (26 / 32)", sent.sous:find("26 / 32") ~= nil)
 check("livre : bêtes de ferme regroupées, produits prêts", txt:find("× 13") ~= nil and txt:find("à récolter") ~= nil)
 check("livre : compagnon et monture", txt:find("Loup") ~= nil and txt:find("Cheval") ~= nil)
+-- cochon et oie (21/11, modèles de Codex) : déclarés par Equilibre.FARM_ANIMALS
+local SSm = game:GetService("ServerStorage"):FindFirstChild("Modeles")
+for _, kind in { "pig", "goose" } do
+	local k = Config.ANIMALS[kind]
+	check(kind .. " : bête de ferme déclarée", k ~= nil and k.price > 0 and k.every >= 1)
+	check(kind .. " : produit connu + verbe", k ~= nil and Config.ITEMS[k.product] ~= nil and Config.PRODUCT_VERB[k.product] ~= nil)
+	check(kind .. " : modèle « " .. tostring(k and k.model) .. " » présent", k ~= nil and SSm ~= nil and SSm:FindFirstChild(k.model) ~= nil)
+	check(kind .. " : appât connu", k ~= nil and (k.bait == "seed" or Config.ITEMS[k.bait] ~= nil))
+end
+check("truffe : mangeable, omelette aux truffes au four", Config.ITEMS.truffle and Config.ITEMS.truffle.food and Config.ITEMS.truffle_omelette ~= nil)
+check("bêtes d'origine inchangées", Config.ANIMALS.chicken.product == "egg" and Config.ANIMALS.cow.product == "milk" and Config.ANIMALS.sheep.product == "wool")
 modL:Destroy()
 f:Destroy()
 return fails .. " échec(s)\n" .. table.concat(out, "\n")
