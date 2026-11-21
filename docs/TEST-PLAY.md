@@ -87,7 +87,8 @@ La téléportation ne marche pas dans Studio : il faut la version publiée.
 - [ ] Quêtes à un lieu (retrouver, visiter, enquêter, escorter) données par un habitant.
 - [ ] Chantiers de village (marché, palissade, lanternes, musée) : contribuer, voir le résultat.
 - [ ] Écurie (`/ecurie`), diligence entre villages, ouvriers agricoles (`/ouvriers`).
-- [ ] Froid la nuit en montagne, chaleur au désert le jour (boire protège).
+- [ ] Boue des marais (on s'enlise, bottes de marais) et obscurité des grottes (lanterne, torche en main gauche).
+      Le froid et la chaleur ont été retirés le 20/11 : ils ne doivent plus apparaître.
 - [ ] Équipement : exigences de caractéristique affichées, panoplies, armes à venin / givre, armes de
       jet, selle et étriers.
 - [ ] Livres : `/bestiaire`, `/chroniques`, `/animaux`.
