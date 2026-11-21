@@ -409,11 +409,52 @@ function M.animauxFerme()
 	return cochon, oie
 end
 
+-- Chèvre seule, pour compléter les modèles de ferme en Édition.
+function M.chevre(): Model
+	dossier = dossierModeles()
+	local m = nouveau("Chevre")
+	local pelage, masque = rgb(232, 220, 190), rgb(178, 145, 105)
+	local corne, sabot = rgb(129, 113, 94), rgb(73, 59, 50)
+	local function volume(nom: string, taille: Vector3, pos: Vector3, couleur: Color3, rot: CFrame?)
+		P(m, nom, taille, pos, couleur, Mat.SmoothPlastic, { forme = "Ball", rot = rot, collide = false })
+	end
+	volume("Corps", Vector3.new(1.64, 1.52, 3), Vector3.new(0, 1.84, 0.23), pelage)
+	volume("Cou", Vector3.new(0.8, 1.4, 0.9), Vector3.new(0, 2.2, -0.99), pelage, CFrame.Angles(math.rad(-32), 0, 0))
+	volume("Tête", Vector3.new(0.91, 0.97, 1.08), Vector3.new(0, 2.66, -1.45), pelage)
+	volume("Museau", Vector3.new(0.67, 0.48, 0.6), Vector3.new(0, 2.38, -1.91), masque)
+	volume("Truffe", Vector3.new(0.32, 0.15, 0.12), Vector3.new(0, 2.45, -2.19), sabot)
+	volume("Barbiche", Vector3.new(0.27, 0.61, 0.25), Vector3.new(0, 1.99, -1.98), masque, CFrame.Angles(math.rad(-15), 0, 0))
+	volume("Queue", Vector3.new(0.34, 0.73, 0.36), Vector3.new(0, 2.39, 1.63), pelage, CFrame.Angles(math.rad(35), 0, 0))
+	for _, cote in { -1, 1 } do
+		volume("Oreille", Vector3.new(0.65, 0.2, 0.33), Vector3.new(cote * 0.56, 2.76, -1.29), masque,
+			CFrame.Angles(0, -cote * math.rad(13), -cote * math.rad(18)))
+		volume("Œil", Vector3.new(0.11, 0.14, 0.18), Vector3.new(cote * 0.37, 2.73, -1.72), sabot)
+		for _, z in { -0.72, 1.12 } do
+			volume("Patte", Vector3.new(0.35, 1.38, 0.39), Vector3.new(cote * 0.49, 0.82, z), pelage)
+			P(m, "Sabot", Vector3.new(0.33, 0.25, 0.42), Vector3.new(cote * 0.49, 0.125, z), sabot, Mat.SmoothPlastic, { collide = false })
+		end
+		local courbe = {
+			Vector3.new(cote * 0.26, 2.99, -1.5),
+			Vector3.new(cote * 0.32, 3.37, -1.4),
+			Vector3.new(cote * 0.39, 3.64, -1.18),
+			Vector3.new(cote * 0.43, 3.8, -0.93),
+		}
+		for i, diametre in { 0.25, 0.19, 0.12 } do
+			local a, b = courbe[i], courbe[i + 1]
+			P(m, "Corne", Vector3.new((b - a).Magnitude + 0.05, diametre, diametre), Vector3.zero, corne, Mat.SmoothPlastic,
+				{ forme = "Cylinder", cf = CFrame.lookAt((a + b) / 2, b) * CFrame.Angles(0, math.pi / 2, 0), collide = false })
+		end
+	end
+	fini(m)
+	return m
+end
+
 -- Créatures du monde vivant (ennemis par biome, monstres de nuit, animaux sauvages).
 -- Convention des bêtes : pièce « Base » au sol, tout ancré, sans collision, la tête vers -Z.
 function M.creatures()
 	dossier = dossierModeles()
 	M.animauxFerme()
+	M.chevre()
 	local function Q(m: Instance, nom: string, taille: Vector3, pos: Vector3, couleur: Color3, mat: Enum.Material?, o: Opts?): BasePart
 		local opts: Opts = o or {}
 		opts.collide = false
