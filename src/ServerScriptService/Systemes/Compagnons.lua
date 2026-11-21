@@ -207,6 +207,7 @@ function Compagnons.tame(player: Player, en)
 			G.Joueurs.addSkillXp(player, "dressage", 12 * t.diff)
 			Compagnons.adopt(player, en)
 			if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "apprivoiser", "bete") end
+			if G.Activites and rawget(G.Activites, "note") then G.Activites.note(player, "dressage") end
 		else
 			G.Joueurs.addSkillXp(player, "dressage", 3 * t.diff)
 			if not en.dead then

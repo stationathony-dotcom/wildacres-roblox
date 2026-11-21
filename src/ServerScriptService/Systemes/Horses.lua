@@ -308,6 +308,7 @@ function Horses.use(player: Player, h, mode: string)
 			end
 			makeMine(player, h)
 			if mode == "tame" and G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "apprivoiser", "bete") end
+			if mode == "tame" and G.Activites and rawget(G.Activites, "note") then G.Activites.note(player, "dressage") end
 			G.Util.toast(player, mode == "tame" and "Le cheval croque la carotte… il est à toi !" or "Le cheval te suit volontiers. Il est à toi… en quelque sorte.", "big")
 		end)
 	end

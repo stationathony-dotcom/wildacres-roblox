@@ -221,6 +221,9 @@ function Animals.collect(player: Player, id: string)
 	if not stolen and G.Quetes and rawget(G.Quetes, "note") then
 		G.Quetes.note(player, "collecter", k.product, n)
 	end
+	if not stolen and G.Activites and rawget(G.Activites, "note") then
+		G.Activites.note(player, "elevage", n) -- concours d'élevage (pas pour un vol)
+	end
 	G.Joueurs.addSkillXp(player, "elevage", 5)
 	refreshPrompt(a)
 end

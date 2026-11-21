@@ -26,7 +26,14 @@ local KINDS = {
 	-- 19/11 (« à ne pas oublier » § 5) : plats et potions préparés ; bêtes et monstres vaincus
 	cuisine = { name = "Concours de cuisine", icon = "🍲", auto = true },
 	chasse = { name = "Concours de chasse", icon = "🏹", auto = true },
+	-- 21/11 (« à ne pas oublier » § 5, quêtes 62 / 326 / 464) : bêtes apprivoisées ; produits de l'élevage ramassés
+	dressage = { name = "Concours de dressage", icon = "🐴", auto = true },
+	elevage = { name = "Concours d'élevage", icon = "🐄", auto = true },
 }
+-- ordre d'affichage au tableau (envoyé au client avec les annonces : `kinds`)
+Activites.ORDER = { "peche", "recolte", "minage", "bucheronnage", "construction", "libre", "course", "cuisine", "chasse", "dressage", "elevage" }
+local SKILL_OF = { peche = "peche", recolte = "agriculture", minage = "minage", bucheronnage = "bucheronnage", cuisine = "cuisine",
+	chasse = "combat", dressage = "dressage", elevage = "elevage" }
 local RACE_MIN = 250 -- studs : l'arrivée est le village le plus proche au-delà de cette distance
 local RACE_FINISH = 30 -- studs autour du centre du village d'arrivée
 Activites.KINDS = KINDS
@@ -84,7 +91,11 @@ local function send(player: Player, village: string)
 		end
 		local _ = orgP
 	end
-	G.remotes.Menu:FireClient(player, { kind = "activites", village = village, rows = rows, gold = G.Joueurs.count(player, "gold") })
+	local kinds = {}
+	for _, k in Activites.ORDER do
+		table.insert(kinds, { k, KINDS[k].icon .. " " .. (KINDS[k].name:gsub("^Concours d[e']%s?", ""):gsub("^%l", string.upper)) })
+	end
+	G.remotes.Menu:FireClient(player, { kind = "activites", village = village, rows = rows, gold = G.Joueurs.count(player, "gold"), kinds = kinds })
 end
 Activites.send = send
 
@@ -270,7 +281,7 @@ function Activites.finish(a, winners)
 		table.insert(names, a.part[w] or "?")
 		local p = G.Util.playerOf("u" .. w)
 		if p then
-			G.Joueurs.addSkillXp(p, a.kind == "peche" and "peche" or (a.kind == "recolte" and "agriculture" or "commerce"), 15)
+			G.Joueurs.addSkillXp(p, SKILL_OF[a.kind] or "commerce", 15)
 		end
 	end
 	local msg = "🏆 « " .. a.title .. " » : " .. table.concat(names, ", ") .. " gagne" .. (#names > 1 and "nt" or "") .. " " .. share .. " 💰 (par courrier)."
