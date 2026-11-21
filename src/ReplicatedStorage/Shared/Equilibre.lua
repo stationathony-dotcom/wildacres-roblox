@@ -122,7 +122,7 @@ E.USES = {
 	rag_doll = { "buff", "charisme" }, wood_toy = { "buff", "charisme" }, perfume = { "buff", "charisme" }, comb = { "buff", "charisme" },
 	pocket_mirror = { "buff", "charisme" }, brush = { "buff", "charisme" }, towel = { "buff", "vie" },
 	-- écrits : on apprend
-	music_sheet = { "buff", "charisme" },
+	music_sheet = { "buff", "charisme" }, franchise_letter = { "rendre" },
 	songbook = { "livre", "commerce" }, diploma = { "livre", "artisanat" }, contract = { "livre", "commerce" },
 	recruit_contract = { "livre", "combat" }, patrol_log = { "livre", "combat" }, sea_chart = { "livre", "peche" },
 	-- antiquités : on les étudie (collection, Chance) — la voie Explorateur s'en nourrit
@@ -285,17 +285,23 @@ E.BOW_AMMO = { "arrow_barbed", "arrow_iron", "arrow", "bolt", "bolt_heavy" } -- 
 E.NEW_FOODS = {
 	{ "aged_cheese", "Fromage affiné", "🧀", 160, 60, { "vie", 3, 15 }, { cheese = 2, salt = 1 }, nil, "elevage", 20 },
 	{ "village_feast", "Grand festin", "🍗", 600, 80, { "vie", 3, 20 }, { roast = 1, bread = 3, pie = 1, ale = 2 }, nil, "cuisine", 30, true },
+	-- 21/11 soir (AUDIT-CRAFT § 5 : pêche, élevage, bûcheronnage, commerce n'avaient rien au-delà de 30)
+	{ "fisher_platter", "Plateau du maître pêcheur", "🐟", 420, 70, { "vitesse", 3, 20 }, { smoked_fish = 2, fish_soup = 1, raw_fish = 2 }, "furnace", "peche", 32, true },
 	{ "lord_banquet", "Banquet du seigneur", "🍖", 1200, 100, { "force", 3, 25 }, { meat_pie = 2, honey_cake = 1, stew = 1, aged_cheese = 1 }, nil, "cuisine", 40, true },
 }
 -- matières de haut niveau : { id, nom, icône, prix, ingrédients, quantité, atelier, compétence, niveau }
 E.HIGH_MATERIALS = {
 	{ "damascus_steel", "Acier damassé", "🔩", 260, { steel = 2, coal = 2 }, 1, "furnace", "minage", 30 },
-	{ "fine_planks", "Planches de chêne fines", "🪵", 40, { oak_log = 2 }, 3, "bench", "bucheronnage", 25 },
+	{ "fine_planks", "Planches de chêne fines", "🌲", 40, { oak_log = 2 }, 3, "bench", "bucheronnage", 25 },
+	{ "heartwood", "Bois de cœur", "🌳", 150, { oak_log = 4, resin = 1 }, 1, "bench", "bucheronnage", 35 },
+	{ "franchise_letter", "Lettre de franchise", "📜", 320, { parchment = 2, gold_ingot = 1, beeswax = 1 }, 1, "bench", "commerce", 30 },
 }
 -- pièces qui les utilisent (même format que E.MASTER)
 E.HIGH_GEAR = {
 	{ "weapon", "Lame damassée", 4, { force = 8, vitesse = 3, chance = 2 }, { damascus_steel = 2, leather = 1, gold_ingot = 1 }, 36, power = 13, visual = "10" },
 	{ "armor", "Cotte damassée", 4, { defense = 10, vie = 3 }, { damascus_steel = 3, soft_leather = 2 }, 38 },
+	{ "weapon", "Arc de bois de cœur", 4, { chance = 9, vitesse = 4, force = 2 }, { heartwood = 2, linen_thread = 4 }, 40, power = 12, visual = "11" },
+	{ "armor", "Brigandine de bois de cœur", 4, { defense = 9, vitesse = 2, vie = 2 }, { heartwood = 3, soft_leather = 2 }, 40 },
 	{ "weapon", "Arc long de maître", 4, { chance = 8, vitesse = 4, force = 1 }, { fine_planks = 3, linen_thread = 4, resin = 2 }, 34, power = 11, visual = "11" },
 }
 
@@ -490,6 +496,12 @@ function E.apply(C)
 		I.truffle_omelette = { name = to.name, icon = to.icon, price = to.price, food = to.food }
 		table.insert(R, { item = "truffle_omelette", needs = table.clone(to.needs), station = "furnace", cat = "cuisine", skill = { "cuisine", to.level } })
 		note("nouvel objet truffle_omelette")
+	end
+	-- élevage 35 (AUDIT-CRAFT § 5) : fromage truffé, festin partagé
+	if not I.truffle_cheese and I.truffle and I.aged_cheese then
+		I.truffle_cheese = { name = "Fromage truffé", icon = "🧀", price = 380, food = 70, meal = { "chance", 3, 25 * 60 }, feast = true }
+		table.insert(R, { item = "truffle_cheese", needs = { aged_cheese = 1, truffle = 2 }, cat = "cuisine", skill = { "elevage", 35 } })
+		note("nouvel objet truffle_cheese")
 	end
 	if C.ANIMALS then
 		for kind, a in E.FARM_ANIMALS do
