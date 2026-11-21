@@ -83,7 +83,7 @@ function Parcelles.canBuild(player: Player, pos: Vector3, silent: boolean?): boo
 		return true
 	end
 	if not silent then
-		G.Util.toast(player, "🏡 Terrain de " .. (p.name or "quelqu'un") .. " : tu ne peux pas construire ici.")
+		G.Util.toast(player, "🏡 Terrain de " .. (p.name or "quelqu'un") .. " : tu ne peux pas construire ici.", "refus")
 	end
 	return false
 end
@@ -111,34 +111,48 @@ function Parcelles.price(player: Player): number
 	return 100 * n * n
 end
 
--- Planter son panneau : renvoie true si la parcelle est créée (le 1er terrain est gratuit,
--- les suivants coûtent 100 × n² or : on s'étend autant que ses moyens le permettent)
-function Parcelles.create(player: Player, pos: Vector3): boolean
+-- Contrôle d'une pose de panneau SANS rien changer : ok, motif du refus (texte joueur), prix.
+-- Sert à Parcelles.create et à l'aperçu du contour avant la pose (Systemes/Infos, lot X18).
+function Parcelles.check(player: Player, pos: Vector3): (boolean, string?, number)
 	local rec = G.Mondes.playerRecord(player)
+	if not rec then
+		return false, "Le monde n'est pas encore chargé.", 0
+	end
 	local mine = Parcelles.plotsOf(rec)
 	local h = Parcelles.HALF
 	local me = tostring(player.UserId)
+	local price = Parcelles.price(player)
 	for uid, other in G.world.players do
 		for _, p in Parcelles.plotsOf(other) do
 			local gap = (uid == me) and h * 2 or h * 2 + 4 -- ses propres terrains peuvent se toucher
 			if math.abs(pos.X - p.x) < gap and math.abs(pos.Z - p.z) < gap then
-				G.Util.toast(player, uid == me and "Ce panneau chevaucherait un de tes terrains : recule d'au moins 12 cases." or ("Trop près du terrain de " .. (p.name or "quelqu'un") .. "."))
-				return false
+				return false, uid == me and "Ce panneau chevaucherait un de tes terrains : recule d'au moins 12 cases." or ("Trop près du terrain de " .. (p.name or "quelqu'un") .. "."), price
 			end
 		end
 	end
-	local price = Parcelles.price(player)
 	if price > 0 and not G.Joueurs.has(player, "gold", price) then
-		G.Util.toast(player, "Ton terrain n°" .. (#mine + 1) .. " coûte " .. price .. " 💰 (plus tu possèdes, plus c'est cher).")
-		return false
+		return false, "Ton terrain n°" .. (#mine + 1) .. " coûte " .. price .. " 💰 (plus tu possèdes, plus c'est cher).", price
 	end
 	local place = not Config.LIBRE.parcelleProcheVillage and nearPlace(pos)
 	if place then
-		G.Util.toast(player, "Trop près de " .. place .. " : installe-toi à l'écart.")
+		return false, "Trop près de " .. place .. " : installe-toi à l'écart.", price
+	end
+	return true, nil, price
+end
+
+-- Planter son panneau : renvoie true si la parcelle est créée (le 1er terrain est gratuit,
+-- les suivants coûtent 100 × n² or : on s'étend autant que ses moyens le permettent)
+function Parcelles.create(player: Player, pos: Vector3): boolean
+	local ok, why, price = Parcelles.check(player, pos)
+	if not ok then
+		G.Util.toast(player, why or "Impossible de planter le panneau ici.", "refus")
 		return false
 	end
+	local mine = Parcelles.plotsOf(G.Mondes.playerRecord(player))
 	if price > 0 then
-		G.Joueurs.take(player, "gold", price)
+		if not G.Joueurs.take(player, "gold", price) then
+			return false
+		end
 	end
 	table.insert(mine, { x = math.floor(pos.X), z = math.floor(pos.Z), name = player.DisplayName, since = G.world.day })
 	Parcelles.publish()

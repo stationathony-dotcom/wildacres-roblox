@@ -47,7 +47,7 @@ PhysicsService:CollisionGroupSetCollidable("PNJ", "PNJ", false)
 -- Chargement des systèmes (un système absent est remplacé par un bouchon silencieux)
 local NAMES = { "Util", "Interact", "Clock", "World", "Joueurs", "Save", "Mondes", "Game", "Avatar", "Tools", "Props", "Farm",
 	"Doors", "Npcs", "Law", "Animals", "Horses", "Enemies", "Combat", "Fishing", "Shop", "Bodies", "Parcelles",
-	"Minijeux", "Compagnons", "Protection", "Economie", "Social", "Armee", "Evenements", "Clans", "Poste", "Terraforme", "Batir", "Machines", "Donjons", "Bestiaire", "Demolir", "Villages", "Meteo", "Admin", "Politique", "Barques", "Activites", "Journal", "Avantpostes", "Ilots", "Nasses", "Nids", "Butin", "Quetes", "QuetesLieux", "Ventes", "Chantiers", "Tourelles", "Chateaux", "Moissons", "Bosquets", "Canaux", "Herbes", "Metiers", "Hameaux", "Fauche", "Reputation", "Chroniques", "Ouvriers", "Livres", "Froid", "Villes", "Demandes", "Duels", "Tresors" }
+	"Minijeux", "Compagnons", "Protection", "Economie", "Social", "Armee", "Evenements", "Clans", "Poste", "Terraforme", "Batir", "Machines", "Donjons", "Bestiaire", "Demolir", "Villages", "Meteo", "Admin", "Politique", "Barques", "Activites", "Journal", "Avantpostes", "Ilots", "Nasses", "Nids", "Butin", "Quetes", "QuetesLieux", "Ventes", "Chantiers", "Tourelles", "Chateaux", "Moissons", "Bosquets", "Canaux", "Herbes", "Metiers", "Hameaux", "Fauche", "Reputation", "Chroniques", "Ouvriers", "Livres", "Froid", "Villes", "Demandes", "Duels", "Tresors", "Infos" }
 local stub = setmetatable({}, { __index = function()
 	return function() end
 end })
