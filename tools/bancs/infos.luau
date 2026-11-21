@@ -76,6 +76,21 @@ end
 check("plafond technique : le 201e est refusé avec un motif", I.poser(B, { x = 1, z = 1 }) == false and toasts[#toasts][3] == "refus")
 check("actions branchées (repere_poser, repere_retirer)", actions.repere_poser ~= nil and actions.repere_retirer ~= nil)
 
+-- retour (X22) : lit du monde courant + journal d'absence gardé pour la session
+local rt = I.retour(A)
+check("retour sans lit ni absence : { absence = {} }", rt and rt.lit == nil and #rt.absence == 0)
+G.world.players["1"].bed = { 120, 8, -36 }
+G.Protection = { absenceVue = { [A] = { { day = 2, text = "Un voleur a forcé ton coffre." } } } }
+rt = I.retour(A)
+check("retour : lit en x/z", rt.lit and rt.lit.x == 120 and rt.lit.z == -36)
+check("retour : journal d'absence recopié", #rt.absence == 1 and rt.absence[1].day == 2 and rt.absence[1].text:find("voleur") ~= nil)
+rt.absence[1].text = "modifié"
+check("retour : copie (le journal de session reste intact)", G.Protection.absenceVue[A][1].text:find("voleur") ~= nil)
+G.world.players["2"].bed = { 0 / 0, 1, 1 }
+check("retour : lit non fini ignoré", I.retour(B).lit == nil)
+local Prot = assert(loadstring(game.ServerScriptService.Systemes.Protection.Source, "Protection"))()
+check("Protection : absenceVue publié", type(Prot.absenceVue) == "table")
+
 -- ménage
 if not hadRF and RS.Remotes:FindFirstChild("Infos") then
 	RS.Remotes.Infos:Destroy()

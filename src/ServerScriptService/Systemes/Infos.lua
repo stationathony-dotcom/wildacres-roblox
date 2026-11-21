@@ -98,6 +98,22 @@ function Infos.reperes(player: Player)
 	return out
 end
 
+-- X22 — retour dans le monde : où est mon lit, que s'est-il passé pendant mon absence (déjà montré en toasts,
+-- gardé pour la session par Protection.absenceVue). → { lit = { x, z }?, absence = { { day, text } } }
+function Infos.retour(player: Player)
+	local rec = G.Mondes.playerRecord(player)
+	local out = { absence = {} }
+	local bed = rec and rec.bed
+	if type(bed) == "table" and finite(bed[1]) and finite(bed[3]) then
+		out.lit = { x = bed[1], z = bed[3] }
+	end
+	local vue = G.Protection and G.Protection.absenceVue and G.Protection.absenceVue[player]
+	for _, e in vue or {} do
+		table.insert(out.absence, { day = e.day, text = e.text })
+	end
+	return out
+end
+
 function Infos.poser(player: Player, data): boolean
 	if type(data) ~= "table" or not finite(data.x) or not finite(data.z) then
 		return false
@@ -149,6 +165,8 @@ function Infos.init(g)
 			return Infos.parcelle(player, data)
 		elseif action == "reperes" then
 			return Infos.reperes(player)
+		elseif action == "retour" then
+			return Infos.retour(player)
 		end
 		return nil
 	end

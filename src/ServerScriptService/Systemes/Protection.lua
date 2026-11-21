@@ -63,9 +63,23 @@ function Protection.log(uid: string, text: string, minor: boolean?)
 	end
 end
 
+-- journal d'absence déjà montré, gardé pour la session (Infos "retour", passage X22) : joueur -> { { day, text } }
+Protection.absenceVue = {}
+game:GetService("Players").PlayerRemoving:Connect(function(p)
+	Protection.absenceVue[p] = nil
+end)
+
 function Protection.showLog(player: Player)
 	local rec = G.Mondes.playerRecord(player)
 	if rec.log and #rec.log > 0 then
+		local vue = Protection.absenceVue[player] or {}
+		for _, e in rec.log do
+			table.insert(vue, { day = e.day, text = e.text })
+		end
+		while #vue > 25 do
+			table.remove(vue, 1)
+		end
+		Protection.absenceVue[player] = vue
 		G.Util.toast(player, "📜 Pendant ton absence (" .. #rec.log .. ") :", "big")
 		for i, e in rec.log do
 			task.delay(1 + i * 1.2, function()
