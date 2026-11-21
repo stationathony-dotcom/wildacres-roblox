@@ -12,6 +12,9 @@
 --    Les champs inondés sont arrosés, et le limon les fait pousser d'un cran quand l'eau se retire.
 --  · Découverte archéologique (19/11, idee.txt § 6) : la terre s'est affaissée près d'un joueur et
 --    laisse voir des tertres ; on les fouille avec une pelle (antiquités, qui s'étudient ou se vendent).
+--  · Route encombrée (21/11, « liste quetes.txt » 518) : un arbre ou un éboulis barre une route près d'un
+--    joueur. Le dégager demande la bonne main (hache pour le tronc, pioche pour les rochers), use l'outil,
+--    rapporte la matière, et les charretiers reconnaissants laissent quelques pièces (honneur +1).
 
 local Debris = game:GetService("Debris")
 local TweenService = game:GetService("TweenService")
@@ -40,6 +43,9 @@ function Evenements.init(g)
 	end)
 	G.Interact.onPrompt("convoy", function(player, prompt)
 		Evenements.handlers.convoy(player, prompt)
+	end)
+	G.Interact.onPrompt("debris", function(player, prompt)
+		Evenements.handlers.debris(player, prompt)
 	end)
 	G.Interact.onPrompt("fouille", function(player, prompt)
 		Evenements.handlers.dig(player, prompt)
@@ -205,6 +211,88 @@ local function startDig()
 		end
 	end
 	nearby(center, 140, "Le sol s'est affaissé non loin : on dirait des pierres taillées qui affleurent…")
+	return true
+end
+
+-- ----------------------------------------------------------------- Route encombrée
+
+-- un point SUR une route (plan.roadD < 1 case), hors village, entre minD et maxD studs d'un joueur :
+-- on parcourt les cases des régions chargées (une case sur deux) et on tire parmi les candidates
+function Evenements.roadSpot(minD: number, maxD: number): Vector3?
+	local CELL = Config.CELL
+	local players = G.Game.players()
+	local p = players[math.random(1, math.max(1, #players))]
+	local root = p and G.Util.root(p)
+	if not root then
+		return nil
+	end
+	local px, pz = root.Position.X, root.Position.Z
+	local found = {}
+	for _, reg in G.World.loaded do
+		local plan = reg.ready and reg.plan
+		if plan and plan.roadD and not (plan.poi and plan.poi.kind == "village") then
+			local size = Config.REGION or 64
+			for lx = 0, size - 1, 2 do
+				for lz = 0, size - 1, 2 do
+					local k = G.WG.idx(lx, lz)
+					if (plan.roadD[k] or 99) < 1 and not plan.water[k] then
+						local x, z = (plan.x0 + lx + 0.5) * CELL, (plan.z0 + lz + 0.5) * CELL
+						local d = math.sqrt((x - px) ^ 2 + (z - pz) ^ 2)
+						if d >= minD and d <= maxD then
+							table.insert(found, { x, z })
+						end
+					end
+				end
+			end
+		end
+	end
+	if #found == 0 then
+		return nil
+	end
+	local c = found[math.random(1, #found)]
+	return Vector3.new(c[1], G.Util.groundY(c[1], c[2]), c[2])
+end
+
+Evenements.DEBRIS = {
+	log = { name = "Tronc en travers de la route", tool = "axe", item = "wood", n = { 3, 5 }, hits = 3 },
+	rock = { name = "Éboulis", tool = "pickaxe", item = "stone", n = { 2, 4 }, hits = 2 },
+}
+
+local function startRoadblock()
+	local pos = Evenements.roadSpot(40, 140)
+	if not pos then
+		return false
+	end
+	local fallenTree = math.random() < 0.6
+	local yaw = math.random() * math.pi
+	local pieces = fallenTree and { { "log", 0 }, { "log", 4 }, { "log", -4 } } or { { "rock", 0 }, { "rock", 3 }, { "rock", -3 } }
+	for _, pc in pieces do
+		local kind, off = pc[1], pc[2]
+		local cf = CFrame.new(pos) * CFrame.Angles(0, yaw, 0) * CFrame.new(off, 0, 0)
+		local m = Instance.new("Part")
+		m.Name = "Debris"
+		m.Anchored = true
+		if kind == "log" then
+			m.Shape = Enum.PartType.Cylinder
+			m.Size = Vector3.new(4, 2.2, 2.2)
+			m.Material = Enum.Material.Wood
+			m.Color = Color3.fromRGB(104, 76, 50)
+			m.CFrame = cf * CFrame.new(0, 1.1, 0)
+		else
+			m.Size = Vector3.new(2.6, 2, 2.4)
+			m.Material = Enum.Material.Slate
+			m.Color = Color3.fromRGB(120, 118, 112)
+			m.CFrame = cf * CFrame.new(0, 1, 0) * CFrame.Angles(math.random() * 0.4, math.random() * 3, math.random() * 0.4)
+		end
+		m:SetAttribute("Debris", kind)
+		m:SetAttribute("Hits", 0)
+		m.Parent = workspace
+		local d = Evenements.DEBRIS[kind]
+		G.Util.prompt(m, "debris", "Dégager", d.name, { dist = 8, hold = 1.2 })
+		Debris:AddItem(m, 1800)
+	end
+	nearby(pos, 160, fallenTree and "Un craquement au loin : un arbre s'est abattu en travers de la route…"
+		or "Un grondement : des rochers ont dévalé sur la route…")
 	return true
 end
 
@@ -441,6 +529,35 @@ Evenements.handlers = {
 		G.Joueurs.wearTool(player, "shovel", 1)
 		G.Joueurs.sync(player)
 	end,
+	debris = function(player, prompt)
+		local m = prompt.Parent
+		local kind = m and m:GetAttribute("Debris")
+		local d = kind and Evenements.DEBRIS[kind]
+		local root = G.Util.root(player)
+		if not d or not root or (root.Position - m.Position).Magnitude > 12 then
+			return
+		end
+		-- certaines choses ne se font pas à mains nues (grind) : hache pour le bois, pioche pour la pierre
+		local tool = G.Joueurs.bestTool(player, d.tool)
+		if not tool then
+			G.Util.toast(player, kind == "log" and "🪓 Il faut une hache pour débiter ce tronc." or "⛏️ Il faut une pioche pour casser ces rochers.", "refus")
+			return
+		end
+		G.Joueurs.wearTool(player, d.tool, 1)
+		local hits = (m:GetAttribute("Hits") or 0) + 1
+		m:SetAttribute("Hits", hits)
+		G.Util.sfx("coup", m.Position, player)
+		if hits < d.hits then
+			return
+		end
+		G.Joueurs.add(player, d.item, math.random(d.n[1], d.n[2]))
+		G.Joueurs.add(player, "gold", math.random(4, 9), true)
+		G.Joueurs.addSkillXp(player, d.tool == "axe" and "bucheronnage" or "minage", 4)
+		G.Law.addHonor(player, 1)
+		G.Joueurs.sync(player)
+		m:Destroy()
+		G.Util.toast(player, "🛣️ Un charretier qui attendait te lance quelques pièces : « Merci, l'ami ! »")
+	end,
 	crystal = function(player, prompt)
 		local item, n = prompt.Parent:GetAttribute("Item"), prompt.Parent:GetAttribute("N") or 1
 		if item then
@@ -484,7 +601,7 @@ Evenements.handlers = {
 -- Studio / tests : force un événement ("fair", "invasion", "crystals", "convoy", "flood", "boss")
 function Evenements.force(kind: string)
 	local f = ({ fair = startFair, invasion = startInvasion, crystals = startCrystals, convoy = startConvoy, flood = startFlood, boss = startBoss,
-		orage = startStorm, golem = startGolem, fouilles = startDig })[kind]
+		orage = startStorm, golem = startGolem, fouilles = startDig, route = startRoadblock })[kind]
 	return f and f() or false
 end
 
@@ -592,7 +709,7 @@ function Evenements.step(dt: number)
 		return
 	end
 	local night = G.Clock.isNight()
-	local options = night and { startInvasion, startBoss, startCrystals, startFlood, startGolem } or { startFair, startBoss, startCrystals, startConvoy, startFlood, startGolem, startDig }
+	local options = night and { startInvasion, startBoss, startCrystals, startFlood, startGolem } or { startFair, startBoss, startCrystals, startConvoy, startFlood, startGolem, startDig, startRoadblock }
 	local f = options[math.random(1, #options)]
 	-- un orage gronde : une fois sur deux, c'est lui qui attire quelque chose
 	if G.Meteo and G.Meteo.kind and G.Meteo.kind() == "orage" and math.random() < 0.5 then
