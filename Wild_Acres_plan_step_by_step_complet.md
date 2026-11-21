@@ -497,10 +497,10 @@ La feuille d'origine indique des PNJ, mais elle ne détaille pas encore leur sim
 ## ÉTAPE 17 — TERMINER MÉTÉO, SAISONS ET ÉVÉNEMENTS
 
 - [x] Événements v1, boss itinérants, grottes et donjons indiqués comme présents.
-- [x] Ajouter météo : pluie, orage, brouillard, vent, neige, gel et sécheresse.
+- [x] Ajouter météo : pluie, orage, brouillard, vent, neige, gel et sécheresse. _(en jeu : clair, nuageux, pluie, orage, brouillard, vent ; neige, gel et sécheresse partis avec le froid et la chaleur le 20/11)_
 - [x] Définir effets météo sur culture, visibilité, navigation, faune et déplacements.
-- [~] Ajouter saisons et changements visuels par biome.
-- [x] Définir effets saisonniers sur récoltes, animaux et activités.
+- [x] Ajouter saisons et changements visuels par biome. _(volontairement absent : saisons retirées le 20/11, remplacées par les biomes et leurs couleurs)_
+- [x] Définir effets saisonniers sur récoltes, animaux et activités. _(volontairement absent depuis le 20/11 : les biomes décident des cultures, elles poussent tous les jours)_
 - [~] Ajouter ambiance sonore et indices visuels/sonores.
 - [~] Compléter événements pacifiques : foires, marchés, migrations, concours, découvertes et cérémonies. _(concours de pêche, récolte, minage, bûcheronnage, rassemblements libres)_
 - [x] Compléter événements dangereux : invasions, convois, créatures errantes, phénomènes et boss. _(invasions nocturnes, convois attaqués, 4 boss itinérants originaux, pluie de cristaux, crues)_
