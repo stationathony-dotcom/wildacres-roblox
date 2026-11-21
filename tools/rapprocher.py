@@ -303,6 +303,10 @@ def quest_match(entry, code_norm):
     nd = norm(desc)
     if "reputation" in nd or "confiance" in nd or "reconnu" in nd:
         return "réputation par village (Reputation)"
+    if any(k in nd for k in ("patrouille", "surveiller", "lanterne", "rassurer", "garde de service")):
+        return "sorte « ronde (QuetesLieux, 21/11) »"
+    if any(k in nd for k in ("faire connaissance", "rencontrer", "parler au", "parler a ", "se presenter aupres")):
+        return "sorte « rencontrer (QuetesLieux, 21/11) »"
     first = nd.split()
     for w in first[:3]:
         if w in VERBE_SORTE:

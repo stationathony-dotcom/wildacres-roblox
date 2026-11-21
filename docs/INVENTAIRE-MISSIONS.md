@@ -976,7 +976,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### 1. Quêtes de débutant et tutoriels
 
-- [ ] (11) 1. **Bienvenue à Valdor** — Parler au maire du village.
+- [x] (11) 1. **Bienvenue à Valdor** — Parler au maire du village. → sorte « rencontrer (QuetesLieux, 21/11) »
 - [x] (12) 2. **Un nouveau départ** — Récolter 10 morceaux de bois. → repris tel quel (Quetes)
 - [x] (13) 3. **Premiers outils** — Fabriquer une hache rudimentaire. → repris tel quel (Quetes)
 - [x] (14) 4. **La pierre est précieuse** — Récolter 10 pierres. → repris tel quel (Quetes)
@@ -988,7 +988,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (20) 10. **Un peu de monnaie** — Vendre trois objets au marchand. → repris tel quel (Quetes)
 - [x] (21) 11. **Apprenti artisan** — Fabriquer un objet sur un établi. → repris tel quel (Quetes)
 - [x] (22) 12. **La vie à la ferme** — Planter cinq graines. → repris tel quel (Quetes)
-- [ ] (23) 13. **Un compagnon de route** — Rencontrer un dresseur.
+- [x] (23) 13. **Un compagnon de route** — Rencontrer un dresseur. → sorte « rencontrer (QuetesLieux, 21/11) »
 - [x] (24) 14. **La première monture** — Découvrir les écuries. → sorte « découvrir / visiter (QuetesLieux) »
 - [x] (25) 15. **Un monde immense** — Découvrir un nouveau biome. → repris tel quel (Quetes)
 
@@ -1196,7 +1196,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (235) 182. **Les bruits du marais** — Identifier l'origine de sons étranges. → sorte « enquêter (QuetesLieux) »
 - [x] (236) 183. **Le voyageur nocturne** — Retrouver un voyageur disparu pendant la nuit. → sorte « retrouver (QuetesLieux) »
 - [x] (237) 184. **La silhouette sur la colline** — Découvrir qui se tient près d'une vieille tour. → sorte « découvrir / visiter (QuetesLieux) »
-- [ ] (238) 185. **Les lanternes éteintes** — Rallumer plusieurs lanternes sur une route.
+- [x] (238) 185. **Les lanternes éteintes** — Rallumer plusieurs lanternes sur une route. → repris tel quel (Quetes)
 - [x] (239) 186. **Le brouillard inhabituel** — Trouver l'origine d'un brouillard étrange. → sorte « retrouver (QuetesLieux) »
 - [ ] (240) 187. **La maison abandonnée** — Examiner une habitation désertée.
 - [x] (241) 188. **Le cercle de pierres** — Découvrir la fonction d'un cercle ancien. → sorte « découvrir / visiter (QuetesLieux) »
@@ -1234,18 +1234,18 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 ### 13. Quêtes de justice, gardes et réputation
 
 - [x] (277) 216. **Le recrutement** — Se présenter auprès du capitaine de la garde. → sorte « concours (Activites : dressage, élevage, cuisine…) »
-- [ ] (278) 217. **La patrouille du matin** — Effectuer une patrouille dans le village.
+- [x] (278) 217. **La patrouille du matin** — Effectuer une patrouille dans le village. → repris tel quel (Quetes)
 - [x] (279) 218. **La route dangereuse** — Escorter un marchand sur une route. → sorte « escorter (QuetesLieux) »
 - [x] (280) 219. **Le vol au marché** — Retrouver le responsable d'un vol. → sorte « retrouver (QuetesLieux) »
 - [ ] (281) 220. **Le témoin important** — Recueillir le témoignage d'un villageois.
 - [x] (282) 221. **Le fugitif** — Retrouver une personne recherchée. → sorte « retrouver (QuetesLieux) »
 - [x] (283) 222. **La récompense promise** — Rapporter la preuve d'une mission accomplie. → sorte « apporter (Quetes) »
-- [ ] (284) 223. **Une garde renforcée** — Surveiller une zone pendant une durée définie.
+- [x] (284) 223. **Une garde renforcée** — Surveiller une zone pendant une durée définie. → repris tel quel (Quetes)
 - [x] (285) 224. **Le convoi royal** — Escorter une cargaison importante. → sorte « escorter (QuetesLieux) »
 - [x] (286) 225. **L'apprenti shérif** — Réussir plusieurs missions de justice. → sorte « concours / courses (Activites) »
 - [x] (287) 226. **Le tribunal du village** — Participer à une audience fictive. → sorte « concours / courses (Activites) »
 - [x] (288) 227. **Une erreur judiciaire** — Retrouver les preuves permettant d'innocenter un personnage. → sorte « retrouver (QuetesLieux) »
-- [ ] (289) 228. **Le village inquiet** — Rassurer les habitants après plusieurs incidents.
+- [x] (289) 228. **Le village inquiet** — Rassurer les habitants après plusieurs incidents. → repris tel quel (Quetes)
 - [x] (290) 229. **La prisonnière clé** — Retrouver un document nécessaire à la résolution d'une affaire. → sorte « retrouver (QuetesLieux) »
 - [x] (291) 230. **Le protecteur de Valdor** — Atteindre un niveau élevé de réputation auprès de la garde. → réputation par village (Reputation)
 
@@ -1304,7 +1304,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (345) 275. **La réserve collective** — Réunir des ressources pour le clan. → sorte « apporter (Quetes) »
 - [ ] (346) 276. **Le chef responsable** — Répartir des tâches entre les membres.
 - [x] (347) 277. **La réunion** — Organiser une réunion dans le quartier général. → sorte « tableau d'affichage (Activites) »
-- [ ] (348) 278. **L'ambassadeur** — Rencontrer un autre clan.
+- [x] (348) 278. **L'ambassadeur** — Rencontrer un autre clan. → sorte « rencontrer (QuetesLieux, 21/11) »
 - [ ] (349) 279. **L'accord commercial** — Échanger des ressources avec un autre clan.
 - [ ] (350) 280. **Le pacte d'amitié** — Conclure une alliance.
 - [x] (351) 281. **La défense du domaine** — Protéger une zone appartenant au clan. → sorte « escorter (QuetesLieux) »
@@ -1333,7 +1333,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### 18. Quêtes sociales et vie quotidienne
 
-- [ ] (377) 301. **Une nouvelle rencontre** — Faire connaissance avec cinq habitants.
+- [x] (377) 301. **Une nouvelle rencontre** — Faire connaissance avec cinq habitants. → repris tel quel (Quetes)
 - [ ] (378) 302. **Le bon voisin** — Aider un joueur à terminer une tâche.
 - [ ] (379) 303. **Un cadeau inattendu** — Offrir un objet à un autre joueur.
 - [x] (380) 304. **La fête des voisins** — Participer à une fête de village. → sorte « concours / courses (Activites) »
@@ -1354,7 +1354,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (395) 316. **La fête des récoltes** — Livrer des produits agricoles. → sorte « livrer (QuetesLieux) »
 - [x] (396) 317. **Le marché d'hiver** — Préparer un étal de saison. → sorte « fabriquer (Quetes, cuisine) »
 - [x] (397) 318. **La chasse aux œufs** — Trouver des objets cachés dans le village. → sorte « retrouver (QuetesLieux) »
-- [ ] (398) 319. **Le festival des lanternes** — Allumer des lanternes dans plusieurs rues.
+- [x] (398) 319. **Le festival des lanternes** — Allumer des lanternes dans plusieurs rues. → repris tel quel (Quetes)
 - [x] (399) 320. **Le concours de cuisine** — Préparer un plat pour un jury. → sorte « fabriquer (Quetes, cuisine) »
 - [x] (400) 321. **La course des montures** — Participer à une course. → sorte « concours / courses (Activites) »
 - [x] (401) 322. **La foire artisanale** — Exposer trois objets fabriqués. → sorte « concours / exposer (Activites) »
@@ -1457,7 +1457,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (499) 395. **La pêche matinale** — Rapporter cinq poissons. → sorte « apporter (Quetes) »
 - [ ] (500) 396. **Le marché approvisionné** — Remplir les stocks d'un marchand.
 - [ ] (501) 397. **Le facteur** — Distribuer plusieurs lettres.
-- [ ] (502) 398. **Le garde de service** — Effectuer une patrouille.
+- [x] (502) 398. **Le garde de service** — Effectuer une patrouille. → repris tel quel (Quetes)
 - [x] (503) 399. **L'animal du jour** — Nourrir ses animaux. → sorte « apporter (Quetes) »
 - [x] (504) 400. **Le jardinier** — Arroser et récolter ses cultures. → sorte « récolter (Quetes) »
 - [x] (505) 401. **Le voyageur** — Visiter un lieu indiqué. → repris tel quel (Quetes)
@@ -1504,7 +1504,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [x] (546) 436. **Le portail** — Installer une entrée sur son terrain. → sorte « bâtir / étal (QuetesLieux) »
 - [x] (547) 437. **La réserve personnelle** — Installer des coffres de rangement. → sorte « bâtir / étal (QuetesLieux) »
 - [x] (548) 438. **La maison sécurisée** — Installer un système de protection autorisé par le jeu. → sorte « bâtir / étal (QuetesLieux) »
-- [ ] (549) 439. **Le voisinage** — Faire connaissance avec les propriétaires voisins.
+- [x] (549) 439. **Le voisinage** — Faire connaissance avec les propriétaires voisins. → sorte « rencontrer (QuetesLieux, 21/11) »
 - [ ] (550) 440. **Le quartier agréable** — Améliorer plusieurs éléments de son quartier.
 - [ ] (551) 441. **Le propriétaire responsable** — Entretenir sa propriété.
 - [x] (552) 442. **Le domaine agricole** — Installer une exploitation sur son terrain. → sorte « bâtir / étal (QuetesLieux) »
@@ -1607,7 +1607,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [ ] (651) 524. **Le visiteur mystérieux** — Un personnage inconnu arrive dans un village.
 - [ ] (652) 525. **La demande du maire** — Le maire choisit une mission selon les besoins du village.
 - [ ] (653) 526. **Le besoin du marchand** — Un marchand réclame le produit dont son stock manque.
-- [ ] (654) 527. **Le signal du garde** — Une patrouille demande de l'aide à proximité.
+- [x] (654) 527. **Le signal du garde** — Une patrouille demande de l'aide à proximité. → sorte « ronde (QuetesLieux, 21/11) »
 - [ ] (655) 528. **La découverte rare** — Une ressource spéciale apparaît quelque part sur l'île.
 - [ ] (656) 529. **La rumeur du jour** — Un PNJ donne un indice menant vers un lieu aléatoire.
 - [ ] (657) 530. **L'événement imprévu** — Un événement local déclenche une mission collective.
