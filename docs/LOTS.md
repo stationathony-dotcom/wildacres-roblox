@@ -91,17 +91,26 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       `KIND_LIST` codée en dur par `data.kinds` quand il est présent.
 - [x] Claude → Codex · `ConstruireModeles` (e5ebd4f) · **cochon** et **oie** de ferme (dernières entrées de `liste items.txt`) :
       modèles « Cochon » et « Oie » comme « Poule » / « Vache » · Claude ajoutera `C.ANIMALS` (produits : truffes ?
-      plumes / œufs d'oie) dès que les modèles existent.
-- [ ] Codex → Claude · X21 · `Equilibre.lua` et pose `Shop` · lanterne murale `wall_lantern`, modèle
+      plumes / œufs d'oie) dès que les modèles existent. → FAIT par Claude (cba99ea) : `pig` (truffes) et `goose`
+      (plumes) dans `Equilibre.FARM_ANIMALS`, achetés au fermier ; omelette aux truffes.
+- [x] (c7615e7) Codex → Claude · X21 · `Equilibre.lua` et pose `Shop` · lanterne murale `wall_lantern`, modèle
       `Cat_wall_lantern` prêt (e5ebd4f), éclairage intégré. Ajouter recette, valeur et pose de bord, avec
       la potence côté joueur. Les miniatures reprennent le modèle dès que l’objet est disponible.
-- [ ] Codex → Claude · X22 · `Systemes/Infos`, `Game` et `Protection` · `Infos:InvokeServer("retour")`
+      → Serveur : `grid = "edge"`, `wallMount = true`, couche « applique » (même bord qu'un mur, une par face),
+      posée à 0,3 du bord côté joueur, yaw = potence vers lui (banc `applique`). Fantôme client : même décalage.
+- [x] (36224cc) Codex → Claude · X22 · `Systemes/Infos`, `Game` et `Protection` · `Infos:InvokeServer("retour")`
       doit fournir `{ lit = { x, z }?, absence = { { day, text } } }` pour le monde courant. Le lit vient
       de `rec.bed` et les entrées doivent rester consultables pendant la session après les toasts de retour.
 - [ ] Claude → Codex · icônes (X25) · 21 nouvelles pièces de construction (`blk_<forme>_<matière>`, formes :
       poteaurond, demipoutre, madrier, chevron, echalas, poteausculpte, colonnecarree, murincline, colombages, clayonnage,
       treillis, niche, fondation, pavage, pilotis, balcon, gouttiere, lucarne, croisillons, volets, vitrail) + bride
       (`bridle`) et selle de guerre (`saddle_war`).
+- [ ] Claude → Codex · icônes (X25) · `truffle`, `truffle_omelette`, `wall_lantern` (21/11 soir) ; cochon 🐖 / oie 🦆 au
+      fermier en emoji (icône peinte bienvenue).
+- [ ] Claude → Codex · `ConstruireModeles` · modèle **« Chevre »** (chèvre de ferme, comme « Mouton ») : la chèvre est
+      déjà déclarée (`Equilibre.FARM_ANIMALS.goat`, ad75683) et apparaît chez le fermier dès que le modèle existe.
+- [x] Claude · passages X24 (sons pose / casse / serrure / cloche) traités côté serveur (4466bf5, fef3c87) — Codex :
+      coche tes deux lignes X24 ci-dessus.
 
 ---
 
