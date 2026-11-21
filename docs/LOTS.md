@@ -80,18 +80,24 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [x] Claude → Codex · interface (X16, a1e4209) · **toasts de sorte `"refus"`** : Batir (trop loin, trop haut, village,
       même pièce, plus dans le sac) et Parcelles (terrain d'autrui, panneau refusé) les envoient maintenant avec
       `kind = "refus"` → les afficher près du fantôme / du panneau (aujourd'hui : toast normal).
-- [ ] Claude → Codex · invite au survol (X19) · **état des cultures en attributs** sur le modèle `Culture`
+- [x] Claude → Codex · invite au survol (X19, 3ae534f) · **état des cultures en attributs** sur le modèle `Culture`
       (Systemes/Farm, 21/11) : `Plante` (nom), `Jour` / `Jours` (pousse), `Arrosee`, `Fletrie`. Machines et coffres :
       demander les attributs voulus par un passage.
 - [x] (0767a79) Codex → Claude · X19 · `Systemes/Machines`, `Shop` et `Protection` · publier sur les modèles de four et
       roue à eau `EtatMachine` (texte bref actualisé selon l’état) et `NomEtat` (nom affiché). Pour les coffres,
       publier `Verrouille` (booléen actualisé à la pose de la serrure). L’interface lit ces attributs à proximité.
-- [ ] Claude → Codex · `Activites.client` · le tableau d'affichage envoie maintenant `data.kinds` = `{ { id, libellé } }`
+- [x] Claude → Codex · `Activites.client` (864b1e0) · le tableau d'affichage envoie maintenant `data.kinds` = `{ { id, libellé } }`
       (21/11 : + « Concours de dressage » et « Concours d'élevage », comptés par le jeu, banc `concours`) → remplacer
       `KIND_LIST` codée en dur par `data.kinds` quand il est présent.
-- [ ] Claude → Codex · `ConstruireModeles` · **cochon** et **oie** de ferme (dernières entrées de `liste items.txt`) :
+- [x] Claude → Codex · `ConstruireModeles` (e5ebd4f) · **cochon** et **oie** de ferme (dernières entrées de `liste items.txt`) :
       modèles « Cochon » et « Oie » comme « Poule » / « Vache » · Claude ajoutera `C.ANIMALS` (produits : truffes ?
       plumes / œufs d'oie) dès que les modèles existent.
+- [ ] Codex → Claude · X21 · `Equilibre.lua` et pose `Shop` · lanterne murale `wall_lantern`, modèle
+      `Cat_wall_lantern` prêt (e5ebd4f), éclairage intégré. Ajouter recette, valeur et pose de bord, avec
+      la potence côté joueur. Les miniatures reprennent le modèle dès que l’objet est disponible.
+- [ ] Codex → Claude · X22 · `Systemes/Infos`, `Game` et `Protection` · `Infos:InvokeServer("retour")`
+      doit fournir `{ lit = { x, z }?, absence = { { day, text } } }` pour le monde courant. Le lit vient
+      de `rec.bed` et les entrées doivent rester consultables pendant la session après les toasts de retour.
 - [ ] Claude → Codex · icônes (X25) · 21 nouvelles pièces de construction (`blk_<forme>_<matière>`, formes :
       poteaurond, demipoutre, madrier, chevron, echalas, poteausculpte, colonnecarree, murincline, colombages, clayonnage,
       treillis, niche, fondation, pavage, pilotis, balcon, gouttiere, lucarne, croisillons, volets, vitrail) + bride
@@ -146,24 +152,27 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [x] **X18 · Périmètre de parcelle avant la pose** — FAIT 21/11 (3b60243). Contour au sol et prix de la case
       visée. Vérifié en Édition : coût, refus, une demande par case et rejet des réponses périmées.
       À voir en Play : alignement du contour sur des pentes et à la pose du panneau.
-- [ ] **X19 · État lisible à proximité** — en cours — Codex, 21/11. Culture (pousse, arrosée, prête), machine (roue à eau, four), coffre
-      verrouillé — en **invite au survol / à [E]** comme « [E] Parler », **jamais de texte permanent au-dessus des
-      PNJ ni des objets**.
+- [x] **X19 · État lisible à proximité** — FAIT 21/11 (3ae534f, 0767a79, e833e38). Cultures, machines et serrures
+      au survol ou dans l’invite. Publication serveur et lecture client vérifiées en Édition sur four,
+      roue à eau, coffre et porte. À voir en Play : visée et lisibilité sur petit écran.
 - [x] **X20 · Formes de construction × matières** — FAIT PAR CLAUDE le 21/11 (bb861c5) : c'étaient des données
       (`Config.BUILD_SHAPES`, formes composées `SHAPE_PARTS`, rendues par Batir et le fantôme existant). Reste pour Codex :
       leurs icônes (X25).
-- [ ] **X21 · Mobilier et décor posables** (reste C6) : tables, bancs, étagères, tapis, bannières, pots,
-      lanternes murales… Modèles + miniatures ; passage à Claude pour recettes. Règle 7 : rien sans usage.
-- [ ] **X22 · Arrivée et retour lisibles** (`AUDIT-PRODUIT` « Arrivée et retour ») : sans tutoriel (règle 1) —
-      repères visibles au lieu de départ (panneau de village, lueur de l'atelier, fumée du four), lit et journal
-      d'absence faciles à retrouver au retour. Vérifier la création de perso sur petit écran.
-- [ ] **X23 · Carte du monde légère** (côté client du lot C12) : la grille se construit au rendu → la construire
-      par morceaux / la mettre en cache, limiter les aperçus 3D visibles (`ViewportFrame`) et les `RenderStepped`.
-      Noter avant / après dans `docs/PERFORMANCE.md` (mesures en Play sur le PC fixe).
-- [ ] **X24 · Sons de la 2e vague** : construction (pose, casse), serrure / crochetage, alarme, cheval, pluie,
-      ambiance de grotte ; bibliothèque Roblox sous licence uniquement.
-- [ ] **X25 · Icônes peintes, 2e lot** : équipement (9 emplacements × formes), matières de créatures, objets de
-      X20 / X21 ; même atlas que d28d1f0, emoji en secours.
+- [~] **X21 · Mobilier et décor posables** — Codex 21/11 (e5ebd4f). Modèles détaillés et dix-sept
+      miniatures vérifiées en Édition. Le modèle de lanterne murale est prêt, recette et pose en passage.
+- [~] **X22 · Arrivée et retour lisibles** — Codex 21/11 (b6136ee). Enseigne, forge, four et disposition
+      étroite vérifiés en Édition. Le repère du lit et le journal d’absence attendent `Infos("retour")`
+      (passage ci-dessus). Vérifier création et retour en Play.
+- [~] **X23 · Carte du monde légère** — Codex 21/11 (b110b77). Rendu des cases découvertes par lots, cache à la
+      réouverture, suivi de carte suspendu à la fermeture et aperçus 3D déchargés hors du champ visible.
+      Vérifications en Édition dans `docs/PERFORMANCE.md`. Mesures en Play à relever sur le PC fixe (P7).
+- [ ] **X24 · Sons de la 2e vague** — Recherche terminée pour les premiers candidats du Creator Store,
+      Pro Sound Effects. Pose 9120946570, casse 9119482853, serrure 9116324156, cloche 9113583960,
+      sabots 9113124912, pluie 9112852671, grotte 9112795583. Reprendre par l’écoute et le préchargement,
+      puis brancher les événements validés avec Claude. Le client utilise déjà `Fx("sfx", nom, position)`.
+- [~] **X25 · Icônes peintes, 2e lot** — Deux planches de 16 formes sont conservées comme brouillons
+      dans `images/icones/`. Ordre des cases dans le README. Restent équipement, matières de créatures,
+      mobilier complémentaire, correspondances Lua, validation des découpes et publication par le propriétaire.
 - [ ] **X26 · `docs/INTERFACE.md` + planches** à jour après X15–X25.
 
 ## Couloir Claude — les règles et le monde
@@ -220,6 +229,12 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 21/11 · Codex · Pause à la demande du propriétaire. X15–X19 livrés et synchronisés dans Studio. X20 était déjà fait.
+  Après synchronisation sur l’autre PC, lancer `ConstruireModeles.animauxFerme()`, `tableauQuetes()` et `reperesDepart()` en Édition.
+  Banc complet initial 54/54 et dernier passage rapide 53/53 en Édition. X23 vérifié ensuite avec 41 régions.
+  En Play sur le PC fixe, vérifier aussi un seul usage par clic, le blocage du toucher derrière une fenêtre et la reconnexion des repères.
+  Reprendre le câblage audio en X24, les planches en X25, puis `docs/INTERFACE.md` et les planches finales en X26.
 
 - 21/11 (2) · Claude : C6, C7 faits, C12 côté serveur (plan de région par étapes, docs/PERFORMANCE.md) ; 21 formes de
   construction, concours dressage/élevage, quêtes ronde/rencontrer/troupeau, route encombrée, chien de berger, cascades ;
