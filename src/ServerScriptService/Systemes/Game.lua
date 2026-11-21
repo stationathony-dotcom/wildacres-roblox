@@ -217,11 +217,19 @@ function Game.start(player: Player)
 	else
 		G.Util.toast(player, string.format("Bon retour à %s ! Jour %d.", G.world.name, G.world.day), "big")
 	end
-	for _, other in Game.players() do
-		if other ~= player then
-			G.Util.toast(other, player.DisplayName .. " arrive dans le monde.")
+	-- arrivée : prévenir ses amis et son clan seulement (pas d'annonce à tout le serveur, règle 1)
+	task.spawn(function() -- IsFriendsWith interroge le web : ne pas retarder l'arrivée
+		local clan = G.Clans and G.Clans.clanOfUid(G.Util.pid(player))
+		for _, other in Game.players() do
+			if other ~= player and other.Parent then
+				local sameClan = clan ~= nil and G.Clans.clanOfUid(G.Util.pid(other)) == clan
+				local okF, friend = pcall(other.IsFriendsWith, other, player.UserId)
+				if sameClan or (okF and friend) then
+					G.Util.toast(other, player.DisplayName .. " arrive dans le monde.")
+				end
+			end
 		end
-	end
+	end)
 	G.Save.save(player)
 end
 
