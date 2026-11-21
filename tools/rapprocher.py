@@ -263,12 +263,62 @@ def game_names():
     return names
 
 
+# Quêtes (« liste quetes.txt », réservoir d'idées) : un titre repris tel quel dans le code est coché « repris » ;
+# sinon, l'idée est cochée par la SORTE d'offre que le générateur tire déjà (Systemes/Quetes + QuetesLieux),
+# d'après son verbe. Les idées sans verbe reconnu restent ouvertes.
+VERBE_SORTE = {
+    "decouvrir": "découvrir / visiter (QuetesLieux)", "explorer": "visiter (QuetesLieux)", "visiter": "visiter (QuetesLieux)",
+    "atteindre": "visiter (QuetesLieux)", "parcourir": "visiter (QuetesLieux)", "reperer": "visiter (QuetesLieux)",
+    "observer": "visiter (QuetesLieux)", "traverser": "naviguer / visiter (Quetes)", "rejoindre": "visiter (QuetesLieux)",
+    "retrouver": "retrouver (QuetesLieux)", "trouver": "retrouver (QuetesLieux)",
+    "fabriquer": "fabriquer (Quetes)", "produire": "fabriquer (Quetes)", "preparer": "fabriquer (Quetes, cuisine)",
+    "creer": "fabriquer (Quetes)", "construire": "bâtir (Quetes)", "installer": "bâtir / étal (QuetesLieux)",
+    "decorer": "bâtir (Quetes)", "restaurer": "réparer (QuetesLieux)", "reparer": "réparer (QuetesLieux)",
+    "livrer": "livrer (QuetesLieux)", "apporter": "apporter (Quetes)", "fournir": "apporter (Quetes)",
+    "rapporter": "apporter (Quetes)", "transporter": "livrer (QuetesLieux)", "transmettre": "lettre (Quetes)",
+    "reunir": "apporter (Quetes)", "rassembler": "apporter (Quetes)", "obtenir": "apporter (Quetes)", "donner": "apporter (Quetes)",
+    "recolter": "récolter (Quetes)", "cultiver": "semer / récolter (Quetes)", "planter": "semer (Quetes)",
+    "pecher": "pêcher (Quetes)", "escorter": "escorter (QuetesLieux)", "suivre": "escorter / enquêter (QuetesLieux)",
+    "identifier": "enquêter (QuetesLieux)", "resoudre": "enquêter (QuetesLieux)", "interroger": "enquêter (QuetesLieux)",
+    "ecouter": "enquêter (QuetesLieux)", "enqueter": "enquêter (QuetesLieux)",
+    "participer": "concours / courses (Activites)", "gagner": "concours / courses (Activites)",
+    "reussir": "concours / courses (Activites)", "vaincre": "tuer / prime (Quetes)", "chasser": "tuer (Quetes, chasse en groupe)",
+    "eliminer": "tuer (Quetes)", "capturer": "prime (Quetes)", "arreter": "prime (Quetes)", "apprivoiser": "apprivoiser (Quetes)",
+    "dresser": "apprivoiser (Quetes)", "miner": "miner (Quetes)", "extraire": "miner (Quetes)", "abattre": "abattre (Quetes)",
+    "couper": "abattre (Quetes)", "vendre": "vendre (Quetes)", "collecter": "collecter (Quetes)", "naviguer": "naviguer (Quetes)",
+    "contribuer": "chantiers de village (Chantiers)", "nourrir": "apporter (Quetes)", "proteger": "escorter (QuetesLieux)",
+    "defendre": "invasion / chantiers (Evenements)",
+}
+
+
+def quest_match(entry, code_norm):
+    m = re.match(r"^\d+\. \*\*(.+?)\*\* — (.+)$", entry)
+    if not m:
+        return None
+    title, desc = m.group(1), m.group(2)
+    t = " ".join(norm(title).split())
+    if len(t) > 6 and t in code_norm:
+        return "repris tel quel (Quetes)"
+    nd = norm(desc)
+    if "reputation" in nd or "confiance" in nd or "reconnu" in nd:
+        return "réputation par village (Reputation)"
+    first = nd.split()
+    for w in first[:3]:
+        if w in VERBE_SORTE:
+            return "sorte « " + VERBE_SORTE[w] + " »"
+    return None
+
+
 def main():
     write = "--sec" not in sys.argv
     names = game_names()
     index = [(set(toks(n)), n) for n in names if toks(n)]
     code = "\n".join(open(f, encoding="utf-8").read() for f in glob.glob(ROOT + "/src/**/*.lua", recursive=True))
     lines = open(DOC, encoding="utf-8").read().split("\n")
+    quetes_src = ""
+    for f in ("Quetes.lua", "QuetesLieux.lua", "Chantiers.lua"):
+        quetes_src += open(ROOT + "/src/ServerScriptService/Systemes/" + f, encoding="utf-8").read()
+    code_norm = " ".join(norm(quetes_src).split())
     sec = None
     done, left, stats = 0, {}, {}
     for i, l in enumerate(lines):
@@ -276,14 +326,16 @@ def main():
         if h:
             sec = h.group(1).strip()
             continue
-        if sec not in ("liste items.txt", "listes ennemi.txt", "tools/creatures_liste.txt"):
+        if sec not in ("liste items.txt", "listes ennemi.txt", "tools/creatures_liste.txt", "liste quetes.txt"):
             continue
         m = re.match(r"^- \[ \] \((\d+)\) (.+)$", l)
         if not m:
             continue
         entry = m.group(2).strip()
         found = None
-        if sec == "tools/creatures_liste.txt":
+        if sec == "liste quetes.txt":
+            found = quest_match(entry, code_norm)
+        elif sec == "tools/creatures_liste.txt":
             cid = re.match(r"`\w+:(\w+)`", entry)
             if cid and re.search(r"\b" + cid.group(1) + r"\b", code):
                 found = "Bestiaire"

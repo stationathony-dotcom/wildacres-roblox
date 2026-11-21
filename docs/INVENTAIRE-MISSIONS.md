@@ -977,358 +977,358 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 ### 1. Quêtes de débutant et tutoriels
 
 - [ ] (11) 1. **Bienvenue à Valdor** — Parler au maire du village.
-- [ ] (12) 2. **Un nouveau départ** — Récolter 10 morceaux de bois.
-- [ ] (13) 3. **Premiers outils** — Fabriquer une hache rudimentaire.
-- [ ] (14) 4. **La pierre est précieuse** — Récolter 10 pierres.
-- [ ] (15) 5. **Un outil indispensable** — Fabriquer une pioche.
-- [ ] (16) 6. **À la découverte du monde** — Visiter trois lieux proches.
-- [ ] (17) 7. **Un endroit où dormir** — Construire un lit.
+- [x] (12) 2. **Un nouveau départ** — Récolter 10 morceaux de bois. → repris tel quel (Quetes)
+- [x] (13) 3. **Premiers outils** — Fabriquer une hache rudimentaire. → repris tel quel (Quetes)
+- [x] (14) 4. **La pierre est précieuse** — Récolter 10 pierres. → repris tel quel (Quetes)
+- [x] (15) 5. **Un outil indispensable** — Fabriquer une pioche. → repris tel quel (Quetes)
+- [x] (16) 6. **À la découverte du monde** — Visiter trois lieux proches. → repris tel quel (Quetes)
+- [x] (17) 7. **Un endroit où dormir** — Construire un lit. → repris tel quel (Quetes)
 - [ ] (18) 8. **Un sac bien rempli** — Récupérer cinq ressources différentes.
-- [ ] (19) 9. **Le premier repas** — Préparer un plat.
-- [ ] (20) 10. **Un peu de monnaie** — Vendre trois objets au marchand.
-- [ ] (21) 11. **Apprenti artisan** — Fabriquer un objet sur un établi.
-- [ ] (22) 12. **La vie à la ferme** — Planter cinq graines.
+- [x] (19) 9. **Le premier repas** — Préparer un plat. → repris tel quel (Quetes)
+- [x] (20) 10. **Un peu de monnaie** — Vendre trois objets au marchand. → repris tel quel (Quetes)
+- [x] (21) 11. **Apprenti artisan** — Fabriquer un objet sur un établi. → repris tel quel (Quetes)
+- [x] (22) 12. **La vie à la ferme** — Planter cinq graines. → repris tel quel (Quetes)
 - [ ] (23) 13. **Un compagnon de route** — Rencontrer un dresseur.
-- [ ] (24) 14. **La première monture** — Découvrir les écuries.
-- [ ] (25) 15. **Un monde immense** — Découvrir un nouveau biome.
+- [x] (24) 14. **La première monture** — Découvrir les écuries. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (25) 15. **Un monde immense** — Découvrir un nouveau biome. → repris tel quel (Quetes)
 
 ### 2. Quêtes de village et de PNJ
 
-- [ ] (31) 16. **Le boulanger est débordé** — Lui apporter 10 unités de farine.
-- [ ] (32) 17. **Une livraison urgente** — Livrer du pain à une maison.
-- [ ] (33) 18. **Le forgeron manque de métal** — Lui apporter 15 minerais de cuivre.
-- [ ] (34) 19. **Le charpentier a besoin d'aide** — Lui fournir 20 planches.
-- [ ] (35) 20. **Une maison à réparer** — Réparer plusieurs éléments d'une maison.
-- [ ] (36) 21. **Le puits est vide** — Rapporter des seaux d'eau.
-- [ ] (37) 22. **La fête approche** — Livrer des décorations au maire.
-- [ ] (38) 23. **Un villageois a perdu ses affaires** — Retrouver trois objets perdus.
-- [ ] (39) 24. **La livraison de tissus** — Apporter du tissu au tailleur.
-- [ ] (40) 25. **Un repas pour les voyageurs** — Préparer cinq repas.
-- [ ] (41) 26. **Le marchand impatient** — Livrer une commande avant son expiration.
-- [ ] (42) 27. **Le garde fatigué** — Lui apporter de quoi manger.
-- [ ] (43) 28. **Une lettre importante** — Transmettre une lettre à un autre village.
-- [ ] (44) 29. **La vieille maison** — Retrouver les matériaux nécessaires à sa rénovation.
-- [ ] (45) 30. **Le marché du dimanche** — Aider à installer les étals.
-- [ ] (46) 31. **La cloche ne fonctionne plus** — Trouver les pièces nécessaires à sa réparation.
-- [ ] (47) 32. **Un invité de marque** — Préparer une chambre pour un voyageur.
-- [ ] (48) 33. **Le collectionneur** — Retrouver plusieurs objets anciens.
-- [ ] (49) 34. **Une histoire oubliée** — Interroger les anciens du village.
-- [ ] (50) 35. **La grande inauguration** — Participer à l'ouverture d'un nouveau bâtiment.
+- [x] (31) 16. **Le boulanger est débordé** — Lui apporter 10 unités de farine. → repris tel quel (Quetes)
+- [x] (32) 17. **Une livraison urgente** — Livrer du pain à une maison. → repris tel quel (Quetes)
+- [x] (33) 18. **Le forgeron manque de métal** — Lui apporter 15 minerais de cuivre. → repris tel quel (Quetes)
+- [x] (34) 19. **Le charpentier a besoin d'aide** — Lui fournir 20 planches. → repris tel quel (Quetes)
+- [x] (35) 20. **Une maison à réparer** — Réparer plusieurs éléments d'une maison. → repris tel quel (Quetes)
+- [x] (36) 21. **Le puits est vide** — Rapporter des seaux d'eau. → repris tel quel (Quetes)
+- [x] (37) 22. **La fête approche** — Livrer des décorations au maire. → repris tel quel (Quetes)
+- [x] (38) 23. **Un villageois a perdu ses affaires** — Retrouver trois objets perdus. → repris tel quel (Quetes)
+- [x] (39) 24. **La livraison de tissus** — Apporter du tissu au tailleur. → repris tel quel (Quetes)
+- [x] (40) 25. **Un repas pour les voyageurs** — Préparer cinq repas. → repris tel quel (Quetes)
+- [x] (41) 26. **Le marchand impatient** — Livrer une commande avant son expiration. → sorte « livrer (QuetesLieux) »
+- [x] (42) 27. **Le garde fatigué** — Lui apporter de quoi manger. → repris tel quel (Quetes)
+- [x] (43) 28. **Une lettre importante** — Transmettre une lettre à un autre village. → repris tel quel (Quetes)
+- [x] (44) 29. **La vieille maison** — Retrouver les matériaux nécessaires à sa rénovation. → repris tel quel (Quetes)
+- [x] (45) 30. **Le marché du dimanche** — Aider à installer les étals. → repris tel quel (Quetes)
+- [x] (46) 31. **La cloche ne fonctionne plus** — Trouver les pièces nécessaires à sa réparation. → sorte « retrouver (QuetesLieux) »
+- [x] (47) 32. **Un invité de marque** — Préparer une chambre pour un voyageur. → sorte « fabriquer (Quetes, cuisine) »
+- [x] (48) 33. **Le collectionneur** — Retrouver plusieurs objets anciens. → repris tel quel (Quetes)
+- [x] (49) 34. **Une histoire oubliée** — Interroger les anciens du village. → repris tel quel (Quetes)
+- [x] (50) 35. **La grande inauguration** — Participer à l'ouverture d'un nouveau bâtiment. → sorte « concours / courses (Activites) »
 
 ### 3. Quêtes d'agriculture
 
-- [ ] (56) 36. **Première récolte** — Récolter 10 blés.
-- [ ] (57) 37. **Une ferme productive** — Cultiver cinq parcelles.
-- [ ] (58) 38. **Le champ du boulanger** — Produire 30 blés.
-- [ ] (59) 39. **Des légumes frais** — Récolter 10 carottes.
+- [x] (56) 36. **Première récolte** — Récolter 10 blés. → repris tel quel (Quetes)
+- [x] (57) 37. **Une ferme productive** — Cultiver cinq parcelles. → sorte « semer / récolter (Quetes) »
+- [x] (58) 38. **Le champ du boulanger** — Produire 30 blés. → repris tel quel (Quetes)
+- [x] (59) 39. **Des légumes frais** — Récolter 10 carottes. → repris tel quel (Quetes)
 - [ ] (60) 40. **La saison des citrouilles** — Faire pousser cinq citrouilles.
-- [ ] (61) 41. **Un jardin coloré** — Cultiver cinq plantes différentes.
-- [ ] (62) 42. **Le fermier voisin** — Aider un autre agriculteur.
+- [x] (61) 41. **Un jardin coloré** — Cultiver cinq plantes différentes. → sorte « semer / récolter (Quetes) »
+- [x] (62) 42. **Le fermier voisin** — Aider un autre agriculteur. → repris tel quel (Quetes)
 - [ ] (63) 43. **La terre fertile** — Améliorer plusieurs parcelles.
-- [ ] (64) 44. **La récolte exceptionnelle** — Obtenir une récolte de grande qualité.
-- [ ] (65) 45. **Une commande royale** — Produire une grande quantité de nourriture.
-- [ ] (66) 46. **Les graines rares** — Trouver une variété de graine spéciale.
-- [ ] (67) 47. **Le jardin botanique** — Cultiver toutes les plantes d'une collection.
-- [ ] (68) 48. **L'irrigation** — Construire un système d'arrosage.
-- [ ] (69) 49. **Le verger** — Planter cinq arbres fruitiers.
-- [ ] (70) 50. **La grande moisson** — Récolter 100 ressources agricoles.
+- [x] (64) 44. **La récolte exceptionnelle** — Obtenir une récolte de grande qualité. → sorte « apporter (Quetes) »
+- [x] (65) 45. **Une commande royale** — Produire une grande quantité de nourriture. → sorte « fabriquer (Quetes) »
+- [x] (66) 46. **Les graines rares** — Trouver une variété de graine spéciale. → sorte « retrouver (QuetesLieux) »
+- [x] (67) 47. **Le jardin botanique** — Cultiver toutes les plantes d'une collection. → sorte « semer / récolter (Quetes) »
+- [x] (68) 48. **L'irrigation** — Construire un système d'arrosage. → sorte « bâtir (Quetes) »
+- [x] (69) 49. **Le verger** — Planter cinq arbres fruitiers. → sorte « semer (Quetes) »
+- [x] (70) 50. **La grande moisson** — Récolter 100 ressources agricoles. → repris tel quel (Quetes)
 
 ### 4. Quêtes d'élevage et d'animaux
 
-- [ ] (74) 51. **Un premier animal** — Acheter ou obtenir un animal d'élevage.
-- [ ] (75) 52. **La basse-cour** — Installer trois poules.
-- [ ] (76) 53. **Des œufs frais** — Récolter 10 œufs.
-- [ ] (77) 54. **La traite du matin** — Récolter du lait.
+- [x] (74) 51. **Un premier animal** — Acheter ou obtenir un animal d'élevage. → sorte « apporter (Quetes) »
+- [x] (75) 52. **La basse-cour** — Installer trois poules. → sorte « bâtir / étal (QuetesLieux) »
+- [x] (76) 53. **Des œufs frais** — Récolter 10 œufs. → sorte « récolter (Quetes) »
+- [x] (77) 54. **La traite du matin** — Récolter du lait. → repris tel quel (Quetes)
 - [ ] (78) 55. **Le troupeau s'agrandit** — Posséder cinq animaux.
-- [ ] (79) 56. **Un abri confortable** — Construire une étable.
-- [ ] (80) 57. **Le mouton égaré** — Retrouver un mouton perdu.
-- [ ] (81) 58. **La laine du village** — Fournir 20 unités de laine.
-- [ ] (82) 59. **Le marchand de bétail** — Livrer deux animaux.
-- [ ] (83) 60. **Le vétérinaire** — Apporter des produits de soin pour animaux.
+- [x] (79) 56. **Un abri confortable** — Construire une étable. → sorte « bâtir (Quetes) »
+- [x] (80) 57. **Le mouton égaré** — Retrouver un mouton perdu. → sorte « retrouver (QuetesLieux) »
+- [x] (81) 58. **La laine du village** — Fournir 20 unités de laine. → sorte « apporter (Quetes) »
+- [x] (82) 59. **Le marchand de bétail** — Livrer deux animaux. → sorte « livrer (QuetesLieux) »
+- [x] (83) 60. **Le vétérinaire** — Apporter des produits de soin pour animaux. → repris tel quel (Quetes)
 - [ ] (84) 61. **Un élevage réputé** — Faire grandir plusieurs animaux.
 - [ ] (85) 62. **Le concours agricole** — Présenter un animal au concours.
-- [ ] (86) 63. **Le cheval sauvage** — Repérer un cheval dans la nature.
+- [x] (86) 63. **Le cheval sauvage** — Repérer un cheval dans la nature. → sorte « visiter (QuetesLieux) »
 - [ ] (87) 64. **Une monture fidèle** — Apprendre à monter un cheval.
-- [ ] (88) 65. **Le meilleur élevage** — Obtenir une récompense pour son élevage.
+- [x] (88) 65. **Le meilleur élevage** — Obtenir une récompense pour son élevage. → sorte « apporter (Quetes) »
 
 ### 5. Quêtes de bûcheronnage et de minage
 
-- [ ] (92) 66. **Le bois du charpentier** — Récolter 20 bûches.
-- [ ] (93) 67. **Un arbre remarquable** — Trouver un arbre rare.
-- [ ] (94) 68. **Le chantier du pont** — Fournir 50 bûches.
-- [ ] (95) 69. **Le bois exotique** — Trouver une essence provenant d'un autre biome.
-- [ ] (96) 70. **Le minerai de cuivre** — Récolter 15 minerais de cuivre.
-- [ ] (97) 71. **Les profondeurs de la mine** — Explorer une mine abandonnée.
-- [ ] (98) 72. **Le fer recherché** — Rapporter 20 minerais de fer.
-- [ ] (99) 73. **La galerie oubliée** — Découvrir une ancienne galerie.
-- [ ] (100) 74. **Le filon caché** — Trouver un gisement rare.
-- [ ] (101) 75. **La forge du maître** — Livrer plusieurs métaux à un forgeron.
-- [ ] (102) 76. **Les cristaux mystérieux** — Trouver trois cristaux rares.
-- [ ] (103) 77. **La mine effondrée** — Retrouver une sortie dans une mine.
-- [ ] (104) 78. **L'outil parfait** — Fabriquer un outil de qualité supérieure.
-- [ ] (105) 79. **Le géologue** — Identifier plusieurs types de minerais.
-- [ ] (106) 80. **Le trésor souterrain** — Découvrir un coffre dans une mine.
+- [x] (92) 66. **Le bois du charpentier** — Récolter 20 bûches. → repris tel quel (Quetes)
+- [x] (93) 67. **Un arbre remarquable** — Trouver un arbre rare. → sorte « retrouver (QuetesLieux) »
+- [x] (94) 68. **Le chantier du pont** — Fournir 50 bûches. → repris tel quel (Quetes)
+- [x] (95) 69. **Le bois exotique** — Trouver une essence provenant d'un autre biome. → sorte « retrouver (QuetesLieux) »
+- [x] (96) 70. **Le minerai de cuivre** — Récolter 15 minerais de cuivre. → repris tel quel (Quetes)
+- [x] (97) 71. **Les profondeurs de la mine** — Explorer une mine abandonnée. → repris tel quel (Quetes)
+- [x] (98) 72. **Le fer recherché** — Rapporter 20 minerais de fer. → repris tel quel (Quetes)
+- [x] (99) 73. **La galerie oubliée** — Découvrir une ancienne galerie. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (100) 74. **Le filon caché** — Trouver un gisement rare. → sorte « retrouver (QuetesLieux) »
+- [x] (101) 75. **La forge du maître** — Livrer plusieurs métaux à un forgeron. → sorte « livrer (QuetesLieux) »
+- [x] (102) 76. **Les cristaux mystérieux** — Trouver trois cristaux rares. → sorte « retrouver (QuetesLieux) »
+- [x] (103) 77. **La mine effondrée** — Retrouver une sortie dans une mine. → sorte « retrouver (QuetesLieux) »
+- [x] (104) 78. **L'outil parfait** — Fabriquer un outil de qualité supérieure. → sorte « fabriquer (Quetes) »
+- [x] (105) 79. **Le géologue** — Identifier plusieurs types de minerais. → sorte « enquêter (QuetesLieux) »
+- [x] (106) 80. **Le trésor souterrain** — Découvrir un coffre dans une mine. → sorte « découvrir / visiter (QuetesLieux) »
 
 ### 6. Quêtes de pêche et de cuisine
 
-- [ ] (110) 81. **La première prise** — Pêcher un poisson.
-- [ ] (111) 82. **Le repas du pêcheur** — Pêcher cinq poissons.
+- [x] (110) 81. **La première prise** — Pêcher un poisson. → repris tel quel (Quetes)
+- [x] (111) 82. **Le repas du pêcheur** — Pêcher cinq poissons. → repris tel quel (Quetes)
 - [ ] (112) 83. **Un poisson exceptionnel** — Attraper une espèce rare.
-- [ ] (113) 84. **La commande de l'auberge** — Livrer 10 poissons.
-- [ ] (114) 85. **Les eaux profondes** — Pêcher dans une zone éloignée.
-- [ ] (115) 86. **Le vieux pêcheur** — Retrouver sa canne perdue.
-- [ ] (116) 87. **Le concours de pêche** — Participer à une compétition.
-- [ ] (117) 88. **Le cuisinier débutant** — Préparer trois recettes.
-- [ ] (118) 89. **Le banquet du village** — Préparer 20 portions de nourriture.
-- [ ] (119) 90. **Une recette ancienne** — Retrouver une recette oubliée.
-- [ ] (120) 91. **Le plat régional** — Préparer une spécialité d'un biome.
-- [ ] (121) 92. **Le chef renommé** — Réussir plusieurs recettes difficiles.
-- [ ] (122) 93. **Le garde affamé** — Préparer des repas pour les gardes.
-- [ ] (123) 94. **Le festin du roi** — Fournir les ingrédients d'un grand banquet.
-- [ ] (124) 95. **Le livre de cuisine** — Découvrir 10 recettes différentes.
+- [x] (113) 84. **La commande de l'auberge** — Livrer 10 poissons. → sorte « livrer (QuetesLieux) »
+- [x] (114) 85. **Les eaux profondes** — Pêcher dans une zone éloignée. → sorte « pêcher (Quetes) »
+- [x] (115) 86. **Le vieux pêcheur** — Retrouver sa canne perdue. → repris tel quel (Quetes)
+- [x] (116) 87. **Le concours de pêche** — Participer à une compétition. → sorte « concours / courses (Activites) »
+- [x] (117) 88. **Le cuisinier débutant** — Préparer trois recettes. → sorte « fabriquer (Quetes, cuisine) »
+- [x] (118) 89. **Le banquet du village** — Préparer 20 portions de nourriture. → repris tel quel (Quetes)
+- [x] (119) 90. **Une recette ancienne** — Retrouver une recette oubliée. → sorte « retrouver (QuetesLieux) »
+- [x] (120) 91. **Le plat régional** — Préparer une spécialité d'un biome. → repris tel quel (Quetes)
+- [x] (121) 92. **Le chef renommé** — Réussir plusieurs recettes difficiles. → sorte « concours / courses (Activites) »
+- [x] (122) 93. **Le garde affamé** — Préparer des repas pour les gardes. → sorte « fabriquer (Quetes, cuisine) »
+- [x] (123) 94. **Le festin du roi** — Fournir les ingrédients d'un grand banquet. → sorte « apporter (Quetes) »
+- [x] (124) 95. **Le livre de cuisine** — Découvrir 10 recettes différentes. → sorte « découvrir / visiter (QuetesLieux) »
 
 ### 7. Quêtes d'artisanat et de construction
 
-- [ ] (128) 96. **Le premier établi** — Construire un établi.
-- [ ] (129) 97. **Un toit au-dessus de la tête** — Construire une petite maison.
-- [ ] (130) 98. **Le foyer chaleureux** — Installer une cheminée.
-- [ ] (131) 99. **Une maison complète** — Installer un lit, une table et des chaises.
-- [ ] (132) 100. **Le menuisier** — Fabriquer 20 planches.
-- [ ] (133) 101. **Le maçon** — Fabriquer 30 blocs de pierre.
-- [ ] (134) 102. **La grande grange** — Construire une grange.
-- [ ] (135) 103. **Le pont du village** — Participer à la construction d'un pont.
-- [ ] (136) 104. **Le moulin** — Construire ou réparer un moulin.
-- [ ] (137) 105. **Le chantier communal** — Livrer des matériaux à un chantier.
-- [ ] (138) 106. **Le mobilier du maire** — Fabriquer un ensemble de meubles.
+- [x] (128) 96. **Le premier établi** — Construire un établi. → sorte « bâtir (Quetes) »
+- [x] (129) 97. **Un toit au-dessus de la tête** — Construire une petite maison. → sorte « bâtir (Quetes) »
+- [x] (130) 98. **Le foyer chaleureux** — Installer une cheminée. → sorte « bâtir / étal (QuetesLieux) »
+- [x] (131) 99. **Une maison complète** — Installer un lit, une table et des chaises. → sorte « bâtir / étal (QuetesLieux) »
+- [x] (132) 100. **Le menuisier** — Fabriquer 20 planches. → sorte « fabriquer (Quetes) »
+- [x] (133) 101. **Le maçon** — Fabriquer 30 blocs de pierre. → repris tel quel (Quetes)
+- [x] (134) 102. **La grande grange** — Construire une grange. → sorte « bâtir (Quetes) »
+- [x] (135) 103. **Le pont du village** — Participer à la construction d'un pont. → sorte « concours / courses (Activites) »
+- [x] (136) 104. **Le moulin** — Construire ou réparer un moulin. → sorte « bâtir (Quetes) »
+- [x] (137) 105. **Le chantier communal** — Livrer des matériaux à un chantier. → repris tel quel (Quetes)
+- [x] (138) 106. **Le mobilier du maire** — Fabriquer un ensemble de meubles. → sorte « fabriquer (Quetes) »
 - [ ] (139) 107. **La maison idéale** — Faire valider une construction par un PNJ.
-- [ ] (140) 108. **L'artisan reconnu** — Fabriquer 10 objets différents.
-- [ ] (141) 109. **Le bâtiment remarquable** — Participer à la construction d'un bâtiment public.
-- [ ] (142) 110. **Le maître constructeur** — Construire une propriété répondant à plusieurs critères.
+- [x] (140) 108. **L'artisan reconnu** — Fabriquer 10 objets différents. → sorte « fabriquer (Quetes) »
+- [x] (141) 109. **Le bâtiment remarquable** — Participer à la construction d'un bâtiment public. → sorte « concours / courses (Activites) »
+- [x] (142) 110. **Le maître constructeur** — Construire une propriété répondant à plusieurs critères. → sorte « bâtir (Quetes) »
 
 ### 8. Quêtes d'exploration et de découverte
 
-- [ ] (146) 111. **La carte incomplète** — Découvrir cinq zones inconnues.
-- [ ] (147) 112. **Le vieux chemin** — Retrouver une route oubliée.
-- [ ] (148) 113. **La tour abandonnée** — Explorer une ancienne tour.
-- [ ] (149) 114. **Le pont détruit** — Trouver un autre passage vers une région.
-- [ ] (150) 115. **La ruine mystérieuse** — Explorer des ruines anciennes.
-- [ ] (151) 116. **Les traces dans la forêt** — Suivre une piste.
-- [ ] (152) 117. **Le campement oublié** — Découvrir un ancien camp.
-- [ ] (153) 118. **La grotte lumineuse** — Explorer une grotte particulière.
-- [ ] (154) 119. **Le sommet du monde** — Atteindre le sommet d'une montagne.
-- [ ] (155) 120. **Le phare isolé** — Trouver un phare éloigné.
-- [ ] (156) 121. **Le désert perdu** — Découvrir une oasis.
-- [ ] (157) 122. **La forêt rousse** — Trouver un arbre remarquable.
-- [ ] (158) 123. **La toundra silencieuse** — Découvrir une ancienne installation.
-- [ ] (159) 124. **Le marais brumeux** — Trouver un passage caché.
-- [ ] (160) 125. **L'explorateur légendaire** — Découvrir tous les lieux d'une région.
-- [ ] (161) 126. **Les frontières du monde** — Atteindre les limites explorables d'une île.
-- [ ] (162) 127. **Une nouvelle terre** — Participer à la découverte d'un nouveau monde.
+- [x] (146) 111. **La carte incomplète** — Découvrir cinq zones inconnues. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (147) 112. **Le vieux chemin** — Retrouver une route oubliée. → repris tel quel (Quetes)
+- [x] (148) 113. **La tour abandonnée** — Explorer une ancienne tour. → sorte « visiter (QuetesLieux) »
+- [x] (149) 114. **Le pont détruit** — Trouver un autre passage vers une région. → sorte « retrouver (QuetesLieux) »
+- [x] (150) 115. **La ruine mystérieuse** — Explorer des ruines anciennes. → repris tel quel (Quetes)
+- [x] (151) 116. **Les traces dans la forêt** — Suivre une piste. → sorte « escorter / enquêter (QuetesLieux) »
+- [x] (152) 117. **Le campement oublié** — Découvrir un ancien camp. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (153) 118. **La grotte lumineuse** — Explorer une grotte particulière. → sorte « visiter (QuetesLieux) »
+- [x] (154) 119. **Le sommet du monde** — Atteindre le sommet d'une montagne. → sorte « visiter (QuetesLieux) »
+- [x] (155) 120. **Le phare isolé** — Trouver un phare éloigné. → sorte « retrouver (QuetesLieux) »
+- [x] (156) 121. **Le désert perdu** — Découvrir une oasis. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (157) 122. **La forêt rousse** — Trouver un arbre remarquable. → sorte « retrouver (QuetesLieux) »
+- [x] (158) 123. **La toundra silencieuse** — Découvrir une ancienne installation. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (159) 124. **Le marais brumeux** — Trouver un passage caché. → sorte « retrouver (QuetesLieux) »
+- [x] (160) 125. **L'explorateur légendaire** — Découvrir tous les lieux d'une région. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (161) 126. **Les frontières du monde** — Atteindre les limites explorables d'une île. → sorte « visiter (QuetesLieux) »
+- [x] (162) 127. **Une nouvelle terre** — Participer à la découverte d'un nouveau monde. → sorte « concours / courses (Activites) »
 - [ ] (163) 128. **Les cartes du cartographe** — Cartographier plusieurs régions.
-- [ ] (164) 129. **Le journal du voyageur** — Retrouver plusieurs pages d'un carnet.
-- [ ] (165) 130. **Le secret de l'île** — Résoudre une énigme répartie sur plusieurs lieux.
+- [x] (164) 129. **Le journal du voyageur** — Retrouver plusieurs pages d'un carnet. → sorte « retrouver (QuetesLieux) »
+- [x] (165) 130. **Le secret de l'île** — Résoudre une énigme répartie sur plusieurs lieux. → sorte « enquêter (QuetesLieux) »
 
 ### 9. Quêtes de chasse et de créatures
 
-- [ ] (169) 131. **Les empreintes** — Identifier les traces d'un animal.
-- [ ] (170) 132. **Le cerf de la forêt** — Observer un cerf rare.
-- [ ] (171) 133. **Le prédateur nocturne** — Découvrir une créature active la nuit.
-- [ ] (172) 134. **Le troupeau disparu** — Retrouver des animaux égarés.
-- [ ] (173) 135. **Le nid abandonné** — Découvrir un nid inhabituel.
-- [ ] (174) 136. **Le naturaliste** — Observer cinq espèces animales.
-- [ ] (175) 137. **Le bestiaire** — Compléter dix entrées du bestiaire.
-- [ ] (176) 138. **Le gardien des animaux** — Protéger des animaux d'une menace.
-- [ ] (177) 139. **La créature des marais** — Découvrir une créature rare.
-- [ ] (178) 140. **L'oiseau des montagnes** — Observer un oiseau difficile à trouver.
-- [ ] (179) 141. **Le loup solitaire** — Retrouver un loup isolé.
-- [ ] (180) 142. **Le grand ours** — Découvrir le territoire d'un ours.
+- [x] (169) 131. **Les empreintes** — Identifier les traces d'un animal. → sorte « enquêter (QuetesLieux) »
+- [x] (170) 132. **Le cerf de la forêt** — Observer un cerf rare. → sorte « visiter (QuetesLieux) »
+- [x] (171) 133. **Le prédateur nocturne** — Découvrir une créature active la nuit. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (172) 134. **Le troupeau disparu** — Retrouver des animaux égarés. → sorte « retrouver (QuetesLieux) »
+- [x] (173) 135. **Le nid abandonné** — Découvrir un nid inhabituel. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (174) 136. **Le naturaliste** — Observer cinq espèces animales. → sorte « visiter (QuetesLieux) »
+- [x] (175) 137. **Le bestiaire** — Compléter dix entrées du bestiaire. → repris tel quel (Quetes)
+- [x] (176) 138. **Le gardien des animaux** — Protéger des animaux d'une menace. → sorte « escorter (QuetesLieux) »
+- [x] (177) 139. **La créature des marais** — Découvrir une créature rare. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (178) 140. **L'oiseau des montagnes** — Observer un oiseau difficile à trouver. → sorte « visiter (QuetesLieux) »
+- [x] (179) 141. **Le loup solitaire** — Retrouver un loup isolé. → sorte « retrouver (QuetesLieux) »
+- [x] (180) 142. **Le grand ours** — Découvrir le territoire d'un ours. → sorte « découvrir / visiter (QuetesLieux) »
 
 ### Wild Acres — Grande bibliothèque de quêtes
 
 
 ### 9. Créatures, faune et observation
 
-- [ ] (190) 143. **Le renard curieux** — Observer un renard sans le faire fuir.
-- [ ] (191) 144. **Le troupeau de cerfs** — Repérer un groupe de cerfs dans la forêt.
-- [ ] (192) 145. **Le chant du hibou** — Trouver un hibou pendant la nuit.
-- [ ] (193) 146. **Les oiseaux migrateurs** — Observer trois espèces d'oiseaux.
-- [ ] (194) 147. **Le lac aux grenouilles** — Découvrir une zone où vivent de nombreuses grenouilles.
-- [ ] (195) 148. **Le terrier mystérieux** — Identifier l'animal qui habite un terrier.
+- [x] (190) 143. **Le renard curieux** — Observer un renard sans le faire fuir. → sorte « visiter (QuetesLieux) »
+- [x] (191) 144. **Le troupeau de cerfs** — Repérer un groupe de cerfs dans la forêt. → sorte « visiter (QuetesLieux) »
+- [x] (192) 145. **Le chant du hibou** — Trouver un hibou pendant la nuit. → sorte « retrouver (QuetesLieux) »
+- [x] (193) 146. **Les oiseaux migrateurs** — Observer trois espèces d'oiseaux. → sorte « visiter (QuetesLieux) »
+- [x] (194) 147. **Le lac aux grenouilles** — Découvrir une zone où vivent de nombreuses grenouilles. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (195) 148. **Le terrier mystérieux** — Identifier l'animal qui habite un terrier. → sorte « enquêter (QuetesLieux) »
 - [ ] (196) 149. **Le biologiste amateur** — Photographier ou enregistrer dix observations d'animaux.
-- [ ] (197) 150. **Le vieux castor** — Retrouver un barrage de castors.
+- [x] (197) 150. **Le vieux castor** — Retrouver un barrage de castors. → sorte « retrouver (QuetesLieux) »
 - [ ] (198) 151. **Le nid de l'aigle** — Localiser un nid en altitude.
-- [ ] (199) 152. **La tanière des loups** — Découvrir une tanière et en noter l'emplacement.
-- [ ] (200) 153. **Le papillon rare** — Trouver un papillon particulier.
-- [ ] (201) 154. **Les lucioles** — Observer un rassemblement de lucioles.
-- [ ] (202) 155. **La migration des troupeaux** — Suivre un troupeau pendant son déplacement.
-- [ ] (203) 156. **L'animal blessé** — Apporter des fournitures au soigneur pour aider un animal.
-- [ ] (204) 157. **Le gardien du refuge** — Nourrir et surveiller les animaux d'un refuge.
+- [x] (199) 152. **La tanière des loups** — Découvrir une tanière et en noter l'emplacement. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (200) 153. **Le papillon rare** — Trouver un papillon particulier. → sorte « retrouver (QuetesLieux) »
+- [x] (201) 154. **Les lucioles** — Observer un rassemblement de lucioles. → sorte « visiter (QuetesLieux) »
+- [x] (202) 155. **La migration des troupeaux** — Suivre un troupeau pendant son déplacement. → sorte « escorter / enquêter (QuetesLieux) »
+- [x] (203) 156. **L'animal blessé** — Apporter des fournitures au soigneur pour aider un animal. → sorte « apporter (Quetes) »
+- [x] (204) 157. **Le gardien du refuge** — Nourrir et surveiller les animaux d'un refuge. → sorte « apporter (Quetes) »
 - [ ] (205) 158. **Le concours du bestiaire** — Présenter les observations de plusieurs espèces.
-- [ ] (206) 159. **Une espèce introuvable** — Découvrir une espèce encore inconnue du joueur.
+- [x] (206) 159. **Une espèce introuvable** — Découvrir une espèce encore inconnue du joueur. → sorte « découvrir / visiter (QuetesLieux) »
 - [ ] (207) 160. **Le maître naturaliste** — Compléter une collection d'observations d'un biome.
 
 ### 10. Donjons, ruines et boss
 
-- [ ] (211) 161. **L'entrée scellée** — Trouver comment ouvrir l'entrée d'un ancien donjon.
-- [ ] (212) 162. **Les couloirs oubliés** — Explorer toutes les salles d'un donjon.
-- [ ] (213) 163. **Le mécanisme ancien** — Résoudre une énigme mécanique.
-- [ ] (214) 164. **Les trois leviers** — Trouver et activer trois mécanismes dans le bon ordre.
+- [x] (211) 161. **L'entrée scellée** — Trouver comment ouvrir l'entrée d'un ancien donjon. → sorte « retrouver (QuetesLieux) »
+- [x] (212) 162. **Les couloirs oubliés** — Explorer toutes les salles d'un donjon. → sorte « visiter (QuetesLieux) »
+- [x] (213) 163. **Le mécanisme ancien** — Résoudre une énigme mécanique. → sorte « enquêter (QuetesLieux) »
+- [x] (214) 164. **Les trois leviers** — Trouver et activer trois mécanismes dans le bon ordre. → sorte « retrouver (QuetesLieux) »
 - [ ] (215) 165. **La salle des symboles** — Reconstituer un code à partir de fresques.
-- [ ] (216) 166. **Le coffre du gardien** — Trouver le coffre caché d'un donjon.
+- [x] (216) 166. **Le coffre du gardien** — Trouver le coffre caché d'un donjon. → sorte « retrouver (QuetesLieux) »
 - [ ] (217) 167. **Le gardien de pierre** — Affronter ou contourner un gardien ancien.
-- [ ] (218) 168. **La crypte silencieuse** — Explorer une crypte abandonnée.
-- [ ] (219) 169. **La bibliothèque interdite** — Retrouver un manuscrit dans des ruines.
-- [ ] (220) 170. **Le temple enfoui** — Découvrir l'entrée d'un temple sous le sable.
-- [ ] (221) 171. **La porte des anciens** — Réunir les éléments nécessaires à son ouverture.
-- [ ] (222) 172. **L'épreuve du courage** — Réussir une épreuve dans un donjon.
-- [ ] (223) 173. **L'épreuve de sagesse** — Résoudre une série d'énigmes.
-- [ ] (224) 174. **L'épreuve d'agilité** — Traverser une salle d'obstacles.
-- [ ] (225) 175. **Le gardien du désert** — Découvrir le repaire d'un boss du désert.
-- [ ] (226) 176. **Le seigneur des marais** — Retrouver la source d'une étrange activité dans les marais.
-- [ ] (227) 177. **Le géant de glace** — Explorer les terres d'une créature légendaire.
+- [x] (218) 168. **La crypte silencieuse** — Explorer une crypte abandonnée. → sorte « visiter (QuetesLieux) »
+- [x] (219) 169. **La bibliothèque interdite** — Retrouver un manuscrit dans des ruines. → sorte « retrouver (QuetesLieux) »
+- [x] (220) 170. **Le temple enfoui** — Découvrir l'entrée d'un temple sous le sable. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (221) 171. **La porte des anciens** — Réunir les éléments nécessaires à son ouverture. → sorte « apporter (Quetes) »
+- [x] (222) 172. **L'épreuve du courage** — Réussir une épreuve dans un donjon. → sorte « concours / courses (Activites) »
+- [x] (223) 173. **L'épreuve de sagesse** — Résoudre une série d'énigmes. → sorte « enquêter (QuetesLieux) »
+- [x] (224) 174. **L'épreuve d'agilité** — Traverser une salle d'obstacles. → sorte « naviguer / visiter (Quetes) »
+- [x] (225) 175. **Le gardien du désert** — Découvrir le repaire d'un boss du désert. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (226) 176. **Le seigneur des marais** — Retrouver la source d'une étrange activité dans les marais. → sorte « retrouver (QuetesLieux) »
+- [x] (227) 177. **Le géant de glace** — Explorer les terres d'une créature légendaire. → sorte « visiter (QuetesLieux) »
 - [ ] (228) 178. **Le dernier mécanisme** — Activer le mécanisme final d'un temple.
-- [ ] (229) 179. **La salle du trésor** — Atteindre la salle secrète d'un donjon.
+- [x] (229) 179. **La salle du trésor** — Atteindre la salle secrète d'un donjon. → sorte « visiter (QuetesLieux) »
 - [ ] (230) 180. **Les explorateurs réunis** — Terminer un donjon avec plusieurs joueurs.
 
 ### 11. Quêtes nocturnes et phénomènes mystérieux
 
-- [ ] (234) 181. **La lumière dans la forêt** — Suivre une lumière aperçue entre les arbres.
-- [ ] (235) 182. **Les bruits du marais** — Identifier l'origine de sons étranges.
-- [ ] (236) 183. **Le voyageur nocturne** — Retrouver un voyageur disparu pendant la nuit.
-- [ ] (237) 184. **La silhouette sur la colline** — Découvrir qui se tient près d'une vieille tour.
+- [x] (234) 181. **La lumière dans la forêt** — Suivre une lumière aperçue entre les arbres. → sorte « escorter / enquêter (QuetesLieux) »
+- [x] (235) 182. **Les bruits du marais** — Identifier l'origine de sons étranges. → sorte « enquêter (QuetesLieux) »
+- [x] (236) 183. **Le voyageur nocturne** — Retrouver un voyageur disparu pendant la nuit. → sorte « retrouver (QuetesLieux) »
+- [x] (237) 184. **La silhouette sur la colline** — Découvrir qui se tient près d'une vieille tour. → sorte « découvrir / visiter (QuetesLieux) »
 - [ ] (238) 185. **Les lanternes éteintes** — Rallumer plusieurs lanternes sur une route.
-- [ ] (239) 186. **Le brouillard inhabituel** — Trouver l'origine d'un brouillard étrange.
+- [x] (239) 186. **Le brouillard inhabituel** — Trouver l'origine d'un brouillard étrange. → sorte « retrouver (QuetesLieux) »
 - [ ] (240) 187. **La maison abandonnée** — Examiner une habitation désertée.
-- [ ] (241) 188. **Le cercle de pierres** — Découvrir la fonction d'un cercle ancien.
-- [ ] (242) 189. **Les traces lumineuses** — Suivre des marques mystérieuses.
-- [ ] (243) 190. **La créature des ruines** — Identifier une présence dans des ruines.
-- [ ] (244) 191. **La cloche de minuit** — Découvrir pourquoi une cloche sonne seule.
-- [ ] (245) 192. **Le lac brillant** — Observer un phénomène lumineux sur l'eau.
-- [ ] (246) 193. **La nuit sans oiseaux** — Découvrir pourquoi les oiseaux ont quitté une zone.
+- [x] (241) 188. **Le cercle de pierres** — Découvrir la fonction d'un cercle ancien. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (242) 189. **Les traces lumineuses** — Suivre des marques mystérieuses. → sorte « escorter / enquêter (QuetesLieux) »
+- [x] (243) 190. **La créature des ruines** — Identifier une présence dans des ruines. → sorte « enquêter (QuetesLieux) »
+- [x] (244) 191. **La cloche de minuit** — Découvrir pourquoi une cloche sonne seule. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (245) 192. **Le lac brillant** — Observer un phénomène lumineux sur l'eau. → sorte « visiter (QuetesLieux) »
+- [x] (246) 193. **La nuit sans oiseaux** — Découvrir pourquoi les oiseaux ont quitté une zone. → sorte « découvrir / visiter (QuetesLieux) »
 - [ ] (247) 194. **Le gardien endormi** — Réveiller un ancien gardien par une énigme.
-- [ ] (248) 195. **Le secret de la pleine lune** — Réunir des indices lors d'une nuit particulière.
+- [x] (248) 195. **Le secret de la pleine lune** — Réunir des indices lors d'une nuit particulière. → sorte « apporter (Quetes) »
 
 ### 12. Quêtes de vol, de contrebande et de criminalité
 
-- [ ] (254) 196. **Le colis discret** — Transporter un colis sans attirer l'attention.
-- [ ] (255) 197. **La cargaison suspecte** — Découvrir la provenance d'une marchandise douteuse.
-- [ ] (256) 198. **Le marchand clandestin** — Trouver un vendeur caché.
-- [ ] (257) 199. **La marchandise perdue** — Retrouver un objet volé.
-- [ ] (258) 200. **Le coffre disparu** — Enquêter sur la disparition d'un coffre.
-- [ ] (259) 201. **Une affaire risquée** — Livrer un objet à un personnage recherché.
-- [ ] (260) 202. **Le passage secret** — Découvrir un passage utilisé par des contrebandiers.
-- [ ] (261) 203. **La dette du brigand** — Retrouver un objet que doit un hors-la-loi.
-- [ ] (262) 204. **Le repaire abandonné** — Explorer une ancienne cachette de bandits.
-- [ ] (263) 205. **La filière de contrebande** — Découvrir plusieurs intermédiaires d'un réseau clandestin.
-- [ ] (264) 206. **Le receleur** — Identifier un marchand qui vend des biens volés.
-- [ ] (265) 207. **La prime importante** — Retrouver un individu recherché.
+- [x] (254) 196. **Le colis discret** — Transporter un colis sans attirer l'attention. → sorte « livrer (QuetesLieux) »
+- [x] (255) 197. **La cargaison suspecte** — Découvrir la provenance d'une marchandise douteuse. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (256) 198. **Le marchand clandestin** — Trouver un vendeur caché. → sorte « retrouver (QuetesLieux) »
+- [x] (257) 199. **La marchandise perdue** — Retrouver un objet volé. → sorte « retrouver (QuetesLieux) »
+- [x] (258) 200. **Le coffre disparu** — Enquêter sur la disparition d'un coffre. → sorte « enquêter (QuetesLieux) »
+- [x] (259) 201. **Une affaire risquée** — Livrer un objet à un personnage recherché. → sorte « livrer (QuetesLieux) »
+- [x] (260) 202. **Le passage secret** — Découvrir un passage utilisé par des contrebandiers. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (261) 203. **La dette du brigand** — Retrouver un objet que doit un hors-la-loi. → sorte « retrouver (QuetesLieux) »
+- [x] (262) 204. **Le repaire abandonné** — Explorer une ancienne cachette de bandits. → sorte « visiter (QuetesLieux) »
+- [x] (263) 205. **La filière de contrebande** — Découvrir plusieurs intermédiaires d'un réseau clandestin. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (264) 206. **Le receleur** — Identifier un marchand qui vend des biens volés. → sorte « enquêter (QuetesLieux) »
+- [x] (265) 207. **La prime importante** — Retrouver un individu recherché. → sorte « retrouver (QuetesLieux) »
 - [ ] (266) 208. **Une réputation dangereuse** — Accomplir plusieurs missions pour une organisation criminelle fictive.
 - [ ] (267) 209. **Le butin partagé** — Répartir une récompense entre plusieurs membres d'un groupe.
-- [ ] (268) 210. **La cargaison interdite** — Découvrir et signaler une cargaison illicite.
-- [ ] (269) 211. **Le témoin silencieux** — Retrouver un témoin d'un vol.
+- [x] (268) 210. **La cargaison interdite** — Découvrir et signaler une cargaison illicite. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (269) 211. **Le témoin silencieux** — Retrouver un témoin d'un vol. → sorte « retrouver (QuetesLieux) »
 - [ ] (270) 212. **Le propriétaire lésé** — Restituer des objets à leur propriétaire.
-- [ ] (271) 213. **Le marché de nuit** — Découvrir un marché qui n'apparaît qu'à certaines heures.
-- [ ] (272) 214. **Le chef des brigands** — Retrouver le responsable d'un groupe de hors-la-loi.
+- [x] (271) 213. **Le marché de nuit** — Découvrir un marché qui n'apparaît qu'à certaines heures. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (272) 214. **Le chef des brigands** — Retrouver le responsable d'un groupe de hors-la-loi. → sorte « retrouver (QuetesLieux) »
 - [ ] (273) 215. **La dernière affaire** — Choisir entre rendre un butin ou le conserver.
 
 ### 13. Quêtes de justice, gardes et réputation
 
 - [ ] (277) 216. **Le recrutement** — Se présenter auprès du capitaine de la garde.
 - [ ] (278) 217. **La patrouille du matin** — Effectuer une patrouille dans le village.
-- [ ] (279) 218. **La route dangereuse** — Escorter un marchand sur une route.
-- [ ] (280) 219. **Le vol au marché** — Retrouver le responsable d'un vol.
+- [x] (279) 218. **La route dangereuse** — Escorter un marchand sur une route. → sorte « escorter (QuetesLieux) »
+- [x] (280) 219. **Le vol au marché** — Retrouver le responsable d'un vol. → sorte « retrouver (QuetesLieux) »
 - [ ] (281) 220. **Le témoin important** — Recueillir le témoignage d'un villageois.
-- [ ] (282) 221. **Le fugitif** — Retrouver une personne recherchée.
-- [ ] (283) 222. **La récompense promise** — Rapporter la preuve d'une mission accomplie.
+- [x] (282) 221. **Le fugitif** — Retrouver une personne recherchée. → sorte « retrouver (QuetesLieux) »
+- [x] (283) 222. **La récompense promise** — Rapporter la preuve d'une mission accomplie. → sorte « apporter (Quetes) »
 - [ ] (284) 223. **Une garde renforcée** — Surveiller une zone pendant une durée définie.
-- [ ] (285) 224. **Le convoi royal** — Escorter une cargaison importante.
-- [ ] (286) 225. **L'apprenti shérif** — Réussir plusieurs missions de justice.
-- [ ] (287) 226. **Le tribunal du village** — Participer à une audience fictive.
-- [ ] (288) 227. **Une erreur judiciaire** — Retrouver les preuves permettant d'innocenter un personnage.
+- [x] (285) 224. **Le convoi royal** — Escorter une cargaison importante. → sorte « escorter (QuetesLieux) »
+- [x] (286) 225. **L'apprenti shérif** — Réussir plusieurs missions de justice. → sorte « concours / courses (Activites) »
+- [x] (287) 226. **Le tribunal du village** — Participer à une audience fictive. → sorte « concours / courses (Activites) »
+- [x] (288) 227. **Une erreur judiciaire** — Retrouver les preuves permettant d'innocenter un personnage. → sorte « retrouver (QuetesLieux) »
 - [ ] (289) 228. **Le village inquiet** — Rassurer les habitants après plusieurs incidents.
-- [ ] (290) 229. **La prisonnière clé** — Retrouver un document nécessaire à la résolution d'une affaire.
-- [ ] (291) 230. **Le protecteur de Valdor** — Atteindre un niveau élevé de réputation auprès de la garde.
+- [x] (290) 229. **La prisonnière clé** — Retrouver un document nécessaire à la résolution d'une affaire. → sorte « retrouver (QuetesLieux) »
+- [x] (291) 230. **Le protecteur de Valdor** — Atteindre un niveau élevé de réputation auprès de la garde. → réputation par village (Reputation)
 
 ### 14. Quêtes de commerce et d'économie
 
 - [ ] (295) 231. **Le premier contrat** — Accepter et terminer une commande commerciale.
 - [ ] (296) 232. **Les prix du marché** — Comparer les prix de trois villages.
-- [ ] (297) 233. **Le marchand itinérant** — Livrer une marchandise dans un autre biome.
-- [ ] (298) 234. **Une bonne affaire** — Trouver une offre intéressante.
-- [ ] (299) 235. **Les réserves du village** — Fournir des ressources à un entrepôt.
+- [x] (297) 233. **Le marchand itinérant** — Livrer une marchandise dans un autre biome. → sorte « livrer (QuetesLieux) »
+- [x] (298) 234. **Une bonne affaire** — Trouver une offre intéressante. → sorte « retrouver (QuetesLieux) »
+- [x] (299) 235. **Les réserves du village** — Fournir des ressources à un entrepôt. → sorte « apporter (Quetes) »
 - [ ] (300) 236. **Le convoi commercial** — Accompagner plusieurs marchands.
-- [ ] (301) 237. **Le comptable** — Retrouver les erreurs d'un registre commercial.
-- [ ] (302) 238. **Le marché prospère** — Contribuer à augmenter les stocks d'un marché.
-- [ ] (303) 239. **Le fournisseur officiel** — Obtenir un contrat régulier avec un commerçant.
-- [ ] (304) 240. **Une commande sur mesure** — Fabriquer un objet demandé par un client.
-- [ ] (305) 241. **Les marchandises rares** — Trouver cinq produits difficiles à obtenir.
+- [x] (301) 237. **Le comptable** — Retrouver les erreurs d'un registre commercial. → sorte « retrouver (QuetesLieux) »
+- [x] (302) 238. **Le marché prospère** — Contribuer à augmenter les stocks d'un marché. → sorte « chantiers de village (Chantiers) »
+- [x] (303) 239. **Le fournisseur officiel** — Obtenir un contrat régulier avec un commerçant. → sorte « apporter (Quetes) »
+- [x] (304) 240. **Une commande sur mesure** — Fabriquer un objet demandé par un client. → sorte « fabriquer (Quetes) »
+- [x] (305) 241. **Les marchandises rares** — Trouver cinq produits difficiles à obtenir. → sorte « retrouver (QuetesLieux) »
 - [ ] (306) 242. **Le commerce entre biomes** — Échanger des ressources provenant de trois biomes.
 - [ ] (307) 243. **La boutique du joueur** — Ouvrir une boutique personnelle.
 - [ ] (308) 244. **Le premier client** — Réaliser une vente dans sa boutique.
-- [ ] (309) 245. **Le commerçant réputé** — Atteindre un certain niveau de réputation commerciale.
-- [ ] (310) 246. **La caravane perdue** — Retrouver une cargaison égarée.
-- [ ] (311) 247. **Le contrat royal** — Fournir des marchandises à un représentant royal.
-- [ ] (312) 248. **La foire commerciale** — Installer un étal lors d'une foire.
+- [x] (309) 245. **Le commerçant réputé** — Atteindre un certain niveau de réputation commerciale. → réputation par village (Reputation)
+- [x] (310) 246. **La caravane perdue** — Retrouver une cargaison égarée. → sorte « retrouver (QuetesLieux) »
+- [x] (311) 247. **Le contrat royal** — Fournir des marchandises à un représentant royal. → sorte « apporter (Quetes) »
+- [x] (312) 248. **La foire commerciale** — Installer un étal lors d'une foire. → sorte « bâtir / étal (QuetesLieux) »
 - [ ] (313) 249. **Le grand négociant** — Conclure plusieurs contrats importants.
 - [ ] (314) 250. **La route des marchands** — Réaliser des livraisons dans tous les villages connus.
 
 ### 15. Quêtes de transport et de voyage
 
-- [ ] (318) 251. **Le premier voyage** — Visiter un village éloigné.
-- [ ] (319) 252. **Le cheval de bât** — Transporter une cargaison avec un animal de bât.
-- [ ] (320) 253. **Une selle adaptée** — Fabriquer ou acheter une selle.
-- [ ] (321) 254. **Le voyageur expérimenté** — Parcourir une longue distance.
-- [ ] (322) 255. **La route effondrée** — Trouver un itinéraire alternatif.
-- [ ] (323) 256. **Le passeur** — Transporter plusieurs voyageurs en bateau.
-- [ ] (324) 257. **La traversée** — Rejoindre une autre partie de l'île par la mer.
-- [ ] (325) 258. **Le bateau en panne** — Retrouver le matériel nécessaire à sa réparation.
-- [ ] (326) 259. **Le chantier naval** — Fournir des matériaux pour construire un bateau.
+- [x] (318) 251. **Le premier voyage** — Visiter un village éloigné. → sorte « visiter (QuetesLieux) »
+- [x] (319) 252. **Le cheval de bât** — Transporter une cargaison avec un animal de bât. → sorte « livrer (QuetesLieux) »
+- [x] (320) 253. **Une selle adaptée** — Fabriquer ou acheter une selle. → sorte « fabriquer (Quetes) »
+- [x] (321) 254. **Le voyageur expérimenté** — Parcourir une longue distance. → sorte « visiter (QuetesLieux) »
+- [x] (322) 255. **La route effondrée** — Trouver un itinéraire alternatif. → sorte « retrouver (QuetesLieux) »
+- [x] (323) 256. **Le passeur** — Transporter plusieurs voyageurs en bateau. → sorte « livrer (QuetesLieux) »
+- [x] (324) 257. **La traversée** — Rejoindre une autre partie de l'île par la mer. → sorte « visiter (QuetesLieux) »
+- [x] (325) 258. **Le bateau en panne** — Retrouver le matériel nécessaire à sa réparation. → sorte « retrouver (QuetesLieux) »
+- [x] (326) 259. **Le chantier naval** — Fournir des matériaux pour construire un bateau. → sorte « apporter (Quetes) »
 - [ ] (327) 260. **Le capitaine** — Effectuer plusieurs voyages maritimes.
-- [ ] (328) 261. **La carte marine** — Découvrir plusieurs points de navigation.
-- [ ] (329) 262. **Les îles lointaines** — Explorer une île éloignée.
+- [x] (328) 261. **La carte marine** — Découvrir plusieurs points de navigation. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (329) 262. **Les îles lointaines** — Explorer une île éloignée. → sorte « visiter (QuetesLieux) »
 - [ ] (330) 263. **La diligence** — Organiser un voyage en diligence.
-- [ ] (331) 264. **Le relais routier** — Trouver ou construire un point de repos sur une route.
-- [ ] (332) 265. **Le grand explorateur** — Visiter tous les moyens de transport disponibles.
+- [x] (331) 264. **Le relais routier** — Trouver ou construire un point de repos sur une route. → sorte « retrouver (QuetesLieux) »
+- [x] (332) 265. **Le grand explorateur** — Visiter tous les moyens de transport disponibles. → sorte « visiter (QuetesLieux) »
 
 ### 16. Quêtes de clans et de coopération
 
-- [ ] (336) 266. **Un groupe se forme** — Rejoindre ou créer un clan.
+- [x] (336) 266. **Un groupe se forme** — Rejoindre ou créer un clan. → sorte « visiter (QuetesLieux) »
 - [ ] (337) 267. **Le premier quartier général** — Définir un lieu de rassemblement.
 - [ ] (338) 268. **Les couleurs du clan** — Choisir un emblème et des couleurs.
 - [ ] (339) 269. **Le coffre commun** — Déposer des ressources dans le coffre du clan.
-- [ ] (340) 270. **Le chantier collectif** — Construire un bâtiment avec des membres du clan.
+- [x] (340) 270. **Le chantier collectif** — Construire un bâtiment avec des membres du clan. → sorte « bâtir (Quetes) »
 - [ ] (341) 271. **La mission commune** — Accomplir une quête à trois joueurs ou plus.
-- [ ] (342) 272. **Le messager du clan** — Transmettre un message à un autre clan.
+- [x] (342) 272. **Le messager du clan** — Transmettre un message à un autre clan. → sorte « lettre (Quetes) »
 - [ ] (343) 273. **Le recrutement** — Accueillir de nouveaux membres.
 - [ ] (344) 274. **Le tournoi amical** — Organiser une compétition entre membres.
-- [ ] (345) 275. **La réserve collective** — Réunir des ressources pour le clan.
+- [x] (345) 275. **La réserve collective** — Réunir des ressources pour le clan. → sorte « apporter (Quetes) »
 - [ ] (346) 276. **Le chef responsable** — Répartir des tâches entre les membres.
 - [ ] (347) 277. **La réunion** — Organiser une réunion dans le quartier général.
 - [ ] (348) 278. **L'ambassadeur** — Rencontrer un autre clan.
 - [ ] (349) 279. **L'accord commercial** — Échanger des ressources avec un autre clan.
 - [ ] (350) 280. **Le pacte d'amitié** — Conclure une alliance.
-- [ ] (351) 281. **La défense du domaine** — Protéger une zone appartenant au clan.
-- [ ] (352) 282. **Le monument du clan** — Construire un monument collectif.
-- [ ] (353) 283. **La grande expédition** — Explorer un donjon en groupe.
-- [ ] (354) 284. **Le clan réputé** — Obtenir une reconnaissance auprès de plusieurs villages.
-- [ ] (355) 285. **La légende du clan** — Réussir une longue série de missions collectives.
+- [x] (351) 281. **La défense du domaine** — Protéger une zone appartenant au clan. → sorte « escorter (QuetesLieux) »
+- [x] (352) 282. **Le monument du clan** — Construire un monument collectif. → sorte « bâtir (Quetes) »
+- [x] (353) 283. **La grande expédition** — Explorer un donjon en groupe. → sorte « visiter (QuetesLieux) »
+- [x] (354) 284. **Le clan réputé** — Obtenir une reconnaissance auprès de plusieurs villages. → sorte « apporter (Quetes) »
+- [x] (355) 285. **La légende du clan** — Réussir une longue série de missions collectives. → sorte « concours / courses (Activites) »
 
 ### 17. Quêtes de territoire, armée et stratégie
 
 - [ ] (359) 286. **Le premier recrue** — Recruter un premier soldat fictif.
-- [ ] (360) 287. **La caserne** — Construire une caserne.
-- [ ] (361) 288. **L'équipement des recrues** — Fournir du matériel à plusieurs recrues.
+- [x] (360) 287. **La caserne** — Construire une caserne. → sorte « bâtir (Quetes) »
+- [x] (361) 288. **L'équipement des recrues** — Fournir du matériel à plusieurs recrues. → sorte « apporter (Quetes) »
 - [ ] (362) 289. **Le quartier-maître** — Organiser les réserves de l'armée.
 - [ ] (363) 290. **Les exercices** — Organiser une activité d'entraînement.
-- [ ] (364) 291. **La tour de guet** — Construire un poste d'observation.
-- [ ] (365) 292. **La frontière** — Explorer les limites d'un territoire.
-- [ ] (366) 293. **Le poste avancé** — Installer un campement dans une zone éloignée.
+- [x] (364) 291. **La tour de guet** — Construire un poste d'observation. → sorte « bâtir (Quetes) »
+- [x] (365) 292. **La frontière** — Explorer les limites d'un territoire. → sorte « visiter (QuetesLieux) »
+- [x] (366) 293. **Le poste avancé** — Installer un campement dans une zone éloignée. → sorte « bâtir / étal (QuetesLieux) »
 - [ ] (367) 294. **La carte stratégique** — Cartographier un territoire.
-- [ ] (368) 295. **Le conseil des officiers** — Réunir plusieurs responsables.
-- [ ] (369) 296. **Le ravitaillement** — Apporter des provisions à un camp.
-- [ ] (370) 297. **La bannière** — Fabriquer une bannière pour une armée.
-- [ ] (371) 298. **Le territoire contesté** — Participer à une mission de négociation territoriale.
-- [ ] (372) 299. **Le traité de paix** — Contribuer à conclure un accord entre deux clans.
+- [x] (368) 295. **Le conseil des officiers** — Réunir plusieurs responsables. → sorte « apporter (Quetes) »
+- [x] (369) 296. **Le ravitaillement** — Apporter des provisions à un camp. → sorte « apporter (Quetes) »
+- [x] (370) 297. **La bannière** — Fabriquer une bannière pour une armée. → sorte « fabriquer (Quetes) »
+- [x] (371) 298. **Le territoire contesté** — Participer à une mission de négociation territoriale. → sorte « concours / courses (Activites) »
+- [x] (372) 299. **Le traité de paix** — Contribuer à conclure un accord entre deux clans. → sorte « chantiers de village (Chantiers) »
 - [ ] (373) 300. **Le commandant** — Diriger une mission collective.
 
 ### 18. Quêtes sociales et vie quotidienne
@@ -1336,254 +1336,254 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 - [ ] (377) 301. **Une nouvelle rencontre** — Faire connaissance avec cinq habitants.
 - [ ] (378) 302. **Le bon voisin** — Aider un joueur à terminer une tâche.
 - [ ] (379) 303. **Un cadeau inattendu** — Offrir un objet à un autre joueur.
-- [ ] (380) 304. **La fête des voisins** — Participer à une fête de village.
-- [ ] (381) 305. **Le joueur généreux** — Donner plusieurs ressources à des joueurs.
-- [ ] (382) 306. **Le guide touristique** — Faire découvrir un village à un nouveau joueur.
-- [ ] (383) 307. **La soirée à l'auberge** — Participer à une activité sociale.
-- [ ] (384) 308. **Le conteur** — Écouter trois histoires racontées par des PNJ.
-- [ ] (385) 309. **La chasse au trésor collective** — Résoudre une énigme avec d'autres joueurs.
+- [x] (380) 304. **La fête des voisins** — Participer à une fête de village. → sorte « concours / courses (Activites) »
+- [x] (381) 305. **Le joueur généreux** — Donner plusieurs ressources à des joueurs. → sorte « apporter (Quetes) »
+- [x] (382) 306. **Le guide touristique** — Faire découvrir un village à un nouveau joueur. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (383) 307. **La soirée à l'auberge** — Participer à une activité sociale. → sorte « concours / courses (Activites) »
+- [x] (384) 308. **Le conteur** — Écouter trois histoires racontées par des PNJ. → sorte « enquêter (QuetesLieux) »
+- [x] (385) 309. **La chasse au trésor collective** — Résoudre une énigme avec d'autres joueurs. → sorte « enquêter (QuetesLieux) »
 - [ ] (386) 310. **Le concours de décoration** — Présenter une maison décorée.
-- [ ] (387) 311. **Le mariage des voisins** — Aider à préparer une célébration fictive.
-- [ ] (388) 312. **Le musicien du village** — Participer à une représentation.
-- [ ] (389) 313. **Le tournoi de lancer** — Participer à un jeu d'adresse.
+- [x] (387) 311. **Le mariage des voisins** — Aider à préparer une célébration fictive. → sorte « fabriquer (Quetes, cuisine) »
+- [x] (388) 312. **Le musicien du village** — Participer à une représentation. → sorte « concours / courses (Activites) »
+- [x] (389) 313. **Le tournoi de lancer** — Participer à un jeu d'adresse. → sorte « concours / courses (Activites) »
 - [ ] (390) 314. **Le champion du village** — Remporter une compétition locale.
-- [ ] (391) 315. **La grande fête** — Participer à plusieurs activités d'un festival.
+- [x] (391) 315. **La grande fête** — Participer à plusieurs activités d'un festival. → sorte « concours / courses (Activites) »
 
 ### 19. Quêtes d'événements et de festivals
 
-- [ ] (395) 316. **La fête des récoltes** — Livrer des produits agricoles.
-- [ ] (396) 317. **Le marché d'hiver** — Préparer un étal de saison.
-- [ ] (397) 318. **La chasse aux œufs** — Trouver des objets cachés dans le village.
+- [x] (395) 316. **La fête des récoltes** — Livrer des produits agricoles. → sorte « livrer (QuetesLieux) »
+- [x] (396) 317. **Le marché d'hiver** — Préparer un étal de saison. → sorte « fabriquer (Quetes, cuisine) »
+- [x] (397) 318. **La chasse aux œufs** — Trouver des objets cachés dans le village. → sorte « retrouver (QuetesLieux) »
 - [ ] (398) 319. **Le festival des lanternes** — Allumer des lanternes dans plusieurs rues.
-- [ ] (399) 320. **Le concours de cuisine** — Préparer un plat pour un jury.
-- [ ] (400) 321. **La course des montures** — Participer à une course.
+- [x] (399) 320. **Le concours de cuisine** — Préparer un plat pour un jury. → sorte « fabriquer (Quetes, cuisine) »
+- [x] (400) 321. **La course des montures** — Participer à une course. → sorte « concours / courses (Activites) »
 - [ ] (401) 322. **La foire artisanale** — Exposer trois objets fabriqués.
-- [ ] (402) 323. **La fête de la pêche** — Réussir un défi de pêche.
-- [ ] (403) 324. **Le concours de construction** — Construire selon un thème imposé.
-- [ ] (404) 325. **La fête de la musique** — Trouver les musiciens dispersés dans le village.
+- [x] (402) 323. **La fête de la pêche** — Réussir un défi de pêche. → sorte « concours / courses (Activites) »
+- [x] (403) 324. **Le concours de construction** — Construire selon un thème imposé. → sorte « bâtir (Quetes) »
+- [x] (404) 325. **La fête de la musique** — Trouver les musiciens dispersés dans le village. → sorte « retrouver (QuetesLieux) »
 - [ ] (405) 326. **Le festival des animaux** — Présenter des animaux d'élevage.
-- [ ] (406) 327. **La journée des explorateurs** — Découvrir plusieurs lieux signalés.
-- [ ] (407) 328. **Le tournoi des clans** — Participer à des épreuves entre clans.
-- [ ] (408) 329. **La grande parade** — Préparer une monture ou un char décoré.
-- [ ] (409) 330. **Le carnaval des villages** — Obtenir plusieurs éléments de costume.
-- [ ] (410) 331. **Le concours de décoration hivernale** — Décorer une habitation.
-- [ ] (411) 332. **Le repas communautaire** — Apporter des ingrédients pour un banquet.
-- [ ] (412) 333. **La course aux trésors** — Trouver plusieurs coffres temporaires.
+- [x] (406) 327. **La journée des explorateurs** — Découvrir plusieurs lieux signalés. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (407) 328. **Le tournoi des clans** — Participer à des épreuves entre clans. → sorte « concours / courses (Activites) »
+- [x] (408) 329. **La grande parade** — Préparer une monture ou un char décoré. → sorte « fabriquer (Quetes, cuisine) »
+- [x] (409) 330. **Le carnaval des villages** — Obtenir plusieurs éléments de costume. → sorte « apporter (Quetes) »
+- [x] (410) 331. **Le concours de décoration hivernale** — Décorer une habitation. → sorte « bâtir (Quetes) »
+- [x] (411) 332. **Le repas communautaire** — Apporter des ingrédients pour un banquet. → sorte « apporter (Quetes) »
+- [x] (412) 333. **La course aux trésors** — Trouver plusieurs coffres temporaires. → sorte « retrouver (QuetesLieux) »
 - [ ] (413) 334. **Le festival des métiers** — Présenter ses compétences professionnelles.
-- [ ] (414) 335. **La célébration du royaume** — Participer à une grande fête organisée sur plusieurs villages.
+- [x] (414) 335. **La célébration du royaume** — Participer à une grande fête organisée sur plusieurs villages. → sorte « concours / courses (Activites) »
 
 ### 20. Quêtes propres aux biomes
 
 
 ### Prairie
 
-- [ ] (420) 336. **Les fleurs des champs** — Récolter plusieurs variétés de fleurs.
-- [ ] (421) 337. **La ferme abandonnée** — Retrouver les propriétaires d'une ferme déserte.
-- [ ] (422) 338. **Le vieux moulin** — Rassembler les pièces nécessaires à sa réparation.
-- [ ] (423) 339. **La colline aux moutons** — Retrouver un troupeau égaré.
-- [ ] (424) 340. **Le puits de la prairie** — Explorer un ancien puits.
+- [x] (420) 336. **Les fleurs des champs** — Récolter plusieurs variétés de fleurs. → sorte « récolter (Quetes) »
+- [x] (421) 337. **La ferme abandonnée** — Retrouver les propriétaires d'une ferme déserte. → sorte « retrouver (QuetesLieux) »
+- [x] (422) 338. **Le vieux moulin** — Rassembler les pièces nécessaires à sa réparation. → sorte « apporter (Quetes) »
+- [x] (423) 339. **La colline aux moutons** — Retrouver un troupeau égaré. → sorte « retrouver (QuetesLieux) »
+- [x] (424) 340. **Le puits de la prairie** — Explorer un ancien puits. → sorte « visiter (QuetesLieux) »
 
 ### Forêt rousse
 
-- [ ] (428) 341. **Les feuilles éternelles** — Trouver une plante particulière.
-- [ ] (429) 342. **La cabane du bûcheron** — Découvrir une cabane isolée.
-- [ ] (430) 343. **Le sentier des champignons** — Trouver plusieurs champignons différents.
-- [ ] (431) 344. **Le grand arbre** — Découvrir un arbre remarquable.
+- [x] (428) 341. **Les feuilles éternelles** — Trouver une plante particulière. → sorte « retrouver (QuetesLieux) »
+- [x] (429) 342. **La cabane du bûcheron** — Découvrir une cabane isolée. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (430) 343. **Le sentier des champignons** — Trouver plusieurs champignons différents. → sorte « retrouver (QuetesLieux) »
+- [x] (431) 344. **Le grand arbre** — Découvrir un arbre remarquable. → sorte « découvrir / visiter (QuetesLieux) »
 - [ ] (432) 345. **Le camp des forestiers** — Réapprovisionner un campement.
 
 ### Désert
 
-- [ ] (436) 346. **Les traces dans le sable** — Suivre des empreintes.
-- [ ] (437) 347. **L'oasis oubliée** — Découvrir une oasis.
-- [ ] (438) 348. **Le puits ensablé** — Trouver comment le remettre en état.
-- [ ] (439) 349. **La caravane disparue** — Retrouver une caravane.
-- [ ] (440) 350. **Le tombeau des dunes** — Découvrir une ancienne tombe.
+- [x] (436) 346. **Les traces dans le sable** — Suivre des empreintes. → sorte « escorter / enquêter (QuetesLieux) »
+- [x] (437) 347. **L'oasis oubliée** — Découvrir une oasis. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (438) 348. **Le puits ensablé** — Trouver comment le remettre en état. → sorte « retrouver (QuetesLieux) »
+- [x] (439) 349. **La caravane disparue** — Retrouver une caravane. → sorte « retrouver (QuetesLieux) »
+- [x] (440) 350. **Le tombeau des dunes** — Découvrir une ancienne tombe. → sorte « découvrir / visiter (QuetesLieux) »
 
 ### Toundra
 
-- [ ] (444) 351. **La cabane gelée** — Trouver un moyen de rejoindre une cabane isolée.
-- [ ] (445) 352. **Les provisions du nord** — Livrer des denrées à un camp.
-- [ ] (446) 353. **Le lac gelé** — Découvrir les secrets d'un lac.
-- [ ] (447) 354. **Le refuge de montagne** — Réparer un refuge.
-- [ ] (448) 355. **Les lumières du nord** — Observer un phénomène lumineux inhabituel.
+- [x] (444) 351. **La cabane gelée** — Trouver un moyen de rejoindre une cabane isolée. → sorte « retrouver (QuetesLieux) »
+- [x] (445) 352. **Les provisions du nord** — Livrer des denrées à un camp. → sorte « livrer (QuetesLieux) »
+- [x] (446) 353. **Le lac gelé** — Découvrir les secrets d'un lac. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (447) 354. **Le refuge de montagne** — Réparer un refuge. → sorte « réparer (QuetesLieux) »
+- [x] (448) 355. **Les lumières du nord** — Observer un phénomène lumineux inhabituel. → sorte « visiter (QuetesLieux) »
 
 ### 21. Quêtes de collection et de fabrication avancée
 
-- [ ] (452) 356. **La collection de minerais** — Obtenir un exemplaire de chaque minerai courant.
-- [ ] (453) 357. **Le collectionneur de bois** — Réunir toutes les essences de bois.
-- [ ] (454) 358. **Le musée du village** — Donner des objets intéressants à un musée.
-- [ ] (455) 359. **Les pièces anciennes** — Rassembler plusieurs pièces de monnaie anciennes.
-- [ ] (456) 360. **Le catalogue des meubles** — Fabriquer plusieurs types de meubles.
-- [ ] (457) 361. **L'armurerie complète** — Fabriquer plusieurs équipements différents.
-- [ ] (458) 362. **Le maître du cuir** — Fabriquer plusieurs objets en cuir.
-- [ ] (459) 363. **L'atelier du verrier** — Produire différents objets en verre.
-- [ ] (460) 364. **La collection de potions** — Fabriquer plusieurs préparations fictives.
-- [ ] (461) 365. **Le tisserand** — Produire plusieurs types de tissus.
-- [ ] (462) 366. **Le joaillier** — Fabriquer plusieurs bijoux.
-- [ ] (463) 367. **Le décorateur** — Réunir une collection de décorations.
-- [ ] (464) 368. **Le restaurateur** — Restaurer un objet ancien.
-- [ ] (465) 369. **L'objet parfait** — Fabriquer un objet de qualité exceptionnelle.
+- [x] (452) 356. **La collection de minerais** — Obtenir un exemplaire de chaque minerai courant. → sorte « apporter (Quetes) »
+- [x] (453) 357. **Le collectionneur de bois** — Réunir toutes les essences de bois. → sorte « apporter (Quetes) »
+- [x] (454) 358. **Le musée du village** — Donner des objets intéressants à un musée. → sorte « apporter (Quetes) »
+- [x] (455) 359. **Les pièces anciennes** — Rassembler plusieurs pièces de monnaie anciennes. → sorte « apporter (Quetes) »
+- [x] (456) 360. **Le catalogue des meubles** — Fabriquer plusieurs types de meubles. → sorte « fabriquer (Quetes) »
+- [x] (457) 361. **L'armurerie complète** — Fabriquer plusieurs équipements différents. → sorte « fabriquer (Quetes) »
+- [x] (458) 362. **Le maître du cuir** — Fabriquer plusieurs objets en cuir. → sorte « fabriquer (Quetes) »
+- [x] (459) 363. **L'atelier du verrier** — Produire différents objets en verre. → sorte « fabriquer (Quetes) »
+- [x] (460) 364. **La collection de potions** — Fabriquer plusieurs préparations fictives. → sorte « fabriquer (Quetes) »
+- [x] (461) 365. **Le tisserand** — Produire plusieurs types de tissus. → repris tel quel (Quetes)
+- [x] (462) 366. **Le joaillier** — Fabriquer plusieurs bijoux. → sorte « fabriquer (Quetes) »
+- [x] (463) 367. **Le décorateur** — Réunir une collection de décorations. → sorte « apporter (Quetes) »
+- [x] (464) 368. **Le restaurateur** — Restaurer un objet ancien. → sorte « réparer (QuetesLieux) »
+- [x] (465) 369. **L'objet parfait** — Fabriquer un objet de qualité exceptionnelle. → sorte « fabriquer (Quetes) »
 - [ ] (466) 370. **L'inventaire du musée** — Compléter une collection d'objets rares.
 
 ### 22. Quêtes de mystères et de longues histoires
 
-- [ ] (470) 371. **La lettre sans signature** — Découvrir qui a envoyé une lettre mystérieuse.
-- [ ] (471) 372. **Le nom effacé** — Identifier un personnage dont le nom a disparu des archives.
-- [ ] (472) 373. **Les trois cartes** — Réunir trois morceaux d'une carte ancienne.
-- [ ] (473) 374. **Le journal du roi** — Retrouver plusieurs pages d'un journal royal.
-- [ ] (474) 375. **Le secret de Valdor** — Découvrir l'origine du village.
+- [x] (470) 371. **La lettre sans signature** — Découvrir qui a envoyé une lettre mystérieuse. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (471) 372. **Le nom effacé** — Identifier un personnage dont le nom a disparu des archives. → sorte « enquêter (QuetesLieux) »
+- [x] (472) 373. **Les trois cartes** — Réunir trois morceaux d'une carte ancienne. → sorte « apporter (Quetes) »
+- [x] (473) 374. **Le journal du roi** — Retrouver plusieurs pages d'un journal royal. → sorte « retrouver (QuetesLieux) »
+- [x] (474) 375. **Le secret de Valdor** — Découvrir l'origine du village. → sorte « découvrir / visiter (QuetesLieux) »
 - [ ] (475) 376. **La tour des anciens** — Comprendre le rôle d'une tour abandonnée.
-- [ ] (476) 377. **La tombe inconnue** — Découvrir à qui appartient une tombe ancienne.
-- [ ] (477) 378. **Le symbole mystérieux** — Retrouver plusieurs représentations d'un symbole.
-- [ ] (478) 379. **L'énigme des statues** — Trouver l'ordre correct de plusieurs statues.
-- [ ] (479) 380. **Le passage oublié** — Découvrir un passage caché entre deux régions.
-- [ ] (480) 381. **L'héritage perdu** — Retrouver plusieurs objets appartenant à une famille.
+- [x] (476) 377. **La tombe inconnue** — Découvrir à qui appartient une tombe ancienne. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (477) 378. **Le symbole mystérieux** — Retrouver plusieurs représentations d'un symbole. → sorte « retrouver (QuetesLieux) »
+- [x] (478) 379. **L'énigme des statues** — Trouver l'ordre correct de plusieurs statues. → sorte « retrouver (QuetesLieux) »
+- [x] (479) 380. **Le passage oublié** — Découvrir un passage caché entre deux régions. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (480) 381. **L'héritage perdu** — Retrouver plusieurs objets appartenant à une famille. → sorte « retrouver (QuetesLieux) »
 - [ ] (481) 382. **Les héritiers** — Déterminer qui doit recevoir un domaine.
-- [ ] (482) 383. **Le château silencieux** — Explorer un château désert.
-- [ ] (483) 384. **Le pacte ancien** — Retrouver les termes d'un ancien accord.
-- [ ] (484) 385. **Les quatre sceaux** — Découvrir quatre sceaux répartis dans le monde.
+- [x] (482) 383. **Le château silencieux** — Explorer un château désert. → sorte « visiter (QuetesLieux) »
+- [x] (483) 384. **Le pacte ancien** — Retrouver les termes d'un ancien accord. → sorte « retrouver (QuetesLieux) »
+- [x] (484) 385. **Les quatre sceaux** — Découvrir quatre sceaux répartis dans le monde. → sorte « découvrir / visiter (QuetesLieux) »
 - [ ] (485) 386. **La bibliothèque secrète** — Ouvrir une salle cachée dans une bibliothèque.
-- [ ] (486) 387. **Le dernier cartographe** — Retrouver les cartes d'un ancien explorateur.
-- [ ] (487) 388. **Le royaume disparu** — Découvrir les vestiges d'un royaume oublié.
+- [x] (486) 387. **Le dernier cartographe** — Retrouver les cartes d'un ancien explorateur. → sorte « retrouver (QuetesLieux) »
+- [x] (487) 388. **Le royaume disparu** — Découvrir les vestiges d'un royaume oublié. → sorte « découvrir / visiter (QuetesLieux) »
 - [ ] (488) 389. **La vérité sur le gardien** — Comprendre l'histoire d'une créature légendaire.
 - [ ] (489) 390. **Les chroniques de Wild Acres** — Terminer une grande série de quêtes historiques.
 
 ### 23. Quêtes quotidiennes et hebdomadaires
 
-- [ ] (495) 391. **La tournée du boulanger** — Livrer du pain à cinq habitants.
-- [ ] (496) 392. **Le bois du jour** — Récolter une quantité définie de bois.
-- [ ] (497) 393. **La commande du forgeron** — Fournir les minerais demandés.
-- [ ] (498) 394. **Le repas quotidien** — Préparer trois plats.
-- [ ] (499) 395. **La pêche matinale** — Rapporter cinq poissons.
+- [x] (495) 391. **La tournée du boulanger** — Livrer du pain à cinq habitants. → sorte « livrer (QuetesLieux) »
+- [x] (496) 392. **Le bois du jour** — Récolter une quantité définie de bois. → sorte « récolter (Quetes) »
+- [x] (497) 393. **La commande du forgeron** — Fournir les minerais demandés. → repris tel quel (Quetes)
+- [x] (498) 394. **Le repas quotidien** — Préparer trois plats. → sorte « fabriquer (Quetes, cuisine) »
+- [x] (499) 395. **La pêche matinale** — Rapporter cinq poissons. → sorte « apporter (Quetes) »
 - [ ] (500) 396. **Le marché approvisionné** — Remplir les stocks d'un marchand.
 - [ ] (501) 397. **Le facteur** — Distribuer plusieurs lettres.
 - [ ] (502) 398. **Le garde de service** — Effectuer une patrouille.
-- [ ] (503) 399. **L'animal du jour** — Nourrir ses animaux.
-- [ ] (504) 400. **Le jardinier** — Arroser et récolter ses cultures.
-- [ ] (505) 401. **Le voyageur** — Visiter un lieu indiqué.
-- [ ] (506) 402. **Le petit artisan** — Fabriquer trois objets.
+- [x] (503) 399. **L'animal du jour** — Nourrir ses animaux. → sorte « apporter (Quetes) »
+- [x] (504) 400. **Le jardinier** — Arroser et récolter ses cultures. → sorte « récolter (Quetes) »
+- [x] (505) 401. **Le voyageur** — Visiter un lieu indiqué. → repris tel quel (Quetes)
+- [x] (506) 402. **Le petit artisan** — Fabriquer trois objets. → sorte « fabriquer (Quetes) »
 - [ ] (507) 403. **Le client mystère** — Répondre à une commande aléatoire.
 - [ ] (508) 404. **La livraison express** — Terminer une livraison dans le temps imparti.
 - [ ] (509) 405. **Le service communautaire** — Aider un autre joueur.
-- [ ] (510) 406. **Le défi du mineur** — Trouver un minerai choisi aléatoirement.
+- [x] (510) 406. **Le défi du mineur** — Trouver un minerai choisi aléatoirement. → sorte « retrouver (QuetesLieux) »
 - [ ] (511) 407. **Le défi du cuisinier** — Réaliser une recette tirée au sort.
-- [ ] (512) 408. **La collecte hebdomadaire** — Réunir plusieurs ressources différentes.
-- [ ] (513) 409. **Le grand voyage hebdomadaire** — Visiter trois régions éloignées.
+- [x] (512) 408. **La collecte hebdomadaire** — Réunir plusieurs ressources différentes. → sorte « apporter (Quetes) »
+- [x] (513) 409. **Le grand voyage hebdomadaire** — Visiter trois régions éloignées. → sorte « visiter (QuetesLieux) »
 - [ ] (514) 410. **Le contrat de la semaine** — Terminer une commande particulièrement importante.
 
 ### 24. Quêtes de métiers spécialisés
 
-- [ ] (518) 411. **L'apprenti tailleur** — Fabriquer un vêtement simple.
-- [ ] (519) 412. **La commande du seigneur** — Fabriquer un vêtement de cérémonie.
+- [x] (518) 411. **L'apprenti tailleur** — Fabriquer un vêtement simple. → sorte « fabriquer (Quetes) »
+- [x] (519) 412. **La commande du seigneur** — Fabriquer un vêtement de cérémonie. → sorte « fabriquer (Quetes) »
 - [ ] (520) 413. **Le tanneur** — Transformer plusieurs peaux en cuir.
-- [ ] (521) 414. **Le maître tanneur** — Produire du cuir de qualité supérieure.
-- [ ] (522) 415. **Le verrier débutant** — Fabriquer une bouteille en verre.
-- [ ] (523) 416. **Le vitrier** — Installer des fenêtres sur une maison.
-- [ ] (524) 417. **Le joaillier débutant** — Fabriquer un bijou.
-- [ ] (525) 418. **La commande de la noblesse** — Créer un bijou personnalisé.
-- [ ] (526) 419. **Le relieur** — Fabriquer un livre.
+- [x] (521) 414. **Le maître tanneur** — Produire du cuir de qualité supérieure. → sorte « fabriquer (Quetes) »
+- [x] (522) 415. **Le verrier débutant** — Fabriquer une bouteille en verre. → repris tel quel (Quetes)
+- [x] (523) 416. **Le vitrier** — Installer des fenêtres sur une maison. → sorte « bâtir / étal (QuetesLieux) »
+- [x] (524) 417. **Le joaillier débutant** — Fabriquer un bijou. → sorte « fabriquer (Quetes) »
+- [x] (525) 418. **La commande de la noblesse** — Créer un bijou personnalisé. → sorte « fabriquer (Quetes) »
+- [x] (526) 419. **Le relieur** — Fabriquer un livre. → sorte « fabriquer (Quetes) »
 - [ ] (527) 420. **Le copiste** — Reproduire plusieurs pages d'un manuscrit.
-- [ ] (528) 421. **L'enlumineur** — Décorer un livre ancien.
-- [ ] (529) 422. **Le potier** — Fabriquer cinq objets en argile.
+- [x] (528) 421. **L'enlumineur** — Décorer un livre ancien. → sorte « bâtir (Quetes) »
+- [x] (529) 422. **Le potier** — Fabriquer cinq objets en argile. → sorte « fabriquer (Quetes) »
 - [ ] (530) 423. **Le maître potier** — Réaliser un objet décoratif rare.
-- [ ] (531) 424. **Le sculpteur** — Créer une statue.
-- [ ] (532) 425. **Le peintre** — Décorer plusieurs panneaux.
-- [ ] (533) 426. **Le teinturier** — Produire plusieurs couleurs de tissu.
-- [ ] (534) 427. **Le fabricant de bougies** — Produire des bougies pour une auberge.
-- [ ] (535) 428. **Le fabricant de cordes** — Fournir des cordages à un chantier naval.
-- [ ] (536) 429. **L'horloger** — Restaurer un mécanisme ancien.
-- [ ] (537) 430. **L'artisan polyvalent** — Fabriquer un objet provenant de cinq métiers différents.
+- [x] (531) 424. **Le sculpteur** — Créer une statue. → sorte « fabriquer (Quetes) »
+- [x] (532) 425. **Le peintre** — Décorer plusieurs panneaux. → sorte « bâtir (Quetes) »
+- [x] (533) 426. **Le teinturier** — Produire plusieurs couleurs de tissu. → sorte « fabriquer (Quetes) »
+- [x] (534) 427. **Le fabricant de bougies** — Produire des bougies pour une auberge. → sorte « fabriquer (Quetes) »
+- [x] (535) 428. **Le fabricant de cordes** — Fournir des cordages à un chantier naval. → sorte « apporter (Quetes) »
+- [x] (536) 429. **L'horloger** — Restaurer un mécanisme ancien. → sorte « réparer (QuetesLieux) »
+- [x] (537) 430. **L'artisan polyvalent** — Fabriquer un objet provenant de cinq métiers différents. → sorte « fabriquer (Quetes) »
 
 ### 25. Quêtes liées aux maisons et aux propriétés
 
-- [ ] (541) 431. **Le premier terrain** — Obtenir une parcelle constructible.
-- [ ] (542) 432. **Les fondations** — Préparer le terrain d'une maison.
-- [ ] (543) 433. **Une maison accueillante** — Installer les éléments essentiels d'une habitation.
+- [x] (541) 431. **Le premier terrain** — Obtenir une parcelle constructible. → sorte « apporter (Quetes) »
+- [x] (542) 432. **Les fondations** — Préparer le terrain d'une maison. → sorte « fabriquer (Quetes, cuisine) »
+- [x] (543) 433. **Une maison accueillante** — Installer les éléments essentiels d'une habitation. → sorte « bâtir / étal (QuetesLieux) »
 - [ ] (544) 434. **Le jardin privé** — Aménager un jardin autour de sa maison.
 - [ ] (545) 435. **La clôture** — Délimiter sa propriété.
-- [ ] (546) 436. **Le portail** — Installer une entrée sur son terrain.
-- [ ] (547) 437. **La réserve personnelle** — Installer des coffres de rangement.
-- [ ] (548) 438. **La maison sécurisée** — Installer un système de protection autorisé par le jeu.
+- [x] (546) 436. **Le portail** — Installer une entrée sur son terrain. → sorte « bâtir / étal (QuetesLieux) »
+- [x] (547) 437. **La réserve personnelle** — Installer des coffres de rangement. → sorte « bâtir / étal (QuetesLieux) »
+- [x] (548) 438. **La maison sécurisée** — Installer un système de protection autorisé par le jeu. → sorte « bâtir / étal (QuetesLieux) »
 - [ ] (549) 439. **Le voisinage** — Faire connaissance avec les propriétaires voisins.
 - [ ] (550) 440. **Le quartier agréable** — Améliorer plusieurs éléments de son quartier.
 - [ ] (551) 441. **Le propriétaire responsable** — Entretenir sa propriété.
-- [ ] (552) 442. **Le domaine agricole** — Installer une exploitation sur son terrain.
-- [ ] (553) 443. **La résidence secondaire** — Obtenir un second lieu de résidence, si le système le permet.
-- [ ] (554) 444. **Le manoir** — Construire une grande demeure répondant à des critères précis.
+- [x] (552) 442. **Le domaine agricole** — Installer une exploitation sur son terrain. → sorte « bâtir / étal (QuetesLieux) »
+- [x] (553) 443. **La résidence secondaire** — Obtenir un second lieu de résidence, si le système le permet. → sorte « apporter (Quetes) »
+- [x] (554) 444. **Le manoir** — Construire une grande demeure répondant à des critères précis. → sorte « bâtir (Quetes) »
 - [ ] (555) 445. **L'architecte du royaume** — Faire reconnaître plusieurs constructions.
 - [ ] (556) 446. **Le propriétaire généreux** — Mettre une installation à disposition d'autres joueurs.
 - [ ] (557) 447. **La maison d'hôtes** — Aménager des chambres pour les voyageurs.
 - [ ] (558) 448. **Le domaine prospère** — Posséder une propriété avec plusieurs installations fonctionnelles.
 - [ ] (559) 449. **La restauration du patrimoine** — Rénover une bâtisse ancienne.
-- [ ] (560) 450. **Le village modèle** — Participer à la rénovation d'un village entier.
+- [x] (560) 450. **Le village modèle** — Participer à la rénovation d'un village entier. → sorte « concours / courses (Activites) »
 
 ### 26. Quêtes de compagnons et de dressage
 
-- [ ] (564) 451. **La confiance du cheval** — Gagner la confiance d'un cheval.
+- [x] (564) 451. **La confiance du cheval** — Gagner la confiance d'un cheval. → réputation par village (Reputation)
 - [ ] (565) 452. **Le premier entraînement** — Faire effectuer un exercice à sa monture.
-- [ ] (566) 453. **La monture endurante** — Parcourir une longue distance avec son cheval.
-- [ ] (567) 454. **Le cheval bien équipé** — Installer une selle et des sacoches.
-- [ ] (568) 455. **Le concours équestre** — Participer à une épreuve avec sa monture.
+- [x] (566) 453. **La monture endurante** — Parcourir une longue distance avec son cheval. → sorte « visiter (QuetesLieux) »
+- [x] (567) 454. **Le cheval bien équipé** — Installer une selle et des sacoches. → sorte « bâtir / étal (QuetesLieux) »
+- [x] (568) 455. **Le concours équestre** — Participer à une épreuve avec sa monture. → sorte « concours / courses (Activites) »
 - [ ] (569) 456. **Le chien fidèle** — Apprendre une commande à son chien.
 - [ ] (570) 457. **Le chien de berger** — Guider un troupeau avec un chien.
-- [ ] (571) 458. **Le compagnon explorateur** — Découvrir une région avec son compagnon.
-- [ ] (572) 459. **Le compagnon retrouvé** — Retrouver un compagnon qui s'est éloigné.
+- [x] (571) 458. **Le compagnon explorateur** — Découvrir une région avec son compagnon. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (572) 459. **Le compagnon retrouvé** — Retrouver un compagnon qui s'est éloigné. → sorte « retrouver (QuetesLieux) »
 - [ ] (573) 460. **Le dresseur débutant** — Apprendre plusieurs commandes à un animal.
 - [ ] (574) 461. **La ménagerie** — Posséder plusieurs espèces de compagnons.
-- [ ] (575) 462. **Le compagnon rare** — Trouver un animal particulièrement rare.
+- [x] (575) 462. **Le compagnon rare** — Trouver un animal particulièrement rare. → sorte « retrouver (QuetesLieux) »
 - [ ] (576) 463. **Le gardien du refuge** — Aider un refuge à accueillir de nouveaux animaux.
 - [ ] (577) 464. **Le concours de dressage** — Présenter un compagnon devant un jury.
-- [ ] (578) 465. **Le lien exceptionnel** — Atteindre un haut niveau de confiance avec un compagnon.
+- [x] (578) 465. **Le lien exceptionnel** — Atteindre un haut niveau de confiance avec un compagnon. → réputation par village (Reputation)
 
 ### 27. Quêtes de navigation et de vie maritime
 
-- [ ] (582) 466. **Le marin débutant** — Effectuer une première sortie en bateau.
+- [x] (582) 466. **Le marin débutant** — Effectuer une première sortie en bateau. → repris tel quel (Quetes)
 - [ ] (583) 467. **Le port animé** — Aider un port à préparer une livraison.
-- [ ] (584) 468. **Le pêcheur côtier** — Pêcher dans plusieurs zones côtières.
-- [ ] (585) 469. **L'épave mystérieuse** — Découvrir l'emplacement d'une épave.
-- [ ] (586) 470. **Le coffre englouti** — Retrouver un coffre au fond de l'eau.
-- [ ] (587) 471. **La balise maritime** — Réparer une balise de navigation.
+- [x] (584) 468. **Le pêcheur côtier** — Pêcher dans plusieurs zones côtières. → repris tel quel (Quetes)
+- [x] (585) 469. **L'épave mystérieuse** — Découvrir l'emplacement d'une épave. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (586) 470. **Le coffre englouti** — Retrouver un coffre au fond de l'eau. → sorte « retrouver (QuetesLieux) »
+- [x] (587) 471. **La balise maritime** — Réparer une balise de navigation. → sorte « réparer (QuetesLieux) »
 - [ ] (588) 472. **Le phare éteint** — Rallumer un phare.
-- [ ] (589) 473. **Le navigateur** — Atteindre trois destinations maritimes.
-- [ ] (590) 474. **La cargaison mouillée** — Retrouver et livrer une cargaison endommagée.
-- [ ] (591) 475. **Le chantier du port** — Fournir les matériaux nécessaires à l'agrandissement du port.
+- [x] (589) 473. **Le navigateur** — Atteindre trois destinations maritimes. → sorte « visiter (QuetesLieux) »
+- [x] (590) 474. **La cargaison mouillée** — Retrouver et livrer une cargaison endommagée. → sorte « retrouver (QuetesLieux) »
+- [x] (591) 475. **Le chantier du port** — Fournir les matériaux nécessaires à l'agrandissement du port. → sorte « apporter (Quetes) »
 - [ ] (592) 476. **La flotte commerciale** — Organiser plusieurs livraisons en bateau.
-- [ ] (593) 477. **Le capitaine expérimenté** — Réussir un voyage maritime difficile.
-- [ ] (594) 478. **La crique cachée** — Découvrir un passage côtier secret.
-- [ ] (595) 479. **Les îlots oubliés** — Visiter plusieurs petites îles.
+- [x] (593) 477. **Le capitaine expérimenté** — Réussir un voyage maritime difficile. → sorte « concours / courses (Activites) »
+- [x] (594) 478. **La crique cachée** — Découvrir un passage côtier secret. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (595) 479. **Les îlots oubliés** — Visiter plusieurs petites îles. → sorte « visiter (QuetesLieux) »
 - [ ] (596) 480. **La carte des marées** — Étudier les changements d'accès à certaines zones.
 
 ### 28. Quêtes de connaissance et de réputation
 
-- [ ] (600) 481. **L'élève du sage** — Écouter plusieurs leçons d'un personnage érudit.
-- [ ] (601) 482. **Les langues anciennes** — Découvrir la signification de symboles anciens.
+- [x] (600) 481. **L'élève du sage** — Écouter plusieurs leçons d'un personnage érudit. → sorte « enquêter (QuetesLieux) »
+- [x] (601) 482. **Les langues anciennes** — Découvrir la signification de symboles anciens. → sorte « découvrir / visiter (QuetesLieux) »
 - [ ] (602) 483. **Le maître des cartes** — Compléter une carte régionale.
-- [ ] (603) 484. **L'histoire de la prairie** — Interroger les habitants sur l'histoire locale.
+- [x] (603) 484. **L'histoire de la prairie** — Interroger les habitants sur l'histoire locale. → sorte « enquêter (QuetesLieux) »
 - [ ] (604) 485. **Les archives royales** — Consulter plusieurs documents anciens.
-- [ ] (605) 486. **Le chercheur** — Réunir des informations sur une créature.
+- [x] (605) 486. **Le chercheur** — Réunir des informations sur une créature. → sorte « apporter (Quetes) »
 - [ ] (606) 487. **Le professeur** — Aider un PNJ à enseigner une compétence.
-- [ ] (607) 488. **L'école du village** — Fournir du matériel à une école.
+- [x] (607) 488. **L'école du village** — Fournir du matériel à une école. → sorte « apporter (Quetes) »
 - [ ] (608) 489. **Le jeune apprenti** — Accompagner un PNJ dans l'apprentissage d'un métier.
 - [ ] (609) 490. **Le concours de connaissances** — Répondre correctement à plusieurs questions.
 - [ ] (610) 491. **Le bibliothécaire** — Classer des livres dans une bibliothèque.
-- [ ] (611) 492. **Le livre manquant** — Retrouver un ouvrage emprunté.
+- [x] (611) 492. **Le livre manquant** — Retrouver un ouvrage emprunté. → sorte « retrouver (QuetesLieux) »
 - [ ] (612) 493. **Le chroniqueur** — Consigner les événements importants d'un village.
-- [ ] (613) 494. **La réputation locale** — Gagner la confiance des habitants.
-- [ ] (614) 495. **L'ami des villages** — Être reconnu dans plusieurs villages.
+- [x] (613) 494. **La réputation locale** — Gagner la confiance des habitants. → réputation par village (Reputation)
+- [x] (614) 495. **L'ami des villages** — Être reconnu dans plusieurs villages. → réputation par village (Reputation)
 
 ### 29. Quêtes de défis et de records
 
-- [ ] (618) 496. **Le long voyage** — Parcourir une distance déterminée sans utiliser de téléportation.
-- [ ] (619) 497. **La récolte record** — Obtenir une récolte particulièrement importante.
-- [ ] (620) 498. **Le mineur infatigable** — Découvrir plusieurs gisements en une expédition.
-- [ ] (621) 499. **Le pêcheur patient** — Réussir plusieurs prises consécutives.
-- [ ] (622) 500. **Le maître artisan** — Fabriquer une série d'objets sans échec.
-- [ ] (623) 501. **Le bâtisseur méthodique** — Construire un bâtiment à partir d'un plan.
+- [x] (618) 496. **Le long voyage** — Parcourir une distance déterminée sans utiliser de téléportation. → sorte « visiter (QuetesLieux) »
+- [x] (619) 497. **La récolte record** — Obtenir une récolte particulièrement importante. → sorte « apporter (Quetes) »
+- [x] (620) 498. **Le mineur infatigable** — Découvrir plusieurs gisements en une expédition. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (621) 499. **Le pêcheur patient** — Réussir plusieurs prises consécutives. → sorte « concours / courses (Activites) »
+- [x] (622) 500. **Le maître artisan** — Fabriquer une série d'objets sans échec. → repris tel quel (Quetes)
+- [x] (623) 501. **Le bâtisseur méthodique** — Construire un bâtiment à partir d'un plan. → sorte « bâtir (Quetes) »
 - [ ] (624) 502. **Le cavalier rapide** — Terminer un parcours chronométré à cheval.
-- [ ] (625) 503. **Le navigateur prudent** — Atteindre une destination sans perdre sa cargaison.
+- [x] (625) 503. **Le navigateur prudent** — Atteindre une destination sans perdre sa cargaison. → sorte « visiter (QuetesLieux) »
 - [ ] (626) 504. **Le collectionneur complet** — Compléter une collection définie.
-- [ ] (627) 505. **Le survivant de l'hiver** — Réussir une expédition dans la toundra.
-- [ ] (628) 506. **Le marcheur des marais** — Traverser une zone marécageuse en trouvant le bon itinéraire.
+- [x] (627) 505. **Le survivant de l'hiver** — Réussir une expédition dans la toundra. → sorte « concours / courses (Activites) »
+- [x] (628) 506. **Le marcheur des marais** — Traverser une zone marécageuse en trouvant le bon itinéraire. → sorte « naviguer / visiter (Quetes) »
 - [ ] (629) 507. **Le spécialiste des biomes** — Réaliser une activité dans chaque biome.
 - [ ] (630) 508. **Le polyvalent** — Accomplir une mission dans cinq compétences différentes.
 - [ ] (631) 509. **Le travail d'équipe** — Terminer un défi avec plusieurs joueurs.
@@ -1592,7 +1592,7 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 ### 30. Quêtes aléatoires et générées par le monde
 
 - [ ] (638) 511. **Le village en manque de bois** — Un village demande une quantité aléatoire de bois.
-- [ ] (639) 512. **La commande surprise** — Un artisan demande un objet aléatoire.
+- [x] (639) 512. **La commande surprise** — Un artisan demande un objet aléatoire. → repris tel quel (Quetes)
 - [ ] (640) 513. **Le voyageur égaré** — Un PNJ apparaît dans une zone et cherche son village.
 - [ ] (641) 514. **Le marchand ambulant** — Un marchand demande une escorte.
 - [ ] (642) 515. **La ferme en difficulté** — Une exploitation a besoin d'aide.
@@ -1632,21 +1632,21 @@ Les cases ouvertes restent à comparer au jeu. Certaines entrées peuvent déjà
 
 ### 32. Quêtes secrètes et découvertes cachées
 
-- [ ] (679) 546. **Le coffre sans serrure** — Trouver un coffre qui s'ouvre avec une énigme.
-- [ ] (680) 547. **Le message dans l'arbre** — Découvrir une inscription cachée dans la forêt.
-- [ ] (681) 548. **La pierre gravée** — Identifier une inscription ancienne.
-- [ ] (682) 549. **Le passage derrière la cascade** — Découvrir une zone cachée.
-- [ ] (683) 550. **Le tableau incomplet** — Retrouver les morceaux d'une illustration ancienne.
-- [ ] (684) 551. **La statue tournée** — Résoudre une énigme avec plusieurs statues.
-- [ ] (685) 552. **Le livre sans titre** — Découvrir l'origine d'un livre mystérieux.
-- [ ] (686) 553. **La chambre secrète** — Trouver une pièce cachée dans un bâtiment.
-- [ ] (687) 554. **La mélodie oubliée** — Retrouver les notes d'une ancienne mélodie.
+- [x] (679) 546. **Le coffre sans serrure** — Trouver un coffre qui s'ouvre avec une énigme. → sorte « retrouver (QuetesLieux) »
+- [x] (680) 547. **Le message dans l'arbre** — Découvrir une inscription cachée dans la forêt. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (681) 548. **La pierre gravée** — Identifier une inscription ancienne. → sorte « enquêter (QuetesLieux) »
+- [x] (682) 549. **Le passage derrière la cascade** — Découvrir une zone cachée. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (683) 550. **Le tableau incomplet** — Retrouver les morceaux d'une illustration ancienne. → sorte « retrouver (QuetesLieux) »
+- [x] (684) 551. **La statue tournée** — Résoudre une énigme avec plusieurs statues. → sorte « enquêter (QuetesLieux) »
+- [x] (685) 552. **Le livre sans titre** — Découvrir l'origine d'un livre mystérieux. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (686) 553. **La chambre secrète** — Trouver une pièce cachée dans un bâtiment. → sorte « retrouver (QuetesLieux) »
+- [x] (687) 554. **La mélodie oubliée** — Retrouver les notes d'une ancienne mélodie. → sorte « retrouver (QuetesLieux) »
 - [ ] (688) 555. **Le code du vieux moulin** — Déchiffrer un code découvert dans un moulin.
-- [ ] (689) 556. **Le chemin des pierres** — Suivre une succession de pierres particulières.
-- [ ] (690) 557. **Le signe des explorateurs** — Retrouver les marques laissées par un ancien groupe.
-- [ ] (691) 558. **Le coffre du premier colon** — Découvrir les affaires d'un ancien habitant.
-- [ ] (692) 559. **L'île invisible** — Découvrir une île accessible uniquement sous certaines conditions.
-- [ ] (693) 560. **Le secret des cinq biomes** — Réunir des indices dans les cinq biomes.
+- [x] (689) 556. **Le chemin des pierres** — Suivre une succession de pierres particulières. → sorte « escorter / enquêter (QuetesLieux) »
+- [x] (690) 557. **Le signe des explorateurs** — Retrouver les marques laissées par un ancien groupe. → sorte « retrouver (QuetesLieux) »
+- [x] (691) 558. **Le coffre du premier colon** — Découvrir les affaires d'un ancien habitant. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (692) 559. **L'île invisible** — Découvrir une île accessible uniquement sous certaines conditions. → sorte « découvrir / visiter (QuetesLieux) »
+- [x] (693) 560. **Le secret des cinq biomes** — Réunir des indices dans les cinq biomes. → sorte « apporter (Quetes) »
 
 ### Comment organiser ces 560 idées dans le jeu
 
