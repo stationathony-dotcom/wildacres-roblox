@@ -8,10 +8,28 @@ local ETATS = {
 
 Composants.PICTOGRAMMES = table.freeze({ fermer = "×", avertissement = "!" })
 
+-- Certains pictogrammes du catalogue et des messages serveur manquent à la police Roblox.
+local SECOURS = {
+	["🪓"] = "⚒️", ["🪚"] = "🛠️", ["🪄"] = "✨", ["🪖"] = "🛡️",
+	["🪵"] = "🌲", ["🪨"] = "⛰️", ["🪙"] = "💰", ["🪣"] = "💧",
+	["🪑"] = "🏠", ["🛖"] = "🏠", ["🪟"] = "🔲", ["🪔"] = "🕯️",
+	["🪕"] = "🎵", ["🪁"] = "🎏", ["🪿"] = "🦆", ["🧌"] = "👹",
+}
+
+function Composants.texteCompatible(texte: string): string
+	local astral = "[\240-\244][\128-\191][\128-\191][\128-\191]"
+	local normalise = texte:gsub("(" .. astral .. ")️", function(glyphe)
+		return SECOURS[glyphe] or (glyphe .. "️")
+	end)
+	return (normalise:gsub(astral, SECOURS))
+end
+
 function Composants.creer(class: string, props, children)
 	local element = Instance.new(class)
 	for key, value in props or {} do
-		if key ~= "Parent" then
+		if key == "Text" and class ~= "TextBox" then
+			element.Text = Composants.texteCompatible(value)
+		elseif key ~= "Parent" then
 			(element :: any)[key] = value
 		end
 	end
@@ -47,7 +65,7 @@ end
 
 function Composants.etatBouton(bouton, texte, etat, couleurNeutre)
 	local style = ETATS[etat]
-	bouton.Text = style and style[1] .. " " .. texte or texte
+	bouton.Text = Composants.texteCompatible(style and style[1] .. " " .. texte or texte)
 	bouton.BackgroundColor3 = style and style[2] or couleurNeutre
 	bouton.Interactable = etat ~= "verrouille"
 end
@@ -60,7 +78,7 @@ function Composants.quantite(n: number, total: number?)
 end
 
 function Composants.avertissement(texte: string)
-	return Composants.PICTOGRAMMES.avertissement .. "  " .. texte
+	return Composants.PICTOGRAMMES.avertissement .. "  " .. Composants.texteCompatible(texte)
 end
 
 return Composants

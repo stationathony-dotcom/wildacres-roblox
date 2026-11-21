@@ -8,6 +8,7 @@ local TweenService = game:GetService("TweenService")
 
 local player = Players.LocalPlayer
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 
 local GOLD = Color3.fromRGB(232, 186, 60)
 local TEXT = Color3.fromRGB(240, 230, 210)
@@ -31,7 +32,7 @@ end
 local function label(parent, text, size, ts, color, bold)
 	local l = Instance.new("TextLabel")
 	l.BackgroundTransparency = 1
-	l.Text = text
+	l.Text = Composants.texteCompatible(text)
 	l.Font = bold and Enum.Font.GothamBold or Enum.Font.Gotham
 	l.TextSize = ts or 13
 	l.TextColor3 = color or TEXT
@@ -43,7 +44,7 @@ local function label(parent, text, size, ts, color, bold)
 end
 local function button(parent, text, size, color, fn)
 	local b = Instance.new("TextButton")
-	b.Text = text
+	b.Text = Composants.texteCompatible(text)
 	b.Font = Enum.Font.GothamBold
 	b.TextSize = 13
 	b.TextColor3 = Color3.new(1, 1, 1)
@@ -122,7 +123,7 @@ end
 
 local current
 local form = { kind = "peche", delay = 60, dur = 60, prize = 100 }
-local KIND_LIST = { { "peche", "🎣 Pêche" }, { "recolte", "🌾 Récolte" }, { "minage", "⛏️ Minage" }, { "bucheronnage", "🪓 Bûcheronnage" }, { "construction", "🏠 Construction" }, { "libre", "🎪 Rassemblement" }, { "course", "🏇 Course" }, { "cuisine", "🍲 Cuisine" }, { "chasse", "🏹 Chasse" } }
+local KIND_LIST = { { "peche", "🎣 Pêche" }, { "recolte", "🌾 Récolte" }, { "minage", "⛏️ Minage" }, { "bucheronnage", "⚒️ Bûcheronnage" }, { "construction", "🏠 Construction" }, { "libre", "🎪 Rassemblement" }, { "course", "🏇 Course" }, { "cuisine", "🍲 Cuisine" }, { "chasse", "🏹 Chasse" } }
 
 local function act(kind, data)
 	data.v = current.village

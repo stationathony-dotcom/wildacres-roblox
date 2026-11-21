@@ -6,6 +6,7 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -16,6 +17,15 @@ end
 local player = Players.LocalPlayer
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local Action = Remotes:WaitForChild("Action")
+local WindowNav = require(script.Parent:WaitForChild("WindowNav"))
+
+local secondaryPrompts = setmetatable({}, { __mode = "k" })
+ProximityPromptService.PromptShown:Connect(function(prompt)
+	if prompt.GamepadKeyCode == Enum.KeyCode.ButtonY then secondaryPrompts[prompt] = true end
+end)
+ProximityPromptService.PromptHidden:Connect(function(prompt)
+	secondaryPrompts[prompt] = nil
+end)
 
 local ANIM_RANGE = 90
 local CLICK_RANGE = 14
@@ -102,7 +112,7 @@ local function tryPick(screenPos: Vector2): boolean
 end
 
 UserInputService.InputBegan:Connect(function(input, processed)
-	if processed then
+	if processed or WindowNav.isOpen() then
 		return
 	end
 	if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -110,6 +120,11 @@ UserInputService.InputBegan:Connect(function(input, processed)
 	elseif input.UserInputType == Enum.UserInputType.Touch then
 		tryPick(Vector2.new(input.Position.X, input.Position.Y))
 	elseif input.KeyCode == Enum.KeyCode.Q or input.KeyCode == Enum.KeyCode.ButtonY then
+		if input.KeyCode == Enum.KeyCode.ButtonY then
+			for prompt in secondaryPrompts do
+				if prompt.Parent and prompt.Enabled then return end
+			end
+		end
 		Action:FireServer("ramasser_tout", {})
 	end
 end)

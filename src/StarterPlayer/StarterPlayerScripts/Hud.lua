@@ -119,7 +119,7 @@ local BLADE_TINTS = {
 }
 
 local FORM_ICONS = { bow = "🏹", crossbow = "🏹", pike = "🔱", halberd = "🔱", spear = "🔱",
-	staff = "🪄", scythe = "🌾", reaper = "🌾", sickle = "🌾", dagger = "🗡️", axe = "🪓",
+	staff = "✨", scythe = "🌾", reaper = "🌾", sickle = "🌾", dagger = "🗡️", axe = "⚒️",
 	hammer = "🔨", mace = "🔨", shield = "🛡️", roundshield = "🛡️", torch = "🔥" }
 
 function Hud.gearIcon(it)

@@ -14,6 +14,7 @@ if not remote or not action then
 	return
 end
 local okGear, Gear = pcall(require, ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Gear"))
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 
 local INK = Color3.fromRGB(58, 40, 26)
 local PAPER = Color3.fromRGB(232, 218, 186)
@@ -65,7 +66,7 @@ border.Parent = frame
 local function label(parent, text, size, color, font)
 	local t = Instance.new("TextLabel")
 	t.BackgroundTransparency = 1
-	t.Text = text or ""
+	t.Text = Composants.texteCompatible(text or "")
 	t.TextSize = size or 14
 	t.TextColor3 = color or INK
 	t.Font = font or Enum.Font.Gotham

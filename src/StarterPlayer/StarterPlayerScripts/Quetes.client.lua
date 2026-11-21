@@ -14,6 +14,7 @@ end
 local player = Players.LocalPlayer
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 
 local GOLD = Color3.fromRGB(246, 200, 70)
 local TEXT = Color3.fromRGB(245, 238, 222)
@@ -37,7 +38,7 @@ end
 local function label(parent, text, size, ts, color, bold)
 	local l = Instance.new("TextLabel")
 	l.BackgroundTransparency = 1
-	l.Text = text
+	l.Text = Composants.texteCompatible(text)
 	l.Font = bold and Enum.Font.GothamBold or Enum.Font.Gotham
 	l.TextSize = ts or 13
 	l.TextColor3 = color or TEXT

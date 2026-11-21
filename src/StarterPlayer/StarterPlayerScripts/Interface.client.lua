@@ -191,7 +191,7 @@ local function toast(text: string, kind: string?)
 		return
 	end
 	if hudNotify and (kind == "gain" or kind == "loot") then
-		hudNotify(text, kind)
+		hudNotify(Composants.texteCompatible(text), kind)
 		return
 	end
 	toastN += 1
@@ -1187,7 +1187,7 @@ local function game_()
 		{ id = "nourriture", name = "Nourriture", icon = "🍞" },
 		{ id = "outils", name = "Outils", icon = "⚒️" },
 		{ id = "graines", name = "Graines", icon = "🌱" },
-		{ id = "poser", name = "À poser", icon = "🪑" },
+		{ id = "poser", name = "À poser", icon = "🏠" },
 		{ id = "construction", name = "Construction", icon = "🧱" },
 		{ id = "valeur", name = "Valeur", icon = "💎" },
 		{ id = "divers", name = "Utilisables", icon = "📜" },
@@ -3427,7 +3427,7 @@ local function game_()
 			clanTitle.Text = "🛡️ Fonder un clan"
 			label({ Text = "Un clan te suit dans tous les mondes : grades, coffre commun, journal. Fonder coûte " .. d.cost .. " 💰.", TextColor3 = C.dim, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 0, Parent = clanBody })
 			local nameBox = new("TextBox", { PlaceholderText = "Nom du clan (3 à 24 lettres)", Text = "", Font = BODY, TextSize = 16, TextColor3 = C.text, BackgroundColor3 = C.panel2, Size = UDim2.new(1, -8, 0, 36), LayoutOrder = 1, ClearTextOnFocus = false, Parent = clanBody }, { corner(8), pad(6) })
-			local tagBox = new("TextBox", { PlaceholderText = "Tag (2 à 4 lettres, ex. LOUP)", Text = "", Font = BODY, TextSize = 16, TextColor3 = C.text, BackgroundColor3 = C.panel2, Size = UDim2.new(1, -8, 0, 36), LayoutOrder = 2, ClearTextOnFocus = false, Parent = clanBody }, { corner(8), pad(6) })
+			local tagBox = new("TextBox", { PlaceholderText = "Sigle (2 à 4 lettres, ex. LOUP)", Text = "", Font = BODY, TextSize = 16, TextColor3 = C.text, BackgroundColor3 = C.panel2, Size = UDim2.new(1, -8, 0, 36), LayoutOrder = 2, ClearTextOnFocus = false, Parent = clanBody }, { corner(8), pad(6) })
 			local b = button("Fonder le clan (" .. d.cost .. " 💰)", C.gold, function()
 				send("clan_create", { name = nameBox.Text, tag = tagBox.Text })
 			end)
@@ -3450,7 +3450,7 @@ local function game_()
 		end)
 		leaveB.Size = UDim2.fromOffset(150, 36)
 		leaveB.Parent = top
-		label({ Text = "Invite des joueurs avec [J] au-dessus d'eux (Officier et plus). Les membres bâtissent sur les parcelles les uns des autres.", TextSize = 12, TextColor3 = C.dim, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 1, Parent = clanBody })
+		label({ Text = "À partir du grade d’officier, utilise l’invite au-dessus d’un joueur pour le recruter.", TextSize = 12, TextColor3 = C.dim, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 1, Parent = clanBody })
 		for i, m in d.members or {} do
 			local row = new("Frame", { Size = UDim2.new(1, -8, 0, 40), BackgroundColor3 = C.panel2, LayoutOrder = 10 + i, Parent = clanBody }, { corner(8) })
 			label({ Text = (m.online and "🟢 " or "⚫ ") .. m.name .. "  ·  " .. m.rankName, Font = BOLD, Size = UDim2.new(1, -230, 1, 0), Position = UDim2.fromOffset(10, 0), Parent = row })
@@ -3799,7 +3799,7 @@ local function game_()
 				return
 			end
 		end
-		toast("🧱 → 🛠️ → ⌨️1-9", nil)
+		toast("Aucune pièce de construction dans la barre rapide.", nil)
 	end
 
 	-- ---------------------------------------------------------------- Effets
@@ -3946,19 +3946,28 @@ local function game_()
 		animal_lead = "🧵", carry = "🙌", horse = "🐴", pet = "🐾", pickup = "✋",
 	}
 	ACTION_ICON.animal_lead = "➰"
-	local PROP_ICON = { chop = "🪓", stump = "🪓", mine = "⛏️", dig = "⛏️", berries = "🍇", open = "📦", pick = "✋" }
+	local PROP_ICON = { chop = "⚒️", stump = "⚒️", mine = "⛏️", dig = "⛏️", berries = "🍇", open = "📦", pick = "✋" }
 	PROP_ICON.berries = "🍇"
 	local ProximityPromptService = game:GetService("ProximityPromptService")
 	local shown = {}
 	local EtatsProches = require(script.Parent:WaitForChild("EtatsProches"))
 	EtatsProches.survol(gui, uiScale, player, MOBILE, WindowNav, shown)
+	local DIRECTION = { DPadUp = "↑", DPadDown = "↓", DPadLeft = "←", DPadRight = "→" }
 	local function keyText(prompt: ProximityPrompt): string
-		local k = prompt.KeyboardKeyCode
-		if MOBILE then
+		local input = UserInputService:GetLastInputType()
+		if input.Name:match("^Gamepad") then
+			local key = prompt.GamepadKeyCode.Name
+			return DIRECTION[key] or (key:gsub("^Button", ""))
+		elseif input == Enum.UserInputType.Touch or MOBILE then
 			return "👆"
 		end
-		return k == Enum.KeyCode.E and "E" or (k == Enum.KeyCode.T and "T" or string.sub(k.Name, 1, 2))
+		return string.sub(prompt.KeyboardKeyCode.Name, 1, 2)
 	end
+	UserInputService.LastInputTypeChanged:Connect(function()
+		for prompt, entry in shown do
+			entry.key.Text = keyText(prompt)
+		end
+	end)
 	ProximityPromptService.PromptShown:Connect(function(prompt: ProximityPrompt)
 		if prompt.Style ~= Enum.ProximityPromptStyle.Custom or shown[prompt] then
 			return
@@ -3967,10 +3976,11 @@ local function game_()
 		local icon = ACTION_ICON[action] or (action == "prop" and PROP_ICON[prompt:GetAttribute("Mode")]) or "✋"
 		local bb = new("BillboardGui", { Size = UDim2.fromOffset(150, 46), StudsOffset = Vector3.new(0, 1.2, 0), AlwaysOnTop = true, LightInfluence = 0,
 			Adornee = prompt.Parent, Parent = gui, ResetOnSpawn = false })
-		local box = new(MOBILE and "TextButton" or "Frame", { Size = UDim2.fromOffset(0, 40), AutomaticSize = Enum.AutomaticSize.X, Position = UDim2.fromScale(0.5, 0.5),
+		local clickable = UserInputService.TouchEnabled
+		local box = new(clickable and "TextButton" or "Frame", { Size = UDim2.fromOffset(0, 40), AutomaticSize = Enum.AutomaticSize.X, Position = UDim2.fromScale(0.5, 0.5),
 			AnchorPoint = Vector2.new(0.5, 0.5), BackgroundColor3 = Color3.fromRGB(20, 16, 13), BackgroundTransparency = 0.15, Parent = bb },
 			{ corner(8), stroke(Color3.fromRGB(176, 140, 72), 1.5), pad(4), new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 6), VerticalAlignment = Enum.VerticalAlignment.Center }) })
-		if MOBILE then
+		if clickable then
 			box.Text = ""
 			box.Activated:Connect(function()
 				if WindowNav.isOpen() then return end
@@ -3983,6 +3993,8 @@ local function game_()
 		local key = new("TextLabel", { Text = keyText(prompt), Font = BOLD, TextSize = 16, TextColor3 = Color3.fromRGB(20, 16, 12), BackgroundColor3 = Color3.fromRGB(235, 225, 205),
 			Size = UDim2.fromOffset(28, 28), Parent = box }, { corner(6) })
 		label({ Text = icon, TextSize = 24, Size = UDim2.fromOffset(30, 30), Parent = box })
+		local verb = label({ Text = "", TextSize = 13, TextWrapped = false, TextTruncate = Enum.TextTruncate.AtEnd,
+			Size = UDim2.fromOffset(126, 30), Parent = box })
 		-- maintien : la touche se remplit
 		local fill = new("Frame", { Size = UDim2.fromScale(1, 0), Position = UDim2.fromScale(0, 1), AnchorPoint = Vector2.new(0, 1), BackgroundColor3 = C.gold,
 			BackgroundTransparency = 0.3, Parent = key }, { corner(6) })
@@ -3998,17 +4010,19 @@ local function game_()
 		local model = EtatsProches.lire(prompt.Parent)
 		local function majDetail()
 			local _, nom, etat = EtatsProches.lire(model)
-			local obj = prompt.ObjectText ~= "" and prompt.ObjectText or (nom or prompt.ActionText)
-			small.Text = etat and (obj .. " · " .. etat) or obj
-			bb.Size = etat and UDim2.fromOffset(228, 65) or UDim2.fromOffset(150, 46)
-			box.Position = etat and UDim2.new(0.5, 0, 0, 20) or UDim2.fromScale(0.5, 0.5)
-			small.Position = etat and UDim2.fromOffset(0, 42) or UDim2.new(0, 0, 1, -4)
-			small.Size = UDim2.new(1, 0, 0, etat and 23 or 12)
+			local obj = prompt.ObjectText ~= "" and prompt.ObjectText or (nom or "")
+			verb.Text = Composants.texteCompatible(prompt.ActionText)
+			small.Text = Composants.texteCompatible(etat and (obj ~= "" and (obj .. " · " .. etat) or etat) or obj)
+			bb.Size = UDim2.fromOffset(228, etat and 65 or 58)
+			box.Position = UDim2.new(0.5, 0, 0, 20)
+			small.Position = UDim2.fromOffset(0, 42)
+			small.Size = UDim2.new(1, 0, 0, etat and 23 or 16)
 		end
 		majDetail()
 		table.insert(conns, prompt:GetPropertyChangedSignal("ObjectText"):Connect(majDetail))
+		table.insert(conns, prompt:GetPropertyChangedSignal("ActionText"):Connect(majDetail))
 		if model then table.insert(conns, model.AttributeChanged:Connect(majDetail)) end
-		shown[prompt] = { bb = bb, conns = conns }
+		shown[prompt] = { bb = bb, conns = conns, key = key }
 	end)
 	ProximityPromptService.PromptHidden:Connect(function(prompt: ProximityPrompt)
 		local s = shown[prompt]
@@ -4115,7 +4129,7 @@ local function game_()
 		return true
 	end
 	local function hit()
-		if WindowNav.isOpen() then return end
+		if building or WindowNav.isOpen() then return end
 		local t = cibleApi.get()
 		send("hit", { target = t and t:GetAttribute("EnemyId") or nil })
 	end
