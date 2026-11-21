@@ -31,6 +31,12 @@ Les 46 planches 16:9 rassemblent 930 objets et 576 équipements nommés. Les ape
 | Bottes | 16 |
 | Bijoux et accessoires | 156 |
 
+## Actualisation du 21 novembre
+
+L’index recense désormais **1 058 objets et 703 équipements** d’après la configuration chargée dans Studio. Il ajoute 128 objets et 127 équipements, et actualise huit noms. Les légendes des captures historiques gardent les noms affichés au moment de la prise de vue.
+
+Les 255 nouvelles entrées ont des colonnes `Planche` et `Vignette` vides. Le suivi signale les miniatures présentes dans Studio et celles à préparer avant la prochaine capture.
+
 ## Planches de contrôle du 20 novembre
 
 - [Objets prioritaires](09-identites-corrigees.jpg). Noyau, fragment de ruine, laine, couronnes, turban, carreaux, insignes, talisman, chair et oreille.

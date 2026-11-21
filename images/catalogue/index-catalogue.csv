@@ -6,7 +6,7 @@ Pièces de construction;01-construction-01.png;4;blk_arche_taille;Arche (Pierre 
 Pièces de construction;01-construction-01.png;5;blk_arche_pierre;Arche (Pierre)
 Pièces de construction;01-construction-01.png;6;wood_arch;Arche en bois
 Pièces de construction;01-construction-01.png;7;stone_arch;Arche en pierre
-Pièces de construction;01-construction-01.png;8;rowboat;Barque
+Pièces de construction;01-construction-01.png;8;rowboat;Barque d'ornement
 Pièces de construction;01-construction-01.png;9;blk_barriere_bois;Barrière (Bois)
 Pièces de construction;01-construction-01.png;10;blk_barriere_fer;Barrière (Fer)
 Pièces de construction;01-construction-01.png;11;blk_bloc_bois;Bloc (Bois)
@@ -520,7 +520,7 @@ Cuisine, cultures et élevage;04-cuisine-et-ferme-04.png;26;egg;Œuf
 Alchimie et commerce;05-alchimie-et-commerce-01.png;1;ring_gem;Bague sertie
 Alchimie et commerce;05-alchimie-et-commerce-01.png;2;scales_tool;Balance
 Alchimie et commerce;05-alchimie-et-commerce-01.png;3;cloth_bale;Ballot de tissu
-Alchimie et commerce;05-alchimie-et-commerce-01.png;4;banniere;Bannière de clan
+Alchimie et commerce;05-alchimie-et-commerce-01.png;4;banniere;Bannière d'avant-poste
 Alchimie et commerce;05-alchimie-et-commerce-01.png;5;herbal_salve;Baume d'herboriste
 Alchimie et commerce;05-alchimie-et-commerce-01.png;6;jewel_box;Boîte à bijoux
 Alchimie et commerce;05-alchimie-et-commerce-01.png;7;bracelet;Bracelet
@@ -588,7 +588,7 @@ Savoir et loisirs;06-savoir-et-loisirs-01.png;21;stone_figurine;Figurine en pier
 Savoir et loisirs;06-savoir-et-loisirs-01.png;22;flute;Flûte
 Savoir et loisirs;06-savoir-et-loisirs-01.png;23;harp;Harpe
 Savoir et loisirs;06-savoir-et-loisirs-01.png;24;cards;Jeu de cartes
-Savoir et loisirs;06-savoir-et-loisirs-01.png;25;dice;Jeu de dés
+Savoir et loisirs;06-savoir-et-loisirs-01.png;25;dice;Osselets
 Savoir et loisirs;06-savoir-et-loisirs-01.png;26;board_game;Jeu de plateau
 Savoir et loisirs;06-savoir-et-loisirs-01.png;27;wood_toy;Jouet en bois
 Savoir et loisirs;06-savoir-et-loisirs-01.png;28;recommendation;Lettre de recommandation
@@ -631,7 +631,7 @@ Butin, curiosités et reliques;07-butin-et-reliques-01.png;5;prise_bounty_hunter
 Butin, curiosités et reliques;07-butin-et-reliques-01.png;6;ancient_jewel;Bijou ancien
 Butin, curiosités et reliques;07-butin-et-reliques-01.png;7;wood;Bois
 Butin, curiosités et reliques;07-butin-et-reliques-01.png;8;antler;Bois de cerf
-Butin, curiosités et reliques;07-butin-et-reliques-01.png;9;prise_deer;Bois de cerf
+Butin, curiosités et reliques;07-butin-et-reliques-01.png;9;prise_deer;Ramure de trophée
 Butin, curiosités et reliques;07-butin-et-reliques-01.png;10;prise_corrupted_stag;Bois de cerf corrompu
 Butin, curiosités et reliques;07-butin-et-reliques-01.png;11;prise_spectral_stag;Bois de cerf spectral
 Butin, curiosités et reliques;07-butin-et-reliques-01.png;12;petrified_wood;Bois pétrifié
@@ -692,7 +692,7 @@ Butin, curiosités et reliques;07-butin-et-reliques-02.png;30;prise_glass_coloss
 Butin, curiosités et reliques;07-butin-et-reliques-02.png;31;prise_harvest_warden;Cœur du Gardien des Moissons
 Butin, curiosités et reliques;07-butin-et-reliques-02.png;32;frozen_heart;Cœur gelé
 Butin, curiosités et reliques;07-butin-et-reliques-02.png;33;mineral_heart;Cœur minéral
-Butin, curiosités et reliques;07-butin-et-reliques-02.png;34;prise_scorpion;Dard de scorpion
+Butin, curiosités et reliques;07-butin-et-reliques-02.png;34;prise_scorpion;Dard de scorpion acéré
 Butin, curiosités et reliques;07-butin-et-reliques-02.png;35;stinger;Dard de scorpion
 Butin, curiosités et reliques;07-butin-et-reliques-02.png;36;tooth;Dent
 Butin, curiosités et reliques;07-butin-et-reliques-03.png;1;monster_tooth;Dent de monstre
@@ -738,7 +738,7 @@ Butin, curiosités et reliques;07-butin-et-reliques-04.png;4;prise_mud_man;Gelé
 Butin, curiosités et reliques;07-butin-et-reliques-04.png;5;prise_mud_golem;Gelée de golem de vase
 Butin, curiosités et reliques;07-butin-et-reliques-04.png;6;prise_freshwater_jellyfish;Gelée de méduse des marais
 Butin, curiosités et reliques;07-butin-et-reliques-04.png;7;prise_leech;Gelée de sangsue géante
-Butin, curiosités et reliques;07-butin-et-reliques-04.png;8;prise_slime;Gelée de slime
+Butin, curiosités et reliques;07-butin-et-reliques-04.png;8;prise_slime;Gelée de slime épaisse
 Butin, curiosités et reliques;07-butin-et-reliques-04.png;9;slime_gel;Gelée de slime
 Butin, curiosités et reliques;07-butin-et-reliques-04.png;10;prise_slime_blue;Gelée de slime bleu
 Butin, curiosités et reliques;07-butin-et-reliques-04.png;11;prise_marsh_king;Gelée du Roi des marais
@@ -813,8 +813,8 @@ Butin, curiosités et reliques;07-butin-et-reliques-06.png;7;prise_yeti;Os massi
 Butin, curiosités et reliques;07-butin-et-reliques-06.png;8;prise_mountain_giant;Os massif du Géant des montagnes
 Butin, curiosités et reliques;07-butin-et-reliques-06.png;9;prise_ghoul;Os maudit de goule
 Butin, curiosités et reliques;07-butin-et-reliques-06.png;10;prise_mummy;Os maudit de momie ancienne
-Butin, curiosités et reliques;07-butin-et-reliques-06.png;11;prise_ancient_skeleton;Os maudit de squelette ancien
-Butin, curiosités et reliques;07-butin-et-reliques-06.png;12;prise_skeleton;Os maudit de squelette errant
+Butin, curiosités et reliques;07-butin-et-reliques-06.png;11;prise_ancient_skeleton;Éclat de gisant ancien
+Butin, curiosités et reliques;07-butin-et-reliques-06.png;12;prise_skeleton;Éclat de gisant errant
 Butin, curiosités et reliques;07-butin-et-reliques-06.png;13;old_page;Page ancienne
 Butin, curiosités et reliques;07-butin-et-reliques-06.png;14;prise_scarecrow;Paille maudite d'épouvantail maudit
 Butin, curiosités et reliques;07-butin-et-reliques-06.png;15;prise_rabbit;Patte de lapin
@@ -1505,3 +1505,258 @@ Armes et équipement;08-equipement-16.png;33;weapon:Épée de l’Ambre royal;É
 Armes et équipement;08-equipement-16.png;34;weapon:Épée de Valdor;Épée de Valdor
 Armes et équipement;08-equipement-16.png;35;weapon:Épée du Reliquaire d’os;Épée du Reliquaire d’os
 Armes et équipement;08-equipement-16.png;36;weapon:Épée longue;Épée longue
+Alchimie et commerce;;;franchise_letter;Lettre de franchise
+Armes et équipement;;;Amulette dorée;Amulette dorée
+Armes et équipement;;;Anneau de fer;Anneau de fer
+Armes et équipement;;;weapon:Arbalète en lin de Valdor;Arbalète en lin de Valdor
+Armes et équipement;;;weapon:Arc de bois de cœur;Arc de bois de cœur
+Armes et équipement;;;weapon:Arc long de maître;Arc long de maître
+Armes et équipement;;;weapon:Arc recourbé au diamant boréal;Arc recourbé au diamant boréal
+Armes et équipement;;;weapon:Arc recourbé en lin de Valdor;Arc recourbé en lin de Valdor
+Armes et équipement;;;armor;armor
+Armes et équipement;;;trinket:Bague du passe-partout;Bague du passe-partout
+Armes et équipement;;;Bandeau de pirate;Bandeau de pirate
+Armes et équipement;;;trinket:Bâton de berger;Bâton de berger
+Armes et équipement;;;weapon:Baudrier du lanceur de couteaux;Baudrier du lanceur de couteaux
+Armes et équipement;;;Béret;Béret
+Armes et équipement;;;armor:Blouse de berger;Blouse de berger
+Armes et équipement;;;Bonnet rouge;Bonnet rouge
+Armes et équipement;;;boots:Bottes de cavalier émérite;Bottes de cavalier émérite
+Armes et équipement;;;boots:Bottes de coureur;Bottes de coureur
+Armes et équipement;;;trinket:Bottes de marais;Bottes de marais
+Armes et équipement;;;trinket:Bottes de marche;Bottes de marche
+Armes et équipement;;;boots:Bottes de pêcheur;Bottes de pêcheur
+Armes et équipement;;;boots:Bottes de vacher;Bottes de vacher
+Armes et équipement;;;boots:Bottes fourrées;Bottes fourrées
+Armes et équipement;;;offhand:Bouclier héraldique;Bouclier héraldique
+Armes et équipement;;;offhand:Bouclier rectangulaire;Bouclier rectangulaire
+Armes et équipement;;;offhand:Bouclier renforcé au diamant;Bouclier renforcé au diamant
+Armes et équipement;;;offhand:Bouclier rond;Bouclier rond
+Armes et équipement;;;offhand:Bouclier-carapace de tortue ancienne;Bouclier-carapace de tortue ancienne
+Armes et équipement;;;trinket:Bourse de colporteur;Bourse de colporteur
+Armes et équipement;;;trinket:Brassards;Brassards
+Armes et équipement;;;armor:Brigandine de bois de cœur;Brigandine de bois de cœur
+Armes et équipement;;;hat:Cagoule de monte-en-l'air;Cagoule de monte-en-l'air
+Armes et équipement;;;armor:Cape;Cape
+Armes et équipement;;;cape:Cape de fourrure;Cape de fourrure
+Armes et équipement;;;armor:Cape de soie;Cape de soie
+Armes et équipement;;;cape:Cape de soie nocturne;Cape de soie nocturne
+Armes et équipement;;;cape:Cape du maître des bêtes;Cape du maître des bêtes
+Armes et équipement;;;Cape sombre;Cape sombre
+Armes et équipement;;;cape:Cape teinte du voyageur;Cape teinte du voyageur
+Armes et équipement;;;Capuche sylvestre;Capuche sylvestre
+Armes et équipement;;;hat:Casque de mineur;Casque de mineur
+Armes et équipement;;;trinket:Ceinture du hachereau;Ceinture du hachereau
+Armes et équipement;;;trinket:Chaîne de maître marchand;Chaîne de maître marchand
+Armes et équipement;;;hat:Chapeau de colporteur;Chapeau de colporteur
+Armes et équipement;;;Chapeau de mage;Chapeau de mage
+Armes et équipement;;;Chapeau de paille;Chapeau de paille
+Armes et équipement;;;hat:Chapeau de paille du fermier;Chapeau de paille du fermier
+Armes et équipement;;;hat:Chapeau de pêcheur;Chapeau de pêcheur
+Armes et équipement;;;legs:Chausses de cuir souple;Chausses de cuir souple
+Armes et équipement;;;legs:Chausses de soie du rôdeur;Chausses de soie du rôdeur
+Armes et équipement;;;cape:Ciré du capitaine;Ciré du capitaine
+Armes et équipement;;;trinket:Collier de griffes;Collier de griffes
+Armes et équipement;;;armor:Cotte damassée;Cotte damassée
+Armes et équipement;;;Cotte de mailles;Cotte de mailles
+Armes et équipement;;;throwing_knife;Couteau de lancer
+Armes et équipement;;;weapon:Couteaux de lancer;Couteaux de lancer
+Armes et équipement;;;weapon:Dague de la Veille d’hiver;Dague de la Veille d’hiver
+Armes et équipement;;;weapon:Dague du Soleil rouge;Dague du Soleil rouge
+Armes et équipement;;;weapon:Dague en lin de Valdor;Dague en lin de Valdor
+Armes et équipement;;;shoulders:Épaulières d'apparat;Épaulières d'apparat
+Armes et équipement;;;shoulders:Épaulières de fourrure;Épaulières de fourrure
+Armes et équipement;;;shoulders:Épaulières de mailles;Épaulières de mailles
+Armes et équipement;;;armor:Épaulières de pierre de gargouille animée;Épaulières de pierre de gargouille animée
+Armes et équipement;;;weapon:Épée des Ronces vertes;Épée des Ronces vertes
+Armes et équipement;;;weapon:Épée du Soleil rouge;Épée du Soleil rouge
+Armes et équipement;;;weapon:Épée en lin de Valdor;Épée en lin de Valdor
+Armes et équipement;;;weapon:Espadon de cuir huilé;Espadon de cuir huilé
+Armes et équipement;;;weapon:Fauchard du Loup gris;Fauchard du Loup gris
+Armes et équipement;;;arrow_iron;Flèche à pointe de fer
+Armes et équipement;;;arrow_barbed;Flèche barbelée
+Armes et équipement;;;weapon:Fronde;Fronde
+Armes et équipement;;;weapon:Fronde de berger renforcée;Fronde de berger renforcée
+Armes et équipement;;;trinket:Gantelets;Gantelets
+Armes et équipement;;;gloves:Gantelets de forge;Gantelets de forge
+Armes et équipement;;;gloves:Gantelets de prospecteur;Gantelets de prospecteur
+Armes et équipement;;;gloves:Gantelets dorés du capitaine;Gantelets dorés du capitaine
+Armes et équipement;;;gloves:Gants d'artisan;Gants d'artisan
+Armes et équipement;;;gloves:Gants de bûcheron;Gants de bûcheron
+Armes et équipement;;;gloves:Gants de crocheteur;Gants de crocheteur
+Armes et équipement;;;gloves:Gants de dresseur;Gants de dresseur
+Armes et équipement;;;gloves:Gants de jardinier;Gants de jardinier
+Armes et équipement;;;gloves:Gants de soie de l'archer;Gants de soie de l'archer
+Armes et équipement;;;trinket:Gants en cuir;Gants en cuir
+Armes et équipement;;;gloves:Gants fourrés;Gants fourrés
+Armes et équipement;;;legs:Genouillères de mineur;Genouillères de mineur
+Armes et équipement;;;Gilet de cuir;Gilet de cuir
+Armes et équipement;;;throwing_axe;Hache de jet
+Armes et équipement;;;weapon:Hache de la Veille d’hiver;Hache de la Veille d’hiver
+Armes et équipement;;;weapon:Hache du Reliquaire d’os;Hache du Reliquaire d’os
+Armes et équipement;;;weapon:Hache en lin de Valdor;Hache en lin de Valdor
+Armes et équipement;;;weapon:Haches de jet du forestier;Haches de jet du forestier
+Armes et équipement;;;weapon:Haches de jet du franc-tireur;Haches de jet du franc-tireur
+Armes et équipement;;;weapon:Hallebarde de forge cuivrée;Hallebarde de forge cuivrée
+Armes et équipement;;;hat;hat
+Armes et équipement;;;Haut-de-forme vert;Haut-de-forme vert
+Armes et équipement;;;trinket:Jambières;Jambières
+Armes et équipement;;;legs:Jambières d'acier;Jambières d'acier
+Armes et équipement;;;legs:Jambières de fourrure;Jambières de fourrure
+Armes et équipement;;;javelin;Javelot
+Armes et équipement;;;weapon:Javelots de chasse;Javelots de chasse
+Armes et équipement;;;weapon:Javelots de guerre;Javelots de guerre
+Armes et équipement;;;weapon:Lame damassée;Lame damassée
+Armes et équipement;;;weapon:Lame de brigand à cheval;Lame de brigand à cheval
+Armes et équipement;;;weapon:Lame venimeuse de serpent marin;Lame venimeuse de serpent marin
+Armes et équipement;;;weapon:Lance de l’Ambre royal;Lance de l’Ambre royal
+Armes et équipement;;;weapon:Lance en lin de Valdor;Lance en lin de Valdor
+Armes et équipement;;;hat:Lunettes de maître artisan;Lunettes de maître artisan
+Armes et équipement;;;cape:Manteau d'apparat;Manteau d'apparat
+Armes et équipement;;;weapon:Marteau de Valdor;Marteau de Valdor
+Armes et équipement;;;weapon:Masse de la Lune d’argent;Masse de la Lune d’argent
+Armes et équipement;;;weapon:Masse de pierre de gisant ancien;Masse de pierre de gisant ancien
+Armes et équipement;;;weapon:Masse de pierre de gisant errant;Masse de pierre de gisant errant
+Armes et équipement;;;weapon:Masse en lin de Valdor;Masse en lin de Valdor
+Armes et équipement;;;weapon:Massue d'os de brochet géant;Massue d'os de brochet géant
+Armes et équipement;;;trinket:Médaillon du grand chef;Médaillon du grand chef
+Armes et équipement;;;Pendentif de jade;Pendentif de jade
+Armes et équipement;;;Plastron de cuivre;Plastron de cuivre
+Armes et équipement;;;Plume de corbeau;Plume de corbeau
+Armes et équipement;;;weapon:Sabre de la Garde du pont;Sabre de la Garde du pont
+Armes et équipement;;;trinket:Sifflet en os;Sifflet en os
+Armes et équipement;;;boots:Solerets d'acier;Solerets d'acier
+Armes et équipement;;;shoulders:Spallières d'acier;Spallières d'acier
+Armes et équipement;;;armor:Tablier de cuisinier;Tablier de cuisinier
+Armes et équipement;;;armor:Tablier de forgeron;Tablier de forgeron
+Armes et équipement;;;armor:Tablier de semeur;Tablier de semeur
+Armes et équipement;;;Toque;Toque
+Armes et équipement;;;hat:Toque de cuisinier;Toque de cuisinier
+Armes et équipement;;;offhand:Torche;Torche
+Armes et équipement;;;Trèfle porte-bonheur;Trèfle porte-bonheur
+Armes et équipement;;;Tricorne;Tricorne
+Armes et équipement;;;trinket;trinket
+Armes et équipement;;;Tunique d'éclaireur;Tunique d'éclaireur
+Armes et équipement;;;armor:Vareuse de bûcheron;Vareuse de bûcheron
+Butin, curiosités et reliques;;;prise_highway_rider;Insigne de brigand à cheval
+Butin, curiosités et reliques;;;prise_giant_pike;Os massif de brochet géant
+Butin, curiosités et reliques;;;prise_sea_serpent;Venin de serpent marin
+Cuisine, cultures et élevage;;;lord_banquet;Banquet du seigneur
+Cuisine, cultures et élevage;;;bridle;Bride et rênes
+Cuisine, cultures et élevage;;;caparison;Caparaçon
+Cuisine, cultures et élevage;;;spiked_collar;Collier clouté
+Cuisine, cultures et élevage;;;stirrups;Étriers
+Cuisine, cultures et élevage;;;aged_cheese;Fromage affiné
+Cuisine, cultures et élevage;;;truffle_cheese;Fromage truffé
+Cuisine, cultures et élevage;;;village_feast;Grand festin
+Cuisine, cultures et élevage;;;pet_harness;Harnais de cuir
+Cuisine, cultures et élevage;;;leash;Laisse
+Cuisine, cultures et élevage;;;halter;Licol
+Cuisine, cultures et élevage;;;truffle_omelette;Omelette aux truffes
+Cuisine, cultures et élevage;;;fisher_platter;Plateau du maître pêcheur
+Cuisine, cultures et élevage;;;saddle_race;Selle de course
+Cuisine, cultures et élevage;;;saddle_leather;Selle de cuir
+Cuisine, cultures et élevage;;;saddle_war;Selle de guerre
+Cuisine, cultures et élevage;;;truffle;Truffe
+Matières, outils et métiers;;;damascus_steel;Acier damassé
+Matières, outils et métiers;;;sewing_needle;Aiguille à coudre
+Matières, outils et métiers;;;heartwood;Bois de cœur
+Matières, outils et métiers;;;chisel;Ciseau de tailleur
+Matières, outils et métiers;;;sickle;Faucille
+Matières, outils et métiers;;;fishing_net;Filet de pêche
+Matières, outils et métiers;;;cork_float;Flotteur
+Matières, outils et métiers;;;pitchfork;Fourche à foin
+Matières, outils et métiers;;;spindle;Fuseau
+Matières, outils et métiers;;;harpoon;Harpon de pêche
+Matières, outils et métiers;;;artisan_hammer;Marteau d'artisan
+Matières, outils et métiers;;;mortar_pestle;Mortier et pilon
+Matières, outils et métiers;;;ice_pick;Piolet
+Matières, outils et métiers;;;fine_planks;Planches de chêne fines
+Matières, outils et métiers;;;rake;Râteau
+Matières, outils et métiers;;;rolling_pin;Rouleau à pâtisserie
+Matières, outils et métiers;;;hand_saw;Scie à main
+Matières, outils et métiers;;;sieve;Tamis
+Mobilier et décorations;;;price_tags;Étiquettes de prix
+Mobilier et décorations;;;wall_lantern;Lanterne murale
+Mobilier et décorations;;;training_dummy;Mannequin d'entraînement
+Pièces de construction;;;blk_balcon_bois;Balcon (Bois)
+Pièces de construction;;;blk_balcon_taille;Balcon (Pierre taillée)
+Pièces de construction;;;blk_balcon_pierre;Balcon (Pierre)
+Pièces de construction;;;blk_balcon_pin;Balcon (Pin)
+Pièces de construction;;;blk_caillebotis_bois;Caillebotis (Bois)
+Pièces de construction;;;blk_caillebotis_pin;Caillebotis (Pin)
+Pièces de construction;;;blk_chevron_bois;Chevron de toit (Bois)
+Pièces de construction;;;blk_chevron_pin;Chevron de toit (Pin)
+Pièces de construction;;;blk_chevron_rondin;Chevron de toit (Rondins)
+Pièces de construction;;;blk_colonnecarree_bois;Colonne carrée (Bois)
+Pièces de construction;;;blk_colonnecarree_brique;Colonne carrée (Brique)
+Pièces de construction;;;blk_colonnecarree_taille;Colonne carrée (Pierre taillée)
+Pièces de construction;;;blk_colonnecarree_pierre;Colonne carrée (Pierre)
+Pièces de construction;;;blk_demipoutre_bois;Demi-poutre (Bois)
+Pièces de construction;;;blk_demipoutre_fer;Demi-poutre (Fer)
+Pièces de construction;;;blk_demipoutre_pin;Demi-poutre (Pin)
+Pièces de construction;;;blk_demipoutre_rondin;Demi-poutre (Rondins)
+Pièces de construction;;;blk_echalas_bois;Échalas (Bois)
+Pièces de construction;;;blk_echalas_pin;Échalas (Pin)
+Pièces de construction;;;blk_croisillons_bois;Fenêtre à croisillons (Bois)
+Pièces de construction;;;blk_croisillons_brique;Fenêtre à croisillons (Brique)
+Pièces de construction;;;blk_croisillons_taille;Fenêtre à croisillons (Pierre taillée)
+Pièces de construction;;;blk_croisillons_pierre;Fenêtre à croisillons (Pierre)
+Pièces de construction;;;blk_croisillons_rondin;Fenêtre à croisillons (Rondins)
+Pièces de construction;;;blk_croisillons_torchis;Fenêtre à croisillons (Torchis)
+Pièces de construction;;;blk_vitrail_brique;Fenêtre avec vitrail (Brique)
+Pièces de construction;;;blk_vitrail_taille;Fenêtre avec vitrail (Pierre taillée)
+Pièces de construction;;;blk_vitrail_pierre;Fenêtre avec vitrail (Pierre)
+Pièces de construction;;;blk_volets_bois;Fenêtre avec volets (Bois)
+Pièces de construction;;;blk_volets_brique;Fenêtre avec volets (Brique)
+Pièces de construction;;;blk_volets_taille;Fenêtre avec volets (Pierre taillée)
+Pièces de construction;;;blk_volets_pierre;Fenêtre avec volets (Pierre)
+Pièces de construction;;;blk_volets_rondin;Fenêtre avec volets (Rondins)
+Pièces de construction;;;blk_volets_torchis;Fenêtre avec volets (Torchis)
+Pièces de construction;;;blk_fondation_bois;Fondation (Bois)
+Pièces de construction;;;blk_fondation_gravier;Fondation (Gravier)
+Pièces de construction;;;blk_fondation_taille;Fondation (Pierre taillée)
+Pièces de construction;;;blk_fondation_pierre;Fondation (Pierre)
+Pièces de construction;;;blk_fondation_rondin;Fondation (Rondins)
+Pièces de construction;;;blk_gouttiere_bois;Gouttière (Bois)
+Pièces de construction;;;blk_gouttiere_fer;Gouttière (Fer)
+Pièces de construction;;;blk_lucarne_ardoise;Lucarne (Ardoise)
+Pièces de construction;;;blk_lucarne_bardeau;Lucarne (Bardeaux)
+Pièces de construction;;;blk_lucarne_bois;Lucarne (Bois)
+Pièces de construction;;;blk_lucarne_chaume;Lucarne (Chaume)
+Pièces de construction;;;blk_lucarne_tuile;Lucarne (Tuiles)
+Pièces de construction;;;blk_madrier_bois;Madrier (Bois)
+Pièces de construction;;;blk_madrier_pin;Madrier (Pin)
+Pièces de construction;;;blk_madrier_rondin;Madrier (Rondins)
+Pièces de construction;;;blk_colombages_brique;Mur à colombages (Brique)
+Pièces de construction;;;blk_colombages_pise;Mur à colombages (Pisé)
+Pièces de construction;;;blk_colombages_torchis;Mur à colombages (Torchis)
+Pièces de construction;;;blk_niche_brique;Mur avec niche (Brique)
+Pièces de construction;;;blk_niche_taille;Mur avec niche (Pierre taillée)
+Pièces de construction;;;blk_niche_pierre;Mur avec niche (Pierre)
+Pièces de construction;;;blk_niche_torchis;Mur avec niche (Torchis)
+Pièces de construction;;;blk_clayonnage_bois;Mur en clayonnage (Bois)
+Pièces de construction;;;blk_clayonnage_rondin;Mur en clayonnage (Rondins)
+Pièces de construction;;;blk_murincline_brique;Mur incliné (Brique)
+Pièces de construction;;;blk_murincline_taille;Mur incliné (Pierre taillée)
+Pièces de construction;;;blk_murincline_pierre;Mur incliné (Pierre)
+Pièces de construction;;;blk_murincline_pise;Mur incliné (Pisé)
+Pièces de construction;;;blk_murincline_torchis;Mur incliné (Torchis)
+Pièces de construction;;;blk_pavage_brique;Pavage irrégulier (Brique)
+Pièces de construction;;;blk_pavage_gravier;Pavage irrégulier (Gravier)
+Pièces de construction;;;blk_pavage_taille;Pavage irrégulier (Pierre taillée)
+Pièces de construction;;;blk_pavage_pierre;Pavage irrégulier (Pierre)
+Pièces de construction;;;blk_pilotis_bois;Plateforme sur pilotis (Bois)
+Pièces de construction;;;blk_pilotis_pin;Plateforme sur pilotis (Pin)
+Pièces de construction;;;blk_pilotis_rondin;Plateforme sur pilotis (Rondins)
+Pièces de construction;;;blk_poteaurond_bois;Poteau rond (Bois)
+Pièces de construction;;;blk_poteaurond_pin;Poteau rond (Pin)
+Pièces de construction;;;blk_poteaurond_rondin;Poteau rond (Rondins)
+Pièces de construction;;;blk_poteausculpte_bois;Poteau sculpté (Bois)
+Pièces de construction;;;blk_poteausculpte_taille;Poteau sculpté (Pierre taillée)
+Pièces de construction;;;blk_poteausculpte_pierre;Poteau sculpté (Pierre)
+Pièces de construction;;;blk_poteausculpte_pin;Poteau sculpté (Pin)
+Pièces de construction;;;blk_treillis_bois;Treillis (Bois)
+Pièces de construction;;;blk_treillis_fer;Treillis (Fer)
+Pièces de construction;;;blk_treillis_pin;Treillis (Pin)
+Savoir et loisirs;;;music_sheet;Partition

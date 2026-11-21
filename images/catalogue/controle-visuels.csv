@@ -6,7 +6,7 @@
 01-construction-01.png;5;blk_arche_pierre;Arche (Pierre);Modèle présent;Maquette de l’objet ou géométrie dédiée, sans volume de secours détecté;13;blk_arche_pierre
 01-construction-01.png;6;wood_arch;Arche en bois;Modèle présent;Maquette de l’objet ou géométrie dédiée, sans volume de secours détecté;5;wood_arch
 01-construction-01.png;7;stone_arch;Arche en pierre;Modèle présent;Maquette de l’objet ou géométrie dédiée, sans volume de secours détecté;5;stone_arch
-01-construction-01.png;8;rowboat;Barque;Modèle présent;Maquette de l’objet ou géométrie dédiée, sans volume de secours détecté;4;rowboat
+01-construction-01.png;8;rowboat;Barque d'ornement;Modèle présent;Maquette de l’objet ou géométrie dédiée, sans volume de secours détecté;4;rowboat
 01-construction-01.png;9;blk_barriere_bois;Barrière (Bois);Modèle présent;Maquette de l’objet ou géométrie dédiée, sans volume de secours détecté;1;blk_barriere_bois
 01-construction-01.png;10;blk_barriere_fer;Barrière (Fer);Modèle présent;Maquette de l’objet ou géométrie dédiée, sans volume de secours détecté;1;blk_barriere_fer
 01-construction-01.png;11;blk_bloc_bois;Bloc (Bois);Modèle présent;Maquette de l’objet ou géométrie dédiée, sans volume de secours détecté;1;blk_bloc_bois
@@ -520,7 +520,7 @@
 05-alchimie-et-commerce-01.png;1;ring_gem;Bague sertie;Modèle présent;Maquette de l’objet ou géométrie dédiée, sans volume de secours détecté;11;ring_gem
 05-alchimie-et-commerce-01.png;2;scales_tool;Balance;Visuel repris;Modèle associé à l'objet. Famille visuelle : scale;9;scales_tool
 05-alchimie-et-commerce-01.png;3;cloth_bale;Ballot de tissu;Visuel repris;Progression ou identite visuelle : sack;6;cloth_bale
-05-alchimie-et-commerce-01.png;4;banniere;Bannière de clan;Visuel repris;Modèle associé à l'objet. Famille visuelle : banner;3;banniere
+05-alchimie-et-commerce-01.png;4;banniere;Bannière d'avant-poste;Visuel repris;Modèle associé à l'objet. Famille visuelle : banner;3;banniere
 05-alchimie-et-commerce-01.png;5;herbal_salve;Baume d'herboriste;Visuel repris;Flacon modelé : profil du verre, liquide et fermeture;9;herbal_salve
 05-alchimie-et-commerce-01.png;6;jewel_box;Boîte à bijoux;Modèle présent;Maquette de l’objet ou géométrie dédiée, sans volume de secours détecté;4;jewel_box
 05-alchimie-et-commerce-01.png;7;bracelet;Bracelet;Modèle présent;Maquette de l’objet ou géométrie dédiée, sans volume de secours détecté;11;bracelet
@@ -588,7 +588,7 @@
 06-savoir-et-loisirs-01.png;22;flute;Flûte;Visuel repris;Modèle associé à l'objet. Famille visuelle : instrument;7;flute
 06-savoir-et-loisirs-01.png;23;harp;Harpe;Visuel repris;Modèle associé à l'objet. Famille visuelle : instrument;10;harp
 06-savoir-et-loisirs-01.png;24;cards;Jeu de cartes;Visuel repris;Identité corrigée après lecture de la planche. Famille : tablegame;6;cards
-06-savoir-et-loisirs-01.png;25;dice;Jeu de dés;Visuel repris;Modèle associé à l'objet. Famille visuelle : dice;12;dice
+06-savoir-et-loisirs-01.png;25;dice;Osselets;Visuel repris;Modèle associé à l'objet. Famille visuelle : dice;12;dice
 06-savoir-et-loisirs-01.png;26;board_game;Jeu de plateau;Visuel repris;Identité corrigée après lecture de la planche. Famille : tablegame;21;board_game
 06-savoir-et-loisirs-01.png;27;wood_toy;Jouet en bois;Visuel repris;Modèle associé à l'objet. Famille visuelle : figurine;6;wood_toy
 06-savoir-et-loisirs-01.png;28;recommendation;Lettre de recommandation;Variante de famille;Silhouette réutilisée avec des détails ou une couleur différente;7;recommendation
@@ -631,7 +631,7 @@
 07-butin-et-reliques-01.png;6;ancient_jewel;Bijou ancien;Modèle présent;Maquette de l’objet ou géométrie dédiée, sans volume de secours détecté;11;ancient_jewel
 07-butin-et-reliques-01.png;7;wood;Bois;Visuel repris;Progression ou identite visuelle : timber;30;wood
 07-butin-et-reliques-01.png;8;antler;Bois de cerf;Visuel repris;Modèle associé à l'objet. Famille visuelle : horn;7;antler
-07-butin-et-reliques-01.png;9;prise_deer;Bois de cerf;Retouché;Silhouette vérifiée ou refaite pour le type d’objet;5;prise_deer
+07-butin-et-reliques-01.png;9;prise_deer;Ramure de trophée;Retouché;Silhouette vérifiée ou refaite pour le type d’objet;5;prise_deer
 07-butin-et-reliques-01.png;10;prise_corrupted_stag;Bois de cerf corrompu;Retouché;Silhouette vérifiée ou refaite pour le type d’objet;5;prise_corrupted_stag
 07-butin-et-reliques-01.png;11;prise_spectral_stag;Bois de cerf spectral;Retouché;Silhouette vérifiée ou refaite pour le type d’objet;5;prise_spectral_stag
 07-butin-et-reliques-01.png;12;petrified_wood;Bois pétrifié;Visuel repris;Modèle associé à l'objet. Famille visuelle : nugget;7;petrified_wood
@@ -692,7 +692,7 @@
 07-butin-et-reliques-02.png;31;prise_harvest_warden;Cœur du Gardien des Moissons;Visuel repris;Progression ou identite visuelle : core;12;prise_harvest_warden
 07-butin-et-reliques-02.png;32;frozen_heart;Cœur gelé;Visuel repris;Progression ou identite visuelle : core;4;frozen_heart
 07-butin-et-reliques-02.png;33;mineral_heart;Cœur minéral;Visuel repris;Progression ou identite visuelle : core;5;mineral_heart
-07-butin-et-reliques-02.png;34;prise_scorpion;Dard de scorpion;Retouché;Silhouette vérifiée ou refaite pour le type d’objet;3;prise_scorpion
+07-butin-et-reliques-02.png;34;prise_scorpion;Dard de scorpion acéré;Retouché;Silhouette vérifiée ou refaite pour le type d’objet;3;prise_scorpion
 07-butin-et-reliques-02.png;35;stinger;Dard de scorpion;Visuel repris;Modèle associé à l'objet. Famille visuelle : fang;4;stinger
 07-butin-et-reliques-02.png;36;tooth;Dent;Visuel repris;Croc, défense ou griffe modelé : courbure, racine et pointe;3;tooth
 07-butin-et-reliques-03.png;1;monster_tooth;Dent de monstre;Visuel repris;Croc, défense ou griffe modelé : courbure, racine et pointe;7;monster_tooth
@@ -738,7 +738,7 @@
 07-butin-et-reliques-04.png;5;prise_mud_golem;Gelée de golem de vase;Visuel repris;Gel modelé : volume, découpe et détails propres à la variante;4;prise_mud_golem
 07-butin-et-reliques-04.png;6;prise_freshwater_jellyfish;Gelée de méduse des marais;Visuel repris;Gel modelé : volume, découpe et détails propres à la variante;6;prise_freshwater_jellyfish
 07-butin-et-reliques-04.png;7;prise_leech;Gelée de sangsue géante;Visuel repris;Gel modelé : volume, découpe et détails propres à la variante;6;prise_leech
-07-butin-et-reliques-04.png;8;prise_slime;Gelée de slime;Visuel repris;Gel modelé : volume, découpe et détails propres à la variante;6;prise_slime
+07-butin-et-reliques-04.png;8;prise_slime;Gelée de slime épaisse;Visuel repris;Gel modelé : volume, découpe et détails propres à la variante;6;prise_slime
 07-butin-et-reliques-04.png;9;slime_gel;Gelée de slime;Visuel repris;Gel modelé : volume, découpe et détails propres à la variante;7;slime_gel
 07-butin-et-reliques-04.png;10;prise_slime_blue;Gelée de slime bleu;Visuel repris;Gel modelé : volume, découpe et détails propres à la variante;4;prise_slime_blue
 07-butin-et-reliques-04.png;11;prise_marsh_king;Gelée du Roi des marais;Visuel repris;Gel modelé : volume, découpe et détails propres à la variante;7;prise_marsh_king
@@ -813,8 +813,8 @@
 07-butin-et-reliques-06.png;8;prise_mountain_giant;Os massif du Géant des montagnes;Visuel repris;Os modelé : anatomie, relief et usure;5;prise_mountain_giant
 07-butin-et-reliques-06.png;9;prise_ghoul;Os maudit de goule;Visuel repris;Os modelé : anatomie, relief et usure;8;prise_ghoul
 07-butin-et-reliques-06.png;10;prise_mummy;Os maudit de momie ancienne;Visuel repris;Os modelé : anatomie, relief et usure;8;prise_mummy
-07-butin-et-reliques-06.png;11;prise_ancient_skeleton;Os maudit de squelette ancien;Visuel repris;Os modelé : anatomie, relief et usure;8;prise_ancient_skeleton
-07-butin-et-reliques-06.png;12;prise_skeleton;Os maudit de squelette errant;Visuel repris;Os modelé : anatomie, relief et usure;5;prise_skeleton
+07-butin-et-reliques-06.png;11;prise_ancient_skeleton;Éclat de gisant ancien;Visuel repris;Os modelé : anatomie, relief et usure;8;prise_ancient_skeleton
+07-butin-et-reliques-06.png;12;prise_skeleton;Éclat de gisant errant;Visuel repris;Os modelé : anatomie, relief et usure;5;prise_skeleton
 07-butin-et-reliques-06.png;13;old_page;Page ancienne;Variante de famille;Silhouette réutilisée avec des détails ou une couleur différente;7;old_page
 07-butin-et-reliques-06.png;14;prise_scarecrow;Paille maudite d'épouvantail maudit;Retouché;Silhouette vérifiée ou refaite pour le type d’objet;7;prise_scarecrow
 07-butin-et-reliques-06.png;15;prise_rabbit;Patte de lapin;Retouché;Silhouette vérifiée ou refaite pour le type d’objet;5;prise_rabbit
@@ -1505,3 +1505,258 @@
 08-equipement-16.png;34;weapon:Épée de Valdor;Épée de Valdor;Modèle présent;Famille visuelle : sword;6;weapon:Épée de Valdor
 08-equipement-16.png;35;weapon:Épée du Reliquaire d’os;Épée du Reliquaire d’os;Visuel repris;Famille visuelle : sword;7;weapon:Épée du Reliquaire d’os
 08-equipement-16.png;36;weapon:Épée longue;Épée longue;Visuel repris;Famille visuelle : sword;5;weapon:Épée longue
+;;franchise_letter;Lettre de franchise;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;4;franchise_letter
+;;Amulette dorée;Amulette dorée;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;Amulette dorée
+;;Anneau de fer;Anneau de fer;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;Anneau de fer
+;;weapon:Arbalète en lin de Valdor;Arbalète en lin de Valdor;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;weapon:Arbalète en lin de Valdor
+;;weapon:Arc de bois de cœur;Arc de bois de cœur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;15;weapon:Arc de bois de cœur
+;;weapon:Arc long de maître;Arc long de maître;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;15;weapon:Arc long de maître
+;;weapon:Arc recourbé au diamant boréal;Arc recourbé au diamant boréal;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;15;weapon:Arc recourbé au diamant boréal
+;;weapon:Arc recourbé en lin de Valdor;Arc recourbé en lin de Valdor;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;weapon:Arc recourbé en lin de Valdor
+;;armor;armor;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;13;armor
+;;trinket:Bague du passe-partout;Bague du passe-partout;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;13;trinket:Bague du passe-partout
+;;Bandeau de pirate;Bandeau de pirate;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;13;Bandeau de pirate
+;;trinket:Bâton de berger;Bâton de berger;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;11;trinket:Bâton de berger
+;;weapon:Baudrier du lanceur de couteaux;Baudrier du lanceur de couteaux;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;weapon:Baudrier du lanceur de couteaux
+;;Béret;Béret;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;3;Béret
+;;armor:Blouse de berger;Blouse de berger;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;armor:Blouse de berger
+;;Bonnet rouge;Bonnet rouge;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;3;Bonnet rouge
+;;boots:Bottes de cavalier émérite;Bottes de cavalier émérite;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;boots:Bottes de cavalier émérite
+;;boots:Bottes de coureur;Bottes de coureur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;boots:Bottes de coureur
+;;trinket:Bottes de marais;Bottes de marais;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;trinket:Bottes de marais
+;;trinket:Bottes de marche;Bottes de marche;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;trinket:Bottes de marche
+;;boots:Bottes de pêcheur;Bottes de pêcheur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;boots:Bottes de pêcheur
+;;boots:Bottes de vacher;Bottes de vacher;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;boots:Bottes de vacher
+;;boots:Bottes fourrées;Bottes fourrées;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;boots:Bottes fourrées
+;;offhand:Bouclier héraldique;Bouclier héraldique;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;offhand:Bouclier héraldique
+;;offhand:Bouclier rectangulaire;Bouclier rectangulaire;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;offhand:Bouclier rectangulaire
+;;offhand:Bouclier renforcé au diamant;Bouclier renforcé au diamant;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;offhand:Bouclier renforcé au diamant
+;;offhand:Bouclier rond;Bouclier rond;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;offhand:Bouclier rond
+;;offhand:Bouclier-carapace de tortue ancienne;Bouclier-carapace de tortue ancienne;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;13;offhand:Bouclier-carapace de tortue ancienne
+;;trinket:Bourse de colporteur;Bourse de colporteur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;trinket:Bourse de colporteur
+;;trinket:Brassards;Brassards;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;3;trinket:Brassards
+;;armor:Brigandine de bois de cœur;Brigandine de bois de cœur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;21;armor:Brigandine de bois de cœur
+;;hat:Cagoule de monte-en-l'air;Cagoule de monte-en-l'air;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;hat:Cagoule de monte-en-l'air
+;;armor:Cape;Cape;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;armor:Cape
+;;cape:Cape de fourrure;Cape de fourrure;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;cape:Cape de fourrure
+;;armor:Cape de soie;Cape de soie;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;armor:Cape de soie
+;;cape:Cape de soie nocturne;Cape de soie nocturne;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;cape:Cape de soie nocturne
+;;cape:Cape du maître des bêtes;Cape du maître des bêtes;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;cape:Cape du maître des bêtes
+;;Cape sombre;Cape sombre;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;Cape sombre
+;;cape:Cape teinte du voyageur;Cape teinte du voyageur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;cape:Cape teinte du voyageur
+;;Capuche sylvestre;Capuche sylvestre;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;15;Capuche sylvestre
+;;hat:Casque de mineur;Casque de mineur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;hat:Casque de mineur
+;;trinket:Ceinture du hachereau;Ceinture du hachereau;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;17;trinket:Ceinture du hachereau
+;;trinket:Chaîne de maître marchand;Chaîne de maître marchand;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;13;trinket:Chaîne de maître marchand
+;;hat:Chapeau de colporteur;Chapeau de colporteur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;hat:Chapeau de colporteur
+;;Chapeau de mage;Chapeau de mage;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;Chapeau de mage
+;;Chapeau de paille;Chapeau de paille;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;Chapeau de paille
+;;hat:Chapeau de paille du fermier;Chapeau de paille du fermier;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;hat:Chapeau de paille du fermier
+;;hat:Chapeau de pêcheur;Chapeau de pêcheur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;hat:Chapeau de pêcheur
+;;legs:Chausses de cuir souple;Chausses de cuir souple;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;legs:Chausses de cuir souple
+;;legs:Chausses de soie du rôdeur;Chausses de soie du rôdeur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;legs:Chausses de soie du rôdeur
+;;cape:Ciré du capitaine;Ciré du capitaine;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;cape:Ciré du capitaine
+;;trinket:Collier de griffes;Collier de griffes;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;17;trinket:Collier de griffes
+;;armor:Cotte damassée;Cotte damassée;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;17;armor:Cotte damassée
+;;Cotte de mailles;Cotte de mailles;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;23;Cotte de mailles
+;;throwing_knife;Couteau de lancer;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;throwing_knife
+;;weapon:Couteaux de lancer;Couteaux de lancer;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;weapon:Couteaux de lancer
+;;weapon:Dague de la Veille d’hiver;Dague de la Veille d’hiver;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;weapon:Dague de la Veille d’hiver
+;;weapon:Dague du Soleil rouge;Dague du Soleil rouge;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;22;weapon:Dague du Soleil rouge
+;;weapon:Dague en lin de Valdor;Dague en lin de Valdor;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;13;weapon:Dague en lin de Valdor
+;;shoulders:Épaulières d'apparat;Épaulières d'apparat;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;shoulders:Épaulières d'apparat
+;;shoulders:Épaulières de fourrure;Épaulières de fourrure;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;3;shoulders:Épaulières de fourrure
+;;shoulders:Épaulières de mailles;Épaulières de mailles;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;shoulders:Épaulières de mailles
+;;armor:Épaulières de pierre de gargouille animée;Épaulières de pierre de gargouille animée;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;armor:Épaulières de pierre de gargouille animée
+;;weapon:Épée des Ronces vertes;Épée des Ronces vertes;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;20;weapon:Épée des Ronces vertes
+;;weapon:Épée du Soleil rouge;Épée du Soleil rouge;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;21;weapon:Épée du Soleil rouge
+;;weapon:Épée en lin de Valdor;Épée en lin de Valdor;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;14;weapon:Épée en lin de Valdor
+;;weapon:Espadon de cuir huilé;Espadon de cuir huilé;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;13;weapon:Espadon de cuir huilé
+;;weapon:Fauchard du Loup gris;Fauchard du Loup gris;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;weapon:Fauchard du Loup gris
+;;arrow_iron;Flèche à pointe de fer;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;arrow_iron
+;;arrow_barbed;Flèche barbelée;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;arrow_barbed
+;;weapon:Fronde;Fronde;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;weapon:Fronde
+;;weapon:Fronde de berger renforcée;Fronde de berger renforcée;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;weapon:Fronde de berger renforcée
+;;trinket:Gantelets;Gantelets;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;11;trinket:Gantelets
+;;gloves:Gantelets de forge;Gantelets de forge;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;13;gloves:Gantelets de forge
+;;gloves:Gantelets de prospecteur;Gantelets de prospecteur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;13;gloves:Gantelets de prospecteur
+;;gloves:Gantelets dorés du capitaine;Gantelets dorés du capitaine;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;14;gloves:Gantelets dorés du capitaine
+;;gloves:Gants d'artisan;Gants d'artisan;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;gloves:Gants d'artisan
+;;gloves:Gants de bûcheron;Gants de bûcheron;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;gloves:Gants de bûcheron
+;;gloves:Gants de crocheteur;Gants de crocheteur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;gloves:Gants de crocheteur
+;;gloves:Gants de dresseur;Gants de dresseur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;gloves:Gants de dresseur
+;;gloves:Gants de jardinier;Gants de jardinier;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;gloves:Gants de jardinier
+;;gloves:Gants de soie de l'archer;Gants de soie de l'archer;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;gloves:Gants de soie de l'archer
+;;trinket:Gants en cuir;Gants en cuir;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;trinket:Gants en cuir
+;;gloves:Gants fourrés;Gants fourrés;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;gloves:Gants fourrés
+;;legs:Genouillères de mineur;Genouillères de mineur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;3;legs:Genouillères de mineur
+;;Gilet de cuir;Gilet de cuir;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;Gilet de cuir
+;;throwing_axe;Hache de jet;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;throwing_axe
+;;weapon:Hache de la Veille d’hiver;Hache de la Veille d’hiver;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;weapon:Hache de la Veille d’hiver
+;;weapon:Hache du Reliquaire d’os;Hache du Reliquaire d’os;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;weapon:Hache du Reliquaire d’os
+;;weapon:Hache en lin de Valdor;Hache en lin de Valdor;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;weapon:Hache en lin de Valdor
+;;weapon:Haches de jet du forestier;Haches de jet du forestier;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;weapon:Haches de jet du forestier
+;;weapon:Haches de jet du franc-tireur;Haches de jet du franc-tireur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;weapon:Haches de jet du franc-tireur
+;;weapon:Hallebarde de forge cuivrée;Hallebarde de forge cuivrée;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;weapon:Hallebarde de forge cuivrée
+;;hat;hat;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;hat
+;;Haut-de-forme vert;Haut-de-forme vert;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;Haut-de-forme vert
+;;trinket:Jambières;Jambières;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;trinket:Jambières
+;;legs:Jambières d'acier;Jambières d'acier;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;legs:Jambières d'acier
+;;legs:Jambières de fourrure;Jambières de fourrure;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;legs:Jambières de fourrure
+;;javelin;Javelot;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;javelin
+;;weapon:Javelots de chasse;Javelots de chasse;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;weapon:Javelots de chasse
+;;weapon:Javelots de guerre;Javelots de guerre;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;weapon:Javelots de guerre
+;;weapon:Lame damassée;Lame damassée;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;18;weapon:Lame damassée
+;;weapon:Lame de brigand à cheval;Lame de brigand à cheval;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;15;weapon:Lame de brigand à cheval
+;;weapon:Lame venimeuse de serpent marin;Lame venimeuse de serpent marin;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;18;weapon:Lame venimeuse de serpent marin
+;;weapon:Lance de l’Ambre royal;Lance de l’Ambre royal;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;weapon:Lance de l’Ambre royal
+;;weapon:Lance en lin de Valdor;Lance en lin de Valdor;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;weapon:Lance en lin de Valdor
+;;hat:Lunettes de maître artisan;Lunettes de maître artisan;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;15;hat:Lunettes de maître artisan
+;;cape:Manteau d'apparat;Manteau d'apparat;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;cape:Manteau d'apparat
+;;weapon:Marteau de Valdor;Marteau de Valdor;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;weapon:Marteau de Valdor
+;;weapon:Masse de la Lune d’argent;Masse de la Lune d’argent;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;11;weapon:Masse de la Lune d’argent
+;;weapon:Masse de pierre de gisant ancien;Masse de pierre de gisant ancien;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;weapon:Masse de pierre de gisant ancien
+;;weapon:Masse de pierre de gisant errant;Masse de pierre de gisant errant;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;weapon:Masse de pierre de gisant errant
+;;weapon:Masse en lin de Valdor;Masse en lin de Valdor;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;weapon:Masse en lin de Valdor
+;;weapon:Massue d'os de brochet géant;Massue d'os de brochet géant;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;weapon:Massue d'os de brochet géant
+;;trinket:Médaillon du grand chef;Médaillon du grand chef;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;trinket:Médaillon du grand chef
+;;Pendentif de jade;Pendentif de jade;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;Pendentif de jade
+;;Plastron de cuivre;Plastron de cuivre;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;13;Plastron de cuivre
+;;Plume de corbeau;Plume de corbeau;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;4;Plume de corbeau
+;;weapon:Sabre de la Garde du pont;Sabre de la Garde du pont;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;weapon:Sabre de la Garde du pont
+;;trinket:Sifflet en os;Sifflet en os;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;5;trinket:Sifflet en os
+;;boots:Solerets d'acier;Solerets d'acier;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;11;boots:Solerets d'acier
+;;shoulders:Spallières d'acier;Spallières d'acier;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;shoulders:Spallières d'acier
+;;armor:Tablier de cuisinier;Tablier de cuisinier;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;armor:Tablier de cuisinier
+;;armor:Tablier de forgeron;Tablier de forgeron;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;armor:Tablier de forgeron
+;;armor:Tablier de semeur;Tablier de semeur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;armor:Tablier de semeur
+;;Toque;Toque;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;Toque
+;;hat:Toque de cuisinier;Toque de cuisinier;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;hat:Toque de cuisinier
+;;offhand:Torche;Torche;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;offhand:Torche
+;;Trèfle porte-bonheur;Trèfle porte-bonheur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;4;Trèfle porte-bonheur
+;;Tricorne;Tricorne;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;Tricorne
+;;trinket;trinket;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;trinket
+;;Tunique d'éclaireur;Tunique d'éclaireur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;Tunique d'éclaireur
+;;armor:Vareuse de bûcheron;Vareuse de bûcheron;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;armor:Vareuse de bûcheron
+;;prise_highway_rider;Insigne de brigand à cheval;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;prise_highway_rider
+;;prise_giant_pike;Os massif de brochet géant;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;prise_giant_pike
+;;prise_sea_serpent;Venin de serpent marin;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;prise_sea_serpent
+;;lord_banquet;Banquet du seigneur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;17;lord_banquet
+;;bridle;Bride et rênes;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;13;bridle
+;;caparison;Caparaçon;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;caparison
+;;spiked_collar;Collier clouté;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;16;spiked_collar
+;;stirrups;Étriers;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;stirrups
+;;aged_cheese;Fromage affiné;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;aged_cheese
+;;truffle_cheese;Fromage truffé;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;truffle_cheese
+;;village_feast;Grand festin;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;17;village_feast
+;;pet_harness;Harnais de cuir;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;13;pet_harness
+;;leash;Laisse;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;18;leash
+;;halter;Licol;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;halter
+;;truffle_omelette;Omelette aux truffes;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;11;truffle_omelette
+;;fisher_platter;Plateau du maître pêcheur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;17;fisher_platter
+;;saddle_race;Selle de course;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;saddle_race
+;;saddle_leather;Selle de cuir;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;saddle_leather
+;;saddle_war;Selle de guerre;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;saddle_war
+;;truffle;Truffe;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;truffle
+;;damascus_steel;Acier damassé;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;damascus_steel
+;;sewing_needle;Aiguille à coudre;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;sewing_needle
+;;heartwood;Bois de cœur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;heartwood
+;;chisel;Ciseau de tailleur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;chisel
+;;sickle;Faucille;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;sickle
+;;fishing_net;Filet de pêche;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;19;fishing_net
+;;cork_float;Flotteur;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;cork_float
+;;pitchfork;Fourche à foin;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;pitchfork
+;;spindle;Fuseau;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;spindle
+;;harpoon;Harpon de pêche;Miniature à préparer;Aucune maquette trouvée dans les dossiers de miniatures;0;
+;;artisan_hammer;Marteau d'artisan;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;artisan_hammer
+;;mortar_pestle;Mortier et pilon;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;mortar_pestle
+;;ice_pick;Piolet;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;ice_pick
+;;fine_planks;Planches de chêne fines;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;fine_planks
+;;rake;Râteau;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;rake
+;;rolling_pin;Rouleau à pâtisserie;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;rolling_pin
+;;hand_saw;Scie à main;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;hand_saw
+;;sieve;Tamis;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;18;sieve
+;;price_tags;Étiquettes de prix;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;price_tags
+;;wall_lantern;Lanterne murale;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;20;wall_lantern
+;;training_dummy;Mannequin d'entraînement;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;training_dummy
+;;blk_balcon_bois;Balcon (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;11;blk_balcon_bois
+;;blk_balcon_taille;Balcon (Pierre taillée);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;11;blk_balcon_taille
+;;blk_balcon_pierre;Balcon (Pierre);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;11;blk_balcon_pierre
+;;blk_balcon_pin;Balcon (Pin);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;11;blk_balcon_pin
+;;blk_caillebotis_bois;Caillebotis (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;blk_caillebotis_bois
+;;blk_caillebotis_pin;Caillebotis (Pin);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;blk_caillebotis_pin
+;;blk_chevron_bois;Chevron de toit (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_chevron_bois
+;;blk_chevron_pin;Chevron de toit (Pin);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_chevron_pin
+;;blk_chevron_rondin;Chevron de toit (Rondins);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_chevron_rondin
+;;blk_colonnecarree_bois;Colonne carrée (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_colonnecarree_bois
+;;blk_colonnecarree_brique;Colonne carrée (Brique);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_colonnecarree_brique
+;;blk_colonnecarree_taille;Colonne carrée (Pierre taillée);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_colonnecarree_taille
+;;blk_colonnecarree_pierre;Colonne carrée (Pierre);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_colonnecarree_pierre
+;;blk_demipoutre_bois;Demi-poutre (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_demipoutre_bois
+;;blk_demipoutre_fer;Demi-poutre (Fer);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_demipoutre_fer
+;;blk_demipoutre_pin;Demi-poutre (Pin);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_demipoutre_pin
+;;blk_demipoutre_rondin;Demi-poutre (Rondins);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_demipoutre_rondin
+;;blk_echalas_bois;Échalas (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_echalas_bois
+;;blk_echalas_pin;Échalas (Pin);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_echalas_pin
+;;blk_croisillons_bois;Fenêtre à croisillons (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;blk_croisillons_bois
+;;blk_croisillons_brique;Fenêtre à croisillons (Brique);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;blk_croisillons_brique
+;;blk_croisillons_taille;Fenêtre à croisillons (Pierre taillée);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;blk_croisillons_taille
+;;blk_croisillons_pierre;Fenêtre à croisillons (Pierre);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;blk_croisillons_pierre
+;;blk_croisillons_rondin;Fenêtre à croisillons (Rondins);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;blk_croisillons_rondin
+;;blk_croisillons_torchis;Fenêtre à croisillons (Torchis);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;blk_croisillons_torchis
+;;blk_vitrail_brique;Fenêtre avec vitrail (Brique);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;blk_vitrail_brique
+;;blk_vitrail_taille;Fenêtre avec vitrail (Pierre taillée);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;blk_vitrail_taille
+;;blk_vitrail_pierre;Fenêtre avec vitrail (Pierre);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;blk_vitrail_pierre
+;;blk_volets_bois;Fenêtre avec volets (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;blk_volets_bois
+;;blk_volets_brique;Fenêtre avec volets (Brique);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;blk_volets_brique
+;;blk_volets_taille;Fenêtre avec volets (Pierre taillée);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;blk_volets_taille
+;;blk_volets_pierre;Fenêtre avec volets (Pierre);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;blk_volets_pierre
+;;blk_volets_rondin;Fenêtre avec volets (Rondins);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;blk_volets_rondin
+;;blk_volets_torchis;Fenêtre avec volets (Torchis);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;blk_volets_torchis
+;;blk_fondation_bois;Fondation (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_fondation_bois
+;;blk_fondation_gravier;Fondation (Gravier);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_fondation_gravier
+;;blk_fondation_taille;Fondation (Pierre taillée);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_fondation_taille
+;;blk_fondation_pierre;Fondation (Pierre);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_fondation_pierre
+;;blk_fondation_rondin;Fondation (Rondins);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_fondation_rondin
+;;blk_gouttiere_bois;Gouttière (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_gouttiere_bois
+;;blk_gouttiere_fer;Gouttière (Fer);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_gouttiere_fer
+;;blk_lucarne_ardoise;Lucarne (Ardoise);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;blk_lucarne_ardoise
+;;blk_lucarne_bardeau;Lucarne (Bardeaux);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;blk_lucarne_bardeau
+;;blk_lucarne_bois;Lucarne (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;blk_lucarne_bois
+;;blk_lucarne_chaume;Lucarne (Chaume);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;blk_lucarne_chaume
+;;blk_lucarne_tuile;Lucarne (Tuiles);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;7;blk_lucarne_tuile
+;;blk_madrier_bois;Madrier (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_madrier_bois
+;;blk_madrier_pin;Madrier (Pin);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_madrier_pin
+;;blk_madrier_rondin;Madrier (Rondins);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_madrier_rondin
+;;blk_colombages_brique;Mur à colombages (Brique);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;blk_colombages_brique
+;;blk_colombages_pise;Mur à colombages (Pisé);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;blk_colombages_pise
+;;blk_colombages_torchis;Mur à colombages (Torchis);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;8;blk_colombages_torchis
+;;blk_niche_brique;Mur avec niche (Brique);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;5;blk_niche_brique
+;;blk_niche_taille;Mur avec niche (Pierre taillée);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;5;blk_niche_taille
+;;blk_niche_pierre;Mur avec niche (Pierre);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;5;blk_niche_pierre
+;;blk_niche_torchis;Mur avec niche (Torchis);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;5;blk_niche_torchis
+;;blk_clayonnage_bois;Mur en clayonnage (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;blk_clayonnage_bois
+;;blk_clayonnage_rondin;Mur en clayonnage (Rondins);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;10;blk_clayonnage_rondin
+;;blk_murincline_brique;Mur incliné (Brique);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_murincline_brique
+;;blk_murincline_taille;Mur incliné (Pierre taillée);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_murincline_taille
+;;blk_murincline_pierre;Mur incliné (Pierre);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_murincline_pierre
+;;blk_murincline_pise;Mur incliné (Pisé);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_murincline_pise
+;;blk_murincline_torchis;Mur incliné (Torchis);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_murincline_torchis
+;;blk_pavage_brique;Pavage irrégulier (Brique);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;blk_pavage_brique
+;;blk_pavage_gravier;Pavage irrégulier (Gravier);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;blk_pavage_gravier
+;;blk_pavage_taille;Pavage irrégulier (Pierre taillée);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;blk_pavage_taille
+;;blk_pavage_pierre;Pavage irrégulier (Pierre);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;9;blk_pavage_pierre
+;;blk_pilotis_bois;Plateforme sur pilotis (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;5;blk_pilotis_bois
+;;blk_pilotis_pin;Plateforme sur pilotis (Pin);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;5;blk_pilotis_pin
+;;blk_pilotis_rondin;Plateforme sur pilotis (Rondins);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;5;blk_pilotis_rondin
+;;blk_poteaurond_bois;Poteau rond (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_poteaurond_bois
+;;blk_poteaurond_pin;Poteau rond (Pin);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_poteaurond_pin
+;;blk_poteaurond_rondin;Poteau rond (Rondins);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;1;blk_poteaurond_rondin
+;;blk_poteausculpte_bois;Poteau sculpté (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;5;blk_poteausculpte_bois
+;;blk_poteausculpte_taille;Poteau sculpté (Pierre taillée);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;5;blk_poteausculpte_taille
+;;blk_poteausculpte_pierre;Poteau sculpté (Pierre);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;5;blk_poteausculpte_pierre
+;;blk_poteausculpte_pin;Poteau sculpté (Pin);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;5;blk_poteausculpte_pin
+;;blk_treillis_bois;Treillis (Bois);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;blk_treillis_bois
+;;blk_treillis_fer;Treillis (Fer);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;blk_treillis_fer
+;;blk_treillis_pin;Treillis (Pin);Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;12;blk_treillis_pin
+;;music_sheet;Partition;Modèle présent, à capturer;Maquette présente dans Studio Édition lors du relevé;6;music_sheet
