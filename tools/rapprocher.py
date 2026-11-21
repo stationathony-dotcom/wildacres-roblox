@@ -292,6 +292,56 @@ VERBE_SORTE = {
 }
 
 
+# mots-clés (description normalisée, sans accents) -> mécanisme existant ; testés dans l'ordre
+MOTS_CLES = [
+    (("alliance", "autre clan", "deux clans"), "volontairement absent : règle 1 (les alliances naissent des joueurs)"),
+    (("commande a son chien", "commandes a un animal", "chien de berger"), "ordres des compagnons (Compagnons)"),
+    (("especes de compagnons",), "Compagnons (sans plafond, limités par la nourriture)"),
+    (("repartir une recompense",), "grottes en groupe : une part du coffre chacun (Donjons)"),
+    (("chantier", "contribuent a une construction"), "chantiers de village (Chantiers, contribution commune)"),
+    (("protection d'un village", "protection d un village"), "invasion (Evenements) + chantiers (palissade)"),
+    (("cargaison",), "chantiers de village / commandes (contribution commune)"),
+    (("posseder", "faire grandir", "menagerie"), "sorte « troupeau (QuetesLieux, 21/11) »"),
+    (("phare",), "sorte « ronde (QuetesLieux) »"),
+    (("faire pousser",), "sorte « récolter (Quetes) »"),
+    (("espece rare", "attraper"), "sorte « pêcher (Quetes) »"),
+    (("cartographier", "carte regionale", "localiser"), "sorte « découvrir / visiter (QuetesLieux) »"),
+    (("examiner", "temoignage", "comprendre"), "sorte « enquêter (QuetesLieux) »"),
+    (("enigme", "fresques", "mecanisme final", "gardien ancien", "salle cachee"), "énigmes des donjons (Donjons, leviers cachés)"),
+    (("donjon avec plusieurs", "plusieurs joueurs", "trois joueurs", "mission collective"), "grottes en groupe + chasse en groupe (Donjons)"),
+    (("accompagner", "voyageur egare", "cherche son village"), "sorte « escorter (QuetesLieux) »"),
+    (("reapprovisionner", "remplir les stocks", "quantite aleatoire", "village demande"), "sorte « apporter (Quetes) »"),
+    (("distribuer plusieurs lettres",), "sorte « lettre (Quetes) »"),
+    (("commande",), "commandes de village + commandes entre joueurs (/commande)"),
+    (("transformer", "reproduire", "recette tiree au sort", "objet decoratif rare"), "sorte « fabriquer (Quetes) »"),
+    (("amenager", "delimiter", "ameliorer plusieurs elements", "chambres pour les voyageurs", "installation a disposition"), "sorte « bâtir (Quetes) »"),
+    (("entretenir", "renover"), "sorte « réparer (QuetesLieux) »"),
+    (("parcours chronometre", "cavalier rapide"), "courses (Activites)"),
+    (("monter un cheval", "exercice a sa monture"), "écurie et allure (Horses)"),
+    (("collection", "musee"), "titres de collection (Social)"),
+    (("bibliotheque", "archives", "documents anciens", "livres", "chroniques", "manuscrit"), "chroniques et livres (Chroniques, Livres)"),
+    (("boutique",), "étals (Ventes)"),
+    (("comparer les prix",), "prix par village (Shop)"),
+    (("contrats importants",), "commandes entre joueurs (/commande)"),
+    (("toutes les villages", "tous les villages"), "sorte « livrer (QuetesLieux) »"),
+    (("voyages maritimes",), "sorte « naviguer (Quetes) »"),
+    (("clan", "membres", "recruter", "recrue", "quartier general", "emblem"), "clans (Clans) / armée (Armee)"),
+    (("rendre un butin", "restituer"), "objets perdus à rendre (E.USES lost_item)"),
+    (("organisation criminelle",), "receleur et primes (Law)"),
+    (("offrir un objet", "aider un joueur", "aider un autre joueur", "repartir une recompense"), "troc et courrier entre joueurs (Social, Poste)"),
+    (("dans chaque biome", "cinq competences"), "succès à compteurs (Social.bump)"),
+    (("delai limite", "temps imparti"), "commandes de village (délai)"),
+    (("refuge",), "Compagnons (apprivoiser)"),
+    (("un port", "au port"), "ports (Mondes) + pêche"),
+    (("enseigner", "apprentissage d'un metier", "apprentissage"), "livres de métier (E.USES « livre »)"),
+    (("questions",), "concours (Activites)"),
+    (("heritiers", "domaine"), "parcelles (Parcelles)"),
+    (("ressources differentes",), "sorte « collecter / apporter (Quetes) »"),
+    (("ameliorer plusieurs parcelles",), "sélection des semences + engrais (Farm.fertilize)"),
+    (("consigner",), "chroniques (Chroniques)"),
+    (("tour abandonnee",), "sorte « visiter (QuetesLieux) »"),
+]
+
 def quest_match(entry, code_norm):
     m = re.match(r"^\d+\. \*\*(.+?)\*\* — (.+)$", entry)
     if not m:
@@ -307,6 +357,9 @@ def quest_match(entry, code_norm):
         return "sorte « ronde (QuetesLieux, 21/11) »"
     if any(k in nd for k in ("faire connaissance", "rencontrer", "parler au", "parler a ", "se presenter aupres")):
         return "sorte « rencontrer (QuetesLieux, 21/11) »"
+    for keys, label in MOTS_CLES:
+        if any(k in nd for k in keys):
+            return label
     first = nd.split()
     for w in first[:3]:
         if w in VERBE_SORTE:
