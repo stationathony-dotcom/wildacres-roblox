@@ -179,7 +179,7 @@ ce qu'on VOIT.
 - [ ] C. Boss mis en scène : repaire visible de loin, entrée (caméra + rugissement, sans texte), phases,
   attaques marquées au sol, sbires qui sortent de terre
 - [ ] E. Menus (couloir Codex, passage dans `docs/LOTS.md`) : un seul cadre médiéval pour toutes les fenêtres, fiche d'objet façon WoW, tri du sac, écran d'accueil où la caméra survole l'île — grille E1–E6 de `docs/DIRECTION-ARTISTIQUE.md`
-- [ ] D. Végétation par biome : essences colorées (bouleaux dorés, érables roux, saules, pins), fleurs, densité ;
+- [x] D. Végétation par biome (25/11, `Clock.CANOPY` teinte par arbre, banc `vegetation`, voile allégé dans `Eclairage`/`Ambiance` ; fleurs et densité NON changées : elles viennent du tirage publié) — à voir en Play par le joueur, idée de départ : : essences colorées (bouleaux dorés, érables roux, saules, pins), fleurs, densité ;
   ambiance (brume selon l'heure, lanternes la nuit)
 
 - Restes des listes, volontairement laissés : jeux de dés (règles Roblox sur les jeux de hasard ; l'objet est devenu des osselets), tutoriel (principe « sans indication »), guerres/alliances déclarées (retirées le 17/11), saisons (remplacées par les biomes)

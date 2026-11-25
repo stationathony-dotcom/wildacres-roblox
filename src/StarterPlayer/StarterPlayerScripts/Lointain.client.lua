@@ -124,11 +124,17 @@ local function rebuild(wg, px: number, pz: number)
 				if r.step <= 48 and n <= 24 then
 					for i = 0, n - 1 do
 						local th = rng:NextNumber(9, 16)
-						newPart(chunk, Vector3.new(r.step * 0.8, th, r.step * 0.8), CFrame.new(r.x0 + (i + 0.5) * r.step + rng:NextNumber(-3, 3), r.top + 4 + th / 2, r.z + rng:NextNumber(-3, 3)), r.canopy, Enum.Material.Grass)
+						local tint = r.shades and r.shades[rng:NextInteger(1, #r.shades)] or r.canopy
+						newPart(chunk, Vector3.new(r.step * 0.8, th, r.step * 0.8), CFrame.new(r.x0 + (i + 0.5) * r.step + rng:NextNumber(-3, 3), r.top + 4 + th / 2, r.z + rng:NextNumber(-3, 3)), tint, Enum.Material.Grass)
 						made += 1
 					end
 				else
-					newPart(chunk, Vector3.new(w * 0.94, 12, r.step * 0.8), CFrame.new(cx, r.top + 10, r.z), r.canopy, Enum.Material.Grass)
+					-- au loin : une haie par rangée, coupée en deux teintes pour casser l'aplat
+					local tint = r.shades and r.shades[rng:NextInteger(1, #r.shades)] or r.canopy
+					local tint2 = r.shades and r.shades[rng:NextInteger(1, #r.shades)] or r.canopy
+					newPart(chunk, Vector3.new(w * 0.47, 12, r.step * 0.8), CFrame.new(cx - w * 0.24, r.top + 10, r.z), tint, Enum.Material.Grass)
+					newPart(chunk, Vector3.new(w * 0.47, 15, r.step * 0.7), CFrame.new(cx + w * 0.24, r.top + 11.5, r.z), tint2, Enum.Material.Grass)
+					made += 1
 				end
 			end
 		end

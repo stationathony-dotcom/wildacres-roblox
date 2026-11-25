@@ -24,7 +24,9 @@ E.OUTDOOR_NIGHT = Color3.fromRGB(70, 80, 120)
 E.AMBIENT_DAY = Color3.fromRGB(86, 79, 72)
 E.AMBIENT_NIGHT = Color3.fromRGB(40, 45, 70)
 -- densité d'atmosphère par beau temps (Ambiance.client la fait varier avec la météo)
-E.DENSITY_CLEAR = 0.27
+-- 25/11 (chantier D, Claude) : 0,27 → 0,20 et voile 0,7 → 0,35, sinon le lointain et les massifs
+-- (Shared/Lointain) sont bleuis et délavés dès 800 studs par beau temps
+E.DENSITY_CLEAR = 0.2
 
 function E.apply(Lighting: Lighting, terrain: Terrain)
 	Lighting.Brightness = 3
@@ -41,7 +43,7 @@ function E.apply(Lighting: Lighting, terrain: Terrain)
 	atm.Color = Color3.fromRGB(196, 222, 246)
 	atm.Decay = Color3.fromRGB(110, 140, 190)
 	atm.Glare = 0.35
-	atm.Haze = 0.7
+	atm.Haze = 0.35
 	atm.Parent = Lighting
 	local cc = Lighting:FindFirstChild("Couleurs") or Instance.new("ColorCorrectionEffect")
 	cc.Name = "Couleurs"

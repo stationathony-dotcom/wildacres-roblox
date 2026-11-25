@@ -42,31 +42,67 @@ function Clock.isNight(): boolean
 	return h >= 21 or h < 6
 end
 
--- Couleur d'un feuillage selon le biome
-local function leafColor(p: BasePart, biome: string)
+-- Essences colorées par biome (chantier D, 25/11) : chaque ARBRE tire sa teinte une fois pour toutes
+-- (d'après sa position : le même arbre garde la même couleur), au lieu d'un bloc sur deux au hasard.
+-- Prairie : verts variés et jaune-vert ; forêt rousse : orange, rouge, or, rouille (et quelques verts
+-- attardés) ; désert : olives sèches ; marais : verts sombres. Les cerisiers (roses) gardent leur fleur.
+local CANOPY = {
+	prairie = { Color3.fromRGB(86, 150, 58), Color3.fromRGB(112, 172, 64), Color3.fromRGB(64, 124, 50), Color3.fromRGB(150, 178, 66), Color3.fromRGB(96, 160, 86) },
+	foret = { AUTUMN[1], AUTUMN[2], AUTUMN[3], AUTUMN[4], Color3.fromRGB(232, 196, 72), Color3.fromRGB(150, 60, 46), Color3.fromRGB(104, 140, 58) },
+	desert = { Color3.fromRGB(150, 146, 78), Color3.fromRGB(170, 152, 86), Color3.fromRGB(130, 138, 72), Color3.fromRGB(188, 162, 98) },
+	marais = { Color3.fromRGB(70, 104, 52), Color3.fromRGB(90, 114, 48), Color3.fromRGB(58, 92, 60), Color3.fromRGB(104, 120, 66) },
+}
+Clock.CANOPY = CANOPY
+
+local function treeHash(pos: Vector3): number
+	return math.floor(math.abs(pos.X * 7.31 + pos.Z * 13.17 + pos.X * pos.Z * 0.013)) % 9973
+end
+
+-- Couleur d'un bloc de feuillage : biome, teinte de l'arbre (hash), hauteur relative du bloc (0 bas, 1 haut)
+local function leafColor(p: BasePart, biome: string, hash: number, rel: number)
 	local base = p:GetAttribute("CouleurPrintemps") or p.Color
 	local caduc = p:GetAttribute("Caduc")
 	p.Transparency = 0
-	if biome == "foret" and caduc then
-		local h = math.floor(math.abs(p.Position.X * 7 + p.Position.Z * 13)) % #AUTUMN + 1
-		return AUTUMN[h]
-	elseif biome == "neige" then
-		return base:Lerp(Color3.fromRGB(240, 245, 250), 0.5)
-	elseif biome == "desert" then
-		return base:Lerp(Color3.fromRGB(176, 160, 92), 0.45)
-	elseif biome == "marais" then
-		return base:Lerp(Color3.fromRGB(56, 88, 48), 0.35)
+	-- relief voxel : le haut de la frondaison prend la lumière, le bas reste dans l'ombre
+	local function shade(c: Color3): Color3
+		local k = (rel - 0.5) * 0.24
+		return k > 0 and c:Lerp(Color3.new(1, 1, 1), k * 0.6) or c:Lerp(Color3.new(0, 0, 0), -k)
 	end
-	return base
+	if base.R > base.G * 1.15 then
+		return shade(base) -- fleurs (cerisier) : on garde le rose
+	end
+	if biome == "neige" then
+		local frost = 0.35 + (hash % 5) * 0.06
+		return shade(base:Lerp(Color3.fromRGB(240, 245, 250), frost))
+	end
+	local pal = CANOPY[biome]
+	if not pal or (biome == "foret" and not caduc) then
+		-- conifères et biomes sans palette : leur vert, à peine varié d'un arbre à l'autre
+		local v = ((hash % 7) - 3) * 0.035
+		return shade(v > 0 and base:Lerp(Color3.new(1, 1, 1), v) or base:Lerp(Color3.new(0, 0, 0), -v))
+	end
+	if biome == "prairie" and not caduc then
+		return shade(base)
+	end
+	return shade(pal[hash % #pal + 1])
 end
 
 -- Teinte un modèle selon le biome où il est posé (nom gardé : appelé partout au chargement)
 function Clock.seasonize(model: Instance)
 	local pos = model:IsA("Model") and model:GetPivot().Position or (model:IsA("BasePart") and model.Position) or nil
 	local b = pos and Clock.biomeAt(pos) or "prairie"
+	local hash = pos and treeHash(pos) or 0
+	-- hauteur relative des blocs de feuillage dans ce modèle
+	local lo, hi = math.huge, -math.huge
 	for _, d in model:GetDescendants() do
 		if d:IsA("BasePart") and CollectionService:HasTag(d, "Feuillage") then
-			d.Color = leafColor(d, b)
+			lo, hi = math.min(lo, d.Position.Y), math.max(hi, d.Position.Y)
+		end
+	end
+	for _, d in model:GetDescendants() do
+		if d:IsA("BasePart") and CollectionService:HasTag(d, "Feuillage") then
+			local rel = hi > lo and (d.Position.Y - lo) / (hi - lo) or 0.5
+			d.Color = leafColor(d, b, hash, rel)
 		end
 		if d:IsA("BasePart") and CollectionService:HasTag(d, "LumiereNuit") then
 			Clock.setLamp(d, lampsOn == true)

@@ -52,6 +52,8 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       demande « tout » du propriétaire) : dessin du lointain et des massifs ; à reprendre librement (réglage dans Paramètres, mobile).
       Constat pour `Shared/Eclairage` + `Ambiance` : par temps clair la densité d'Atmosphere (0,28) bleuit tout au-delà de ~800 studs,
       et la météo « brouillard » (0,72) noie le village : à revoir avec le chantier D (captures `captures/2026-11-25/`).
+- [x] Claude → Codex (pour info) · `Shared/Eclairage.lua` (densité 0,27 → 0,20, voile 0,7 → 0,35) et `Ambiance.client.lua` (densités
+      des météos un cran plus légères, brouillard 0,72 → 0,52) · fait par Claude le 25/11 (chantier D) : petits chiffres seulement.
 - [ ] Claude (pour soi) · `Util.groundY` · au bord de l'eau, la hauteur est interpolée avec les cases d'eau (0) : une bête posée
       près d'un étang s'enfonce de ~2 studs (vu en Play le 25/11, graine 7, x≈80 z≈119) · à corriger sans toucher au tirage.
 

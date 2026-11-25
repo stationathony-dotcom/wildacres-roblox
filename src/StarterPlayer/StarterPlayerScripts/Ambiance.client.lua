@@ -129,10 +129,11 @@ end
 -- Cibles selon l'état (interpolées en douceur : rien ne « saute »)
 local TARGETS = {
 	clair = { rain = 0, cover = 0.32, density = Eclairage.DENSITY_CLEAR, dark = 0, wind = 0.15 },
-	nuageux = { rain = 0, cover = 0.7, density = 0.4, dark = 0.05, wind = 0.35 },
-	pluie = { rain = 1, cover = 0.88, density = 0.46, dark = 0.12, wind = 0.25 },
-	orage = { rain = 1.4, cover = 0.95, density = 0.5, dark = 0.22, wind = 0.6 },
-	brouillard = { rain = 0, cover = 0.6, density = 0.72, dark = 0.06, wind = 0.05 },
+	-- 25/11 (chantier D, Claude) : un cran plus légers ; le brouillard reste épais mais le village se lit
+	nuageux = { rain = 0, cover = 0.7, density = 0.32, dark = 0.05, wind = 0.35 },
+	pluie = { rain = 1, cover = 0.88, density = 0.38, dark = 0.12, wind = 0.25 },
+	orage = { rain = 1.4, cover = 0.95, density = 0.42, dark = 0.22, wind = 0.6 },
+	brouillard = { rain = 0, cover = 0.6, density = 0.52, dark = 0.06, wind = 0.05 },
 }
 local cur = { rain = 0, cover = 0.32, density = Eclairage.DENSITY_CLEAR, dark = 0, wind = 0.15 }
 local biome, biomeT = "prairie", 0

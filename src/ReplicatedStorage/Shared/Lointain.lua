@@ -37,6 +37,14 @@ L.CANOPY = {
 	neige = Color3.fromRGB(64, 98, 76),
 	marais = Color3.fromRGB(78, 100, 52),
 }
+-- nuancier des bouquets vus de loin (même esprit que Clock.CANOPY) : clé = couleur de base ci-dessus
+L.CANOPY_SHADES = {
+	prairie = { Color3.fromRGB(70, 128, 52), Color3.fromRGB(96, 150, 58), Color3.fromRGB(56, 108, 46), Color3.fromRGB(128, 160, 62) },
+	foret = { Color3.fromRGB(196, 112, 44), Color3.fromRGB(176, 66, 40), Color3.fromRGB(222, 168, 58), Color3.fromRGB(160, 86, 48), Color3.fromRGB(98, 130, 56) },
+	desert = { Color3.fromRGB(150, 150, 80), Color3.fromRGB(170, 152, 86) },
+	neige = { Color3.fromRGB(64, 98, 76), Color3.fromRGB(150, 178, 172), Color3.fromRGB(52, 84, 66) },
+	marais = { Color3.fromRGB(78, 100, 52), Color3.fromRGB(62, 90, 56), Color3.fromRGB(96, 112, 60) },
+}
 L.MATERIALS = {
 	prairie = Enum.Material.Grass, foret = Enum.Material.LeafyGrass, desert = Enum.Material.Sand,
 	neige = Enum.Material.Snow, marais = Enum.Material.Mud,
@@ -103,6 +111,7 @@ function L.layout(wg, px: number, pz: number, skip, opts)
 				top = math.floor((s.h - L.SINK) * 2 + 0.5) / 2
 			end
 			local canopy = s.kind == "terre" and s.forest and L.CANOPY[s.biome] or nil
+			local shades = canopy and L.CANOPY_SHADES[s.biome] or nil
 			local same = run and run.top == top and run.color == color and run.canopy == canopy
 				and math.abs(run.x1 - (cell.x - step / 2)) < 0.01
 			if same then
@@ -110,7 +119,7 @@ function L.layout(wg, px: number, pz: number, skip, opts)
 			else
 				flush()
 				run = { x0 = cell.x - step / 2, x1 = cell.x + step / 2, z = gz, step = step, top = top, color = color, material = mat,
-					canopy = canopy, water = s.kind ~= "terre" }
+					canopy = canopy, shades = shades, water = s.kind ~= "terre" }
 			end
 		end
 		flush()
