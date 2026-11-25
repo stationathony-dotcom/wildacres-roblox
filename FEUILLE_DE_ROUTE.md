@@ -185,6 +185,10 @@ ce qu'on VOIT.
         coût en nourriture / soins, pas d'achat Robux
   - [ ] **Ambiance** : « ne correspond vraiment pas à ce que je t'ai envoyé » — refaire en comparant capture par capture aux exemples
         (Eggoria : couleurs vives saturées, ciel lumineux, relief vertical, cascades ; RPG : lumière dramatique, contrastes)
+  - [ ] **Vue aérienne « catastrophique »** (captures `captures/2026-11-25/lointain/01` et `vegetation-ambiance/01`) : le lointain se lit
+        en aplats carrés et pavés orange. Pistes : le cacher quand on est en l'air près de l'île (il ne sert qu'à l'horizon), le
+        commencer plus loin, des bords non alignés sur la grille, de vrais arbres (troncs + houppiers) au lieu de pavés, la même
+        couleur de sol que le terrain réel (raccord invisible)
   - [ ] **Monstres encore trop peu détaillés** : viser la densité des planches (plus de pièces, motifs, dégradés de couleur par
         pièce, accessoires, poses), budget de pièces à relever
 - [ ] (ancien) E. Menus (couloir Codex, passage dans `docs/LOTS.md`) : un seul cadre médiéval pour toutes les fenêtres, fiche d'objet façon WoW, tri du sac, écran d'accueil où la caméra survole l'île — grille E1–E6 de `docs/DIRECTION-ARTISTIQUE.md`
