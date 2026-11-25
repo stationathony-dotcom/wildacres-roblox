@@ -9,6 +9,18 @@ local WindowNav = {}
 local open = {}
 local menuReturn
 
+-- cadre médiéval commun (Cadre.lua, 25/11) : chargé sans risque, une fenêtre reste utilisable sans lui
+local okCadre, Cadre = pcall(require, script.Parent:WaitForChild("Cadre", 5))
+local function habiller(panel)
+	if okCadre and type(Cadre) == "table" then
+		local ok, err = pcall(Cadre.habiller, panel)
+		if not ok then
+			warn("[WildAcres] Cadre :", err)
+		end
+	end
+end
+WindowNav.habiller = habiller
+
 local function usesGamepad()
 	return UserInputService:GetLastInputType().Name:match("^Gamepad") ~= nil
 end
@@ -45,6 +57,7 @@ function WindowNav.watch(panel, closeButton, close, screen, initialFocus)
 	local layer = panel:FindFirstAncestorWhichIsA("ScreenGui")
 	local source, property = screen or panel, screen and "Enabled" or "Visible"
 	local entry = { panel = panel, focus = initialFocus or closeButton, close = close, layer = layer }
+	habiller(panel)
 	closeButton.Text = Composants.PICTOGRAMMES.fermer
 	closeButton.Selectable = true
 	panel.Active = true

@@ -178,7 +178,16 @@ ce qu'on VOIT.
   plaque carrée), silhouettes d'îles lointaines (couche à part, graine propre : ne pas toucher au rng de `RegionPlan`)
 - [x] C. Boss mis en scène (25/11, `Enemies` + client `Boss`, banc `boss_scene`, entrée filmée vue en Play ; repaire = colonne de lumière, pas de nouveau décor) — à voir en Play par le joueur, idée de départ : : repaire visible de loin, entrée (caméra + rugissement, sans texte), phases,
   attaques marquées au sol, sbires qui sortent de terre
-- [ ] E. Menus (couloir Codex, passage dans `docs/LOTS.md`) : un seul cadre médiéval pour toutes les fenêtres, fiche d'objet façon WoW, tri du sac, écran d'accueil où la caméra survole l'île — grille E1–E6 de `docs/DIRECTION-ARTISTIQUE.md`
+- [~] E. Menus : E1 cadre médiéval commun posé par `WindowNav` (`Cadre.lua`, 25/11 soir, Studio fermé : PAS encore vu en jeu) ;
+  E2 infobulle WoW et E3 tri du sac existaient déjà ; E4 accueil animé, E5 mobile, E6 : à faire avec Studio ouvert
+- [ ] **Retour du joueur (25/11 soir) — à retravailler** :
+  - [ ] **Montures** plus nombreuses et **montures volantes** (griffon, hippogriffe, wyverne apprivoisés ?) — règles : pas de plafond,
+        coût en nourriture / soins, pas d'achat Robux
+  - [ ] **Ambiance** : « ne correspond vraiment pas à ce que je t'ai envoyé » — refaire en comparant capture par capture aux exemples
+        (Eggoria : couleurs vives saturées, ciel lumineux, relief vertical, cascades ; RPG : lumière dramatique, contrastes)
+  - [ ] **Monstres encore trop peu détaillés** : viser la densité des planches (plus de pièces, motifs, dégradés de couleur par
+        pièce, accessoires, poses), budget de pièces à relever
+- [ ] (ancien) E. Menus (couloir Codex, passage dans `docs/LOTS.md`) : un seul cadre médiéval pour toutes les fenêtres, fiche d'objet façon WoW, tri du sac, écran d'accueil où la caméra survole l'île — grille E1–E6 de `docs/DIRECTION-ARTISTIQUE.md`
 - [x] D. Végétation par biome (25/11, `Clock.CANOPY` teinte par arbre, banc `vegetation`, voile allégé dans `Eclairage`/`Ambiance` ; fleurs et densité NON changées : elles viennent du tirage publié) — à voir en Play par le joueur, idée de départ : : essences colorées (bouleaux dorés, érables roux, saules, pins), fleurs, densité ;
   ambiance (brume selon l'heure, lanternes la nuit)
 
