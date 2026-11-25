@@ -9,6 +9,20 @@
 
 local Bestiaire = {}
 local G, Config
+-- Silhouettes : chargé à la première sculpture ; cherché aussi hors du dossier (bancs qui clonent ce
+-- module seul). Absent : les anciennes formes servent.
+local Silhouettes
+local function silhouettes()
+	if Silhouettes == nil then
+		local mod = (script.Parent and script.Parent:FindFirstChild("Silhouettes"))
+			or game:GetService("ServerScriptService"):FindFirstChild("Silhouettes", true)
+		local ok, res = pcall(function()
+			return mod and require(mod)
+		end)
+		Silhouettes = ok and res or false
+	end
+	return Silhouettes or nil
+end
 
 local RESPAWN_DAYS = 3
 local CAMP_CHANCE = 0.12
@@ -734,17 +748,52 @@ FORMES.masse = function(m, o)
 	return body
 end
 
-function Bestiaire.build(name: string): Model?
-	local id = string.match(name, "^Bete_(.+)$")
-	local k = id and KINDS[id]
-	if not k then
-		return nil
+-- Famille visuelle d'une créature (Silhouettes.FAM) : le biome où elle vit, par ordre de caractère
+-- (une bête des neiges ET des forêts sera « neige ») ; grottes seulement ; spectres de nuit = « nuit »
+local FAMILY_ORDER = { "neige", "desert", "marais", "foret", "prairie" }
+local familyCache
+function Bestiaire.family(id: string): string
+	if not familyCache then
+		familyCache = {}
+		for _, b in FAMILY_ORDER do
+			for _, tbl in { DAY, NIGHT } do
+				for _, kid in tbl[b] or {} do
+					familyCache[kid] = familyCache[kid] or b
+				end
+			end
+		end
+		for kid, r in Bestiaire.ROAMING do
+			familyCache[kid] = familyCache[kid] or (r.biome and r.biome[1])
+		end
+		for b, kid in Bestiaire.GUARDIAN do
+			familyCache[kid] = familyCache[kid] or b
+		end
+		for _, b in FAMILY_ORDER do
+			for _, kid in Bestiaire.CAVE[b] or {} do
+				familyCache[kid] = familyCache[kid] or "grotte"
+			end
+		end
 	end
+	local k = KINDS[id]
+	if k and k.night and (k.form == "spectre" or (k.look and k.look.spectre)) then
+		return "nuit"
+	end
+	return familyCache[id] or "prairie"
+end
+
+-- Modèles : sculptés une fois (Silhouettes), gardés en patron, clonés à chaque apparition. Toutes les
+-- pièces sont SOUDÉES à « Base » (seule ancrée) : un déplacement d'Enemies n'envoie qu'une position au
+-- réseau, quel que soit le nombre de pièces. Les boss sont portés à BOSS_HEIGHT (≈ 2,6 avatars).
+local BOSS_HEIGHT = 13
+local TEMPLATES = {}
+
+local function sculpt(id: string, k): Model
 	local m = Instance.new("Model")
-	m.Name = name
+	m.Name = "Bete_" .. id
 	local base = Instance.new("Part")
 	base.Name = "Base"
 	base.Size = Vector3.new(1, 0.2, 1)
+	base.CFrame = CFrame.identity
 	base.Transparency = 1
 	base.Anchored = true
 	base.CanCollide = false
@@ -752,8 +801,60 @@ function Bestiaire.build(name: string): Model?
 	base.CanTouch = false
 	base.Parent = m
 	m.PrimaryPart = base
-	FORMES[k.form](m, k.look or {})
+	local S = silhouettes()
+	local ok, body = false, "module Silhouettes absent"
+	if S then
+		ok, body = pcall(S.build, m, id, k, Bestiaire.family(id), C, SKIN)
+	end
+	m:SetAttribute("Silhouette", ok and body ~= nil)
+	if not ok or not body then
+		warn("[WildAcres] silhouette de " .. id .. " : " .. tostring(body) .. " (ancienne forme utilisée)")
+		for _, p in m:GetChildren() do
+			if p ~= base then
+				p:Destroy()
+			end
+		end
+		FORMES[k.form](m, k.look or {})
+	end
+	if k.boss then
+		-- envergure d'un boss : sa hauteur, ou la moitié de sa longueur pour les bêtes basses et longues
+		-- (un serpent porté à 13 de haut ferait 50 de long)
+		local _, size = m:GetBoundingBox()
+		local presence = math.max(size.Y, math.max(size.X, size.Z) * 0.5)
+		if presence > 0 and presence < BOSS_HEIGHT then
+			m:ScaleTo(BOSS_HEIGHT / presence)
+		end
+	end
+	for _, p in m:GetDescendants() do
+		if p:IsA("BasePart") and p ~= base then
+			local w = Instance.new("WeldConstraint")
+			w.Part0 = base
+			w.Part1 = p
+			w.Parent = p
+			p.Anchored = false
+		end
+	end
 	return m
+end
+
+function Bestiaire.template(id: string): Model?
+	local k = KINDS[id]
+	if not k then
+		return nil
+	end
+	if not TEMPLATES[id] then
+		TEMPLATES[id] = sculpt(id, k)
+	end
+	return TEMPLATES[id]
+end
+
+function Bestiaire.build(name: string): Model?
+	local id = string.match(name, "^Bete_(.+)$")
+	local t = id and Bestiaire.template(id)
+	if not t then
+		return nil
+	end
+	return t:Clone()
 end
 
 -- ----------------------------------------------------------------- Installation
@@ -821,6 +922,16 @@ function Bestiaire.init(g)
 		E[id] = k
 	end
 	Bestiaire.normalizeLoot(E, Config)
+	-- boss sculptés à leur vraie taille : leur rayon de contact suit (sinon on frappe « dans » le modèle)
+	for id, k in KINDS do
+		if k.boss and not (k.model and not string.match(k.model, "^Bete_")) then
+			local t = Bestiaire.template(id)
+			if t then
+				local _, size = t:GetBoundingBox()
+				k.radius = math.max(k.radius or 2, math.min(math.max(size.X, size.Z) * 0.38, 7))
+			end
+		end
+	end
 	G.Interact.onPrompt("camp_chest", function(player, prompt)
 		Bestiaire.lootCamp(player, prompt)
 	end)

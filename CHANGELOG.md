@@ -5,6 +5,10 @@ toute mise à jour qui change un format ajoute une migration (étape 1A).
 
 Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
+## 0.2.4 — 2026-11-25
+
+- **Créatures** — Les 134 créatures du bestiaire ont chacune une silhouette sculptée : pattes coudées, griffes, crocs, yeux qui brillent, ailes à plumes ou à membrane, carapaces, cristaux. Chaque famille suit son biome (givre et cristaux, mousse et fleurs, vase, or, améthyste des grottes, spectres de la nuit). Les humanoïdes portent l'attribut de leur métier (carquois, bouclier, sac, chapeau, masque, turban…), et chaque spectre a son trait (lanterne, ramure, chaînes, visage vide…). Les boss font au moins 2,6 fois la taille d'un joueur et leur portée suit leur taille. Un modèle n'envoie plus qu'une position au réseau quand il bouge.
+
 ## 0.2.3 — 2026-11-21
 
 - **Contrôles** — La rangée de touches sous la barre rapide disparaît : une aide « touche + mot » ne s’affiche que quand elle sert (descendre de cheval, lâcher, tout ramasser, se relever). Toutes les touches sont expliquées dans Paramètres. Un clic donne toujours un coup, même dans l’herbe, et les poings alternent gauche/droite.
