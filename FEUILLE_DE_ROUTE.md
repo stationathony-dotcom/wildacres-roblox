@@ -161,4 +161,25 @@ banque agrandissable sans fin, champs sans limite.
 - [x] 21/11 soir, relecture des règles d'AGENTS.md dans le code : squelettes → gisants (règle 9), jeu de dés → osselets (règle 10), annonces à tout le serveur retirées (règle 1), déblocages par compétence entraînée (règle 4), bug « tout le serveur accusé » corrigé
 - [ ] **TEST en Play** de tout ce qui précède (PC fixe)
 - [ ] Icônes peintes à la place des emojis (il faut mettre des images en ligne avec le compte du joueur)
+## Demande du 25/11 : « de l'envergure » (exemples dans `Downloads\Gmail(2)`)
+
+Exemples vus : Eggoria (relief vertical, cascades, arbres colorés), RPG épée « fait avec Claude » (ambiance,
+boss avec cinématique, apparition animée des ennemis), planches de créatures voxel par biome et 7 planches de
+boss (@shulckerbox : **inspiration de style seulement**, pas de copie des dessins). Écartés : œufs / familiers
+(tirage façon casino, règle 10), famille « bonbons » et T-rex (pas médiéval).
+Constat en Play (graine 7) : 130 créatures sur 8 formes (griffon et wyverne-boss = 8 pièces, même taille),
+île plate aux bords carrés, horizon vide, brume bleue qui délave tout. Il ne manque pas de systèmes : il manque
+ce qu'on VOIT.
+
+- [x] A. Créatures façon planche (25/11, `Systemes/Silhouettes`, banc `creatures_voxel` 134/134, vitrine vue en Play) — à voir en Play par le joueur : constructeur voxel par gabarits en données (silhouette propre, 4-6 couleurs
+  + 1 lueur, yeux lumineux), familles par biome (glace, désert, lave, forêt, cristal des grottes), boss 3 à 5 fois
+  la taille du joueur ; budget de pièces mesuré
+- [ ] B. Relief et horizon : falaises en terrasses, un sommet par île, cascades hautes, côtes découpées (plus de
+  plaque carrée), silhouettes d'îles lointaines (couche à part, graine propre : ne pas toucher au rng de `RegionPlan`)
+- [ ] C. Boss mis en scène : repaire visible de loin, entrée (caméra + rugissement, sans texte), phases,
+  attaques marquées au sol, sbires qui sortent de terre
+- [ ] E. Menus (couloir Codex, passage dans `docs/LOTS.md`) : un seul cadre médiéval pour toutes les fenêtres, fiche d'objet façon WoW, tri du sac, écran d'accueil où la caméra survole l'île — grille E1–E6 de `docs/DIRECTION-ARTISTIQUE.md`
+- [ ] D. Végétation par biome : essences colorées (bouleaux dorés, érables roux, saules, pins), fleurs, densité ;
+  ambiance (brume selon l'heure, lanternes la nuit)
+
 - Restes des listes, volontairement laissés : jeux de dés (règles Roblox sur les jeux de hasard ; l'objet est devenu des osselets), tutoriel (principe « sans indication »), guerres/alliances déclarées (retirées le 17/11), saisons (remplacées par les biomes)

@@ -44,6 +44,13 @@ Ne pas toucher à ces sujets avant la réponse. Écrire la réponse ici quand el
 
 Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; cocher avec le hash du commit.
 
+- [ ] Claude → Codex · toutes les fenêtres client (`Interface`, `Hud`, `ComposantsInterface`, `WindowNav`…) · **chantier E « menus aboutis »**
+      (demande du propriétaire, 25/11) : un seul cadre médiéval commun (bois sombre, coins en fer, bandeau de titre), fiche d'objet façon
+      WoW partout (sac, boutique, coffre, hôtel des ventes), tri du sac + Maj+clic = tout transférer, écran d'accueil où la caméra survole
+      l'île en direct · sources et grille de vérification E1–E6 : `docs/DIRECTION-ARTISTIQUE.md` · règle 11 : ne pas regrossir le HUD.
+- [ ] Claude (pour soi) · `Util.groundY` · au bord de l'eau, la hauteur est interpolée avec les cases d'eau (0) : une bête posée
+      près d'un étang s'enfonce de ~2 studs (vu en Play le 25/11, graine 7, x≈80 z≈119) · à corriger sans toucher au tirage.
+
 - [x] (54069dc) **URGENT** Claude → Codex · `Interface.client.lua` · l'écran d'apparence plante (Play du 21/11 soir, PC fixe) :
       `Interface:2461: attempt to index nil with 'Visible'`. Le gestionnaire `Menu` `data.kind == "look"` (≈ l. 2462 sur disque)
       écrit `lookInfo`, `lookCtx`, `lookDraft`, `charTab`, `bag`, `renderChar`, qui sont des locales du bloc `do` de la fiche
