@@ -176,7 +176,7 @@ ce qu'on VOIT.
   la taille du joueur ; budget de pièces mesuré
 - [x] B. Relief et horizon (25/11, `Shared/Lointain` + client `Lointain`, banc `lointain`, captures dans `captures/2026-11-25/lointain`) — le relief de l'île n'est PAS changé (tirage publié) : on voit le reste de l'île au loin + massifs au large ; à voir en Play par le joueur, idée de départ : falaises en terrasses, un sommet par île, cascades hautes, côtes découpées (plus de
   plaque carrée), silhouettes d'îles lointaines (couche à part, graine propre : ne pas toucher au rng de `RegionPlan`)
-- [ ] C. Boss mis en scène : repaire visible de loin, entrée (caméra + rugissement, sans texte), phases,
+- [x] C. Boss mis en scène (25/11, `Enemies` + client `Boss`, banc `boss_scene`, entrée filmée vue en Play ; repaire = colonne de lumière, pas de nouveau décor) — à voir en Play par le joueur, idée de départ : : repaire visible de loin, entrée (caméra + rugissement, sans texte), phases,
   attaques marquées au sol, sbires qui sortent de terre
 - [ ] E. Menus (couloir Codex, passage dans `docs/LOTS.md`) : un seul cadre médiéval pour toutes les fenêtres, fiche d'objet façon WoW, tri du sac, écran d'accueil où la caméra survole l'île — grille E1–E6 de `docs/DIRECTION-ARTISTIQUE.md`
 - [x] D. Végétation par biome (25/11, `Clock.CANOPY` teinte par arbre, banc `vegetation`, voile allégé dans `Eclairage`/`Ambiance` ; fleurs et densité NON changées : elles viennent du tirage publié) — à voir en Play par le joueur, idée de départ : : essences colorées (bouleaux dorés, érables roux, saules, pins), fleurs, densité ;

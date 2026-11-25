@@ -81,40 +81,50 @@ Il ne manque pas de systèmes : ~75 systèmes serveur, plus que dans l'exemple �
 
 ## 2. Grille de vérification « de A à Z »
 
+**État au 25/11 soir** (Claude) — coché = vérifié par banc et/ou capture en Play sur le PC fixe ; captures dans
+`captures/2026-11-25/`. Restent ouverts, avec la raison :
+- A6 (animations en marche) et A8 (FPS avec 40 créatures) : à mesurer en Play réel, à plusieurs ;
+- B2, B3, B4, B6 : le relief de l'île n'a PAS été changé (tirage publié : sauvegardes et ids de props) ; à la place, l'horizon
+  montre le reste de l'île et des massifs au large (B5). Un vrai relief neuf = nouvelle version du générateur (gen 3), pour les
+  nouveaux mondes seulement : décision du propriétaire ;
+- C6 : butin inchangé dans le code, banc `butin_creatures` vert, mais pas rejoué en Play ;
+- D2 (brume selon l'heure) : météo allégée seulement ; D3 (lanternes la nuit) : existait déjà (`Clock.setLamp`), pas recapturé ;
+- E1–E6 : couloir Codex (passage écrit dans `docs/LOTS.md`).
+
 Un chantier n'est fini que si **chaque ligne** est vérifiée et notée (date, comment : banc, capture en Play,
 mesure). Seul le propriétaire coche « testé en Play ».
 
 ### A. Créatures
-- [ ] A1 Toutes les créatures du bestiaire et toutes celles d'`Enemies` se construisent sans erreur (banc `creatures_voxel`)
-- [ ] A2 Aucune créature n'a la même liste de pièces qu'une autre : silhouettes distinctes (banc : empreinte par créature)
-- [ ] A3 Les yeux ou les points lumineux sont en `Neon` et chaque créature a au plus 7 couleurs (banc)
-- [ ] A4 Les boss mesurent au moins 2,5 fois la hauteur d'un avatar ; les créatures normales restent entre 0,5 et 2 fois (banc)
-- [ ] A5 Budget de pièces : une créature normale ≤ 90 pièces, une élite ≤ 140, un boss ≤ 260 (banc)
+- [x] A1 Toutes les créatures du bestiaire et toutes celles d'`Enemies` se construisent sans erreur (banc `creatures_voxel`)
+- [x] A2 Aucune créature n'a la même liste de pièces qu'une autre : silhouettes distinctes (banc : empreinte par créature)
+- [x] A3 Les yeux ou les points lumineux sont en `Neon` et chaque créature a au plus 7 couleurs (banc)
+- [x] A4 Les boss mesurent au moins 2,5 fois la hauteur d'un avatar ; les créatures normales restent entre 0,5 et 2 fois (banc)
+- [x] A5 Budget de pièces : une créature normale ≤ 90 pièces, une élite ≤ 140, un boss ≤ 260 (banc)
 - [ ] A6 Les animations d'`Enemies` marchent toujours : pattes, ailes, queue, tête et parties nommées (Play : capture en marche et en attaque)
-- [ ] A7 Planche de capture : une rangée par biome, photographiée en Play et rangée dans `images/bestiaire/`
+- [x] A7 Planche de capture : une rangée par biome, photographiée en Play et rangée dans `images/bestiaire/`
 - [ ] A8 Performance : pas de chute de FPS mesurable avec 40 créatures chargées (`/wa perf`)
 
 ### B. Relief et horizon
-- [ ] B1 Le rng de `RegionPlan` n'est pas touché : banc `generation` vert, mêmes ids de props avant et après
+- [x] B1 Le rng de `RegionPlan` n'est pas touché : banc `generation` vert, mêmes ids de props avant et après
 - [ ] B2 Chaque île a un sommet visible depuis n'importe quelle plage (capture depuis 4 plages)
 - [ ] B3 Les côtes ne sont plus droites : aucun segment de rivage droit de plus de 40 studs (banc)
 - [ ] B4 Au moins une cascade de plus de 25 studs par île montagneuse (banc + capture)
-- [ ] B5 Des silhouettes d'îles lointaines à l'horizon, sans collision et sans coût serveur (capture)
+- [x] B5 Des silhouettes d'îles lointaines à l'horizon, sans collision et sans coût serveur (capture)
 - [ ] B6 Les villages, parcelles, ports et donjons restent accessibles à pied (banc : chemin entre lieux)
 
 ### C. Boss
-- [ ] C1 Chaque boss a un repaire reconnaissable de loin (lueur, forme) : capture depuis 150 studs
-- [ ] C2 L'entrée en combat se fait sans texte : caméra, rugissement et secousse côté client, à voir en Play
-- [ ] C3 Chaque attaque spéciale est marquée au sol au moins 0,8 s avant de frapper (banc sur les délais)
-- [ ] C4 Au moins 2 phases différentes par boss, avec un changement visible (banc + Play)
-- [ ] C5 Les sbires sortent de terre de façon animée (Play)
+- [x] C1 Chaque boss a un repaire reconnaissable de loin (lueur, forme) : capture depuis 150 studs
+- [x] C2 L'entrée en combat se fait sans texte : caméra, rugissement et secousse côté client, à voir en Play
+- [x] C3 Chaque attaque spéciale est marquée au sol au moins 0,8 s avant de frapper (banc sur les délais)
+- [x] C4 Au moins 2 phases différentes par boss, avec un changement visible (banc + Play)
+- [x] C5 Les sbires sortent de terre de façon animée (Play)
 - [ ] C6 Butin, trophées et pièces légendaires inchangés (banc `butin_creatures`)
 
 ### D. Végétation et ambiance
-- [ ] D1 Au moins 4 essences d'arbres colorées par biome, et l'abattage marche toujours (règle 6 : `Recoltable`)
+- [x] D1 Au moins 4 essences d'arbres colorées par biome, et l'abattage marche toujours (règle 6 : `Recoltable`)
 - [ ] D2 La brume suit l'heure et la météo, et le ciel n'est plus délavé à midi (captures à 9 h, 13 h, 19 h, 23 h)
 - [ ] D3 Les lanternes de village s'allument la nuit (capture à 23 h)
-- [ ] D4 Pas de repousse automatique (règle « monde fini ») : banc `bosquets`
+- [x] D4 Pas de repousse automatique (règle « monde fini ») : banc `bosquets`
 
 ### E. Menus (couloir Codex, passage écrit dans `docs/LOTS.md`)
 - [ ] E1 Toutes les fenêtres partagent le même cadre (bois, fer, bandeau de titre) : capture de chaque fenêtre

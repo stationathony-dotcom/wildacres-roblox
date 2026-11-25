@@ -257,6 +257,9 @@ local function spawn(reg, d, parent)
 	model:PivotTo(CFrame.new(en.pos) * CFrame.Angles(0, en.yaw, 0))
 	model.Parent = parent
 	healthBar(en)
+	if k.boss and Enemies.beacon then
+		Enemies.beacon(en) -- (défini plus bas, avec la mise en scène des boss)
+	end
 	if k.burrow and parent then
 		en.burrow = Enemies.burrow(en, parent)
 	end
@@ -280,6 +283,23 @@ Enemies.spawn = spawn
 
 function Enemies.spawnFree(kind: string, pos: Vector3, parent: Instance)
 	return spawn(nil, { id = "free#" .. math.random(1, 1e9), kind = kind, x = pos.X, z = pos.Z, free = true }, parent)
+end
+
+-- Pour les tests (DbgAppel) : blesse la bête `id` d'une fraction de sa vie max, au nom du 1er joueur,
+-- et rend son état (la table de la bête elle-même ne passe pas par DbgAppel)
+function Enemies.dbgHurt(id: string, frac: number): string
+	local en = Enemies.byId(id)
+	local pl = G.Game.players()[1]
+	if not (en and pl) then
+		return "introuvable"
+	end
+	en.invuln = 0
+	Enemies.hit(en, math.floor(en.maxHp * frac), pl)
+	return string.format("%s pv=%d/%d phase=%d", en.state, en.hp, en.maxHp, en.phase)
+end
+function Enemies.dbgState(id: string): string
+	local en = Enemies.byId(id)
+	return en and string.format("%s pv=%d phase=%d shockT=%.1f", en.state, en.hp, en.phase, en.shockT or 0) or "introuvable"
 end
 
 Enemies.KILL_GOLD_BASE = 25 -- or de la mise à mort : au plus 25 + 12 % de la vie de la bête (± 40 %)
@@ -382,8 +402,14 @@ local function render(en)
 	if en.k.style == "hop" then
 		lift = math.abs(math.sin(en.hop)) * (en.boss and 3 or 1.5)
 	end
+	-- sbire qui sort de terre (2e phase d'un boss)
+	if en.riseT and en.riseT > 0 then
+		lift -= en.height * math.min(1, en.riseT / (en.riseMax or 1.2))
+	end
 	local shake = CFrame.identity
-	if en.state == "windup" then
+	if en.state == "roar" or en.state == "slam" then
+		shake = CFrame.Angles(math.sin(en.t * 31) * 0.05, 0, math.sin(en.t * 40) * 0.1)
+	elseif en.state == "windup" then
 		-- pose d'annonce : il tremble et brille
 		shake = CFrame.Angles(0, 0, math.sin(en.t * 40) * 0.12)
 		if en.model.PrimaryPart and not en.model.PrimaryPart:FindFirstChild("Alerte") then
@@ -420,7 +446,7 @@ local function render(en)
 		end
 	end
 	-- rien n'a bougé : pas de PivotTo (chaque déplacement de modèle part sur le réseau vers tous)
-	local windup = en.state == "windup"
+	local windup = en.state == "windup" or en.state == "roar" or en.state == "slam"
 	if not windup and not en.lastWindup and en.lastLift == lift and en.lastYaw == en.yaw and en.lastPos and (en.pos - en.lastPos).Magnitude < 0.02 then
 		return
 	end
@@ -430,6 +456,160 @@ end
 
 Enemies.move = moveToward
 Enemies.render = render
+
+-- ----------------------------------------------------------------- Mise en scène des boss
+-- (chantier C, 25/11, docs/DIRECTION-ARTISTIQUE.md) : une lueur qui monte au ciel trahit le repaire,
+-- chaque attaque est marquée au sol avant de frapper, la 2e phase change la couleur du boss et ajoute
+-- une onde de choc annoncée, les sbires sortent de terre. Aucun texte : lumière, son, secousse.
+local BOSS_WINDUP = 0.9 -- l'attaque d'un boss est marquée au sol 0,9 s avant de frapper
+local SHOCK_EVERY = 6 -- 2e phase : une onde de choc environ toutes les 6 s
+local SHOCK_WINDUP = 1.1
+local SHOCK_RADIUS = 11
+local MARK_COLOR = Color3.fromRGB(255, 84, 40)
+local FURY_COLOR = Color3.fromRGB(255, 56, 36)
+local RISE_TIME = 1.2
+Enemies.BOSS_WINDUP, Enemies.SHOCK_WINDUP, Enemies.SHOCK_RADIUS = BOSS_WINDUP, SHOCK_WINDUP, SHOCK_RADIUS
+
+local function glowOf(model: Model): Color3
+	for _, p in model:GetDescendants() do
+		if p:IsA("BasePart") and p.Material == Enum.Material.Neon and p.Name ~= "Lueur" then
+			return p.Color
+		end
+	end
+	return Color3.fromRGB(255, 150, 60)
+end
+
+-- colonne de lumière au-dessus du boss (soudée à sa base : elle le suit)
+local function beacon(en)
+	local base = en.model and en.model.PrimaryPart
+	if not base or en.model:FindFirstChild("Lueur") then
+		return
+	end
+	local col = glowOf(en.model)
+	local p = Instance.new("Part")
+	p.Name = "Lueur"
+	p.Shape = Enum.PartType.Cylinder
+	p.Size = Vector3.new(170, 2.4, 2.4)
+	p.CFrame = base.CFrame * CFrame.new(0, en.height + 88, 0) * CFrame.Angles(0, 0, math.rad(90))
+	p.Material = Enum.Material.Neon
+	p.Color = col
+	p.Transparency = 0.5
+	p.CanCollide = false
+	p.CanQuery = false
+	p.CanTouch = false
+	p.CastShadow = false
+	p.Massless = true
+	p.Anchored = false
+	local w = Instance.new("WeldConstraint")
+	w.Part0 = base
+	w.Part1 = p
+	w.Parent = p
+	p.Parent = en.model
+	local light = Instance.new("PointLight")
+	light.Name = "LueurSol"
+	light.Color = col
+	light.Range = 18
+	light.Brightness = 0.9
+	light.Parent = base
+end
+Enemies.beacon = beacon
+
+-- marque au sol (cercle ou bande) qui s'intensifie jusqu'au coup
+local function groundMark(cf: CFrame, size: Vector3, dur: number, round: boolean)
+	local p = Instance.new("Part")
+	p.Name = "MarqueBoss"
+	if round then
+		p.Shape = Enum.PartType.Cylinder
+	end
+	p.Size = size
+	p.CFrame = cf
+	p.Material = Enum.Material.Neon
+	p.Color = MARK_COLOR
+	p.Transparency = 0.7
+	p.Anchored = true
+	p.CanCollide = false
+	p.CanQuery = false
+	p.CanTouch = false
+	p.CastShadow = false
+	p.Parent = workspace
+	TweenService:Create(p, TweenInfo.new(dur, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Transparency = 0.15 }):Play()
+	Debris:AddItem(p, dur + 0.15)
+	return p
+end
+Enemies.groundMark = groundMark
+
+-- hauteur du vrai sol sous un point (rayon sur le terrain : le plan se trompe au bord de l'eau et
+-- ne connaît pas les grottes) ; à défaut, sous les pieds de la cible
+local groundRay = RaycastParams.new()
+groundRay.FilterType = Enum.RaycastFilterType.Include
+groundRay.FilterDescendantsInstances = { workspace.Terrain }
+local function feetY(en, at: Vector3): number
+	local hit = workspace:Raycast(at + Vector3.new(0, 6, 0), Vector3.new(0, -20, 0), groundRay)
+	if hit then
+		return hit.Position.Y
+	end
+	return at.Y - 2.9
+end
+
+local function markCircle(en, at: Vector3, r: number, dur: number)
+	local y = feetY(en, at) + 0.12
+	return groundMark(CFrame.new(at.X, y, at.Z) * CFrame.Angles(0, 0, math.rad(90)), Vector3.new(0.2, r * 2, r * 2), dur, true)
+end
+
+-- marque l'attaque qu'un boss prépare (cible figée : ce qui est marqué est ce qui frappe)
+local function telegraph(en)
+	local k = en.k
+	if not en.target then
+		return
+	end
+	if k.style == "spore" then
+		-- la marque reste jusqu'à l'impact (préparation + vol du projectile)
+		local dur = BOSS_WINDUP + ((k.proj and k.proj.fast) and 0.5 or 0.9)
+		markCircle(en, en.target, 6, dur)
+		if en.phase == 2 then
+			en.target2 = en.target + Vector3.new(math.random(-8, 8), 0, math.random(-8, 8))
+			markCircle(en, en.target2, 6, dur)
+		end
+	else
+		-- charge (×3,2 pendant 0,5 s) ou bond (×2,2 pendant 0,35 s) : la bande couvre tout le trajet
+		local burst = k.style == "charge" and 3.2 * 0.5 or 2.2 * 0.35
+		local flat = Vector3.new(en.target.X - en.pos.X, 0, en.target.Z - en.pos.Z)
+		local reach = math.min(flat.Magnitude, k.speed * (en.phase == 2 and 1.3 or 1) * burst) + en.radius
+		if flat.Magnitude > 0.1 then
+			local dir = flat.Unit
+			local mid = en.pos + dir * reach / 2
+			local y = feetY(en, en.pos) + 0.12
+			groundMark(CFrame.lookAt(Vector3.new(mid.X, y, mid.Z), Vector3.new(mid.X, y, mid.Z) + dir), Vector3.new((en.radius + 2.5) * 2, 0.2, reach), BOSS_WINDUP, false)
+		else
+			markCircle(en, en.pos, en.radius + 2.5, BOSS_WINDUP)
+		end
+	end
+end
+Enemies.telegraph = telegraph
+
+-- 2e phase : ses lueurs virent au rouge (yeux, cœur, colonne)
+local function enrage(en)
+	for _, p in en.model:GetDescendants() do
+		if p:IsA("BasePart") and p.Material == Enum.Material.Neon then
+			p.Color = FURY_COLOR
+		elseif p:IsA("PointLight") then
+			p.Color = FURY_COLOR
+		end
+	end
+	en.shockT = 0
+end
+Enemies.enrage = enrage
+
+local function nearPlayers(pos: Vector3, r: number)
+	local out = {}
+	for _, pl in G.Game.players() do
+		local root = G.Util.root(pl)
+		if root and (root.Position - pos).Magnitude < r then
+			table.insert(out, pl)
+		end
+	end
+	return out
+end
 
 local function flash(en)
 	local h = Instance.new("Highlight")
@@ -556,6 +736,18 @@ end
 local function think(en, dt: number)
 	en.t += dt
 	en.invuln -= dt
+	if en.riseT then
+		en.riseT -= dt
+		if en.riseT > 0 then
+			render(en)
+			return
+		end
+		en.riseT = nil
+		render(en)
+	end
+	if en.boss and en.phase == 2 then
+		en.shockT = (en.shockT or 0) + dt -- l'onde de choc se recharge pendant tout le combat
+	end
 	local k = en.k
 	if k.passive then
 		thinkPassive(en, dt)
@@ -621,6 +813,24 @@ local function think(en, dt: number)
 		if proot and pd < AGGRO and not far and (not k.neutral or en.angry) then
 			en.state = "chase"
 			en.t = 0
+			-- boss : entrée en scène pour qui ne l'a pas vu depuis 10 min (rugissement, caméra côté client) ;
+			-- il se fige pendant ce temps (le joueur n'est jamais frappé pendant qu'on lui montre le boss)
+			if en.boss then
+				en.seenBy = en.seenBy or {}
+				local who = {}
+				for _, pl in nearPlayers(en.pos, AGGRO * 1.6) do
+					if not en.seenBy[pl] or os.clock() - en.seenBy[pl] > 600 then
+						en.seenBy[pl] = os.clock()
+						table.insert(who, pl)
+					end
+				end
+				if #who > 0 then
+					en.state = "roar"
+					for _, pl in who do
+						G.remotes.Fx:FireClient(pl, "boss", en.model, en.pos)
+					end
+				end
+			end
 		else
 			if not en.goal or en.t > 4 then
 				en.t = 0
@@ -635,10 +845,22 @@ local function think(en, dt: number)
 			en.t = 0
 		else
 			local range = k.style == "spore" and 22 or (k.style == "charge" and 14 or 4 + en.radius)
-			if pd < range and en.t > 0.4 then
+			if en.boss and en.phase == 2 and (en.shockT or 0) > SHOCK_EVERY and pd < SHOCK_RADIUS + 8 then
+				-- onde de choc : cercle au sol, le boss tremble, puis frappe tout le cercle
+				en.shockT = 0
+				en.state = "slam"
+				en.t = 0
+				markCircle(en, en.pos, SHOCK_RADIUS, SHOCK_WINDUP)
+				if G.Util.sfx then
+					G.Util.sfx("grognement", en.pos + Vector3.new(0, 2, 0))
+				end
+			elseif pd < range and en.t > 0.4 then
 				en.state = "windup"
 				en.t = 0
 				en.target = proot.Position
+				if en.boss then
+					telegraph(en)
+				end
 				-- l'annonce s'entend aussi : cri d'effort (humanoïdes) ou grognement (bêtes, monstres)
 				if G.Util.sfx and en.pos then
 					G.Util.sfx((k.form == "humain") and "cri_humain" or "grognement", en.pos + Vector3.new(0, 2, 0))
@@ -650,20 +872,50 @@ local function think(en, dt: number)
 		end
 	elseif en.state == "windup" then
 		-- pose d'annonce : le joueur peut s'écarter
-		if proot then
+		-- (boss : la cible reste celle qui est marquée au sol)
+		if proot and not en.boss then
 			en.target = proot.Position
-			local d = proot.Position - en.pos
+		end
+		local aim = en.boss and en.target or (proot and proot.Position)
+		if aim then
+			local d = aim - en.pos
 			en.yaw = math.atan2(-d.X, -d.Z)
 		end
-		if en.t > (k.style == "charge" and 0.6 or 0.5) then
+		if en.t > (en.boss and BOSS_WINDUP or (k.style == "charge" and 0.6 or 0.5)) then
 			en.state = "attack"
 			en.t = 0
 			if k.style == "spore" and en.target then
 				spore(en, en.target)
 				if en.boss and en.phase == 2 then
-					spore(en, en.target + Vector3.new(math.random(-8, 8), 0, math.random(-8, 8)))
+					spore(en, en.target2 or (en.target + Vector3.new(math.random(-8, 8), 0, math.random(-8, 8))))
+					en.target2 = nil
 				end
 			end
+		end
+	elseif en.state == "roar" then
+		-- entrée en scène : il se dresse et rugit, sans attaquer
+		if proot then
+			local d = proot.Position - en.pos
+			en.yaw = math.atan2(-d.X, -d.Z)
+		end
+		if en.t > 1.9 then
+			en.state = "chase"
+			en.t = 0
+		end
+	elseif en.state == "slam" then
+		if en.t > SHOCK_WINDUP then
+			for _, pl in nearPlayers(en.pos, SHOCK_RADIUS + 1) do
+				G.Combat.hurtPlayer(pl, math.floor(en.dmg * 0.8), en.pos)
+			end
+			for _, pl in nearPlayers(en.pos, 70) do
+				G.remotes.Fx:FireClient(pl, "secousse", en.pos, 0.6)
+			end
+			puff(en.pos + Vector3.new(0, 1, 0), Color3.fromRGB(150, 130, 110), 40)
+			if G.Util.sfx then
+				G.Util.sfx("impact_sourd", en.pos)
+			end
+			en.state = "recover"
+			en.t = 0
 		end
 	elseif en.state == "attack" then
 		local dur = k.style == "charge" and 0.5 or 0.35
@@ -938,11 +1190,25 @@ function Enemies.hit(en, dmg: number, player: Player)
 	if en.boss and en.phase == 1 and en.hp < en.maxHp / 2 then
 		en.phase = 2
 		G.Util.toast(player, en.k.name .. " devient furieux !", "danger")
+		-- 2e phase visible : ses lueurs virent au rouge, il rugit, le sol tremble
+		enrage(en)
+		for _, pl in nearPlayers(en.pos, 70) do
+			G.remotes.Fx:FireClient(pl, "secousse", en.pos, 0.45)
+		end
+		if G.Util.sfx then
+			G.Util.sfx("grognement", en.pos + Vector3.new(0, 2, 0))
+		end
 		if not en.minionsDone then
 			en.minionsDone = true
 			for i = 1, 2 do
-				spawn(en.reg, { id = en.id .. "+" .. i .. "_" .. G.world.day, kind = en.k.minion, x = en.pos.X + math.random(-6, 6), z = en.pos.Z + math.random(-6, 6),
-					y = en.pos.Y < -40 and en.pos.Y or nil }, en.model.Parent or en.reg.enemyFolder)
+				local m = spawn(en.reg, { id = en.id .. "+" .. i .. "_" .. G.world.day, kind = en.k.minion, x = en.pos.X + math.random(-6, 6), z = en.pos.Z + math.random(-6, 6),
+					y = en.pos.Y < -40 and en.pos.Y or nil }, en.model.Parent or (en.reg and en.reg.enemyFolder))
+				-- les sbires sortent de terre (invulnérables tant qu'ils émergent)
+				if m then
+					m.riseT, m.riseMax = RISE_TIME, RISE_TIME
+					m.invuln = RISE_TIME
+					puff(m.pos + Vector3.new(0, 0.5, 0), Color3.fromRGB(120, 100, 80), 18)
+				end
 			end
 		end
 	end
