@@ -174,7 +174,7 @@ ce qu'on VOIT.
 - [x] A. Créatures façon planche (25/11, `Systemes/Silhouettes`, banc `creatures_voxel` 134/134, vitrine vue en Play) — à voir en Play par le joueur : constructeur voxel par gabarits en données (silhouette propre, 4-6 couleurs
   + 1 lueur, yeux lumineux), familles par biome (glace, désert, lave, forêt, cristal des grottes), boss 3 à 5 fois
   la taille du joueur ; budget de pièces mesuré
-- [ ] B. Relief et horizon : falaises en terrasses, un sommet par île, cascades hautes, côtes découpées (plus de
+- [x] B. Relief et horizon (25/11, `Shared/Lointain` + client `Lointain`, banc `lointain`, captures dans `captures/2026-11-25/lointain`) — le relief de l'île n'est PAS changé (tirage publié) : on voit le reste de l'île au loin + massifs au large ; à voir en Play par le joueur, idée de départ : falaises en terrasses, un sommet par île, cascades hautes, côtes découpées (plus de
   plaque carrée), silhouettes d'îles lointaines (couche à part, graine propre : ne pas toucher au rng de `RegionPlan`)
 - [ ] C. Boss mis en scène : repaire visible de loin, entrée (caméra + rugissement, sans texte), phases,
   attaques marquées au sol, sbires qui sortent de terre

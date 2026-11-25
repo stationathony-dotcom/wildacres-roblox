@@ -7,6 +7,7 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.4 — 2026-11-25
 
+- **Horizon** — Au-delà des régions chargées, on voit enfin le reste de l'île : plateaux, collines, forêts rousses, lacs, plages et mer jusqu'à l'horizon, en blocs allégés tirés des mêmes bruits que le monde (95 % des paliers et 88 % de l'eau identiques au vrai terrain). Une couronne de seize massifs en gradins, enneigés et parfois traversés d'une cascade, ferme l'horizon au large, au-delà des îlots. Tout est dessiné par le client, sans collision ni réseau, et le tirage du monde n'est pas touché.
 - **Créatures** — Les 134 créatures du bestiaire ont chacune une silhouette sculptée : pattes coudées, griffes, crocs, yeux qui brillent, ailes à plumes ou à membrane, carapaces, cristaux. Chaque famille suit son biome (givre et cristaux, mousse et fleurs, vase, or, améthyste des grottes, spectres de la nuit). Les humanoïdes portent l'attribut de leur métier (carquois, bouclier, sac, chapeau, masque, turban…), et chaque spectre a son trait (lanterne, ramure, chaînes, visage vide…). Les boss font au moins 2,6 fois la taille d'un joueur et leur portée suit leur taille. Un modèle n'envoie plus qu'une position au réseau quand il bouge.
 
 ## 0.2.3 — 2026-11-21
