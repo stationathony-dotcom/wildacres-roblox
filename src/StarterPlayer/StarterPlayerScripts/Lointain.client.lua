@@ -100,6 +100,50 @@ local function loadedRegions(): { [string]: boolean }
 	return skip
 end
 
+-- couleur du vrai terrain pour un matériau (Eclairage règle les couleurs) : raccord invisible (C16, 26/11)
+local terrainColor = {}
+local function groundColor(r): Color3
+	local m = r.material
+	if m and m ~= Enum.Material.SmoothPlastic then
+		local c = terrainColor[m]
+		if not c then
+			local ok, col = pcall(function()
+				return workspace.Terrain:GetMaterialColor(m)
+			end)
+			c = ok and col or r.color
+			terrainColor[m] = c
+		end
+		return c
+	end
+	return r.color
+end
+
+local TRUNK = Color3.fromRGB(92, 64, 44)
+local CONIFER = { Color3.fromRGB(52, 92, 58), Color3.fromRGB(62, 104, 62), Color3.fromRGB(44, 80, 54) }
+
+-- un arbre vu de loin (C16, 26/11 : « de vrais arbres, troncs + houppiers, au lieu de pavés ») :
+-- feuillu = houppier en 2 étages décalés ; conifère = 2 gradins étroits ; tronc seulement de près
+local function tree(parent, x: number, y: number, z: number, size: number, tint: Color3, conifer: boolean, trunk: boolean, rng): number
+	local n = 0
+	local rot = CFrame.Angles(0, rng:NextNumber(0, math.pi / 2), 0)
+	local h = size * rng:NextNumber(0.9, 1.25)
+	if trunk then
+		newPart(parent, Vector3.new(size * 0.14, h * 0.45, size * 0.14), CFrame.new(x, y + h * 0.22, z) * rot, TRUNK, Enum.Material.Wood)
+		n += 1
+	end
+	if conifer then
+		local c = CONIFER[rng:NextInteger(1, #CONIFER)]
+		newPart(parent, Vector3.new(size * 0.62, h * 0.55, size * 0.62), CFrame.new(x, y + h * 0.5, z) * rot, c, Enum.Material.Grass)
+		newPart(parent, Vector3.new(size * 0.34, h * 0.5, size * 0.34), CFrame.new(x, y + h * 0.95, z) * rot * CFrame.Angles(0, math.pi / 4, 0), c:Lerp(Color3.new(1, 1, 1), 0.06), Enum.Material.Grass)
+	else
+		local w = size * rng:NextNumber(0.8, 1.05)
+		newPart(parent, Vector3.new(w, h * 0.42, w * 0.9), CFrame.new(x, y + h * 0.55, z) * rot, tint, Enum.Material.Grass)
+		newPart(parent, Vector3.new(w * 0.62, h * 0.32, w * 0.62), CFrame.new(x + w * 0.08, y + h * 0.86, z - w * 0.06) * rot * CFrame.Angles(0, math.pi / 4, 0),
+			tint:Lerp(Color3.new(1, 1, 0.85), 0.12), Enum.Material.Grass)
+	end
+	return n + 2
+end
+
 local function rebuild(wg, px: number, pz: number)
 	building = true
 	dirty = false
@@ -117,24 +161,51 @@ local function rebuild(wg, px: number, pz: number)
 			newPart(chunk, Vector3.new(w, 1, r.step), CFrame.new(cx, r.top - 0.5, r.z), r.color, r.material)
 		else
 			local h = math.max(1, r.top - BOTTOM)
-			newPart(chunk, Vector3.new(w, h, r.step), CFrame.new(cx, BOTTOM + h / 2, r.z), r.color, r.material)
-			if r.canopy then
-				-- frondaisons : un bouquet par case près du joueur, une haie au loin
-				local n = math.max(1, math.floor(w / r.step + 0.5))
-				if r.step <= 48 and n <= 24 then
-					for i = 0, n - 1 do
-						local th = rng:NextNumber(9, 16)
-						local tint = r.shades and r.shades[rng:NextInteger(1, #r.shades)] or r.canopy
-						newPart(chunk, Vector3.new(r.step * 0.8, th, r.step * 0.8), CFrame.new(r.x0 + (i + 0.5) * r.step + rng:NextNumber(-3, 3), r.top + 4 + th / 2, r.z + rng:NextNumber(-3, 3)), tint, Enum.Material.Grass)
-						made += 1
+			local col = groundColor(r)
+			local mat = r.material
+			if r.canopy or r.material == Enum.Material.LeafyGrass then
+				-- de loin, une forêt se lit surtout par ses frondaisons : sol (tapis roux) fondu vers le vert sombre
+				col = col:Lerp(Color3.fromRGB(84, 104, 50), r.canopy and 0.55 or 0.4)
+				mat = Enum.Material.Grass
+			end
+			newPart(chunk, Vector3.new(w, h, r.step), CFrame.new(cx, BOTTOM + h / 2, r.z), col, mat)
+			-- bords biseautés vers la mer (les côtes ne sont plus en escalier carré)
+			local above = r.top - L.SEA_Y
+			if above > 0.5 and r.step <= 48 then
+				local bw = math.min(r.step * 0.7, above * 3 + 6)
+				for _, side in { -1, 1 } do
+					-- seulement là où la mer touche la rangée (pas contre une région chargée ni dans les terres)
+					if (side < 0 and not r.edgeL) or (side > 0 and not r.edgeR) then
+						continue
 					end
-				else
-					-- au loin : une haie par rangée, coupée en deux teintes pour casser l'aplat
-					local tint = r.shades and r.shades[rng:NextInteger(1, #r.shades)] or r.canopy
-					local tint2 = r.shades and r.shades[rng:NextInteger(1, #r.shades)] or r.canopy
-					newPart(chunk, Vector3.new(w * 0.47, 12, r.step * 0.8), CFrame.new(cx - w * 0.24, r.top + 10, r.z), tint, Enum.Material.Grass)
-					newPart(chunk, Vector3.new(w * 0.47, 15, r.step * 0.7), CFrame.new(cx + w * 0.24, r.top + 11.5, r.z), tint2, Enum.Material.Grass)
+					local ex = side < 0 and r.x0 or r.x1
+					local wedge = Instance.new("WedgePart")
+					wedge.Anchored, wedge.CanCollide, wedge.CanQuery, wedge.CanTouch, wedge.CastShadow = true, false, false, false, false
+					wedge.Size = Vector3.new(r.step, above, bw)
+					wedge.CFrame = CFrame.new(ex + side * bw / 2, L.SEA_Y + above / 2, r.z) * CFrame.Angles(0, side > 0 and -math.pi / 2 or math.pi / 2, 0)
+					wedge.Color = col:Lerp(L.COLORS.sable, 0.5)
+					wedge.Material = Enum.Material.Sand
+					wedge.Parent = chunk
 					made += 1
+				end
+			end
+			if r.canopy then
+				local dist = math.sqrt((cx - px) ^ 2 + (r.z - pz) ^ 2)
+				local near = r.step <= 48
+				local spacing = near and r.step * 0.75 or r.step * 1.1
+				local n = math.clamp(math.floor(w / spacing + 0.5), 1, near and 40 or 14)
+				local size = near and rng:NextNumber(14, 19) or rng:NextNumber(22, 30)
+				for i = 0, n - 1 do
+					local x = r.x0 + (i + 0.5) * (w / n) + rng:NextNumber(-spacing * 0.3, spacing * 0.3)
+					local z = r.z + rng:NextNumber(-r.step * 0.3, r.step * 0.3)
+					local tint = r.shades and r.shades[rng:NextInteger(1, #r.shades)] or r.canopy
+					local conifer = r.conifers and rng:NextNumber() < r.conifers
+					made += tree(chunk, x, r.top, z, size * rng:NextNumber(0.85, 1.15), tint, conifer, near and dist < 520, rng)
+					if made % PER_FRAME == 0 then
+						chunk = Instance.new("Folder")
+						chunk.Parent = f
+						task.wait()
+					end
 				end
 			end
 		end

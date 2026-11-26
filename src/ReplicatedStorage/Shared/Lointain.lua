@@ -38,13 +38,16 @@ L.CANOPY = {
 	marais = Color3.fromRGB(78, 100, 52),
 }
 -- nuancier des bouquets vus de loin (même esprit que Clock.CANOPY) : clé = couleur de base ci-dessus
+-- 26/11 (C16) : mêmes teintes que les vrais arbres (Clock.CANOPY), pour que le loin prolonge le près
 L.CANOPY_SHADES = {
-	prairie = { Color3.fromRGB(70, 128, 52), Color3.fromRGB(96, 150, 58), Color3.fromRGB(56, 108, 46), Color3.fromRGB(128, 160, 62) },
-	foret = { Color3.fromRGB(196, 112, 44), Color3.fromRGB(176, 66, 40), Color3.fromRGB(222, 168, 58), Color3.fromRGB(160, 86, 48), Color3.fromRGB(98, 130, 56) },
-	desert = { Color3.fromRGB(150, 150, 80), Color3.fromRGB(170, 152, 86) },
+	prairie = { Color3.fromRGB(86, 150, 58), Color3.fromRGB(112, 172, 64), Color3.fromRGB(64, 124, 50), Color3.fromRGB(150, 178, 66), Color3.fromRGB(96, 160, 86) },
+	foret = { Color3.fromRGB(214, 120, 40), Color3.fromRGB(196, 70, 40), Color3.fromRGB(226, 170, 60), Color3.fromRGB(180, 90, 50), Color3.fromRGB(232, 196, 72), Color3.fromRGB(104, 140, 58) },
+	desert = { Color3.fromRGB(150, 146, 78), Color3.fromRGB(170, 152, 86), Color3.fromRGB(130, 138, 72) },
 	neige = { Color3.fromRGB(64, 98, 76), Color3.fromRGB(150, 178, 172), Color3.fromRGB(52, 84, 66) },
-	marais = { Color3.fromRGB(78, 100, 52), Color3.fromRGB(62, 90, 56), Color3.fromRGB(96, 112, 60) },
+	marais = { Color3.fromRGB(70, 104, 52), Color3.fromRGB(90, 114, 48), Color3.fromRGB(58, 92, 60), Color3.fromRGB(104, 120, 66) },
 }
+-- part de conifères parmi les arbres vus de loin
+L.CONIFERS = { prairie = 0.1, foret = 0.45, desert = 0, neige = 0.85, marais = 0.15 }
 L.MATERIALS = {
 	prairie = Enum.Material.Grass, foret = Enum.Material.LeafyGrass, desert = Enum.Material.Sand,
 	neige = Enum.Material.Snow, marais = Enum.Material.Mud,
@@ -90,8 +93,10 @@ function L.layout(wg, px: number, pz: number, skip, opts)
 	local function emit(step, gx0, gz, cells)
 		-- cells : liste ordonnée en x de { s = sample, x = centre }
 		local run
-		local function flush()
+		local prevWater = false
+		local function flush(nextWater: boolean?)
 			if run then
+				run.edgeR = nextWater == true
 				table.insert(rows, run)
 				run = nil
 			end
@@ -99,9 +104,11 @@ function L.layout(wg, px: number, pz: number, skip, opts)
 		for _, cell in cells do
 			local s = cell.s
 			if not s then
-				flush()
+				flush(false)
+				prevWater = false
 				continue
 			end
+			local isWater = s.kind ~= "terre"
 			local color, mat, top
 			if s.kind ~= "terre" then
 				color, mat, top = L.COLORS[s.kind], Enum.Material.SmoothPlastic, L.SEA_Y
@@ -117,12 +124,14 @@ function L.layout(wg, px: number, pz: number, skip, opts)
 			if same then
 				run.x1 = cell.x + step / 2
 			else
-				flush()
+				flush(isWater)
 				run = { x0 = cell.x - step / 2, x1 = cell.x + step / 2, z = gz, step = step, top = top, color = color, material = mat,
-					canopy = canopy, shades = shades, water = s.kind ~= "terre" }
+					canopy = canopy, shades = shades, water = s.kind ~= "terre", edgeL = prevWater,
+					conifers = canopy and L.CONIFERS[s.biome] or nil }
 			end
+			prevWater = isWater
 		end
-		flush()
+		flush(false)
 	end
 	local function ring(step, rIn, rOut)
 		-- grille alignée sur le pas (stable quand le joueur bouge)
