@@ -302,6 +302,16 @@ reste à pousser / capturer sur le PC fixe.
 - [ ] **X31 · Menus E4 à E6** de `docs/DIRECTION-ARTISTIQUE.md` (accueil où la caméra survole l'île, mobile,
       HUD jamais masqué) + capture de chaque fenêtre dans le cadre commun `Cadre.lua`.
 
+- [ ] **X32 · Armes et équipement portés** niveau planche (Gear, GearDesign, Avatar, Tools) — Sol, file du 26/11.
+- [ ] **X33 · Objets du sac** (miniatures, ConstruireModelesMiniatures) — Sol, file du 26/11.
+- [ ] **X34 · Maisons et bâtiments** (maison, villages2, moulin, château) — Sol, file du 26/11.
+- [ ] **X35 · PNJ : apparence + dialogues** (Avatar.dress, Apparence ; `Dialogue.lua` : passage accordé par Claude) — Sol.
+- [ ] **X36 · Créatures du bestiaire + 6 boss** (`Silhouettes.lua` : passage accordé par Claude ; données des boss → passage à Claude) — Sol.
+- [ ] **X37 · Écriture des quêtes** (TEXTE seulement de `Quetes.lua` / `QuetesLieux.lua` : passage accordé) — Sol.
+
+Répartition décidée par le propriétaire le 26/11 : **Codex = ce qui se génère, s'écrit ou se peaufine ; Claude = le code**
+(systèmes, intégration dans Studio, captures, perf) et la coordination. Effort Codex : `high` (jamais `ultra`).
+
 ## Couloir Claude — les règles et le monde
 
 - [x] **C1 · Banc de régression unique.** FAIT 20/11 (edef686) : 39 bancs, ~2 min, ménage des restes. `tools/bancs/tout.luau` lance tous les bancs Edit et rend un
@@ -347,10 +357,10 @@ reste à pousser / capturer sur le PC fixe.
 
 ### 3e vague Claude (écrite le 26/11)
 
-- [ ] **C14 · Créatures niveau planche** (`Systemes/Silhouettes.lua`) : tons multiples par masse, plaques et rivets,
+- [ ] ~~**C14 · Créatures niveau planche**~~ → confié à Codex (X36) (`Systemes/Silhouettes.lua`) : tons multiples par masse, plaques et rivets,
       rangées de dents, langue, points lumineux le long du corps, motifs par famille, budget relevé (créature ≤ 140,
       boss ≤ 320). Banc `creatures_voxel` mis à jour.
-- [ ] **C15 · Boss inspirés des planches** (noms et dessins à nous) : coffre-mimique des ruines, baudroie des
+- [ ] **C15 · Boss inspirés des planches** (dessins par Codex en X36 ; Claude : données de combat et branchement) (noms et dessins à nous) : coffre-mimique des ruines, baudroie des
       abysses, mammouth de givre, griffon d'orage (silhouette propre au boss), veuve des cavernes, crocodile des
       marais. Données dans `Bestiaire`/`Equilibre`, mise en scène existante (`boss_scene`).
 - [ ] **C16 · Vue aérienne** (`Shared/Lointain`) : retour « catastrophique » du 25/11 (FEUILLE_DE_ROUTE).
