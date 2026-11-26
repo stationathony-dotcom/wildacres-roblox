@@ -380,6 +380,11 @@ Répartition décidée par le propriétaire le 26/11 : **Codex = ce qui se gén�
 
 ## Journal (5 lignes maximum par session)
 
+- 26/11 · Claude (PC portable, Studio Édition) : montures façon WoW + vol (664c332), vue aérienne (e3c4981), contours (c7a3d46),
+  relief gen 3 (0579ea8, Y_MAX 240), ambiance par biome + tempêtes (97c2952), aubergiste/fournisseur/alchimiste (4a0af9b), armurier
+  (2f3b0c0), Store nettoyé (d8c89c1, db58a37). 61/61 bancs verts + generation. Place synchronisée (18ceeb8). Codex Sol : file X27→X38
+  à 15h06. À voir en Play (PC fixe) : journal [N], vol, Équitation, tempêtes (`Meteo.storm`), nouveaux marchands, NOUVEAU MONDE gen 3.
+
 - 21/11 · Codex · Torses sur disque, 416 variantes et 520 essayages contrôlés sur des instances simulées.
   Claude reprend les bancs en Édition. En Play : comparer les familles à 36 px, puis les pans en mouvement et le retour des coupes longue et tablier.
 
