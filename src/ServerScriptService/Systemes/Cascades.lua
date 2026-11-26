@@ -10,6 +10,7 @@ local Cascades = {}
 local G, Config
 
 Cascades.CHANCE = 0.25
+Cascades.CHANCE_MOUNTAIN = 0.55
 Cascades.MIN_DROP = 5 -- studs de dénivelé au minimum
 
 function Cascades.init(g)
@@ -43,7 +44,11 @@ function Cascades.site(plan, rng: Random)
 	if #found == 0 then
 		return nil
 	end
-	local c = found[rng:NextInteger(1, #found)]
+	-- 26/11 (relief gen 3) : on préfère les plus hautes chutes (le quart le plus haut)
+	table.sort(found, function(a, b)
+		return (a.top - a.bottom) > (b.top - b.bottom)
+	end)
+	local c = found[rng:NextInteger(1, math.max(1, math.floor(#found / 4)))]
 	-- pied de la falaise : au bord de la case basse, côté falaise
 	local x = (plan.x0 + c.lx + 0.5 + c.dx * 0.5) * CELL
 	local z = (plan.z0 + c.lz + 0.5 + c.dz * 0.5) * CELL
@@ -68,7 +73,14 @@ function Cascades.onRegionLoad(reg)
 		return
 	end
 	local rng = Random.new(G.WG.hash(G.world.seed, "cascade", reg.rx, reg.rz))
-	if rng:NextNumber() >= Cascades.CHANCE then
+	-- en montagne (relief gen 3), une région sur deux a sa cascade
+	local peak = 0
+	for _, h in p.H do
+		if h > peak then
+			peak = h
+		end
+	end
+	if rng:NextNumber() >= (peak > 60 and Cascades.CHANCE_MOUNTAIN or Cascades.CHANCE) then
 		return
 	end
 	local s = Cascades.site(p, rng)
