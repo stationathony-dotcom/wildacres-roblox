@@ -261,12 +261,14 @@ function WG:plan(rx: number, rz: number)
 				else
 					mat[i] = Config.BIOMES[b].mat
 				end
-				-- gen 3 : roche puis neige en altitude (hors routes et lieux)
+				-- gen 3 : en altitude, neige au-dessus de 125 ; entre 80 et 125, alpage (herbe) sur les replats et
+				-- roche sur les pentes (bruit de collines fort) — pas une dalle de roche uniforme
 				if self.gen >= 3 and not inPoi[i] and rd > 1.6 then
-					if h > 120 then
+					if h > 125 then
 						mat[i] = Mat.Snow
 					elseif h > 80 then
-						mat[i] = Mat.Rock
+						local steep = math.abs(self:hills(cx, cz)) > 0.28
+						mat[i] = steep and Mat.Rock or (h > 110 and Mat.Slate or Mat.Grass)
 					end
 				end
 				H[i] = h
