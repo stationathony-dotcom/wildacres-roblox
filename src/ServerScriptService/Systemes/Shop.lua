@@ -446,8 +446,9 @@ function Shop.buy(player: Player, item: string, n: number)
 		return
 	end
 	local info = Config.ITEMS[item]
-	if (info and info.tool) or string.sub(item, 1, 7) == "animal:" then
-		n = 1 -- une bête à la fois (sinon n fois le prix pour une seule)
+	local isGear = string.sub(item, 1, 5) == "gear:" or string.sub(item, 1, 7) == "unique:"
+	if (info and info.tool) or string.sub(item, 1, 7) == "animal:" or isGear then
+		n = 1 -- une bête (ou une pièce d'équipement) à la fois
 	end
 	-- gens de métier : stock réel (ce que les joueurs leur ont apporté)
 	if e.data.metier then
@@ -470,6 +471,15 @@ function Shop.buy(player: Player, item: string, n: number)
 		local a = Config.ANIMALS[kind]
 		G.Util.toast(player, a.masc and (a.name .. " acheté ! Il te suit : mène-le où tu veux et appuie [R] pour l'installer.")
 			or (a.name .. " achetée ! Elle te suit : mène-la où tu veux et appuie [R] pour l'installer."), "big")
+	elseif isGear then
+		-- armurier (Metiers, 26/11) : une vraie pièce d'équipement
+		local piece = G.Metiers.makeGear and G.Metiers.makeGear(e, item)
+		if not piece then
+			G.Joueurs.add(player, "gold", entry.price)
+			G.Util.toast(player, "Plus en stock.")
+			return
+		end
+		G.Joueurs.addGear(player, piece)
 	else
 		G.Joueurs.add(player, item, n)
 	end

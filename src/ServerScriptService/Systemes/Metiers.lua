@@ -108,7 +108,17 @@ ROLES.alchemist = {
 	products = { "potion_vent", "potion_pierre", "potion_charme", "potion_taureau", "potion_brume", "night_elixir" },
 	intro = "Une fiole pour chaque besoin… à condition d'avoir les ingrédients.",
 }
-local ORDER = { "baker", "cook", "blacksmith", "healer", "priest", "stablemaster", "barber", "tailor", "innkeeper", "outfitter", "alchemist" }
+-- 26/11 (« un armurier : équipement de base, réparation et quelques pièces uniques ») : son étal se remplit de
+-- pièces de rareté 1-2 forgées avec les lingots et le cuir qu'on lui vend ; chaque jour, 2 pièces UNIQUES
+-- (rareté 3, surnom et bonus propres) ; il répare les outils comme le forgeron.
+ROLES.armorer = {
+	label = "Armurier", labelF = "Armurière", at = { "Forge", "Marche_Village" }, front = 9, side = -9, garb = "cuir", maxHp = 120,
+	shop = "Armurerie", trade = "🛡️ Armes et armures", baseValue = 140, services = { "reparer" }, hammer = true,
+	inputs = { "iron_ingot", "steel", "copper_ingot", "leather", "planks", "buckle", "iron_ring", "leather_strap" },
+	gearShop = true,
+	intro = "Une lame bien trempée vaut mieux que mille promesses. Apporte du métal, je forge.",
+}
+local ORDER = { "baker", "cook", "blacksmith", "healer", "priest", "stablemaster", "barber", "tailor", "innkeeper", "outfitter", "alchemist", "armorer" }
 Metiers.ROLES = ROLES
 
 local PEDDLER = { label = "Colporteur", labelF = "Colporteuse", trade = "🎒 Voir sa marchandise", hat = "capuche", garb = "hotte" }
@@ -165,13 +175,118 @@ local function roleState(key: string, role: string)
 	local v = village(key)
 	local st = v.roles[role]
 	if not st then
-		st = { gen = 1, points = 0, stock = {} }
+		st = { gen = 1, points = 0, stock = {}, key = key }
 		v.roles[role] = st
 		-- première visite : une fournée de base dès aujourd'hui (pas un étal vide)
 		Metiers.produce(role, st)
 	end
 	st.stock = st.stock or {}
+	st.key = st.key or key
 	return st
+end
+
+-- ----------------------------------------------------------------- Armurier (26/11)
+local GEAR_STOCK_CAP = 3
+local EPITHETS = { "du Loup", "de l'Aube", "des Brumes", "du Roc", "de la Comtesse", "du Vieux Gué", "à la Rose", "des Cendres",
+	"du Veilleur", "de la Marée", "des Sept Collines", "du Chêne fendu", "de la Lune rousse", "du Gué d'argent" }
+local gearCache
+local function gearRecipes()
+	if not gearCache then
+		gearCache = { basic = {}, rare = {} }
+		for i, r in Config.RECIPES do
+			if r.gear and r.gear.stats then
+				local rar = r.gear.rarity or 1
+				if rar <= 2 then
+					table.insert(gearCache.basic, i)
+				elseif rar == 3 then
+					table.insert(gearCache.rare, i)
+				end
+			end
+		end
+	end
+	return gearCache
+end
+local function gearValue(r): number
+	local v = 0
+	for item, n in r.needs or {} do
+		local info = Config.ITEMS[item]
+		v += (info and info.price or 5) * n
+	end
+	return math.max(25, math.floor(v * 1.5))
+end
+Metiers.gearValue = gearValue
+
+-- pièce vendue par l'armurier : « gear:<recette> » (base) ou « unique:<n> » (pièce du jour, vendue une fois)
+function Metiers.makeGear(e, item: string)
+	local st = roleState(e.reg.key, e.data.metier)
+	local u = tonumber(string.match(item, "^unique:(%d+)$"))
+	local piece
+	if u then
+		local x = st.uniques and st.uniques[u]
+		if not x or x.sold then
+			return nil
+		end
+		x.sold = true
+		piece = table.clone(x.piece)
+		piece.stats = table.clone(x.piece.stats)
+	else
+		local i = tonumber(string.match(item, "^gear:(%d+)$"))
+		local r = i and Config.RECIPES[i]
+		if not (r and r.gear) or (st.stock[item] or 0) <= 0 then
+			return nil
+		end
+		piece = table.clone(r.gear)
+		piece.stats = table.clone(r.gear.stats)
+	end
+	piece.visual = piece.visual or ""
+	piece.power = piece.power or 0
+	piece.id = math.random(1, 2 ^ 30)
+	return piece
+end
+
+local function produceGear(st, base: number)
+	local list = gearRecipes().basic
+	local budget = (st.points or 0) + base
+	table.sort(list, function(a, b)
+		return gearValue(Config.RECIPES[a]) < gearValue(Config.RECIPES[b])
+	end)
+	local progress = true
+	while progress do
+		progress = false
+		for _, i in list do
+			local k = "gear:" .. i
+			local p = gearValue(Config.RECIPES[i])
+			if budget >= p and (st.stock[k] or 0) < GEAR_STOCK_CAP then
+				st.stock[k] = (st.stock[k] or 0) + 1
+				budget -= p
+				progress = true
+			end
+		end
+	end
+	st.points = math.max(0, budget - base)
+	-- pièces uniques du jour (graine : village + jour) ; une invendue disparaît le lendemain
+	local rare = gearRecipes().rare
+	local day = G.world and G.world.day or 0
+	local rng = Random.new(G.WG and G.WG.hash and G.WG.hash(0, "armurier", st.key or "", day) or day)
+	st.uniques = {}
+	for u = 1, math.min(2, #rare) do
+		local r = Config.RECIPES[rare[rng:NextInteger(1, #rare)]]
+		local piece = table.clone(r.gear)
+		piece.stats = table.clone(r.gear.stats)
+		local best, bv = nil, -1
+		for s, v in piece.stats do
+			if v > bv then
+				best, bv = s, v
+			end
+		end
+		if best then
+			piece.stats[best] += rng:NextInteger(1, 3)
+		end
+		piece.name = piece.name .. " " .. EPITHETS[rng:NextInteger(1, #EPITHETS)]
+		piece.unique = true
+		st.uniques[u] = { piece = piece, price = math.floor(gearValue(r) * 2.6), sold = false }
+		st.stock["unique:" .. u] = 1
+	end
 end
 
 local function priceOf(item: string): number
@@ -183,6 +298,9 @@ end
 -- Tour à tour, du moins cher au plus cher, tant qu'il reste de quoi en faire un.
 function Metiers.produce(role: string, st)
 	local def = ROLES[role]
+	if def and def.gearShop then
+		return produceGear(st, def.baseValue or 0)
+	end
 	if not def or not def.products then
 		return
 	end
@@ -799,6 +917,25 @@ function Metiers.catalog(player: Player, e)
 		return buy, localCrops(e)
 	end
 	local def = ROLES[role]
+	if def and def.gearShop then
+		local st = roleState(e.reg.key, role)
+		for k, n in st.stock do
+			local i = tonumber(string.match(k, "^gear:(%d+)$"))
+			local r = i and Config.RECIPES[i]
+			if n > 0 and r and r.gear then
+				table.insert(buy, { item = k, n = n, name = r.gear.name, icon = "⚔️", price = G.Shop.buyPrice(player, e, gearValue(r)) })
+			end
+		end
+		for u, x in st.uniques or {} do
+			if not x.sold then
+				table.insert(buy, { item = "unique:" .. u, n = 1, name = "★ " .. x.piece.name, icon = "🗡️", price = G.Shop.buyPrice(player, e, x.price) })
+			end
+		end
+		table.sort(buy, function(a, b)
+			return a.price < b.price
+		end)
+		return buy, def.inputsSet or {}
+	end
 	if not def or not def.products then
 		return buy, {}
 	end
