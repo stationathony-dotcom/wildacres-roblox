@@ -487,7 +487,7 @@ function E.apply(C)
 			if m.drop then
 				local id = Ecurie.itemId(m.id)
 				if not I[id] then
-					I[id] = { name = "Rênes : " .. m.name, icon = m.type == "vol" and "🪶" or "🐎", price = Ecurie.itemPrice(m),
+					I[id] = { name = "Rênes : " .. m.name, icon = m.type == "vol" and "🦅" or "🐎", price = Ecurie.itemPrice(m),
 						use = "cat_monture", useArg = m.id }
 					note("rênes " .. id)
 				end
@@ -496,6 +496,10 @@ function E.apply(C)
 		if C.SKILLS and not C.SKILLS.equitation then
 			C.SKILLS.equitation = { name = "Équitation", icon = "🏇", desc = "Montures plus rapides ; vol au niveau " .. Ecurie.FLY_SKILL }
 			table.insert(C.SKILL_ORDER, "equitation")
+		end
+		-- chevaucher entraîne la vitesse et l'adresse (banc stats : chaque compétence nourrit une caractéristique)
+		if C.STAT_FROM_SKILL and not C.STAT_FROM_SKILL.equitation then
+			C.STAT_FROM_SKILL.equitation = { vitesse = 0.7, charisme = 0.3 }
 		end
 	end
 	if I.harpoon and not I.harpoon.price then
