@@ -800,6 +800,11 @@ function J.useCatalogue(player: Player, item: string, info)
 			G.Util.toast(player, info.icon .. " " .. info.name .. " rejoint ton équipement : à porter depuis la fiche [P].", "gain")
 			J.markDirty(player)
 		end
+	elseif use == "monture" then
+		-- rênes rares (Systemes/Montures, 26/11) : la monture entre dans la collection
+		if not (G.Montures and rawget(G.Montures, "learn") and G.Montures.learn(player, arg, "renes")) then
+			J.add(player, item, 1, true)
+		end
 	elseif use == "etudier" then
 		-- antiquité étudiée : entrée de collection, la Chance (connaissance du monde) progresse
 		if G.Social and rawget(G.Social, "collect") then

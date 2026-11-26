@@ -435,6 +435,8 @@ local function game_()
 		{ id = "carte", icon = "🗺️", model = "map_world", label = "Carte", key = Enum.KeyCode.M, fn = fireLocal("OuvrirCarte") },
 		{ id = "clan", icon = "🛡️", label = "Clan", key = Enum.KeyCode.L, fn = act("clan") },
 		{ id = "atelier", icon = "🛠️", model = "workbench", label = "Atelier", key = Enum.KeyCode.C, fn = act("atelier") },
+		-- journal des montures façon WoW (Montures.client, 26/11)
+		{ id = "montures", icon = "🏇", label = "Montures", key = Enum.KeyCode.N, fn = fireLocal("OuvrirMontures") },
 		{ id = "parametres", icon = "⚙️", label = "Paramètres", key = Enum.KeyCode.O, fn = fireLocal("OuvrirParametres") },
 	}
 	local menuKeys = { [Enum.KeyCode.Tab] = menu[1].fn }

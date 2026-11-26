@@ -187,6 +187,9 @@ function Game.start(player: Player)
 	task.delay(1.5, function()
 		if player.Parent then
 			G.Compagnons.onJoin(player)
+			if G.Montures and G.Montures.onJoin then
+				G.Montures.onJoin(player) -- journal des montures (26/11)
+			end
 		end
 	end)
 	task.delay(6, function()

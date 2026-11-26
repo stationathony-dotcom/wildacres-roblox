@@ -51,6 +51,7 @@ local function folder(): Folder
 	end
 	return f
 end
+Compagnons.folder = folder
 
 -- enregistrement des bêtes d'un joueur (dans ce monde)
 local function petsOf(uid: string)
@@ -129,6 +130,20 @@ local function setPrompt(en)
 	local who = ownerP and (" de " .. ownerP.DisplayName) or ""
 	local text = en.rec.ready and "Récolter" or (stationed(en.rec) and "Me suivre" or "Garder ici")
 	en.prompt = G.Util.prompt(en.model.PrimaryPart, "pet", text, label(en.kind) .. who, { data = { Pet = en.petId }, dist = 9 })
+	-- monture volante (Systemes/Envol, 26/11) : un second bouton pour monter dessus
+	if en.flyPrompt then
+		en.flyPrompt:Destroy()
+		en.flyPrompt = nil
+	end
+	if G.Envol and G.Envol.isFlyer and G.Envol.isFlyer(en.kind) then
+		en.flyPrompt = G.Util.prompt(en.model.PrimaryPart, "pet_fly", "Monter (voler)", label(en.kind) .. who,
+			{ data = { Pet = en.petId }, dist = 9, key = Enum.KeyCode.R, pad = Enum.KeyCode.ButtonY })
+		en.flyPrompt.Enabled = not en.ridden
+	end
+end
+
+function Compagnons.byId(id: string)
+	return live[id]
 end
 
 Compagnons.refreshPrompt = setPrompt
@@ -251,6 +266,10 @@ function Compagnons.adopt(player: Player, en)
 	petsOf(uid)[id] = rec
 	spawnPet(id, rec, uid)
 	G.Social.collect(player, "tames", en.kind)
+	-- collection de montures (Systemes/Montures, 26/11) : une bête de monte apprivoisée y entre
+	if G.Montures and rawget(G.Montures, "learnKind") then
+		G.Montures.learnKind(player, en.kind)
+	end
 	G.Util.toast(player, "💞 " .. en.k.name .. " t'a adopté ! Approche-toi et donne-lui un ordre (suivre / garder).", "big")
 end
 
@@ -675,6 +694,9 @@ function Compagnons.step(dt: number)
 		local en = Compagnons.list[i]
 		if en.dead or not en.model.Parent then
 			table.remove(Compagnons.list, i)
+		elseif en.ridden then
+			-- montée (Envol) : c'est le cavalier qui la déplace
+			continue
 		else
 			-- niveau de détail (20/11 : armées sans effectif maximum) : près d'un joueur, en attaque ou
 			-- blessé depuis peu → chaque pas ; plus loin, 6 Hz puis 1 Hz avec le temps cumulé

@@ -43,6 +43,7 @@ Save.FIELDS = {
 	"stable", "breedDay", -- 19/11 : montures à l'écurie (Horses.swap / breed), facultatif
 	"selection", -- 19/11 : sélection des semences par culture (Farm), facultatif
 	"unlocks", -- 19/11 : coiffures et teintes débloquées chez le barbier / tailleur (Avatar)
+	"montures", -- 26/11 : collection de montures façon WoW (Systemes/Montures), facultatif
 }
 
 -- v -> fonction qui transforme une sauvegarde v en v+1 (ne jamais modifier une migration publiée)

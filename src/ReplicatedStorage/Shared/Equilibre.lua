@@ -479,6 +479,25 @@ function E.apply(C)
 			note("nouvel objet " .. id)
 		end
 	end
+	-- montures façon WoW (26/11, Shared/Ecurie) : rênes rares à utiliser pour apprendre la monture,
+	-- et compétence Équitation (vitesse en selle, vol à partir de Ecurie.FLY_SKILL)
+	local okEc, Ecurie = pcall(require, script.Parent.Ecurie)
+	if okEc then
+		for _, m in Ecurie.LIST do
+			if m.drop then
+				local id = Ecurie.itemId(m.id)
+				if not I[id] then
+					I[id] = { name = "Rênes : " .. m.name, icon = m.type == "vol" and "🪶" or "🐎", price = Ecurie.itemPrice(m),
+						use = "cat_monture", useArg = m.id }
+					note("rênes " .. id)
+				end
+			end
+		end
+		if C.SKILLS and not C.SKILLS.equitation then
+			C.SKILLS.equitation = { name = "Équitation", icon = "🏇", desc = "Montures plus rapides ; vol au niveau " .. Ecurie.FLY_SKILL }
+			table.insert(C.SKILL_ORDER, "equitation")
+		end
+	end
 	if I.harpoon and not I.harpoon.price then
 		local h = E.HARPOON
 		I.harpoon.price = h.price

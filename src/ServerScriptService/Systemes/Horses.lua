@@ -19,6 +19,12 @@ function Horses.init(g)
 	end)
 	G.Interact.onAction("dismount", function(player)
 		Horses.dismount(player, false)
+		if G.Envol and G.Envol.dismount then
+			G.Envol.dismount(player) -- monture volante (Systemes/Envol)
+		end
+		if G.Montures and G.Montures.dismount then
+			G.Montures.dismount(player) -- monture de collection au sol (Systemes/Montures)
+		end
 	end)
 	G.Interact.onAction("whistle", function(player)
 		Horses.whistle(player)
@@ -110,6 +116,8 @@ local function paint(model: Model, coat: number, saddle: number)
 		end
 	end
 end
+
+Horses.paint = paint
 
 local function setPrompts(h)
 	for _, p in h.prompts or {} do
@@ -244,6 +252,10 @@ local function makeMine(player: Player, h)
 		allure = h.allure, born = h.data and h.data.born }
 	h.saddle = prof.horse.saddle
 	paint(h.model, h.coat, h.saddle)
+	-- collection de montures (Systemes/Montures, 26/11) : cette robe est apprise
+	if G.Montures and rawget(G.Montures, "learnHorse") then
+		G.Montures.learnHorse(player, h.species, h.coat)
+	end
 	setPrompts(h)
 	G.Joueurs.markDirty(player)
 end
