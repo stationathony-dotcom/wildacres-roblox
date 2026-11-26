@@ -41,6 +41,17 @@ en Play** (PC portable). Coche au fur et à mesure ; note les bugs dans `retours
 
 ## 4. Combat et créatures
 - [ ] Contours : boss et élites proches cernés de sombre, créature sous le curseur en doré.
+- [ ] Chaque famille d'arme se joue différemment (`Shared/Armes.lua`) : dague rapide et terrible dans le dos, espadon lent
+      qui touche 3 ennemis, lance à 11 studs (et charge à cheval), masse qui écrase les golems, sabre qui fait saigner.
+- [ ] Enchaînement : 3 coups rapides → le 3e frappe plus fort.
+- [ ] Coup chargé : maintenir le clic puis relâcher (≥ 0,5 s) → second coup plus fort ; à l'arc = tir bandé plus loin.
+- [ ] [Z] maintenu = garde (bouclier : presque tout bloqué ; sans bouclier : moitié) ; lever la garde au dernier moment =
+      « Paré ! » + riposte ; endurance vide = garde brisée. Ne protège que de face.
+- [ ] [Alt] = roulade d'esquive (invulnérable un instant, coûte de l'endurance). Manette : L2 garde, L1 esquive ;
+      mobile : boutons 🛡 et 💨.
+- [ ] Arcs : arc court rapide, arc long 72 studs (bonus de loin), arbalète lente qui perce l'armure, fronde, armes de jet ;
+      tir pleinement bandé sur un humanoïde : parfois « En pleine tête ! ».
+- [ ] Maîtrise par famille : message tous les 5 niveaux (+0,5 % de dégâts par niveau).
 - [ ] Rênes rares tombent bien (rares !) sur les créatures listées dans `Shared/Ecurie.lua`.
 
 ## 5. Store créateur

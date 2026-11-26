@@ -531,7 +531,7 @@ local function bite(en, target, isPlayer: boolean)
 	end
 	local owner = G.Util.playerOf(en.owner)
 	if isPlayer then
-		G.Combat.hurtPlayer(target, math.floor(damageOf(en) * 0.6), en.pos)
+		G.Combat.hurtPlayer(target, math.floor(damageOf(en) * 0.6), en.pos, { source = en })
 	elseif owner then
 		G.Enemies.hit(target, damageOf(en), owner)
 	else

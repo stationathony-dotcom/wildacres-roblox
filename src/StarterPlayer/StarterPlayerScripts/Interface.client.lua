@@ -3536,6 +3536,7 @@ local function game_()
 	-- appelé par la barre rapide quand l'objet en main change
 	buildHook.fn = function(blockId: string?)
 		building = blockId ~= nil
+		player:SetAttribute("ModeBatir", building or nil) -- lu par Combat.client (la touche Z sert aussi à la construction)
 		buildBlock = blockId
 		buildHint.Visible = building
 		if building then
@@ -4049,10 +4050,25 @@ local function game_()
 		showWear(m)
 		return true
 	end
+	-- coup chargé (26/11, Shared/Armes) : le clic frappe tout de suite ; maintenu puis relâché, il donne un
+	-- second coup CHARGÉ (bander l'arc, armer un coup lourd). Le serveur vérifie la durée et la cadence.
+	local chargeStart, chargeTarget = nil, nil
 	local function hit()
 		if building or WindowNav.isOpen() then return end
 		local t = cibleApi.get()
 		send("hit", { target = t and t:GetAttribute("EnemyId") or nil })
+		chargeStart, chargeTarget = os.clock(), t
+		player:SetAttribute("ChargeEnCours", true) -- local : Gestes peut montrer qu'on arme le coup
+	end
+	local function releaseCharge()
+		local t0 = chargeStart
+		chargeStart = nil
+		player:SetAttribute("ChargeEnCours", nil)
+		if not t0 or building or WindowNav.isOpen() then return end
+		local dt = os.clock() - t0
+		if dt >= 0.5 then
+			send("hit", { target = chargeTarget and chargeTarget:GetAttribute("EnemyId") or nil, charge = math.min(dt, 1.5) })
+		end
 	end
 	-- Clic gauche ou toucher : un seul chemin pour le butin, la pose, la récolte ou le coup.
 	-- Maintenir répète la récolte.
@@ -4099,6 +4115,9 @@ local function game_()
 	UserInputService.InputEnded:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			holding += 1
+		end
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.KeyCode == Enum.KeyCode.ButtonR2 then
+			releaseCharge()
 		end
 	end)
 	local crouch = false

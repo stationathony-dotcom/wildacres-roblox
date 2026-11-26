@@ -44,6 +44,7 @@ Save.FIELDS = {
 	"selection", -- 19/11 : sélection des semences par culture (Farm), facultatif
 	"unlocks", -- 19/11 : coiffures et teintes débloquées chez le barbier / tailleur (Avatar)
 	"montures", -- 26/11 : collection de montures façon WoW (Systemes/Montures), facultatif
+	"maitrise", -- 26/11 : maîtrise par famille d'armes (Combat, Shared/Armes), facultatif
 }
 
 -- v -> fonction qui transforme une sauvegarde v en v+1 (ne jamais modifier une migration publiée)

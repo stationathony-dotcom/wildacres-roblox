@@ -21,7 +21,8 @@
 | 6 | X36 | Créatures du bestiaire (168) + 6 boss inspirés des planches | `Systemes/Silhouettes.lua` |
 | 7 | X37 | Écriture et peaufinage des quêtes (texte seulement) | `Systemes/Quetes.lua`, `QuetesLieux.lua` |
 | 8 | X38 | Habillage du journal des montures, beau bestiaire, animations des montures en selle | `Montures.client.lua`, `Livre.client.lua`, `Livres.lua` |
-| 9 | X39 | Animations de combat du personnage (anticipation / frappe / suite, enchaînements, réactions, traînées) | `Gestes.client.lua` |
+| 9 | X39 | Animations de combat du personnage (anticipation / frappe / suite, enchaînements, réactions, traînées). Le serveur expose déjà : attributs `Combo` (1-3), `CoupCharge`, `Garde` (« bouclier » / « arme »), geste « esquive », attribut local `ChargeEnCours` ; profils dans `Shared/Armes.lua` | `Gestes.client.lua` |
+| 10 | X40 | Interface « un peu façon Luma Island » : habillage arrondi et chaleureux, même disposition et proportions que l'image cible | `Hud.lua`, `Cadre.lua`, `ComposantsInterface.lua` |
 
 Lots encore ouverts dans `docs/LOTS.md` sans prompt dédié : **X28** ambiance fine (Eclairage : Future, Bloom ; Claude
 a déjà fait les profils par biome et les tempêtes dans `Ambiance.client.lua`), **X30** suite du Store (choisir quoi

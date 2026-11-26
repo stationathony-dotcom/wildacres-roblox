@@ -8,6 +8,12 @@ local G
 local cooldown = {}
 local invuln = {}
 
+local Armes = require(game:GetService("ReplicatedStorage").Shared.Armes)
+-- 26/11 (combat façon action-RPG) : enchaînements, garde / parade, esquive
+local comboN, lastSwing = {}, {}
+local garde, gardeStart, gardeBrisee = {}, {}, {}
+local dodgeUntil, dodgeLast = {}, {}
+
 local SAFE_SPAWN_R = 60 -- studs autour de l'arrivée : pas de combat entre joueurs
 local KO_GRACE = 600 -- s : protection contre celui qui vient de te mettre K.O.
 local koBy = {} -- UserId victime -> { [UserId agresseur] = os.clock() }
@@ -18,13 +24,26 @@ function Combat.init(g)
 		local char = player.Character
 		local tool = char and char:FindFirstChildOfClass("Tool")
 		local target = type(data) == "table" and type(data.target) == "string" and data.target or nil
-		if not (tool and G.Tools.use(player, tool, target)) then
-			Combat.attack(player, nil, target)
+		local charge = type(data) == "table" and tonumber(data.charge) or nil
+		if charge and (charge ~= charge or charge < 0) then
+			charge = nil -- « nan » refusé
 		end
+		if not (tool and G.Tools.use(player, tool, target)) then
+			Combat.attack(player, nil, target, charge and math.min(charge, Armes.CHARGE_MAX) or nil)
+		end
+	end)
+	-- garde ([Z] maintenu) : le serveur décide de tout (coût, bris de garde, parade)
+	G.Interact.onAction("garde", function(player, data)
+		Combat.setGuard(player, type(data) == "table" and data.on == true)
+	end)
+	-- esquive ([Alt]) : invulnérabilité brève payée en endurance ; le client fait la roulade
+	G.Interact.onAction("esquive", function(player)
+		Combat.dodge(player)
 	end)
 	game:GetService("Players").PlayerRemoving:Connect(function(p)
 		cooldown[p] = nil
 		invuln[p] = nil
+		comboN[p], lastSwing[p], garde[p], gardeStart[p], gardeBrisee[p], dodgeUntil[p], dodgeLast[p] = nil, nil, nil, nil, nil, nil, nil
 	end)
 end
 
@@ -47,6 +66,105 @@ function Combat.damageOf(player: Player, itemId: string?): number
 		dmg *= 2
 	end
 	return math.floor(dmg)
+end
+
+-- ----------------------------------------------------------------- Profils d'armes (Shared/Armes)
+local function formeArme(player: Player)
+	local prof = G.Joueurs.get(player)
+	local w = prof and prof.equipped and prof.equipped.weapon
+	if not w then
+		return nil, nil
+	end
+	local okD, Design = pcall(require, game:GetService("ReplicatedStorage").Shared.GearDesign)
+	return w, okD and Design.formOf(w) or nil
+end
+
+-- clé de profil (corps à corps) : outil tenu (épée, gourdin, hache, pioche), sinon l'arme portée, sinon poings
+function Combat.profil(player: Player, itemId: string?): (string, any)
+	local base = itemId and G.Config.baseOf and G.Config.baseOf(itemId)
+	if base and Armes.DE_OUTIL[base] then
+		return Armes.DE_OUTIL[base], Armes.profil(Armes.DE_OUTIL[base])
+	end
+	local w, form = formeArme(player)
+	if not w then
+		return "poing", Armes.profil("poing")
+	end
+	local k = Armes.DE_FORME[form or ""] or "epee"
+	return k, Armes.profil(k)
+end
+
+function Combat.profilDistance(player: Player): (string, any)
+	local _, form = formeArme(player)
+	local k = Armes.DE_FORME_DIST[form or ""] or "arc"
+	return k, Armes.DISTANCE[k]
+end
+
+-- endurance (attribut Stamina, relu par Game.step) : vrai si on avait de quoi payer
+local function spend(player: Player, n: number): boolean
+	local st = player:GetAttribute("Stamina") or G.Config.MAX_STAMINA or 100
+	if st < n then
+		player:SetAttribute("Stamina", 0)
+		return false
+	end
+	player:SetAttribute("Stamina", st - n)
+	return true
+end
+Combat.spendStamina = spend
+
+-- maîtrise par famille : +0,5 % par niveau (Shared/Armes) ; chaque coup qui porte l'entraîne
+local function maitrise(player: Player, cle: string): number
+	local prof = G.Joueurs.get(player)
+	local xp = prof and prof.maitrise and prof.maitrise[cle] or 0
+	return 1 + Armes.maitriseNiveau(xp) * Armes.MAITRISE_PAR_NIVEAU
+end
+local function entrainer(player: Player, cle: string)
+	local prof = G.Joueurs.get(player)
+	if not prof then
+		return
+	end
+	prof.maitrise = prof.maitrise or {}
+	local before = Armes.maitriseNiveau(prof.maitrise[cle])
+	prof.maitrise[cle] = (prof.maitrise[cle] or 0) + 1
+	local after = Armes.maitriseNiveau(prof.maitrise[cle])
+	if after > before and after % 5 == 0 then
+		local nom = (Armes.PROFILS[cle] or Armes.DISTANCE[cle] or {}).nom or cle
+		G.Util.toast(player, "⚔️ Maîtrise : " .. nom .. " niveau " .. after .. " (+" .. math.floor(after * Armes.MAITRISE_PAR_NIVEAU * 100 + 0.5) .. " % de dégâts).", "gain")
+	end
+	player:SetAttribute("Maitrise_" .. cle, after)
+	G.Joueurs.markDirty(player)
+end
+
+local function hasShield(player: Player): boolean
+	local prof = G.Joueurs.get(player)
+	local o = prof and prof.equipped and prof.equipped.offhand
+	local n = o and string.lower(o.name or "") or ""
+	return o ~= nil and (string.find(n, "bouclier") ~= nil or string.find(n, "pavois") ~= nil or string.find(n, "écu") ~= nil)
+end
+Combat.hasShield = hasShield
+
+function Combat.setGuard(player: Player, on: boolean)
+	local now = os.clock()
+	if on and (gardeBrisee[player] or 0) > now then
+		on = false
+	end
+	if on and not garde[player] then
+		gardeStart[player] = now
+	end
+	garde[player] = on or nil
+	player:SetAttribute("Garde", on and (hasShield(player) and "bouclier" or "arme") or nil)
+end
+
+function Combat.dodge(player: Player)
+	local now = os.clock()
+	if (dodgeLast[player] or 0) + Armes.ESQUIVE_CD > now or player:GetAttribute("Riding") or player:GetAttribute("Carrying") then
+		return
+	end
+	if not spend(player, Armes.ESQUIVE_COUT) then
+		return
+	end
+	dodgeLast[player] = now
+	dodgeUntil[player] = now + Armes.ESQUIVE_INVULN
+	G.Util.geste(player, "esquive")
 end
 
 function Combat.popup(at: Vector3, text: string, color: Color3)
@@ -93,7 +211,7 @@ end
 -- applique un coup (corps à corps ou flèche) à la cible choisie
 -- Effets des armes de créatures (Shared/Equilibre) : venin = 3 piqûres (15 % des dégâts) ; feu =
 -- 2 brûlures (20 %) ; givre = l'ennemi ralentit de 40 % pendant 3 s (Enemies : moveToward).
-local FX_COLOR = { venin = Color3.fromRGB(120, 220, 90), feu = Color3.fromRGB(255, 150, 60) }
+local FX_COLOR = { venin = Color3.fromRGB(120, 220, 90), feu = Color3.fromRGB(255, 150, 60), saigne = Color3.fromRGB(200, 40, 40) }
 local function weaponEffect(player: Player, en, fx: string, dmg: number)
 	if fx == "givre" then
 		en.slowUntil = os.clock() + 3
@@ -102,6 +220,8 @@ local function weaponEffect(player: Player, en, fx: string, dmg: number)
 	local ticks, part = 3, 0.15
 	if fx == "feu" then
 		ticks, part = 2, 0.2
+	elseif fx == "saigne" then
+		ticks, part = 3, 0.1 -- sabre (Shared/Armes) : saignement
 	end
 	task.spawn(function()
 		for _ = 1, ticks do
@@ -119,7 +239,7 @@ local function weaponEffect(player: Player, en, fx: string, dmg: number)
 	end)
 end
 
-local function applyHit(player: Player, best, kind: string, dmg: number, root: BasePart)
+local function applyHit(player: Player, best, kind: string, dmg: number, root: BasePart, opts)
 	if kind == "enemy" then
 		G.Enemies.hit(best, dmg, player)
 		local wprof = G.Joueurs.get(player)
@@ -167,9 +287,26 @@ local function applyHit(player: Player, best, kind: string, dmg: number, root: B
 		end
 		victim:SetAttribute("LastHitBy", player.UserId)
 		victim:SetAttribute("LastHitAt", os.clock())
-		Combat.hurtPlayer(victim, dmg, root.Position)
+		Combat.hurtPlayer(victim, dmg, root.Position, { source = player, armure = opts and opts.armure, garde = opts and opts.garde })
 		Combat.popup(vroot.Position + Vector3.new(0, 3, 0), tostring(dmg), Color3.fromRGB(255, 120, 100))
 	end
+end
+
+-- Multiplicateur propre à la cible : résistance de la créature au type de dégâts, coup dans le dos (dague)
+local function cibleMult(best, kind: string, typ: string, prof, root: BasePart): number
+	local m = 1
+	if kind == "enemy" and best.k then
+		local r = (best.k.resist and best.k.resist[typ]) or (Armes.RESIST[best.k.form or ""] or {})[typ]
+		m *= r or 1
+		if prof.dos and best.model then
+			local face = best.model:GetPivot().LookVector
+			local d = Vector3.new(best.pos.X - root.Position.X, 0, best.pos.Z - root.Position.Z)
+			if d.Magnitude > 0.1 and face:Dot(d.Unit) > 0.4 then
+				m *= prof.dos -- on la frappe dans le dos
+			end
+		end
+	end
+	return m
 end
 
 -- Tir à l'arc (19/11) : un arc ou une arbalète équipés tirent à distance (RANGE studs) une FLÈCHE
@@ -236,7 +373,7 @@ local function arrowFx(from: Vector3, to: Vector3)
 	game:GetService("Debris"):AddItem(a, d.Magnitude / 140 + 1.5)
 end
 
-function Combat.shoot(player: Player, targetId: string?)
+function Combat.shoot(player: Player, targetId: string?, charge: number?)
 	local root = G.Util.root(player)
 	if not root or player:GetAttribute("Carrying") then
 		return
@@ -263,6 +400,10 @@ function Combat.shoot(player: Player, targetId: string?)
 		G.Util.toast(player, names[ammoOf or ""] or "🏹 Plus de flèches. (Établi : bois, silex et plume.)")
 		return
 	end
+	local cle, prof = Combat.profilDistance(player)
+	local k = (charge and charge >= Armes.CHARGE_MIN) and math.min(1, charge / Armes.CHARGE_MAX) or 0
+	local RANGE = prof.portee * (1 + 0.4 * k)
+	local fatigue = spend(player, prof.endu * (k > 0 and 2 or 1)) and 1 or 0.6
 	local char = player.Character
 	local from = root.Position + Vector3.new(0, 1.2, 0) + root.CFrame.LookVector * 1.5
 	local look = root.CFrame.LookVector
@@ -277,14 +418,14 @@ function Combat.shoot(player: Player, targetId: string?)
 	local function consider(pos: Vector3, target, k: string, model: Instance?)
 		local d = pos - root.Position
 		local dist = d.Magnitude
-		if dist > Combat.RANGE or dist < 0.5 then
+		if dist > RANGE or dist < 0.5 then
 			return
 		end
 		local dot = look:Dot(d.Unit)
-		if dot < 0.9 then
+		if dot < prof.vise then
 			return
 		end
-		local score = dot * 2 - dist / Combat.RANGE
+		local score = dot * 2 - dist / RANGE
 		if score > bestScore and visible(pos, model) then
 			best, bestScore, kind, aim = target, score, k, pos
 		end
@@ -292,7 +433,7 @@ function Combat.shoot(player: Player, targetId: string?)
 	local chosen = targetId and G.Enemies.byId(targetId)
 	if chosen and not chosen.dead and chosen.model.Parent then
 		local d = chosen.pos - root.Position
-		if d.Magnitude <= Combat.RANGE and visible(chosen.pos, chosen.model) then
+		if d.Magnitude <= RANGE and visible(chosen.pos, chosen.model) then
 			best, kind, aim = chosen, "enemy", chosen.pos
 			local flat = Vector3.new(d.X, 0, d.Z)
 			if flat.Magnitude > 0.1 then
@@ -335,34 +476,63 @@ function Combat.shoot(player: Player, targetId: string?)
 	G.Util.geste(player, (ammoOf == "javelin" or ammoOf == "throwing_knife" or ammoOf == "throwing_axe" or ammoOf == "stone") and "lancer" or "tir")
 	G.Util.sfx("coup", root.Position)
 	if not best then
-		arrowFx(from, from + look * Combat.RANGE)
+		arrowFx(from, from + look * RANGE)
 		return
 	end
 	arrowFx(from, aim + Vector3.new(0, 0.8, 0))
-	local dmg = math.floor(Combat.damageOf(player, nil) * ((okE and Eq.AMMO_DMG and Eq.AMMO_DMG[ammoUsed]) or 1))
+	local typ = Armes.TYPE_MUNITION[ammoUsed or ""] or prof.type
+	local mult = prof.mult * (1 + Armes.CHARGE_BONUS * k) * fatigue * maitrise(player, cle) * cibleMult(best, kind, typ, {}, root)
+	if prof.loin and (aim - from).Magnitude > 40 then
+		mult *= prof.loin -- arc long : il paie à grande distance
+	end
+	if k >= 0.8 and (kind == "npc" or kind == "player") and math.random() < Armes.TETE_CHANCE then
+		mult *= Armes.TETE_MULT
+		Combat.popup(aim + Vector3.new(0, 4.5, 0), "En pleine tête !", Color3.fromRGB(255, 210, 90))
+	end
+	local dmg = math.floor(Combat.damageOf(player, nil) * ((okE and Eq.AMMO_DMG and Eq.AMMO_DMG[ammoUsed]) or 1) * mult)
 	G.Joueurs.addSkillXp(player, "combat", 1)
+	entrainer(player, cle)
 	task.delay((aim - from).Magnitude / 140, function()
 		if player.Parent and root.Parent then
-			applyHit(player, best, kind, dmg, root)
+			applyHit(player, best, kind, dmg, root, { armure = prof.armure })
+			if ammoUsed == "arrow_barbed" and kind == "enemy" then
+				weaponEffect(player, best, "saigne", dmg) -- flèche barbelée : saignement
+			end
 		end
 	end)
 end
 
-function Combat.attack(player: Player, itemId: string?, targetId: string?)
+function Combat.attack(player: Player, itemId: string?, targetId: string?, charge: number?)
 	local now = os.clock()
-	if cooldown[player] and now - cooldown[player] < 0.45 then
-		return
-	end
+	local charged = charge ~= nil and charge >= Armes.CHARGE_MIN
 	-- arc équipé et rien d'autre en main (une épée ou un outil tenus frappent au corps à corps)
 	local held = itemId and G.Config.ITEMS[itemId]
 	if rangedWeapon(player) and (held == nil or not (held.weapon or held.tool)) then
-		if cooldown[player] and now - cooldown[player] < Combat.BOW_COOLDOWN then
+		local _, dprof = Combat.profilDistance(player)
+		-- un tir chargé suit le tir de l'appui : il lui faut seulement la durée minimale de charge
+		if cooldown[player] and now - cooldown[player] < (charged and math.min(dprof.cd * 1.3, Armes.CHARGE_MIN - 0.05) or dprof.cd) then
 			return
 		end
 		cooldown[player] = now
-		return Combat.shoot(player, targetId)
+		return Combat.shoot(player, targetId, charge)
+	end
+	local cle, prof = Combat.profil(player, itemId)
+	if cooldown[player] and now - cooldown[player] < (charged and math.min(prof.cd * 1.5, Armes.CHARGE_MIN - 0.05) or prof.cd) then
+		return
+	end
+	if garde[player] then
+		Combat.setGuard(player, false) -- on ne frappe pas en gardant
 	end
 	cooldown[player] = now
+	-- enchaînement : coups rapprochés → 1, 2, 3 (le 3e est le coup final)
+	if lastSwing[player] and now - lastSwing[player] < prof.cd + Armes.COMBO_FENETRE then
+		comboN[player] = (comboN[player] or 0) % 3 + 1
+	else
+		comboN[player] = 1
+	end
+	lastSwing[player] = now
+	player:SetAttribute("Combo", comboN[player])
+	player:SetAttribute("CoupCharge", charged or nil)
 	local root = G.Util.root(player)
 	if not root or player:GetAttribute("Carrying") then
 		return
@@ -370,15 +540,26 @@ function Combat.attack(player: Player, itemId: string?, targetId: string?)
 	local fam = famille(player, itemId)
 	G.Util.geste(player, fam) -- geste du coup (client Gestes), son de l'arme dans le vide compris
 	Combat.swoosh(player)
-	local dmg = Combat.damageOf(player, itemId)
+	local fatigue = spend(player, prof.endu * (charged and 2 or 1)) and 1 or 0.6 -- à bout de souffle : coup mou
+	local kc = charged and math.min(1, charge / Armes.CHARGE_MAX) or 0
+	local dmg = Combat.damageOf(player, itemId) * prof.mult * fatigue * maitrise(player, cle)
+		* (comboN[player] == 3 and Armes.COMBO_FINAL or 1) * (1 + Armes.CHARGE_BONUS * kc)
+	if prof.charge and player:GetAttribute("Riding") then
+		dmg *= prof.charge -- lance en selle : charge
+	end
 	local look = root.CFrame.LookVector
-	local best, bd, kind = nil, 7.5, nil
+	local reachMax = prof.portee * (charged and 1.15 or 1)
+	local best, bd, kind = nil, reachMax, nil
+	local hits = {} -- cibles possibles (armes qui touchent plusieurs ennemis : espadon, hast)
 	local function consider(pos: Vector3, target, k: string, reach: number)
 		local d = pos - root.Position
 		local flat = Vector3.new(d.X, 0, d.Z)
 		local dist = flat.Magnitude - reach
-		if dist < bd and math.abs(d.Y) < 8 and (flat.Magnitude < 3 or look:Dot(flat.Unit) > 0.35) then
-			best, bd, kind = target, dist, k
+		if dist < reachMax and math.abs(d.Y) < 8 and (flat.Magnitude < 3 or look:Dot(flat.Unit) > (prof.cone or 0.35)) then
+			table.insert(hits, { t = target, k = k, d = dist })
+			if dist < bd then
+				best, bd, kind = target, dist, k
+			end
 		end
 	end
 	-- cible choisie (clic façon WoW) : frappée en priorité si elle est à portée, on se tourne vers elle
@@ -386,7 +567,7 @@ function Combat.attack(player: Player, itemId: string?, targetId: string?)
 	if chosen and chosen.model.Parent then
 		local d = chosen.pos - root.Position
 		local flat = Vector3.new(d.X, 0, d.Z)
-		if flat.Magnitude - (chosen.radius or 1.5) < 7.5 and math.abs(d.Y) < 8 then
+		if flat.Magnitude - (chosen.radius or 1.5) < reachMax and math.abs(d.Y) < 8 then
 			best, bd, kind = chosen, -1e9, "enemy"
 			if flat.Magnitude > 0.1 then
 				root.CFrame = CFrame.lookAt(root.Position, root.Position + flat)
@@ -435,7 +616,29 @@ function Combat.attack(player: Player, itemId: string?, targetId: string?)
 	if typeof(at) == "Vector3" then
 		G.Util.sfx(IMPACT[fam] or "impact_lame", at) -- le coup porte : lame, choc sourd ou poing
 	end
-	applyHit(player, best, kind, dmg, root)
+	-- la cible choisie d'abord, puis les plus proches (multi : espadon 3, hast 2)
+	local list = { { t = best, k = kind } }
+	if (prof.multi or 1) > 1 then
+		table.sort(hits, function(a, b)
+			return a.d < b.d
+		end)
+		for _, h in hits do
+			if #list >= prof.multi then
+				break
+			end
+			if h.t ~= best and h.k ~= "player" then -- le balayage n'emporte pas d'autres joueurs par mégarde
+				table.insert(list, h)
+			end
+		end
+	end
+	for _, h in list do
+		local d = math.max(1, math.floor(dmg * cibleMult(h.t, h.k, prof.type, prof, root)))
+		applyHit(player, h.t, h.k, d, root, { armure = prof.armure, garde = prof.garde })
+		if prof.saigne and h.k == "enemy" then
+			weaponEffect(player, h.t, "saigne", d)
+		end
+	end
+	entrainer(player, cle)
 end
 
 -- Appelé par Game.onDeath quand un joueur est mis K.O. par un autre
@@ -444,10 +647,47 @@ function Combat.noteKO(victim: Player, attackerId: number)
 	koBy[victim.UserId][attackerId] = os.clock()
 end
 
-function Combat.hurtPlayer(player: Player, dmg: number, fromPos: Vector3?)
+function Combat.hurtPlayer(player: Player, dmg: number, fromPos: Vector3?, opts)
 	local now = os.clock()
+	if (dodgeUntil[player] or 0) > now then
+		return -- esquive : le coup passe à côté
+	end
 	if invuln[player] and now - invuln[player] < 0.6 then
 		return
+	end
+	-- garde : seulement contre un coup venu de face
+	local root = G.Util.root(player)
+	if garde[player] and fromPos and root then
+		local d = Vector3.new(fromPos.X - root.Position.X, 0, fromPos.Z - root.Position.Z)
+		if d.Magnitude < 0.1 or root.CFrame.LookVector:Dot(d.Unit) > Armes.GARDE_CONE then
+			local src = opts and opts.source
+			if now - (gardeStart[player] or 0) < Armes.PARADE then
+				-- PARADE : rien ne passe, riposte sur l'attaquant (sonné)
+				G.Util.sfx("impact_metal", root.Position)
+				Combat.popup(root.Position + Vector3.new(0, 4, 0), "Paré !", Color3.fromRGB(255, 230, 140))
+				local rip = math.floor(Combat.damageOf(player, nil) * Armes.PARADE_RIPOSTE)
+				if type(src) == "table" and src.k and not src.dead then
+					src.invuln = 0
+					G.Enemies.hit(src, rip, player)
+					src.slowUntil = now + 1.5
+				elseif typeof(src) == "Instance" and src:IsA("Player") then
+					spend(src, 25)
+				end
+				invuln[player] = now
+				return
+			end
+			local pass = hasShield(player) and Armes.GARDE_BOUCLIER or Armes.GARDE_ARME
+			local cost = dmg * (1 - pass) * Armes.GARDE_COUT * ((opts and opts.garde) or 1)
+			if spend(player, cost) then
+				G.Util.sfx("impact_metal", root.Position)
+				dmg = math.max(1, math.floor(dmg * pass))
+			else
+				-- garde brisée : à bout de souffle, plus de garde pendant un moment
+				gardeBrisee[player] = now + Armes.GARDE_BRISEE
+				Combat.setGuard(player, false)
+				G.Util.sfx("casse", root.Position)
+			end
+		end
 	end
 	invuln[player] = now
 	local char = player.Character
@@ -455,7 +695,7 @@ function Combat.hurtPlayer(player: Player, dmg: number, fromPos: Vector3?)
 	if not hum or hum.Health <= 0 then
 		return
 	end
-	local def = G.Joueurs.stats(player).defense or 0
+	local def = (G.Joueurs.stats(player).defense or 0) * (1 - ((opts and opts.armure) or 0)) -- masse, arbalète : percent l'armure
 	-- caparaçon dans le sac : protège le cavalier tant qu'il est en selle (Shared/Equilibre.CAPARISON_DEF)
 	if player:GetAttribute("Riding") and G.Joueurs.has(player, "caparison") then
 		local okE, Eq = pcall(require, game:GetService("ReplicatedStorage").Shared.Equilibre)

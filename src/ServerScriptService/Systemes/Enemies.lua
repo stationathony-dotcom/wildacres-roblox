@@ -911,7 +911,7 @@ local function think(en, dt: number)
 	elseif en.state == "slam" then
 		if en.t > SHOCK_WINDUP then
 			for _, pl in nearPlayers(en.pos, SHOCK_RADIUS + 1) do
-				G.Combat.hurtPlayer(pl, math.floor(en.dmg * 0.8), en.pos)
+				G.Combat.hurtPlayer(pl, math.floor(en.dmg * 0.8), en.pos, { source = en })
 			end
 			for _, pl in nearPlayers(en.pos, 70) do
 				G.remotes.Fx:FireClient(pl, "secousse", en.pos, 0.6)
@@ -931,7 +931,7 @@ local function think(en, dt: number)
 			for _, pl in G.Game.players() do
 				local r = G.Util.root(pl)
 				if r and (r.Position - en.pos).Magnitude < en.radius + 2.5 then
-					G.Combat.hurtPlayer(pl, en.dmg, en.pos)
+					G.Combat.hurtPlayer(pl, en.dmg, en.pos, { source = en })
 				end
 			end
 			for _, pet in G.Compagnons.list do

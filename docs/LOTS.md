@@ -308,6 +308,8 @@ reste à pousser / capturer sur le PC fixe.
 - [ ] **X35 · PNJ : apparence + dialogues** (Avatar.dress, Apparence ; `Dialogue.lua` : passage accordé par Claude) — Sol.
 - [ ] **X36 · Créatures du bestiaire + 6 boss** (`Silhouettes.lua` : passage accordé par Claude ; données des boss → passage à Claude) — Sol.
 - [ ] **X38 · Journal des montures, beau bestiaire, animations en selle** (peaufinage de 664c332) — Sol.
+- [ ] **X40 · Interface un peu façon Luma Island** (habillage arrondi et chaleureux ; disposition et proportions de l'image cible gardées) — Sol.
+- [x] **C19 · Combat par familles d'armes** — FAIT 26/11 (Claude) : profils, types de dégâts et résistances, enchaînements, coup chargé, garde / parade / esquive, armes à distance poussées, maîtrise ; banc `combat_armes` 16/16.
 - [ ] **X39 · Animations de combat du personnage** (Gestes.client : anticipation/frappe/suite, enchaînements, réactions, traînées) — Sol.
 - [ ] **X37 · Écriture des quêtes** (TEXTE seulement de `Quetes.lua` / `QuetesLieux.lua` : passage accordé) — Sol.
 

@@ -45,8 +45,12 @@ local toasts = {}
 local gestes
 local prof = { equipped = { weapon = { name = "Arc court", power = 3 } } }
 local P = { Parent = true, Character = Instance.new("Model") } -- un vrai joueur a toujours un Character (filtre du raycast)
-function P:GetAttribute()
-	return nil
+local attrs = {}
+function P:GetAttribute(k)
+	return attrs[k]
+end
+function P:SetAttribute(k, v) -- 26/11 : le combat règle l'endurance et la maîtrise
+	attrs[k] = v
 end
 local G = {
 	Config = { ITEMS = { sword = { weapon = 2 } }, baseOf = function() return nil end },
@@ -56,7 +60,7 @@ local G = {
 		get = function() return prof end,
 		take = function(_, i, n) if (bag[i] or 0) < n then return false end bag[i] -= n return true end,
 		stats = function() return {} end, skill = function() return 0 end, talent = function() return 0 end,
-		addSkillXp = function() end,
+		addSkillXp = function() end, markDirty = function() end,
 	},
 	Enemies = { list = { near, far, side }, byId = function() return nil end, hit = function(en) table.insert(hits, en.id) end },
 	World = { loaded = {} },
