@@ -290,7 +290,7 @@ reste à pousser / capturer sur le PC fixe.
       délave plus (densité basse, `Haze` faible), ciel lumineux le jour, nuit bleu profond où les lueurs ressortent.
       Profil par biome (glace : froid lumineux ; désert : chaud doré ; marais : vert sourd ; grottes : sombre + lueurs).
       Qualité basse mobile : garder un réglage léger. Captures 9 h / 13 h / 19 h / 23 h.
-- [ ] **X29 · Contours façon planche** (client) : `Highlight` en contour seul (`FillTransparency = 1`,
+- [x] **X29 · Contours façon planche** — FAIT par Claude 26/11 (Contours.client + attributs Boss/Elite dans Enemies). (client) : `Highlight` en contour seul (`FillTransparency = 1`,
       `OutlineColor` sombre) sur les boss proches et la créature ciblée ; **31 Highlight maximum** côté client →
       priorité aux plus proches, retrait au-delà de 120 studs.
 - [ ] **X30 · Props gratuits du Store créateur** : chercher des modèles gratuits low-poly / voxel cohérents avec
@@ -364,7 +364,7 @@ Répartition décidée par le propriétaire le 26/11 : **Codex = ce qui se gén�
 - [ ] **C15 · Boss inspirés des planches** (dessins par Codex en X36 ; Claude : données de combat et branchement) (noms et dessins à nous) : coffre-mimique des ruines, baudroie des
       abysses, mammouth de givre, griffon d'orage (silhouette propre au boss), veuve des cavernes, crocodile des
       marais. Données dans `Bestiaire`/`Equilibre`, mise en scène existante (`boss_scene`).
-- [ ] **C16 · Vue aérienne** (`Shared/Lointain`) : retour « catastrophique » du 25/11 (FEUILLE_DE_ROUTE).
+- [x] **C16 · Vue aérienne** — FAIT 26/11 (e3c4981) : vrais arbres au loin, sol couleur terrain, côtes biseautées ; captures `captures/2026-11-26/lointain/`. Reste : le relief plat vient du tirage publié (gen 3 = décision du propriétaire).
 - [ ] **C17 · Banc d'import sûr du Store** `tools/bancs/store_import.luau` (pour X30).
 - [x] **C18 · Montures façon WoW + volantes** — FAIT 26/11 (664c332) : collection + journal [N], invocation 2 s, rênes rares (13), Équitation (vol au niv. 25), Envol. À voir en Play.
 

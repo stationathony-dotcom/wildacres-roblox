@@ -253,6 +253,12 @@ local function spawn(reg, d, parent)
 	}
 	model.Name = k.name
 	model:SetAttribute("EnemyId", d.id)
+	-- contours façon planche (Contours.client, 26/11) : le client met en avant boss et élites
+	if k.boss then
+		model:SetAttribute("Boss", true)
+	elseif k.elite then
+		model:SetAttribute("Elite", true)
+	end
 	G.Util.tag(model, "Bete") -- empreintes côté client (Traces.client)
 	model:PivotTo(CFrame.new(en.pos) * CFrame.Angles(0, en.yaw, 0))
 	model.Parent = parent
