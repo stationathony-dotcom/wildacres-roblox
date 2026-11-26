@@ -133,3 +133,23 @@ mesure). Seul le propriétaire coche « testé en Play ».
 - [ ] E4 Écran d'accueil où la caméra survole l'île en direct
 - [ ] E5 Mobile : chaque fenêtre utilisable au doigt (Device Simulator : téléphone et tablette)
 - [ ] E6 Aucune fenêtre ne masque le HUD de façon permanente, et le HUD n'est pas regrossi (règle 11)
+
+## 3. Méthode « niveau planche » (26/11, tirée du concours du mammouth)
+
+Concours du 26/11 (`tools/concours/`, sujet dans `SUJET.md`) : trois mammouths de givre sur le même cahier des charges.
+Classement du propriétaire : **Codex Sol > Codex Astra > Claude**. Ce qui a fait gagner `sol_mammouth.luau` :
+
+1. **Sculpter par masses anatomiques qui se chevauchent** (ventre, cage, épaules, garrot, dos, reins, croupe), pas un
+   gros bloc avec du décor collé dessus. La silhouette vient du chevauchement.
+2. **Positions réglées à la main**, pas de tirage aléatoire ; petites **asymétries voulues** (pattes de tailles proches
+   mais différentes, mèches décalées).
+3. **Chaque détail en 3 étages de ton** : masse (moyen) + relief (clair) + pointe (sombre), légèrement **inclinés**
+   (2 à 7°) pour casser la grille.
+4. **Manteau continu puis déchiré** : la matière de surface (givre, mousse, rouille) couvre le sommet d'un seul tenant,
+   puis se défait en corniches et retombées sur les flancs.
+5. **Pièces nommées** (« Mèche de flanc », « Corniche gelée du pied ») : relecture et retouche faciles.
+
+Défauts relevés chez les perdants : bosse en dalle plate (« toit »), coulures régulières en peigne, mèches toutes de
+même taille, cristaux fins et hauts plutôt que trapus.
+
+Toute nouvelle créature ou tout nouveau prop suit ces 5 points, et chaque lot visuel est livré avec une **capture Studio**.
