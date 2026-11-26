@@ -307,6 +307,7 @@ reste à pousser / capturer sur le PC fixe.
 - [ ] **X34 · Maisons et bâtiments** (maison, villages2, moulin, château) — Sol, file du 26/11.
 - [ ] **X35 · PNJ : apparence + dialogues** (Avatar.dress, Apparence ; `Dialogue.lua` : passage accordé par Claude) — Sol.
 - [ ] **X36 · Créatures du bestiaire + 6 boss** (`Silhouettes.lua` : passage accordé par Claude ; données des boss → passage à Claude) — Sol.
+- [ ] **X38 · Journal des montures, beau bestiaire, animations en selle** (peaufinage de 664c332) — Sol.
 - [ ] **X37 · Écriture des quêtes** (TEXTE seulement de `Quetes.lua` / `QuetesLieux.lua` : passage accordé) — Sol.
 
 Répartition décidée par le propriétaire le 26/11 : **Codex = ce qui se génère, s'écrit ou se peaufine ; Claude = le code**
@@ -365,7 +366,7 @@ Répartition décidée par le propriétaire le 26/11 : **Codex = ce qui se gén�
       marais. Données dans `Bestiaire`/`Equilibre`, mise en scène existante (`boss_scene`).
 - [ ] **C16 · Vue aérienne** (`Shared/Lointain`) : retour « catastrophique » du 25/11 (FEUILLE_DE_ROUTE).
 - [ ] **C17 · Banc d'import sûr du Store** `tools/bancs/store_import.luau` (pour X30).
-- [ ] **C18 · Montures volantes** (griffon, hippogriffe, wyverne apprivoisés ; coût nourriture/soins, pas de plafond).
+- [x] **C18 · Montures façon WoW + volantes** — FAIT 26/11 (664c332) : collection + journal [N], invocation 2 s, rênes rares (13), Équitation (vol au niv. 25), Envol. À voir en Play.
 
 ## Pour le propriétaire (personne d'autre ne peut le faire)
 
