@@ -208,7 +208,7 @@ function Mondes.friends(player: Player)
 	return out
 end
 
-Mondes.GENERATOR = 2 -- version du générateur (= WorldGen.CURRENT_GEN) : un monde garde à vie sa graine ET sa version
+Mondes.GENERATOR = 3 -- version du générateur (= WorldGen.CURRENT_GEN) : un monde garde à vie sa graine ET sa version
 
 local SYL1 = { "Ver", "Bru", "Kal", "Mor", "Ise", "Ald", "Fen", "Gro", "Lun", "Oss", "Tar", "Vel", "Cor", "Dra", "Eri" }
 local SYL2 = { "mo", "ne", "ra", "li", "va", "do", "si", "ka", "ru", "te", "go", "la" }

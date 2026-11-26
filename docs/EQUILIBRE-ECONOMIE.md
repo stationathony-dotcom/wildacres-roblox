@@ -1,6 +1,6 @@
 # Wild Acres — équilibre économique (généré)
 
-Généré par `tools/bancs/economie.luau` (21/11/2026) : **ne pas modifier à la main**. Or par minute de jeu
+Généré par `tools/bancs/economie.luau` (26/11/2026) : **ne pas modifier à la main**. Or par minute de jeu
 estimé avec les vraies données ; hypothèses en tête du banc. Médiane de toutes les activités : **43 or/min**.
 « TROP » = plus de 3 × la médiane, « faible » = moins d'un tiers (une activité ne doit pas rendre les autres inutiles).
 

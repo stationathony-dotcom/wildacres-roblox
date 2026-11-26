@@ -237,13 +237,12 @@ function WG:plan(rx: number, rz: number)
 				H[i] = dl == 1 and -4 or (dl == 2 and -8 or -12)
 				mat[i] = dl == 1 and Mat.Sand or Mat.Ground
 			else
-				local lv = 0
-				if distW[i] > 2 then
-					local pe = self:plateau(cx, cz) - down * 0.8
-					lv = pe > WG.T_PLATEAU2 and 2 or (pe > WG.T_PLATEAU1 and 1 or 0)
+				-- relief : WG:relief (gen ≤ 2 = ancien calcul à l'identique ; gen 3 = terrasses et sommet)
+				local lv, hill = self:relief(cx, cz, down)
+				if distW[i] <= 2 then
+					lv = 0
 				end
 				level[i] = lv
-				local hill = math.max(0, self:hills(cx, cz)) * 7 * (1 - down)
 				local h = Config.GROUND_Y + lv * Config.LEVEL_H + hill
 				local dw = distW[i]
 				local f = self:forest(cx, cz)
@@ -261,6 +260,14 @@ function WG:plan(rx: number, rz: number)
 					mat[i] = (dw <= 4 or f > WG.T_FOREST) and Mat.Mud or Mat.Grass
 				else
 					mat[i] = Config.BIOMES[b].mat
+				end
+				-- gen 3 : roche puis neige en altitude (hors routes et lieux)
+				if self.gen >= 3 and not inPoi[i] and rd > 1.6 then
+					if h > 120 then
+						mat[i] = Mat.Snow
+					elseif h > 80 then
+						mat[i] = Mat.Rock
+					end
 				end
 				H[i] = h
 			end

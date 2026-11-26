@@ -12,7 +12,7 @@ C.WATER_Y = 0 -- surface de l'eau
 C.GROUND_Y = 2 -- sol de base
 C.LEVEL_H = 12 -- hauteur d'un plateau (falaise infranchissable sans escalier)
 C.Y_MIN = -16
-C.Y_MAX = 48
+C.Y_MAX = 240 -- 26/11 : montagnes de la gen 3 (World n'écrit que la hauteur utile de chaque région)
 C.WORLD_RADIUS = 13 -- île finie : régions au-delà = océan (27 x 27 régions ≈ 5 km de côté)
 
 -- Biomes (remplacent les saisons) : chaque région a son climat, ses arbres, ses cultures.

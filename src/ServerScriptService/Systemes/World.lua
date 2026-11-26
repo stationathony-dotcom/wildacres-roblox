@@ -49,10 +49,19 @@ end
 
 -- ----------------------------------------------------------------- Terrain
 
+local writtenNy = {} -- région -> nombre de couches écrites (clearTerrain n'efface que ce qui existe)
 local function writeTerrain(plan)
 	local idx = G.WG.idx
 	local H, mat, water = plan.H, plan.mat, plan.water
-	local ny = math.floor((Config.Y_MAX - Config.Y_MIN) / 4)
+	-- seulement la hauteur utile (26/11 : Y_MAX monté à 240 pour les montagnes ; une région plate reste légère)
+	local maxH = Config.WATER_Y
+	for _, h in H do
+		if h > maxH then
+			maxH = h
+		end
+	end
+	local ny = math.min(math.floor((Config.Y_MAX - Config.Y_MIN) / 4), math.ceil((maxH + 8 - Config.Y_MIN) / 4))
+	writtenNy[plan.rx .. "," .. plan.rz] = ny
 	local region = Region3.new(
 		Vector3.new(plan.x0 * CELL, Config.Y_MIN, plan.z0 * CELL),
 		Vector3.new((plan.x0 + REGION) * CELL, Config.Y_MIN + ny * 4, (plan.z0 + REGION) * CELL)
@@ -104,7 +113,8 @@ local function writeTerrain(plan)
 end
 
 local function clearTerrain(rx: number, rz: number)
-	local ny = math.floor((Config.Y_MAX - Config.Y_MIN) / 4)
+	local ny = writtenNy[rx .. "," .. rz] or math.floor((Config.Y_MAX - Config.Y_MIN) / 4)
+	writtenNy[rx .. "," .. rz] = nil
 	local region = Region3.new(
 		Vector3.new(rx * REGION * CELL, Config.Y_MIN, rz * REGION * CELL),
 		Vector3.new((rx + 1) * REGION * CELL, Config.Y_MIN + ny * 4, (rz + 1) * REGION * CELL)

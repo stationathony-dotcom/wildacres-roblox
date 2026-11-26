@@ -50,7 +50,7 @@ L.CANOPY_SHADES = {
 L.CONIFERS = { prairie = 0.1, foret = 0.45, desert = 0, neige = 0.85, marais = 0.15 }
 L.MATERIALS = {
 	prairie = Enum.Material.Grass, foret = Enum.Material.LeafyGrass, desert = Enum.Material.Sand,
-	neige = Enum.Material.Snow, marais = Enum.Material.Mud,
+	neige = Enum.Material.Snow, marais = Enum.Material.Mud, falaise = Enum.Material.Slate,
 }
 
 -- Échantillon d'une position monde (studs) : { kind = "mer" | "lac" | "terre", h, biome, forest, coast }
@@ -65,14 +65,19 @@ function L.sample(wg, x: number, z: number)
 	end
 	local b = wg:biome(cx, cz)
 	local coast = c < lakeT + 0.035
-	local lv = 0
-	local pe = wg:plateau(cx, cz)
-	if not coast then
-		lv = pe > wg.T_PLATEAU2 and 2 or (pe > wg.T_PLATEAU1 and 1 or 0)
+	-- même relief que le vrai terrain (WG:relief), sans les routes
+	local lv, hill = wg:relief(cx, cz, 0)
+	if coast then
+		lv = 0
 	end
-	local hill = math.max(0, wg:hills(cx, cz)) * 7
 	local h = coast and 1.2 or (Config.GROUND_Y + lv * Config.LEVEL_H + hill)
-	local forest = not coast and b ~= "desert" and wg:forest(cx, cz) > wg.T_FOREST
+	-- altitude (gen 3) : roche puis neiges éternelles, comme le vrai terrain
+	if h > 120 then
+		b = "neige"
+	elseif h > 80 then
+		b = "falaise"
+	end
+	local forest = not coast and b ~= "desert" and b ~= "falaise" and h <= 100 and wg:forest(cx, cz) > wg.T_FOREST
 	return { kind = "terre", h = h, biome = b, forest = forest, coast = coast, level = lv }
 end
 

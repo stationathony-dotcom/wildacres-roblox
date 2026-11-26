@@ -108,7 +108,7 @@ end
 --       remplacés par un voisin), noms de villages propres, faune triée (Bestiaire) ; 18/11/2026
 -- Toute évolution qui change le résultat d'une graine DOIT passer par une nouvelle version testée
 -- avec `if self.gen >= N` et un tirage aléatoire séparé (ne pas décaler les tirages existants).
-WG.CURRENT_GEN = 2
+WG.CURRENT_GEN = 3 -- 26/11 : relief en terrasses, massifs et un sommet par île (WG:relief)
 
 -- ----------------------------------------------------------------- Thèmes d'île (gen ≥ 2)
 -- Chaque île tire son thème de sa graine : on ne retrouve pas les mêmes paysages, villages, créatures
@@ -281,6 +281,51 @@ function WG:hills(cx, cz)
 end
 function WG:forest(cx, cz)
 	return self:fbm(5, cx, cz, 1 / 45, 2)
+end
+
+-- ----------------------------------------------------------------- Relief (gen 3, 26/11)
+-- Demande du propriétaire (« de l'envergure », vue aérienne « plate ») : falaises en terrasses, massifs,
+-- un sommet visible depuis les plages. Gen ≤ 2 : exactement l'ancien calcul (2 paliers + collines).
+-- `down` (0..1) : poids d'un lieu ou d'une route, qui aplanit — les routes creusent des cols dans les
+-- massifs et les villages restent de plain-pied (accès à pied).
+WG.T_LEVELS = { 0.1, 0.27, 0.42, 0.56 } -- gen 3 : jusqu'à 4 paliers de Config.LEVEL_H au-dessus du sol
+
+function WG:summit(): { number }
+	if not self.summitPos then
+		-- graine propre : ne décale aucun autre tirage
+		local r = Random.new(WG.hash(self.seed, "sommet"))
+		local a = r:NextNumber(0, math.pi * 2)
+		local d = r:NextNumber(0.28, 0.5) * EDGE
+		self.summitPos = { math.cos(a) * d, math.sin(a) * d }
+	end
+	return self.summitPos
+end
+
+function WG:relief(cx: number, cz: number, down: number?): (number, number)
+	down = down or 0
+	if self.gen < 3 then
+		local pe = self:plateau(cx, cz) - down * 0.8
+		local lv = pe > WG.T_PLATEAU2 and 2 or (pe > WG.T_PLATEAU1 and 1 or 0)
+		return lv, math.max(0, self:hills(cx, cz)) * 7 * (1 - down)
+	end
+	local keep = 1 - down
+	-- massifs : grandes zones montagneuses lentes (bruit 8, libre jusqu'ici)
+	local massif = math.max(0, self:fbm(8, cx, cz, 1 / 240, 3) + 0.05) * 1.6
+	local s = self:summit()
+	local dd = math.sqrt((cx - s[1]) ^ 2 + (cz - s[2]) ^ 2) / (REGION * 4)
+	local peak = dd < 1 and (1 - dd) ^ 1.4 * 0.75 or 0
+	local pe = self:plateau(cx, cz) - down * 0.8 + (massif * 0.55 + peak) * keep
+	local lv = 0
+	for i, t in WG.T_LEVELS do
+		if pe > t then
+			lv = i
+		end
+	end
+	local hill = math.max(0, self:hills(cx, cz)) * (7 + massif * 6) * keep
+	-- pentes de montagne douces par-dessus les terrasses : massifs et sommet (praticables à pied)
+	hill += (massif * massif * 80 + peak ^ 1.5 * 175) * keep
+	hill = math.min(hill, Config.Y_MAX - 12 - Config.GROUND_Y - lv * Config.LEVEL_H)
+	return lv, hill
 end
 
 -- ----------------------------------------------------------------- Lieux
