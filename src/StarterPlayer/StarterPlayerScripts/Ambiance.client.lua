@@ -94,6 +94,42 @@ snow.EmissionDirection = Enum.NormalId.Bottom
 snow.Rate = 0
 snow.Parent = emitterPart
 
+-- Tempête de sable (26/11) : grains poussés à l'horizontale par le vent
+local sand = Instance.new("ParticleEmitter")
+sand.Texture = "rbxasset://textures/particles/smoke_main.dds"
+sand.Color = ColorSequence.new(Color3.fromRGB(214, 176, 120), Color3.fromRGB(190, 140, 84))
+sand.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.2, 0.55), NumberSequenceKeypoint.new(1, 1) })
+sand.Size = NumberSequence.new(2.5, 6)
+sand.Lifetime = NumberRange.new(2, 3)
+sand.Speed = NumberRange.new(4, 8)
+sand.Acceleration = Vector3.new(55, -6, 18)
+sand.SpreadAngle = Vector2.new(40, 40)
+sand.RotSpeed = NumberRange.new(-60, 60)
+sand.EmissionDirection = Enum.NormalId.Bottom
+sand.Rate = 0
+sand.Parent = emitterPart
+
+-- Ambiance par biome (26/11) : teinte et ciel propres à chaque biome, en fondu. Les tempêtes régionales
+-- (Meteo.STORMS, attribut « Tempete_<biome> ») épaississent l'air et changent sa couleur.
+local BASE_ATM = { color = Color3.fromRGB(196, 222, 246), decay = Color3.fromRGB(110, 140, 190), haze = 0.35 }
+local BIOME_LOOK = {
+	prairie = { tint = Color3.fromRGB(255, 250, 238), sat = 0.04, con = 0, bri = 0, color = BASE_ATM.color, decay = BASE_ATM.decay, haze = 0.35, dens = 0 },
+	foret = { tint = Color3.fromRGB(255, 238, 212), sat = 0.1, con = 0.03, bri = -0.01, color = Color3.fromRGB(226, 214, 186), decay = Color3.fromRGB(150, 120, 80), haze = 0.9, dens = 0.04 },
+	desert = { tint = Color3.fromRGB(255, 236, 206), sat = 0.06, con = 0.08, bri = 0.04, color = Color3.fromRGB(236, 214, 176), decay = Color3.fromRGB(196, 150, 100), haze = 1.4, dens = 0.02 },
+	neige = { tint = Color3.fromRGB(226, 238, 255), sat = -0.06, con = 0.04, bri = 0.05, color = Color3.fromRGB(218, 232, 250), decay = Color3.fromRGB(140, 170, 210), haze = 0.6, dens = 0.05 },
+	marais = { tint = Color3.fromRGB(226, 240, 212), sat = -0.12, con = -0.02, bri = -0.03, color = Color3.fromRGB(176, 192, 160), decay = Color3.fromRGB(96, 112, 84), haze = 2.2, dens = 0.12 },
+}
+local STORM_LOOK = {
+	desert = { color = Color3.fromRGB(214, 168, 104), decay = Color3.fromRGB(170, 112, 60), haze = 1.8, dens = 0.2, tint = Color3.fromRGB(255, 214, 160), bri = -0.04 },
+	neige = { color = Color3.fromRGB(236, 242, 250), decay = Color3.fromRGB(200, 214, 232), haze = 1.6, dens = 0.2, tint = Color3.fromRGB(232, 240, 255), bri = 0.02 },
+	marais = { color = Color3.fromRGB(150, 168, 136), decay = Color3.fromRGB(80, 96, 70), haze = 2.4, dens = 0.18, tint = Color3.fromRGB(214, 232, 200), bri = -0.06 },
+	foret = { color = Color3.fromRGB(214, 196, 160), decay = Color3.fromRGB(140, 110, 70), haze = 1.2, dens = 0.06, tint = Color3.fromRGB(255, 232, 200), bri = -0.02 },
+}
+local biomeCC = Instance.new("ColorCorrectionEffect")
+biomeCC.Name = "TeinteBiome"
+biomeCC.Parent = Lighting
+local look = { tint = Color3.new(1, 1, 1), sat = 0, con = 0, bri = 0, color = BASE_ATM.color, decay = BASE_ATM.decay, haze = BASE_ATM.haze, dens = 0, storm = 0 }
+
 -- ---------------------------------------------------------------- Nuages et brume
 local clouds = workspace.Terrain:FindFirstChildOfClass("Clouds") or Instance.new("Clouds")
 clouds.Cover = 0.4
@@ -167,12 +203,38 @@ RunService.RenderStepped:Connect(function(dt)
 	local graphics = player:GetAttribute("GraphicsProfile") or 2
 	local density = graphics == 1 and 0.4 or graphics == 3 and 1.18 or 1
 	local amount = (covered or dry) and 0 or cur.rain * density
+	-- tempête régionale du biome où l'on est (Meteo.STORMS)
+	local fin = workspace:GetAttribute("Tempete_" .. biome)
+	local stormOn = fin and fin > workspace:GetServerTimeNow() and STORM_LOOK[biome] ~= nil
+	look.storm += ((stormOn and 1 or 0) - look.storm) * math.clamp(dt * 0.25, 0, 1) -- ~6 s pour monter
+	local st = look.storm * (1 - caveMix)
 	rain.Rate = snowy and 0 or amount * 900
-	snow.Rate = snowy and amount * 260 or 0
+	snow.Rate = snowy and (amount * 260 + (covered and 0 or st * 900 * density)) or 0
+	snow.Acceleration = Vector3.new(st * 45, 0, st * 14)
+	sand.Rate = (dry and not covered) and st * 140 * density or 0
 	clouds.Cover = cur.cover
+	-- profil du biome, en fondu (~4 s), puis la tempête par-dessus
+	local p = BIOME_LOOK[biome] or BIOME_LOOK.prairie
+	local kb = math.clamp(dt * 0.3, 0, 1)
+	look.tint = look.tint:Lerp(p.tint, kb)
+	look.sat += (p.sat - look.sat) * kb
+	look.con += (p.con - look.con) * kb
+	look.bri += (p.bri - look.bri) * kb
+	look.color = look.color:Lerp(p.color, kb)
+	look.decay = look.decay:Lerp(p.decay, kb)
+	look.haze += (p.haze - look.haze) * kb
+	look.dens += (p.dens - look.dens) * kb
+	local s2 = STORM_LOOK[biome]
+	biomeCC.TintColor = s2 and look.tint:Lerp(s2.tint, st) or look.tint
+	biomeCC.Saturation = look.sat
+	biomeCC.Contrast = look.con
+	biomeCC.Brightness = look.bri + (s2 and s2.bri * st or 0)
 	local atm = Lighting:FindFirstChildOfClass("Atmosphere")
 	if atm then
-		atm.Density = cur.density
+		atm.Density = math.min(0.9, cur.density + look.dens + (s2 and s2.dens * st or 0))
+		atm.Color = s2 and look.color:Lerp(s2.color, st) or look.color
+		atm.Decay = s2 and look.decay:Lerp(s2.decay, st) or look.decay
+		atm.Haze = look.haze + (s2 and (s2.haze - look.haze) * st or 0)
 	end
 	gloom.Brightness = -cur.dark * 0.5
 	gloom.Saturation = -cur.dark
@@ -184,7 +246,7 @@ RunService.RenderStepped:Connect(function(dt)
 	caveMix += ((underground and 1 or 0) - caveMix) * k
 	local rainVolume = (snowy or dry) and 0 or math.min(1, cur.rain) * 0.7 * (covered and 0.5 or 1)
 	loopVolume(rainSound, rainVolume * v * (1 - caveMix))
-	loopVolume(windSound, cur.wind * 0.5 * v * (1 - caveMix))
+	loopVolume(windSound, math.min(1, cur.wind + look.storm * 0.9) * 0.5 * v * (1 - caveMix))
 	loopVolume(caveSound, 0.35 * caveMix * v)
 end)
 

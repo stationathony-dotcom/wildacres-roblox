@@ -169,10 +169,51 @@ local function strike()
 	end
 end
 
+-- Tempêtes RÉGIONALES (26/11, demande du propriétaire : « l'ambiance change selon les biomes, des tempêtes de
+-- neige, de sable… ») : chaque biome a la sienne, tirée à part de la météo commune. Aucune annonce (règle 1) :
+-- on la voit arriver. Effet purement visuel et sonore (pas de survie, règle 10). Attribut workspace
+-- « Tempete_<biome> » = heure de fin (GetServerTimeNow), lu par Ambiance.client.
+Meteo.STORMS = {
+	desert = { chance = 0.035, min = 180, max = 420 }, -- tempête de sable
+	neige = { chance = 0.035, min = 180, max = 420 }, -- blizzard
+	marais = { chance = 0.05, min = 240, max = 540 }, -- brume épaisse
+	foret = { chance = 0.02, min = 150, max = 300 }, -- bourrasques de feuilles
+}
+local stormAcc = 0
+local function stormStep(dt: number)
+	stormAcc += dt
+	if stormAcc < 60 then
+		return
+	end
+	stormAcc = 0
+	local now = workspace:GetServerTimeNow()
+	for biome, s in Meteo.STORMS do
+		local fin = workspace:GetAttribute("Tempete_" .. biome)
+		if not fin or fin < now then
+			if fin then
+				workspace:SetAttribute("Tempete_" .. biome, nil)
+			end
+			if math.random() < s.chance then
+				workspace:SetAttribute("Tempete_" .. biome, now + math.random(s.min, s.max))
+			end
+		end
+	end
+end
+
+-- Test / admin : DbgAppel "Meteo.storm", "desert", 300
+function Meteo.storm(biome: string, seconds: number?)
+	if not Meteo.STORMS[biome] then
+		return false
+	end
+	workspace:SetAttribute("Tempete_" .. biome, workspace:GetServerTimeNow() + (seconds or 300))
+	return true
+end
+
 function Meteo.step(dt: number)
 	if not G.world then
 		return
 	end
+	stormStep(dt)
 	local m = state()
 	local now = absMin()
 	if now >= m.untilMin then
