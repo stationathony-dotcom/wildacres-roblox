@@ -8,7 +8,7 @@ relais (RemoteEvent, *Value), puis rangement dans `ServerStorage.StoreImports` (
 
 | Paquet | Id | Auteur | Contenu | Scripts | Avis |
 |---|---|---|---|---|---|
-| Asset Pack Medieval | 121230482146932 | AFK Works | 30 maillages : tentes, charrettes, roue, puits, tombes, bannières, barque, lanterne, caisse, clôtures, tas de pierres | 0 | Propre, low-poly lisse. Bon pour camps de bandits / foires, à recolorer (palette Valdor). |
+| Asset Pack Medieval | 121230482146932 | AFK Works | 30 maillages : tentes, charrettes, roue, puits, tombes, bannières, barque, lanterne, caisse, clôtures, tas de pierres | 0 | Propre, low-poly lisse. Avis du propriétaire (26/11) : tentes « cirque » → recolorées en toile écrue unie (texture rayée retirée), bannières en cuir ; charrettes « ok ». Capture `captures/2026-11-26/store/tentes-toile.jpg`. |
 | Low Poly Prop Pack | 6905386946 | HanzRBX | 32 maillages divers | 0 | Petits objets, style lisse ; tri à faire. |
 | Weapon Display | 124985445833504 | cube3D | présentoir d'armes stylisé | 3 (sans code suspect, retirés) | Utile pour forge / armurerie. |
 
