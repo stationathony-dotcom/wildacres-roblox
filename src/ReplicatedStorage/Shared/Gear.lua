@@ -13,8 +13,10 @@ G.slotOf = Design.slotOf
 G.STATS = {
 	force = "Force", defense = "Défense", vie = "Vie", vitesse = "Vitesse",
 	chance = "Chance", charisme = "Charisme", discretion = "Discrétion",
+	-- 26/11 (Shared/Equipement) : caractéristiques de combat apportées par les affixes
+	critique = "Critique", hate = "Hâte", maitrise = "Maîtrise",
 }
-G.STAT_ORDER = { "force", "defense", "vie", "vitesse", "chance", "charisme", "discretion" }
+G.STAT_ORDER = { "force", "defense", "vie", "vitesse", "chance", "charisme", "discretion", "critique", "hate", "maitrise" }
 G.RARITIES = {
 	{ name = "Commun", color = Color3.fromRGB(217, 217, 204), points = 2, weight = 60 },
 	{ name = "Rare", color = Color3.fromRGB(102, 178, 255), points = 4, weight = 28 },
@@ -187,6 +189,10 @@ function G.describe(item): string
 		end
 	end
 	local extra = item.slot == "weapon" and string.format(" (dégâts %d)", item.power) or ""
+	-- durabilité (Shared/Equipement, 26/11)
+	if item.duraMax then
+		extra ..= (item.dura or 0) <= 0 and " · BRISÉE (à réparer)" or string.format(" · durabilité %d/%d", item.dura or 0, item.duraMax)
+	end
 	local details = ""
 	-- exigence de caractéristique (Shared/Equilibre)
 	local okE, Eq = pcall(function()

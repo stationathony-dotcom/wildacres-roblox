@@ -54,6 +54,14 @@ en Play** (PC portable). Coche au fur et à mesure ; note les bugs dans `retours
 - [ ] Maîtrise par famille : message tous les 5 niveaux (+0,5 % de dégâts par niveau).
 - [ ] Rênes rares tombent bien (rares !) sur les créatures listées dans `Shared/Ecurie.lua`.
 
+## 4 bis. Équipement façon MMO (docs/EQUIPEMENT-MMO.md)
+- [ ] Une pièce ramassée ou achetée peut avoir un complément de nom (« … de célérité ») et une caractéristique en plus.
+- [ ] Fiche de la pièce : « durabilité x/y » ; frapper et encaisser l'usent ; brisée = « BRISÉE », stats perdues ;
+      « Réparer » chez le forgeron ou l'armurier remet tout à neuf (prix selon l'usure).
+- [ ] Torse en plates : plus lent mais plus solide ; en tissu : plus rapide.
+- [ ] Spécialisation affichée (attribut `Specialisation`) : bouclier → Gardien, dague → Ombre, arc → Rôdeur, arme lourde → Guerrier.
+- [ ] Les nouvelles caractéristiques Critique, Hâte, Maîtrise apparaissent dans la fiche [P] (à habiller par Codex si besoin).
+
 ## 5. Store créateur
 - [ ] `ServerStorage.StoreImports` : tentes en toile écrue, charrettes. Dire si on les utilise (camps de bandits, foires).
 

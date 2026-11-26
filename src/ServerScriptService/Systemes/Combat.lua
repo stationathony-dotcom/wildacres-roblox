@@ -9,6 +9,45 @@ local cooldown = {}
 local invuln = {}
 
 local Armes = require(game:GetService("ReplicatedStorage").Shared.Armes)
+local Equip = require(game:GetService("ReplicatedStorage").Shared.Equipement)
+
+-- hâte (caractéristique) : cadence plus rapide, plafonnée
+local function hate(player: Player): number
+	local st = G.Joueurs.stats(player)
+	return 1 - math.min(Equip.HATE_MAX, (st.hate or 0) * Equip.HATE_PAR_POINT)
+end
+
+-- usure d'une pièce portée (Shared/Equipement) ; brisée = plus de statistiques jusqu'à réparation
+local function user(player: Player, slot: string?)
+	local prof = G.Joueurs.get(player)
+	local eq = prof and prof.equipped
+	if not eq then
+		return
+	end
+	if not slot then
+		local slots = {}
+		for k, piece in eq do
+			if k ~= "weapon" and type(piece) == "table" and piece.duraMax then
+				table.insert(slots, k)
+			end
+		end
+		if #slots == 0 then
+			return
+		end
+		slot = slots[math.random(1, #slots)]
+	end
+	local piece = eq[slot]
+	if type(piece) ~= "table" or not piece.duraMax or (piece.dura or 0) <= 0 then
+		return
+	end
+	piece.dura = (piece.dura or piece.duraMax) - 1
+	if piece.dura <= 0 then
+		G.Util.toast(player, "💔 " .. (piece.name or "Une pièce") .. " est brisée : fais-la réparer chez le forgeron ou l'armurier.", "danger")
+		G.Joueurs.applyStats(player)
+	end
+	G.Joueurs.markDirty(player)
+end
+Combat.user = user
 -- 26/11 (combat façon action-RPG) : enchaînements, garde / parade, esquive
 local comboN, lastSwing = {}, {}
 local garde, gardeStart, gardeBrisee = {}, {}, {}
@@ -60,10 +99,18 @@ function Combat.damageOf(player: Player, itemId: string?): number
 	if w then
 		base = math.max(base, (w.power or 1) * 10)
 	end
-	local force = G.Joueurs.stats(player).force or 0
+	local st = G.Joueurs.stats(player)
+	local force = st.force or 0
 	local dmg = (base + force * 3) * (1 + 0.01 * G.Joueurs.skill(player, "combat"))
-	if math.random() < 0.12 * G.Joueurs.talent(player, "critique") then
+		* (1 + (st.maitrise or 0) * Equip.MAITRISE_PAR_POINT) -- maîtrise d'équipement (affixes)
+	-- critique : talent + caractéristique Critique (Shared/Equipement, plafonnée)
+	local crit = 0.12 * G.Joueurs.talent(player, "critique") + math.min(Equip.CRIT_MAX, (st.critique or 0) * Equip.CRIT_PAR_POINT)
+	if math.random() < crit then
 		dmg *= 2
+	end
+	-- Guerrier (spécialisation) : armes lourdes +6 %
+	if player:GetAttribute("Specialisation") == "guerrier" then
+		dmg *= Equip.SPEC_PASSIF.guerrier
 	end
 	return math.floor(dmg)
 end
@@ -303,6 +350,12 @@ local function cibleMult(best, kind: string, typ: string, prof, root: BasePart):
 			local d = Vector3.new(best.pos.X - root.Position.X, 0, best.pos.Z - root.Position.Z)
 			if d.Magnitude > 0.1 and face:Dot(d.Unit) > 0.4 then
 				m *= prof.dos -- on la frappe dans le dos
+				if root.Parent and root.Parent:IsA("Model") then
+					local pl = game:GetService("Players"):GetPlayerFromCharacter(root.Parent)
+					if pl and pl:GetAttribute("Specialisation") == "ombre" then
+						m *= Equip.SPEC_PASSIF.ombre
+					end
+				end
 			end
 		end
 	end
@@ -402,7 +455,7 @@ function Combat.shoot(player: Player, targetId: string?, charge: number?)
 	end
 	local cle, prof = Combat.profilDistance(player)
 	local k = (charge and charge >= Armes.CHARGE_MIN) and math.min(1, charge / Armes.CHARGE_MAX) or 0
-	local RANGE = prof.portee * (1 + 0.4 * k)
+	local RANGE = prof.portee * (1 + 0.4 * k) * (player:GetAttribute("Specialisation") == "rodeur" and Equip.SPEC_PASSIF.rodeur or 1)
 	local fatigue = spend(player, prof.endu * (k > 0 and 2 or 1)) and 1 or 0.6
 	local char = player.Character
 	local from = root.Position + Vector3.new(0, 1.2, 0) + root.CFrame.LookVector * 1.5
@@ -510,14 +563,14 @@ function Combat.attack(player: Player, itemId: string?, targetId: string?, charg
 	if rangedWeapon(player) and (held == nil or not (held.weapon or held.tool)) then
 		local _, dprof = Combat.profilDistance(player)
 		-- un tir chargé suit le tir de l'appui : il lui faut seulement la durée minimale de charge
-		if cooldown[player] and now - cooldown[player] < (charged and math.min(dprof.cd * 1.3, Armes.CHARGE_MIN - 0.05) or dprof.cd) then
+		if cooldown[player] and now - cooldown[player] < (charged and math.min(dprof.cd * 1.3, Armes.CHARGE_MIN - 0.05) or dprof.cd * hate(player)) then
 			return
 		end
 		cooldown[player] = now
 		return Combat.shoot(player, targetId, charge)
 	end
 	local cle, prof = Combat.profil(player, itemId)
-	if cooldown[player] and now - cooldown[player] < (charged and math.min(prof.cd * 1.5, Armes.CHARGE_MIN - 0.05) or prof.cd) then
+	if cooldown[player] and now - cooldown[player] < (charged and math.min(prof.cd * 1.5, Armes.CHARGE_MIN - 0.05) or prof.cd * hate(player)) then
 		return
 	end
 	if garde[player] then
@@ -639,6 +692,7 @@ function Combat.attack(player: Player, itemId: string?, targetId: string?, charg
 		end
 	end
 	entrainer(player, cle)
+	user(player, "weapon")
 end
 
 -- Appelé par Game.onDeath quand un joueur est mis K.O. par un autre
@@ -678,6 +732,7 @@ function Combat.hurtPlayer(player: Player, dmg: number, fromPos: Vector3?, opts)
 			end
 			local pass = hasShield(player) and Armes.GARDE_BOUCLIER or Armes.GARDE_ARME
 			local cost = dmg * (1 - pass) * Armes.GARDE_COUT * ((opts and opts.garde) or 1)
+				* (player:GetAttribute("Specialisation") == "gardien" and Equip.SPEC_PASSIF.gardien or 1)
 			if spend(player, cost) then
 				G.Util.sfx("impact_metal", root.Position)
 				dmg = math.max(1, math.floor(dmg * pass))
@@ -703,6 +758,7 @@ function Combat.hurtPlayer(player: Player, dmg: number, fromPos: Vector3?, opts)
 	end
 	local real = math.max(1, math.floor(dmg * (1 - math.min(0.6, def * 0.04))))
 	hum:TakeDamage(real)
+	user(player, nil) -- une pièce d'armure au hasard s'use
 	G.remotes.Fx:FireClient(player, "hurt", fromPos)
 end
 

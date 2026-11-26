@@ -820,10 +820,28 @@ end
 -- prix de l'outil × son usure, +5 or de main-d'œuvre par outil). Alternative payante à Shop.repair.
 function Shop.repairAll(player: Player)
 	local prof = G.Joueurs.get(player)
-	if not prof or not prof.wear then
+	if not prof then
 		return
 	end
-	local list, total = {}, 0
+	prof.wear = prof.wear or {}
+	-- équipement usé ou brisé (Shared/Equipement, 26/11) : porté et dans le sac
+	local okQ, Equip = pcall(require, game:GetService("ReplicatedStorage").Shared.Equipement)
+	local pieces, gearCost = {}, 0
+	if okQ then
+		local function consider(piece)
+			if type(piece) == "table" and piece.duraMax and (piece.dura or 0) < piece.duraMax then
+				table.insert(pieces, piece)
+				gearCost += math.ceil((piece.duraMax - (piece.dura or 0)) * (Equip.REPARER[piece.rarity or 1] or 1))
+			end
+		end
+		for _, piece in prof.equipped or {} do
+			consider(piece)
+		end
+		for _, piece in prof.gear or {} do
+			consider(piece)
+		end
+	end
+	local list, total = {}, gearCost
 	for id, w in prof.wear do
 		local info = Config.ITEMS[id]
 		if w > 0 and info and info.tool and (prof.inv[id] or 0) > 0 then
@@ -833,13 +851,20 @@ function Shop.repairAll(player: Player)
 			total += cost
 		end
 	end
-	if #list == 0 then
-		G.Util.toast(player, "⚒️ Le forgeron : « Tes outils sont comme neufs ! »")
+	if #list == 0 and #pieces == 0 then
+		G.Util.toast(player, "⚒️ Le forgeron : « Tes outils et ton équipement sont comme neufs ! »")
 		return
 	end
 	if not G.Joueurs.take(player, "gold", total) then
 		G.Util.toast(player, "⚒️ Le forgeron : « Ça fera " .. total .. " or pour tout remettre à neuf. »")
 		return
+	end
+	for _, piece in pieces do
+		piece.dura = piece.duraMax
+	end
+	if #pieces > 0 then
+		G.Joueurs.applyStats(player)
+		G.Joueurs.markDirty(player)
 	end
 	for _, id in list do
 		prof.wear[id] = 0

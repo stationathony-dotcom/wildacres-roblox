@@ -237,6 +237,11 @@ function J.addGear(player: Player, item)
 	if not p then
 		return
 	end
+	-- affixes procéduraux et durabilité (Shared/Equipement, 26/11) : une seule fois par pièce
+	local okQ, Equip = pcall(require, game:GetService("ReplicatedStorage").Shared.Equipement)
+	if okQ then
+		Equip.finaliser(item)
+	end
 	if G.Butin and rawget(G.Butin, "redirectGear") and G.Butin.redirectGear(player, item) then
 		return
 	end
@@ -249,6 +254,14 @@ end
 function J.stats(player: Player)
 	local p = J.profiles[player]
 	local t = G.Gear.totals(p and p.equipped or {})
+	-- pièce brisée (durabilité 0) : elle ne donne plus rien tant qu'on ne l'a pas réparée
+	for _, piece in (p and p.equipped) or {} do
+		if type(piece) == "table" and piece.dura ~= nil and piece.dura <= 0 then
+			for k, v in piece.stats or {} do
+				t[k] = (t[k] or 0) - v
+			end
+		end
+	end
 	-- panoplies : plusieurs pièces de la même matière (Shared/Equilibre)
 	local okE, Eq = pcall(require, game:GetService("ReplicatedStorage").Shared.Equilibre)
 	if okE and p then
@@ -538,10 +551,66 @@ function J.sightFactor(player: Player): number
 	return f
 end
 
+-- type d'armure du torse (Shared/Equipement.ARMURES) et spécialisation déduite de l'équipement
+function J.armorType(player: Player)
+	local p = J.profiles[player]
+	local a = p and p.equipped and p.equipped.armor
+	if not a then
+		return nil
+	end
+	local okD, Design = pcall(require, game:GetService("ReplicatedStorage").Shared.GearDesign)
+	local form = okD and Design.formOf(a) or nil
+	local okQ, Equip = pcall(require, game:GetService("ReplicatedStorage").Shared.Equipement)
+	if not okQ then
+		return nil
+	end
+	for _, t in Equip.ARMURES do
+		if t.formes[form or ""] then
+			return t
+		end
+	end
+	return nil
+end
+
+function J.specialisation(player: Player): string
+	local p = J.profiles[player]
+	local eq = p and p.equipped or {}
+	local okQ, Equip = pcall(require, game:GetService("ReplicatedStorage").Shared.Equipement)
+	local okA, Armes = pcall(require, game:GetService("ReplicatedStorage").Shared.Armes)
+	if not (okQ and okA) then
+		return "aventurier"
+	end
+	local cle = G.Combat and rawget(G.Combat, "profil") and select(1, G.Combat.profil(player, nil)) or "poing"
+	local ranged = G.Combat and rawget(G.Combat, "rangedWeapon") and G.Combat.rangedWeapon(player) ~= nil
+	local tests = {
+		bouclier = G.Combat and rawget(G.Combat, "hasShield") and G.Combat.hasShield(player),
+		dague = cle == "dague",
+		distance = ranged,
+		lourde = cle == "espadon" or cle == "hache" or cle == "masse" or cle == "hast",
+		compagnon = G.Compagnons and rawget(G.Compagnons, "count") and G.Compagnons.count(player) > 0 and (J.stats(player).charisme or 0) >= 5,
+		metier = false,
+		defaut = true,
+	}
+	for _, piece in eq do
+		if type(piece) == "table" and piece.skills then
+			tests.metier = true
+		end
+	end
+	for _, s in Equip.SPECS do
+		if tests[s.test] then
+			return s.id
+		end
+	end
+	return "aventurier"
+end
+
 function J.applyStats(player: Player)
 	local s = J.stats(player)
-	player:SetAttribute("BaseSpeed", G.Config.WALK + (s.vitesse or 0) * 0.6)
-	player:SetAttribute("Defense", s.defense or 0)
+	local armure = J.armorType(player)
+	player:SetAttribute("BaseSpeed", (G.Config.WALK + (s.vitesse or 0) * 0.6) * (armure and armure.vitesse or 1))
+	player:SetAttribute("Defense", math.floor((s.defense or 0) * (1 + (armure and armure.defense or 0))))
+	player:SetAttribute("TypeArmure", armure and armure.nom or nil)
+	player:SetAttribute("Specialisation", J.specialisation(player))
 	local ch = player.Character
 	local hum = ch and ch:FindFirstChildOfClass("Humanoid")
 	if hum then
