@@ -9,6 +9,28 @@ ou marquée « volontairement absent »), en respectant les règles d'`AGENTS.md
 
 ---
 
+## Message à Codex — 3e vague « niveau planche » (26/11, à lire en premier)
+
+Le propriétaire a envoyé 13 planches de référence (`Downloads\Gmail (1)`, copie réduite dans
+`images/references-26-11/`) : créatures voxel par biome (glace, désert, braise, forêt, cristal) et planches de boss
+(coffre-mimique, baudroie abyssale, mammouth de givre, griffon d'orage, veuve venimeuse, crocodile des marais).
+Sa demande : « des modèles similaires », « de même pour tous les props, le plus abouti possible », « une ambiance de
+jeu similaire aux captures », et il autorise les **props gratuits du Store créateur** s'ils ont du sens, **en
+faisant attention aux scripts**.
+
+Ce qu'il faut viser (relevé sur les planches, valable pour props ET créatures) :
+1. **Blocs empilés lisibles** : chaque masse = un gros bloc + gradins/rebords ; pas de pièce lisse unique.
+2. **4 à 6 couleurs + 1 lueur** par modèle, avec **2 ou 3 tons par matière** (bois foncé / moyen / clair ;
+   fourrure foncée / moyenne / claire) répartis par bloc, jamais un aplat.
+3. **Liserés et renforts** : coins en métal ou en or, bandes de fer, clous/rivets, plaques. C'est ce qui donne
+   l'aspect « fini ».
+4. **Détails d'usure** : griffures, fissures lumineuses, mousse, givre, gouttes ; un détail « signature » par modèle.
+5. **Contraste fort** sur fond sombre : lueur Neon pour yeux, cristaux, fissures ; couleurs saturées.
+6. Budget : prop courant ≤ 60 pièces, prop de village remarquable ≤ 120 ; créature ≤ 140 ; boss ≤ 320.
+
+Inspiration de style seulement : noms, silhouettes et palettes à nous (règle 9). Famille « bonbons » et T-rex
+toujours écartés (pas médiéval, décision du 25/11).
+
 ## Message à Codex — vérification du 21/11 (à lire en premier)
 
 Relu tes 52 commits du 20/11 : couloirs respectés, commits fichier par fichier, pas de `.rbxl`, X1–X14 cochés
@@ -251,6 +273,35 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       synchronisation, le banc `apparence` et les commits. En Play : réapparition, coiffes, tarifs, sauvegarde,
       défilement tactile et focus manette.
 
+### 3e vague Codex (écrite le 26/11) — « niveau planche » : props, ambiance, Store
+
+Modèle conseillé pour cette vague : `gpt-6.2-astra`, raisonnement `ultra`. Studio n'est pas ouvert sur le PC
+portable : écrire sur disque, garder chaque constructeur appelable en Édition, et lister dans le journal ce qui
+reste à pousser / capturer sur le PC fixe.
+
+- [ ] **X27 · Props niveau planche, famille par famille** (`ConstruireModeles*`) : reprendre les 90 props posables et
+      les décors de village selon les 6 points du message du 26/11. Ordre : coffres et caisses (coins dorés, bandes de
+      fer, serrure à plaque), ateliers (enclume, four, établi, métier à tisser), mobilier, clôtures/portails,
+      lanternes et puits, étals de marché, puis décor naturel (rochers en strates, souches, champignons). Pour chaque
+      famille : planche de capture avant/après dans `images/props-26-11/`, banc `visuels_props` vert, budget respecté,
+      noms de pièces et points d'accroche inchangés (le serveur lit `Recoltable`, `Touffe`, portes, coffres).
+- [ ] **X28 · Ambiance façon planches** (`Shared/Eclairage.lua`, client `Ambiance`) : `Technology.Future` si le coût
+      passe, `ColorCorrection` plus saturée (+0,15 à +0,25), `Bloom` léger pour les lueurs Neon, `Atmosphere` qui ne
+      délave plus (densité basse, `Haze` faible), ciel lumineux le jour, nuit bleu profond où les lueurs ressortent.
+      Profil par biome (glace : froid lumineux ; désert : chaud doré ; marais : vert sourd ; grottes : sombre + lueurs).
+      Qualité basse mobile : garder un réglage léger. Captures 9 h / 13 h / 19 h / 23 h.
+- [ ] **X29 · Contours façon planche** (client) : `Highlight` en contour seul (`FillTransparency = 1`,
+      `OutlineColor` sombre) sur les boss proches et la créature ciblée ; **31 Highlight maximum** côté client →
+      priorité aux plus proches, retrait au-delà de 120 studs.
+- [ ] **X30 · Props gratuits du Store créateur** : chercher des modèles gratuits low-poly / voxel cohérents avec
+      Valdor (pas de réaliste, pas de cartoon lisse). Tenir `docs/STORE.md` : id, nom, auteur, lien, pourquoi, pièces.
+      **Import uniquement par le banc `tools/bancs/store_import.luau`** (lot C17, Claude) qui retire tout script,
+      refuse les `require(<id>)`, les `getfenv`/`loadstring`, les objets `Script/LocalScript/ModuleScript/*Value`
+      cachés, et compte les pièces. Jamais d'insertion directe dans le jeu. Préférer nos constructeurs quand le Store
+      ne fait pas mieux.
+- [ ] **X31 · Menus E4 à E6** de `docs/DIRECTION-ARTISTIQUE.md` (accueil où la caméra survole l'île, mobile,
+      HUD jamais masqué) + capture de chaque fenêtre dans le cadre commun `Cadre.lua`.
+
 ## Couloir Claude — les règles et le monde
 
 - [x] **C1 · Banc de régression unique.** FAIT 20/11 (edef686) : 39 bancs, ~2 min, ménage des restes. `tools/bancs/tout.luau` lance tous les bancs Edit et rend un
@@ -293,6 +344,18 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       d'un village chargé ; dégradation gracieuse.
 - [x] **C13 · Administration** — FAIT 20/11 : `/wa etat` (le reste existait : journal, perf, joueur, coupe…) ; (étape 24) : tableau de bord `/wa` (serveurs, mondes, erreurs,
       sauvegardes), lecture des journaux d'économie et de clan.
+
+### 3e vague Claude (écrite le 26/11)
+
+- [ ] **C14 · Créatures niveau planche** (`Systemes/Silhouettes.lua`) : tons multiples par masse, plaques et rivets,
+      rangées de dents, langue, points lumineux le long du corps, motifs par famille, budget relevé (créature ≤ 140,
+      boss ≤ 320). Banc `creatures_voxel` mis à jour.
+- [ ] **C15 · Boss inspirés des planches** (noms et dessins à nous) : coffre-mimique des ruines, baudroie des
+      abysses, mammouth de givre, griffon d'orage (silhouette propre au boss), veuve des cavernes, crocodile des
+      marais. Données dans `Bestiaire`/`Equilibre`, mise en scène existante (`boss_scene`).
+- [ ] **C16 · Vue aérienne** (`Shared/Lointain`) : retour « catastrophique » du 25/11 (FEUILLE_DE_ROUTE).
+- [ ] **C17 · Banc d'import sûr du Store** `tools/bancs/store_import.luau` (pour X30).
+- [ ] **C18 · Montures volantes** (griffon, hippogriffe, wyverne apprivoisés ; coût nourriture/soins, pas de plafond).
 
 ## Pour le propriétaire (personne d'autre ne peut le faire)
 
