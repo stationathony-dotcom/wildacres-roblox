@@ -12,6 +12,7 @@ local TweenService = game:GetService("TweenService")
 local Lighting = game:GetService("Lighting")
 local SoundService = game:GetService("SoundService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Input = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
 local Shared = ReplicatedStorage:WaitForChild("Shared")
@@ -111,14 +112,15 @@ sand.Parent = emitterPart
 
 -- Ambiance par biome (26/11) : teinte et ciel propres à chaque biome, en fondu. Les tempêtes régionales
 -- (Meteo.STORMS, attribut « Tempete_<biome> ») épaississent l'air et changent sa couleur.
-local BASE_ATM = { color = Color3.fromRGB(196, 222, 246), decay = Color3.fromRGB(110, 140, 190), haze = 0.35 }
+local BASE_ATM = Eclairage.CIEL_CLAIR
 local BIOME_LOOK = {
-	prairie = { tint = Color3.fromRGB(255, 250, 238), sat = 0.04, con = 0, bri = 0, color = BASE_ATM.color, decay = BASE_ATM.decay, haze = 0.35, dens = 0 },
-	foret = { tint = Color3.fromRGB(255, 238, 212), sat = 0.1, con = 0.03, bri = -0.01, color = Color3.fromRGB(226, 214, 186), decay = Color3.fromRGB(150, 120, 80), haze = 0.9, dens = 0.04 },
-	desert = { tint = Color3.fromRGB(255, 236, 206), sat = 0.06, con = 0.08, bri = 0.04, color = Color3.fromRGB(236, 214, 176), decay = Color3.fromRGB(196, 150, 100), haze = 1.4, dens = 0.02 },
-	neige = { tint = Color3.fromRGB(226, 238, 255), sat = -0.06, con = 0.04, bri = 0.05, color = Color3.fromRGB(218, 232, 250), decay = Color3.fromRGB(140, 170, 210), haze = 0.6, dens = 0.05 },
-	marais = { tint = Color3.fromRGB(226, 240, 212), sat = -0.12, con = -0.02, bri = -0.03, color = Color3.fromRGB(176, 192, 160), decay = Color3.fromRGB(96, 112, 84), haze = 2.2, dens = 0.12 },
+	prairie = { tint = Color3.fromRGB(255, 250, 238), sat = 0.03, con = 0, bri = 0, color = BASE_ATM.color, decay = BASE_ATM.decay, haze = BASE_ATM.haze, dens = 0 },
+	foret = { tint = Color3.fromRGB(255, 241, 221), sat = 0.06, con = 0.03, bri = -0.01, color = Color3.fromRGB(217, 215, 192), decay = Color3.fromRGB(141, 119, 85), haze = 0.37, dens = 0.02 },
+	desert = { tint = Color3.fromRGB(255, 233, 195), sat = 0.05, con = 0.07, bri = 0.03, color = Color3.fromRGB(233, 209, 165), decay = Color3.fromRGB(183, 132, 79), haze = 0.38, dens = 0.01 },
+	neige = { tint = Color3.fromRGB(218, 236, 255), sat = -0.035, con = 0.035, bri = 0.04, color = Color3.fromRGB(207, 229, 250), decay = Color3.fromRGB(128, 163, 210), haze = 0.30, dens = 0.03 },
+	marais = { tint = Color3.fromRGB(221, 235, 200), sat = -0.10, con = 0.01, bri = -0.04, color = Color3.fromRGB(169, 188, 145), decay = Color3.fromRGB(86, 106, 73), haze = 0.72, dens = 0.08 },
 }
+local TEINTE_GROTTE = Color3.fromRGB(209, 221, 255)
 local STORM_LOOK = {
 	desert = { color = Color3.fromRGB(214, 168, 104), decay = Color3.fromRGB(170, 112, 60), haze = 1.8, dens = 0.2, tint = Color3.fromRGB(255, 214, 160), bri = -0.04 },
 	neige = { color = Color3.fromRGB(236, 242, 250), decay = Color3.fromRGB(200, 214, 232), haze = 1.6, dens = 0.2, tint = Color3.fromRGB(232, 240, 255), bri = 0.02 },
@@ -174,6 +176,7 @@ local TARGETS = {
 local cur = { rain = 0, cover = 0.32, density = Eclairage.DENSITY_CLEAR, dark = 0, wind = 0.15 }
 local biome, biomeT = "prairie", 0
 local caveMix = 0
+local eco = false
 
 RunService.RenderStepped:Connect(function(dt)
 	local cam = workspace.CurrentCamera
@@ -190,7 +193,18 @@ RunService.RenderStepped:Connect(function(dt)
 	if biomeT <= 0 then
 		biomeT = 1
 		biome = biomeAt(cam.CFrame.Position)
+		local graphics = player:GetAttribute("GraphicsProfile") or 2
+		eco = graphics == 1 or (graphics == 2 and Input.TouchEnabled and not Input.KeyboardEnabled)
+		local bloom = Lighting:FindFirstChildOfClass("BloomEffect")
+		local rays = Lighting:FindFirstChildOfClass("SunRaysEffect")
+		if bloom then bloom.Enabled = not eco end
+		if rays then rays.Enabled = not eco end
 	end
+	local char = player.Character
+	local root = char and char:FindFirstChild("HumanoidRootPart")
+	-- Même seuil que la musique de grotte, y compris quand le joueur s'éclaire.
+	local underground = root and root.Position.Y < -40
+	caveMix += ((underground and 1 or 0) - caveMix) * k
 	-- sous un toit ? pas de pluie qui tombe dans la maison (rayon vers le ciel)
 	local camPos = cam.CFrame.Position
 	local params = RaycastParams.new()
@@ -201,7 +215,7 @@ RunService.RenderStepped:Connect(function(dt)
 	local snowy = biome == "neige"
 	local dry = biome == "desert"
 	local graphics = player:GetAttribute("GraphicsProfile") or 2
-	local density = graphics == 1 and 0.4 or graphics == 3 and 1.18 or 1
+	local density = eco and 0.4 or graphics == 3 and 1.18 or 1
 	local amount = (covered or dry) and 0 or cur.rain * density
 	-- tempête régionale du biome où l'on est (Meteo.STORMS)
 	local fin = workspace:GetAttribute("Tempete_" .. biome)
@@ -225,25 +239,22 @@ RunService.RenderStepped:Connect(function(dt)
 	look.haze += (p.haze - look.haze) * kb
 	look.dens += (p.dens - look.dens) * kb
 	local s2 = STORM_LOOK[biome]
-	biomeCC.TintColor = s2 and look.tint:Lerp(s2.tint, st) or look.tint
-	biomeCC.Saturation = look.sat
-	biomeCC.Contrast = look.con
-	biomeCC.Brightness = look.bri + (s2 and s2.bri * st or 0)
+	local teinte = s2 and look.tint:Lerp(s2.tint, st) or look.tint
+	biomeCC.TintColor = teinte:Lerp(TEINTE_GROTTE, caveMix)
+	biomeCC.Saturation = look.sat * (1 - caveMix) - caveMix * 0.06
+	biomeCC.Contrast = look.con * (1 - caveMix) + caveMix * 0.05
+	biomeCC.Brightness = (look.bri + (s2 and s2.bri * st or 0)) * (1 - caveMix) - caveMix * 0.045
 	local atm = Lighting:FindFirstChildOfClass("Atmosphere")
 	if atm then
-		atm.Density = math.min(0.9, cur.density + look.dens + (s2 and s2.dens * st or 0))
-		atm.Color = s2 and look.color:Lerp(s2.color, st) or look.color
-		atm.Decay = s2 and look.decay:Lerp(s2.decay, st) or look.decay
-		atm.Haze = look.haze + (s2 and (s2.haze - look.haze) * st or 0)
+		local dens = cur.density + look.dens + (s2 and s2.dens * st or 0)
+		local ciel = s2 and look.color:Lerp(s2.color, st) or look.color
+		local horizon = s2 and look.decay:Lerp(s2.decay, st) or look.decay
+		local voile = look.haze + (s2 and (s2.haze - look.haze) * st or 0)
+		Eclairage.appliquerAtmosphere(atm, Lighting.ClockTime, cur.cover, dens, voile, ciel, horizon)
 	end
 	gloom.Brightness = -cur.dark * 0.5
 	gloom.Saturation = -cur.dark
 	local v = vol()
-	local char = player.Character
-	local root = char and char:FindFirstChild("HumanoidRootPart")
-	-- Même seuil que la musique de grotte, y compris quand le joueur s'éclaire.
-	local underground = root and root.Position.Y < -40
-	caveMix += ((underground and 1 or 0) - caveMix) * k
 	local rainVolume = (snowy or dry) and 0 or math.min(1, cur.rain) * 0.7 * (covered and 0.5 or 1)
 	loopVolume(rainSound, rainVolume * v * (1 - caveMix))
 	loopVolume(windSound, math.min(1, cur.wind + look.storm * 0.9) * 0.5 * v * (1 - caveMix))

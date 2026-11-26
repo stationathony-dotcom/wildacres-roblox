@@ -19,14 +19,37 @@ E.TERRAIN = {
 }
 
 -- jour / nuit (Clock interpole)
-E.OUTDOOR_DAY = Color3.fromRGB(161, 151, 136)
-E.OUTDOOR_NIGHT = Color3.fromRGB(70, 80, 120)
+E.OUTDOOR_DAY = Color3.fromRGB(166, 154, 136)
+E.OUTDOOR_NIGHT = Color3.fromRGB(58, 72, 112)
 E.AMBIENT_DAY = Color3.fromRGB(86, 79, 72)
-E.AMBIENT_NIGHT = Color3.fromRGB(40, 45, 70)
--- densité d'atmosphère par beau temps (Ambiance.client la fait varier avec la météo)
--- 25/11 (chantier D, Claude) : 0,27 → 0,20 et voile 0,7 → 0,35, sinon le lointain et les massifs
--- (Shared/Lointain) sont bleuis et délavés dès 800 studs par beau temps
-E.DENSITY_CLEAR = 0.2
+E.AMBIENT_NIGHT = Color3.fromRGB(35, 42, 68)
+E.DENSITY_CLEAR = 0.15
+E.CIEL_CLAIR = {
+	color = Color3.fromRGB(188, 217, 245),
+	decay = Color3.fromRGB(92, 133, 183),
+	haze = 0.17,
+}
+
+local CIEL_SOIR = Color3.fromRGB(240, 176, 130)
+local HORIZON_SOIR = Color3.fromRGB(151, 103, 143)
+local CIEL_NUIT = Color3.fromRGB(101, 135, 198)
+local HORIZON_NUIT = Color3.fromRGB(45, 67, 120)
+
+function E.appliquerAtmosphere(atm: Atmosphere, heure: number, couverture: number, densite: number,
+	voile: number, ciel: Color3, horizon: Color3)
+	local nuit = math.clamp(math.max((7.5 - heure) / 3, (heure - 17.25) / 3), 0, 1)
+	nuit = nuit * nuit * (3 - 2 * nuit)
+	local distance = math.min(math.abs(heure - 6.5), math.abs(heure - 18.5))
+	local crepuscule = math.clamp(1 - distance / 2.5, 0, 1)
+	local airClair = 1 - math.clamp(couverture, 0, 1)
+
+	atm.Density = math.min(0.9, densite + crepuscule * 0.018 + nuit * 0.025)
+	atm.Offset = 0.19 + nuit * 0.05
+	atm.Haze = voile + crepuscule * airClair * 0.27 + nuit * 0.10
+	atm.Glare = (0.22 + crepuscule * 0.12) * airClair * (1 - nuit)
+	atm.Color = ciel:Lerp(CIEL_SOIR, crepuscule * airClair * 0.45):Lerp(CIEL_NUIT, nuit * 0.43)
+	atm.Decay = horizon:Lerp(HORIZON_SOIR, crepuscule * airClair * 0.55):Lerp(HORIZON_NUIT, nuit * 0.52)
+end
 
 function E.apply(Lighting: Lighting, terrain: Terrain)
 	Lighting.Brightness = 3
@@ -38,27 +61,23 @@ function E.apply(Lighting: Lighting, terrain: Terrain)
 	Lighting.ShadowSoftness = 0.30
 	Lighting.GeographicLatitude = 30
 	local atm = Lighting:FindFirstChildOfClass("Atmosphere") or Instance.new("Atmosphere")
-	atm.Density = E.DENSITY_CLEAR
-	atm.Offset = 0.25
-	atm.Color = Color3.fromRGB(196, 222, 246)
-	atm.Decay = Color3.fromRGB(110, 140, 190)
-	atm.Glare = 0.35
-	atm.Haze = 0.35
+	local clair = E.CIEL_CLAIR
+	E.appliquerAtmosphere(atm, Lighting.ClockTime, 0.32, E.DENSITY_CLEAR, clair.haze, clair.color, clair.decay)
 	atm.Parent = Lighting
 	local cc = Lighting:FindFirstChild("Couleurs") or Instance.new("ColorCorrectionEffect")
 	cc.Name = "Couleurs"
-	cc.Saturation = 0.16
+	cc.Saturation = 0.19
 	cc.Contrast = 0.08
 	cc.Brightness = 0.02
-	cc.TintColor = Color3.fromRGB(255, 246, 232)
+	cc.TintColor = Color3.fromRGB(255, 250, 241)
 	cc.Parent = Lighting
 	local bloom = Lighting:FindFirstChildOfClass("BloomEffect") or Instance.new("BloomEffect")
-	bloom.Intensity = 0.32
-	bloom.Size = 28
-	bloom.Threshold = 1.4
+	bloom.Intensity = 0.25
+	bloom.Size = 22
+	bloom.Threshold = 1.55
 	bloom.Parent = Lighting
 	local rays = Lighting:FindFirstChildOfClass("SunRaysEffect") or Instance.new("SunRaysEffect")
-	rays.Intensity = 0.06
+	rays.Intensity = 0.04
 	rays.Spread = 0.6
 	rays.Parent = Lighting
 	local sky = Lighting:FindFirstChildOfClass("Sky")
