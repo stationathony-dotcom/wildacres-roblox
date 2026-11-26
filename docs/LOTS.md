@@ -279,7 +279,7 @@ Modèle conseillé pour cette vague : `gpt-6.2-astra`, raisonnement `ultra`. Stu
 portable : écrire sur disque, garder chaque constructeur appelable en Édition, et lister dans le journal ce qui
 reste à pousser / capturer sur le PC fixe.
 
-- [ ] **X27 · Props niveau planche, famille par famille** (`ConstruireModeles*`) : reprendre les 90 props posables et
+- [ ] **X27 · Props niveau planche, famille par famille** — en cours — Codex, 26/11 (`ConstruireModeles*`) : reprendre les 90 props posables et
       les décors de village selon les 6 points du message du 26/11. Ordre : coffres et caisses (coins dorés, bandes de
       fer, serrure à plaque), ateliers (enclume, four, établi, métier à tisser), mobilier, clôtures/portails,
       lanternes et puits, étals de marché, puis décor naturel (rochers en strates, souches, champignons). Pour chaque
