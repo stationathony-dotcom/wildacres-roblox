@@ -8,6 +8,28 @@ fini. La liste des lots (le travail concret, avec qui le prend) est dans [`docs/
 
 ---
 
+## 0. Économie de contexte (à respecter avant tout, Codex comme Claude)
+
+Le jeu fait plus de 140 scripts et des docs de plus de 100 Ko. Les relire coûte plus cher que le travail lui-même.
+
+1. **Trouver avant de lire.** Ouvrir `docs/CARTE.md` (rôle de chaque fichier), puis pour un gros fichier
+   `docs/carte/<fichier>.md` (chaque fonction avec sa ligne). Ensuite `rg -n` sur le nom exact.
+2. **Lire une plage, jamais un gros fichier entier.** Au-delà de 500 lignes : lire ±80 lignes autour de la
+   fonction visée (`sed -n 'A,Bp'`). `ConstruireModeles`, `Interface.client`, `Catalogue`, `Config`,
+   `GearVisuals`, `Equilibre` ne se lisent **jamais** en entier.
+3. **Un lot = sa fiche.** Pour un lot Codex, lire seulement sa fiche `docs/codex-lots/<n>_<lot>.md` et les
+   fichiers qu'elle cite. Dans `docs/LOTS.md`, lire seulement « Passages » et la ligne du lot.
+4. **Docs de fond = sur demande.** `REFERENCE`, `INVENTAIRE-MISSIONS`, rapports `RAPPORT-*`, `VERIFICATION-*`,
+   `RELECTURE-*`, `docs/archives/` : ne les ouvrir que si la fiche du lot les nomme, et par section (titres
+   listés dans `docs/CARTE.md`).
+5. **Pas d'exploration « pour comprendre ».** Pas de `ls -R`, pas de lecture du dépôt en entier, pas de
+   relecture d'un fichier qu'on vient d'éditer. Diff court en fin de lot : `git diff --stat`.
+6. **Fin de session.** `python tools/archiver_lots.py` (déplace les lots cochés vers
+   `docs/archives/LOTS-FAITS.md`) puis `python tools/carte.py` (remet la carte à jour), les deux dans le
+   commit de fin.
+
+---
+
 ## 1. Le jeu qu'on doit livrer (ce que veut le propriétaire)
 
 Wild Acres = « craft / GTA / MMORPG » : un **bac à sable géant** façon Minecraft (en moins cubique),
@@ -151,7 +173,7 @@ propriétaire coche « testé en Play ».
 
 ## 6. Comment démarrer une session
 
-1. Lire ce fichier puis `docs/LOTS.md` (Passages d'abord, puis Questions : si une réponse est arrivée,
+1. Lire ce fichier (§ 0 surtout) puis dans `docs/LOTS.md` seulement Passages et Questions (si une réponse est arrivée,
    l'appliquer).
 2. `git status` + `git log --oneline -15` pour voir ce que l'autre vient de faire.
 3. Prendre le **premier lot libre de sa colonne**, écrire « en cours — <nom>, <date> » dessus.

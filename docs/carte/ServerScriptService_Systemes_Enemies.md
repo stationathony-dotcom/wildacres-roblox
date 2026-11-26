@@ -1,0 +1,36 @@
+# src/ServerScriptService/Systemes/Enemies.lua — fonctions et lignes
+
+- Enemies.init:102
+- puff:110
+- healthBar:131
+- Enemies.burrow:182
+- spawn:226
+- Enemies.spawnFree:290
+- Enemies.dbgHurt:296
+- Enemies.dbgState:306
+- Enemies.byId:314
+- Enemies.removeWild:324
+- Enemies.onRegionLoad:334
+- Enemies.onRegionUnload:353
+- nearestPlayer:363
+- floorFor:369
+- moveToward:380
+- render:403
+- glowOf:479
+- beacon:489
+- groundMark:524
+- feetY:552
+- markCircle:560
+- telegraph:566
+- enrage:597
+- nearPlayers:609
+- flash:620
+- spore:629
+- thinkPassive:664
+- think:742
+- Enemies.step:974
+- dieInner:1009
+- die:1103
+- Enemies.hit:1130
+- inSafePlace:1231
+- Enemies.nightStep:1244

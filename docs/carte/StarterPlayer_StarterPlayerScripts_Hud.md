@@ -1,0 +1,29 @@
+# src/StarterPlayer/StarterPlayerScripts/Hud.lua — fonctions et lignes
+
+- Hud.scaleFor:17
+- new:33
+- corner:48
+- stroke:51
+- text:54
+- grad:62
+- Hud.objectViewport:68
+- Hud.gearIcon:143
+- Hud.gearThumbnail:151
+- Hud.watchAvatar:178
+- Hud.headViewport:233
+- Hud.avatarViewport:272
+- bar:310
+- Hud.build:321
+- Hud:setPlayer:521
+- Hud:setPortrait:528
+- setBar:539
+- Hud:setBars:548
+- thousands:553
+- Hud:setGold:558
+- Hud:setStars:561
+- Hud:setHeading:568
+- Hud:setPlace:574
+- Hud:setClock:580
+- Hud:setMap:587
+- Hud:notify:604
+- Hud:gain:646

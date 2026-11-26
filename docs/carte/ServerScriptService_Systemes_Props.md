@@ -1,0 +1,31 @@
+# src/ServerScriptService/Systemes/Props.lua — fonctions et lignes
+
+- Props.init:54
+- rand:70
+- chips:74
+- shake:96
+- Props.swing:116
+- setPrompt:132
+- build:177
+- canRespawn:246
+- Props.onRegionLoad:254
+- sapling:308
+- growPlanted:334
+- Props.plant:339
+- loadPlanted:373
+- growStep:385
+- Props.onRegionUnload:400
+- give:408
+- remove:414
+- toughness:449
+- strike:466
+- powerOf:483
+- tooSoon:504
+- needTool:513
+- fell:527
+- harvest:596
+- Props.harvest:802
+- Props.toolHit:811
+- Props.click:857
+- Props.newDay:881
+- Props.get:921

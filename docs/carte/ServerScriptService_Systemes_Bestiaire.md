@@ -1,0 +1,29 @@
+# src/ServerScriptService/Systemes/Bestiaire.lua — fonctions et lignes
+
+- silhouettes:15
+- Bestiaire.islandPool:350
+- Bestiaire.signature:389
+- P:440
+- V:463
+- eyes:466
+- weapon:473
+- FORMES.humain:500
+- FORMES.quadrupede:551
+- FORMES.insecte:603
+- FORMES.serpent:628
+- FORMES.volant:644
+- FORMES.golem:674
+- FORMES.spectre:698
+- FORMES.masse:725
+- Bestiaire.family:755
+- sculpt:790
+- Bestiaire.template:840
+- Bestiaire.build:851
+- Bestiaire.normalizeLoot:866
+- Bestiaire.init:916
+- spawnKept:940
+- freeSpot:951
+- buildCamp:966
+- Bestiaire.onRegionLoad:1026
+- Bestiaire.lootCamp:1069
+- Bestiaire.nightKind:1100

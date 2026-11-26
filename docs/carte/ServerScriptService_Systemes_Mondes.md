@@ -1,0 +1,39 @@
+# src/ServerScriptService/Systemes/Mondes.lua — fonctions et lignes
+
+- getStore:46
+- try:54
+- decode:67
+- Mondes.init:75
+- §Accueil:138
+- readRegistry:142
+- onlineCounts:153
+- onlineJobs:171
+- Mondes.friends:192
+- worldName:218
+- survey:224
+- createWorld:245
+- Mondes.status:285
+- Mondes.registry:314
+- Mondes.list:329
+- Mondes.best:368
+- Mondes.lastWorldOf:390
+- Mondes.join:402
+- §Monde:429
+- newWorld:431
+- worldIdFromJoin:447
+- Mondes.boot:465
+- Mondes.acquire:566
+- Mondes.saveSoon:609
+- Mondes.heartbeat:630
+- sectorOf:641
+- Mondes.ensureRegion:646
+- posOf:704
+- Mondes.rememberPlayer:714
+- Mondes.playerRecord:724
+- Mondes.saveWorld:735
+- saveWorldInner:748
+- §Voyage (port):881
+- Mondes.travelFailed:888
+- Mondes.openSeaMap:901
+- Mondes.travel:911
+- Mondes.shutdown:1005

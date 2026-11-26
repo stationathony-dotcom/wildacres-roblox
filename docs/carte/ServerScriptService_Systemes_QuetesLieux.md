@@ -1,0 +1,30 @@
+# src/ServerScriptService/Systemes/QuetesLieux.lua — fonctions et lignes
+
+- pick:91
+- hint:96
+- onLand:103
+- pointNear:115
+- rootOf:127
+- flat:131
+- villageByKey:135
+- target:145
+- advance:159
+- QuetesLieux.offer:172
+- QuetesLieux.offerHome:229
+- homesOf:273
+- frontOf:301
+- stallOnSquare:307
+- QuetesLieux.what:320
+- QuetesLieux.onTake:362
+- QuetesLieux.checkHerd:429
+- QuetesLieux.noteTalk:445
+- dropMarker:458
+- dropEscort:466
+- QuetesLieux.clear:475
+- makeMarker:492
+- endLoot:528
+- onSearch:538
+- spawnEscort:611
+- stepEscort:678
+- QuetesLieux.step:720
+- QuetesLieux.init:778

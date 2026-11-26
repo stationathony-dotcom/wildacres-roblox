@@ -1,0 +1,28 @@
+# src/ServerScriptService/Systemes/Silhouettes.lua — fonctions et lignes
+
+- newCtx:121
+- part:129
+- along:158
+- chunk:168
+- limb:175
+- chain:181
+- eyes:197
+- teeth:207
+- claws:214
+- crystal:222
+- featherWing:235
+- membraneWing:252
+- backDeco:288
+- spines:319
+- darken:327
+- F.quadrupede:336
+- weapon:493
+- F.humain:529
+- F.insecte:684
+- F.serpent:796
+- F.volant:860
+- leafColor:1041
+- F.golem:1049
+- F.spectre:1141
+- F.masse:1257
+- Silhouettes.build:1344

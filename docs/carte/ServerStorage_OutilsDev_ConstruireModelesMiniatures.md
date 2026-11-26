@@ -1,0 +1,28 @@
+# src/ServerStorage/OutilsDev/ConstruireModelesMiniatures.lua — fonctions et lignes
+
+- serie:11
+- dessin:18
+- M.objet:62
+- construction:77
+- M.construireBloc:133
+- planches:1497
+- folder:1884
+- piecesVisibles:1893
+- volume:1903
+- boite:1909
+- ecart:1914
+- composantes:1939
+- echelle:1962
+- M.centrer:1967
+- M.verifier:1978
+- M.raccorder:2008
+- importance:2035
+- M.depuisProp:2044
+- model:2101
+- curl:2123
+- M.mobilier:2131
+- M.formeOsselets:2162
+- M.identites:2176
+- family:2260
+- trophy:2278
+- M.piecesDeCreatures:2329

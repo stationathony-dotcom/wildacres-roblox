@@ -1,0 +1,27 @@
+# src/ServerScriptService/Systemes/Combat.lua — fonctions et lignes
+
+- hate:15
+- user:21
+- Combat.init:60
+- Combat.damageOf:89
+- formeArme:119
+- Combat.profil:130
+- Combat.profilDistance:143
+- spend:150
+- maitrise:162
+- entrainer:167
+- hasShield:184
+- Combat.setGuard:192
+- Combat.dodge:204
+- Combat.popup:217
+- Combat.swoosh:250
+- weaponEffect:262
+- applyHit:289
+- cibleMult:343
+- rangedWeapon:371
+- famille:390
+- arrowFx:408
+- Combat.shoot:429
+- Combat.attack:558
+- Combat.noteKO:699
+- Combat.hurtPlayer:704
