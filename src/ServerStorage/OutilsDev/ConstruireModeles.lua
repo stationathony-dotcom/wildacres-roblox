@@ -365,6 +365,33 @@ local function lumiereProp(m: Model, nom: string, pos: Vector3, taille: Vector3,
 	return f
 end
 
+-- Le relief décoratif laisse le volume porteur et les rayons d'interaction libres.
+local function reliefProp(m: Model, nom: string, taille: Vector3, pos: Vector3, c: Color3,
+	mat: Enum.Material, rx: number?, ry: number?, rz: number?, forme: string?)
+	local p = P(m, nom, taille, pos, c, mat,
+		{ collide = false, rot = CFrame.Angles(math.rad(rx or 0), math.rad(ry or 0), math.rad(rz or 0)), forme = forme })
+	p.CanTouch = false
+	p.CanQuery = false
+	return p
+end
+
+local LAITON = rgb(177, 111, 39)
+local OR_PALE = rgb(250, 203, 105)
+local FER_CLAIR = rgb(114, 122, 130)
+local FER_SOMBRE = rgb(41, 42, 49)
+local MOUSSE = rgb(84, 107, 57)
+local MOUSSE_CLAIRE = rgb(123, 147, 77)
+local MOUSSE_SOMBRE = rgb(53, 70, 41)
+
+local function detailProp(m: Model, nom: string, taille: Vector3, pos: Vector3, couleur: Color3,
+	mat: Enum.Material, angles: Vector3?, forme: string?): BasePart
+	local rot = angles and CFrame.Angles(math.rad(angles.X), math.rad(angles.Y), math.rad(angles.Z))
+	local p = P(m, nom, taille, pos, couleur, mat, { rot = rot, forme = forme, collide = false })
+	p.CanQuery = false
+	p.CanTouch = false
+	return p
+end
+
 local function lanterneProp(m: Model, nom: string, position: Vector3, echelle: number, range: number, luminosite: number)
 	local function p(x: number, y: number, z: number): Vector3
 		return position + Vp(x, y, z) * echelle
@@ -378,6 +405,14 @@ local function lanterneProp(m: Model, nom: string, position: Vector3, echelle: n
 		for _, z in { -0.375, 0.375 } do
 			P(m, "Montant", Vp(0.083, 1.11, 0.083) * echelle, p(x, 0, z), FER, Mat.Metal, { collide = false })
 		end
+	end
+	reliefProp(m, "Liseré de cuivre", Vp(0.92, 0.09, 0.91) * echelle, p(0, 0.47, 0), LAITON, Mat.Metal)
+	reliefProp(m, "Pointe du capot", Vp(0.38, 0.24, 0.34) * echelle, p(0.022, 0.80, 0), FER_CLAIR, Mat.Metal, 4, -4)
+	reliefProp(m, "Bord du fond poli", Vp(0.81, 0.09, 0.81) * echelle, p(0, -0.47, 0), LAITON, Mat.Metal)
+	for _, z in { -0.382, 0.382 } do
+		reliefProp(m, "Traverse de cage", Vp(0.75, 0.075, 0.055) * echelle, p(0, -0.13, z), FER, Mat.Metal)
+		reliefProp(m, "Goutte de patine", Vp(0.24, 0.12, 0.041) * echelle, p(z * 0.37, 0.53, z * 1.25),
+			rgb(92, 121, 106), Mat.Metal, 0, 0, z * 15)
 	end
 	return lumiereProp(m, nom, p(0, -0.18, 0), Vp(0.26, 0.55, 0.26) * echelle, range, luminosite, true)
 end
@@ -404,6 +439,15 @@ function PROPS_VALDOR.Lampadaire()
 		cercleProp(m, "Chaine", Vp(0, 10.49 - i * 0.30, 3.60), 0.215, 6, 0.11, FER, Mat.Metal, true)
 	end
 	lanterneProp(m, "Lanterne", Vp(0, 8.5, 3.60), 1.54, 28, 1.7)
+	for i, x in { -0.72, -0.24, 0.27, 0.56 } do
+		reliefProp(m, "Croûte de mousse sur le socle", Vp(0.44, 0.14 + i * 0.021, 0.31),
+			Vp(x, 0.79 - i * 0.08, 0.93), i % 2 == 0 and MOUSSE or MOUSSE_CLAIRE, Mat.Grass, -5, 0, i * 3 - 8)
+	end
+	reliefProp(m, "Face claire du fût", Vp(0.71, 5.66, 0.105), Vp(0.04, 5.24, 0.46), BOIS_CLAIR, Mat.Wood, 0, 0, 2)
+	reliefProp(m, "Veine arrachée", Vp(0.17, 1.17, 0.075), Vp(0.29, 5.09, 0.52), BOIS_FONCE, Mat.Wood, 0, 0, -5)
+	reliefProp(m, "Couronnement du mât", Vp(1.12, 0.25, 1.1), Vp(0, 11.92, 0), FER, Mat.Metal, 3)
+	reliefProp(m, "Chant de la potence", Vp(0.09, 0.16, 3.79), Vp(-0.39, 11.24, 2.03), BOIS_CLAIR, Mat.Wood, 3)
+	reliefProp(m, "Étrier de suspension", Vp(0.54, 0.26, 0.38), Vp(0, 10.64, 3.59), FER_CLAIR, Mat.Metal, 5)
 	fini(m)
 end
 
@@ -417,6 +461,13 @@ function PROPS_VALDOR.Lanterne()
 	local l = lanterneProp(m, "Flamme", Vp(0, 4.05, 1.1), 0.85, 22, 1.6)
 	local light = l:FindFirstChildOfClass("PointLight")
 	if light then light.Enabled = false end
+	reliefProp(m, "Sabot du potelet", Vp(0.49, 0.38, 0.47), Vp(0, 0.42, 0), FER, Mat.Metal, 0, 3)
+	reliefProp(m, "Plaque de bois fendu", Vp(0.28, 1.35, 0.089), Vp(-0.02, 2.97, 0.15), BOIS_CLAIR, Mat.Wood, 0, 0, -4)
+	reliefProp(m, "Mousse au pied", Vp(0.26, 0.11, 0.21), Vp(0.13, 0.24, 0.19), MOUSSE, Mat.Grass, 0, 6, -5)
+	detailProp(m, "Biseau du montant", Vp(0.14, 2.70, 0.064), Vp(-0.072, 2.12, 0.156), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -2))
+	detailProp(m, "Éclat au pied", Vp(0.09, 0.60, 0.072), Vp(0.037, 0.50, 0.17), BOIS_FONCE, Mat.Wood, Vp(0, 0, 5), "Wedge")
+	detailProp(m, "Crochet relevé de la potence", Vp(0.23, 0.23, 0.26), Vp(0.004, 4.99, 0.96), rgb(146,108,67), Mat.Metal, Vp(-5, 0, 5))
+	detailProp(m, "Sabot oxydé du montant", Vp(0.39, 0.28, 0.38), Vp(0, 0.37, 0), rgb(101,84,62), Mat.Metal, Vp(0, 6, 0))
 	fini(m)
 end
 
@@ -445,6 +496,47 @@ function PROPS_VALDOR.Puits()
 	for _, y in { 3.42, 3.86 } do cylProp(m, "Cercle", 0.84, 0.08, Vp(0, y, 0), FER, Mat.Metal, nil, false) end
 	P(m, "Corde", Vp(0.08, 1.03, 0.08), Vp(0, 4.27, 0.27), LIN, Mat.Fabric, { collide = false })
 	lienProp(m, "Anse", Vp(0, 3.83, -0.32), Vp(0, 4.01, 0.27), 0.071, 0.073, FER, Mat.Metal, false)
+	-- Un seul versant usé évoque le ruissellement. La margelle garde son diamètre.
+	for i, x in { -2.11, -1.62, -0.95, -0.30, 0.49, 1.21, 1.83 } do
+		reliefProp(m, "Corniche de paille relevée", Vp(0.78 + i % 3 * 0.07, 0.21, 0.65),
+			Vp(x, 6.48 + i % 3 * 0.05, 1.96 - i % 2 * 0.09), i % 3 == 0 and BOIS or OR_PALE, Mat.Grass, 29, 0, i % 3 * 5 - 5)
+		reliefProp(m, "Chaume effiloché de l’égout", Vp(0.37 + i % 3 * 0.06, 0.14, 0.27),
+			Vp(x + i % 2 * 0.077, 6.20 + i % 3 * 0.025, 2.32), i % 2 == 0 and CHAUME or BOIS, Mat.Grass, 28, 0, i % 3 * 4 - 4)
+	end
+	for i, a in { -0.61, -0.30, 0.06, 0.33, 0.58 } do
+		reliefProp(m, "Dalle de margelle humide", Vp(0.79, 0.13, 0.44),
+			Vp(math.sin(a) * 2.05, 1.342 - i % 3 * 0.05, math.cos(a) * 2.05),
+			i % 3 == 0 and MOUSSE_SOMBRE or i % 2 == 0 and MOUSSE_CLAIRE or MOUSSE,
+			Mat.Grass, -6, math.deg(a), i * 2 - 6)
+	end
+	for _, x in { -2.04, 2.04 } do
+		reliefProp(m, "Coussinet du treuil", Vp(0.51, 0.44, 0.52), Vp(x, 5, 0), FER, Mat.Metal)
+		lienProp(m, "Console du treuil", Vp(x, 4.62, 0.23), Vp(x * 0.73, 5.18, 0.2),
+			0.19, 0.20, BOIS_CLAIR, Mat.Wood, false)
+	end
+	cylProp(m, "Creux du seau", 0.63, 0.035, Vp(0, 3.945, 0), BOIS_FONCE, Mat.Wood, nil, false)
+
+	for i, x in { -1.88, -1.07, -0.19, 0.69, 1.54 } do
+		local z = math.sqrt(2.08 ^ 2 - x ^ 2)
+		detailProp(m, "Mousse sur la margelle", Vp(0.73 + i % 2 * 0.17, 0.12, 0.43), Vp(x, 1.395, z),
+			rgb(89 + i * 7, 113 + i * 4, 62), Mat.Grass, Vp(3, math.deg(math.asin(x / 2.08)), i - 4))
+		if i ~= 4 then
+			detailProp(m, "Pointe de mousse", Vp(0.32, 0.32 + i * 0.044, 0.16), Vp(x + 0.075, 1.25, z + 0.16),
+				rgb(67, 96 + i * 5, 64), Mat.Grass, Vp(4, math.deg(math.asin(x / 2.08)), i * 3 - 8), "Wedge")
+		end
+	end
+	for i, x in { -2.08, -1.37, -0.48, 0.39, 1.28, 2.13 } do
+		local z = 2.39 - i % 3 * 0.055
+		detailProp(m, "Paille rompue à l’égout", Vp(0.67, 0.27, 0.55), Vp(x, 6.29 - i % 2 * 0.071, z),
+			({ CHAUME, rgb(177, 131, 63), rgb(220, 182, 100) })[i % 3 + 1], Mat.Grass, Vp(27 + i % 3 * 3, i - 4, 4), "Wedge")
+	end
+	for _, x in { -2.04, 2.04 } do
+		lienProp(m, "Jambe de force de l’auvent", Vp(x, 5.21, 0.16), Vp(x * 0.67, 6.43, 0.20), 0.23, 0.23, BOIS_CLAIR, Mat.Wood, false)
+		detailProp(m, "Épaulement d’about", Vp(0.36, 0.49, 0.15), Vp(x, 5.21, 0.25), FER, Mat.Metal, Vp(0, 0, x * 3))
+		detailProp(m, "Biseau du fût mouillé", Vp(0.17, 1.14, 0.13), Vp(x - 0.13, 1.99, 0.24), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -4))
+	end
+	detailProp(m, "Écho du reflet sous le seau", Vp(1.32, 0.026, 0.17), Vp(-0.41, 0.887, 0.50), rgb(134,185,191), Mat.Glass, Vp(0, 13, 0))
+	detailProp(m, "Reflet brisé en rive", Vp(0.77, 0.022, 0.13), Vp(0.72, 0.885, 0.72), rgb(107,161,167), Mat.Glass, Vp(0, -18, 0))
 	fini(m)
 end
 
@@ -473,6 +565,41 @@ function PROPS_VALDOR.Fontaine()
 	pe.Speed, pe.Lifetime, pe.Rate = NumberRange.new(5, 7), NumberRange.new(0.5, 0.7), 35
 	pe.SpreadAngle, pe.Acceleration = Vector2.new(17, 17), Vp(0, -24, 0)
 	pe.Parent = jet
+	local eauClaire = rgb(151, 212, 216)
+	for i, a in { -1.38, -0.97, -0.52, -0.14, 0.25, 0.62, 1.17, 2.17, 2.62, 3.36 } do
+		local x, z = math.sin(a), math.cos(a)
+		reliefProp(m, "Calcaire blanchi par l’eau", Vp(0.97 + i % 3 * 0.14, 0.21, 0.17),
+			Vp(x * 3.90, 1.19 - i % 3 * 0.06, z * 3.90),
+			i % 3 == 0 and MOUSSE_SOMBRE or i % 2 == 0 and PIERRE_CLAIRE or rgb(201, 190, 167), Mat.Slate,
+			-4, math.deg(a), i % 3 * 5 - 5)
+		reliefProp(m, "Ride brisée du bassin", Vp(0.92 + i % 3 * 0.19, 0.028, 0.13),
+			Vp(x * (2.75 + i % 3 * 0.13), 1.014, z * (2.75 + i % 3 * 0.13)),
+			i % 2 == 0 and eauClaire or rgb(106, 167, 177), Mat.Glass, 0, math.deg(a), 0, "Ball")
+	end
+	for i, a in { -1.67, -0.85, -0.09, 0.78, 1.59, 2.37, 3.10 } do
+		local x, z = math.sin(a), math.cos(a)
+		reliefProp(m, "Nervure de la colonne", Vp(0.24, 2.21 + i % 3 * 0.18, 0.12), Vp(x * 0.68, 2.54, z * 0.68),
+			i % 2 == 0 and CALCAIRE or FER_CLAIR, Mat.Slate, -3, math.deg(a), i % 3 * 4 - 4)
+	end
+	reliefProp(m, "Bouche de cuivre verdie", Vp(0.36, 0.28, 0.26), Vp(0, 5.54, 0.19), rgb(97, 130, 106), Mat.Metal, 7)
+
+	for i, position in { Vp(-1.52, 1.352, 3.15), Vp(-0.85, 1.36, 3.46), Vp(-0.16, 1.35, 3.57),
+		Vp(0.61, 1.354, 3.50), Vp(1.22, 1.35, 3.26) } do
+		detailProp(m, "Manteau de mousse humide", Vp(0.78, 0.095, 0.46), position,
+			rgb(101 + i * 5, 125 + i * 2, 78), Mat.Grass, Vp(3, math.deg(math.atan2(position.X, position.Z)), i - 4))
+		detailProp(m, "Lamelle de mousse sur joint", Vp(0.29, 0.27 + i % 3 * 0.067, 0.13), position + Vp(0.12, -0.13, 0.29),
+			rgb(73, 106 + i * 3, 79), Mat.Grass, Vp(4, 0, 6 - i * 3), "Wedge")
+	end
+	for i, a in { 0.10, 1.65, 3.28, 4.82 } do
+		local dir = Vp(math.sin(a), 0, math.cos(a))
+		local col = rgb(137 + i * 12, 187 + i * 6, 190 + i * 7)
+		lienProp(m, "Filet tombant de la vasque", dir * 1.54 + Vp(0, 5.265, 0), dir * (1.67 + i * 0.043) + Vp(0, 1.0, 0),
+			0.095 + i * 0.023, 0.11, col, Mat.Glass, false)
+		detailProp(m, "Éclaboussure au bassin", Vp(0.56, 0.066, 0.37), dir * 1.82 + Vp(0, 1.026, 0), col, Mat.Glass, Vp(0, 17 * i, 0), "Ball")
+	end
+	detailProp(m, "Ressaut de chapiteau chanfrené", Vp(1.50, 0.30, 1.50), Vp(0, 4.05, 0), PIERRE_CLAIRE, Mat.Slate, Vp(0, 13, 0))
+	detailProp(m, "Pointe lapidaire", Vp(0.34, 0.34, 0.14), Vp(0, 2.79, 0.682), CALCAIRE, Mat.Slate, Vp(0, 0, 45))
+	detailProp(m, "Filet de calcaire", Vp(0.13, 1.25, 0.07), Vp(0.24, 2.50, 0.64), rgb(205,194,166), Mat.Slate, Vp(0, 0, -5))
 	fini(m)
 end
 
@@ -499,6 +626,25 @@ function PROPS_VALDOR.Panneau()
 		t.Font, t.TextColor3 = Enum.Font.Fondamento, rgb(65, 38, 24)
 		t.Parent, sg.Parent = sg, planche
 	end
+	for _, x in { -2.47, 2.47 } do
+		for _, z in { -0.185, 0.185 } do
+			reliefProp(m, "Éclisse de cadre", Vp(0.39, 1.53, 0.083), Vp(x, 3.91, z), BOIS_FONCE, Mat.Wood, 0, 0, x * 2)
+			reliefProp(m, "Coin biseauté du cadre", Vp(0.48, 0.27, 0.11), Vp(x, 4.58, z), LAITON, Mat.Metal, 0, 0, x * 2)
+		end
+	end
+	for i, profil in { { -1.57, 3.20, 1.18 }, { 0.09, 3.19, 1.32 }, { 1.54, 3.17, 0.85 } } do
+		reliefProp(m, "Bord écaillé du panneau", Vp(profil[3], 0.089, 0.09), Vp(profil[1], profil[2], 0.17),
+			i == 2 and LIN or BOIS_CLAIR, Mat.Wood, 0, 0, i * 4 - 8)
+	end
+	reliefProp(m, "Frise haute du panneau", Vp(4.31, 0.105, 0.11), Vp(0.04, 4.67, 0.153), BOIS_CLAIR, Mat.Wood, 0, 0, 2)
+	detailProp(m, "Traverse à chant miel", Vp(5.30, 0.11, 0.12), Vp(-0.03, 4.75, 0.167), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 1))
+	detailProp(m, "Éclat de traverse", Vp(0.64, 0.09, 0.13), Vp(1.45, 4.74, 0.198), BOIS, Mat.Wood, Vp(0, 2, 4), "Wedge")
+	detailProp(m, "Longeron d’enseigne", Vp(4.68, 0.12, 0.15), Vp(-0.04, 3.12, 0.18), BOIS, Mat.Wood, Vp(0, 0, 2))
+	detailProp(m, "Jambe de force gauche", Vp(0.19, 0.78, 0.17), Vp(-2.15, 2.83, 0.09), BOIS_CLAIR, Mat.Wood, Vp(3, 0, -38))
+	detailProp(m, "Jambe de force droite", Vp(0.19, 0.77, 0.17), Vp(2.14, 2.79, -0.075), BOIS, Mat.Wood, Vp(-4, 0, 37))
+	detailProp(m, "Fer d’angle", Vp(0.36, 0.34, 0.10), Vp(-2.48, 4.56, 0.205), FER, Mat.Metal, Vp(0, 0, -5))
+	detailProp(m, "Arête du fer d’angle", Vp(0.16, 0.17, 0.066), Vp(-2.52, 4.62, 0.248), rgb(118,132,128), Mat.Metal, Vp(0, 0, -5))
+	detailProp(m, "Coin supérieur doré", Vp(0.29, 0.28, 0.11), Vp(2.44, 4.56, 0.21), rgb(161,120,62), Mat.Metal, Vp(0, 0, 6))
 	fini(m)
 end
 
@@ -506,18 +652,34 @@ function PROPS_VALDOR.Tonneaux()
 	local m = nouveau("Tonneaux")
 	for i, p in { Vp(0, 0, 0), Vp(2.02, 0, 0.26), Vp(0.92, 0, 1.82) } do
 		local h, diam = 2.62 - (i - 1) * 0.39, 2.05 - (i - 1) * 0.13
-		local c = i % 2 == 0 and BOIS_CLAIR or BOIS
+		local c = i % 2 == 0 and rgb(151, 106, 63) or rgb(111, 65, 42)
 		for j, t in { { 0.16, 0.87, 0.32 }, { 0.49, 1, 0.39 }, { 0.83, 0.86, 0.34 } } do
-			cylProp(m, "Douelles", diam * t[2], h * t[3], p + Vp(0, h * t[1], 0), teinteProp(c, j), Mat.WoodPlanks)
+			cylProp(m, "Douelles", diam * t[2], h * t[3], p + Vp(0, h * t[1], 0), ({ BOIS_FONCE, c, BOIS_CLAIR })[j], Mat.WoodPlanks)
 		end
 		cylProp(m, "Fond du fût", diam * 0.76, 0.07, p + Vp(0, h, 0), BOIS_FONCE, Mat.Wood)
 		lamesProp(m, "Lame", Vp(diam * 0.59, 0.05, diam * 0.51), p + Vp(0, h + 0.022, 0), 3, "Z", c)
 		for _, t in { 0.25, 0.76 } do
 			local y = h * t
 			cylProp(m, "Cercle", diam * 0.98, 0.125, p + Vp(0, y, 0), FER, Mat.Metal, nil, false)
-			for _, x in { -0.31, 0.29 } do rivetProp(m, p + Vp(x, y, diam * 0.46), 0.105) end
+			rivetProp(m, p + Vp(t < 0.5 and -0.31 or 0.29, y, diam * 0.46), 0.105, FER_CLAIR)
 		end
 		cylProp(m, "Bonde", 0.18, 0.08, p + Vp(0.16, h + 0.048, 0), BOIS_CLAIR, Mat.Wood)
+		-- Les douelles visibles chevauchent le ventre porteur et se perdent sous les cercles.
+		for j, profil in { { -1.12, 0.46, 0.62 }, { -0.64, 0.44, 0.77 }, { -0.18, 0.47, 0.83 },
+			{ 0.32, 0.48, 0.76 }, { 0.84, 0.43, 0.68 } } do
+			local a, w, hauteur = profil[1] + (i - 2) * 0.09, profil[2], profil[3]
+			local rayon = diam * 0.457
+			reliefProp(m, "Douelle saillante", Vp(diam * w * 0.56, h * hauteur, 0.095),
+				p + Vp(math.sin(a) * rayon, h * (0.51 + (j % 3 - 1) * 0.023), math.cos(a) * rayon),
+				({ BOIS_FONCE, c, BOIS_CLAIR })[(i + j) % 3 + 1], Mat.Wood, (j % 3 - 1) * 4, math.deg(a))
+		end
+		reliefProp(m, "Agrafe rouille du cercle", Vp(0.37, 0.21, 0.09),
+			p + Vp(-0.12 + i * 0.09, h * 0.76, diam * 0.48), LAITON, Mat.Metal, 0, -5, -4)
+		reliefProp(m, "Bois poli autour de la bonde", Vp(0.42, 0.035, 0.20),
+			p + Vp(0.15, h + 0.058, 0.04), LIN, Mat.Wood, 0, i * 4 - 9)
+		if i ~= 3 then
+			detailProp(m, "Tranche usée du fond", Vp(diam * 0.38, 0.04, 0.12), p + Vp(-0.08, h + 0.05, diam * 0.17), BOIS_CLAIR, Mat.Wood, Vp(0, 5, 0))
+		end
 	end
 	fini(m)
 end
@@ -528,13 +690,22 @@ local function caisseProp(m: Model, p: Vector3, size: number, c: Color3, ouverte
 		lamesProp(m, "Bordage", Vp(size, size * 0.84, 0.13), p + Vp(0, size * 0.55, s * (size / 2 - 0.065)), 2, "Y", c)
 		lamesProp(m, "Bordage", Vp(0.13, size * 0.84, size - 0.18), p + Vp(s * (size / 2 - 0.065), size * 0.55, 0), 2, "Y", c)
 		for _, x in { -0.43, 0.43 } do
-			P(m, "Cornière", Vp(0.20, size, 0.20), p + Vp(size * x, size / 2, s * size * 0.43), BOIS_FONCE, Mat.Wood)
+			P(m, "Cornière", Vp(0.25, size, 0.25), p + Vp(size * x, size / 2, s * size * 0.43), s == 1 and FER or BOIS_FONCE, s == 1 and Mat.Metal or Mat.Wood)
 		end
 	end
+	-- Le bois frotté se prolonge sur deux arêtes et s'arrête sur une éclisse plus sombre.
+	reliefProp(m, "Cadre de rive clair", Vp(size * 0.97, size * 0.10, 0.095),
+		p + Vp(0, size * 0.90, size * 0.477), BOIS_CLAIR, Mat.Wood, -3, 0, 2)
+	if not ouverte then
+		reliefProp(m, "Patin de caisse sombre", Vp(size * 0.92, size * 0.12, 0.10),
+			p + Vp(0, size * 0.16, size * 0.478), BOIS_FONCE, Mat.Wood, 0, 0, -2)
+	end
+	reliefProp(m, "Poignée creuse", Vp(size * 0.25, size * 0.10, 0.067),
+		p + Vp(size * 0.08, size * 0.76, size * 0.488), FER_SOMBRE, Mat.Wood)
 	if ouverte then
 		P(m, "Fond garni", Vp(size * 0.86, size * 0.10, size * 0.83), p + Vp(0, size * 0.82, 0), BOIS, Mat.Wood)
 	else
-		lamesProp(m, "Couvercle", Vp(size, size * 0.11, size), p + Vp(0, size * 0.96, 0), 3, "X", c)
+		lamesProp(m, "Couvercle", Vp(size, size * 0.11, size), p + Vp(0, size * 0.96, 0), 2, "X", c)
 		lienProp(m, "Écharpe", p + Vp(-size * 0.42, size * 0.18, size * 0.50),
 			p + Vp(size * 0.42, size * 0.86, size * 0.50), 0.17, 0.11, BOIS_FONCE, Mat.Wood, false)
 	end
@@ -545,11 +716,13 @@ function PROPS_VALDOR.Caisses()
 	caisseProp(m, Vector3.zero, 2.37, BOIS_CLAIR, false)
 	caisseProp(m, Vp(2.03, 0, 0.35), 1.84, BOIS, true)
 	caisseProp(m, Vp(0.32, 2.37, -0.1), 1.68, BOIS, false)
-	for i = 0, 4 do
+	for i = 0, 3 do
 		local x, z = 1.58 + i % 3 * 0.47, 0.04 + math.floor(i / 3) * 0.64
-		P(m, "Choux", Vp(0.58, 0.56, 0.55), Vp(x, 1.74, z), rgb(106 + i * 3, 133 + i * 3, 68),
+		P(m, "Choux", Vp(0.67, 0.61, 0.65), Vp(x, 1.74 + i * 0.07, z + i * 0.10), rgb(106 + i * 3, 133 + i * 3, 68),
 			Mat.Grass, { forme = "Ball", collide = false })
 	end
+	reliefProp(m, "Feuille claire froissée", Vp(0.55, 0.19, 0.47), Vp(1.68, 2.02, 0.23),
+		MOUSSE_CLAIRE, Mat.Grass, -7, 26, 5, "Ball")
 	fini(m)
 end
 
@@ -576,6 +749,26 @@ function PROPS_VALDOR.Epouvantail()
 		CFrame.Angles(0, 0, math.pi / 2 - 0.13), false)
 	cylProp(m, "Calotte", 1.32, 0.60, Vp(0.13, 6.91, 0), CHAUME, Mat.Grass, nil, false)
 	cylProp(m, "Galon", 1.35, 0.13, Vp(0.13, 6.74, 0), BOIS_FONCE, Mat.Fabric, nil, false)
+	reliefProp(m, "Écharpe de toile", Vp(1.28, 0.29, 0.77), Vp(0.08, 5.17, 0.16), rgb(60, 109, 105), Mat.Fabric, 0, -5, -6)
+	for i, p in { Vp(-0.43, 4.87, 0.55), Vp(-0.63, 4.55, 0.56), Vp(-0.72, 4.31, 0.58) } do
+		reliefProp(m, "Pan effiloché de l’écharpe", Vp(0.37, 0.38 - i * 0.041, 0.13), p,
+			i == 3 and rgb(48, 81, 82) or rgb(84, 136, 125), Mat.Fabric, 2, 0, -18 + 4 * i)
+	end
+	reliefProp(m, "Boucle de corde", Vp(0.37, 0.24, 0.18), Vp(0.15, 3.42, 0.59), LAITON, Mat.Metal, 0, 0, 6)
+	for i, x in { -0.78, -0.32, 0.20, 0.67 } do
+		reliefProp(m, "Éclat de paille du chapeau", Vp(0.37 + i * 0.041, 0.12, 0.30), Vp(x, 6.54 + i * 0.036, 0.86 - math.abs(x) * 0.2),
+			i % 2 == 0 and BOIS or OR_PALE, Mat.Grass, -5, i * 6 - 12, 6)
+	end
+	reliefProp(m, "Bouton de toile sombre", Vp(0.19, 0.21, 0.10), Vp(0.19, 4.36, 0.55), BOIS_FONCE, Mat.Fabric, 0, 0, 7)
+	detailProp(m, "Bandeau du col", Vp(1.31, 0.30, 0.17), Vp(0.02, 4.91, 0.49), rgb(197,89,65), Mat.Fabric, Vp(0, 0, -6))
+	detailProp(m, "Revers de col", Vp(0.43, 0.38, 0.16), Vp(-0.07, 4.73, 0.51), rgb(106,49,46), Mat.Fabric, Vp(0, 0, 18), "Wedge")
+	detailProp(m, "Écharpe courte", Vp(0.69, 0.28, 0.78), Vp(0.11, 5.28, 0.022), rgb(52,93,104), Mat.Fabric, Vp(4, -4, -7))
+	detailProp(m, "Pan d’écharpe effiloché", Vp(0.43, 0.96, 0.14), Vp(0.57, 4.94, 0.40), rgb(58,106,112), Mat.Fabric, Vp(-4, 6, 29), "Wedge")
+	detailProp(m, "Ourlet rapiécé", Vp(0.67, 0.24, 0.13), Vp(0.38, 3.19, 0.52), rgb(114,52,47), Mat.Fabric, Vp(0, 0, 5))
+	detailProp(m, "Rapiéçage de coude", Vp(0.49, 0.37, 0.089), Vp(-1.70, 4.47, 0.373), rgb(178,119,78), Mat.Fabric, Vp(0, 0, -8))
+	detailProp(m, "Paille sous la veste", Vp(0.56, 0.56, 0.32), Vp(-0.49, 3.01, 0.15), CHAUME, Mat.Grass, Vp(5, 6, -12), "Wedge")
+	detailProp(m, "Bord cassé du chapeau", Vp(0.75, 0.16, 0.47), Vp(-0.55, 6.58, 0.83), rgb(222,180,96), Mat.Grass, Vp(7, 9, -7), "Wedge")
+	detailProp(m, "Pan de galon", Vp(0.25, 0.31, 0.37), Vp(0.70, 6.65, 0.05), BOIS_FONCE, Mat.Grass, Vp(-5, 0, 13))
 	fini(m)
 end
 
@@ -597,6 +790,20 @@ function PROPS_VALDOR.Botte_Foin()
 		lienProp(m, "Lien", c, d, 0.075, 0.093, BOIS_FONCE, Mat.Fabric, false)
 		rivetProp(m, Vp(x, 2.34, 0.4), 0.14, BOIS_CLAIR)
 	end
+	for i, profil in { { -1.34, 2.30, 0.97 }, { -0.61, 2.33, 1.04 }, { 0.27, 2.35, 1.10 }, { 0.92, 2.31, 1.06 } } do
+		reliefProp(m, "Nappe claire de foin", Vp(0.90 + i * 0.06, 0.21, 0.59), Vp(profil[1], profil[2], profil[3]),
+			i == 2 and CHAUME or OR_PALE, Mat.Grass, -5, 0, i * 3 - 6)
+		lienProp(m, "Mèche de foin rabattue", Vp(profil[1], profil[2], 1.25), Vp(profil[1] + 0.24 - i * 0.07, 1.94 - i * 0.072, 1.32),
+			0.20, 0.12, i % 2 == 0 and BOIS or CHAUME, Mat.Grass, false)
+	end
+	reliefProp(m, "Nœud de ficelle", Vp(0.27, 0.19, 0.23), Vp(0.88, 2.36, 0.41), LIN, Mat.Fabric, 4, -7, 4)
+	detailProp(m, "Crête de paille rabattue", Vp(2.84, 0.16, 0.62), Vp(-0.29, 2.33, 0.38), rgb(230,184,95), Mat.Grass, Vp(2, 4, -2))
+	detailProp(m, "Paille effilochée à gauche", Vp(0.91, 0.27, 0.45), Vp(-1.41, 2.14, 0.74), rgb(208,162,78), Mat.Grass, Vp(7, -6, -5), "Wedge")
+	detailProp(m, "Tresse du flanc", Vp(1.44, 0.25, 0.16), Vp(0.48, 1.83, 1.32), rgb(226,176,84), Mat.Grass, Vp(0, 0, 5))
+	detailProp(m, "Paille ancienne au cœur", Vp(0.72, 0.20, 0.18), Vp(0.66, 1.53, 1.32), rgb(146,108,54), Mat.Grass, Vp(0, 0, -6), "Wedge")
+	detailProp(m, "Pointe libre de la gerbe", Vp(0.65, 0.23, 0.30), Vp(-1.42, 1.71, 1.22), rgb(236,185,90), Mat.Grass, Vp(5, -6, 6), "Wedge")
+	detailProp(m, "Nœud de corde saillant", Vp(0.34, 0.19, 0.25), Vp(-0.92, 2.34, 0.60), BOIS_FONCE, Mat.Fabric, Vp(-4, 18, -5))
+	detailProp(m, "Brin de corde libre", Vp(0.56, 0.072, 0.095), Vp(-0.78, 2.40, 0.72), LIN, Mat.Fabric, Vp(0, -34, -4))
 	fini(m)
 end
 
@@ -613,6 +820,27 @@ function PROPS_VALDOR.Boite_Lettres()
 		for _, x in { -0.61, 0.61 } do rivetProp(m, Vp(x, y, -0.69), 0.08) end
 	end
 	toitureProp(m, 1.96, 1.64, 4.52, 0.36, 0, false)
+	reliefProp(m, "Bec de la fente", Vp(1.20, 0.17, 0.16), Vp(0, 4.18, -0.63), FER_CLAIR, Mat.Metal, -7)
+	reliefProp(m, "Lettre pliée dans la fente", Vp(0.65, 0.10, 0.17), Vp(-0.11, 4.055, -0.67), LIN, Mat.Fabric, 6, 0, -5)
+	reliefProp(m, "Écusson du sceau", Vp(0.48, 0.49, 0.14), Vp(0, 3.63, -0.612), LAITON, Mat.Metal, 0, 0, 45)
+	reliefProp(m, "Court volet de levée", Vp(0.16, 0.49, 0.31), Vp(0.79, 4.08, 0.16), GARANCE, Mat.Metal, 0, -5, -5)
+	reliefProp(m, "Pied du volet", Vp(0.17, 0.39, 0.14), Vp(0.75, 3.79, 0.17), FER_SOMBRE, Mat.Metal, 6, 0, -7)
+	lienProp(m, "Console de la boîte", Vp(0.1, 2.66, -0.08), Vp(0.53, 3.18, -0.48), 0.16, 0.16, BOIS_CLAIR, Mat.Wood, false)
+	for i, x in { -0.64, -0.33, 0.13, 0.55, 0.74 } do
+		reliefProp(m, "Écaille de bardeau clair", Vp(0.34, 0.088, 0.25), Vp(x, 4.64 + i % 3 * 0.039, 0.65 - i % 2 * 0.07),
+			i % 3 == 0 and BOIS_FONCE or BOIS_CLAIR, Mat.Wood, 22, 0, i % 3 * 5 - 5)
+	end
+	detailProp(m, "Plaque sous la fente", Vp(1.16, 0.34, 0.055), Vp(0, 4.075, -0.654), rgb(125,81,46), Mat.Metal, Vp(0, 0, -3))
+	detailProp(m, "Auvent de fente en laiton", Vp(1.21, 0.10, 0.16), Vp(0.004, 4.205, -0.696), rgb(205,149,72), Mat.Metal, Vp(-5, 0, 0))
+	detailProp(m, "Mât du fanion de levée", Vp(0.102, 0.62, 0.13), Vp(0.82, 4.02, -0.24), FER, Mat.Metal, Vp(0, 0, -6))
+	detailProp(m, "Fanion de levée patiné", Vp(0.11, 0.30, 0.40), Vp(0.85, 4.27, -0.22), GARANCE, Mat.Metal, Vp(5, 0, -5), "Wedge")
+	detailProp(m, "Bouton du fanion", Vp(0.13, 0.17, 0.16), Vp(0.82, 3.76, -0.25), rgb(199,148,70), Mat.Metal)
+	detailProp(m, "Bois nu de la boîte", Vp(0.49, 0.12, 0.059), Vp(-0.31, 3.63, -0.636), BOIS, Mat.Wood, Vp(0, 0, -6))
+	detailProp(m, "Aubier dans le fil", Vp(0.34, 0.065, 0.048), Vp(-0.37, 3.66, -0.673), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -6))
+	detailProp(m, "Sous-toit usé", Vp(1.57, 0.14, 0.14), Vp(0, 4.47, -0.66), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 3))
+	detailProp(m, "Larme sombre au bardeau", Vp(0.22, 0.23, 0.14), Vp(-0.49, 4.47, -0.68), BOIS_FONCE, Mat.Wood, Vp(-4, 0, -7), "Wedge")
+	detailProp(m, "Jambe de force du caisson", Vp(0.28, 0.64, 0.25), Vp(0.13, 3.12, -0.22), BOIS_FONCE, Mat.Wood, Vp(-30, 0, -8))
+	detailProp(m, "Empreinte de cire", Vp(0.19, 0.18, 0.045), Vp(0, 3.63, -0.711), rgb(195,82,64), Mat.CeramicTiles, Vp(0, 0, 39))
 	fini(m)
 end
 
@@ -627,6 +855,18 @@ function PROPS_VALDOR.Cloture()
 		rivetProp(m, Vp(-1.99, y, 0.258), 0.11)
 		P(m, "Tenon", Vp(0.32, 0.20, 0.29), Vp(-2.10, y, 0), BOIS_FONCE, Mat.Wood)
 	end
+	reliefProp(m, "Coiffe biseautée du piquet", Vp(0.51, 0.14, 0.51), Vp(-2, 3.15, 0), BOIS_CLAIR, Mat.Wood, 3, 0, -5)
+	for i, y in { 1.11, 2.24 } do
+		reliefProp(m, "Bande de bois fendu", Vp(2.62 + i * 0.18, 0.11, 0.079), Vp(0.13 - i * 0.24, y + 0.04, 0.108),
+			i == 1 and BOIS or BOIS_CLAIR, Mat.Wood, 0, 0, i * 3 - 4)
+		reliefProp(m, "Cheville traversante", Vp(0.19, 0.24, 0.16), Vp(-2.06, y, -0.19), LAITON, Mat.Metal, 0, 0, i * 5 - 3)
+	end
+	reliefProp(m, "Mousse de pied déchirée", Vp(0.39, 0.29, 0.14), Vp(-1.96, 0.29, 0.22), MOUSSE, Mat.Grass, -5, 0, 7)
+	detailProp(m, "Oblique de réparation", Vp(0.19, 1.60, 0.16), Vp(0.70, 1.68, 0.10), BOIS, Mat.Wood, Vp(0, 0, -43))
+	detailProp(m, "Tranche de lisse fendue", Vp(1.47, 0.10, 0.13), Vp(-0.37, 2.30, 0.11), BOIS_FONCE, Mat.Wood, Vp(0, 0, 3))
+	detailProp(m, "Aubier au bord de la fente", Vp(0.81, 0.071, 0.095), Vp(-0.25, 2.35, 0.15), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 4))
+	detailProp(m, "Épaulement du sabot", Vp(0.49, 0.14, 0.48), Vp(-2, 0.255, 0), BOIS_FONCE, Mat.Wood, Vp(0, 5, 0))
+	detailProp(m, "Fiche de réparation", Vp(0.17, 0.32, 0.09), Vp(0.35, 1.23, 0.20), FER, Mat.Metal, Vp(0, 0, 5))
 	fini(m)
 end
 
@@ -643,25 +883,82 @@ function PROPS_VALDOR.Feu_Camp()
 	local f = lumiereProp(m, "Flamme", Vp(0, 0.64, 0.02), Vp(0.36, 0.46, 0.41), 20, 2)
 	local fire = Instance.new("Fire")
 	fire.Size, fire.Heat, fire.Parent = 3, 6, f
+	for i, p in { Vp(-0.49, 0.34, 0.41), Vp(-0.09, 0.41, -0.16), Vp(0.47, 0.32, 0.35), Vp(0.30, 0.42, -0.49) } do
+		reliefProp(m, "Braise fendue", Vp(0.37, 0.13, 0.25), p, rgb(255, 104 + i * 13, 41), Mat.Neon,
+			5, i * 23, i * 4 - 8, "Wedge")
+	end
+	for i, a in { -0.45, 0.11, 0.91, 2.02 } do
+		reliefProp(m, "Arête brisée de la pierre de feu", Vp(0.71, 0.23, 0.46),
+			Vp(math.sin(a) * 1.51, 0.53 - i % 3 * 0.033, math.cos(a) * 1.51),
+			i % 2 == 0 and CALCAIRE or FER_SOMBRE, Mat.Slate, 5, math.deg(a), i * 4 - 9, "Wedge")
+	end
+	reliefProp(m, "Cœur de charbon mat", Vp(0.93, 0.12, 0.73), Vp(0.10, 0.21, 0.09), FER_SOMBRE, Mat.Slate, 0, -7)
+	detailProp(m, "Lit de tisons", Vp(1.24, 0.08, 0.92), Vp(0.07, 0.26, 0.06), rgb(236,79,33), Mat.Neon, Vp(0, -9, 0), "Ball")
+	detailProp(m, "Pointe d’un tison", Vp(0.38, 0.16, 0.35), Vp(0.51, 0.34, 0.28), rgb(255,146,48), Mat.Neon, Vp(5, 3, -7), "Wedge")
+	detailProp(m, "Charbon fendu vif", Vp(0.47, 0.084, 0.12), Vp(-0.52, 0.35, -0.14), rgb(255,99,46), Mat.Neon, Vp(0, 15, 0))
+	detailProp(m, "Couronne noircie", Vp(1.17, 0.12, 0.31), Vp(-0.08, 0.44, 1.17), rgb(62,54,48), Mat.Slate, Vp(0, -5, -4))
+	detailProp(m, "Suie en langue", Vp(0.31, 0.21, 0.22), Vp(0.33, 0.47, 1.35), rgb(79,67,61), Mat.Slate, Vp(4, 3, 7), "Wedge")
+	detailProp(m, "Éclat de pierre blanche", Vp(0.67, 0.15, 0.36), Vp(-0.80, 0.49, 1.19), CALCAIRE, Mat.Slate, Vp(5, 21, -6), "Wedge")
+	detailProp(m, "Moellon brûlé rompu", Vp(0.61, 0.22, 0.36), Vp(1.21, 0.37, 1.00), rgb(113,98,85), Mat.Slate, Vp(4, -17, -4))
+	detailProp(m, "Cendre claire sur une bûche", Vp(0.76, 0.10, 0.19), Vp(0.21, 0.55, -0.12), rgb(156,137,113), Mat.Wood, Vp(0, 52, 5))
 	fini(m)
 end
 
 local function coffreProp(nom: string, c: Color3, colFer: Color3)
 	local m = nouveau(nom)
-	lamesProp(m, "Caisse", Vp(3, 1.55, 1.99), Vp(0, 0.775, 0), 5, "X", c)
-	lamesProp(m, "Couvercle", Vp(3.08, 0.34, 2.08), Vp(0, 1.68, 0), 5, "X", c)
-	lamesProp(m, "Bombé", Vp(3.07, 0.33, 1.73), Vp(0, 1.95, 0), 5, "X", BOIS_CLAIR)
-	lamesProp(m, "Faîtage", Vp(3.03, 0.18, 1.2), Vp(0, 2.17, 0), 5, "X", c)
+	local sombre, miel = rgb(69, 41, 31), rgb(174, 108, 64)
+	local bronze, laiton = rgb(151, 91, 36), rgb(236, 176, 71)
+	local acier = colFer:Lerp(rgb(121, 132, 140), 0.55)
+	-- Props anime cette pièce. Les lattes et ferrures mobiles suivent son CFrame.
+	local couvercle = P(m, "Couvercle", Vp(3.08, 0.34, 2.08), Vp(0, 1.68, 0), c, Mat.Wood, { transp = 1 })
+	local function mobile(p: BasePart)
+		p.Anchored = false
+		local joint = Instance.new("WeldConstraint")
+		joint.Part0, joint.Part1, joint.Parent = couvercle, p, p
+	end
+	P(m, "Fond", Vp(3, 0.24, 1.99), Vp(0, 0.12, 0), sombre, Mat.Wood)
+	for _, s in { -1, 1 } do
+		for i, ton in { sombre, c, miel } do
+			local y = 0.23 + (i - 0.5) * 0.44
+			P(m, "Bordage de façade", Vp(2.98, 0.45, 0.23), Vp(0, y, s * 0.88), ton, Mat.WoodPlanks)
+			P(m, "Bordage de joue", Vp(0.24, 0.45, 1.61), Vp(s * 1.37, y + s * 0.012, -0.015), ton, Mat.WoodPlanks)
+		end
+		mobile(detailProp(m, "Joue de voûte", Vp(0.17, 0.32, 1.82), Vp(s * 1.44, 1.84, 0), sombre, Mat.Wood))
+		mobile(detailProp(m, "Rebord du couvercle", Vp(3.06, 0.13, 0.12), Vp(0, 1.68, s * 0.975), colFer, Mat.Metal))
+	end
+	local voute = {
+		{ z = -0.82, y = 1.81, profondeur = 0.44, angle = 23, ton = sombre },
+		{ z = -0.43, y = 2.01, profondeur = 0.52, angle = 21, ton = c },
+		{ z = 0.015, y = 2.12, profondeur = 0.56, angle = 2, ton = miel },
+		{ z = 0.45, y = 2.01, profondeur = 0.51, angle = -22, ton = c },
+		{ z = 0.83, y = 1.81, profondeur = 0.42, angle = -26, ton = miel },
+	}
+	for _, latte in voute do
+		mobile(detailProp(m, "Latte de voûte", Vp(3.04, 0.24, latte.profondeur), Vp(0, latte.y, latte.z),
+			latte.ton, Mat.WoodPlanks, Vp(latte.angle, 0, 0)))
+	end
 	for _, x in { -1.04, 1.04 } do
 		for _, z in { -1, 1 } do
-			P(m, "Cerclage", Vp(0.23, 1.65, 0.10), Vp(x, 0.89, z), colFer, Mat.Metal, { collide = false })
-			lienProp(m, "Cerclage", Vp(x, 1.68, z), Vp(x, 2.27, z * 0.56), 0.22, 0.086, colFer, Mat.Metal, false)
+			detailProp(m, "Cerclage", Vp(0.24, 1.46, 0.10), Vp(x, 0.80, z), colFer, Mat.Metal)
+			local a, b = Vp(x, 1.74, z * 0.98), Vp(x, 2.235, z * 0.52)
+			mobile(P(m, "Cerclage de voûte", Vp(0.23, 0.092, (b - a).Magnitude), Vector3.zero, colFer, Mat.Metal,
+				{ cf = CFrame.lookAt((a + b) / 2, b), collide = false }))
+			detailProp(m, "Sabot de bronze", Vp(0.37, 0.30, 0.17), Vp(x * 1.27, 0.24, z * 0.981), bronze, Mat.Metal, Vp(0, 0, 3 * z))
+			detailProp(m, "Gradin de laiton", Vp(0.23, 0.17, 0.062), Vp(x * 1.29, 0.29, z * 1.065), laiton, Mat.Metal)
+			mobile(detailProp(m, "Coin doré en gradin", Vp(0.31, 0.22, 0.17), Vp(x * 1.31, 1.76, z * 0.971), laiton, Mat.Metal, Vp(4 * z, 0, 0)))
 		end
-		P(m, "Cerclage", Vp(0.22, 0.087, 1.16), Vp(x, 2.28, 0), colFer, Mat.Metal, { collide = false })
-		for _, y in { 0.28, 1.42 } do rivetProp(m, Vp(x, y, 1.06), 0.12, OR) end
+		mobile(detailProp(m, "Bande sommitale", Vp(0.23, 0.092, 1.05), Vp(x, 2.268, 0), colFer, Mat.Metal))
+		for _, y in { 0.32, 1.39 } do rivetProp(m, Vp(x, y, 1.061), 0.135, acier) end
 	end
-	P(m, "Serrure", Vp(0.44, 0.49, 0.14), Vp(0, 1.59, 1.06), OR, Mat.Metal, { collide = false })
-	P(m, "Entrée", Vp(0.09, 0.16, 0.05), Vp(0, 1.61, 1.14), FER, Mat.Metal, { collide = false })
+	detailProp(m, "Serrure", Vp(0.59, 0.58, 0.14), Vp(0, 1.45, 1.06), bronze, Mat.Metal)
+	detailProp(m, "Plaque de laiton", Vp(0.46, 0.49, 0.075), Vp(0, 1.47, 1.12), laiton, Mat.Metal, Vp(0, 0, -3))
+	detailProp(m, "Entrée", Vp(0.14, 0.24, 0.024), Vp(0, 1.45, 1.163), sombre, Mat.Metal)
+	detailProp(m, "Reflet au fond de la serrure", Vp(0.09, 0.095, 0.018), Vp(0, 1.51, 1.176), rgb(255, 191, 74), Mat.Neon)
+	for i, x in { -0.54, 0.52 } do
+		local y = i == 2 and 0.57 or 0.80
+		detailProp(m, "Griffure creuse", Vp(0.30 - i * 0.025, 0.067, 0.022), Vp(x, y, 1.007), sombre, Mat.Wood, Vp(0, 0, 28 + i * 5))
+		detailProp(m, "Bois mis à nu", Vp(0.22 - i * 0.022, 0.035, 0.018), Vp(x + 0.02, y - 0.033, 1.022), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 28 + i * 5))
+	end
 	fini(m)
 end
 
@@ -670,7 +967,7 @@ function PROPS_VALDOR.Coffre_Joueur()
 end
 
 function PROPS_VALDOR.Coffre()
-	coffreProp("Coffre", BOIS, rgb(163, 116, 50))
+	coffreProp("Coffre", rgb(133, 76, 42), FER_SOMBRE)
 end
 
 function PROPS_VALDOR.Etabli()
@@ -695,6 +992,34 @@ function PROPS_VALDOR.Etabli()
 	end
 	lienProp(m, "Marteau", Vp(1.08, 3.29, 0.50), Vp(1.33, 3.36, -0.55), 0.17, 0.17, BOIS, Mat.Wood, false)
 	P(m, "Tete", Vp(0.72, 0.32, 0.36), Vp(1.33, 3.39, -0.54), FER, Mat.Metal, { collide = false })
+	-- L'étau chevauche la rive et sa vis descend devant la traverse.
+	reliefProp(m, "Selle de l’étau", Vp(0.56, 0.24, 0.84), Vp(-1.42, 3.23, 0.72), FER_SOMBRE, Mat.Metal)
+	reliefProp(m, "Mors fixe", Vp(0.56, 0.31, 0.21), Vp(-1.42, 3.42, 0.58), FER, Mat.Metal)
+	reliefProp(m, "Mors mobile poli", Vp(0.58, 0.31, 0.18), Vp(-1.42, 3.41, 1.015), FER_CLAIR, Mat.Metal, -4)
+	cylProp(m, "Noix de la vis", 0.25, 0.23, Vp(-1.42, 3.15, 1.075), LAITON, Mat.Metal, FACE_PROP, false)
+	lienProp(m, "Levier de l’étau", Vp(-1.65, 2.90, 1.15), Vp(-1.22, 3.37, 1.15), 0.10, 0.10, FER_CLAIR, Mat.Metal, false)
+	reliefProp(m, "Tablette basse", Vp(2.99, 0.16, 0.78), Vp(0.13, 0.88, 0.28), BOIS, Mat.WoodPlanks)
+	reliefProp(m, "Rive de tablette entaillée", Vp(2.35, 0.14, 0.16), Vp(0.29, 0.86, 0.67), BOIS_CLAIR, Mat.Wood, 0, 0, 3)
+	for i, x in { 0.23, 0.58, 0.82 } do
+		reliefProp(m, "Copeau relevé", Vp(0.29 - i * 0.022, 0.10, 0.18), Vp(x, 3.29, -0.49 - i * 0.10),
+			i == 2 and BOIS or LIN, Mat.Wood, 8, i * 19, 5, "Wedge")
+	end
+	for i, x in { -0.64, -0.19, 0.33 } do
+		reliefProp(m, "Entaille de la rive", Vp(0.13 + 0.06 * i, 0.09, 0.051), Vp(x, 3.12 - 0.03 * i, 1.182),
+			BOIS_FONCE, Mat.Wood, 0, 0, -7 * i)
+	end
+	detailProp(m, "Mordache fixe", Vp(0.51, 0.50, 0.22), Vp(1.50, 2.93, 1.02), BOIS_FONCE, Mat.Wood, Vp(0, 0, -3))
+	detailProp(m, "Mordache mobile", Vp(0.57, 0.46, 0.22), Vp(1.50, 2.93, 1.19), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -3))
+	detailProp(m, "Alèse éclatée", Vp(1.27, 0.13, 0.15), Vp(-0.54, 3.17, 1.09), rgb(192,132,83), Mat.Wood, Vp(0, 0, 4))
+	detailProp(m, "Entaille dans l’alèse", Vp(0.47, 0.11, 0.043), Vp(-0.79, 3.17, 1.169), BOIS_FONCE, Mat.Wood, Vp(0, 0, -8))
+	detailProp(m, "Chute de bois", Vp(0.68, 0.12, 0.36), Vp(0.14, 3.30, -0.67), BOIS, Mat.Wood, Vp(0, 14, 0))
+	detailProp(m, "Éclat de dosse", Vp(0.49, 0.09, 0.23), Vp(0.24, 3.38, -0.65), BOIS_CLAIR, Mat.Wood, Vp(-4, 24, 0), "Wedge")
+	detailProp(m, "Coin de tenon", Vp(0.38, 0.18, 0.20), Vp(-1.7, 2.53, 0.95), BOIS_CLAIR, Mat.Wood, Vp(0, 6, 3))
+	detailProp(m, "Tiroir à outils", Vp(1.21, 0.37, 0.24), Vp(-0.2, 2.60, 0.99), BOIS, Mat.Wood, Vp(0, 0, 2))
+	detailProp(m, "Lèvre du tiroir", Vp(1.24, 0.09, 0.13), Vp(-0.2, 2.43, 1.048), BOIS_FONCE, Mat.Wood)
+	detailProp(m, "Vis d’étau", Vp(0.19, 0.20, 0.20), Vp(1.50, 2.89, 1.29), FER, Mat.Metal)
+	detailProp(m, "Manivelle d’étau", Vp(0.105, 0.66, 0.10), Vp(1.54, 2.69, 1.31), rgb(142,151,148), Mat.Metal, Vp(0, 0, 16))
+	detailProp(m, "Tirette encastrée", Vp(0.37, 0.09, 0.09), Vp(-0.2, 2.64, 1.112), FER, Mat.Metal)
 	fini(m)
 end
 
@@ -713,6 +1038,23 @@ function PROPS_VALDOR.Enclume()
 	P(m, "Bigorne", Vp(0.86, 0.38, 1.03), Vp(1.60, 2.35, 0), FER, Mat.Metal, { forme = "Wedge", rot = CFrame.Angles(0, -math.pi / 2, 0) })
 	lienProp(m, "Marteau", Vp(-0.82, 2.60, 0.37), Vp(-0.50, 2.69, -0.32), 0.17, 0.16, BOIS, Mat.Wood, false)
 	P(m, "Tete", Vp(0.47, 0.29, 0.30), Vp(-0.5, 2.70, -0.31), FER, Mat.Metal, { collide = false })
+	reliefProp(m, "Embase évasée", Vp(1.66, 0.15, 1.18), Vp(-0.06, 1.67, 0), FER_SOMBRE, Mat.Metal, 0, -3)
+	reliefProp(m, "Épaulement forgé", Vp(1.62, 0.24, 0.93), Vp(-0.14, 2.17, 0), FER, Mat.Metal, 0, 3, 4)
+	reliefProp(m, "Biseau de frappe", Vp(1.87, 0.098, 0.16), Vp(0.13, 2.46, 0.51), FER_CLAIR, Mat.Metal, 0, 0, -2)
+	reliefProp(m, "Trou carré du talon", Vp(0.29, 0.025, 0.27), Vp(-0.93, 2.557, -0.24), FER_SOMBRE, Mat.Metal, 0, -5)
+	for i, x in { -0.48, -0.13, 0.33 } do
+		reliefProp(m, "Écorce détachée du billot", Vp(0.30, 0.89 - 0.12 * i, 0.13), Vp(x, 0.79, 0.72 + (i == 2 and 0.12 or 0)),
+			i == 2 and BOIS_CLAIR or BOIS_FONCE, Mat.Wood, -4, (i - 2) * 24, i * 3)
+	end
+	reliefProp(m, "Fente du bois de bout", Vp(0.54, 0.025, 0.08), Vp(-0.42, 1.632, 0.54), BOIS_FONCE, Mat.Wood, 0, -26)
+	detailProp(m, "Arête polie", Vp(1.75, 0.095, 0.095), Vp(0.24, 2.43, 0.54), rgb(154,164,165), Mat.Metal, Vp(0, 0, -2))
+	detailProp(m, "Talon étagé", Vp(0.46, 0.20, 0.99), Vp(-1.08, 2.46, 0), rgb(105,117,123), Mat.Metal)
+	detailProp(m, "Carré de l’enclume", Vp(0.25, 0.022, 0.24), Vp(-1.03, 2.573, 0.14), rgb(40,42,47), Mat.Metal, Vp(0, 5, 0))
+	detailProp(m, "Biseau de la bigorne", Vp(0.64, 0.084, 0.52), Vp(1.56, 2.53, 0), rgb(141,145,145), Mat.Metal, Vp(0, 0, -10), "Wedge")
+	detailProp(m, "Calamine jouant sous l’arête", Vp(0.53, 0.13, 0.043), Vp(0.54, 2.28, 0.55), rgb(48,51,61), Mat.Metal, Vp(0, 0, 5))
+	detailProp(m, "Écorce relevée", Vp(0.31, 0.77, 0.17), Vp(-0.29, 0.82, 0.79), BOIS_FONCE, Mat.Wood, Vp(0, -12, -5))
+	detailProp(m, "Veine de billot", Vp(0.17, 0.72, 0.12), Vp(0.43, 0.83, 0.744), BOIS_CLAIR, Mat.Wood, Vp(0, 15, 5))
+	detailProp(m, "Fente ouverte du billot", Vp(0.12, 0.41, 0.065), Vp(-0.16, 1.04, 0.87), BOIS_FONCE, Mat.Wood, Vp(0, 0, -11))
 	fini(m)
 end
 
@@ -744,6 +1086,35 @@ function PROPS_VALDOR.Fourneau()
 	P(m, "Cendres", Vp(1.34, 0.23, 1.33), Vp(0, 0.41, 0.66), FER, Mat.Slate, { collide = false })
 	lumiereProp(m, "Braise", Vp(0, 0.64, 1.06), Vp(1.03, 0.37, 0.51), 12, 1.5)
 	reperesFeu(m)
+	local suie = rgb(54, 46, 44)
+	local brique = rgb(184, 101, 67)
+	for i, profil in { { -1.23, 1.17, -7 }, { 1.20, 1.27, 5 }, { -0.64, 1.87, -4 }, { 0.39, 1.88, 4 } } do
+		local x, y, angle = profil[1], profil[2], profil[3]
+		reliefProp(m, "Pierre noircie du foyer", Vp(0.46 + 0.08 * i, 0.28, 0.11), Vp(x, y, 1.425), suie, Mat.Slate, 0, 0, angle)
+	end
+	for i, profil in { { -1.04, 0.56, 0.67 }, { -0.45, 0.43, 0.59 }, { 0.09, 0.49, 0.53 }, { 0.66, 0.42, 0.67 }, { 1.22, 0.59, 0.45 } } do
+		reliefProp(m, "Seuil de briques cassées", Vp(profil[3], 0.20, 0.43), Vp(profil[1], profil[2], 1.23),
+			i % 2 == 0 and brique or rgb(121, 65, 48), Mat.Brick, i * 2 - 6, 0, i * 3 - 8)
+	end
+	for i, y in { 3.63, 4.08, 4.48, 4.86 } do
+		reliefProp(m, "Joue de cheminée décalée", Vp(0.78 - i * 0.067, 0.27, 0.10),
+			Vp(0.63 + i * 0.035, y, -0.039), i == 4 and suie or CALCAIRE, Mat.Slate, 0, 0, i * 3 - 7)
+	end
+	reliefProp(m, "Gueule noire de la cheminée", Vp(0.79, 0.033, 0.76), Vp(0.69, 5.423, -0.56), suie, Mat.Slate)
+	reliefProp(m, "Fissure de braise", Vp(0.65, 0.079, 0.027), Vp(0.07, 0.54, 1.38), rgb(255, 112, 44), Mat.Neon, 0, 0, -6)
+	detailProp(m, "Clef d’arc taillée", Vp(0.43, 0.48, 0.38), Vp(0.024, 1.78, 1.26), rgb(201,126,83), Mat.Brick, Vp(0, 0, -4), "Wedge")
+	detailProp(m, "Brique réfractaire", Vp(0.46, 0.24, 0.17), Vp(-0.62, 0.54, 1.32), rgb(137,70,48), Mat.Brick, Vp(0, 0, 3))
+	detailProp(m, "Scorie de seuil", Vp(0.40, 0.14, 0.33), Vp(0.36, 0.39, 1.21), rgb(61,42,36), Mat.Brick, Vp(4, 7, -7))
+	detailProp(m, "Soubassement ébréché", Vp(0.73, 0.17, 0.51), Vp(-1.25, 0.27, 1.14), rgb(166,113,82), Mat.Brick, Vp(0, 4, 6), "Wedge")
+	detailProp(m, "Joint noirci", Vp(0.86, 0.25, 0.14), Vp(0.16, 1.98, 1.20), rgb(62,54,49), Mat.Brick, Vp(0, 0, -5))
+	detailProp(m, "Langue de suie", Vp(0.36, 0.46, 0.12), Vp(0.40, 2.13, 1.18), rgb(85,69,61), Mat.Brick, Vp(0, 0, 10), "Wedge")
+	detailProp(m, "Ressaut du conduit", Vp(1.04, 0.16, 1.06), Vp(0.67, 4.49, -0.56), rgb(112,83,70), Mat.Brick, Vp(0, -3, 2))
+	detailProp(m, "Dépôt de suie sous chapeau", Vp(0.47, 0.37, 0.12), Vp(0.82, 5.02, -0.045), rgb(65,58,55), Mat.Brick, Vp(0, 0, 6))
+	detailProp(m, "Gueule du registre", Vp(0.69, 0.44, 0.16), Vp(0.12, 2.53, 1.32), FER, Mat.Metal, Vp(0, 0, 2))
+	detailProp(m, "Poignée du registre", Vp(0.29, 0.12, 0.16), Vp(0.18, 2.57, 1.42), rgb(146,117,87), Mat.Metal, Vp(0, 0, 6))
+	detailProp(m, "Veine de braise", Vp(0.43, 0.084, 0.10), Vp(0.12, 0.57, 1.39), rgb(255,113,42), Mat.Neon, Vp(0, 0, 3))
+	detailProp(m, "Éclat dans la scorie", Vp(0.17, 0.11, 0.12), Vp(-0.24, 0.51, 1.27), rgb(255,166,58), Mat.Neon, Vp(5, 0, -6))
+	detailProp(m, "Tison au fond du foyer", Vp(0.26, 0.16, 0.18), Vp(-0.35, 0.73, 1.05), rgb(255,102,29), Mat.Neon, Vp(0, 5, 6))
 	fini(m)
 end
 
@@ -771,6 +1142,31 @@ function PROPS_VALDOR.Metier_Tisser()
 	end
 	P(m, "Banc", Vp(2.42, 0.21, 0.81), Vp(0, 1.23, 1.78), BOIS_CLAIR, Mat.WoodPlanks)
 	P(m, "Entretoise", Vp(2.17, 0.16, 0.18), Vp(0, 0.62, 1.76), BOIS_FONCE, Mat.Wood)
+	for i, x in { -1.51, 1.44 } do
+		local signe = math.sign(x)
+		cylProp(m, "Joue du rouleau", 0.52, 0.17, haut + Vp(x, 0, 0), BOIS_CLAIR, Mat.Wood, CFrame.identity, false)
+		cylProp(m, "Bobine de trame", 0.44, 0.48, bas + Vp(x, 0, 0), i == 1 and GARANCE or LIN, Mat.Fabric, CFrame.identity, false)
+		cylProp(m, "Collerette de bobine", 0.49, 0.07, bas + Vp(x - signe * 0.19, 0, 0), BOIS_CLAIR, Mat.Wood, CFrame.identity, false)
+		lienProp(m, "Bord tissé clair", Vp(x - signe * 0.28, 3.21, -0.10), Vp(x - signe * 0.28, 2.45, 0.82),
+			0.095, 0.06, LIN, Mat.Fabric, false)
+	end
+	for i, x in { -0.82, -0.31, 0.25, 0.79 } do
+		reliefProp(m, "Motif en losange tissé", Vp(0.27, 0.065, 0.29), Vp(x, 2.76 + i * 0.01, 0.45),
+			i % 2 == 0 and OR_PALE or rgb(202, 112, 71), Mat.Fabric, 45, 0, 43)
+		lienProp(m, "Trame libre", Vp(x, 2.50, 0.68), Vp(x + 0.06, 2.37 - i * 0.018, 0.90),
+			0.080, 0.047, i == 2 and OR or LIN, Mat.Fabric, false)
+	end
+	detailProp(m, "Galon indigo pris dans la chaîne", Vp(2.54, 0.105, 0.18), Vp(0.01, 2.86, 0.34), rgb(51,83,104), Mat.Fabric, Vp(43, 0, 2))
+	detailProp(m, "Crête de toile tissée", Vp(2.49, 0.11, 0.16), Vp(-0.01, 2.73, 0.48), rgb(190,77,61), Mat.Fabric, Vp(43, 0, -3))
+	detailProp(m, "Lisière écrue", Vp(2.42, 0.12, 0.15), Vp(0.04, 2.64, 0.58), LIN, Mat.Fabric, Vp(43, 0, 3))
+	detailProp(m, "Repli d’étoffe", Vp(1.34, 0.29, 0.15), Vp(0.32, 2.16, 0.96), GARANCE, Mat.Fabric, Vp(-6, 0, -4))
+	detailProp(m, "Ourlet déchiré", Vp(0.48, 0.19, 0.12), Vp(0.68, 2.02, 0.99), rgb(104,41,42), Mat.Fabric, Vp(4, 0, -7), "Wedge")
+	detailProp(m, "Bobine de garance", Vp(0.37, 0.24, 0.30), Vp(-0.76, 1.46, 1.75), GARANCE, Mat.Fabric, Vp(2, 6, 0))
+	detailProp(m, "Bobine de lin", Vp(0.33, 0.19, 0.26), Vp(-0.48, 1.43, 1.89), LIN, Mat.Fabric, Vp(0, 18, -4))
+	detailProp(m, "Pédale", Vp(1.14, 0.14, 0.58), Vp(0.29, 0.28, 0.88), BOIS_CLAIR, Mat.Wood, Vp(-13, -4, 2))
+	detailProp(m, "Palonnier", Vp(0.17, 1.26, 0.19), Vp(0.82, 0.88, 0.53), BOIS, Mat.Wood, Vp(-11, 0, 5))
+	detailProp(m, "Clavette d’ensouple", Vp(0.18, 0.56, 0.15), Vp(1.55, 3.75, -0.78), BOIS_CLAIR, Mat.Wood, Vp(5, 0, -6))
+	detailProp(m, "Butée basse", Vp(0.45, 0.34, 0.52), Vp(1.42, 0.24, 1.68), BOIS, Mat.Wood)
 	fini(m)
 end
 
@@ -783,7 +1179,7 @@ function PROPS_VALDOR.Bac_Tannage()
 		P(m, "Douelle", Vp(0.65, 1.31, 0.15), Vp(-0.87 + math.sin(a) * 1.19, 0.84, math.cos(a) * 1.19),
 			teinteProp(BOIS, i), Mat.WoodPlanks, { rot = CFrame.Angles(0, a, 0) })
 	end
-	for _, y in { 0.40, 1.32 } do cercleProp(m, "Cercle", Vp(-0.87, y, 0), 1.27, 10, 0.12, FER, Mat.Metal) end
+	for _, y in { 0.40, 1.32 } do cercleProp(m, "Cercle", Vp(-0.87, y, 0), 1.27, 9, 0.12, FER, Mat.Metal) end
 	cylProp(m, "Eau", 2.32, 0.094, Vp(-0.87, 1.24, 0), rgb(110, 78, 44), Mat.Glass, nil, false).Transparency = 0.21
 	for _, z in { -0.88, 0.88 } do
 		P(m, "Cadre", Vp(0.29, 2.94, 0.28), Vp(1.40, 1.57, z), BOIS_FONCE, Mat.Wood)
@@ -799,6 +1195,19 @@ function PROPS_VALDOR.Bac_Tannage()
 	end
 	P(m, "Racloir", Vp(0.78, 0.11, 0.25), Vp(-0.82, 1.51, 1.18), FER, Mat.Metal, { collide = false })
 	P(m, "Poignée", Vp(0.25, 0.17, 0.19), Vp(-1.30, 1.52, 1.18), BOIS_CLAIR, Mat.Wood, { collide = false })
+	reliefProp(m, "Échine du cuir", Vp(0.28, 0.22, 1.50), Vp(1.43, 2.85, -0.025), rgb(203, 153, 99), Mat.Fabric, 4)
+	for i, profil in { { -0.48, 0.65, 0.45 }, { -0.08, 0.50, 0.36 }, { 0.36, 0.76, 0.52 } } do
+		reliefProp(m, "Retombée du cuir tanné", Vp(0.17, profil[3], 0.45), Vp(1.53, profil[2], profil[1]),
+			i == 2 and rgb(117, 68, 44) or rgb(191, 128, 79), Mat.Fabric, i * 4 - 9, 0, 4)
+	end
+	for i, p in { Vp(-1.53, 1.305, 0.39), Vp(-1.15, 1.307, 0.64), Vp(-0.42, 1.307, 0.57) } do
+		reliefProp(m, "Écume du bain", Vp(0.32 + i * 0.067, 0.028, 0.13), p, rgb(173, 137, 82), Mat.Glass, 0, -24 + i * 11, 0, "Ball")
+	end
+	for _, p in { Vp(-1.23, 0.43, 1.22), Vp(-0.72, 1.33, 1.24) } do
+		reliefProp(m, "Agrafe oxydée", Vp(0.34, 0.18, 0.11), p, LAITON, Mat.Metal, -5, 0, 5)
+	end
+	detailProp(m, "Douelle humide", Vp(0.35, 0.55, 0.08), Vp(-1.16, 0.88, 1.19), BOIS_FONCE, Mat.Wood, Vp(0, -9, 5))
+	detailProp(m, "Cale du baquet", Vp(0.52, 0.26, 0.54), Vp(-1.39, 0.21, 0.87), BOIS_CLAIR, Mat.Wood, Vp(0, -7, 3), "Wedge")
 	fini(m)
 end
 
@@ -825,6 +1234,33 @@ function PROPS_VALDOR.Alambic()
 	P(m, "Fiole", Vp(0.47, 0.54, 0.47), Vp(1.91, 0.59, 0.71), rgb(131, 166, 131), Mat.Glass,
 		{ forme = "Ball", collide = false, transp = 0.28 })
 	cylProp(m, "Col de fiole", 0.24, 0.18, Vp(1.91, 0.9, 0.71), rgb(131, 166, 131), Mat.Glass, nil, false)
+	local vert = rgb(90, 127, 107)
+	local clair = rgb(215, 149, 89)
+	cylProp(m, "Pied de chaudière", 1.22, 0.27, Vp(0, 1.01, 0), rgb(105, 61, 46), Mat.Metal, nil, false)
+	cylProp(m, "Bague haute du chapiteau", 0.82, 0.075, Vp(0, 2.55, 0), clair, Mat.Metal, nil, false)
+	for i, p in { a, b, c, d } do
+		reliefProp(m, "Manchon de cuivre réparé", Vp(0.28, 0.26, 0.29), p, i == 3 and vert or clair, Mat.Metal, 0, 0, i * 3 - 8)
+	end
+	for i, p in { Vp(-0.48, 1.99, 0.65), Vp(-0.25, 1.93, 0.82), Vp(0.05, 1.82, 0.915),
+		Vp(-0.35, 1.66, 0.83), Vp(-0.61, 1.82, 0.65) } do
+		reliefProp(m, "Vert-de-gris écaillé", Vp(0.37 - i * 0.026, 0.25, 0.085), p,
+			i % 2 == 0 and rgb(132, 158, 123) or vert, Mat.Metal, i * 3 - 9, 15 - i * 9, 5, "Ball")
+	end
+	cylProp(m, "Liqueur de la fiole", 0.37, 0.15, Vp(1.91, 0.55, 0.71), rgb(116, 160, 64), Mat.Glass, nil, false)
+	reliefProp(m, "Bouchon de liège", Vp(0.23, 0.14, 0.23), Vp(1.91, 1.04, 0.71), BOIS_CLAIR, Mat.Wood, 5, 0, -5)
+	detailProp(m, "Bague haute de chaudière", Vp(0.96, 0.18, 0.98), Vp(0, 2.42, 0.02), rgb(121,68,46), Mat.Metal, Vp(4, 0, 1))
+	detailProp(m, "Brasure de chaudière", Vp(1.12, 0.16, 0.15), Vp(-0.09, 1.94, 0.84), rgb(212,136,76), Mat.Metal, Vp(0, 0, -3))
+	detailProp(m, "Vert-de-gris sur la brasure", Vp(0.58, 0.20, 0.15), Vp(0.24, 1.93, 0.85), rgb(67,133,110), Mat.Metal, Vp(0, -8, -4))
+	detailProp(m, "Coulée de vert-de-gris", Vp(0.30, 0.45, 0.10), Vp(0.41, 1.74, 0.81), rgb(74,114,94), Mat.Metal, Vp(4, -11, -7), "Wedge")
+	detailProp(m, "Perle cuivrée", Vp(0.43, 0.24, 0.11), Vp(-0.39, 1.82, 0.81), rgb(220,144,83), Mat.Metal, Vp(0, -9, 6))
+	detailProp(m, "Raccord carré", Vp(0.33, 0.31, 0.33), Vp(0.65, 3.25, 0), rgb(226,153,86), Mat.Metal, Vp(0, 0, 26))
+	detailProp(m, "Fourreau de coude", Vp(0.31, 0.42, 0.34), Vp(1.86, 3.12, 0), rgb(118,74,55), Mat.Metal, Vp(0, 5, -5))
+	detailProp(m, "Robinet coudé", Vp(0.14, 0.26, 0.31), Vp(1.90, 0.96, 0.59), rgb(224,149,77), Mat.Metal, Vp(20, 0, 0))
+	detailProp(m, "Ailette du robinet", Vp(0.41, 0.11, 0.16), Vp(1.91, 1.18, 0.58), rgb(89,133,107), Mat.Metal, Vp(0, 14, -5))
+	detailProp(m, "Patte de serpentin", Vp(0.16, 0.51, 0.17), Vp(2.23, 1.40, 0.28), rgb(108,65,44), Mat.Metal, Vp(4, 0, -4))
+	detailProp(m, "Cale fumée", Vp(0.60, 0.19, 0.52), Vp(-0.69, 0.31, 0.75), BOIS, Mat.Wood, Vp(0, 3, 0), "Wedge")
+	detailProp(m, "Rehausse du collecteur", Vp(0.72, 0.16, 0.53), Vp(1.94, 0.34, 0.68), BOIS_CLAIR, Mat.Wood, Vp(0, -4, 0))
+	detailProp(m, "Distillat dans la fiole", Vp(0.32, 0.23, 0.31), Vp(1.91, 0.48, 0.71), rgb(204,153,63), Mat.Glass, nil, "Ball")
 	fini(m)
 end
 
@@ -845,6 +1281,16 @@ local function augeProp(nom: string, eau: boolean)
 	for _, x in { -longueur * 0.478, longueur * 0.478 } do
 		P(m, "Joue", Vp(0.16, 0.49, 1.19), Vp(x, niveau + 0.14, 0), BOIS_CLAIR, Mat.Wood)
 	end
+	for _, z in { -1, 1 } do
+		reliefProp(m, "Lèvre éclaircie par les sabots", Vp(longueur * 0.77, 0.10, 0.14),
+			Vp(z * 0.17, niveau + 0.41, z * 0.55), BOIS_CLAIR, Mat.Wood, z * 5)
+		for i, x in { -longueur * 0.37, longueur * 0.34 } do
+			reliefProp(m, "Bride de l’auge", Vp(0.23, 0.52, 0.09), Vp(x, niveau + 0.15, z * 0.552),
+				i == 2 and FER or FER_SOMBRE, Mat.Metal, z * 14, 0, (i - 1.5) * 8)
+		end
+		reliefProp(m, "Jambe oblique de l’auge", Vp(0.21, niveau * 0.66, 0.20),
+			Vp(z * longueur * 0.32, niveau * 0.45, z * 0.13), BOIS_CLAIR, Mat.Wood, z * 6, 0, z * 10)
+	end
 	if eau then
 		P(m, "Eau", Vp(longueur - 0.23, 0.06, 1.0), Vp(0, niveau + 0.22, 0), EAU_PROP, Mat.Glass, { collide = false, transp = 0.23 })
 	else
@@ -852,6 +1298,31 @@ local function augeProp(nom: string, eau: boolean)
 			P(m, "Foin", Vp(0.69, 0.58 + i % 3 * 0.10, 0.91), Vp((i - 2) * 0.55, niveau + 0.45, i % 2 * 0.09),
 				teinteProp(CHAUME, i), Mat.Grass, { forme = "Ball", collide = false })
 		end
+	end
+	for i, x in { -0.77, -0.16, 0.48 } do
+		if eau then
+			reliefProp(m, "Ride claire de l’eau", Vp(0.38 + i * 0.07, 0.022, 0.085),
+				Vp(x, niveau + 0.263, i * 0.17 - 0.36), rgb(128, 177, 174), Mat.Glass, 0, i * 5 - 11)
+		else
+			lienProp(m, "Paille débordante", Vp(x, niveau + 0.66, 0.28), Vp(x - 0.23 + i * 0.07, niveau + 0.40, 0.58),
+				0.12, 0.075, i == 2 and OR_PALE or CHAUME, Mat.Grass, false)
+		end
+	end
+	detailProp(m, "Traverse d’auge à tenons", Vp(longueur * 0.81, 0.18, 0.23), Vp(0, niveau * 0.48, 0), BOIS_FONCE, Mat.Wood, Vp(0, 0, 2))
+	detailProp(m, "Arête de rive polie", Vp(longueur * 0.92, 0.084, 0.09), Vp(0, niveau + 0.432, 0.58), BOIS_CLAIR, Mat.Wood)
+	detailProp(m, "Joue éraflée", Vp(longueur * 0.29, 0.15, 0.08), Vp(-longueur * 0.23, niveau + 0.17, 0.582), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -4))
+	detailProp(m, "Coup de gouge", Vp(longueur * 0.19, 0.087, 0.067), Vp(longueur * 0.22, niveau + 0.08, 0.566), BOIS_FONCE, Mat.Wood, Vp(0, 0, 6))
+	detailProp(m, "Cale trapue", Vp(0.38, 0.33, 0.39), Vp(longueur * 0.34, niveau * 0.75, 0.33), BOIS, Mat.Wood, Vp(-6, 0, 7), "Wedge")
+	detailProp(m, "Étrier forgé gauche", Vp(0.19, 0.42, 0.11), Vp(-longueur * 0.39, niveau + 0.14, 0.602), FER, Mat.Metal, Vp(-4, 0, -6))
+	detailProp(m, "Étrier forgé droit", Vp(0.19, 0.39, 0.11), Vp(longueur * 0.39, niveau + 0.16, 0.597), FER, Mat.Metal, Vp(4, 0, 4))
+	if eau then
+		detailProp(m, "Reflet large", Vp(longueur * 0.62, 0.025, 0.15), Vp(-0.11, niveau + 0.264, 0.18), rgb(142,191,193), Mat.Glass, Vp(0, 4, 0))
+		detailProp(m, "Reflet rompu", Vp(0.52, 0.03, 0.11), Vp(0.55, niveau + 0.27, 0.30), rgb(178,215,202), Mat.Glass, Vp(0, -7, 0))
+		detailProp(m, "Reflet de rive", Vp(0.51, 0.022, 0.19), Vp(-1.11, niveau + 0.263, -0.30), rgb(86,151,154), Mat.Glass, Vp(0, -4, 0))
+	else
+		detailProp(m, "Paille fraîche débordante", Vp(0.84, 0.27, 0.75), Vp(-0.87, niveau + 0.70, 0.13), rgb(231,183,94), Mat.Grass, Vp(6, -7, -6), "Wedge")
+		detailProp(m, "Paille retroussée", Vp(0.64, 0.23, 0.35), Vp(0.42, niveau + 0.64, 0.36), rgb(217,166,70), Mat.Grass, Vp(7, 9, 3), "Wedge")
+		detailProp(m, "Paille pincée au rebord", Vp(0.39, 0.19, 0.24), Vp(0.86, niveau + 0.53, 0.50), rgb(145,98,45), Mat.Grass, Vp(-6, -6, -7), "Wedge")
 	end
 	fini(m)
 end
@@ -879,6 +1350,33 @@ function PROPS_VALDOR.Lit_Joueur()
 	P(m, "Galon", Vp(2.39, 0.06, 0.15), Vp(0, 1.428, -0.58), OR, Mat.Fabric, { collide = false })
 	P(m, "Oreiller", Vp(1.56, 0.38, 0.83), Vp(-0.08, 1.45, -1.61), LIN, Mat.Fabric,
 		{ forme = "Ball", collide = false })
+	local bordeaux = rgb(101, 41, 42)
+	for i, x in { -0.87, -0.34, 0.21, 0.81 } do
+		reliefProp(m, "Pli épais du dessus-de-lit", Vp(0.52 + i * 0.026, 0.10, 2.59 - i * 0.063),
+			Vp(x, 1.411 + i % 2 * 0.024, 0.76), i % 2 == 0 and GARANCE or rgb(177, 71, 52), Mat.Fabric,
+			i * 2 - 5, 2, i * 3 - 7)
+		reliefProp(m, "Retombée de couverture", Vp(0.54 + i * 0.04, 0.42 - i * 0.044, 0.15),
+			Vp(x, 1.18 + i * 0.018, 2.09), i == 3 and bordeaux or GARANCE, Mat.Fabric, -5, 0, i * 3 - 7)
+	end
+	reliefProp(m, "Ourlet de lin écru", Vp(2.28, 0.105, 0.26), Vp(-0.02, 1.45, -0.47), LIN, Mat.Fabric, 0, 0, 2)
+	reliefProp(m, "Bord roulé", Vp(0.19, 0.15, 2.55), Vp(1.12, 1.40, 0.75), bordeaux, Mat.Fabric, 0, -2, 5)
+	for _, x in { -1.16, 1.16 } do
+		reliefProp(m, "Pommeau sculpté", Vp(0.33, 0.29, 0.31), Vp(x, 1.77, -2.29), BOIS_CLAIR, Mat.Wood, -5, 0, 5)
+	end
+	reliefProp(m, "Tête de lit sculptée", Vp(1.68, 0.29, 0.24), Vp(0.025, 1.75, -2.27), BOIS, Mat.Wood, 0, 0, 2)
+	reliefProp(m, "Fleur de tête de lit", Vp(0.27, 0.29, 0.08), Vp(0.025, 1.66, -2.11), BOIS_CLAIR, Mat.Wood, 0, 0, 45)
+	detailProp(m, "Vallon du couvre-lit", Vp(2.23, 0.10, 1.68), Vp(0, 1.44, 0.49), rgb(171,63,52), Mat.Fabric, Vp(0, 2, 0))
+	detailProp(m, "Revers indigo", Vp(2.33, 0.14, 0.48), Vp(-0.01, 1.44, -0.40), rgb(57,84,101), Mat.Fabric, Vp(0, -3, -2))
+	detailProp(m, "Liseré écru du revers", Vp(2.13, 0.045, 0.12), Vp(0.047, 1.53, -0.43), LIN, Mat.Fabric, Vp(0, -3, 0))
+	detailProp(m, "Pli de couverture", Vp(0.54, 0.27, 0.66), Vp(1.11, 1.24, 0.93), GARANCE, Mat.Fabric, Vp(3, -5, 6), "Wedge")
+	detailProp(m, "Pli à contre-jour", Vp(0.39, 0.15, 0.59), Vp(1.12, 1.20, 1.40), rgb(104,47,45), Mat.Fabric, Vp(-3, 7, -5), "Wedge")
+	detailProp(m, "Pièce reprise de lin", Vp(0.37, 0.026, 0.43), Vp(0.57, 1.499, 0.79), rgb(215,168,121), Mat.Fabric, Vp(0, -14, 0))
+	detailProp(m, "Dos d’oreiller", Vp(1.63, 0.41, 0.81), Vp(-0.08, 1.40, -1.59), rgb(170,157,128), Mat.Fabric, Vp(0, 6, 0), "Ball")
+	detailProp(m, "Couture d’oreiller", Vp(1.20, 0.04, 0.10), Vp(-0.12, 1.515, -1.25), rgb(157,125,100), Mat.Fabric, Vp(0, -3, 0))
+	detailProp(m, "Corniche de chevet", Vp(2.56, 0.13, 0.28), Vp(0, 1.843, -2.30), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -2))
+	detailProp(m, "Panneau sculpté du chevet", Vp(1.60, 0.38, 0.13), Vp(-0.03, 1.47, -2.18), BOIS_FONCE, Mat.Wood, Vp(0, 0, 3))
+	detailProp(m, "Pointe sculptée", Vp(0.35, 0.35, 0.09), Vp(-0.05, 1.50, -2.10), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 45))
+	detailProp(m, "Rebord ébréché", Vp(0.46, 0.13, 0.08), Vp(-0.69, 0.74, 2.32), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 7), "Wedge")
 	fini(m)
 end
 
@@ -893,6 +1391,27 @@ function PROPS_VALDOR.Porte()
 	lienProp(m, "Écharpe", Vp(-1.02, 0.71, -0.18), Vp(1.05, 4.62, -0.18), 0.20, 0.12, BOIS_FONCE, Mat.Wood, false)
 	P(m, "Platine", Vp(0.32, 0.48, 0.10), Vp(0.88, 2.75, 0.17), FER, Mat.Metal, { collide = false })
 	cercleProp(m, "Poignee", Vp(0.88, 2.76, 0.24), 0.14, 6, 0.05, FER, Mat.Metal, true)
+	for i, y in { 0.71, 4.62 } do
+		reliefProp(m, "Penture en pointe", Vp(0.47, 0.22, 0.084), Vp(-0.18, y, 0.172), FER, Mat.Metal, 0, 0, i * 5 - 8, "Wedge")
+		reliefProp(m, "Gond de fer", Vp(0.19, 0.48, 0.20), Vp(-1.13, y, 0.162), FER_SOMBRE, Mat.Metal)
+		reliefProp(m, "Arête polie de penture", Vp(0.67, 0.065, 0.069), Vp(-0.75, y + 0.073, 0.22), FER_CLAIR, Mat.Metal)
+	end
+	reliefProp(m, "Bas de porte érodé", Vp(2.34, 0.23, 0.084), Vp(0, 0.36, 0.145), BOIS_FONCE, Mat.Wood, 0, 0, 2)
+	for i, p in { Vp(-0.64, 1.30, 0.156), Vp(0.13, 0.75, 0.156), Vp(0.51, 1.04, 0.156) } do
+		reliefProp(m, "Veine éclatée du battant", Vp(0.13, 0.78 - i * 0.15, 0.056), p,
+			i == 2 and BOIS_CLAIR or BOIS_FONCE, Mat.Wood, 0, 0, 5 - i * 4)
+	end
+	reliefProp(m, "Bord de platine en laiton", Vp(0.31, 0.11, 0.10), Vp(0.88, 3.01, 0.182), LAITON, Mat.Metal, 0, 0, -4)
+
+	for i, y in { 0.71, 4.62 } do
+		detailProp(m, "Queue de penture étirée", Vp(1.19, 0.145, 0.065), Vp(-0.54, y, 0.194), FER, Mat.Metal, Vp(0, 0, i == 1 and 5 or -4))
+		detailProp(m, "Lèvre de penture polie", Vp(0.64, 0.057, 0.059), Vp(-0.79, y + 0.057, 0.23), rgb(129, 139, 141), Mat.Metal, Vp(0, 0, i == 1 and 5 or -4))
+	end
+	detailProp(m, "Succession d’aubier du battant", Vp(0.23, 3.70, 0.061), Vp(-0.30, 2.68, 0.157), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -2))
+	detailProp(m, "Éclat d’aubier rompu", Vp(0.16, 0.74, 0.065), Vp(-0.34, 0.90, 0.167), BOIS, Mat.Wood, Vp(0, 0, 6), "Wedge")
+	detailProp(m, "Pied noirci", Vp(2.36, 0.28, 0.088), Vp(0, 0.24, 0.139), BOIS_FONCE, Mat.Wood, Vp(0, 0, 2))
+	detailProp(m, "Humidité dans le joint", Vp(0.36, 0.52, 0.068), Vp(0.42, 0.35, 0.157), rgb(105,78,53), Mat.Wood, Vp(0, 0, -5), "Wedge")
+	detailProp(m, "Pointe de platine en laiton", Vp(0.21, 0.18, 0.08), Vp(0.88, 2.92, 0.226), rgb(191,145,67), Mat.Metal, Vp(0, 0, 43))
 	fini(m)
 end
 
@@ -911,6 +1430,22 @@ function PROPS_VALDOR.Cloche_Alarme()
 	cylProp(m, "Battant", 0.10, 0.42, Vp(0, 4.19, 1.21), FER, Mat.Metal, nil, false)
 	P(m, "Pommeau", Vp(0.2, 0.22, 0.21), Vp(0, 3.99, 1.21), FER, Mat.Metal, { forme = "Ball", collide = false })
 	rivetProp(m, Vp(0, 5.37, 0.23), 0.13)
+	cylProp(m, "Bague d’épaule en bronze poli", 0.80, 0.088, Vp(0, 4.57, 1.21), OR_PALE, Mat.Metal, nil, false)
+	cylProp(m, "Lèvre sombre de la cloche", 1.09, 0.069, Vp(0, 4.075, 1.21), FER_SOMBRE, Mat.Metal, nil, false)
+	reliefProp(m, "Étrier ouvragé de potence", Vp(0.41, 0.31, 0.45), Vp(0, 5.41, 1.22), FER, Mat.Metal, 0, -5, 5)
+	lienProp(m, "Corde de sonnerie haute", Vp(0, 4, 1.2), Vp(-0.09, 3.26, 1.13), 0.09, 0.09, LIN, Mat.Fabric, false)
+	lienProp(m, "Corde de sonnerie basse", Vp(-0.09, 3.26, 1.13), Vp(0.035, 2.51, 1.13), 0.09, 0.09, LIN, Mat.Fabric, false)
+	reliefProp(m, "Nœud de la corde", Vp(0.19, 0.21, 0.18), Vp(0.035, 2.51, 1.13), BOIS_CLAIR, Mat.Fabric, 7, 0, 7, "Ball")
+	for i, p in { Vp(-0.22, 4.39, 1.56), Vp(0.02, 4.32, 1.62), Vp(0.17, 4.26, 1.65) } do
+		reliefProp(m, "Bronze grignoté de patine", Vp(0.27 - i * 0.055, 0.13, 0.052), p,
+			rgb(94, 126, 102), Mat.Metal, -5, i * 13 - 25, 5)
+	end
+	detailProp(m, "Cordon de bronze clair", Vp(0.83, 0.13, 0.19), Vp(0, 4.38, 1.61), rgb(206,147,71), Mat.Metal, Vp(0, 0, -3))
+	detailProp(m, "Patine d’épaule de cloche", Vp(0.31, 0.36, 0.12), Vp(0.16, 4.45, 1.59), rgb(91,109,78), Mat.Metal, Vp(0, 17, 6), "Wedge")
+	detailProp(m, "Triangle gravé", Vp(0.27, 0.25, 0.10), Vp(-0.04, 4.58, 1.56), rgb(111,71,47), Mat.Metal, Vp(0, -5, 4), "Wedge")
+	detailProp(m, "Corde de tirage", Vp(0.127, 2.01, 0.118), Vp(0.055, 3.01, 1.23), LIN, Mat.Fabric, Vp(0, 0, -3))
+	detailProp(m, "Nœud au bout de la corde", Vp(0.22, 0.29, 0.18), Vp(-0.007, 2.00, 1.23), CHAUME, Mat.Fabric, Vp(4, 0, -6), "Ball")
+	detailProp(m, "Chapeau de potence", Vp(0.39, 0.15, 0.35), Vp(0, 5.54, 1.05), BOIS_CLAIR, Mat.Wood, Vp(3, 0, -4))
 	fini(m)
 end
 
@@ -933,6 +1468,23 @@ function PROPS_VALDOR.Table_Bois()
 	for _, x in { -1.48, 1.48 } do
 		rivetProp(m, Vp(x, 2.40, 0.99), 0.093)
 	end
+	for i, x in { -1.47, 1.47 } do
+		for _, z in { -0.88, 0.89 } do
+			reliefProp(m, "Sabot de pied", Vp(0.35, 0.29, 0.35), Vp(x, 0.16, z), BOIS, Mat.Wood, 0, 5 - i * 3, 3)
+			lienProp(m, "Console oblique", Vp(x, 1.97, z), Vp(x * 0.68, 2.43, z), 0.18, 0.15, BOIS_CLAIR, Mat.Wood, false)
+		end
+	end
+	reliefProp(m, "Rive claire rabotée", Vp(2.84, 0.105, 0.10), Vp(-0.08, 2.57, 1.047), BOIS_CLAIR, Mat.Wood, 0, 0, 2)
+	reliefProp(m, "Veine ouverte du plateau", Vp(1.11, 0.022, 0.084), Vp(-0.44, 2.743, 0.72), BOIS_FONCE, Mat.Wood, 0, -6)
+	reliefProp(m, "Incrustation en papillon", Vp(0.25, 0.028, 0.25), Vp(-0.30, 2.753, 0.72), LIN, Mat.Wood, 0, 42)
+	detailProp(m, "Face de ceinture évidée", Vp(2.81, 0.14, 0.13), Vp(0.04, 2.43, -0.99), BOIS, Mat.Wood, Vp(0, 0, 2))
+	detailProp(m, "Liston d’alèse", Vp(2.98, 0.12, 0.08), Vp(-0.03, 2.65, 1.052), BOIS, Mat.Wood, Vp(0, 0, -2))
+	detailProp(m, "Éclat d’alèse", Vp(0.69, 0.07, 0.076), Vp(0.62, 2.68, 1.052), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 4))
+	detailProp(m, "Branche de contreventement", Vp(0.28, 0.78, 0.23), Vp(-1.26, 1.99, 0.78), BOIS, Mat.Wood, Vp(5, 4, -26))
+	detailProp(m, "Traverse à mi-bois", Vp(2.90, 0.22, 0.26), Vp(0.042, 0.92, -0.03), BOIS_FONCE, Mat.Wood, Vp(0, 0, -2))
+	detailProp(m, "Éclisse en papillon", Vp(0.57, 0.027, 0.35), Vp(-0.96, 2.743, -0.23), BOIS_FONCE, Mat.Wood, Vp(0, -8, 0))
+	detailProp(m, "Aile d’éclisse", Vp(0.23, 0.036, 0.43), Vp(-1.15, 2.746, -0.25), BOIS, Mat.Wood, Vp(0, 13, 0))
+	detailProp(m, "Tache de patine", Vp(0.91, 0.020, 0.19), Vp(0.38, 2.743, 0.36), rgb(185,139,81), Mat.Wood, Vp(0, 5, 0))
 	fini(m)
 end
 
@@ -946,6 +1498,24 @@ function PROPS_VALDOR.Chaise()
 	for _, y in { 2.17, 2.74, 3.27 } do
 		P(m, "Dossier", Vp(1.50, 0.22, 0.21), Vp(0, y, 0.64), BOIS, Mat.Wood)
 	end
+	local assise = rgb(71, 114, 109)
+	reliefProp(m, "Coussin de toile", Vp(1.39, 0.20, 1.28), Vp(-0.022, 1.74, -0.055), assise, Mat.Fabric, 0, -4, 2)
+	reliefProp(m, "Rabat usé du coussin", Vp(1.11, 0.14, 0.15), Vp(0.065, 1.74, -0.64), LIN, Mat.Fabric, 0, 3, -3)
+	reliefProp(m, "Pli du coussin", Vp(0.44, 0.048, 0.66), Vp(-0.27, 1.85, -0.18), rgb(105, 150, 136), Mat.Fabric, 0, -7)
+	for _, x in { -0.59, 0.59 } do
+		reliefProp(m, "Toupie de dossier", Vp(0.26, 0.28, 0.25), Vp(x, 3.45, 0.64), BOIS_CLAIR, Mat.Wood, 4, 0, x * 9)
+		lienProp(m, "Équerre sous l’assise", Vp(x, 1.04, 0.52), Vp(x * 0.52, 1.44, 0.52),
+			0.16, 0.17, BOIS, Mat.Wood, false)
+	end
+	reliefProp(m, "Crête entaillée du dossier", Vp(1.24, 0.12, 0.20), Vp(-0.035, 3.30, 0.59), BOIS_CLAIR, Mat.Wood, 0, 0, -4)
+	detailProp(m, "Traverse arc-boutée", Vp(1.25, 0.21, 0.22), Vp(0, 0.58, -0.56), BOIS, Mat.Wood, Vp(0, 0, -3))
+	detailProp(m, "Biseau de dossier", Vp(1.39, 0.13, 0.21), Vp(-0.017, 3.39, 0.628), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 2))
+	detailProp(m, "Mortaise du dossier", Vp(0.68, 0.12, 0.095), Vp(-0.04, 2.74, 0.52), BOIS_FONCE, Mat.Wood, Vp(0, 0, -4))
+	detailProp(m, "Pointe du dossier", Vp(0.28, 0.28, 0.10), Vp(-0.04, 2.75, 0.50), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 43))
+	detailProp(m, "Reprise sur le barreau", Vp(0.32, 0.11, 0.09), Vp(0.34, 2.19, 0.52), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -5))
+	detailProp(m, "Galette d’assise", Vp(1.24, 0.23, 1.16), Vp(0, 1.79, -0.04), rgb(73,112,104), Mat.Fabric, Vp(0, -4, 0), "Ball")
+	detailProp(m, "Passepoil tendu", Vp(1.05, 0.09, 0.23), Vp(-0.01, 1.78, -0.54), rgb(185,161,104), Mat.Fabric, Vp(0, -4, 0))
+	detailProp(m, "Rapiéçage de l’assise", Vp(0.26, 0.05, 0.29), Vp(-0.29, 1.892, -0.16), rgb(127,154,118), Mat.Fabric, Vp(0, 11, 3))
 	fini(m)
 end
 
@@ -954,6 +1524,21 @@ function PROPS_VALDOR.Banc()
 	cadreTable(m, 3.98, 1.18, 1.38)
 	lamesProp(m, "Assise", Vp(3.99, 0.28, 1.19), Vp(0, 1.49, 0), 3, "Z", BOIS_CLAIR)
 	P(m, "Traverse", Vp(3.71, 0.18, 0.23), Vp(0, 0.54, 0), BOIS_FONCE, Mat.Wood)
+	for i, x in { -1.75, 1.73 } do
+		reliefProp(m, "Contrefort du banc", Vp(0.28, 1.16, 0.31), Vp(x, 0.74, 0.18), BOIS,
+			Mat.Wood, i * 6 - 8, 0, x * 4)
+		reliefProp(m, "Clavette traversante", Vp(0.33, 0.20, 0.25), Vp(x, 0.55, 0.21), BOIS_CLAIR, Mat.Wood, 0, 0, i * 7 - 9)
+	end
+	reliefProp(m, "Rive de l’assise polie", Vp(2.84, 0.09, 0.10), Vp(0.24, 1.54, -0.55), LIN, Mat.Wood, 0, 0, 2)
+	reliefProp(m, "Éclisse sombre du siège", Vp(0.82, 0.025, 0.09), Vp(-1.16, 1.642, 0.31), BOIS_FONCE, Mat.Wood, 0, 6)
+	reliefProp(m, "Réparation en bois clair", Vp(0.30, 0.032, 0.24), Vp(-1.1, 1.651, 0.30), BOIS_CLAIR, Mat.Wood, 0, 43)
+	detailProp(m, "Semelle de pied", Vp(0.36, 0.16, 0.26), Vp(-1.75, 0.10, 0.43), BOIS, Mat.Wood, Vp(0, 4, -5))
+	detailProp(m, "Jambe de force gauche", Vp(0.24, 0.69, 0.29), Vp(-1.48, 0.99, 0.34), BOIS, Mat.Wood, Vp(4, 0, -33))
+	detailProp(m, "Jambe de force droite", Vp(0.24, 0.69, 0.29), Vp(1.47, 0.97, 0.36), BOIS, Mat.Wood, Vp(-3, 0, 36))
+	detailProp(m, "Tenon exposé", Vp(0.27, 0.16, 0.20), Vp(-1.61, 0.56, 0.49), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 5))
+	detailProp(m, "Arête d’assise satinée", Vp(3.56, 0.083, 0.08), Vp(0.04, 1.59, 0.55), rgb(193,144,86), Mat.Wood, Vp(0, 0, 2))
+	detailProp(m, "Fente dans le chant", Vp(0.63, 0.066, 0.05), Vp(0.89, 1.46, 0.571), BOIS_FONCE, Mat.Wood, Vp(0, 0, -5))
+	detailProp(m, "Éclat de chant", Vp(0.54, 0.079, 0.05), Vp(-0.65, 1.56, 0.575), BOIS, Mat.Wood, Vp(0, 0, 6))
 	fini(m)
 end
 
@@ -973,6 +1558,29 @@ function PROPS_VALDOR.Tapis()
 		P(m, "Médaillon", Vp(profil[1], 0.024, profil[1]), Vp(0, profil[2], 0), profil[3], Mat.Fabric,
 			{ rot = CFrame.Angles(0, math.pi / 4, 0), collide = false })
 	end
+	local bordeaux = rgb(103, 43, 45)
+	for _, z in { -0.96, 0.94 } do
+		reliefProp(m, "Champ tissé en gradin", Vp(2.72, 0.026, 0.60), Vp(0, 0.088, z), bordeaux, Mat.Fabric, 0, z * 3)
+		for i, x in { -0.88, 0.09, 0.96 } do
+			reliefProp(m, "Losange en laine", Vp(0.41, 0.029, 0.41), Vp(x, 0.112, z), i == 2 and LIN or OR_PALE,
+				Mat.Fabric, 0, 41 + i * 2)
+		end
+	end
+	for _, x in { -1.25, 1.27 } do
+		reliefProp(m, "Contregalon interrompu", Vp(0.12, 0.031, 0.78), Vp(x, 0.113, 0.10), OR, Mat.Fabric, 0, x * 3)
+	end
+	reliefProp(m, "Coin replié", Vp(0.38, 0.08, 0.40), Vp(1.53, 0.081, -1.47), LIN, Mat.Fabric, -5, 8, -6, "Wedge")
+	reliefProp(m, "Usure du coin", Vp(0.32, 0.034, 0.28), Vp(1.32, 0.102, -1.39), rgb(190, 111, 73), Mat.Fabric, 0, 6)
+	detailProp(m, "Champ indigo", Vp(2.89, 0.022, 2.69), Vp(0, 0.071, 0), rgb(53,72,89), Mat.Fabric)
+	detailProp(m, "Fil tiré sur la rive", Vp(0.34, 0.026, 0.22), Vp(1.52, 0.09, 1.31), rgb(207,165,105), Mat.Fabric, Vp(0, 17, 3), "Wedge")
+	detailProp(m, "Trame usée", Vp(0.46, 0.027, 0.21), Vp(1.26, 0.087, 1.32), rgb(106,78,68), Mat.Fabric, Vp(0, -8, -2))
+	detailProp(m, "Extrémité rabattue", Vp(0.29, 0.032, 0.53), Vp(-1.63, 0.066, -1.37), rgb(111,53,53), Mat.Fabric, Vp(0, 3, -6), "Wedge")
+	for _, x in { -0.99, 0.99 } do
+		for _, z in { -0.92, 0.92 } do
+			detailProp(m, "Losange d’angle", Vp(0.43, 0.026, 0.43), Vp(x, 0.096, z), OR, Mat.Fabric, Vp(0, 45, 0))
+			detailProp(m, "Œil écru du losange", Vp(0.21, 0.025, 0.21), Vp(x + 0.018, 0.116, z), LIN, Mat.Fabric, Vp(0, 44, 0))
+		end
+	end
 	fini(m)
 end
 
@@ -990,12 +1598,34 @@ function PROPS_VALDOR.Pot_Fleurs()
 		lienProp(m, "Tige", Vp(x, 0.87, z), h, 0.074, 0.073, rgb(79, 117, 65), Mat.Grass, false)
 		P(m, "Feuille", Vp(0.33, 0.12, 0.17), Vp(x - 0.09, 1.15, z), rgb(93, 125, 65), Mat.Grass,
 			{ forme = "Ball", collide = false })
+		detailProp(m, "Cœur de fleur", Vp(0.21, 0.11, 0.21), h + Vp(0, 0.1, 0), OR, Mat.Fabric)
 		for j = 0, 2 do
 			local a = j * PASSE / 3
 			P(m, "Fleur", Vp(0.23, 0.18, 0.22), h + Vp(math.cos(a) * 0.1, 0, math.sin(a) * 0.1),
 				c, Mat.Fabric, { forme = "Ball", collide = false })
 		end
 	end
+	cylProp(m, "Filet d’émail sombre", 1.11, 0.10, Vp(0, 0.57, 0), rgb(98, 57, 51), Mat.CeramicTiles, nil, false)
+	cylProp(m, "Collerette émaillée claire", 1.16, 0.092, Vp(0, 0.70, 0), rgb(205, 150, 95), Mat.CeramicTiles, nil, false)
+	for i, p in { Vp(-0.24, 0.62, 0.51), Vp(0.12, 0.50, 0.54), Vp(0.38, 0.65, 0.39), Vp(0.27, 0.77, 0.461) } do
+		reliefProp(m, "Émail écaillé", Vp(0.20, 0.25 - i * 0.034, 0.049), p,
+			i % 2 == 0 and terreCuite or LIN, Mat.CeramicTiles, -5, (i - 2) * 23, 15 + i * 5)
+	end
+	for i, p in { Vp(-0.365, 1.639, 0.14), Vp(0, 1.48, -0.16), Vp(0.365, 1.640, 0.14) } do
+		reliefProp(m, "Cœur de fleur en relief", Vp(0.19, 0.19, 0.21), p + Vp(0, 0.081, 0.04),
+			i == 2 and LAITON or OR_PALE, Mat.Fabric, 6, 0, i * 4, "Ball")
+		lienProp(m, "Feuille retournée", p - Vp(0, 0.33, 0), p - Vp(i * 0.13 - 0.25, 0.16, 0.20),
+			0.16, 0.07, MOUSSE_CLAIRE, Mat.Grass, false)
+	end
+	detailProp(m, "Émail bleu effacé", Vp(0.77, 0.20, 0.19), Vp(-0.05, 0.60, 0.474), rgb(64,122,127), Mat.CeramicTiles, Vp(0, -3, -4))
+	detailProp(m, "Dent d’émail bleu", Vp(0.25, 0.23, 0.12), Vp(0.17, 0.51, 0.505), rgb(61,99,111), Mat.CeramicTiles, Vp(0, 10, 7), "Wedge")
+	detailProp(m, "Aile d’émail bleu", Vp(0.30, 0.12, 0.11), Vp(-0.35, 0.55, 0.402), rgb(86,145,142), Mat.CeramicTiles, Vp(0, -27, 5))
+	detailProp(m, "Lèvre ébréchée", Vp(0.31, 0.085, 0.15), Vp(0.25, 0.975, 0.48), rgb(205,130,82), Mat.CeramicTiles, Vp(-4, -21, -4), "Wedge")
+	detailProp(m, "Bout de soucoupe polie", Vp(0.54, 0.08, 0.11), Vp(-0.09, 0.13, 0.42), rgb(211,145,90), Mat.CeramicTiles, Vp(4, 7, 3))
+	detailProp(m, "Joint de soucoupe sombre", Vp(0.59, 0.058, 0.11), Vp(-0.06, 0.075, 0.43), rgb(107,58,48), Mat.CeramicTiles, Vp(4, 4, 2))
+	detailProp(m, "Feuille retombante", Vp(0.40, 0.15, 0.22), Vp(-0.34, 1.04, 0.25), rgb(82,120,73), Mat.Grass, Vp(6, 13, -27), "Wedge")
+	detailProp(m, "Feuille jeune", Vp(0.30, 0.13, 0.24), Vp(0.31, 1.18, 0.17), rgb(141,159,79), Mat.Grass, Vp(-7, 17, 28), "Wedge")
+	detailProp(m, "Bourgeon replié", Vp(0.19, 0.28, 0.18), Vp(0.12, 1.31, 0.39), GARANCE, Mat.Grass, Vp(12, -5, -14), "Ball")
 	fini(m)
 end
 
@@ -1016,6 +1646,29 @@ function PROPS_VALDOR.Etagere()
 		P(m, "Livre", Vp(0.29, h, 0.68), Vp(-1.19 + i * 0.32, 1.66 + h / 2, 0.04), cols[i % 3 + 1],
 			Mat.Fabric, { collide = false })
 	end
+	reliefProp(m, "Fronton à gradins", Vp(2.47, 0.33, 0.31), Vp(0, 4.34, -0.41), BOIS, Mat.Wood, 0, 0, 2)
+	reliefProp(m, "Rive claire du fronton", Vp(2.77, 0.12, 0.29), Vp(0, 4.44, -0.43), BOIS_CLAIR, Mat.Wood)
+	for i, y in { 0.31, 1.57, 2.84, 4.10 } do
+		reliefProp(m, "Chant de rayon contrasté", Vp(2.75 - i * 0.04, 0.13, 0.12), Vp(i * 0.026, y, -0.50),
+			i % 2 == 0 and BOIS or BOIS_CLAIR, Mat.Wood, 0, 0, i * 2 - 4)
+	end
+	for i, x in { -1.18, -0.53, 0.11, 0.75 } do
+		reliefProp(m, "Coiffe de reliure", Vp(0.28, 0.115, 0.062), Vp(x, 2.07 + i % 2 * 0.09, -0.31),
+			i % 2 == 0 and LIN or OR, Mat.Fabric, 0, 0, i * 3 - 7)
+	end
+	reliefProp(m, "Registre couché", Vp(0.98, 0.17, 0.71), Vp(0.71, 3.029, -0.05), GARANCE, Mat.Fabric, 0, 7)
+	reliefProp(m, "Tranche du registre", Vp(0.87, 0.11, 0.062), Vp(0.68, 3.035, -0.39), LIN, Mat.Fabric, 0, 7)
+	detailProp(m, "Corniche à ressaut", Vp(2.88, 0.12, 0.93), Vp(0.01, 4.445, 0.06), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -2))
+	detailProp(m, "Socle mouluré", Vp(2.84, 0.16, 0.18), Vp(0, 0.24, -0.50), BOIS, Mat.Wood, Vp(0, 0, 2))
+	detailProp(m, "Bois nu du socle", Vp(0.76, 0.09, 0.10), Vp(0.53, 0.21, -0.571), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -5))
+	detailProp(m, "Rive de rayon patinée", Vp(2.75, 0.12, 0.10), Vp(0, 2.86, -0.49), BOIS_FONCE, Mat.Wood, Vp(0, 0, 2))
+	detailProp(m, "Serre-livres taillé", Vp(0.28, 0.51, 0.71), Vp(1.10, 1.80, 0.026), BOIS_CLAIR, Mat.Wood, Vp(0, 4, 0), "Wedge")
+	detailProp(m, "Codex couché", Vp(1.14, 0.21, 0.75), Vp(-0.58, 2.96, -0.02), rgb(53,86,101), Mat.Fabric, Vp(0, 7, -2))
+	detailProp(m, "Tranche du codex", Vp(0.98, 0.14, 0.08), Vp(-0.54, 2.96, -0.391), LIN, Mat.Fabric, Vp(0, 7, -2))
+	detailProp(m, "Livre incliné", Vp(0.31, 0.77, 0.70), Vp(0.64, 3.33, -0.03), GARANCE, Mat.Fabric, Vp(0, 5, -14))
+	detailProp(m, "Tranche dorée", Vp(0.22, 0.62, 0.08), Vp(0.64, 3.36, -0.39), OR, Mat.Fabric, Vp(0, 5, -14))
+	detailProp(m, "Boîte à lettres pliées", Vp(0.61, 0.33, 0.61), Vp(0.77, 0.54, 0.02), rgb(83,117,107), Mat.Fabric, Vp(0, -7, -2))
+	detailProp(m, "Feuillets de correspondance", Vp(0.53, 0.10, 0.39), Vp(0.79, 0.75, 0.03), LIN, Mat.Fabric, Vp(0, -12, 2))
 	fini(m)
 end
 
@@ -1040,6 +1693,42 @@ function PROPS_VALDOR.Etal()
 		P(m, "Pommes", Vp(0.27, 0.29, 0.29), Vp(1.17 + i * 0.22, 2.99, 0.25 + i % 2 * 0.13), GARANCE,
 			Mat.Grass, { forme = "Ball", collide = false })
 	end
+	local rougeFonce = rgb(105, 48, 45)
+	for i = 0, 5 do
+		local x = (i - 2.5) * 0.747
+		local c = i % 2 == 0 and rougeFonce or LIN
+		reliefProp(m, "Ourlet d’auvent soulevé", Vp(0.74, 0.087, 0.15), Vp(x, 5.08 - i % 3 * 0.041, -1.01),
+			i % 2 == 0 and rgb(198, 83, 58) or rgb(183, 160, 131), Mat.Fabric, -6, 0, i % 3 * 4 - 4)
+		reliefProp(m, "Pli du lé", Vp(0.14 + i % 3 * 0.065, 0.085, 1.18), Vp(x + 0.17, 5.47 + i % 2 * 0.032, -0.18),
+			c, Mat.Fabric, -11, i % 3 * 4 - 4)
+	end
+	for _, z in { -0.95, 0.95 } do
+		reliefProp(m, "Tablier de comptoir", Vp(4.18, 0.32, 0.13), Vp(0, 1.98, z), BOIS_FONCE, Mat.Wood, 0, 0, 2)
+		reliefProp(m, "Traverse claire du comptoir", Vp(4.24, 0.19, 0.13), Vp(0, 0.30, z), BOIS_CLAIR, Mat.Wood, 0, 0, -2)
+	end
+	reliefProp(m, "Panier de marché tressé", Vp(1.09, 0.36, 0.67), Vp(-1.25, 2.76, -0.24), BOIS, Mat.Wood, 0, -7, 0, "Ball")
+	reliefProp(m, "Nappe de comptoir", Vp(1.63, 0.07, 1.18), Vp(-1.28, 2.62, -0.36), GARANCE, Mat.Fabric, 0, -3)
+	for i, x in { -1.73, -1.42, -1.08, -0.82 } do
+		reliefProp(m, "Pain doré", Vp(0.36, 0.22 + i % 2 * 0.07, 0.52), Vp(x, 2.92, -0.25 + i % 3 * 0.12),
+			i % 2 == 0 and CHAUME or OR_PALE, Mat.Sand, -5, i * 13 - 29, 0, "Ball")
+	end
+
+	for i = 0, 5 do
+		local x = (i - 2.5) * 0.747
+		local c = i % 2 == 0 and rgb(187, 83, 67) or rgb(235, 221, 181)
+		detailProp(m, "Pli d’auvent éclairé", Vp(0.20, 0.054, 2.31 - i % 3 * 0.14), Vp(x + 0.13, 5.55, 0.23), c, Mat.Fabric, Vp(-11, i % 3 - 2, 0))
+		detailProp(m, "Pointe de toile usée", Vp(0.39 + i % 2 * 0.12, 0.15, 0.11), Vp(x - 0.11, 4.99 - i % 3 * 0.057, -0.97),
+			i % 2 == 0 and rgb(114, 49, 49) or rgb(178, 151, 121), Mat.Fabric, Vp(0, 0, (i - 3) * 2), "Wedge")
+	end
+	detailProp(m, "Caisse inclinée d’épices", Vp(0.94, 0.36, 0.66), Vp(-1.16, 2.75, -0.21), BOIS_FONCE, Mat.Wood, Vp(0, 12, -5))
+	detailProp(m, "Lèvre de caisse inclinée", Vp(0.86, 0.098, 0.14), Vp(-1.16, 2.95, -0.47), BOIS_CLAIR, Mat.Wood, Vp(0, 12, -5))
+	detailProp(m, "Façade de comptoir ferrée", Vp(4.11, 0.17, 0.11), Vp(0, 2.23, 0.973), BOIS_FONCE, Mat.Wood, Vp(0, 0, 2))
+	detailProp(m, "Bois mis à nu du comptoir", Vp(0.69, 0.13, 0.11), Vp(0.59, 2.22, 1.020), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -6), "Wedge")
+	detailProp(m, "Sac ocre de comptoir", Vp(0.57, 0.50, 0.49), Vp(-1.15, 3.03, -0.18), CHAUME, Mat.Fabric, Vp(3, -7, 6), "Ball")
+	detailProp(m, "Sac de lin à la corde", Vp(0.52, 0.43, 0.54), Vp(-0.67, 2.98, -0.10), LIN, Mat.Fabric, Vp(-4, 7, -5), "Ball")
+	detailProp(m, "Revers du sac ocre", Vp(0.30, 0.13, 0.37), Vp(-1.14, 3.27, -0.17), BOIS, Mat.Fabric, Vp(-2, 5, 7))
+	detailProp(m, "Torchon retombé", Vp(0.64, 0.48, 0.13), Vp(0.64, 2.52, 1.016), rgb(58,104,111), Mat.Fabric, Vp(0, 0, 5))
+	detailProp(m, "Rayure écrue du torchon", Vp(0.14, 0.41, 0.07), Vp(0.53, 2.54, 1.087), LIN, Mat.Fabric, Vp(0, 0, 5))
 	fini(m)
 end
 
@@ -1054,6 +1743,20 @@ function PROPS_VALDOR.Serrure_Entrainement()
 	end
 	cylProp(m, "Rosace", 0.52, 0.085, Vp(0, 2.02, -0.664), OR, Mat.Metal, FACE_PROP, false)
 	P(m, "Trou", Vp(0.115, 0.27, 0.038), Vp(0, 2.02, -0.714), rgb(38, 35, 31), Mat.Metal, { collide = false })
+	reliefProp(m, "Contreplaque de serrure", Vp(1.42, 1.22, 0.10), Vp(0, 2.04, -0.566), FER_SOMBRE, Mat.Metal)
+	cylProp(m, "Gorge de l’entrée", 0.25, 0.057, Vp(0, 2.075, -0.734), FER_SOMBRE, Mat.Metal, FACE_PROP, false)
+	reliefProp(m, "Épaulement de l’entrée", Vp(0.63, 0.12, 0.10), Vp(0, 1.79, -0.67), LAITON, Mat.Metal, 0, 0, -4)
+	for i, p in { Vp(-0.49, 1.38, -0.552), Vp(0.31, 1.61, -0.657), Vp(0.47, 1.56, -0.652) } do
+		reliefProp(m, "Trace d’exercice", Vp(0.36 - i * 0.052, 0.062, 0.038), p,
+			i % 2 == 0 and FER_CLAIR or BOIS_CLAIR, Mat.Metal, 0, 0, 25 + i * 6)
+	end
+	reliefProp(m, "Cale usée sur le socle", Vp(0.48, 0.16, 0.33), Vp(-0.43, 0.30, -0.40), BOIS_CLAIR, Mat.Wood, -5, 7, 4)
+	detailProp(m, "Glissière du pêne", Vp(0.45, 0.29, 0.16), Vp(0.42, 1.73, -0.68), rgb(116,122,113), Mat.Metal, Vp(0, 0, -4))
+	detailProp(m, "Pêne en saillie", Vp(0.46, 0.13, 0.17), Vp(0.44, 1.76, -0.775), rgb(196,139,65), Mat.Metal, Vp(0, 0, -4))
+	detailProp(m, "Coin de la rosace écaillé", Vp(0.22, 0.13, 0.08), Vp(-0.22, 2.17, -0.746), rgb(241,178,71), Mat.Metal, Vp(0, 0, 28))
+	detailProp(m, "Arrêt de lime sur la plaque", Vp(0.47, 0.073, 0.044), Vp(-0.34, 1.82, -0.678), rgb(173,142,108), Mat.Metal, Vp(0, 0, -19))
+	detailProp(m, "Long éclat sous la plaque", Vp(0.19, 0.57, 0.075), Vp(-0.49, 1.20, -0.553), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 5), "Wedge")
+	detailProp(m, "Biseau noirci du sabot", Vp(0.81, 0.13, 0.13), Vp(-0.23, 0.37, -0.527), BOIS_FONCE, Mat.Wood, Vp(0, 0, 3))
 	fini(m)
 end
 
@@ -1090,6 +1793,47 @@ function PROPS_VALDOR.Moulin()
 		P(m, "Voile", Vp(3.42, 0.89, 0.055), centre + dir * 3.23 + cote * 0.47 + Vp(0, 0, -0.073),
 			LIN, Mat.Fabric, { rot = CFrame.Angles(0, 0, a), collide = false })
 	end
+	for i, profil in { { -0.69, 2.2, 2.16 }, { -0.37, 3.78, 2.24 }, { 0.19, 5.08, 2.20 }, { 0.76, 6.24, 2.10 },
+		{ 1.53, 2.9, 2.26 }, { 2.74, 4.08, 2.28 }, { 3.57, 6.55, 2.10 }, { 4.08, 7.78, 2.03 } } do
+		local a, y, r = profil[1], profil[2], profil[3]
+		local p = Vp(math.sin(a) * r, y, math.cos(a) * r)
+		reliefProp(m, "Moellon saillant du fût", Vp(1.15 + i % 3 * 0.15, 0.39, 0.16), p,
+			i % 3 == 0 and PIERRE or PIERRE_CLAIRE, Mat.Slate, -3, math.deg(a), i % 3 * 4 - 4)
+		reliefProp(m, "Joint arraché", Vp(0.68 + i % 3 * 0.14, 0.12, 0.073), p + Vp(0, -0.22, 0),
+			i % 2 == 0 and MOUSSE or FER_SOMBRE, Mat.Slate, 2, math.deg(a), i % 3 * 4 - 4)
+	end
+	cylProp(m, "Chapeau sombre du sommet", 0.71, 0.22, Vp(0, 11.93, 0), BOIS_FONCE, Mat.Wood, nil, false)
+	cylProp(m, "Frette polie du moyeu", 0.58, 0.21, centre - Vp(0, 0, 0.20), LAITON, Mat.Metal, FACE_PROP, false)
+	for i = 0, 3 do
+		local angle = i * math.pi / 2 + math.pi / 4
+		local dir, cote = Vp(math.cos(angle), math.sin(angle), 0), Vp(-math.sin(angle), math.cos(angle), 0)
+		local p = centre + dir * (3.9 + i % 2 * 0.18) + cote * 0.47 - Vp(0, 0, 0.104)
+		reliefProp(m, "Reprise de toile des ailes", Vp(0.49 + i * 0.047, 0.78, 0.068), p,
+			i % 2 == 0 and rgb(179, 148, 106) or rgb(243, 224, 178), Mat.Fabric, 0, 0, math.deg(angle) + i * 3 - 6)
+		reliefProp(m, "Bout d’aile ferré", Vp(0.42, 0.28, 0.24), centre + dir * 4.92,
+			FER_CLAIR, Mat.Metal, 0, 0, math.deg(angle) - 3)
+	end
+
+	for i, a in { 0.31, 0.91, 1.58, 2.26, 3.90, 4.53, 5.56 } do
+		local p = Vp(math.sin(a), 0, math.cos(a))
+		detailProp(m, "Appareil saillant de la tour", Vp(0.94, 0.47, 0.23), p * (2.36 - i % 3 * 0.07) + Vp(0, 2.89 + i % 3 * 1.13, 0),
+			({ PIERRE, PIERRE_CLAIRE, CALCAIRE })[i % 3 + 1], Mat.Slate, Vp(0, math.deg(a), i * 2 - 8))
+		detailProp(m, "Joint creux sous la pierre", Vp(0.75, 0.11, 0.17), p * (2.42 - i % 3 * 0.07) + Vp(0, 2.69 + i % 3 * 1.13, 0),
+			rgb(103, 102, 93), Mat.Cobblestone, Vp(0, math.deg(a), i * 2 - 8))
+	end
+	for i = 0, 3 do
+		local a = i * math.pi / 2 + math.pi / 4
+		local dir, cote = Vp(math.cos(a), math.sin(a), 0), Vp(-math.sin(a), math.cos(a), 0)
+		local ct = centre + dir * (4.74 + i % 2 * 0.07) + cote * 0.45 + Vp(0, 0, -0.12)
+		detailProp(m, "Ourlet de voile déchiré", Vp(0.56, 0.82 - i % 3 * 0.09, 0.065), ct,
+			i % 2 == 0 and rgb(167, 144, 106) or rgb(222, 194, 154), Mat.Fabric,
+			Vp(0, 0, math.deg(a) + i * 3 - 5), "Wedge")
+		detailProp(m, "Rapport de toile", Vp(0.75, 0.35, 0.045), centre + dir * (2.58 + i * 0.24) + cote * 0.59 + Vp(0, 0, -0.115),
+			i % 2 == 0 and rgb(174, 71, 57) or rgb(190, 169, 128), Mat.Fabric, Vp(0, 0, math.deg(a) + 4))
+	end
+	detailProp(m, "Joue de moyeu en bronze", Vp(0.42, 0.44, 0.16), Vp(0, 8.5, -3.956), rgb(188,129,66), Mat.Metal, Vp(0, 0, 43))
+	detailProp(m, "Mousse tournée vers le sol", Vp(1.05, 0.22, 0.56), Vp(0.78, 0.49, 2.19), rgb(99,126,72), Mat.Grass, Vp(3, 15, -4))
+	detailProp(m, "Pointe de mousse sur l’assise", Vp(0.46, 0.41, 0.33), Vp(1.22, 0.60, 2.02), rgb(73,101,65), Mat.Grass, Vp(0, 23, 4), "Wedge")
 	fini(m)
 end
 
@@ -1111,6 +1855,25 @@ function PROPS_VALDOR.Arroseur()
 		lienProp(m, "Buse", Vp(0, 1.64, 0), b, 0.11, 0.11, cuivre, Mat.Metal, false)
 		rivetProp(m, b, 0.15, FER)
 	end
+	local vert = rgb(85, 130, 104)
+	cylProp(m, "Trappe du réservoir", 0.46, 0.12, Vp(-0.13, 0.965, 0.93), LAITON, Mat.Metal, nil, false)
+	cylProp(m, "Couronne de vanne", 0.51, 0.10, Vp(0, 1.80, 0), cuivre, Mat.Metal, nil, false)
+	cylProp(m, "Creux de la vanne", 0.35, 0.035, Vp(0, 1.865, 0), FER_SOMBRE, Mat.Metal, nil, false)
+	for i, p in { Vp(-0.32, 0.65, 1.41), Vp(0.05, 0.54, 1.50), Vp(0.36, 0.68, 1.34) } do
+		reliefProp(m, "Traînée humide du réservoir", Vp(0.23, 0.32 - i * 0.022, 0.095), p,
+			i % 2 == 0 and vert or BOIS_FONCE, Mat.Wood, -6, i * 29 - 55, i * 4 - 9)
+	end
+	for _, p in { Vp(0.48, 0.20, 0.79), Vp(-0.36, 0.19, 1.01), Vp(-0.42, 0.18, 0.66) } do
+		reliefProp(m, "Mousse sur la semelle humide", Vp(0.28, 0.10, 0.31), p, MOUSSE_CLAIRE, Mat.Grass, 6, -7, 5)
+	end
+	detailProp(m, "Collecteur cuivré", Vp(0.36, 0.22, 0.35), Vp(0, 1.39, 0), rgb(209,143,75), Mat.Metal, Vp(0, 0, 4))
+	detailProp(m, "Levier de pression", Vp(0.12, 0.36, 0.43), Vp(0.084, 0.93, 0.83), rgb(191,130,63), Mat.Metal, Vp(24, 0, -7))
+	detailProp(m, "Cache du manomètre", Vp(0.42, 0.32, 0.14), Vp(0, 1.18, 0.414), FER, Mat.Metal, Vp(0, 0, 7))
+	detailProp(m, "Face du manomètre", Vp(0.32, 0.22, 0.07), Vp(0, 1.18, 0.497), LIN, Mat.Metal, Vp(0, 0, 7))
+	detailProp(m, "Aiguille du manomètre", Vp(0.04, 0.135, 0.028), Vp(0.018, 1.19, 0.539), GARANCE, Mat.Metal, Vp(0, 0, -29))
+	detailProp(m, "Galon de vert-de-gris", Vp(0.18, 0.31, 0.10), Vp(0.085, 1.00, 0.605), rgb(80,128,109), Mat.Metal, Vp(10, 0, 6), "Wedge")
+	detailProp(m, "Goutte dans la buse", Vp(0.11, 0.14, 0.11), Vp(0.43, 1.62, 0.052), rgb(117,180,187), Mat.Metal, nil, "Ball")
+	detailProp(m, "Douelle polie du réservoir", Vp(0.29, 0.41, 0.10), Vp(-0.08, 0.56, 1.47), BOIS_CLAIR, Mat.Wood, Vp(0, 4, -4))
 	fini(m)
 end
 
@@ -1124,6 +1887,22 @@ function PROPS_VALDOR.Ruche()
 	end
 	P(m, "Planche d’envol", Vp(0.64, 0.12, 0.34), Vp(0, 0.71, -0.86), BOIS, Mat.Wood)
 	P(m, "Trou", Vp(0.36, 0.19, 0.11), Vp(0, 0.83, -0.90), BOIS_FONCE, Mat.Wood, { collide = false })
+	reliefProp(m, "Seuil ombré de l’entrée", Vp(0.73, 0.19, 0.33), Vp(0, 0.66, -0.82), BOIS_FONCE, Mat.Wood, 2)
+	reliefProp(m, "Encadrement de cire", Vp(0.51, 0.31, 0.095), Vp(0, 0.84, -0.889), LAITON, Mat.Grass, 0, 0, 4)
+	for i, p in { Vp(-0.30, 1.82, -0.41), Vp(0.04, 1.86, -0.48), Vp(0.38, 1.73, -0.39), Vp(0.49, 1.48, -0.48) } do
+		reliefProp(m, "Tresse de paille défaite", Vp(0.38, 0.19, 0.23), p,
+			i % 2 == 0 and OR_PALE or CHAUME, Mat.Grass, -5, i * 9 - 24, i * 4 - 8)
+	end
+	for i, p in { Vp(0.22, 0.73, -0.88), Vp(0.31, 0.65, -0.91), Vp(0.39, 0.59, -0.87) } do
+		reliefProp(m, "Filet de cire ambrée", Vp(0.14 + i * 0.02, 0.13, 0.11), p,
+			i == 3 and LAITON or OR, Mat.Glass, 3, 0, -7, "Ball")
+	end
+	detailProp(m, "Crête de paille blonde", Vp(0.71, 0.115, 0.65), Vp(-0.04, 1.97, 0.073), rgb(236,191,100), Mat.Grass, Vp(4, -7, -3))
+	detailProp(m, "Paille déchirée", Vp(0.49, 0.19, 0.28), Vp(-0.44, 1.26, -0.49), rgb(225,178,84), Mat.Grass, Vp(-5, 10, -8), "Wedge")
+	detailProp(m, "Anneau ombré de paille", Vp(0.81, 0.10, 0.14), Vp(0.034, 1.0, -0.813), rgb(132,93,49), Mat.Grass, Vp(0, 7, 4))
+	detailProp(m, "Linteau d’entrée", Vp(0.56, 0.13, 0.18), Vp(0.014, 0.945, -0.873), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -4))
+	detailProp(m, "Lèvre d’envol satinée", Vp(0.54, 0.072, 0.13), Vp(0.014, 0.768, -0.959), BOIS_FONCE, Mat.Wood, Vp(0, 0, 3))
+	detailProp(m, "Goutte d’ambre", Vp(0.135, 0.23, 0.11), Vp(0.225, 0.713, -0.964), rgb(234,159,59), Mat.Glass, Vp(0, 0, 6), "Ball")
 	fini(m)
 end
 
@@ -1158,6 +1937,48 @@ function PROPS_VALDOR.Caserne()
 		P(m, "Drapeau", Vp(0.13, h, 0.59), Vp(i % 2 * 0.045, 12.33 - h / 2, 0.32 + i * 0.54),
 			i % 2 == 0 and GARANCE or GARANCE:Lerp(BOIS_FONCE, 0.11), Mat.Fabric, { collide = false })
 	end
+	for _, x in { -5.48, 5.48 } do
+		for _, z in { -4.48, 4.48 } do
+			local f = math.sign(z)
+			for i, y in { 1.24, 3.77, 6.14 } do
+				reliefProp(m, "Chaîne d’angle de tour", Vp(0.72 - i * 0.071, 0.43, 0.20),
+					Vp(x + (i % 2 - 0.5) * 0.37, y, z + f * 0.89), i == 1 and PIERRE or PIERRE_CLAIRE, Mat.Slate, 0, 0, (i - 2) * 3)
+			end
+			reliefProp(m, "Meurtrière profonde", Vp(0.24, 0.94, 0.081), Vp(x, 5.28, z + f * 0.936), FER_SOMBRE, Mat.Slate)
+			reliefProp(m, "Appui de meurtrière", Vp(0.56, 0.16, 0.24), Vp(x, 4.79, z + f * 0.93), CALCAIRE, Mat.Slate, -5)
+		end
+	end
+	for i, x in { -3.89, -3.01, -2.19, 2.12, 2.91, 3.78 } do
+		reliefProp(m, "Mousse fragmentée des fondations", Vp(0.94, 0.31 - i % 3 * 0.06, 0.28),
+			Vp(x, 0.89 + i % 3 * 0.12, -4.52), i % 2 == 0 and MOUSSE or MOUSSE_CLAIRE, Mat.Grass, 0, 0, i % 3 * 5 - 5)
+	end
+	reliefProp(m, "Écu de la garnison", Vp(1.30, 1.18, 0.25), Vp(0, 5.85, -4.50), FER_SOMBRE, Mat.Metal, 0, 0, 3)
+	reliefProp(m, "Plaque de l’écu", Vp(1.12, 0.99, 0.17), Vp(0, 5.86, -4.65), GARANCE, Mat.Metal, 0, 0, 3)
+	reliefProp(m, "Losange doré de l’écu", Vp(0.49, 0.49, 0.093), Vp(0, 5.86, -4.76), OR_PALE, Mat.Metal, 0, 0, 45)
+	for _, x in { -1.22, 1.21 } do
+		reliefProp(m, "Traverse ferrée du portail", Vp(0.24, 3.68, 0.07), Vp(x, 2.98, -4.68), FER_CLAIR, Mat.Metal, 0, 0, x * 2)
+	end
+
+	for i, x in { -4.41, -3.38, -2.49, 2.26, 3.12, 4.37 } do
+		local y = 1.36 + (i % 3) * 1.13
+		detailProp(m, "Pierre d’appareil de façade", Vp(0.99 + i % 3 * 0.20, 0.47, 0.29), Vp(x, y, -4.52),
+			({ PIERRE, PIERRE_CLAIRE, CALCAIRE })[i % 3 + 1], Mat.Slate, Vp(0, 0, i - 4))
+		detailProp(m, "Joint en retrait sous le moellon", Vp(0.82 + i % 3 * 0.17, 0.13, 0.19), Vp(x + 0.14, y - 0.25, -4.54),
+			rgb(108, 100, 91), Mat.Cobblestone, Vp(0, 0, i - 4))
+	end
+	for _, x in { -4.74, 4.74 } do
+		detailProp(m, "Contrefort en glacis", Vp(0.67, 1.31, 0.68), Vp(x, 1.36, -4.65), PIERRE, Mat.Slate, Vp(0, 0, x > 0 and 3 or -3), "Wedge")
+		detailProp(m, "Lèvre claire du glacis", Vp(0.54, 0.38, 0.51), Vp(x, 1.57, -4.70), CALCAIRE, Mat.Slate, Vp(0, 0, x > 0 and 3 or -3), "Wedge")
+		detailProp(m, "Mousse au glacis", Vp(0.39, 0.26, 0.36), Vp(x - 0.12, 0.98, -4.85), rgb(97, 128, 75), Mat.Grass, Vp(5, 5, -4), "Wedge")
+	end
+	for _, x in { -2.76, 2.76 } do
+		detailProp(m, "Embrasure d’archère", Vp(0.59, 1.82, 0.16), Vp(x, 4.61, -4.53), rgb(63, 58, 55), Mat.Slate, Vp(0, 0, 2))
+		detailProp(m, "Linteau de l’archère", Vp(0.78, 0.22, 0.22), Vp(x, 5.54, -4.53), PIERRE_CLAIRE, Mat.Slate, Vp(0, 0, -3))
+		detailProp(m, "Tablette sous l’archère", Vp(0.76, 0.22, 0.24), Vp(x, 3.64, -4.59), PIERRE, Mat.Slate, Vp(0, 0, 3))
+	end
+	detailProp(m, "Bannière coupée au-dessus de la porte", Vp(1.14, 1.39, 0.11), Vp(0, 6.26, -4.59), GARANCE, Mat.Fabric, Vp(0, 0, -3))
+	detailProp(m, "Pointe de bannière", Vp(0.57, 0.46, 0.103), Vp(0.22, 5.49, -4.615), rgb(101,44,47), Mat.Fabric, Vp(0, 0, 5), "Wedge")
+	detailProp(m, "Écu brodé", Vp(0.33, 0.33, 0.041), Vp(-0.03, 6.44, -4.655), OR, Mat.Fabric, Vp(0, 0, 43))
 	fini(m)
 end
 
@@ -1190,16 +2011,72 @@ function PROPS_VALDOR.Embarcadere()
 	lienProp(m, "Amarre", Vp(1.8, 0.91, -4), Vp(3.45, 0.91, -2.82), 0.073, 0.073, LIN, Mat.Fabric, false)
 	P(m, "PiedPanneau", Vp(0.27, 2.08, 0.29), Vp(0, 1.66, -4.58), BOIS_FONCE, Mat.Wood)
 	lamesProp(m, "Panneau", Vp(2.22, 1.02, 0.18), Vp(0, 2.60, -4.58), 3, "Y", BOIS)
+	for _, x in { -1.80, 1.80 } do
+		for i, z in { -4, 0, 4 } do
+			reliefProp(m, "Tête usée du pieu", Vp(0.47, 0.17, 0.48), Vp(x, 1.041, z), BOIS_CLAIR, Mat.Wood, 3, 0, i * 4 - 9)
+			reliefProp(m, "Algue de la ligne d’eau", Vp(0.35, 0.54, 0.10), Vp(x + 0.04, 0.22 - i * 0.06, z + 0.212),
+				i == 2 and MOUSSE_SOMBRE or MOUSSE, Mat.Grass, -5, 0, i * 4 - 6)
+		end
+	end
+	for i, z in { -2.29, -1.31, -0.39, 0.62, 1.54, 2.15 } do
+		reliefProp(m, "Préceinte de la barque", Vp(0.14, 0.19, 1.03 - i % 3 * 0.10), Vp(4.57 - math.abs(z) * 0.026, 0.89, z),
+			i % 2 == 0 and BOIS_CLAIR or BOIS_FONCE, Mat.Wood, i % 3 * 4 - 4, 0, 5)
+	end
+	for i, z in { -0.84, -0.32, 0.22, 0.75 } do
+		reliefProp(m, "Couture de la voile reprise", Vp(0.14, 0.57, 0.51), Vp(3.56, 3.48 + i % 2 * 0.061, z),
+			i % 2 == 0 and GARANCE or rgb(171, 128, 95), Mat.Fabric, i * 3 - 8, 0, 5)
+	end
+	for i, z in { -3.66, -3.35, -3.20 } do
+		cylProp(m, "Bobine d’amarre", 0.55 - i * 0.058, 0.11, Vp(1.39 - i * 0.034, 0.84 + i * 0.07, z),
+			i == 2 and BOIS_CLAIR or LIN, Mat.Fabric, nil, false)
+	end
+
+	for _, x in { -1.8, 1.8 } do
+		for i, z in { -4, 0, 4 } do
+			detailProp(m, "Tête de pieu taillée", Vp(0.49, 0.19, 0.47), Vp(x, 1.02, z), BOIS_CLAIR, Mat.Wood, Vp(0, i * 5, 5 - i * 3), "Wedge")
+			detailProp(m, "Dépôt de rive sur pieu", Vp(0.29, 0.47, 0.086), Vp(x, 0.38, z + 0.22), rgb(80, 106 + i * 5, 76), Mat.Grass, Vp(0, 0, i * 4 - 7), "Wedge")
+		end
+	end
+	for i, z in { -1.51, 0, 1.51 } do
+		detailProp(m, "Plaque de renfort du bordé", Vp(0.09, 0.19, 0.76), Vp(2.23, 0.74, z + 0.13), FER, Mat.Metal, Vp(-5, 0, i * 3))
+		detailProp(m, "Joue d’étoupe du bordé", Vp(0.08, 0.13, 0.81), Vp(4.65, 0.94, z - 0.08), BOIS_CLAIR, Mat.Wood, Vp(i * 2 - 5, 0, -3))
+	end
+	detailProp(m, "Bordé relevé du canot", Vp(0.18, 0.18, 3.94), Vp(4.5, 1.05, 0.04), BOIS_FONCE, Mat.Wood, Vp(-2, 0, 0))
+	detailProp(m, "Bordé clair du canot", Vp(0.17, 0.14, 3.94), Vp(2.39, 1.08, -0.01), BOIS_CLAIR, Mat.Wood, Vp(2, 0, 0))
+	detailProp(m, "Patin de proue", Vp(0.29, 0.41, 0.29), Vp(3.44, 1.12, -2.70), BOIS, Mat.Wood, Vp(-19, 0, 4), "Wedge")
+	detailProp(m, "Raccommodage d’indigo", Vp(0.07, 0.67, 0.53), Vp(3.63, 3.47, 0.73), rgb(68,106,114), Mat.Fabric, Vp(-7, 6, 2))
+	detailProp(m, "Couture du raccommodage", Vp(0.08, 0.12, 0.46), Vp(3.67, 3.79, 0.77), LIN, Mat.Fabric, Vp(-7, 6, 2))
+	detailProp(m, "Pointe de voile libre", Vp(0.12, 0.28, 0.53), Vp(3.52, 2.73, -0.61), rgb(178,151,116), Mat.Fabric, Vp(4, 7, 0), "Wedge")
+	detailProp(m, "Glène d’amarre sur le ponton", Vp(0.63, 0.14, 0.58), Vp(1.44, 0.87, -3.61), LIN, Mat.Fabric, Vp(0, 7, 0), "Ball")
+	detailProp(m, "Brin libre de l’amarre", Vp(0.14, 0.085, 0.55), Vp(1.51, 0.83, -3.34), CHAUME, Mat.Fabric, Vp(0, 22, 0))
 	fini(m)
 end
 
 function PROPS_VALDOR.Plancher()
 	local m = nouveau("Plancher")
-	lamesProp(m, "Planches", Vp(4, 0.4, 4), Vp(0, 0.2, 0), 7, "X", BOIS_CLAIR)
+	local largeurs = { 0.47, 0.64, 0.52, 0.73, 0.49, 0.56, 0.59 }
+	local tons = { rgb(98, 63, 40), BOIS, BOIS_CLAIR, rgb(143, 100, 61) }
+	local bord = -2
+	for i, w in largeurs do
+		P(m, "Planches", Vp(w - 0.018, 0.4, 4), Vp(bord + w / 2, 0.2, 0), tons[(i - 1) % #tons + 1], Mat.WoodPlanks)
+		bord += w
+	end
 	for _, z in { -1.7, 1.7 } do
 		P(m, "Solive", Vp(4, 0.16, 0.23), Vp(0, 0.08, z), BOIS_FONCE, Mat.Wood)
-		for x = -1.55, 1.55, 0.62 do rivetProp(m, Vp(x, 0.404, z), 0.077) end
+		reliefProp(m, "Solive à chant clair", Vp(3.96, 0.12, 0.19), Vp(0, 0.11, z), BOIS_CLAIR, Mat.Wood)
 	end
+	reliefProp(m, "Fond sombre des joints", Vp(4, 0.21, 4), Vp(0, 0.17, 0), BOIS_FONCE, Mat.Wood)
+	for i, p in { Vp(-1.64, 0.403, 0.93), Vp(-1.14, 0.404, 0.45), Vp(0.21, 0.403, -0.94) } do
+		reliefProp(m, "Bord poli par les pas", Vp(0.20 + i * 0.02, 0.025, 1.46 - i * 0.24), p,
+			i == 2 and BOIS_CLAIR or rgb(161, 111, 70), Mat.WoodPlanks, 0, i * 3 - 7)
+	end
+	detailProp(m, "Liseré de rive au sud", Vp(3.92, 0.07, 0.16), Vp(0, 0.38, 1.909), BOIS_FONCE, Mat.Wood)
+	detailProp(m, "Liseré de rive au nord", Vp(3.92, 0.07, 0.16), Vp(0, 0.38, -1.909), BOIS_FONCE, Mat.Wood)
+	detailProp(m, "About de rive éclairci", Vp(1.68, 0.04, 0.13), Vp(0.78, 0.414, 1.918), BOIS_CLAIR, Mat.Wood, Vp(0, 2, 0))
+	detailProp(m, "About de rive sombre", Vp(1.56, 0.035, 0.12), Vp(-0.89, 0.415, -1.914), BOIS, Mat.Wood, Vp(0, -2, 0))
+	detailProp(m, "Bois de passage à gauche", Vp(0.31, 0.025, 1.07), Vp(-0.37, 0.398, -0.45), rgb(196,147,91), Mat.Wood, Vp(0, 2, 0), "Wedge")
+	detailProp(m, "Bois de passage au centre", Vp(0.36, 0.025, 1.42), Vp(0.04, 0.403, 0.03), rgb(192,141,83), Mat.Wood, Vp(0, -2, 0))
+	detailProp(m, "Bois de passage à droite", Vp(0.32, 0.025, 0.79), Vp(0.42, 0.398, 0.36), rgb(172,118,69), Mat.Wood, Vp(0, 3, 0), "Wedge")
 	fini(m)
 end
 
@@ -1209,27 +2086,58 @@ local function murBoise(nom: string, porte: boolean, fenetre: boolean)
 		P(m, "Poteau", Vp(0.6, 7.2, 0.6), Vp(x, 3.6, 0), BOIS_FONCE, Mat.Wood)
 		for _, y in { 0.43, 6.75 } do
 			P(m, "Bride", Vp(0.63, 0.19, 0.63), Vp(x, y, 0), FER, Mat.Metal, { collide = false })
-			rivetProp(m, Vp(x, y, 0.325), 0.124)
 		end
 	end
 	if porte then
 		lamesProp(m, "Linteau", Vp(3.97, 1.4, 0.49), Vp(0, 6.3, 0), 7, "X", BOIS_CLAIR)
 		for _, x in { -1.65, 1.65 } do
-			lamesProp(m, "Montant", Vp(0.7, 5.62, 0.49), Vp(x, 2.81, 0), 2, "X", BOIS)
+			lamesProp(m, "Montant", Vp(0.7, 5.62, 0.49), Vp(x, 2.81, 0), 1, "X", BOIS)
 		end
+		for _, x in { -1.43, 1.43 } do
+			reliefProp(m, "Chant de jambage raboté", Vp(0.23, 5.32, 0.11), Vp(x, 2.78, 0.235),
+				BOIS_CLAIR, Mat.Wood, 0, 0, math.sign(x) * 2)
+			reliefProp(m, "Sabot sombre du jambage", Vp(0.49, 0.56, 0.11), Vp(x, 0.37, 0.235),
+				BOIS_FONCE, Mat.Wood, 0, 0, -math.sign(x) * 2)
+		end
+		reliefProp(m, "Lit clair du linteau", Vp(2.78, 0.17, 0.16), Vp(0, 5.80, 0.234), BOIS_CLAIR, Mat.Wood, 0, 0, 2)
+		reliefProp(m, "Entaille basse du linteau", Vp(0.74, 0.11, 0.09), Vp(-0.93, 5.77, 0.272), BOIS_FONCE, Mat.Wood, 0, 0, -4)
 	elseif fenetre then
-		lamesProp(m, "Bas", Vp(3.99, 2.6, 0.49), Vp(0, 1.3, 0), 8, "X", BOIS_CLAIR)
-		lamesProp(m, "Haut", Vp(3.99, 1.8, 0.49), Vp(0, 6.1, 0), 8, "X", BOIS_CLAIR)
-		for _, x in { -1.55, 1.55 } do lamesProp(m, "Cote", Vp(0.9, 2.61, 0.49), Vp(x, 3.9, 0), 2, "X", BOIS) end
+		lamesProp(m, "Bas", Vp(3.99, 2.6, 0.49), Vp(0, 1.3, 0), 5, "X", BOIS_CLAIR)
+		lamesProp(m, "Haut", Vp(3.99, 1.8, 0.49), Vp(0, 6.1, 0), 5, "X", BOIS)
+		for _, x in { -1.55, 1.55 } do lamesProp(m, "Cote", Vp(0.9, 2.61, 0.49), Vp(x, 3.9, 0), 1, "X", BOIS) end
 		P(m, "Vitre", Vp(2.2, 2.62, 0.11), Vp(0, 3.9, 0), rgb(156, 190, 207), Mat.Glass, { transp = 0.46 })
 		P(m, "Croisillon", Vp(2.26, 0.14, 0.30), Vp(0, 3.90, 0), BOIS_FONCE, Mat.Wood)
 		P(m, "Croisillon", Vp(0.14, 2.62, 0.30), Vp(0, 3.90, 0), BOIS_FONCE, Mat.Wood)
-		for _, y in { 2.57, 5.20 } do P(m, "Cadre", Vp(2.35, 0.21, 0.64), Vp(0, y, 0), BOIS_FONCE, Mat.Wood) end
+		for _, y in { 2.57, 5.20 } do
+			P(m, "Cadre", Vp(2.35, 0.21, 0.64), Vp(0, y, 0), y < 3 and BOIS_CLAIR or BOIS_FONCE, Mat.Wood)
+		end
+		for _, x in { -1.15, 1.15 } do
+			reliefProp(m, "Joue de l’encadrement", Vp(0.17, 2.48, 0.49), Vp(x, 3.89, 0.037),
+				BOIS, Mat.Wood, 0, 0, math.sign(x) * 2)
+		end
 	else
-		lamesProp(m, "Mur", Vp(3.99, 7, 0.5), Vp(0, 3.5, 0), 8, "X", BOIS_CLAIR)
+		lamesProp(m, "Mur", Vp(3.99, 7, 0.5), Vp(0, 3.5, 0), 5, "X", BOIS_CLAIR)
+		reliefProp(m, "Fond sombre du bardage", Vp(3.99, 6.96, 0.32), Vp(0, 3.50, 0), BOIS_FONCE, Mat.Wood)
+		for i, x in { -1.70, -1.18, -0.22, 0.69, 1.66 } do
+			reliefProp(m, "Bardage éclairci à la rive", Vp(0.29 + i % 2 * 0.065, 2.68 - i % 3 * 0.48, 0.072),
+				Vp(x, 5.19 - i % 3 * 0.36, 0.231), i % 2 == 0 and BOIS or BOIS_CLAIR, Mat.WoodPlanks, 0, 0, i % 3 * 3 - 3)
+		end
+		for i, x in { -1.29, -0.22, 1.04 } do
+			reliefProp(m, "Lèvre sombre du bardage usé", Vp(0.93 - i * 0.115, 0.22, 0.092), Vp(x, 0.46 + i * 0.071, 0.228),
+				i == 2 and BOIS or BOIS_FONCE, Mat.WoodPlanks, 0, 0, i * 3 - 7)
+		end
 	end
 	for _, y in { porte and 5.66 or 0.23, 6.89 } do
 		P(m, "Traverse", Vp(4.01, 0.21, 0.58), Vp(0, y, 0), BOIS_FONCE, Mat.Wood)
+	end
+	for _, z in { -0.254, 0.254 } do
+		detailProp(m, "Faîte raboté", Vp(3.99, 0.12, 0.096), Vp(0, 6.94, z), BOIS_CLAIR, Mat.Wood)
+		detailProp(m, "Liseré dans l’ombre", Vp(3.99, 0.105, 0.096), Vp(0, porte and 5.59 or 0.35, z), BOIS_FONCE, Mat.Wood)
+	end
+	if porte then
+		for i, x in { -1.38, 1.38 } do
+			detailProp(m, "Jambe du linteau", Vp(0.18, 0.61, 0.11), Vp(x * 0.96, 5.46, 0.249), BOIS, Mat.Wood, Vp(0, 0, i == 1 and -21 or 21))
+		end
 	end
 	fini(m)
 end
@@ -1244,21 +2152,33 @@ local function murMaconne(nom: string, c: Color3, mat: Enum.Material, rangs: num
 		P(m, "Poteau", Vp(0.6, 7.2, 0.6), Vp(x, 3.6, 0), BOIS_FONCE, Mat.Wood)
 	end
 	local h = 7 / rangs
+	local clair, sombre = c:Lerp(PIERRE_CLAIRE, 0.31), c:Lerp(rgb(74, 64, 62), 0.48)
+	local jointSombre = c:Lerp(rgb(55, 49, 48), 0.64)
+	local tons = { c:Lerp(jointSombre, 0.33), c, c:Lerp(rgb(227, 211, 188), 0.39) }
+	reliefProp(m, "Lit de mortier sombre", Vp(4, 6.95, 0.40), Vp(0, 3.51, 0), jointSombre, mat)
 	for i = 0, rangs - 1 do
-		local joint = i % 2 == 0 and { 1.05, 1.67, 1.28 } or { 0.78, 1.22, 0.87, 1.13 }
+		local trois = i % 2 == 0 and { 1.05, 1.67, 1.28 } or { 1.45, 1.38, 1.17 }
+		local joint = rangs == 6 and i % 2 == 1 and { 0.78, 1.22, 0.87, 1.13 } or trois
 		local x = -2
 		for j, w in joint do
-			P(m, "Moellon", Vp(w - 0.026, h, 0.48 + (j + i) % 3 * 0.014), Vp(x + w / 2, h * (i + 0.5), 0),
-				c:Lerp(PIERRE, (i + j) % 3 * 0.12), mat)
+			P(m, "Moellon", Vp(w - 0.042, h - 0.035, 0.46 + (j + i) % 3 * 0.024), Vp(x + w / 2, h * (i + 0.5), 0),
+				tons[(2 * i + j) % #tons + 1], mat, { rot = CFrame.Angles(0, 0, math.rad((j + i) % 3 - 1)) })
 			x += w
 		end
 	end
 	P(m, "Arase", Vp(4.03, 0.17, 0.58), Vp(0, 6.97, 0), c, mat)
+	reliefProp(m, "Chaperon éclairci", Vp(3.86, 0.14, 0.53), Vp(0, 7.037, 0), tons[3], mat, 0, 0, 1)
+	detailProp(m, "Solin inférieur", Vp(3.98, 0.18, 0.59), Vp(0, 0.12, 0), sombre, mat)
+	if rangs == 6 then
+		for _, p in { Vp(-1.15, 0.89, 0.247), Vp(-0.80, 0.80, 0.249), Vp(-0.54, 0.70, 0.241) } do
+			detailProp(m, "Front de calcaire fracturé", Vp(0.47, 0.14, 0.087), p, clair, mat, Vp(0, 0, 5), "Wedge")
+		end
+	end
 	fini(m)
 end
 
-function PROPS_VALDOR.Mur_Pierre() murMaconne("Mur_Pierre", CALCAIRE, Mat.Slate, 7) end
-function PROPS_VALDOR.Mur_Briques() murMaconne("Mur_Briques", rgb(153, 87, 65), Mat.Brick, 10) end
+function PROPS_VALDOR.Mur_Pierre() murMaconne("Mur_Pierre", CALCAIRE, Mat.Slate, 6) end
+function PROPS_VALDOR.Mur_Briques() murMaconne("Mur_Briques", rgb(153, 87, 65), Mat.Brick, 7) end
 
 function PROPS_VALDOR.Toit_Chaume()
 	local m = nouveau("Toit_Chaume")
@@ -1268,6 +2188,25 @@ function PROPS_VALDOR.Toit_Chaume()
 		P(m, "Chevron", Vp(4.71, 0.19, 0.30), Vp(0, 7.22, z), BOIS, Mat.Wood)
 	end
 	toitureProp(m, 4.71, 4.71, 7.27, 1.14, 0, true)
+	for i, x in { -1.78, -0.82, 0.31, 1.39 } do
+		for _, z in { -1, 1 } do
+			reliefProp(m, "Gerbe d’égout rabattue", Vp(1.19 - i % 3 * 0.082, 0.19, 0.54),
+				Vp(x, 7.478 + i % 3 * 0.045, z * (1.90 - i % 2 * 0.08)),
+				i % 3 == 0 and CHAUME or OR_PALE, Mat.Grass, z * 27, 0, i % 3 * 4 - 4)
+		end
+	end
+	reliefProp(m, "Dos clair du faîtage", Vp(4.51, 0.21, 0.32), Vp(0, 8.46, 0.02), BOIS_CLAIR, Mat.Wood, 0, 0, 1)
+	for i, x in { -1.47, 0.06, 1.56 } do
+		reliefProp(m, "Pointe sombre de gerbe", Vp(0.72 - i * 0.062, 0.10, 0.40), Vp(x, 7.44, 2.06),
+			BOIS, Mat.Grass, 26, 0, i * 3 - 6)
+	end
+
+	local tons = { rgb(146, 110, 52), CHAUME, rgb(223, 180, 90) }
+	for i, x in { -1.88, -0.60, 0.63, 1.82 } do
+		detailProp(m, "Gerbe coupée de rive", Vp(0.72 + i % 2 * 0.17, 0.19, 0.57), Vp(x, 7.388 - i % 3 * 0.04, 2.04),
+			tons[i % 3 + 1], Mat.Grass, Vp(27, i % 3 * 3 - 4, i - 4), "Wedge")
+	end
+	detailProp(m, "Coiffe de paille du faîtage", Vp(4.65, 0.13, 0.36), Vp(0, 8.469, 0), tons[3], Mat.Grass)
 	fini(m)
 end
 
@@ -1275,11 +2214,17 @@ function PROPS_VALDOR.Escalier_Bois()
 	local m = nouveau("Escalier_Bois")
 	for i = 0, 7 do
 		local y, z = 0.44 + i * 0.92, 1.75 - i * 0.50
-		P(m, "Marche", Vp(3.59, 0.88, 0.50), Vp(0, y, z), teinteProp(BOIS_CLAIR, i), Mat.WoodPlanks)
+		P(m, "Marche", Vp(3.59, 0.88, 0.50), Vp(0, y, z),
+			({ BOIS, BOIS_CLAIR, rgb(148, 102, 63) })[i % 3 + 1], Mat.WoodPlanks)
+		reliefProp(m, "Bord de marche poli", Vp(2.98 + i % 3 * 0.13, 0.038, 0.23),
+			Vp((i % 3 - 1) * 0.10, y + 0.442, z + 0.083), i % 3 == 0 and BOIS or BOIS_CLAIR, Mat.Wood, 0, i % 3 - 1)
 		P(m, "Nez", Vp(3.61, 0.13, 0.11), Vp(0, y + 0.36, z + 0.18), BOIS_FONCE, Mat.Wood)
 	end
 	for _, x in { -1.71, 1.71 } do
 		lienProp(m, "Limon", Vp(x, 0.33, 1.76), Vp(x, 6.77, -1.77), 0.23, 0.32, BOIS_FONCE, Mat.Wood, false)
+	end
+	for _, x in { -1.72, 1.72 } do
+		lienProp(m, "Chant éclairci du limon", Vp(x, 0.32, 1.62), Vp(x, 6.77, -1.70), 0.13, 0.20, BOIS, Mat.Wood, false)
 	end
 	fini(m)
 end
@@ -1297,6 +2242,19 @@ function PROPS_VALDOR.Rocher()
 	for _, p in { Vp(-0.42, 2.46, -0.15), Vp(0.27, 2.44, 0.18), Vp(0.96, 1.78, 0.84) } do
 		P(m, "Mousse", Vp(0.83, 0.16, 0.77), p, rgb(95, 118, 70), Mat.Grass, { forme = "Ball", collide = false })
 	end
+	reliefProp(m, "Strate de quartz", Vp(1.92, 0.21, 0.49), Vp(0.85, 1.58, 1.57), rgb(197, 177, 150), Mat.Slate, -5, 6, 6, "Wedge")
+	reliefProp(m, "Revers cassé de la strate", Vp(1.17, 0.27, 0.39), Vp(0.77, 1.35, 1.63), FER_SOMBRE, Mat.Slate, 6, -5, 4)
+	reliefProp(m, "Corniche moussue", Vp(1.51, 0.21, 0.76), Vp(0.43, 2.40, 0.28), MOUSSE, Mat.Grass, 5, -7, 4)
+	reliefProp(m, "Langue claire de la corniche", Vp(0.67, 0.16, 0.50), Vp(0.91, 2.29, 0.53), MOUSSE_CLAIRE, Mat.Grass, 18, -6, 4)
+	reliefProp(m, "Retombée de mousse", Vp(0.43, 0.37, 0.25), Vp(1.05, 2.11, 0.67), MOUSSE_SOMBRE, Mat.Grass, -6, 4, -6)
+	reliefProp(m, "Épaulement ardoise", Vp(0.93, 0.51, 0.84), Vp(-0.84, 0.69, 1.29), rgb(99, 100, 101), Mat.Rock, -6, 32, -7, "Wedge")
+	detailProp(m, "Assise arrachée", Vp(2.44, 0.57, 1.89), Vp(-0.24, 0.39, 0.70), rgb(94,96,95), Mat.Slate, Vp(-4, 14, 5), "Wedge")
+	detailProp(m, "Strate d’ardoise", Vp(2.39, 0.35, 1.37), Vp(0.02, 0.98, 0.87), rgb(111,118,121), Mat.Slate, Vp(-4, 12, -5))
+	detailProp(m, "Strate claire brisée", Vp(1.82, 0.24, 1.2), Vp(0.64, 1.37, 1.02), CALCAIRE, Mat.Slate, Vp(-5, -8, 4), "Wedge")
+	detailProp(m, "Cassure ouverte", Vp(0.43, 0.32, 0.82), Vp(-0.68, 1.64, 1.11), rgb(73,83,86), Mat.Slate, Vp(-5, 29, -6))
+	detailProp(m, "Corniche de mousse", Vp(1.58, 0.21, 0.76), Vp(-0.09, 2.25, 0.55), rgb(107,130,75), Mat.Grass, Vp(8, -6, -4))
+	detailProp(m, "Mousse rompue", Vp(0.45, 0.47, 0.20), Vp(-0.40, 2.052, 0.83), rgb(74,101,65), Mat.Grass, Vp(0, 5, -9), "Wedge")
+	detailProp(m, "Pointe de lichen sur la cassure", Vp(0.44, 0.12, 0.27), Vp(0.68, 2.19, 0.73), rgb(142,151,86), Mat.Grass, Vp(7, 4, 5), "Wedge")
 	fini(m)
 end
 
@@ -1308,6 +2266,15 @@ function PROPS_VALDOR.Caillou()
 		{ forme = "Wedge", rot = CFrame.Angles(0, -0.68, 0), collide = false })
 	P(m, "Éclat", Vp(0.57, 0.29, 0.46), Vp(0.63, 0.15, 0.19), PIERRE_CLAIRE, Mat.Slate,
 		{ forme = "Ball", collide = false })
+	reliefProp(m, "Cassure d’ardoise", Vp(0.48, 0.23, 0.33), Vp(-0.33, 0.22, 0.20), FER_CLAIR, Mat.Slate, -6, 22, 4, "Wedge")
+	reliefProp(m, "Fente sous la cassure", Vp(0.42, 0.095, 0.12), Vp(-0.30, 0.23, 0.32), FER_SOMBRE, Mat.Slate, 0, -8, 6)
+	reliefProp(m, "Lichen du sommet", Vp(0.46, 0.092, 0.31), Vp(-0.14, 0.535, -0.015), MOUSSE_CLAIRE, Mat.Grass, -6, 8, 4, "Ball")
+	reliefProp(m, "Lichen en lisière", Vp(0.25, 0.072, 0.29), Vp(-0.28, 0.467, 0.085), MOUSSE_SOMBRE, Mat.Grass, -7, 4, -5, "Ball")
+	detailProp(m, "Ressaut sombre", Vp(0.71, 0.16, 0.53), Vp(0.16, 0.21, 0.19), rgb(79,88,88), Mat.Slate, Vp(0, 17, 5), "Wedge")
+	detailProp(m, "Nerf de quartz", Vp(0.57, 0.104, 0.29), Vp(0.07, 0.41, 0.26), rgb(211,187,155), Mat.Slate, Vp(6, -17, -6), "Wedge")
+	detailProp(m, "Tranche d’ardoise", Vp(0.41, 0.16, 0.30), Vp(0.46, 0.21, 0.28), rgb(116,124,129), Mat.Slate, Vp(5, 7, 5), "Wedge")
+	detailProp(m, "Lichen jaunâtre", Vp(0.33, 0.07, 0.30), Vp(-0.13, 0.552, 0.10), rgb(133,142,80), Mat.Grass, Vp(4, -7, -5), "Ball")
+	detailProp(m, "Pointe de lichen", Vp(0.18, 0.15, 0.16), Vp(-0.24, 0.475, 0.19), rgb(101,115,77), Mat.Grass, Vp(6, 6, 7), "Wedge")
 	fini(m)
 end
 
@@ -1318,6 +2285,16 @@ function PROPS_VALDOR.Branche()
 	lienProp(m, "Fourche", Vp(0.15, 0.21, 0.02), Vp(0.72, 0.16, 0.68), 0.14, 0.15, BOIS, Mat.Wood, false)
 	lienProp(m, "Brindille", Vp(0.44, 0.19, 0.31), Vp(0.19, 0.13, 0.67), 0.089, 0.083, BOIS, Mat.Wood, false)
 	lienProp(m, "Écorce fendue", Vp(-1.31, 0.20, -0.25), Vp(-0.93, 0.31, -0.19), 0.085, 0.023, BOIS_CLAIR, Mat.Wood, false)
+	lienProp(m, "Lanière d’écorce", Vp(-1.27, 0.27, -0.18), Vp(-0.37, 0.31, -0.045), 0.16, 0.09, BOIS, Mat.Wood, false)
+	lienProp(m, "Écharde claire", Vp(-0.94, 0.29, -0.13), Vp(-1.35, 0.40, -0.26), 0.103, 0.065, LIN, Mat.Wood, false)
+	reliefProp(m, "Nœud d’écorce brun", Vp(0.29, 0.16, 0.22), Vp(0.18, 0.265, 0.10), BOIS, Mat.Wood, 5, 22, 5, "Ball")
+	reliefProp(m, "Liège moussu", Vp(0.41, 0.088, 0.22), Vp(-0.18, 0.31, -0.056), MOUSSE, Mat.Grass, 4, -7, -5)
+	reliefProp(m, "Lamelle de mousse décollée", Vp(0.23, 0.085, 0.19), Vp(-0.06, 0.32, 0.037), MOUSSE_CLAIRE, Mat.Grass, -6, -5, 5, "Wedge")
+	detailProp(m, "Écorce en long lambeau", Vp(1.07, 0.105, 0.17), Vp(-0.54, 0.295, -0.10), BOIS, Mat.Wood, Vp(3, -9, 4))
+	detailProp(m, "Lame d’aubier au bout cassé", Vp(0.33, 0.13, 0.17), Vp(1.0, 0.23, -0.267), BOIS_CLAIR, Mat.Wood, Vp(3, 16, -7), "Wedge")
+	detailProp(m, "Écorce plissée de la fourche", Vp(0.47, 0.096, 0.14), Vp(0.43, 0.225, 0.351), BOIS_FONCE, Mat.Wood, Vp(4, -49, -4))
+	detailProp(m, "Mousse sur l’écorce", Vp(0.57, 0.081, 0.18), Vp(-0.40, 0.347, -0.07), rgb(105,127,76), Mat.Grass, Vp(0, -9, 5))
+	detailProp(m, "Pointe de mousse contre la fente", Vp(0.23, 0.084, 0.13), Vp(-0.18, 0.304, 0.012), rgb(70,96,68), Mat.Grass, Vp(5, -14, 4), "Wedge")
 	fini(m)
 end
 
@@ -1336,6 +2313,26 @@ function PROPS_VALDOR.Buisson()
 				rgb(148 + j * 17, 51 + i % 3 * 6, 56), Mat.Grass, { forme = "Ball", collide = false })
 		end
 	end
+	for i, profil in { { -0.76, 2.36, 0.15, 0.97 }, { -0.18, 2.62, 0.02, 0.98 }, { 0.55, 2.60, -0.17, 0.96 },
+		{ 1.06, 2.11, 0.47, 0.82 }, { 0.66, 1.70, 1.10, 0.64 }, { -0.72, 1.87, 0.97, 0.66 } } do
+		reliefProp(m, "Nappe feuillue en surplomb", Vp(profil[4], 0.30 + i % 2 * 0.08, 0.87),
+			Vp(profil[1], profil[2], profil[3]), i % 3 == 0 and MOUSSE or MOUSSE_CLAIRE, Mat.Grass,
+			i % 3 * 5 - 6, i * 13, i % 3 * 6 - 6, "Wedge")
+	end
+	for i, p in { Vp(-0.89, 1.26, 0.91), Vp(0.36, 1.30, 1.31), Vp(0.93, 1.45, 1.02) } do
+		reliefProp(m, "Pointe sombre de ramure", Vp(0.61, 0.27 + i * 0.04, 0.46), p, MOUSSE_SOMBRE, Mat.Grass,
+			-5, i * 19, i * 4 - 9, "Wedge")
+	end
+	lienProp(m, "Rameau sous les baies", Vp(0.04, 0.42, 0.55), Vp(0.62, 1.38, 1.48), 0.15, 0.13, BOIS, Mat.Wood, false)
+	detailProp(m, "Manteau de jeunes feuilles", Vp(1.58, 0.55, 1.44), Vp(-0.10, 2.21, 0.31), rgb(124,158,77), Mat.Grass, Vp(7, -9, -6))
+	detailProp(m, "Cime en balai à gauche", Vp(0.80, 0.51, 0.87), Vp(-0.71, 2.10, 0.49), rgb(112,154,71), Mat.Grass, Vp(6, 13, -6), "Wedge")
+	detailProp(m, "Cime en balai à droite", Vp(0.89, 0.49, 0.81), Vp(0.53, 2.31, 0.22), rgb(151,171,86), Mat.Grass, Vp(-5, -7, 4), "Wedge")
+	detailProp(m, "Lobe retombant", Vp(0.42, 0.89, 0.57), Vp(-0.90, 1.54, 0.82), rgb(63,107,69), Mat.Grass, Vp(-4, 31, 23), "Wedge")
+	detailProp(m, "Lobe de la rive ajourée", Vp(0.58, 0.57, 0.61), Vp(0.73, 1.59, 1.06), rgb(108,142,74), Mat.Grass, Vp(5, -17, -7), "Wedge")
+	detailProp(m, "Fente sombre du feuillage", Vp(0.52, 0.68, 0.58), Vp(-0.28, 1.20, 1.07), rgb(55,91,63), Mat.Grass, Vp(-7, -4, 6), "Wedge")
+	detailProp(m, "Souche brune sous la ramure", Vp(0.42, 1.07, 0.44), Vp(-0.05, 0.51, 0.15), BOIS_FONCE, Mat.Wood, Vp(8, 7, -6))
+	detailProp(m, "Bifurcation sous le feuillage", Vp(0.16, 0.67, 0.18), Vp(0.12, 0.88, 0.23), BOIS, Mat.Wood, Vp(-12, 0, -21))
+	detailProp(m, "Éclat du rameau en façade", Vp(0.15, 0.48, 0.14), Vp(0.34, 1.10, 0.67), BOIS_CLAIR, Mat.Wood, Vp(-21, 0, -22))
 	fini(m)
 end
 
@@ -1353,6 +2350,21 @@ function PROPS_VALDOR.Tronc_Couche()
 		P(m, "Mousse", Vp(0.83, 0.19, 0.67), Vp(-0.73 + i * 0.55, 1.63 - i % 2 * 0.045, i % 2 * 0.17),
 			rgb(84 + i * 4, 117, 64), Mat.Grass, { forme = "Ball", collide = false })
 	end
+	for i, profil in { { -1.53, 1.63, 0.18 }, { -0.87, 1.70, 0.25 }, { -0.19, 1.75, 0.16 },
+		{ 0.59, 1.64, 0.28 }, { 1.21, 1.60, 0.26 } } do
+		reliefProp(m, "Croûte de mousse du tronc", Vp(0.88, 0.16, 0.63), Vp(profil[1], profil[2], profil[3]),
+			i % 2 == 0 and MOUSSE or MOUSSE_CLAIRE, Mat.Grass, -5, i * 3 - 7, i % 3 * 4 - 4)
+	end
+	reliefProp(m, "Retombée sombre de mousse", Vp(0.55, 0.39, 0.26), Vp(0.58, 1.46, 0.62), MOUSSE_SOMBRE, Mat.Grass, -5, 0, -7)
+	reliefProp(m, "Plaque d’écorce descellée", Vp(1.78, 0.31, 0.18), Vp(-0.88, 1.05, 0.78), BOIS, Mat.Wood, -5, -3, 4)
+	reliefProp(m, "Fente dans le bois de bout", Vp(0.047, 0.50, 0.16), Vp(2.33, 1.11, 0.17), FER_SOMBRE, Mat.Wood, -28, 0, 4)
+	detailProp(m, "Pan d’écorce décollé", Vp(2.18, 0.21, 0.56), Vp(-0.70, 1.46, 0.56), BOIS, Mat.Wood, Vp(-7, -4, -3))
+	detailProp(m, "Veine de bois à nu", Vp(1.82, 0.13, 0.27), Vp(-0.61, 1.32, 0.70), rgb(177,125,80), Mat.Wood, Vp(-5, 1, -4))
+	detailProp(m, "Lèvre sombre de la cassure", Vp(1.12, 0.14, 0.19), Vp(-0.20, 1.25, 0.76), BOIS_FONCE, Mat.Wood, Vp(3, -3, 5), "Wedge")
+	detailProp(m, "Fourche courte du vieux nœud", Vp(0.42, 0.79, 0.33), Vp(-0.89, 1.61, 0.55), BOIS, Mat.Wood, Vp(21, 5, -18), "Wedge")
+	detailProp(m, "Centre du nœud érodé", Vp(0.32, 0.32, 0.24), Vp(-0.93, 1.83, 0.62), BOIS_CLAIR, Mat.Wood, Vp(7, 13, 11), "Wedge")
+	detailProp(m, "Pont de mousse sur l’écorce", Vp(1.82, 0.13, 0.53), Vp(0.39, 1.64, 0.21), rgb(115,137,77), Mat.Grass, Vp(4, 4, 0))
+	detailProp(m, "Mousse en lobe rompu", Vp(0.48, 0.30, 0.30), Vp(0.74, 1.53, 0.39), rgb(70,106,70), Mat.Grass, Vp(-4, 4, 7), "Wedge")
 	fini(m)
 end
 
@@ -1363,13 +2375,27 @@ function PROPS_VALDOR.Fleurs()
 		lienProp(m, "Tige", p * 0.33 + Vp(0, 0.03, 0), h, 0.065, 0.061, rgb(86, 119, 65), Mat.Grass, false)
 		lienProp(m, "Feuille", (p + h) / 2, (p + h) / 2 + Vp(i % 2 == 0 and -0.2 or 0.21, 0.19, 0.05),
 			0.11, 0.065, rgb(104, 134, 73), Mat.Grass, false)
+		reliefProp(m, "Calice sombre", Vp(0.21, 0.16, 0.22), h - Vp(0, 0.019, 0), MOUSSE_SOMBRE, Mat.Grass, 6, 0, -5, "Ball")
+		lienProp(m, "Revers clair d’une feuille", h * 0.64 + p * 0.36, h * 0.64 + p * 0.36 + Vp(0.19, 0.11, -0.13),
+			0.15, 0.056, MOUSSE_CLAIRE, Mat.Grass, false)
+		for j, decalage in { Vp(-0.13, 0.102, 0.044), Vp(0.084, 0.11, -0.13) } do
+			reliefProp(m, "Pétale recourbé", Vp(0.23 - j * 0.025, 0.098, 0.17), h + decalage,
+				i % 2 == 0 and rgb(251, 234, 206) or rgb(218, 137, 116), Mat.Fabric, 6, i * 17, j * 9 - 13, "Ball")
+		end
 		for j = 0, 3 do
 			local a = j * PASSE / 4
 			P(m, "Petale", Vp(0.179, 0.12, 0.17), h + Vp(math.cos(a) * 0.11, 0.04, math.sin(a) * 0.11),
 				i % 2 == 0 and LIN or CHAUME, Mat.Fabric, { forme = "Ball", collide = false })
 		end
+		detailProp(m, "Calice ombré", Vp(0.31, 0.10, 0.30), h + Vp(0, 0.014, 0), rgb(78, 112, 65), Mat.Grass, Vp(5, i * 5, -5), "Ball")
+		detailProp(m, "Pointe de pétale repliée", Vp(0.19, 0.093, 0.20), h + Vp(0.08, 0.104, -0.055),
+			i % 2 == 0 and rgb(238, 221, 183) or rgb(234, 190, 103), Mat.Fabric, Vp(6, 9 * i, i - 5), "Wedge")
 		cylProp(m, "Cœur", 0.15, 0.079, h + Vp(0, 0.048, 0), OR, Mat.Fabric, nil, false)
 	end
+	detailProp(m, "Rosette de feuilles", Vp(0.81, 0.15, 0.75), Vp(0, 0.16, 0.03), rgb(83,121,69), Mat.Grass, Vp(3, 4, -4), "Ball")
+	detailProp(m, "Feuille de rosette claire", Vp(0.38, 0.087, 0.27), Vp(-0.32, 0.219, 0.16), rgb(128,156,77), Mat.Grass, Vp(-5, 26, -5), "Wedge")
+	detailProp(m, "Feuille de rosette ombrée", Vp(0.45, 0.11, 0.25), Vp(0.32, 0.18, 0.13), rgb(69,104,63), Mat.Grass, Vp(5, -26, 6), "Wedge")
+	detailProp(m, "Pointe de rosette en retour", Vp(0.28, 0.11, 0.39), Vp(0.09, 0.26, -0.34), rgb(106,146,75), Mat.Grass, Vp(-7, 11, 6), "Wedge")
 	fini(m)
 end
 
@@ -1381,11 +2407,24 @@ function PROPS_VALDOR.Champignon()
 		cylProp(m, "Lamelles", d, 0.08, p + Vp(0, h - 0.065, 0), rgb(186, 157, 117), Mat.Sand, nil, false)
 		P(m, "Chapeau", Vp(d, d * 0.47, d * 0.94), p + Vp(0, h + 0.044, 0), GARANCE, Mat.Sand,
 			{ forme = "Ball", collide = false })
+		reliefProp(m, "Lèvre sombre du chapeau", Vp(d * 0.61, d * 0.22, d * 0.38), p + Vp(d * 0.13, h - 0.018, d * 0.30),
+			rgb(102, 43, 43), Mat.Sand, -5, i * 12 - 25, 5, "Ball")
+		reliefProp(m, "Peau relevée du chapeau", Vp(d * 0.34, d * 0.12, d * 0.25), p + Vp(-d * 0.24, h + d * 0.19, d * 0.13),
+			rgb(203, 106, 71), Mat.Sand, 6, -18, i * 5 - 9, "Ball")
+		reliefProp(m, "Collerette froissée", Vp(d * 0.45, d * 0.16, d * 0.40), p + Vp(0.026, h * 0.69, 0.037),
+			rgb(234, 213, 162), Mat.Sand, -7, 0, 5, "Ball")
+		detailProp(m, "Lèvre rouge brisée", Vp(d * 0.77, d * 0.16, d * 0.23), p + Vp(-0.012, h + 0.01, d * 0.33),
+			rgb(107, 51, 51), Mat.Sand, Vp(3, -8 * i, 7 - i * 2), "Wedge")
+		detailProp(m, "Crête éclairée du chapeau", Vp(d * 0.57, d * 0.18, d * 0.49), p + Vp(-d * 0.1, h + d * 0.22, -d * 0.1),
+			rgb(193, 82, 62), Mat.Sand, Vp(-3, 11 * i, -7), "Ball")
 		for j = -1, 1 do
 			P(m, "Moucheture", Vp(d * 0.13, 0.036, d * 0.113), p + Vp(d * j * 0.22, h + d * 0.25, d * (j % 2) * 0.09),
 				LIN, Mat.Sand, { forme = "Ball", collide = false })
 		end
 	end
+	detailProp(m, "Mousse à la naissance des pieds", Vp(0.68, 0.13, 0.52), Vp(0.045, 0.07, 0.074), rgb(103,130,76), Mat.Grass, Vp(5, -4, 4), "Ball")
+	detailProp(m, "Pointe vert frais", Vp(0.35, 0.122, 0.29), Vp(-0.13, 0.10, 0.21), rgb(136,145,83), Mat.Grass, Vp(5, -9, -6), "Wedge")
+	detailProp(m, "Motte sombre sous les pieds", Vp(0.39, 0.102, 0.28), Vp(0.28, 0.056, 0.27), rgb(84,103,66), Mat.Grass, Vp(4, 17, -5), "Ball")
 	fini(m)
 end
 
@@ -1398,6 +2437,15 @@ function PROPS_VALDOR.Touffe()
 		lienProp(m, "Brin", tige * r + Vp(0, -0.18, 0), tige * (r + 0.14) + Vp(0, 0.52 + i % 4 * 0.18, 0),
 			0.105, 0.067, rgb(84 + i * 3, 123 + i * 3, 68), Mat.Grass, false)
 	end
+	reliefProp(m, "Cœur sombre gainé", Vp(0.37, 0.40, 0.32), Vp(-0.01, 0.13, -0.02), MOUSSE_SOMBRE, Mat.Grass, 5, -6, -4, "Wedge")
+	lienProp(m, "Feuille pliée claire", Vp(-0.16, 0.19, -0.04), Vp(-0.40, 0.61, 0.16), 0.16, 0.075, MOUSSE_CLAIRE, Mat.Grass, false)
+	lienProp(m, "Brin de paille couché", Vp(0.14, 0.29, -0.02), Vp(0.36, 0.18, -0.27), 0.13, 0.073, CHAUME, Mat.Grass, false)
+	reliefProp(m, "Languette de feuille froissée", Vp(0.19, 0.26, 0.12), Vp(-0.35, 0.60, 0.14), MOUSSE, Mat.Grass, 7, 10, 25, "Wedge")
+	detailProp(m, "Éventail de feuilles sur le pied", Vp(0.61, 0.18, 0.59), Vp(-0.009, 0.13, 0.02), rgb(69,104,64), Mat.Grass, Vp(-4, 5, 3), "Ball")
+	detailProp(m, "Lame jeune en avant", Vp(0.17, 0.58, 0.095), Vp(-0.18, 0.47, 0.26), rgb(137,165,82), Mat.Grass, Vp(-7, 14, 17), "Wedge")
+	detailProp(m, "Lame pincée en arrière", Vp(0.14, 0.56, 0.088), Vp(0.20, 0.55, -0.19), rgb(75,111,64), Mat.Grass, Vp(7, 25, -17), "Wedge")
+	detailProp(m, "Pointe déchirée en retour", Vp(0.19, 0.24, 0.068), Vp(-0.25, 0.71, 0.29), rgb(162,168,86), Mat.Grass, Vp(7, 14, 23), "Wedge")
+	detailProp(m, "Pointe sèche sous l’éventail", Vp(0.11, 0.27, 0.085), Vp(0.14, 0.23, 0.25), rgb(145,127,69), Mat.Grass, Vp(-7, -19, -24), "Wedge")
 	fini(m)
 end
 
@@ -1410,6 +2458,18 @@ function PROPS_VALDOR.Sol_Laboure()
 				rgb(95 + j * 4, 62 + j * 2, 43), Mat.Ground, { forme = "Ball", collide = false })
 		end
 	end
+	for i, profil in { { -1.06, 0.44, -1.12 }, { 0.16, 0.46, -1.02 }, { 0.96, 0.44, -0.97 }, { -0.61, 0.40, 0.05 },
+		{ 0.22, 0.42, 0.06 }, { -0.97, 0.43, 1.16 }, { 0.81, 0.43, 1.13 } } do
+		reliefProp(m, "Crête de sillon émiettée", Vp(0.75 - i % 3 * 0.089, 0.13, 0.31), Vp(profil[1], profil[2], profil[3]),
+			i % 3 == 0 and BOIS_FONCE or rgb(140, 101, 65), Mat.Ground, 5, i % 3 * 6 - 6, i % 3 * 5 - 5, "Ball")
+	end
+	reliefProp(m, "Caillou retourné par la charrue", Vp(0.34, 0.16, 0.28), Vp(1.52, 0.37, -1.37), PIERRE_CLAIRE, Mat.Slate, 6, -19, 5, "Wedge")
+	lienProp(m, "Radicelle rompue", Vp(-1.0, 0.36, 0.95), Vp(-0.53, 0.39, 0.56), 0.10, 0.062, BOIS_CLAIR, Mat.Wood, false)
+	detailProp(m, "Crête de sillon fraîche", Vp(2.06, 0.12, 0.39), Vp(-0.21, 0.443, 1.10), rgb(143,98,66), Mat.Ground, Vp(0, 3, -3), "Ball")
+	detailProp(m, "Tranchée de terre mouillée", Vp(2.94, 0.075, 0.39), Vp(-0.14, 0.33, 0.56), rgb(71,55,43), Mat.Ground, Vp(-3, 2, 0))
+	detailProp(m, "Tête de sillon rompue", Vp(0.56, 0.16, 0.38), Vp(0.93, 0.40, 1.19), rgb(121,85,58), Mat.Ground, Vp(6, 13, -6), "Wedge")
+	detailProp(m, "Motte claire du soc", Vp(0.44, 0.18, 0.43), Vp(1.21, 0.422, -1.07), rgb(145,101,72), Mat.Ground, Vp(5, -15, 6), "Wedge")
+	detailProp(m, "Motte retournée sombre", Vp(0.32, 0.12, 0.42), Vp(1.45, 0.36, -1.11), rgb(81,61,47), Mat.Ground, Vp(4, -19, -5), "Ball")
 	fini(m)
 end
 
@@ -1421,6 +2481,16 @@ function PROPS_VALDOR.Terre_Retournee()
 		P(m, "Motte", Vp(1.33, 0.18 + i % 2 * 0.05, 1.46), Vp(i % 2 * 0.18 - 0.08, 0.29, i * 0.76),
 			rgb(110 + i * 3, 73 + i * 2, 51), Mat.Ground, { forme = "Ball", collide = false })
 	end
+	reliefProp(m, "Lèvre de terre fraîche", Vp(0.89, 0.21, 1.37), Vp(-0.38, 0.34, 0.45), rgb(142, 99, 63), Mat.Ground, 4, -6, -4, "Ball")
+	reliefProp(m, "Cassure sous la lèvre", Vp(0.64, 0.16, 0.98), Vp(-0.46, 0.32, 0.70), BOIS_FONCE, Mat.Ground, 7, 5, 6, "Wedge")
+	reliefProp(m, "Motte fendue claire", Vp(0.57, 0.24, 0.74), Vp(0.41, 0.36, -0.64), rgb(137, 99, 70), Mat.Ground, -5, 22, -6, "Wedge")
+	reliefProp(m, "Moitié sombre de la motte", Vp(0.44, 0.19, 0.55), Vp(0.55, 0.32, -0.41), BOIS_FONCE, Mat.Ground, -5, 5, 5, "Ball")
+	lienProp(m, "Racine blanchie à nu", Vp(-0.30, 0.45, 0.37), Vp(0.24, 0.32, 0.76), 0.09, 0.078, BOIS_CLAIR, Mat.Wood, false)
+	detailProp(m, "Crête fraîche du labour", Vp(1.15, 0.16, 1.64), Vp(-0.07, 0.393, -0.54), rgb(146,97,65), Mat.Ground, Vp(-3, -8, 4), "Ball")
+	detailProp(m, "Marche noircie en travers", Vp(1.30, 0.11, 0.24), Vp(0.02, 0.315, 0.59), rgb(72,53,41), Mat.Ground, Vp(5, -6, -5))
+	detailProp(m, "Revers de la motte", Vp(0.83, 0.18, 0.56), Vp(-0.34, 0.373, 0.28), rgb(132,89,61), Mat.Ground, Vp(6, 17, 7), "Wedge")
+	detailProp(m, "Pointe craquelée", Vp(0.51, 0.19, 0.48), Vp(0.35, 0.35, 1.12), rgb(149,103,71), Mat.Ground, Vp(-5, -12, -7), "Wedge")
+	detailProp(m, "Éclat remonté de la terre", Vp(0.40, 0.15, 0.34), Vp(0.49, 0.30, -0.87), rgb(149,130,105), Mat.Slate, Vp(4, 6, -5), "Wedge")
 	fini(m)
 end
 
@@ -1476,6 +2546,41 @@ local function construireTableauQuetes(): Model
 		rivetProp(m, Vp(x, 1.05, 1.685), 0.11)
 	end
 	attache(m.PrimaryPart, "Devant", CFrame.new(0, 0, 4))
+	for i, x in { -3.15, -2.42, -1.55, -0.71, 0.11, 1.03, 1.85, 2.59, 3.29 } do
+		reliefProp(m, "Bardeau fendu de l’auvent", Vp(0.87, 0.09, 0.35), Vp(x, 7.69 + i % 3 * 0.035, 1.04 - i % 2 * 0.07),
+			({ BOIS_FONCE, BOIS, BOIS_CLAIR })[i % 3 + 1], Mat.Wood, 34, 0, i % 3 * 4 - 4)
+	end
+	for i, sp in spots do
+		reliefProp(m, "Revers du parchemin roulé", Vp(1.18, 0.145, 0.14),
+			Vp(sp[1], sp[2] - 0.64, 0.30), LIN, Mat.Fabric, 0, 0, sp[3])
+		reliefProp(m, "Coin déchiré du parchemin", Vp(0.29, 0.29, 0.085),
+			Vp(sp[1] - 0.47, sp[2] + 0.57, 0.28), i % 2 == 0 and PARCH or rgb(184, 153, 112), Mat.Fabric, -5, 0, sp[3] - 6, "Wedge")
+	end
+	for _, x in { -3.1, 3.1 } do
+		reliefProp(m, "Virole du poteau", Vp(0.82, 0.23, 0.78), Vp(x, 0.93, 0), FER, Mat.Metal)
+		reliefProp(m, "Aile du cadre ouvragé", Vp(0.31, 3.43, 0.16), Vp(x, 4.08, 0.24), BOIS_FONCE, Mat.Wood, 0, 0, x)
+		lienProp(m, "Console de l’auvent", Vp(x, 5.99, 0.08), Vp(x, 7.55, 0.91), 0.23, 0.22, BOIS_CLAIR, Mat.Wood, false)
+	end
+	reliefProp(m, "Liseré d’enseigne", Vp(5.81, 0.095, 0.38), Vp(0.025, 7.26, 0), LAITON, Mat.Metal, 0, 0, 1)
+
+	for i, x in { -3.27, -2.39, -1.39, -0.43, 0.62, 1.53, 2.55, 3.32 } do
+		local z = 1.14 + (i % 3 - 1) * 0.04
+		detailProp(m, "Languette de bardeau", Vp(0.88, 0.18, 0.49), Vp(x, 7.58 + i % 2 * 0.038, z),
+			({ BOIS_FONCE, rgb(151, 87, 63), rgb(184, 115, 76) })[i % 3 + 1], Mat.Wood, Vp(31, i - 5, i % 3 - 2))
+	end
+	for _, x in { -3.17, 3.17 } do
+		lienProp(m, "Crosse de l’auvent", Vp(x, 6.53, 0.20), Vp(x * 0.70, 7.55, 0.22), 0.25, 0.27, BOIS, Mat.Wood, false)
+		detailProp(m, "Bouclier d’angle forgé", Vp(0.46, 0.49, 0.12), Vp(x, 6.66, 0.397), FER, Mat.Metal, Vp(0, 0, 5))
+		detailProp(m, "Épaulement de pierre", Vp(0.85, 0.17, 0.84), Vp(x, 0.42, 0.02), CALCAIRE, Mat.Slate, Vp(0, 4, 2))
+		detailProp(m, "Mousse de pied", Vp(0.50, 0.15, 0.43), Vp(x + 0.13, 0.42, 0.275), rgb(98, 122, 74), Mat.Grass, Vp(3, -7, 5))
+	end
+	for i, x in { -2.1, -0.4, 1.6, -1.5, 1.69 } do
+		local haut = (i <= 3 and 5.0 or 3.18) - i % 3 * 0.11
+		detailProp(m, "Bord de parchemin déchiré", Vp(0.27, 0.47, 0.065), Vp(x + 0.55, haut - 0.48, 0.275),
+			i % 2 == 0 and PARCH or rgb(200, 169, 123), Mat.Fabric, Vp(0, 0, i * 3 - 8), "Wedge")
+		detailProp(m, "Punaise de parchemin", Vp(0.13, 0.13, 0.094), Vp(x - 0.25, haut + 0.63, 0.27),
+			OR, Mat.Metal, Vp(0, 0, i * 7))
+	end
 	fini(m)
 	return m
 end
@@ -3014,14 +4119,18 @@ function M.champBle()
 	local m = nouveau("Champ_Ble")
 	local W, D = 22, 16
 	P(m, "Terre", Vector3.new(W, 0.6, D), Vector3.new(0, 0.1, 0), rgb(112, 80, 52), Mat.Ground)
-	local rng = Random.new(18)
+	local ecarts = { -0.07, 0.13, -0.11, 0.17, 0.02, -0.15, 0.09, 0.15, -0.06, 0.12, -0.08 }
+	local hauteurs = { 3.24, 3.66, 3.35, 3.55, 3.47, 3.75, 3.29, 3.6, 3.14, 3.5, 3.38 }
+	local tons = { rgb(172, 125, 52), rgb(211, 159, 66), rgb(232, 190, 87) }
+	local angles = { -5, 2, 4, -6, 3, 7, -4, 6 }
 	for iz = 0, 7 do
+		local rang = -D / 2 + 1.2 + iz * ((D - 2.4) / 7)
 		for ix = 0, 10 do
-			local x = -W / 2 + 1.2 + ix * ((W - 2.4) / 10) + rng:NextNumber(-0.2, 0.2)
-			local z = -D / 2 + 1.2 + iz * ((D - 2.4) / 7)
-			local h = rng:NextNumber(3, 3.8)
-			local gold = rgb(214, 168, 62):Lerp(rgb(238, 204, 108), rng:NextNumber())
-			local tilt = CFrame.Angles(math.rad(rng:NextNumber(-5, 5)), 0, math.rad(rng:NextNumber(-6, 6)))
+			local x = -W / 2 + 1.2 + ix * ((W - 2.4) / 10) + ecarts[(ix + iz * 3) % #ecarts + 1]
+			local z = rang
+			local h = hauteurs[(ix * 3 + iz * 4) % #hauteurs + 1]
+			local gold = tons[(ix + iz * 2) % 3 + 1]
+			local tilt = CFrame.Angles(math.rad(angles[(ix + iz * 3) % #angles + 1]), 0, math.rad(angles[(ix * 2 + iz) % #angles + 1]))
 			-- une « Touffe » = un bloc récoltable au clic (Systemes/Moissons)
 			local t = Instance.new("Model")
 			t.Name = "Touffe"
@@ -3031,6 +4140,12 @@ function M.champBle()
 			local azimut = CFrame.Angles(0, ((ix * 5 + iz * 7) % 13) * math.pi / 7, 0)
 			P(t, "Epis", Vp(largeur, hauteur, 0.86 + ix % 2 * 0.19), Vector3.zero, gold, Mat.Grass,
 				{ cf = CFrame.new(x, 0.36 + hauteur / 2, z) * tilt * azimut, collide = false, forme = "Wedge" })
+			if (ix + iz) % 2 == 0 then
+				local d = ({ -0.15, 0.05, 0.17, -0.04 })[(ix + 2 * iz) % 4 + 1]
+				reliefProp(t, "Épi mûr au revers clair", Vp(largeur * 0.64, 0.73, 0.25),
+					Vp(x + d, 0.36 + hauteur * 0.76, z - 0.17), iz % 3 == 0 and CHAUME or OR_PALE, Mat.Grass,
+					6, (ix % 3 - 1) * 7, (iz % 3 - 1) * 6, "Wedge")
+			end
 		end
 	end
 	-- clôture : poteaux tous les 4 studs, deux lisses
@@ -3053,6 +4168,19 @@ function M.champBle()
 	cote(Vector3.new(hx, 0, -hz), Vector3.new(hx, 0, hz))
 	P(m, "Botte", Vp(2.4, 1.6, 1.6), Vp(hx + 2, 0.8, hz - 2), CHAUME, Mat.Grass,
 		{ forme = "Ball", rot = CFrame.Angles(0, 0.09, 0) })
+	for i, z in { -1.44, 1.15 } do
+		reliefProp(m, "Terre sombre du passage", Vp(17.8 - i * 0.41, 0.064, 0.46), Vp(0.19, 0.425, z),
+			BOIS_FONCE, Mat.Ground, 0, i - 2)
+	end
+	for _, x in { hx + 1.52, hx + 2.38 } do
+		reliefProp(m, "Lien sombre de la botte", Vp(0.095, 1.05, 1.49), Vp(x, 0.96, hz - 2),
+			BOIS_FONCE, Mat.Fabric, 0, 4, 4)
+	end
+	reliefProp(m, "Nappe de paille sur la botte", Vp(1.79, 0.25, 0.81), Vp(hx + 2.02, 1.55, hz - 1.94),
+		OR_PALE, Mat.Grass, -7, 4, 5, "Ball")
+
+		rgb(192, 147, 67), Mat.Grass, Vp(4, 2, -4))
+	detailProp(m, "Paille qui retombe", Vp(0.61, 0.46, 0.20), Vp(hx + 1.80, 0.94, hz - 1.40), rgb(162, 111, 49), Mat.Grass, Vp(4, 11, 6), "Wedge")
 	fini(m)
 	return m
 end
