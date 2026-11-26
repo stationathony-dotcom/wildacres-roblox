@@ -308,6 +308,7 @@ reste à pousser / capturer sur le PC fixe.
 - [ ] **X35 · PNJ : apparence + dialogues** (Avatar.dress, Apparence ; `Dialogue.lua` : passage accordé par Claude) — Sol.
 - [ ] **X36 · Créatures du bestiaire + 6 boss** (`Silhouettes.lua` : passage accordé par Claude ; données des boss → passage à Claude) — Sol.
 - [ ] **X38 · Journal des montures, beau bestiaire, animations en selle** (peaufinage de 664c332) — Sol.
+- [ ] **X39 · Animations de combat du personnage** (Gestes.client : anticipation/frappe/suite, enchaînements, réactions, traînées) — Sol.
 - [ ] **X37 · Écriture des quêtes** (TEXTE seulement de `Quetes.lua` / `QuetesLieux.lua` : passage accordé) — Sol.
 
 Répartition décidée par le propriétaire le 26/11 : **Codex = ce qui se génère, s'écrit ou se peaufine ; Claude = le code**
