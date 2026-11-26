@@ -70,8 +70,9 @@ local ROLES = {
 	stablemaster = {
 		label = "Palefrenier", labelF = "Palefrenière", at = { "Ecurie" }, front = 6, hat = "paille", garb = "gilet",
 		shop = "Écurie", trade = "🐴 Foin et harnais", baseValue = 60, services = { "monture", "changer", "pouliner", "diligence" },
-		inputs = { "hay", "oat", "wheat", "carrot", "apple", "leather" },
-		products = { "hay", "animal_feed", "leather_strap" },
+		inputs = { "hay", "oat", "wheat", "carrot", "apple", "leather", "iron_ingot", "buckle", "iron_ring" },
+		-- 26/11 (montures façon WoW) : aussi vendeur de harnachement
+		products = { "hay", "animal_feed", "leather_strap", "bridle", "horseshoes", "stirrups", "saddle_leather" },
 		intro = "Une bête bien nourrie te le rendra au centuple.",
 	},
 }
@@ -84,7 +85,30 @@ ROLES.tailor = {
 	label = "Tailleur", labelF = "Couturière", at = { "Marche_Village", "Auberge", "Taverne" }, front = 6, side = 7, garb = "echarpe",
 	services = { "couture" }, intro = "Des teintes pour chaque saison, cousues main.",
 }
-local ORDER = { "baker", "cook", "blacksmith", "healer", "priest", "stablemaster", "barber", "tailor" }
+-- 26/11 (« des marchands d'un peu tout, façon WoW ») : aubergiste, fournisseur, alchimiste. Même règle que les
+-- autres : leur étal se remplit avec ce que les joueurs leur apportent (plus une petite fournée de base).
+ROLES.innkeeper = {
+	label = "Aubergiste", labelF = "Aubergiste", at = { "Auberge", "Taverne" }, front = 7, side = 6, hat = "toque", garb = "tablier",
+	shop = "Auberge", trade = "🍺 Boire et manger", baseValue = 150,
+	inputs = { "wheat", "barley", "apple", "milk", "meat", "honey", "potato", "carrot", "onion", "cabbage" },
+	products = { "apple_juice", "cider", "jerky", "nettle_soup", "rations", "cheese", "stew", "ale" },
+	intro = "Une chope, un bol de soupe, une paillasse… et les nouvelles du coin en prime.",
+}
+ROLES.outfitter = {
+	label = "Fournisseur", labelF = "Fournisseuse", at = { "Marche_Village", "Auberge" }, front = 6, side = -14, hat = "paille", garb = "gilet",
+	shop = "Bazar", trade = "🎒 Fournitures de voyage", baseValue = 110,
+	inputs = { "feather", "planks", "iron_ingot", "fiber", "leather", "cloth" },
+	products = { "bait", "arrow", "rope", "bolt", "arrow_iron", "candle_wax", "map_region", "braided_rope", "oil", "compass", "provision_bag", "canvas_bag" },
+	intro = "Flèches, cordes, cartes et sacs : tout ce qu'il faut avant de prendre la route.",
+}
+ROLES.alchemist = {
+	label = "Alchimiste", labelF = "Alchimiste", at = { "Auberge", "Marche_Village", "Chapelle" }, front = 7, side = 13, hat = "capuche", garb = "robe",
+	shop = "Officine", trade = "⚗️ Voir les fioles", baseValue = 80,
+	inputs = { "night_flower", "ancient_root", "mushroom", "honey", "valerian", "lavender", "sage", "nettle", "slime_gel", "ice_crystal" },
+	products = { "potion_vent", "potion_pierre", "potion_charme", "potion_taureau", "potion_brume", "night_elixir" },
+	intro = "Une fiole pour chaque besoin… à condition d'avoir les ingrédients.",
+}
+local ORDER = { "baker", "cook", "blacksmith", "healer", "priest", "stablemaster", "barber", "tailor", "innkeeper", "outfitter", "alchemist" }
 Metiers.ROLES = ROLES
 
 local PEDDLER = { label = "Colporteur", labelF = "Colporteuse", trade = "🎒 Voir sa marchandise", hat = "capuche", garb = "hotte" }
