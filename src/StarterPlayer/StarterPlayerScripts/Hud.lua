@@ -145,7 +145,7 @@ function Hud.gearIcon(it)
 	local gear = require(shared:WaitForChild("Gear"))
 	local design = require(shared:WaitForChild("GearDesign"))
 	local icons = require(script.Parent:WaitForChild("IconesPeintes"))
-	return icons.secours("equipement:" .. (it.name or ""), FORM_ICONS[design.formOf(it)] or gear.SLOT_ICONS[gear.slotOf(it)] or "✨")
+	return icons.secours("equipement:" .. gear.baseName(it), FORM_ICONS[design.formOf(it)] or gear.SLOT_ICONS[gear.slotOf(it)] or "✨")
 end
 
 function Hud.gearThumbnail(it, dim: boolean?): GuiObject?
@@ -155,7 +155,7 @@ function Hud.gearThumbnail(it, dim: boolean?): GuiObject?
 	local gear = require(shared:WaitForChild("Gear"))
 	local slot = gear.slotOf(it)
 	if not it.name or not gear.SLOTS[slot] then return nil end
-	local template = equipment and equipment:FindFirstChild(gear.visualKey(it))
+	local template = equipment and equipment:FindFirstChild(slot .. ":" .. gear.baseName(it))
 	if template and template:IsA("Model") and template:GetAttribute("EquipementCommun")
 		and (slot ~= "armor" or template:GetAttribute("FamilleTorse"))
 		and template:GetAttribute("RangVisuel") == (it.rarity or 1) then

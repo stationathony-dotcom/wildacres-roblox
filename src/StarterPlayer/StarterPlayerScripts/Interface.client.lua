@@ -772,7 +772,14 @@ local function game_()
 		local premiereAction
 		clear(tip)
 		for i, l in lines do
-			tipLine(l[1], l[2], l[3], i)
+			if l.fill then
+				local track = new("Frame", { Size = UDim2.new(1, 0, 0, 7), BackgroundColor3 = Color3.fromRGB(55, 48, 45),
+					LayoutOrder = i, Parent = tip, ZIndex = 81 }, { corner(3) })
+				new("Frame", { Size = UDim2.fromScale(l.fill, 1), BackgroundColor3 = l[2],
+					Visible = l.fill > 0, Parent = track, ZIndex = 82 }, { corner(3) })
+			else
+				tipLine(l[1], l[2], l[3], i)
+			end
 		end
 		tipActions = actions
 		if actions and #actions > 0 then
@@ -1502,6 +1509,13 @@ local function game_()
 	local STAT_HELP = { force = "Dégâts", defense = "Moins de dégâts reçus", vie = "+10 vie max par point", vitesse = "Course, endurance",
 		chance = "Butin, pêche, trouvailles", charisme = "Prix, avis des PNJ", discretion = "Moins vu des témoins" }
 	STAT_ICON.discretion = "🌑"
+	STAT_ICON.critique, STAT_ICON.hate, STAT_ICON.maitrise = "✦", "⚡", "◆"
+	local equipment = require(Shared:WaitForChild("Equipement"))
+	local combatStats = {
+		critique = { equipment.CRIT_PAR_POINT, equipment.CRIT_MAX, "de chance de coup double" },
+		hate = { equipment.HATE_PAR_POINT, equipment.HATE_MAX, "de cadence" },
+		maitrise = { equipment.MAITRISE_PAR_POINT, math.huge, "de dégâts" },
+	}
 	local charTab = "stats"
 	local lookInfo = nil -- écran d'apparence ouvert par le serveur (création, barbier, tailleur)
 	local FicheApparence = require(script.Parent:WaitForChild("FicheApparence"))
@@ -1556,17 +1570,28 @@ local function game_()
 
 	local function gearLines(it)
 		local r = Gear.RARITIES[it.rarity] or Gear.RARITIES[1]
-		local lines = { { it.name, r.color, 16 }, { (Gear.SLOTS[it.slot] or it.slot) .. " · " .. r.name, C.dim, 12 } }
+		local durability, maximum = Gear.durability(it)
+		local broken = equipment.brisee(it)
+		local lines = { { Gear.baseName(it), broken and C.dim or r.color, 16 }, { (Gear.SLOTS[it.slot] or it.slot) .. " · " .. r.name, C.dim, 12 } }
+		if it.affixes and #it.affixes > 0 then
+			table.insert(lines, { table.concat(it.affixes, "  ·  "), broken and C.dim or Color3.fromRGB(212, 159, 252), 13 })
+		end
+		if maximum then
+			local fraction = durability / maximum
+			local tint = fraction > 0.5 and C.green or fraction > 0.2 and C.gold or C.red
+			table.insert(lines, { string.format("%s  %d / %d", broken and "BRISÉE" or "Durabilité", durability, maximum), tint, 12 })
+			table.insert(lines, { fill = fraction, [2] = tint })
+		end
 		if it.slot == "offhand" and string.find(string.lower(it.name or ""), "torche", 1, true) then
 			table.insert(lines, { "Tenue en main gauche, elle éclaire les grottes.", C.gold })
 		end
 		if it.power and it.power > 0 then
-			table.insert(lines, { "⚔️ " .. it.power, C.text, 15 })
+			table.insert(lines, { "⚔️ " .. it.power, broken and C.dim or C.text, 15 })
 		end
 		for _, st in Gear.STAT_ORDER do
 			local v = it.stats and it.stats[st]
 			if v and v ~= 0 then
-				table.insert(lines, { (STAT_ICON[st] or "") .. " +" .. v .. " " .. Gear.STATS[st], Color3.fromRGB(30, 255, 0) })
+				table.insert(lines, { (STAT_ICON[st] or "") .. " +" .. v .. " " .. Gear.STATS[st], broken and C.dim or C.green })
 			end
 		end
 		local worn = inv.equipped[it.slot]
@@ -1579,7 +1604,8 @@ local function game_()
 				end
 			end
 			for _, stat in Gear.STAT_ORDER do
-				local delta = ((it.stats or {})[stat] or 0) - ((worn.stats or {})[stat] or 0)
+				local delta = (broken and 0 or (it.stats or {})[stat] or 0)
+					- (equipment.brisee(worn) and 0 or (worn.stats or {})[stat] or 0)
 				if delta ~= 0 then
 					table.insert(lines, { string.format("%+d %s", delta, Gear.STATS[stat]), delta > 0 and C.green or C.red, 12 })
 				end
@@ -1589,16 +1615,23 @@ local function game_()
 	end
 	local function gearCell(parent, size: number, it, slot: string?)
 		local r = it and (Gear.RARITIES[it.rarity] or Gear.RARITIES[1])
+		local broken = equipment.brisee(it)
 		local cell = new("TextButton", {
 			Text = it and Hud.gearIcon(it) or (SLOT_ICON[slot] or ""), TextSize = math.floor(size * 0.5), Font = BOLD, TextTransparency = it and 0 or 0.75,
 			AutoButtonColor = it ~= nil, BackgroundColor3 = Color3.fromRGB(30, 26, 22), Size = UDim2.fromOffset(size, size), Parent = parent, ZIndex = 8,
 		}, { corner(4) })
-		stroke(r and r.color or Color3.fromRGB(70, 60, 50), r and 2 or 1).Parent = cell
+		stroke(broken and C.dim or r and r.color or Color3.fromRGB(70, 60, 50), r and 2 or 1).Parent = cell
 		if it then
-			local preview = Hud.gearThumbnail(it)
+			local preview = Hud.gearThumbnail(it, broken)
 			if preview then
 				cell.Text = ""
+				if broken then preview.ImageColor3 = Color3.fromRGB(119, 115, 121) end
 				preview.ZIndex, preview.Parent = 9, cell
+			end
+			if broken then
+				cell.TextColor3 = C.dim
+				label({ Text = "BRISÉE", Font = BOLD, TextSize = 8, TextColor3 = C.text, TextXAlignment = Enum.TextXAlignment.Center,
+					Size = UDim2.new(1, 0, 0, 11), Position = UDim2.new(0, 0, 1, -11), Parent = cell, ZIndex = 10 })
 			end
 			cell.MouseEnter:Connect(function()
 				if not tipActions then
@@ -1703,20 +1736,35 @@ local function game_()
 			return new("Frame", { Size = UDim2.new(1, -6, 0, h or 34), BackgroundColor3 = Color3.fromRGB(40, 33, 26), LayoutOrder = order, Parent = content, ZIndex = 8 }, { corner(4) })
 		end
 		if charTab == "stats" then
-			-- chaque caractéristique monte en pratiquant (pas de point à placer) : rang + progression
-			local r0 = row(0, 26)
-			label({ Text = "Elles montent en pratiquant : survole une ligne pour voir comment.", TextSize = 12, TextColor3 = C.dim,
-				Size = UDim2.new(1, -10, 1, 0), Position = UDim2.fromOffset(8, 0), Parent = r0, ZIndex = 9 })
+			local specId, armor = player:GetAttribute("Specialisation"), player:GetAttribute("TypeArmure")
+			local spec = equipment.SPECS[#equipment.SPECS]
+			for _, candidate in equipment.SPECS do
+				if candidate.id == specId then spec = candidate break end
+			end
+			local summary = row(0, 63)
+			label({ Text = spec.nom, Font = BOLD, TextSize = 15, TextColor3 = C.gold, Size = UDim2.new(1, -16, 0, 20),
+				Position = UDim2.fromOffset(8, 3), Parent = summary, ZIndex = 9 })
+			label({ Text = "Passif · " .. spec.passif, TextSize = 12, Size = UDim2.new(1, -16, 0, 17),
+				Position = UDim2.fromOffset(8, 23), Parent = summary, ZIndex = 9 })
+			label({ Text = "Armure · " .. (armor or "Aucune"), TextSize = 12, TextColor3 = C.dim, Size = UDim2.new(1, -16, 0, 17),
+				Position = UDim2.fromOffset(8, 41), Parent = summary, ZIndex = 9 })
 			for k, st in Gear.STAT_ORDER do
 				local r = row(k, 38)
 				local xp = (inv.statXp or {})[st] or 0
 				local rank = Config.statLevel(xp)
 				local cur, nxt = Config.statXpFor(rank), Config.statXpFor(rank + 1)
 				local total = inv.stats[st] or 0
+				local combat = combatStats[st]
 				label({ Text = STAT_ICON[st] or "", TextSize = 18, Size = UDim2.fromOffset(30, 38), Position = UDim2.fromOffset(6, 0), Parent = r, ZIndex = 9 })
 				label({ Text = Gear.STATS[st], Font = BOLD, TextSize = 14, Size = UDim2.new(1, -150, 0, 20), Position = UDim2.fromOffset(38, 2), Parent = r, ZIndex = 9 })
 				label({ Text = tostring(total), Font = BOLD, TextSize = 18, TextColor3 = C.gold, TextXAlignment = Enum.TextXAlignment.Right,
 					Size = UDim2.fromOffset(50, 38), Position = UDim2.new(1, -58, 0, 0), Parent = r, ZIndex = 9 })
+				if combat then
+					label({ Text = string.format("%g %% %s", math.min(total * combat[1], combat[2]) * 100, combat[3]),
+						TextSize = 12, TextColor3 = C.dim, Size = UDim2.new(1, -110, 0, 16), Position = UDim2.fromOffset(38, 20),
+						Parent = r, ZIndex = 9 })
+					continue
+				end
 				local back = new("Frame", { Size = UDim2.new(1, -110, 0, 7), Position = UDim2.fromOffset(38, 25), BackgroundColor3 = Color3.fromRGB(20, 16, 12), Parent = r, ZIndex = 9 }, { corner(4) })
 				new("Frame", { Size = UDim2.fromScale(math.clamp((xp - cur) / math.max(1, nxt - cur), 0, 1), 1), BackgroundColor3 = Color3.fromRGB(240, 190, 60), Parent = back, ZIndex = 10 }, { corner(4) })
 				local from = {}
@@ -1838,6 +1886,11 @@ local function game_()
 			task.defer(renderChar)
 		end
 	end)
+	for _, attribute in {"TypeArmure", "Specialisation"} do
+		player:GetAttributeChangedSignal(attribute):Connect(function()
+			if bag.Visible and charTab == "stats" then task.defer(renderChar) end
+		end)
+	end
 	end
 
 	-- ---------------------------------------------------------------- Atelier : grille d'artisanat (façon Minecraft)
