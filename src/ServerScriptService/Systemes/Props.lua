@@ -44,10 +44,33 @@ local TOOL_NAMES = { axe = "une hache", pickaxe = "une pioche", shovel = "une pe
 local TIER_NAMES = { [2] = "de cuivre", [3] = "de fer", [4] = "d'acier", [5] = "au diamant" }
 local TOOL_HINT = { axe = "(atelier : 3 bois + 2 pierres)", pickaxe = "(atelier : 2 bois + 4 pierres)", shovel = "(atelier : 2 bois + 3 pierres)" }
 local FLOWER_COLORS = { Color3.fromRGB(240, 220, 80), Color3.fromRGB(240, 120, 160), Color3.fromRGB(150, 120, 230), Color3.fromRGB(250, 250, 250), Color3.fromRGB(240, 110, 60) }
--- Monde fini : ce qu'on coupe ou mine ne revient pas tout seul (on peut nettoyer une zone pour de bon ;
--- pour reboiser, il faudra planter). Seuls les buissons à baies se regarnissent.
-local TREE_REGROW = math.huge
+-- Forêts qui repoussent (27/11, MANQUES-MMO n° 7, accord du propriétaire : « pas si une maison est
+-- présente ») : une souche redevient arbre après TREE_REGROW jours, un arbre déraciné (souche arrachée)
+-- revient après TREE_RESEED jours — SAUF sur une parcelle de joueur ou près d'une construction : une
+-- clairière qu'on a bâtie reste nette. Les buissons à baies se regarnissent.
+local TREE_REGROW = 12
+local TREE_RESEED = 24
+local BUILT_CLEAR = 14 -- studs autour d'une construction de joueur où rien ne repousse
 local BERRY_REGROW = 2
+
+-- vrai si un arbre peut repousser à cet endroit (ni parcelle, ni construction, ni objet posé à côté)
+local function treeFree(reg, p): boolean
+	if not (p and p.x and p.z) then
+		return false
+	end
+	if G.Parcelles and rawget(G.Parcelles, "at") and G.Parcelles.at(Vector3.new(p.x, 0, p.z)) then
+		return false
+	end
+	for _, list in { reg.state.built, reg.state.placed } do
+		for _, d in list or {} do
+			local dx, dz = (d.x or 1e9) - p.x, (d.z or 1e9) - p.z
+			if dx * dx + dz * dz < BUILT_CLEAR * BUILT_CLEAR then
+				return false
+			end
+		end
+	end
+	return true
+end
 
 local live = {} -- id -> {model, data, reg, hits}
 
@@ -243,10 +266,13 @@ local loadPlanted -- plantations d'arbres (défini plus bas)
 
 -- Rien ne repousse tout seul (monde fini : on replante les arbres)… sauf les FILONS, façon WoW :
 -- un filon miné revient au même endroit au bout de quelques jours (KINDS[...].respawn).
-local function canRespawn(p, removedDay: number): boolean
+local function canRespawn(p, removedDay: number, reg): boolean
 	local k = KINDS[p.kind]
 	if k and (string.sub(p.kind, 1, 4) == "ore_" or k.herb) then
 		return G.world.day >= removedDay + (k.respawn or 6)
+	end
+	if k and k.tree and reg then
+		return G.world.day >= removedDay + TREE_RESEED and treeFree(reg, p)
 	end
 	return false
 end
@@ -257,9 +283,18 @@ function Props.onRegionLoad(reg)
 	folder.Parent = reg.folder
 	reg.propFolder = folder
 	local st = reg.state
-	for _, s in st.props do
+	local byId
+	for id, s in st.props do
 		if s.stump and G.world.day >= (s.day or 0) + TREE_REGROW then
-			s.stump = nil
+			if not byId then
+				byId = {}
+				for _, p in reg.plan.props do
+					byId[p.id] = p
+				end
+			end
+			if treeFree(reg, byId[id]) then
+				s.stump = nil
+			end
 		end
 		if s.empty and G.world.day >= (s.day or 0) + BERRY_REGROW then
 			s.empty = nil
@@ -268,7 +303,7 @@ function Props.onRegionLoad(reg)
 	local n = 0
 	for _, p in reg.plan.props do
 		local removed = st.removed[p.id]
-		if removed and canRespawn(p, removed) then
+		if removed and canRespawn(p, removed, reg) then
 			st.removed[p.id] = nil
 			removed = nil
 		end
@@ -884,7 +919,7 @@ function Props.newDay()
 		-- souches qui repoussent, buissons qui se regarnissent
 		for id, s in st.props do
 			local entry = reg.props and reg.props[id]
-			if s.stump and G.world.day >= (s.day or 0) + TREE_REGROW then
+			if s.stump and G.world.day >= (s.day or 0) + TREE_REGROW and entry and treeFree(reg, entry.data) then
 				st.props[id] = nil
 				if entry then
 					local parent = entry.model.Parent
@@ -908,7 +943,7 @@ function Props.newDay()
 		-- petites choses qui repoussent
 		for _, p in reg.plan.props do
 			local removed = st.removed[p.id]
-			if removed and canRespawn(p, removed) then
+			if removed and canRespawn(p, removed, reg) then
 				st.removed[p.id] = nil
 				build(reg, p, reg.propFolder)
 			end

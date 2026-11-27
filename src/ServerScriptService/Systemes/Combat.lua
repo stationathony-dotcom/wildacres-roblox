@@ -96,7 +96,7 @@ function Combat.damageOf(player: Player, itemId: string?): number
 		base = 10 + 5 * G.Config.tierOf(itemId)
 	end
 	local w = prof and prof.equipped.weapon
-	if w and not (w.duraMax and (w.dura or 0) <= 0) then -- arme brisée : plus de puissance jusqu'à réparation
+	if w and not (w.duraMax and type(w.dura) == "number" and w.dura <= 0) then -- arme brisée : plus de puissance jusqu'à réparation
 		base = math.max(base, (w.power or 1) * 10)
 	end
 	local st = G.Joueurs.stats(player)

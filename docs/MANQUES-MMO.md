@@ -31,7 +31,7 @@ de `src/`. Règles d'`AGENTS.md` § 1 appliquées : **pas de saisons ni de clima
    secrètes, cartes marines, ports, routes commerciales, créatures marines, voyage vers d'autres mondes.
 6. **Royaumes et diplomatie** : de la ville au royaume, élections, maires et rois, lois locales, impôts, trésorerie,
    alliances, traités, ambassades, frontières (au-dessus de `Villes` et `Politique`).
-7. **Écosystème vivant** : reproduction et migration des troupeaux, forêts qui repoussent et graines qui se dispersent,
+7. **Écosystème vivant** (27/11 : forêts qui repoussent — souche 12 j, déraciné 24 j, jamais près d'une construction) : reproduction et migration des troupeaux, forêts qui repoussent et graines qui se dispersent,
    sécheresses et inondations ponctuelles (météo, pas saisons), floraison, créatures nocturnes, régénération des ressources.
 8. **PNJ évolutifs** : domicile, horaires, inventaire, besoins ; village qui prospère ou décline selon le commerce des joueurs.
 9. **Automatisation étendue** : engrenages, axes, roue à aube, moulin à vent, poulies, treuils, presses, scierie, meules,
