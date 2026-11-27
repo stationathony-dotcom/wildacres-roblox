@@ -2854,12 +2854,46 @@ function M.chevre(): Model
 	return m
 end
 
+-- Slimes (27/11, Claude : ils n'avaient pas de constructeur sur disque, seulement deux cubes dans la place) :
+-- corps translucide à arêtes adoucies, noyau sombre visible, yeux et bouche, reflet, gouttes au sol.
+function M.slimes()
+	dossier = dossierModeles()
+	for nom, c in { Slime = { rgb(110, 210, 90), rgb(60, 140, 50) }, Slime_Bleu = { rgb(90, 170, 240), rgb(40, 90, 170) } } do
+		local old = dossier:FindFirstChild(nom)
+		if old then
+			old:Destroy()
+		end
+		local m = nouveau(nom)
+		local function S(n: string, t: Vector3, pos: Vector3, col: Color3, mat: Enum.Material, tr: number?)
+			local q = P(m, n, t, pos, col, mat, { collide = false })
+			q.Transparency = tr or 0
+			return q
+		end
+		S("Corps", Vector3.new(2.4, 1.9, 2.4), Vector3.new(0, 1.05, 0), c[1], Mat.Glass, 0.25)
+		S("Dôme", Vector3.new(1.9, 0.5, 1.9), Vector3.new(0, 2.15, 0), c[1], Mat.Glass, 0.25)
+		S("Bourrelet", Vector3.new(2.7, 0.4, 2.7), Vector3.new(0, 0.25, 0), c[1], Mat.Glass, 0.3)
+		S("Coeur", Vector3.new(1, 0.9, 1), Vector3.new(0.15, 1, 0.3), c[2], Mat.SmoothPlastic, 0.1)
+		S("Reflet", Vector3.new(0.5, 0.25, 0.05), Vector3.new(-0.6, 1.7, -1.22), Color3.new(1, 1, 1), Mat.Neon, 0.2)
+		for _, sx in { -1, 1 } do
+			S("Oeil", Vector3.new(0.34, 0.42, 0.06), Vector3.new(sx * 0.45, 1.35, -1.22), rgb(20, 24, 20), Mat.SmoothPlastic)
+			S("Pupille", Vector3.new(0.12, 0.12, 0.04), Vector3.new(sx * 0.4, 1.45, -1.26), Color3.new(1, 1, 1), Mat.Neon)
+		end
+		S("Bouche", Vector3.new(0.6, 0.12, 0.05), Vector3.new(0, 0.95, -1.22), rgb(20, 24, 20), Mat.SmoothPlastic)
+		for i = 0, 2 do
+			local a = i * 2.1
+			S("Goutte", Vector3.new(0.35, 0.18, 0.35), Vector3.new(math.cos(a) * 1.5, 0.09, math.sin(a) * 1.5), c[1], Mat.Glass, 0.25)
+		end
+		fini(m)
+	end
+end
+
 -- Créatures du monde vivant (ennemis par biome, monstres de nuit, animaux sauvages).
 -- Convention des bêtes : pièce « Base » au sol, tout ancré, sans collision, la tête vers -Z.
 function M.creatures()
 	dossier = dossierModeles()
 	M.animauxFerme()
 	M.chevre()
+	M.slimes()
 	local function Q(m: Instance, nom: string, taille: Vector3, pos: Vector3, couleur: Color3, mat: Enum.Material?, o: Opts?): BasePart
 		local opts: Opts = o or {}
 		opts.collide = false
@@ -3031,9 +3065,20 @@ function M.creatures()
 		end,
 	})
 	do
+		-- 27/11, Claude : flamme spectrale (avant : deux sphères) — langues de flamme effilées en 3 tons, visage, halo
 		local m = nouveau("Feu_Follet")
-		local coeur = Q(m, "Coeur", Vector3.new(1.4, 1.4, 1.4), Vector3.new(0, 3, 0), rgb(150, 230, 255), Mat.Neon, { forme = "Ball", transp = 0.15 })
-		Q(m, "Halo", Vector3.new(2.4, 2.4, 2.4), Vector3.new(0, 3, 0), rgb(120, 200, 255), Mat.Neon, { forme = "Ball", transp = 0.7 })
+		local c1, c2, c3 = rgb(120, 200, 255), rgb(170, 230, 255), rgb(235, 250, 255)
+		local coeur = Q(m, "Coeur", Vector3.new(1.3, 1.2, 1.3), Vector3.new(0, 2.6, 0), c2, Mat.Neon, { transp = 0.1 })
+		Q(m, "Flamme", Vector3.new(1.0, 1.0, 1.0), Vector3.new(0, 3.5, 0), c2, Mat.Neon, { transp = 0.15, rot = CFrame.Angles(0, 0.4, 0) })
+		Q(m, "Flamme", Vector3.new(0.6, 0.9, 0.6), Vector3.new(0.1, 4.3, 0), c3, Mat.Neon, { transp = 0.1, rot = CFrame.Angles(0, 0.8, 0.15) })
+		Q(m, "Flamme", Vector3.new(0.3, 0.6, 0.3), Vector3.new(0.18, 4.95, 0), c3, Mat.Neon, { transp = 0.05 })
+		for _, sx in { -1, 1 } do
+			Q(m, "Flamme", Vector3.new(0.4, 0.8, 0.4), Vector3.new(sx * 0.6, 3.4, 0.1), c1, Mat.Neon, { transp = 0.25, rot = CFrame.Angles(0, 0, sx * -0.4) })
+			Q(m, "Oeil", Vector3.new(0.2, 0.28, 0.06), Vector3.new(sx * 0.26, 2.75, -0.66), rgb(20, 40, 70), Mat.SmoothPlastic)
+		end
+		Q(m, "Queue", Vector3.new(0.7, 0.7, 0.7), Vector3.new(0, 1.8, 0.1), c1, Mat.Neon, { transp = 0.3 })
+		Q(m, "Queue", Vector3.new(0.35, 0.5, 0.35), Vector3.new(0, 1.3, 0.2), c1, Mat.Neon, { transp = 0.45 })
+		Q(m, "Halo", Vector3.new(2.6, 2.6, 2.6), Vector3.new(0, 3, 0), c1, Mat.Neon, { forme = "Ball", transp = 0.82 })
 		local l = Instance.new("PointLight")
 		l.Range = 14
 		l.Brightness = 2
