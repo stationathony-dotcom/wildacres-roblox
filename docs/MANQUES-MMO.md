@@ -25,7 +25,7 @@ de `src/`. Règles d'`AGENTS.md` § 1 appliquées : **pas de saisons ni de clima
    pénurie de fer → commande, animal disparu → recherche, escorte de marchand) + **contrats publiés par les joueurs**.
 3. **Donjons poussés** : plusieurs niveaux de difficulté, énigmes et passages secrets, butin exclusif, raids de groupe,
    boss mondiaux et maritimes (pas de boss saisonniers : règle).
-4. **Magie** (déjà en tête d'`EQUIPEMENT-MMO.md`) : écoles pyro, cryo, géo, hydro, aéro, druidisme, astrale, spirituelle
+4. **Magie** (27/11 : serveur fait — 5 sorts / 5 écoles en grimoires, `Systemes/Magie` ; touches et effets à faire par Codex) (déjà en tête d'`EQUIPEMENT-MMO.md`) : écoles pyro, cryo, géo, hydro, aéro, druidisme, astrale, spirituelle
    (soutien), runique (enchantements), illusion ; apprise par grimoires, maîtres PNJ et talents. **Attend l'accord du propriétaire.**
 5. **Mer complète** : voiliers, navires marchands et d'exploration, construction de bateaux, équipages, épaves, îles
    secrètes, cartes marines, ports, routes commerciales, créatures marines, voyage vers d'autres mondes.

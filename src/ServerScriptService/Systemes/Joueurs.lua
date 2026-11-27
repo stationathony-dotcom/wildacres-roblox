@@ -869,6 +869,11 @@ function J.useCatalogue(player: Player, item: string, info)
 			G.Util.toast(player, info.icon .. " " .. info.name .. " rejoint ton équipement : à porter depuis la fiche [P].", "gain")
 			J.markDirty(player)
 		end
+	elseif use == "grimoire" then
+		-- grimoire (Systemes/Magie, 27/11) : le sort est appris ; déjà connu → grimoire rendu
+		if not (G.Magie and rawget(G.Magie, "learn") and G.Magie.learn(player, arg)) then
+			J.add(player, item, 1, true)
+		end
 	elseif use == "monture" then
 		-- rênes rares (Systemes/Montures, 26/11) : la monture entre dans la collection
 		if not (G.Montures and rawget(G.Montures, "learn") and G.Montures.learn(player, arg, "renes")) then

@@ -464,6 +464,15 @@ function E.apply(C)
 			note("haut niveau " .. m[2])
 		end
 	end
+	-- 12 ter. grimoires de sorts (Systemes/Magie)
+	for _, sp in E.SORTS do
+		local id, gr = "grimoire_" .. sp[1], sp[11]
+		if not I[id] and known(C, gr[1]) then
+			I[id] = { name = "Grimoire : " .. sp[3], icon = "📕", price = gr[3], use = "cat_grimoire", useArg = sp[1] }
+			table.insert(R, { item = id, needs = table.clone(gr[1]), station = "bench", cat = "outils", skill = { "artisanat", gr[2] } })
+			note("grimoire " .. sp[1])
+		end
+	end
 	-- 12 bis. ensembles nommés (GearDesign.namedDesigns, X32)
 	local okD, GD = pcall(require, script.Parent.GearDesign)
 	if okD and GD.namedDesigns then
@@ -890,6 +899,18 @@ E.COLLECTIONS = {
 	["Fermier ancestral"] = { { vie = 3, chance = 1 }, 20, { linen = 2, copper_ingot = 1 }, "straw", { { "vie", 2 }, { "chance", 3 }, { "vie", 6 } } },
 	["Marchand royal"] = { { charisme = 4, chance = 1 }, 28, { silk = 2, gold_ingot = 1 }, "pearl", { { "charisme", 2 }, { "chance", 3 }, { "charisme", 8 } } },
 	["Explorateur des océans"] = { { vitesse = 2, vie = 2 }, 28, { leather = 2, silver_ingot = 1 }, "rare_shell", { { "vitesse", 2 }, { "vie", 4 }, { "vitesse", 6 } } },
+}
+
+-- 12 ter. MAGIE (27/11, MANQUES-MMO n° 4, accord du propriétaire « tout ») : des écoles de sorts apprises
+--     dans des GRIMOIRES (objet à lire, fabriqué à l'établi avec une matière rare). Systemes/Magie lance
+--     le sort : endurance + temps de recharge, puissance selon une caractéristique (pas de niveau).
+--     { id, école, nom, icône, endurance, recharge (s), portée (studs), effet, base, stat, grimoire = { ingrédients, niveau d'artisanat, prix } }
+E.SORTS = {
+	{ "boule_feu", "pyro", "Boule de feu", "🔥", 25, 4, 40, "degats", 30, "force", { { paper = 3, ink = 1, coal = 4, ruby = 1 }, 18, 220 } },
+	{ "trait_givre", "cryo", "Trait de givre", "❄️", 20, 5, 40, "gel", 16, "chance", { { paper = 3, ink = 1, ice_crystal = 2 }, 16, 200 } },
+	{ "souffle_vie", "druide", "Souffle de vie", "🌿", 30, 10, 20, "soin", 35, "vie", { { paper = 3, ink = 1, herbs = 4, ancient_seed = 1 }, 20, 260 } },
+	{ "bourrasque", "aero", "Bourrasque", "🌪️", 25, 8, 14, "repousse", 10, "vitesse", { { paper = 3, ink = 1, feather = 6 }, 14, 180 } },
+	{ "peau_pierre", "geo", "Peau de pierre", "🪨", 30, 20, 0, "armure", 6, "defense", { { paper = 3, ink = 1, stone = 10, carved_stone = 1 }, 22, 240 } },
 }
 
 -- bonus des panoplies portées : { [stat] = bonus }, et la liste lisible des panoplies actives

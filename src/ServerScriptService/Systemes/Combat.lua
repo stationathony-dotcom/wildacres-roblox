@@ -709,6 +709,10 @@ function Combat.hurtPlayer(player: Player, dmg: number, fromPos: Vector3?, opts)
 	if invuln[player] and now - invuln[player] < 0.6 then
 		return
 	end
+	-- « Peau de pierre » (Systemes/Magie) : dégâts divisés par deux
+	if G.Magie and rawget(G.Magie, "damageMult") then
+		dmg *= G.Magie.damageMult(player)
+	end
 	-- garde : seulement contre un coup venu de face
 	local root = G.Util.root(player)
 	if garde[player] and fromPos and root then
