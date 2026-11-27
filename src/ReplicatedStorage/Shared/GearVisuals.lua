@@ -353,14 +353,25 @@ local function weapon(d, s)
 	local color, material = s.metal, hard(s)
 	local y = 0.68 + s.profile * 0.046 + s.cut * 0.009
 	if f == "clawglove" then
-		d.box("Dos du gantelet", 0, -0.13, 0, 0.66, 0.78, 0.42, s.color, M.Leather)
-		d.box("Bride forgée", 0, y * 0.23, -0.105, 0.68, 0.18, 0.32, s.metal, M.Metal)
-		d.box("Dos de bride", -0.06, 0.05, -0.23, 0.53, 0.24, 0.14, edgeOf(s, color), material, 0.07)
-		d.box("Repli de gant griffu", 0.05, -0.36, -0.19, 0.57, 0.19, 0.15, dark, M.Leather, -0.10)
-		d.box("Couture de bride", -0.24, -0.07, -0.218, 0.084, 0.45, 0.079, s.trim, M.Fabric, -0.101)
+		-- 27/11, Claude : l'ancien gantelet était un cube de cuir surmonté de griffes ; main lisible : manchette,
+		-- dos de main, quatre doigts à deux phalanges, pouce, plaques de jointures forgées, griffes recourbées.
+		d.box("Manchette", 0, -0.46, 0, 0.5, 0.3, 0.38, s.color, M.Leather)
+		d.box("Revers de manchette", 0, -0.32, -0.01, 0.54, 0.07, 0.42, dark, M.Leather)
+		d.box("Couture de manchette", -0.2, -0.46, -0.195, 0.05, 0.26, 0.02, s.trim, M.Fabric)
+		d.box("Dos du gantelet", 0, -0.12, 0, 0.5, 0.36, 0.3, s.color, M.Leather)
+		d.box("Bride forgée", 0, -0.12, -0.16, 0.52, 0.12, 0.06, s.metal, M.Metal)
+		d.box("Rivet de bride", -0.18, -0.12, -0.195, 0.05, 0.05, 0.02, edgeOf(s, color), material)
+		d.box("Rivet de bride", 0.18, -0.12, -0.195, 0.05, 0.05, 0.02, edgeOf(s, color), material)
+		for i = 0, 3 do
+			local x = -0.18 + i * 0.12
+			d.box("Phalange", x, 0.1, 0, 0.1, 0.16, 0.24, s.color, M.Leather)
+			d.box("Plaque de jointure", x, 0.1, -0.135, 0.11, 0.1, 0.04, s.metal, M.Metal)
+			d.box("Phalangette", x, 0.23, -0.02, 0.09, 0.12, 0.2, dark, M.Leather, 0.12)
+		end
+		d.box("Pouce", 0.3, -0.06, -0.04, 0.1, 0.22, 0.14, s.color, M.Leather, -0.4)
 		for i = -1, 1 do
-			bentPoint(d, "Griffe enchâssée", V(i * 0.21, 0.22, -0.10),
-				0.12 + i * 0.12, 0.52 + s.profile * 0.062 - math.abs(i) * 0.14, 0.15, 0.16,
+			bentPoint(d, "Griffe enchâssée", V(i * 0.13, 0.3, -0.06),
+				0.12 + i * 0.12, 0.42 + s.profile * 0.05 - math.abs(i) * 0.1, 0.11, 0.12,
 				ivory:Lerp(s.accent, 0.24), M.SmoothPlastic)
 		end
 		if s.rarity >= 3 then setting(d, 0, -0.16, -0.21, 0.22, s) end
