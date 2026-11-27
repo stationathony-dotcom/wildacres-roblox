@@ -314,7 +314,7 @@ local KINDS = {
 	deep_beast = { name = "Bête des profondeurs", form = "serpent", look = { "N", "V", long = true, scale = 2.6 }, hp = 2600, dmg = 52, speed = 12, level = 10, style = "charge", radius = 3.6, boss = true, minion = "water_snake",
 		loot = { { "raw_hide", 4, 6, 1 }, { "tooth", 3, 5, 1 } }, gold = 9 },
 	-- boss des planches du 26/11 (lot C15) : données de combat ; dessins propres à venir (Codex, X36 / Silhouettes)
-	mimic_chest = { name = "Coffre-mimique des ruines", form = "masse", look = { "B", "O", scale = 1.8, }, hp = 2400, dmg = 50, speed = 10, level = 10, style = "hop", radius = 3.2, boss = true, minion = "skeleton",
+	mimic_chest = { name = "Coffre-mimique des ruines", model = "Coffre_Mimique", form = "masse", look = { "B", "O", scale = 1.8, }, hp = 2400, dmg = 50, speed = 10, level = 10, style = "hop", radius = 3.2, boss = true, minion = "skeleton",
 		loot = { { "mimic_tongue", 1, 1, 1 }, { "ancient_jewel", 1, 3, 1 }, { "pearl", 1, 2, 0.5 } }, gold = 12 },
 	abyss_angler = { name = "Baudroie des abysses", form = "serpent", look = { "N", "BL", scale = 2.4 }, hp = 2600, dmg = 52, speed = 11, level = 10, style = "spore", radius = 3.6, boss = true, swims = true, minion = "sea_serpent",
 		proj = { color = Color3.fromRGB(120, 255, 220), size = 2.2 }, loot = { { "angler_lure", 1, 1, 1 }, { "pearl", 2, 4, 1 }, { "rare_shell", 1, 2, 0.6 } }, gold = 10 },

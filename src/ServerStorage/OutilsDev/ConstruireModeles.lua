@@ -4874,4 +4874,73 @@ function M.mammouthGivre(): Model
 	return mammouthSol(dossier, CFrame.new())
 end
 
+-- Coffre-mimique (boss des ruines, 27/11, Claude) : coffre ferré à 3 tons de bois, couvercle entrouvert, deux rangées
+-- de dents, langue pendante, yeux luisants dans l'ombre du couvercle, pattes griffues, serrure dorée qui « respire ».
+function M.coffreMimique(): Model
+	dossier = dossierModeles()
+	local old = dossier:FindFirstChild("Coffre_Mimique")
+	if old then
+		old:Destroy()
+	end
+	local m = nouveau("Coffre_Mimique")
+	local b1, b2, b3 = rgb(120, 74, 42), rgb(92, 56, 32), rgb(156, 104, 62)
+	local fer, or1, dent = rgb(70, 72, 80), rgb(226, 178, 64), rgb(240, 232, 210)
+	local function Bx(n: string, t: Vector3, pos: Vector3, c: Color3, mat: Enum.Material?, rot: CFrame?)
+		return P(m, n, t, pos, c, mat or Mat.Wood, { collide = false, rot = rot })
+	end
+	-- caisse
+	Bx("Caisse", Vector3.new(6, 3.2, 4), Vector3.new(0, 2.6, 0), b1)
+	for i, y in { 1.4, 2.6, 3.8 } do
+		Bx("Planche", Vector3.new(6.05, 0.12, 4.05), Vector3.new(0, y, 0), i % 2 == 0 and b2 or b3)
+	end
+	for _, sx in { -1, 1 } do
+		for _, sz in { -1, 1 } do
+			Bx("Coin ferré", Vector3.new(0.5, 3.3, 0.5), Vector3.new(sx * 2.85, 2.6, sz * 1.85), fer, Mat.Metal)
+		end
+		Bx("Bande de fer", Vector3.new(0.35, 3.3, 4.1), Vector3.new(sx * 1.6, 2.6, 0), fer, Mat.Metal)
+	end
+	-- couvercle entrouvert (bascule vers l'arrière autour de la charnière)
+	local lid = CFrame.new(0, 4.2, 2) * CFrame.Angles(math.rad(34), 0, 0)
+	local function L(n: string, t: Vector3, off: Vector3, c: Color3, mat: Enum.Material?)
+		return P(m, n, t, Vector3.zero, c, mat or Mat.Wood, { collide = false, cf = lid * CFrame.new(off) })
+	end
+	L("Couvercle", Vector3.new(6.1, 1.0, 4.1), Vector3.new(0, 0.5, -2.05), b1)
+	L("Voûte", Vector3.new(5.6, 0.6, 3.6), Vector3.new(0, 1.2, -2.05), b3)
+	for _, sx in { -1, 1 } do
+		L("Bande de fer", Vector3.new(0.35, 1.3, 4.2), Vector3.new(sx * 1.6, 0.7, -2.05), fer, Mat.Metal)
+	end
+	for i = -3, 3 do
+		L("Dent", Vector3.new(0.45, 0.7, 0.4), Vector3.new(i * 0.8, -0.3, -3.95), dent, Mat.SmoothPlastic)
+	end
+	for _, sx in { -1, 1 } do
+		L("Oeil", Vector3.new(0.6, 0.45, 0.1), Vector3.new(sx * 1.3, 0.2, -4.13), rgb(255, 210, 60), Mat.Neon)
+		L("Pupille", Vector3.new(0.18, 0.4, 0.06), Vector3.new(sx * 1.3, 0.2, -4.19), rgb(30, 10, 10), Mat.SmoothPlastic)
+	end
+	-- gueule : intérieur sombre, dents du bas, langue qui pend
+	Bx("Gueule", Vector3.new(5.4, 0.3, 3.4), Vector3.new(0, 4.1, 0), rgb(60, 14, 20), Mat.SmoothPlastic)
+	for i = -3, 3 do
+		Bx("Dent", Vector3.new(0.42, 0.65, 0.38), Vector3.new(i * 0.8, 4.5, -1.8), dent, Mat.SmoothPlastic)
+	end
+	Bx("Langue", Vector3.new(1.4, 0.3, 2.6), Vector3.new(0.3, 4.15, -2.6), rgb(200, 70, 90), Mat.SmoothPlastic, CFrame.Angles(math.rad(-35), 0, 0))
+	Bx("Langue", Vector3.new(1.1, 0.25, 1.2), Vector3.new(0.3, 3.2, -3.4), rgb(214, 86, 104), Mat.SmoothPlastic, CFrame.Angles(math.rad(-70), 0, 0))
+	-- serrure
+	Bx("Serrure", Vector3.new(1.0, 1.1, 0.25), Vector3.new(0, 3.3, -2.1), or1, Mat.Metal)
+	Bx("Trou", Vector3.new(0.2, 0.45, 0.06), Vector3.new(0, 3.3, -2.24), rgb(20, 14, 10), Mat.SmoothPlastic)
+	-- pattes griffues
+	for _, sx in { -1, 1 } do
+		for _, sz in { -1, 1 } do
+			Bx("Patte", Vector3.new(0.7, 1.2, 0.7), Vector3.new(sx * 2.4, 0.6, sz * 1.4), b2)
+			for g = -1, 1 do
+				Bx("Griffe", Vector3.new(0.15, 0.2, 0.45), Vector3.new(sx * 2.4 + g * 0.22, 0.1, sz * 1.4 - 0.55), dent, Mat.SmoothPlastic)
+			end
+		end
+	end
+	-- pièces d'or qui débordent
+	for i = 0, 5 do
+		Bx("Piece", Vector3.new(0.5, 0.1, 0.5), Vector3.new(-2 + i * 0.8, 4.3 + (i % 2) * 0.1, 0.6 + (i % 3) * 0.3), or1, Mat.Metal)
+	end
+	fini(m)
+	return m
+end
+
 return M
