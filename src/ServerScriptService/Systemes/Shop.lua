@@ -1020,7 +1020,7 @@ local function buildPlaced(reg, d)
 		G.Util.prompt(base, "bed", ownerP and "Dormir (location " .. (d.rent or 15) .. " 💰 si ce n'est pas ton lit)" or "Dormir", "Lit" .. whose, { dist = 8, data = { Placed = d.id } })
 	elseif d.item == "chest" then
 		G.Util.prompt(base, "chest", "Ouvrir", "Coffre" .. whose, { dist = 8, data = { Placed = d.id } })
-	elseif G.Protection.DOORS and G.Protection.DOORS[d.item] then
+	elseif G.Protection and G.Protection.DOORS and G.Protection.DOORS[d.item] then
 		G.Util.prompt(base, "door", "Ouvrir", (Config.ITEMS[d.item] and Config.ITEMS[d.item].name or "Porte") .. whose, { dist = 7, data = { Placed = d.id } })
 	elseif Shop.CONTAINERS[d.item] and d.item ~= "chest" then
 		-- grange, grenier, charrettes (27/11) : des rangements comme le coffre
