@@ -1095,6 +1095,15 @@ function PROPS_VALDOR.Etabli()
 	fini(m)
 end
 
+function PROPS_VALDOR.Scierie()
+	local shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
+	local catalogue = require(shared:WaitForChild("Catalogue"))
+	local modele = assert(catalogue.build("Scierie"), "Modèle Scierie absent du catalogue")
+	local ancien = dossier:FindFirstChild("Scierie")
+	if ancien then ancien:Destroy() end
+	fini(modele)
+end
+
 function PROPS_VALDOR.Enclume()
 	local m = nouveau("Enclume")
 	cylProp(m, "Billot", 1.77, 1.58, Vp(0, 0.79, 0), BOIS, Mat.Wood)
@@ -2690,7 +2699,7 @@ local NOMS_DECOR = {
 	"Fontaine", "Puits", "Lampadaire", "Panneau", "Tonneaux", "Caisses", "Epouvantail", "Botte_Foin", "Boite_Lettres",
 	"Cloture", "Feu_Camp", "Etabli", "Coffre_Joueur",
 }
-local NOMS_STATIONS = { "Enclume", "Metier_Tisser", "Bac_Tannage", "Alambic", "Abreuvoir", "Mangeoire" }
+local NOMS_STATIONS = { "Enclume", "Metier_Tisser", "Bac_Tannage", "Alambic", "Abreuvoir", "Mangeoire", "Scierie" }
 
 local function reconstruireProps(noms: {string})
 	dossier = dossierModeles()
@@ -5219,6 +5228,161 @@ function M.vargor(): Model
 	Bx("Queue", Vector3.new(0.9, 0.9, 1.0), Vector3.new(0, 3.3, 5.1), b2)
 	fini(m)
 	m:ScaleTo(1.8) -- taille de boss
+	return m
+end
+
+-- Quatre boss de plus (27/11, Claude) : outils communs
+local function bossBuilder(nom: string)
+	dossier = dossierModeles()
+	local old = dossier:FindFirstChild(nom)
+	if old then
+		old:Destroy()
+	end
+	local m = nouveau(nom)
+	local function Bx(n: string, t: Vector3, pos: Vector3, c: Color3, mat: Enum.Material?, rot: CFrame?)
+		return P(m, n, t, pos, c, mat or Mat.SmoothPlastic, { collide = false, rot = rot })
+	end
+	local function barre(n: string, a: Vector3, b: Vector3, e: number, c: Color3, mat: Enum.Material?)
+		return P(m, n, Vector3.new(e, e, (b - a).Magnitude + e * 0.5), Vector3.zero, c, mat or Mat.SmoothPlastic,
+			{ collide = false, cf = CFrame.lookAt((a + b) / 2, b) })
+	end
+	return m, Bx, barre
+end
+
+-- Hydre des tourbières : corps trapu couvert de mousse, trois cous qui se dressent, trois têtes à crocs et yeux jaunes
+function M.hydre(): Model
+	local m, Bx, barre = bossBuilder("Hydre_Tourbieres")
+	local v1, v2, v3, ventre, mousse = rgb(58, 90, 60), rgb(42, 66, 46), rgb(86, 122, 78), rgb(176, 180, 120), rgb(96, 140, 60)
+	Bx("Corps", Vector3.new(4, 2.6, 5), Vector3.new(0, 2.0, 0.6), v1)
+	Bx("Dos", Vector3.new(3.4, 0.5, 4.4), Vector3.new(0, 3.5, 0.6), v2)
+	Bx("Ventre", Vector3.new(3.4, 0.3, 4.4), Vector3.new(0, 0.75, 0.6), ventre)
+	for k = 0, 3 do
+		Bx("Mousse", Vector3.new(1.2, 0.2, 0.9), Vector3.new(-1.2 + k * 0.8, 3.8, -0.6 + (k % 2) * 1.6), mousse, Mat.Grass)
+	end
+	for _, sx in { -1, 1 } do
+		for _, z in { -0.9, 2.2 } do
+			Bx("Patte", Vector3.new(1.0, 1.4, 1.0), Vector3.new(sx * 1.9, 0.7, z), v2)
+		end
+	end
+	Bx("Queue", Vector3.new(1.6, 1.2, 2.4), Vector3.new(0, 1.6, 4.1), v1)
+	Bx("Queue", Vector3.new(0.9, 0.8, 1.8), Vector3.new(0, 1.3, 6.0), v2)
+	for k, d in { { -1.4, -0.3 }, { 0, 0 }, { 1.4, 0.3 } } do
+		local base = Vector3.new(d[1] * 0.8, 3.0, -1.4)
+		local mid = Vector3.new(d[1] * 1.3, 5.0 + (k == 2 and 0.8 or 0), -2.4)
+		local tete = Vector3.new(d[1] * 1.5, 6.4 + (k == 2 and 1.0 or 0), -3.4)
+		barre("Cou", base, mid, 0.9, v1)
+		barre("Cou", mid, tete, 0.8, v3)
+		Bx("Tete", Vector3.new(1.3, 1.0, 1.6), tete, v1, nil, CFrame.Angles(0, d[2], 0))
+		local avant = tete + Vector3.new(math.sin(d[2]) * -1.1, -0.15, -1.0)
+		Bx("Museau", Vector3.new(1.0, 0.6, 1.0), avant, v2, nil, CFrame.Angles(0, d[2], 0))
+		for _, sx in { -1, 1 } do
+			Bx("Oeil", Vector3.new(0.22, 0.18, 0.1), tete + Vector3.new(sx * 0.45, 0.3, -0.8), rgb(255, 214, 60), Mat.Neon)
+			Bx("Croc", Vector3.new(0.12, 0.35, 0.12), avant + Vector3.new(sx * 0.3, -0.4, -0.35), rgb(236, 230, 210))
+		end
+		Bx("Crete", Vector3.new(0.2, 0.6, 1.0), tete + Vector3.new(0, 0.75, 0.2), v3)
+	end
+	fini(m)
+	m:ScaleTo(1.7)
+	return m
+end
+
+-- Taureau d'airain : taureau de bronze massif, plaques rivetées, cornes dorées, anneau au mufle, yeux de forge
+function M.taureauAirain(): Model
+	local m, Bx = bossBuilder("Taureau_Airain")
+	local b1, b2, b3, or1, braise = rgb(176, 112, 56), rgb(138, 84, 40), rgb(206, 146, 80), rgb(236, 190, 70), rgb(255, 130, 40)
+	Bx("Corps", Vector3.new(3.4, 3.0, 5.4), Vector3.new(0, 3.4, 0.6), b1, Mat.Metal)
+	Bx("Bosse", Vector3.new(3.0, 1.0, 2.0), Vector3.new(0, 5.3, -0.8), b2, Mat.Metal)
+	for k = 0, 3 do
+		Bx("Plaque", Vector3.new(3.5, 0.15, 0.8), Vector3.new(0, 4.9, -0.2 + k * 1.2), b3, Mat.Metal)
+		for _, sx in { -1, 1 } do
+			Bx("Rivet", Vector3.new(0.15, 0.15, 0.15), Vector3.new(sx * 1.75, 4.2, -0.2 + k * 1.2), or1, Mat.Metal)
+		end
+	end
+	Bx("Tete", Vector3.new(2.0, 1.9, 1.8), Vector3.new(0, 3.9, -2.9), b1, Mat.Metal)
+	Bx("Mufle", Vector3.new(1.6, 1.0, 0.8), Vector3.new(0, 3.3, -4.0), b2, Mat.Metal)
+	Bx("Anneau", Vector3.new(0.7, 0.7, 0.12), Vector3.new(0, 2.8, -4.45), or1, Mat.Metal)
+	for _, sx in { -1, 1 } do
+		Bx("Oeil", Vector3.new(0.3, 0.22, 0.08), Vector3.new(sx * 0.6, 4.3, -3.82), braise, Mat.Neon)
+		Bx("Naseau", Vector3.new(0.25, 0.25, 0.08), Vector3.new(sx * 0.4, 3.4, -4.42), rgb(40, 20, 10))
+		Bx("Corne", Vector3.new(1.4, 0.35, 0.35), Vector3.new(sx * 1.55, 4.7, -2.8), or1, Mat.Metal, CFrame.Angles(0, 0, sx * 0.3))
+		Bx("Corne", Vector3.new(0.3, 0.8, 0.3), Vector3.new(sx * 2.2, 5.2, -2.8), or1, Mat.Metal)
+		for _, z in { -1.4, 2.6 } do
+			Bx("Patte", Vector3.new(0.9, 2.2, 1.0), Vector3.new(sx * 1.05, 1.1, z), b2, Mat.Metal)
+			Bx("Sabot", Vector3.new(1.0, 0.4, 1.1), Vector3.new(sx * 1.05, 0.2, z), rgb(60, 50, 44), Mat.Metal)
+		end
+	end
+	Bx("Queue", Vector3.new(0.3, 2.0, 0.3), Vector3.new(0, 3.6, 3.4), b2, Mat.Metal, CFrame.Angles(math.rad(20), 0, 0))
+	Bx("Queue", Vector3.new(0.5, 0.6, 0.5), Vector3.new(0, 2.6, 3.7), or1, Mat.Metal)
+	fini(m)
+	m:ScaleTo(1.7)
+	return m
+end
+
+-- Salamandre de braise : lézard trapu noir de suie, fissures de lave Neon, crête de flammes, queue incandescente
+function M.salamandre(): Model
+	local m, Bx = bossBuilder("Salamandre_Braise")
+	local s1, s2, lave, lave2 = rgb(40, 32, 30), rgb(66, 50, 44), rgb(255, 120, 30), rgb(255, 200, 70)
+	Bx("Corps", Vector3.new(2.6, 1.6, 5.0), Vector3.new(0, 1.6, 0.4), s1)
+	Bx("Ventre", Vector3.new(2.2, 0.25, 4.4), Vector3.new(0, 0.85, 0.4), s2)
+	for k = 0, 4 do
+		Bx("Fissure", Vector3.new(2.62, 0.12, 0.18), Vector3.new(0, 1.8 + (k % 2) * 0.2, -1.4 + k * 0.9), lave, Mat.Neon)
+		Bx("Flamme", Vector3.new(0.35, 0.8 - (k % 2) * 0.2, 0.5), Vector3.new(0, 2.6, -1.6 + k * 0.9), k % 2 == 0 and lave or lave2, Mat.Neon)
+	end
+	Bx("Tete", Vector3.new(1.8, 1.0, 1.8), Vector3.new(0, 1.8, -2.8), s1)
+	Bx("Museau", Vector3.new(1.4, 0.6, 1.0), Vector3.new(0, 1.6, -4.0), s2)
+	local gueule = Bx("Gueule", Vector3.new(1.2, 0.12, 0.9), Vector3.new(0, 1.25, -3.9), lave, Mat.Neon)
+	for _, sx in { -1, 1 } do
+		Bx("Oeil", Vector3.new(0.3, 0.25, 0.08), Vector3.new(sx * 0.6, 2.1, -3.72), lave2, Mat.Neon)
+		for _, z in { -1.3, 1.9 } do
+			Bx("Patte", Vector3.new(1.4, 0.7, 0.8), Vector3.new(sx * 1.5, 1.0, z), s2)
+			Bx("Pied", Vector3.new(0.8, 0.75, 1.0), Vector3.new(sx * 2.1, 0.375, z - 0.1), s1)
+			Bx("Fissure", Vector3.new(0.12, 0.3, 0.6), Vector3.new(sx * 2.2, 1.0, z), lave, Mat.Neon)
+		end
+	end
+	for k = 0, 4 do
+		local w = 1.6 - k * 0.28
+		Bx("Queue", Vector3.new(w, w * 0.7, 1.2), Vector3.new(math.sin(k * 0.6) * 0.5, 1.3 - k * 0.12, 3.5 + k * 1.05), k >= 3 and lave or s1, k >= 3 and Mat.Neon or nil)
+	end
+	local l = Instance.new("PointLight")
+	l.Range, l.Brightness, l.Color = 14, 1.6, lave
+	l.Parent = gueule
+	fini(m)
+	m:ScaleTo(1.8)
+	return m
+end
+
+-- Cerf-Roi des brumes : grand cerf blanc spectral, ramure immense à pointes lumineuses, collier de brume, sabots d'argent
+function M.cerfRoi(): Model
+	local m, Bx, barre = bossBuilder("Cerf_Roi")
+	local w1, w2, w3, lueur, argent = rgb(232, 236, 244), rgb(198, 206, 222), rgb(160, 174, 200), rgb(140, 210, 255), rgb(210, 214, 224)
+	Bx("Corps", Vector3.new(2.2, 2.2, 4.4), Vector3.new(0, 4.2, 0.6), w1)
+	Bx("Dos", Vector3.new(1.8, 0.3, 4.0), Vector3.new(0, 5.4, 0.6), w2)
+	Bx("Collier", Vector3.new(2.6, 1.4, 1.2), Vector3.new(0, 4.6, -1.5), w3)
+	local brume = Bx("Brume", Vector3.new(3.0, 0.6, 1.6), Vector3.new(0, 3.8, -1.4), lueur, Mat.Neon)
+	brume.Transparency = 0.5
+	Bx("Cou", Vector3.new(1.1, 2.0, 1.1), Vector3.new(0, 5.6, -2.2), w1, nil, CFrame.Angles(math.rad(-20), 0, 0))
+	Bx("Tete", Vector3.new(1.2, 1.1, 1.8), Vector3.new(0, 6.8, -2.9), w1)
+	Bx("Museau", Vector3.new(0.8, 0.6, 0.8), Vector3.new(0, 6.5, -4.0), w2)
+	for _, sx in { -1, 1 } do
+		Bx("Oeil", Vector3.new(0.08, 0.22, 0.3), Vector3.new(sx * 0.61, 7.0, -3.4), lueur, Mat.Neon)
+		Bx("Oreille", Vector3.new(0.6, 0.25, 0.3), Vector3.new(sx * 0.8, 7.3, -2.5), w2)
+		local a = Vector3.new(sx * 0.4, 7.4, -2.7)
+		local b = Vector3.new(sx * 1.4, 9.0, -2.4)
+		local c = Vector3.new(sx * 2.2, 10.4, -2.0)
+		barre("Bois", a, b, 0.28, argent)
+		barre("Bois", b, c, 0.24, argent)
+		for _, t in { { b, Vector3.new(sx * 1.6, 9.9, -3.2) }, { c, Vector3.new(sx * 2.0, 11.4, -2.8) }, { c, Vector3.new(sx * 3.0, 11.0, -1.6) } } do
+			barre("Andouiller", t[1], t[2], 0.18, argent)
+			Bx("Pointe", Vector3.new(0.3, 0.3, 0.3), t[2], lueur, Mat.Neon)
+		end
+		for _, z in { -1.0, 2.2 } do
+			Bx("Patte", Vector3.new(0.5, 3.2, 0.5), Vector3.new(sx * 0.7, 1.7, z), w2)
+			Bx("Sabot", Vector3.new(0.6, 0.3, 0.7), Vector3.new(sx * 0.7, 0.15, z), argent, Mat.Metal)
+		end
+	end
+	Bx("Queue", Vector3.new(0.5, 0.7, 0.4), Vector3.new(0, 5.0, 2.95), w3)
+	fini(m)
+	m:ScaleTo(1.6)
 	return m
 end
 

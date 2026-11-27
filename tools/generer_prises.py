@@ -19,6 +19,10 @@ K["frost_mammoth"] = {"name": "Mammouth de givre", "form": "quadrupede", "rank":
 K["storm_griffin"] = {"name": "Griffon d'orage", "form": "volant", "rank": "B", "level": 10}
 K["cavern_widow"] = {"name": "Veuve des cavernes", "form": "insecte", "rank": "B", "level": 10}
 K["marsh_crocodile"] = {"name": "Crocodile des marais", "form": "quadrupede", "rank": "B", "level": 10}
+K["bog_hydra"] = {"name": "Hydre des tourbières", "form": "serpent", "rank": "B", "level": 10}
+K["bronze_bull"] = {"name": "Taureau d'airain", "form": "quadrupede", "rank": "B", "level": 10}
+K["ember_salamander"] = {"name": "Salamandre de braise", "form": "quadrupede", "rank": "B", "level": 10}
+K["mist_stag_king"] = {"name": "Cerf-Roi des brumes", "form": "quadrupede", "rank": "B", "level": 10}
 
 # Enemies : forme d'après le modèle
 EF = {"Ours": "quadrupede", "Sanglier": "quadrupede", "Chef_Gobelin": "humain", "Myconide_Ancien": "masse", "Roi_Slimes": "masse",
@@ -34,6 +38,9 @@ for k, v in K.items():
 def pick(name, form):
     n = name.lower()
     # matériau qui a du sens pour la bête, emplacement de la pièce, nom de la pièce
+    if "hydre" in n: return ("Croc d'hydre", "🐍", "trinket", "Amulette aux trois têtes")
+    if "taureau d'airain" in n: return ("Corne d'airain", "🐂", "weapon", "Hache à corne")
+    if "salamandre" in n: return ("Écaille de braise", "🔥", "armor", "Cuirasse de braise")
     if "coffre" in n: return ("Langue de mimique", "👅", "trinket", "Bourse vorace")
     if "baudroie" in n: return ("Leurre lumineux", "🏮", "trinket", "Lanterne des abysses")
     if "mammouth" in n: return ("Défense de mammouth", "🦣", "weapon", "Hache à défense")
@@ -105,14 +112,15 @@ BASE = {"weapon": ("{ iron_ingot = 2, planks = 1 }", "anvil"), "armor": ("{ leat
         "hat": ("{ cloth = 2 }", "loom"), "trinket": ("{ rope = 1, copper_ingot = 1 }", "bench")}
 
 def lua_str(t): return '"' + t.replace('"', '\\"') + '"'
-BOSS_DU = ("Roi", "Chef", "Scarabée", "Myconide", "Gardien", "Colosse", "Dormeur", "Géant", "Coffre", "Mammouth", "Griffon", "Crocodile")
-BOSS_DELA = ("Mère", "Wyverne", "Bête", "Baudroie", "Veuve")
+BOSS_DU = ("Roi", "Chef", "Scarabée", "Myconide", "Gardien", "Colosse", "Dormeur", "Géant", "Coffre", "Mammouth", "Griffon", "Crocodile", "Taureau", "Cerf")
+BOSS_DELA = ("Mère", "Wyverne", "Bête", "Baudroie", "Veuve", "Salamandre")
 def de(name, boss=False):
     n = name.split(",")[0]
     if boss:
         if n.startswith("Le "): return "du " + n[3:]
         if n.startswith(BOSS_DU): return "du " + n
         if n.startswith(BOSS_DELA): return "de la " + n
+        if n.startswith("Hydre"): return "de l'" + n
         return "de " + n
     low = n[0].lower() + n[1:] if not n.startswith("Le ") else n
     if n.startswith("Le "): return "du " + n[3:]

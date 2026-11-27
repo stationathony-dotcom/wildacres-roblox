@@ -326,6 +326,15 @@ local KINDS = {
 		proj = { color = Color3.fromRGB(140, 230, 70), size = 2, poison = true }, loot = { { "widow_silk", 1, 1, 1 }, { "ancient_crystal", 1, 2, 0.5 } }, gold = 10 },
 	marsh_crocodile = { name = "Crocodile des marais", model = "Croco_Marais", form = "quadrupede", look = { "V", "BF", long = true, queue = true, scale = 2.4 }, hp = 2800, dmg = 54, speed = 12, level = 10, style = "charge", radius = 3.8, boss = true, minion = "leech",
 		loot = { { "croc_king_hide", 1, 1, 1 }, { "tooth", 3, 5, 1 }, { "black_scale", 1, 1, 0.25 } }, gold = 10 },
+	-- 4 boss de plus (27/11, demande du propriétaire « 15 c'est tout ») : modèles dessinés par Claude (ConstruireModeles)
+	bog_hydra = { name = "Hydre des tourbières", model = "Hydre_Tourbieres", form = "serpent", look = { "V", "N", scale = 2.4 }, hp = 3000, dmg = 54, speed = 9, level = 10, style = "spore", radius = 4, boss = true, minion = "bog_lizard",
+		proj = { color = Color3.fromRGB(150, 220, 90), size = 2.2, poison = true }, loot = { { "emerald", 1, 2, 1 }, { "black_scale", 1, 1, 0.3 }, { "ancient_root", 1, 2, 1 } }, gold = 11 },
+	bronze_bull = { name = "Taureau d'airain", model = "Taureau_Airain", form = "quadrupede", look = { "O", "BF", scale = 2.4 }, hp = 3200, dmg = 58, speed = 13, level = 10, style = "charge", radius = 3.8, boss = true, minion = "bandit",
+		loot = { { "gold_ingot", 2, 4, 1 }, { "ruby", 1, 1, 0.4 }, { "steel", 3, 6, 1 } }, gold = 12 },
+	ember_salamander = { name = "Salamandre de braise", model = "Salamandre_Braise", form = "quadrupede", look = { "R", "O", scale = 2.4 }, hp = 2700, dmg = 56, speed = 12, level = 10, style = "spore", radius = 3.6, boss = true, minion = "sand_basilisk",
+		proj = { color = Color3.fromRGB(255, 120, 40), size = 2.4 }, loot = { { "meteorite", 1, 1, 0.5 }, { "ruby", 1, 2, 1 }, { "coal", 6, 10, 1 } }, gold = 11 },
+	mist_stag_king = { name = "Cerf-Roi des brumes", model = "Cerf_Roi", form = "quadrupede", look = { "W", "BL", scale = 2.4 }, hp = 2600, dmg = 50, speed = 15, level = 10, style = "charge", radius = 3.6, boss = true, minion = "spectral_fox",
+		loot = { { "moon_flower", 2, 3, 1 }, { "sapphire", 1, 1, 0.5 }, { "ancient_jewel", 1, 2, 1 } }, gold = 11 },
 	cave_troll = { name = "Troll des cavernes", form = "humain", look = { "P", "BF", weapon = "massue", scale = 1.8, peau = "P" }, hp = 700, dmg = 38, speed = 9, level = 8, style = "charge", radius = 2.4, elite = true,
 		loot = { { "stone", 4, 8, 1 }, { "ore", 1, 3, 0.6 } }, gold = 5 },
 	-- 20/11 : les trois dernières de « listes ennemi.txt », modèles faits par Codex (ServerStorage.Modeles)
@@ -442,6 +451,10 @@ Bestiaire.ROAMING = {
 	storm_griffin = { name = "Griffon d'orage", biome = { "prairie", "neige" } },
 	cavern_widow = { name = "Veuve des cavernes", biome = { "foret" }, night = true },
 	marsh_crocodile = { name = "Crocodile des marais", biome = { "marais" } },
+	bog_hydra = { name = "Hydre des tourbières", biome = { "marais" } },
+	bronze_bull = { name = "Taureau d'airain", biome = { "prairie" } },
+	ember_salamander = { name = "Salamandre de braise", biome = { "desert" } },
+	mist_stag_king = { name = "Cerf-Roi des brumes", biome = { "foret" }, night = true },
 }
 
 -- ----------------------------------------------------------------- Modèles
