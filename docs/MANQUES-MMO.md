@@ -36,7 +36,7 @@ de `src/`. Règles d'`AGENTS.md` § 1 appliquées : **pas de saisons ni de clima
 8. **PNJ évolutifs** (27/11 : village qui prospère / fleurit / décline selon l'or échangé au comptoir, −5 % à +10 %, les habitants en parlent) : domicile, horaires, inventaire, besoins ; village qui prospère ou décline selon le commerce des joueurs.
 9. **Automatisation étendue** : engrenages, axes, roue à aube, moulin à vent, poulies, treuils, presses, scierie, meules,
    portes mécaniques, ascenseurs à contrepoids, ateliers semi-automatiques, machines combinables.
-10. **Vie sociale** : mariages, guildes de métiers, concerts et instruments, courses de chevaux, concours agricoles, foires,
+10. **Vie sociale** (27/11 : mariages au village avec une bague sertie, +10 % d'expérience côte à côte) : mariages, guildes de métiers, concerts et instruments, courses de chevaux, concours agricoles, foires,
     festivals, jeux de plateau, musées, bibliothèques, journaux de joueurs.
 11. **Collections et prestige** (27/11 : records du monde au registre de la taverne, succès secrets, titres de magie) : codex d'équipements, poissons, herbier, fossiles, recettes, reliques ; titres, succès
     secrets, records mondiaux, apparences exclusives, historique des découvertes.

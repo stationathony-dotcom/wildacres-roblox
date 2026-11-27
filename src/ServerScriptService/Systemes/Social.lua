@@ -130,6 +130,7 @@ local FEATS = {
 	{ "chroniqueur", "Chroniqueur", "chroniques", 6 },
 	-- 27/11 : magie (Systemes/Magie) ; « secret » = nom caché (« ??? ») tant qu'il n'est pas obtenu
 	{ "mage", "Mage itinérant", "sorts", 3 },
+	{ "marie", "Uni pour la vie", "maries", 1 },
 	{ "archimage", "Archimage", "sorts", 5, secret = true },
 	{ "riche", "Fortune de Valdor", "soldGold", 100000, secret = true },
 	{ "tueur_legendes", "Tueur de légendes", "bosses", 25, secret = true },
@@ -387,6 +388,11 @@ end
 function Social.groupBonus(player: Player): number
 	local g = groups[player]
 	local r = G.Util.root(player)
+	-- époux côte à côte (Systemes/Mariages, 27/11) : même bonus qu'un groupe
+	local wed = G.Mariages and rawget(G.Mariages, "bonus") and G.Mariages.bonus(player) or 1
+	if wed > 1 then
+		return wed
+	end
 	if not g or not r then
 		return 1
 	end
