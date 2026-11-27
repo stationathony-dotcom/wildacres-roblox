@@ -7,6 +7,10 @@ local templates = {
 	hoe = "Houe", can = "Arrosoir", axe = "Hache", pickaxe = "Pioche", shovel = "Pelle",
 	spade = "Pelle", rod = "Canne à pêche", club = "Gourdin", sword = "Épée", harpoon = "harpoon",
 }
+local workingParts = {
+	hoe = "Lame", can = "Cuve", axe = "Fer", pickaxe = "Fer", shovel = "Pelle",
+	spade = "Pelle", rod = "Moulinet", club = "Tete", sword = "Lame", harpoon = "Pointe",
+}
 local surfaces = {
 	hoe = {"Col de la houe", "Talonnette", "Fil coudé"},
 	can = {"Épaulement de pomme", "Joint de tôle", "Pli de cuivre"},
@@ -31,7 +35,7 @@ local function finish(tool, base, tint)
 		if part == handle or part.Transparency >= 1 then continue end
 		local x, y, z = part.Size.X, part.Size.Y, part.Size.Z
 		local face = math.max(x * y, y * z, x * z)
-		if part.Name == "Pointe" and base == "harpoon" then face = math.huge end
+		if part.Name == workingParts[base] then face = math.huge end
 		if face > area then head, area = part, face end
 	end
 	if count > 34 then return end
@@ -93,6 +97,11 @@ function M.equipements(folder, config)
 	local baseTools = {}
 	for id, name in templates do
 		baseTools[id] = folder:FindFirstChild(id) or folder:FindFirstChild(name)
+	end
+	if baseTools.spade and baseTools.spade == baseTools.shovel and config.ITEMS.spade then
+		local spade = baseTools.spade:Clone()
+		spade.Name, spade.Parent = "spade", folder
+		baseTools.spade = spade
 	end
 	-- Les variantes utilisent en priorité le modèle déjà présent sous leur identifiant.
 	-- Les autres héritent de la prise en main de leur outil de base.

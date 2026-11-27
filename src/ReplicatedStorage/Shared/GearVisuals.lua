@@ -355,6 +355,9 @@ local function weapon(d, s)
 	if f == "clawglove" then
 		d.box("Dos du gantelet", 0, -0.13, 0, 0.66, 0.78, 0.42, s.color, M.Leather)
 		d.box("Bride forgée", 0, y * 0.23, -0.105, 0.68, 0.18, 0.32, s.metal, M.Metal)
+		d.box("Dos de bride", -0.06, 0.05, -0.23, 0.53, 0.24, 0.14, edgeOf(s, color), material, 0.07)
+		d.box("Repli de gant griffu", 0.05, -0.36, -0.19, 0.57, 0.19, 0.15, dark, M.Leather, -0.10)
+		d.box("Couture de bride", -0.24, -0.07, -0.218, 0.084, 0.45, 0.079, s.trim, M.Fabric, -0.101)
 		for i = -1, 1 do
 			bentPoint(d, "Griffe enchâssée", V(i * 0.21, 0.22, -0.10),
 				0.12 + i * 0.12, 0.52 + s.profile * 0.062 - math.abs(i) * 0.14, 0.15, 0.16,
@@ -510,14 +513,21 @@ local function shields(d, s)
 		d.box("Sabot d’écu", 0, -0.77, -0.096, width * 0.22, 0.25, 0.12, edgeOf(s, s.metal), M.Metal, -0.068)
 		emblem(d, s, 0, 0.26, -0.109, width * 0.66)
 	end
-	if s.rarity >= 3 and f ~= "shield" then setting(d, 0, 0, f == "roundshield" and -0.287 or -0.25, width * 0.20, s) end
+	if s.rarity >= 3 and f ~= "shield" then
+		setting(d, 0, 0, f == "roundshield" and -0.287 or -0.25, width * 0.20, s)
+	elseif s.rarity >= 4 then
+		setting(d, -0.025, 0.55, -0.147, width * 0.17, s)
+	end
 	d.box("Énarme", 0, 0.04, 0.13, width * 0.49, 0.18, 0.20, hide, M.Leather)
 end
 
 local function torch(d, s)
 	d.box("Bois de torche", 0, -0.25, 0, 0.19, 1.16, 0.19, wood, M.Wood)
+	d.box("Aubier de torche", 0.05, -0.29, -0.085, 0.069, 0.79, 0.058, wood:Lerp(pale, 0.42), M.Wood, -0.048)
+	d.box("Joint brûlé", -0.057, 0.07, -0.091, 0.074, 0.39, 0.071, wood:Lerp(dark, 0.72), M.Wood, 0.083)
 	d.disc("Cerclage", 0, 0.25, 0, 0.30, 0.14, s.metal, M.Metal, true)
 	d.ball("Étoupe", 0, 0.39, 0, 0.34, 0.34, 0.35, hide, M.Fabric)
+	d.box("Revers de l’étoupe", 0.055, 0.36, -0.121, 0.26, 0.22, 0.16, rgb(204, 109, 48), M.Fabric, -0.08)
 	d.tip("Flamme", V(0, 0.43, 0), V(0.08, 0.94, 0), 0.45, 0.26, rgb(247, 129, 48), M.SmoothPlastic)
 	d.tip("Flammèche", V(0.02, 0.46, -0.07), V(-0.066, 0.77, -0.08), 0.23, 0.16, rgb(255, 199, 68), M.SmoothPlastic)
 end
@@ -783,7 +793,7 @@ local function plateTorso(r, s)
 		r.top.box("Sceau taillé des anciens", 0, 0.13, -0.735, 0.39, 0.39, 0.16, r.edge, M.Slate, math.pi / 4)
 	elseif s.series == "soleil" or s.series == "garde" or s.series == "lune" or s.series == "ronces" or s.series == "nord" then
 		emblem(r.top, s, 0, 0.13, -0.735, 0.45)
-	elseif s.name == "plastron serti de diamant" then
+	elseif s.name == "plastron serti de diamant" or s.series == "diamant" or s.series == "ambre" then
 		setting(r.top, 0, 0.13, -0.735, 0.46, s)
 	end
 	torsoBelt(r, "Ceinturon de cuirasse", hide, M.Leather, 0.042, 1.12)
@@ -964,6 +974,9 @@ local function cloak(d, s)
 	-- La bride et son fermoir avant rejoignent le col.
 	d.box("Bride de cape", 0, 0.46, -0.14, 0.47, 0.12, 0.77, c, M.Fabric)
 	d.ball("Fermoir", 0, 0.42, -0.52, 0.23, 0.21, 0.115, t, M.Metal)
+	if s.rarity >= 3 then
+		setting(d, 0, 0.42, -0.55, 0.18, s)
+	end
 end
 
 local function plume(d, root, dx, dy, width, color)
@@ -1025,6 +1038,9 @@ local function headdress(d, s)
 		local material = textile(s)
 		if f == "mask" then
 			d.box("Masque de tissu", 0, -0.27, -0.58, 1.22, 0.37 + shift, 0.20, c:Lerp(soot, 0.46), material)
+			d.box("Pli du masque", -0.083, -0.32, -0.661, 0.83, 0.13, 0.091, c:Lerp(pale, 0.29), material, -0.07)
+			d.box("Repli du masque", 0.28, -0.39, -0.636, 0.46, 0.115, 0.13, c:Lerp(soot, 0.50), material, 0.10)
+			d.box("Surpiqûre du masque", -0.35, -0.237, -0.678, 0.29, 0.07, 0.059, t, M.Fabric, 0.079)
 			for _, side in pair do
 				d.part("Lien du masque", V(0.13, 0.17, 0.93),
 					C(side * 0.56, -0.22, -0.20) * A(side * 0.06, 0, side * 0.14), c, material)
@@ -1061,6 +1077,9 @@ local function headdress(d, s)
 		local mat = regal and M.Metal or M.Leather
 		local y = f == "headband" and 0.26 or 0.50
 		d.loop("Cercle de coiffe", 0, y, 0, 0.66, 0.65, 10, regal and 0.17 or 0.195, color, mat, true)
+		d.box("Bourrelet de coiffe", 0.0, y + 0.057, -0.619, 0.65, 0.115, 0.15, color:Lerp(pale, 0.33), mat, -0.049)
+		d.box("Joint de coiffe", 0.37, y - 0.050, -0.52, 0.31, 0.14, 0.15, color:Lerp(soot, 0.44), mat, 0.106)
+		d.box("Retour de coiffe", -0.38, y + 0.083, -0.52, 0.29, 0.15, 0.16, t, mat, -0.10)
 		if f == "antlers" then
 			for _, side in pair do
 				local base = V(side * 0.51, y, -0.30)
@@ -1097,6 +1116,9 @@ local function headdress(d, s)
 			d.disc("Verre de loupe", side * 0.31, 0.11, -0.711, 0.41, 0.090, rgb(140, 179, 163), M.Glass)
 		end
 		d.box("Pont de lunettes", 0, 0.13, -0.64, 0.36, 0.13, 0.12, t, M.Metal)
+		d.box("Appui du pont", 0.013, 0.08, -0.673, 0.22, 0.099, 0.10, soot, M.Metal, -0.075)
+		d.box("Boucle de courroie", 0.61, 0.11, -0.16, 0.18, 0.22, 0.24, t, M.Metal, 0.066)
+		d.box("Épaulement de loupe", -0.36, 0.265, -0.681, 0.34, 0.079, 0.108, edgeOf(s, t), M.Metal, -0.09)
 	elseif f == "turban" or f == "bonnet" or f == "chapka" or f == "beret" or f == "toque" then
 		if f == "turban" then
 			local desert = s.name:find("désert", 1, true)
@@ -1145,6 +1167,9 @@ local function headdress(d, s)
 		if mushroom then
 			d.disc("Lamelles de champignon", 0, base, 0, brim, 0.16, ivory, M.Fabric, true)
 			d.ball("Chapeau fongique", 0, base + 0.27, 0, brim, 0.74 + s.variant * 0.063, brim, c:Lerp(s.accent, 0.40), M.Fabric)
+			d.disc("Sous-rebord fongique", 0, base + 0.052, 0, brim * 0.94, 0.14, c:Lerp(dark, 0.47), M.Fabric, true)
+			d.box("Repli fongique", 0.34, base + 0.20, -brim * 0.35, 0.41, 0.21, 0.24, c:Lerp(pale, 0.39), M.Fabric, 0.095)
+			d.box("Lamelle déchirée", -0.31, base - 0.062, -brim * 0.27, 0.32, 0.15, 0.29, ivory:Lerp(dark, 0.27), M.Fabric, -0.081)
 			for i = 0, 2 + s.variant do
 				local angle = i * 2.40 + s.profile
 				d.ball("Spore enchâssée", math.cos(angle) * brim * 0.30, base + 0.47 + (i % 2) * 0.075,
@@ -1502,6 +1527,9 @@ local function accessory(d, s)
 	if f == "feather" then
 		plume(d, V(-0.26, -0.55, 0), 0.62, 1.23, 0.44, c:Lerp(soot, 0.59))
 		d.box("Ligature de plume", -0.195, -0.415, 0, 0.16, 0.17, 0.14, t, M.Metal, -0.42)
+		d.bar("Rachis clair", V(-0.21, -0.48, -0.058), V(0.23, 0.42, -0.055), 0.079, 0.086, c:Lerp(pale, 0.43), M.Fabric)
+		d.box("Repli de barbe", 0.075, 0.10, -0.04, 0.22, 0.33, 0.15, c:Lerp(soot, 0.47), M.Fabric, -0.11)
+		d.box("Fil dans la ligature", -0.19, -0.417, -0.062, 0.16, 0.075, 0.076, t:Lerp(pale, 0.48), M.Fabric, 0.11)
 	elseif f == "clover" then
 		local green = rgb(100, 155, 77)
 		for _, side in pair do
@@ -1509,16 +1537,25 @@ local function accessory(d, s)
 		end
 		d.ball("Foliole", 0, -0.18, 0, 0.49, 0.43, 0.16, green, M.Fabric)
 		d.bar("Tige", V(-0.085, -0.02, 0), V(0.15, -0.53, 0), 0.103, 0.10, green:Lerp(dark, 0.38), M.Fabric)
+		d.bar("Nervure de foliole", V(-0.04, 0.0, -0.06), V(-0.29, 0.27, -0.07), 0.067, 0.079, green:Lerp(pale, 0.42), M.Fabric)
+		d.box("Revers de foliole", 0.24, 0.16, -0.043, 0.20, 0.25, 0.12, green:Lerp(soot, 0.46), M.Fabric, -0.10)
+		d.box("Nœud de la tige", 0.05, -0.29, 0, 0.17, 0.12, 0.135, t, M.Fabric, 0.083)
 	elseif f == "paw" then
 		d.ball("Patte de lapin", 0, -0.22, 0, 0.54, 0.57, 0.29, c:Lerp(pale, 0.62), M.Fabric)
 		for i = -1, 1 do d.ball("Doigt de patte", i * 0.16, -0.43, 0, 0.20, 0.25, 0.26, ivory, M.Fabric) end
 		d.box("Virole", 0, 0.095, 0, 0.37, 0.24, 0.34, t, M.Metal)
+		d.box("Patin de patte", 0, -0.28, -0.115, 0.34, 0.29, 0.12, c:Lerp(dark, 0.24), M.Leather, 0.08)
+		d.box("Bourrelet de toison", -0.12, -0.04, -0.092, 0.28, 0.21, 0.16, pale, M.Fabric, -0.09)
+		d.box("Bague de virole", 0, 0.145, -0.12, 0.35, 0.086, 0.16, t:Lerp(pale, 0.36), M.Metal, 0.06)
 		d.loop("Annelet", 0, 0.285, 0, 0.15, 0.14, 6, 0.073, t, M.Metal)
 	elseif f == "heart" or f == "shard" then
 		local gem = s.accent:Lerp(c, 0.22)
 		local shard = f == "shard"
 		local width = shard and 0.44 or 0.57 + s.variant * 0.052
 		d.box("Matrice minérale", 0, -0.13, 0, width, 0.60, 0.57, s.metal, M.Slate, 0.26 + s.cut * 0.014)
+		d.box("Aplat de fracture", -width * 0.19, -0.21, -0.21, width * 0.61, 0.38, 0.21, s.metal:Lerp(soot, 0.48), M.Slate, -0.09)
+		d.box("Débord de quartz", width * 0.30, 0.04, -0.18, width * 0.57, 0.34, 0.24, gem:Lerp(pale, 0.54), M.Glass, 0.12)
+		d.box("Gradin de roche", -width * 0.08, -0.39, -0.14, width * 0.76, 0.16, 0.41, s.metal:Lerp(pale, 0.26), M.Slate, 0.10)
 		for i = -1, 1 do
 			local reach = shard and 0.22 or 0.35 + s.profile * 0.018
 			d.tip("Cristal fracturé", V(i * width * 0.27, -0.18, -0.15),
@@ -1537,6 +1574,11 @@ local function accessory(d, s)
 			glass and M.Glass or M.Leather)
 		d.box("Col du flacon", 0, 0.27, 0, width * 0.44, 0.37, 0.33, t, glass and M.Glass or M.Leather)
 		d.disc("Bouchon", 0, 0.52, 0, width * 0.51, 0.18, wood, M.Wood, true)
+		d.disc("Bague du col", 0, 0.415, 0, width * 0.58, 0.105, t, M.Metal, true)
+		d.box("Couture du flanc", width * 0.31, -0.19, -0.17, width * 0.18, 0.41, 0.13, c:Lerp(soot, 0.44),
+			glass and M.Glass or M.Leather, -0.10)
+		d.box("Reflet de l’épaule", -width * 0.21, 0.04, -0.204, width * 0.34, 0.18, 0.11, s.accent:Lerp(pale, 0.47),
+			glass and M.Glass or M.Fabric, 0.116)
 		if lum then
 			d.tip("Pierre lumineuse en cage", V(0, -0.31, -0.24), V(0, 0.21, -0.24), width * 0.78, 0.09,
 				s.accent:Lerp(pale, 0.57), M.Glass)
@@ -1550,6 +1592,9 @@ local function accessory(d, s)
 		d.box("Fond de lanterne", 0, -0.52, 0, 0.82, 0.15, 0.63, t, M.Metal)
 		d.box("Vitre de lanterne", 0, -0.12, 0, 0.60, 0.72, 0.49, rgb(223, 171, 65), M.Glass)
 		d.box("Toit de lanterne", 0, 0.41, 0, 0.80, 0.19, 0.65, t, M.Metal)
+		d.box("Gradin du pavillon", -0.02, 0.52, 0, 0.58, 0.18, 0.48, s.metal:Lerp(pale, 0.30), M.Metal, 0.06)
+		d.box("Sabot de lanterne", 0.04, -0.59, 0, 0.64, 0.119, 0.57, soot, M.Metal, -0.077)
+		d.box("Flamme captive", -0.09, -0.23, -0.217, 0.23, 0.36, 0.099, rgb(238, 192, 99), M.Glass, 0.093)
 		d.loop("Anse de lanterne", 0, 0.62, 0, 0.25, 0.19, 8, 0.073, s.metal, M.Metal)
 	elseif f == "horn" or f == "whistle" then
 		local small = f == "whistle"
@@ -1558,6 +1603,9 @@ local function accessory(d, s)
 		d.box("Virole", -0.33, -0.24, 0, small and 0.27 or 0.48, 0.26, 0.34, t, M.Metal, -0.55)
 		d.box(small and "Fenêtre du sifflet" or "Bourrelet de pavillon", -0.40, -0.33, -0.13, 0.18, 0.17, 0.13,
 			small and soot or t, M.Metal, -0.57)
+		d.box("Bague de l’embouchure", -0.12, -0.04, 0, 0.31, 0.19, 0.32, t, M.Metal, -0.50)
+		d.bar("Arête d’ivoire", V(-0.36, -0.25, -0.132), V(0.1, 0.18, -0.13), 0.071, 0.081, pale, M.SmoothPlastic)
+		d.box("Joint de l’embouchure", -0.29, -0.19, -0.124, 0.24, 0.09, 0.10, soot, M.Leather, -0.48)
 	elseif f == "keyring" or f == "horseshoe" then
 		local key = f == "keyring"
 		local r = key and 0.35 or 0.47
@@ -1568,6 +1616,10 @@ local function accessory(d, s)
 			points[i + 1] = V(math.cos(a) * r, y - math.sin(a) * 0.50, 0)
 		end
 		d.path(key and "Anneau de clés" or "Fer ouvert", points, key and 0.105 or 0.20, 0.19, s.metal, M.Metal)
+		d.bar(key and "Revers de l’anneau" or "Fil de la branche", points[1] - V(0, 0, 0.08), points[3] - V(0, 0, 0.08),
+			0.083, 0.068, edgeOf(s, s.metal), M.Metal)
+		d.box("Bourrelet de ferrure", points[7].X, points[7].Y, -0.078, 0.22, 0.15, 0.13, t, M.Metal, -0.10)
+		d.box("Patin de ferrure", points[9].X, points[9].Y, -0.07, 0.20, 0.18, 0.14, soot, M.Metal, 0.10)
 		for i = -1, 1 do
 			local x = i * r * 0.60
 			if key then
@@ -1589,6 +1641,9 @@ local function accessory(d, s)
 			d.box(net and "Maille nouée" or "Drap du voile", 0, 0.39 - i * 0.29, 0, 1.04 + i * 0.055, net and 0.074 or 0.30,
 				0.092, net and t or c:Lerp(soot, i * 0.08), M.Fabric)
 		end
+		d.box("Revers de traverse", -0.09, 0.51, -0.076, 0.83, 0.14, 0.12, c:Lerp(pale, 0.39), M.Fabric, 0.083)
+		d.box("Lest cousu", 0.22, -0.48, -0.04, 0.27, 0.15, 0.15, c:Lerp(soot, 0.48), M.Fabric, -0.11)
+		d.box("Nœud de traverse", -0.37, 0.43, -0.065, 0.19, 0.21, 0.14, t, M.Fabric, 0.10)
 	elseif f == "quiver" then
 		local lunar = s.name:find("lune", 1, true)
 		d.part("Fourreau de carquois", V(lunar and 0.72 or 0.56, 1.59, 0.47), C(0, -0.13, 0) * A(0, 0, -0.15), c, M.Leather)
@@ -1598,6 +1653,9 @@ local function accessory(d, s)
 			d.box("Empennage", 0.145 + i * 0.21, 0.948 - math.abs(i) * 0.068, 0.03, 0.19, 0.22, 0.085, t, M.Fabric, -i * 0.15)
 		end
 		d.box("Bride de carquois", -0.05, -0.27, -0.22, 0.68, 0.16, 0.14, hide, M.Leather, -0.15)
+		d.box("Sabot de carquois", -0.06, -0.77, 0, 0.57, 0.20, 0.47, c:Lerp(soot, 0.53), M.Leather, -0.141)
+		d.box("Repli de la gueule", 0.19, 0.51, -0.22, 0.42, 0.16, 0.14, t, M.Metal, -0.151)
+		d.bar("Couture du fourreau", V(-0.19, -0.60, -0.23), V(-0.12, 0.49, -0.23), 0.079, 0.069, c:Lerp(pale, 0.41), M.Fabric)
 		if lunar then
 			d.path("Renfort du croissant", {V(-0.18, 0.41, -0.233), V(-0.26, 0.19, -0.233), V(-0.10, -0.025, -0.233),
 				V(0.16, -0.011, -0.233)}, 0.089, 0.061, t, M.Metal)
@@ -1607,6 +1665,9 @@ local function accessory(d, s)
 		d.box("Boucle d’attache", 0, -0.31, -0.05, 0.39, 0.25, 0.20, t, M.Metal)
 		d.box("Mortaise", 0, -0.31, -0.158, 0.23, 0.12, 0.046, soot, M.Leather)
 		d.box("Ardillon", 0.02, -0.31, -0.18, 0.23, 0.04, 0.031, t, M.Metal)
+		d.box("Contre-boucle", 0.04, -0.27, 0.066, 0.33, 0.25, 0.13, c:Lerp(soot, 0.46), M.Leather, 0.07)
+		d.box("Passant du brin", -0.27, -0.323, -0.06, 0.17, 0.23, 0.18, t, M.Leather, -0.105)
+		d.box("Surpiqûre de ceinture", 0.25, -0.315, -0.115, 0.31, 0.066, 0.079, c:Lerp(pale, 0.43), M.Fabric, 0.08)
 		if s.name:find("collets", 1, true) then
 			d.loop("Collet attaché", 0.33, -0.47, -0.016, 0.19, 0.24, 7, 0.066, t, M.Fabric)
 		elseif s.name:find("hachereau", 1, true) then

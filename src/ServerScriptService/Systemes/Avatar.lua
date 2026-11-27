@@ -453,17 +453,17 @@ local function watchGestures(player, char)
 		local profile = G.Joueurs.get(player)
 		local worn = profile and profile.equipped
 		local item = worn and worn.weapon
-		if not item or item.dura == 0 or Design.formOf(item) == "clawglove" then return end
+		if not item or Design.formOf(item) == "clawglove" then return end
 		local previous = state.item
 		state.item, state.gesture = item, gesture
-		if previous ~= item then drawWeapon(char, item, outfitLimits(char, profile).weapon, true) end
+		if previous ~= item then drawWeapon(char, item, state.weaponLimit, true) end
 		task.delay(duration, function()
 			if player.Character ~= char or state.gesture ~= gesture then return end
 			state.item = nil
 			local current = G.Joueurs.get(player)
 			local equipped = current and current.equipped
 			if equipped and equipped.weapon == item then
-				drawWeapon(char, item, outfitLimits(char, current).weapon, false)
+				drawWeapon(char, item, state.weaponLimit, false)
 			end
 		end)
 	end)
@@ -490,6 +490,7 @@ function Avatar.applyExtraGear(player: Player, limits)
 	limits = limits or outfitLimits(char, prof)
 	local holder = layer(char, "Equipement_WA")
 	local state = handStates[char]
+	if state then state.weaponLimit = limits.weapon end
 	for _, slot in visibleSlots do
 		local item = worn[slot]
 		if item then

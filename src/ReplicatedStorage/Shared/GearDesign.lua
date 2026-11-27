@@ -73,6 +73,7 @@ end
 -- Les affixes d'une instance changent son libellé et ses stats. Le dessin reste celui de la série.
 function D.baseName(item): string
 	local name = item.name or ""
+	if trophies[name] or name == "Cuirasse des anciens" or name == "Lame des anciens" then return name end
 	local affix = item.affixes and item.affixes[1]
 	if type(affix) == "string" and affix ~= "" then
 		local ending = " " .. affix
@@ -255,7 +256,9 @@ local formsBySeries = {
 	}},
 	{ id = "armures", target = 300, slots = {
 		{"offhand",{{"Rondache","roundshield"},{"Écu","shield"},{"Pavois","pavise"}}},
-		{"armor",D.FORMS.armor}, {"shoulders",D.FORMS.shoulders}, {"gloves",{{"Brassards","bracer"},{"Gantelets","gauntlets"}}},
+		{"armor",{{"Plastron","plate"},{"Brigandine","brigandine"},{"Cotte de mailles","mail"},{"Gilet","leather"},
+			{"Cuirasse segmentée","scale"}}},
+		{"shoulders",D.FORMS.shoulders}, {"gloves",{{"Brassards","bracer"},{"Gantelets","gauntlets"}}},
 		{"legs",{{"Grèves","greaves"},{"Genouillères","kneepads"}}}, {"boots",{{"Solerets","sabatons"}}},
 		{"hat",{{"Heaume","closedhelm"},{"Casque nasal","nasalhelm"},{"Casque à crête","cresthelm"}}},
 	}},
