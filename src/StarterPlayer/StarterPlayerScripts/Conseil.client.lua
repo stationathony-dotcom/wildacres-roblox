@@ -5,6 +5,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
+local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 
 local player = Players.LocalPlayer
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
@@ -44,20 +45,13 @@ local function label(parent, text, size, ts, color, bold)
 end
 
 local function button(parent, text, size, color, fn)
-	local b = Instance.new("TextButton")
-	b.Text = text
-	b.Font = Enum.Font.GothamBold
-	b.TextSize = 13
-	b.TextColor3 = Color3.new(1, 1, 1)
-	b.BackgroundColor3 = color
-	b.Size = size
-	b.Parent = parent
-	corner(b)
-	b.Activated:Connect(function()
+	local b
+	b = Composants.bouton({ Text = text, TextSize = 13, BackgroundColor3 = color, Size = size, Parent = parent }, function()
 		b.Size = size - UDim2.fromOffset(4, 4)
 		TweenService:Create(b, TweenInfo.new(0.15, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Size = size }):Play()
 		fn()
 	end)
+	corner(b)
 	return b
 end
 
@@ -85,7 +79,6 @@ end
 fit()
 workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(fit)
 
-local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
 local title = Composants.titre({
 	Text = "", TextSize = 20, TextColor3 = GOLD,
 	Size = UDim2.new(1, -60, 0, 30), Position = UDim2.fromOffset(14, 8), Parent = panel,
@@ -95,7 +88,9 @@ local function dismiss()
 end
 local close = button(panel, "×", UDim2.fromOffset(28, 28), Color3.fromRGB(190, 60, 50), dismiss)
 close.Position = UDim2.new(1, -36, 0, 8)
-require(script.Parent:WaitForChild("WindowNav")).watch(panel, close, dismiss)
+local WindowNav = require(script.Parent:WaitForChild("WindowNav"))
+WindowNav.watch(panel, close, dismiss)
+WindowNav.clavier(panel)
 
 local body = Instance.new("ScrollingFrame")
 body.BackgroundTransparency = 1
@@ -150,6 +145,35 @@ local function render(d)
 	local l0 = label(r0, (d.maire and ("👑 Maire : " .. d.maire) or "👑 Pas de maire pour l'instant")
 		.. "\n💰 Trésor : " .. d.tresor .. "   ·   🏷️ Taxe du marché : " .. d.taxe .. " %", UDim2.new(1, -16, 1, 0), 14, TEXT, true)
 	l0.Position = UDim2.fromOffset(8, 0)
+	local royaume = d.royaume
+	if royaume then
+		section("Royaume")
+		local vassaux = royaume.vassaux or {}
+		local names = #vassaux > 0 and table.concat(vassaux, ", ") or "Aucun"
+		local detail = (royaume.nom or "Indépendant") .. "\nSuzerain · " .. (royaume.suzerain or "Aucun")
+			.. "\nVassaux · " .. names .. "\nTribut · " .. math.floor((royaume.tribut or 0) * 100) .. " % des taxes"
+		local r = row(84)
+		r.AutomaticSize = Enum.AutomaticSize.Y
+		local summary = label(r, detail, UDim2.new(1, -16, 0, 76), 13, TEXT)
+		summary.AutomaticSize = Enum.AutomaticSize.Y
+		summary.Position = UDim2.fromOffset(8, 0)
+		if d.isMaire then
+			section("Prêter allégeance à…")
+			for _, choix in royaume.choix or {} do
+				local choice = row(42)
+				local name = choix.name .. (choix.maire and (" · " .. choix.maire) or "")
+				button(choice, name, UDim2.new(1, -8, 1, -8), BLUE, function()
+					act("pol_allegeance", { to = choix.v })
+				end).Position = UDim2.fromOffset(4, 4)
+			end
+			if #(royaume.choix or {}) == 0 then section("Aucun conseil disponible.") end
+			if royaume.suzerain then
+				button(row(42), "Rompre l’allégeance", UDim2.new(1, -8, 1, -8), Color3.fromRGB(123, 61, 47), function()
+					act("pol_allegeance")
+				end).Position = UDim2.fromOffset(4, 4)
+			end
+		end
+	end
 	if not d.resident then
 		local r = row(40)
 		local l = label(r, "Tu n'habites pas ici : pour voter ou te présenter, il faut une parcelle près du village.", UDim2.new(1, -16, 1, 0), 12, DIM)

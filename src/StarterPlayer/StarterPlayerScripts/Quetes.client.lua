@@ -15,6 +15,7 @@ local player = Players.LocalPlayer
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
 local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
+local Registres = require(script.Parent:WaitForChild("Registres"))
 
 local GOLD = Color3.fromRGB(246, 200, 70)
 local TEXT = Color3.fromRGB(245, 238, 222)
@@ -49,16 +50,8 @@ local function label(parent, text, size, ts, color, bold)
 	return l
 end
 local function button(parent, text, size, color, fn)
-	local b = Instance.new("TextButton")
-	b.Text = text
-	b.Font = Enum.Font.GothamBold
-	b.TextSize = 13
-	b.TextColor3 = Color3.new(1, 1, 1)
-	b.BackgroundColor3 = color
-	b.Size = size
-	b.Parent = parent
+	local b = Composants.bouton({ Text = text, TextSize = 13, BackgroundColor3 = color, Size = size, Parent = parent }, fn)
 	corner(b, 6)
-	b.Activated:Connect(fn)
 	return b
 end
 
@@ -150,6 +143,11 @@ ongletQuetes = button(panel, "Quêtes", UDim2.fromOffset(76, 24), ROW, function(
 ongletQuetes.Position = UDim2.fromOffset(16, 35)
 ongletAbsence = button(panel, "Journal d’absence", UDim2.fromOffset(153, 24), ROW, function() onglet(true) end)
 ongletAbsence.Position = UDim2.fromOffset(98, 35)
+local ongletGazette = button(panel, "Gazette", UDim2.fromOffset(96, 24), ROW, function()
+	Registres.ouvrir("gazette", panel)
+end)
+ongletGazette.Position = UDim2.fromOffset(257, 35)
+ongletGazette.Visible = false
 onglet(false)
 
 local function send(kind, data)
@@ -217,6 +215,7 @@ local function questRow(q, offer: boolean)
 end
 
 local function render(data)
+	ongletGazette.Visible = data.village ~= nil and data.village.from == "Tableau des quêtes"
 	for _, c in body:GetChildren() do
 		if not c:IsA("UIListLayout") then
 			c:Destroy()
@@ -281,9 +280,11 @@ ouvrir.Name = "OuvrirQuetes"
 ouvrir.Event:Connect(toggle)
 ouvrir.Parent = player
 
-require(script.Parent:WaitForChild("WindowNav")).watch(panel, close, function()
+local WindowNav = require(script.Parent:WaitForChild("WindowNav"))
+WindowNav.watch(panel, close, function()
 	panel.Visible = false
 end)
+WindowNav.clavier(panel)
 
 -- panneau ouvert : se met à jour (on s'éloigne du tableau / de l'habitant → les offres disparaissent)
 task.spawn(function()

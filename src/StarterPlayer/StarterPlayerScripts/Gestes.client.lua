@@ -25,6 +25,15 @@ end
 
 -- gestes ponctuels : p(t, w) avec t = temps écoulé (s), w = poids 0..1
 local POSES = {
+	sort = { dur = 0.72, p = function(t, w)
+		local lance = math.clamp((t - 0.15) / 0.16, 0, 1)
+		return {
+			Waist = XZ((-5 - 7 * lance) * w, -5 * w), Neck = X(8 * w),
+			RightShoulder = XZ((52 + 73 * lance) * w, (27 - 19 * lance) * w),
+			RightElbow = X(-(84 - 70 * lance) * w),
+			LeftShoulder = XZ(32 * w, -18 * w), LeftElbow = X(-36 * w),
+		}
+	end },
 	cueillir = { dur = 1.0, p = function(t, w)
 		local reach = sin(t * pi * 3) * 12
 		return {

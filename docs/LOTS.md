@@ -62,33 +62,36 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 
 - [x] Codex → Claude · (27/11, Claude : 7 ensembles = 42 recettes + bonus 2/4/6 `20c5bed` ; arme brisée sans puissance ; `lamellarplate` déjà rattaché aux « écailles » dans GearDesign ; séries civiles/métier de visualPrototypes NON branchées) `Shared/Equilibre.lua`, `Shared/Equipement.lua` · **X32** · Rendre jouables les sept ensembles de `GearDesign.namedDesigns()` et leurs bonus à 2, 4 et 6 pièces. Reprendre les couples `design.form` / `design.material`, y compris pour les séries civiles et de métier de `Gear.visualPrototypes(Config)`, puis leur donner des sources, des usages et des stats. Vérifier aussi le rattachement de `lamellarplate` et des coupes civiles aux types d’armure envoyés par le serveur, ainsi que la puissance de base encore lue sur une arme brisée.
 
-- [ ] Claude → Codex · client · **gazette** (27/11, `Systemes/Gazette`) : au tableau du village, onglet « Gazette » : action `gazette` →
+- [x] Claude → Codex · client · **gazette** (27/11, `Systemes/Gazette`) : au tableau du village, onglet « Gazette » : action `gazette` →
       `kind = "gazette", articles = {{id, uid, auteur, titre, texte, jour, village}}` ; « Écrire » (titre ≤ 60, texte ≤ 600) →
       `gazette_ecrire { titre, texte }` (1 papier + 1 encre) ; sur ses articles « Retirer » → `gazette_retirer { id }`.
-- [ ] Claude → Codex · client · **contrats entre joueurs** (27/11, `Systemes/Contrats`, même stockage que /commande en chat) : un onglet
+- [x] Claude → Codex · client · **contrats entre joueurs** (27/11, `Systemes/Contrats`, même stockage que /commande en chat) : un onglet
       « Commandes » (tableau du village ou poste) : action `contrats` → message `kind = "contrats", contrats = {{id, name, uid, item, label, icon, n, prix, vname, reste}}` ;
       « Publier » (objet + quantité + prix) → `contrat_publier { item, n, prix }` ; « Livrer » → `contrat_livrer { id }` ;
       sur ses propres contrats « Retirer » → `contrat_retirer { id }`.
-- [ ] Claude → Codex · `ConstruireModeles` + `Catalogue` · **scierie** (27/11) : l'objet posable `sawmill` utilise pour l'instant le
+- [x] Claude → Codex · `ConstruireModeles` + `Catalogue` · **scierie** (27/11) : l'objet posable `sawmill` utilise pour l'instant le
       modèle « Etabli ». Il lui faut son modèle « Scierie » (lame circulaire, chevalet, tas de planches) ; changer `place` dans
       `Equilibre` (bloc « scierie ») ou me le signaler.
-- [ ] Claude → Codex · client · **chefs-d'œuvre** (27/11, `Systemes/Oeuvres`) : action `oeuvres` → message `kind = "oeuvres", oeuvres =
+- [x] Claude → Codex · client · **chefs-d'œuvre** (27/11, `Systemes/Oeuvres`) : action `oeuvres` → message `kind = "oeuvres", oeuvres =
       {{id, voie, name, skill, level, title, have, total, done, needs, got}}` ; bouton « Apporter » → action `oeuvre { id }` (au village).
       Un onglet de la fiche [P] ou du journal suffit.
-- [ ] Claude → Codex · client · **mariages** (27/11, `Systemes/Mariages`) : action `mariage_demande { target = UserId }` (menu du joueur
+- [x] Claude → Codex · client · **mariages** (27/11, `Systemes/Mariages`) : action `mariage_demande { target = UserId }` (menu du joueur
       ciblé, comme l'invitation de groupe), message reçu `kind = "mariage_demande", from` avec bouton « Oui » → action `mariage_oui`,
       et « Divorcer » dans la fiche (action `divorce`). Le profil porte `conjoint = { uid, name, day }`.
-- [ ] Claude → Codex · client · **records et succès secrets** (27/11, `Systemes/Social`) : action `records` (au village seulement) →
+- [x] Claude → Codex · client · **records et succès secrets** (27/11, `Systemes/Social`) : action `records` (au village seulement) →
       message `kind = "records", records = {{stat, label, name, value}}` : un « registre des records » à la taverne. Dans la fiche des
       succès, `secret = true` + nom « ??? » tant qu'il n'est pas obtenu.
-- [ ] Claude → Codex · client (touches, HUD, effets) · **magie** (27/11, `Systemes/Magie`) : action `sort { id, target? }`
+- [x] Claude → Codex · client (touches, HUD, effets) · **magie** (27/11, `Systemes/Magie`) : action `sort { id, target? }`
       (target = id d'ennemi visé, comme `hit`) ; action `sorts` → message `kind = "sorts", sorts = {{id, name, icon, ecole, cout, reste}}`.
       Il faut : une barre ou une roue de sorts (touches 1-5 ou maintien d'une touche), la recharge visible, un geste « sort »
       (`Util.geste`), et un effet par école (pyro, cryo, druide, aero, geo). Les grimoires se lisent comme les rênes (usage « grimoire »).
-- [ ] Claude → Codex · fenêtre « conseil » (`Interface.client`) · **royaumes** (27/11) : le message `kind = "conseil"` porte
+- [x] Claude → Codex · fenêtre « conseil » (`Conseil.client`) · **royaumes** (27/11) : le message `kind = "conseil"` porte
       `royaume = { nom, suzerain, vassaux = {noms}, choix = {{v, name, maire}}, tribut }`. Afficher le royaume et, pour le maire
       (`isMaire`), une liste « Prêter allégeance à… » qui envoie l'action `pol_allegeance { v = village, to = clé }` et un bouton
       « Rompre » (`pol_allegeance { v = village }`). Les villes de joueurs ont aussi ce conseil (borne au centre).
+- [ ] Codex → Claude · `Shared/Equilibre.lua` · **X41 scierie** · Passer `I.sawmill.place` de `Etabli` à `Scierie`. Vérifier le modèle des nouvelles poses et des scieries déjà enregistrées.
+- [ ] Codex → Claude · `Systemes/Joueurs.lua`, `Systemes/Mariages.lua` · **X41 conjoint** · Envoyer `conjoint = { name, day }` dans `Inventory` et renvoyer l’inventaire aux deux joueurs connectés après le mariage ou le divorce. Le champ manque dans `Joueurs.sync`, que lit la fiche [P].
+- [ ] Codex → Claude · `Systemes/Magie.lua` · **X41 effets de sort** · Répliquer aux clients concernés l’école, le lanceur et la position de l’ennemi effectivement retenu après validation. `Geste = "sort:n"` confirme le lancer local mais ne porte ni école ni cible pour les effets des autres joueurs et les cibles choisies par le serveur.
 - [ ] Claude → Codex · toutes les fenêtres client (`Interface`, `Hud`, `ComposantsInterface`, `WindowNav`…) · **chantier E « menus aboutis »**
       (demande du propriétaire, 25/11) : un seul cadre médiéval commun (bois sombre, coins en fer, bandeau de titre), fiche d'objet façon
       WoW partout (sac, boutique, coffre, hôtel des ventes), tri du sac + Maj+clic = tout transférer, écran d'accueil où la caméra survole

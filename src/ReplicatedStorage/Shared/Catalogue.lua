@@ -2591,6 +2591,42 @@ ARCH.presse = function(m, c)
 end
 
 
+-- Scierie posable et aperçu de la même station.
+K.MODELS.Scierie = { arch = "scierie", color = "BC" }
+
+function ARCH.scierie(m, c)
+	local timber = WOOD:Lerp(DARK, 0.22)
+	local steel = Color3.fromRGB(151, 160, 157)
+	for _, x in { -1.86, 1.86 } do
+		for _, side in { -1, 1 } do
+			lien(m, "Pied du chevalet", V(x, 0.14, side * 1.33), V(x, 2.45, side * 0.61), 0.36, 0.40, timber, Mat.Wood)
+		end
+		bois(m, "Traverse du chevalet", V(0.32, 0.23, 2.14), V(x, 0.78, 0), timber)
+		bois(m, "Selle du chevalet", V(0.46, 0.32, 2.12), V(x, 2.40, 0), timber)
+	end
+	bois(m, "Longeron bas", V(4.25, 0.32, 0.35), V(0, 0.80, 0), timber)
+	for i, z in { -0.94, -0.41, 0.41, 0.94 } do
+		piece(m, "Planche du banc de coupe", V(4.75, 0.24, 0.49), V(0, 2.63, z), teinte(c, i), Mat.WoodPlanks)
+	end
+	bois(m, "Guide de coupe", V(3.60, 0.25, 0.20), V(-0.35, 2.87, -0.56), timber)
+	local centre = V(-0.32, 2.70, 0)
+	local axe = CFrame.Angles(0, math.pi / 2, 0)
+	cyl(m, "Lame circulaire", 2.16, 0.10, centre, steel, Mat.Metal, axe, true)
+	cyl(m, "Moyeu de la lame", 0.48, 0.24, centre, IRON, Mat.Metal, axe, true)
+	for i = 1, 24 do
+		local angle = i * math.pi * 2 / 24
+		local pos = centre + V(math.cos(angle), math.sin(angle), 0) * 1.08
+		piece(m, "Dent de la lame", V(0.23, 0.23, 0.11), pos, steel, Mat.Metal, "coin", CFrame.Angles(0, 0, angle), true)
+	end
+	cyl(m, "Axe de transmission", 0.21, 1.76, centre + V(0, 0, 0.9), IRON, Mat.Metal, axe, true)
+	cyl(m, "Roue d’entraînement", 1.12, 0.23, centre + V(0, 0, 1.39), timber, Mat.Wood, axe, true)
+	for pile = 1, 5 do
+		local y = 0.14 + (pile - 1) * 0.18
+		piece(m, "Planche débitée", V(2.09 - pile * 0.07, 0.17, 0.57), V(1.12 + pile * 0.06, y, 1.50),
+			teinte(c, pile), Mat.WoodPlanks, nil, CFrame.Angles(0, math.rad(3 * (pile % 3 - 1)), 0))
+	end
+end
+
 -- Construit le modèle d'un objet du catalogue (nil si inconnu). Le pied du modèle est en y = 0.
 function K.build(name: string): Model?
 	local spec = K.MODELS[name]

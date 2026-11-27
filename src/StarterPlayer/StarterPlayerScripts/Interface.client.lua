@@ -135,6 +135,7 @@ end
 
 -- Panneau générique (titre + bouton fermer + zone défilante)
 local WindowNav = require(script.Parent:WaitForChild("WindowNav"))
+local Registres = require(script.Parent:WaitForChild("Registres"))
 local panels = {}
 local function makePanel(name: string, title: string, size: UDim2, onClose: (() -> ())?)
 	local f = new("Frame", {
@@ -438,6 +439,7 @@ local function game_()
 		-- journal des montures façon WoW (Montures.client, 26/11)
 		{ id = "montures", icon = "🏇", label = "Montures", key = Enum.KeyCode.N, fn = fireLocal("OuvrirMontures") },
 		{ id = "parametres", icon = "⚙️", label = "Paramètres", key = Enum.KeyCode.O, fn = fireLocal("OuvrirParametres") },
+		{ id = "sorts", icon = "✨", label = "Sorts", key = Enum.KeyCode.I, fn = act("sorts") },
 	}
 	local menuKeys = { [Enum.KeyCode.Tab] = menu[1].fn }
 	for _, entry in menu do
@@ -1535,6 +1537,7 @@ local function game_()
 	pclose.ZIndex = 6
 	pclose.Parent = bag
 	WindowNav.watch(bag, pclose, closeBag)
+	WindowNav.clavier(bag)
 	local editor = FicheApparence.mount(bag, pclose, C, uiScale, send)
 	local left = new("Frame", { Size = UDim2.new(0, 300, 1, -54), Position = UDim2.fromOffset(12, 42), BackgroundColor3 = Color3.fromRGB(32, 26, 20), Parent = bag, ZIndex = 6 },
 		{ corner(6), stroke(Color3.fromRGB(80, 64, 44), 1) })
@@ -1719,18 +1722,22 @@ local function game_()
 		end
 		-- droite : onglets
 		clear(tabsRow)
-		for _, t in { { "stats", "💪" }, { "skills", "🎓" }, { "col", "🏺" }, { "titles", "🏅" }, { "look", "✂️" } } do
+		for _, t in { { "stats", "💪" }, { "skills", "🎓" }, { "col", "🏺" }, { "titles", "🏅" }, { "look", "✂️" }, { "oeuvres", "🏛️" } } do
 			local b = button(t[2], charTab == t[1] and C.gold or C.panel2, function()
+				if t[1] == "oeuvres" then
+					Registres.ouvrir("oeuvres", bag)
+					return
+				end
 				charTab = t[1]
 				content.CanvasPosition = Vector2.zero
 				renderChar()
 			end)
-			b.Size = UDim2.fromOffset(56, 32)
+			b.Size = UDim2.new(1 / 6, -4, 0, 32)
 			b.TextSize = 18
 			b.ZIndex = 8
 			b.Parent = tabsRow
 			b.MouseEnter:Connect(function()
-				showTip({ { ({ stats = "Caractéristiques", skills = "Compétences", col = "Collections", titles = "Titres", look = "Apparence" })[t[1]], C.text, 14 } })
+				showTip({ { ({ stats = "Caractéristiques", skills = "Compétences", col = "Collections", titles = "Titres", look = "Apparence", oeuvres = "Chefs-d’œuvre" })[t[1]], C.text, 14 } })
 			end)
 			b.MouseLeave:Connect(hideTip)
 		end
@@ -1739,6 +1746,14 @@ local function game_()
 			return new("Frame", { Size = UDim2.new(1, -6, 0, h or 34), BackgroundColor3 = Color3.fromRGB(40, 33, 26), LayoutOrder = order, Parent = content, ZIndex = 8 }, { corner(4) })
 		end
 		if charTab == "stats" then
+			local conjoint = inv.conjoint
+			local mariage = row(-1, 66)
+			local epoux = conjoint and ("💍 " .. conjoint.name .. " · depuis le jour " .. conjoint.day) or "💍 Mariage"
+			label({ Text = epoux, TextSize = 13, Size = UDim2.new(1, -16, 0, 25),
+				Position = UDim2.fromOffset(8, 0), Parent = mariage, ZIndex = 9 })
+			local divorcer = button("Divorcer", C.red, function() Registres.divorce(conjoint) end)
+			divorcer.Size, divorcer.Position = UDim2.fromOffset(105, 32), UDim2.fromOffset(8, 28)
+			divorcer.TextSize, divorcer.ZIndex, divorcer.Parent = 13, 9, mariage
 			local specId, armor = player:GetAttribute("Specialisation"), player:GetAttribute("TypeArmure")
 			local spec = equipment.SPECS[#equipment.SPECS]
 			for _, candidate in equipment.SPECS do
@@ -1837,17 +1852,15 @@ local function game_()
 			for k, t in inv.titles or {} do
 				local r = row(k)
 				-- succès pas encore atteint : sa progression (ex. « 🔒 Loup de mer  57/200 »)
-				local prog = (not t.owned and t.need) and string.format("  %d/%d", t.got or 0, t.need) or ""
-				local b = new("TextButton", { Text = (t.owned and (t.on and "✅ " or "") or "🔒 ") .. t.name .. prog, Font = BOLD, TextSize = 13, TextColor3 = t.owned and C.text or C.dim,
-					BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), Parent = r, ZIndex = 9 })
+				local secret = t.secret and not t.owned
+				local prog = (not secret and not t.owned and t.need) and string.format("  %d/%d", t.got or 0, t.need) or ""
+				local b = Composants.bouton({ Text = (t.owned and (t.on and "✅ " or "") or "🔒 ") .. (secret and "???" or t.name) .. prog, Font = BOLD, TextSize = 13, TextColor3 = t.owned and C.text or C.dim,
+					BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), Parent = r, ZIndex = 9, Selectable = t.owned == true }, function()
+					if t.owned then send("set_title", { id = t.id }) end
+				end)
 				if t.on then
 					stroke(C.gold, 1.5).Parent = r
 				end
-				b.Activated:Connect(function()
-					if t.owned then
-						send("set_title", { id = t.id })
-					end
-				end)
 			end
 		end
 	end
@@ -3042,6 +3055,7 @@ local function game_()
 
 	-- ---------------------------------------------------------------- La poste (courrier + hôtel des ventes)
 	local postP, postBody = makePanel("Poste", "📬 Poste et hôtel des ventes", UDim2.fromOffset(700, 520))
+	WindowNav.clavier(postP)
 	local postTab = "mail"
 	local postData = nil
 	local selItem = nil
@@ -3052,12 +3066,17 @@ local function game_()
 		end
 		clear(postBody)
 		local tabs = new("Frame", { Size = UDim2.new(1, -8, 0, 38), BackgroundTransparency = 1, LayoutOrder = 0, Parent = postBody }, { new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 6) }) })
-		for _, t in { { "mail", "📬 Courrier (" .. #(d.mail or {}) .. ")" }, { "market", "🏷️ Hôtel des ventes" }, { "sell", "Vendre / envoyer" } } do
+		for _, t in { { "mail", "📬 Courrier (" .. #(d.mail or {}) .. ")" }, { "market", "🏷️ Hôtel des ventes" }, { "sell", "Vendre / envoyer" }, { "contrats", "Commandes" } } do
 			local b = button(t[2], postTab == t[1] and C.blue or C.panel2, function()
+				if t[1] == "contrats" then
+					Registres.ouvrir("contrats", postP)
+					return
+				end
 				postTab = t[1]
 				renderPost()
 			end)
-			b.Size = UDim2.fromOffset(200, 34)
+			b.Size = UDim2.new(0.25, -5, 0, 40)
+			b.TextSize = 13
 			b.Parent = tabs
 		end
 		if postTab == "mail" then
@@ -3325,14 +3344,14 @@ local function game_()
 			end)
 		end
 	end)
-	-- invite « Inviter [U] » au-dessus des autres joueurs
+	-- Menu social de l'autre joueur à portée [U].
 	local function groupPrompt(other: Player, char: Model)
 		local root = char:WaitForChild("HumanoidRootPart", 10)
 		if not root then
 			return
 		end
 		local pp = Instance.new("ProximityPrompt")
-		pp.ActionText = "Inviter dans le groupe"
+		pp.ActionText = "Interagir avec ce joueur"
 		pp.ObjectText = other.DisplayName
 		pp.KeyboardKeyCode = Enum.KeyCode.U
 		pp.GamepadKeyCode = Enum.KeyCode.DPadDown
@@ -3342,7 +3361,7 @@ local function game_()
 		pp.UIOffset = Vector2.new(0, 60)
 		pp.Parent = root
 		pp.Triggered:Connect(function()
-			send("group_invite", { target = other.UserId })
+			Registres.joueur(other)
 		end)
 	end
 	local function watchG(other: Player)
@@ -3840,7 +3859,7 @@ local function game_()
 		end
 	end)
 	local rightStart: Vector2? = nil
-	local function selectAt(pos: Vector2)
+	local function modelAt(pos: Vector2): Model?
 		local cam = workspace.CurrentCamera
 		if not cam then
 			return
@@ -3850,9 +3869,21 @@ local function game_()
 		params.FilterType = Enum.RaycastFilterType.Exclude
 		params.FilterDescendantsInstances = { player.Character }
 		local result = workspace:Raycast(ray.Origin, ray.Direction * 150, params)
-		setTarget(result and targetOf(result.Instance) or nil)
+		return result and targetOf(result.Instance) or nil
+	end
+	local function selectAt(pos: Vector2)
+		setTarget(modelAt(pos))
 	end
 	cibleApi.selectAt = selectAt
+	cibleApi.pourSort = function()
+		if target and target.Parent and target:GetAttribute("EnemyId") then return target end
+		local input = UserInputService:GetLastInputType()
+		local cam = workspace.CurrentCamera
+		if cam and (input == Enum.UserInputType.Touch or input.Name:match("^Gamepad")) then
+			return modelAt(cam.ViewportSize / 2)
+		end
+		return nil
+	end
 	UserInputService.InputBegan:Connect(function(input, processed)
 		if processed or building or WindowNav.isOpen() then
 			return
@@ -4222,15 +4253,26 @@ local function game_()
 		end
 	end
 
+	local magie = require(script.Parent:WaitForChild("MagieClient")).mount(player, gui, uiScale, Remotes, cibleApi.pourSort, function()
+		return not building and not panels.CharteVille.Visible
+	end)
+	menuActions.sorts = magie.toggle
+	Remotes:WaitForChild("Inventory").OnClientEvent:Connect(magie.inventaire)
+
 	UserInputService.InputBegan:Connect(function(input, processed)
-		if processed or panels.CharteVille.Visible then
+		if processed or panels.CharteVille.Visible or UserInputService:GetFocusedTextBox() then
 			return
 		end
 		local k = input.KeyCode
 		local HOTKEYS = { [Enum.KeyCode.One] = 1, [Enum.KeyCode.Two] = 2, [Enum.KeyCode.Three] = 3, [Enum.KeyCode.Four] = 4, [Enum.KeyCode.Five] = 5,
 			[Enum.KeyCode.Six] = 6, [Enum.KeyCode.Seven] = 7, [Enum.KeyCode.Eight] = 8, [Enum.KeyCode.Nine] = 9 }
-		if HOTKEYS[k] then
-			selectSlot(HOTKEYS[k])
+		local index = HOTKEYS[k]
+		if index and index <= 5 and UserInputService:IsKeyDown(Enum.KeyCode.RightShift) then
+			magie.raccourci(index)
+		elseif index then
+			selectSlot(index)
+		elseif k == Enum.KeyCode.Tab and WindowNav.clavierActif() then
+			return
 		elseif menuKeys[k] and not UserInputService:GetFocusedTextBox() then
 			menuKeys[k]()
 		elseif k == Enum.KeyCode.V then

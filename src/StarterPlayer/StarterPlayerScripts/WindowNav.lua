@@ -39,6 +39,87 @@ function WindowNav.isOpen()
 	return #open > 0
 end
 
+function WindowNav.isTop(panel)
+	local entry = topWindow()
+	return entry ~= nil and entry.panel == panel
+end
+
+function WindowNav.clavier(panel)
+	panel:SetAttribute("NavigationClavier", true)
+end
+
+function WindowNav.clavierActif()
+	local entry = topWindow()
+	return entry ~= nil and entry.panel:GetAttribute("NavigationClavier") == true
+end
+
+local function controls(panel)
+	local list = {}
+	for _, item in panel:GetDescendants() do
+		if (item:IsA("TextBox") or Composants.actionBouton(item)) and item.Selectable and item.Interactable then
+			local cursor = item
+			while cursor ~= panel and cursor.Visible do
+				cursor = cursor.Parent
+			end
+			if cursor == panel then table.insert(list, item) end
+		end
+	end
+	table.sort(list, function(a, b)
+		local pa, pb = a.AbsolutePosition, b.AbsolutePosition
+		return pa.Y < pb.Y or (pa.Y == pb.Y and pa.X < pb.X)
+	end)
+	return list
+end
+
+local function keyboard(_, state, input)
+	local entry = topWindow()
+	if not entry or not entry.panel:GetAttribute("NavigationClavier") then return Enum.ContextActionResult.Pass end
+	local panel = entry.panel
+	local focused = UserInputService:GetFocusedTextBox()
+	if focused and not focused:IsDescendantOf(panel) then return Enum.ContextActionResult.Pass end
+	local tab = input.KeyCode == Enum.KeyCode.Tab
+	local selected = GuiService.SelectedObject
+	if not tab and (focused or not selected or not selected:IsDescendantOf(panel)) then
+		return Enum.ContextActionResult.Pass
+	end
+	if state == Enum.UserInputState.Begin then
+		if tab then
+			local items = controls(panel)
+			local shift = UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or UserInputService:IsKeyDown(Enum.KeyCode.RightShift)
+			local index = table.find(items, focused or selected) or (shift and 1 or 0)
+			if #items > 0 then
+				if focused then focused:ReleaseFocus() end
+				local nextItem = items[(index - 1 + (shift and -1 or 1)) % #items + 1]
+				GuiService.SelectedObject = nextItem
+				local scroll = nextItem:FindFirstAncestorWhichIsA("ScrollingFrame")
+				if scroll then
+					local y = nextItem.AbsolutePosition.Y - scroll.AbsolutePosition.Y
+					local height = nextItem.AbsoluteSize.Y
+					local delta = math.min(y, 0) + math.max(y + height - scroll.AbsoluteWindowSize.Y, 0)
+					scroll.CanvasPosition = Vector2.new(scroll.CanvasPosition.X, math.max(0, scroll.CanvasPosition.Y + delta))
+				end
+			end
+		elseif selected:IsA("TextBox") then
+			selected:CaptureFocus()
+		elseif selected.Interactable then
+			local action = Composants.actionBouton(selected)
+			if action then action() end
+		end
+	end
+	return Enum.ContextActionResult.Sink
+end
+
+local function manetteTexte(_, state)
+	local entry = topWindow()
+	local selected = GuiService.SelectedObject
+	if not entry or not WindowNav.clavierActif() or not selected or not selected:IsA("TextBox")
+		or not selected:IsDescendantOf(entry.panel) or UserInputService:GetFocusedTextBox() then
+		return Enum.ContextActionResult.Pass
+	end
+	if state == Enum.UserInputState.Begin then selected:CaptureFocus() end
+	return Enum.ContextActionResult.Sink
+end
+
 local function focusTop()
 	local top = topWindow()
 	if top and usesGamepad() then
@@ -108,6 +189,10 @@ end
 
 function WindowNav.bindMenu(menu, toggle, close)
 	UserInputService.LastInputTypeChanged:Connect(focusTop)
+	ContextActionService:BindActionAtPriority("WildAcresNavigationClavier", keyboard, false,
+		Enum.ContextActionPriority.High.Value, Enum.KeyCode.Tab, Enum.KeyCode.Return, Enum.KeyCode.KeypadEnter)
+	ContextActionService:BindActionAtPriority("WildAcresSaisieManette", manetteTexte, false,
+		Enum.ContextActionPriority.High.Value, Enum.KeyCode.ButtonA)
 	ContextActionService:BindActionAtPriority("WildAcresMenu", function(_, state)
 		if state == Enum.UserInputState.Begin then toggle() end
 		return Enum.ContextActionResult.Sink

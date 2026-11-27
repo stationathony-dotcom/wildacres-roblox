@@ -52,13 +52,21 @@ function Composants.titre(props)
 	return Composants.creer("TextLabel", props)
 end
 
+local actions = setmetatable({}, { __mode = "k" })
+
+function Composants.actionBouton(bouton)
+	return actions[bouton]
+end
+
 function Composants.bouton(props, action, children)
 	props.Font = props.Font or Enum.Font.GothamBold
 	props.TextColor3 = props.TextColor3 or Color3.fromRGB(250, 241, 222)
 	props.AutoButtonColor = true
 	local bouton = Composants.creer("TextButton", props, children)
 	if action then
+		actions[bouton] = action
 		bouton.Activated:Connect(action)
+		bouton.Destroying:Once(function() actions[bouton] = nil end)
 	end
 	return bouton
 end
