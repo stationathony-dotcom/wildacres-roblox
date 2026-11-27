@@ -31,7 +31,7 @@ de `src/`. Règles d'`AGENTS.md` § 1 appliquées : **pas de saisons ni de clima
    secrètes, cartes marines, ports, routes commerciales, créatures marines, voyage vers d'autres mondes.
 6. **Royaumes et diplomatie** (27/11 : 1er pas — une ville de joueurs a son conseil : maire élu, taxe des étals, trésor, projets ; allégeance entre conseils, tribut de 10 %, royaume au sommet de la chaîne — fenêtre à faire par Codex) : de la ville au royaume, élections, maires et rois, lois locales, impôts, trésorerie,
    alliances, traités, ambassades, frontières (au-dessus de `Villes` et `Politique`).
-7. **Écosystème vivant** (27/11 : forêts qui repoussent — souche 12 j, déraciné 24 j, jamais près d'une construction) : reproduction et migration des troupeaux, forêts qui repoussent et graines qui se dispersent,
+7. **Écosystème vivant** (27/11 : forêts qui repoussent — souche 12 j, déraciné 24 j, jamais près d'une construction ; sécheresse après 4 jours sans pluie — baies qui ne repoussent plus, poissons qui mordent moins, pluie plus probable) : reproduction et migration des troupeaux, forêts qui repoussent et graines qui se dispersent,
    sécheresses et inondations ponctuelles (météo, pas saisons), floraison, créatures nocturnes, régénération des ressources.
 8. **PNJ évolutifs** (27/11 : village qui prospère / fleurit / décline selon l'or échangé au comptoir, −5 % à +10 %, les habitants en parlent) : domicile, horaires, inventaire, besoins ; village qui prospère ou décline selon le commerce des joueurs.
 9. **Automatisation étendue** (27/11 : scierie — bois le soir, 3 planches par bûche le lendemain, 4 avec une roue à eau) : engrenages, axes, roue à aube, moulin à vent, poulies, treuils, presses, scierie, meules,

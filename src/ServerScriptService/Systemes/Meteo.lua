@@ -58,7 +58,7 @@ end
 
 -- Délai avant que ça morde (Fishing) : la pluie réveille les poissons
 function Meteo.biteMult(): number
-	return Meteo.isWet() and 0.65 or 1
+	return Meteo.isWet() and 0.65 or (Meteo.drought() and 1.4 or 1)
 end
 
 -- Les cultures poussent tous les jours (plus d'hiver)
@@ -76,6 +76,11 @@ end
 local function roll()
 	local m = state()
 	local w = WEIGHTS
+	if (m.dry or 0) >= Meteo.DRY_DAYS then
+		w = table.clone(WEIGHTS)
+		w.pluie *= 2
+		w.orage *= 1.5
+	end
 	local total = 0
 	for _, v in w do
 		total += v
@@ -219,6 +224,10 @@ function Meteo.step(dt: number)
 	if now >= m.untilMin then
 		roll()
 	end
+	if Meteo.isWet() then
+		m.rainedToday = true
+		m.dry = 0
+	end
 	if Meteo.isWet() and now - (m.lastWater or 0) >= WATER_EVERY then
 		m.lastWater = now
 		waterAll()
@@ -236,7 +245,23 @@ function Meteo.step(dt: number)
 	end
 end
 
+-- SÉCHERESSE (27/11, MANQUES-MMO n° 7, météo et pas saisons) : DRY_DAYS jours de suite sans pluie ni orage
+-- = sécheresse, jusqu'à la prochaine pluie. Effets : les baies ne se regarnissent plus (Props), les poissons
+-- mordent moins (biteMult) ; plus de chances de pluie le temps qu'elle dure (la nature se rattrape).
+Meteo.DRY_DAYS = 4
+function Meteo.drought(): boolean
+	return G.world ~= nil and (state().dry or 0) >= Meteo.DRY_DAYS
+end
+
 function Meteo.newDay()
+	local m = state()
+	if m.rainedToday then
+		m.dry = 0
+	else
+		m.dry = (m.dry or 0) + 1
+	end
+	m.rainedToday = false
+	workspace:SetAttribute("Secheresse", Meteo.drought() or nil)
 	publish()
 end
 

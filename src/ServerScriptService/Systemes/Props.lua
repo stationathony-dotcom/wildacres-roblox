@@ -296,7 +296,7 @@ function Props.onRegionLoad(reg)
 				s.stump = nil
 			end
 		end
-		if s.empty and G.world.day >= (s.day or 0) + BERRY_REGROW then
+		if s.empty and G.world.day >= (s.day or 0) + BERRY_REGROW and not (G.Meteo and rawget(G.Meteo, "drought") and G.Meteo.drought()) then
 			s.empty = nil
 		end
 	end
@@ -926,7 +926,7 @@ function Props.newDay()
 					entry.model:Destroy()
 					build(reg, entry.data, parent)
 				end
-			elseif s.empty and G.world.day >= (s.day or 0) + BERRY_REGROW then
+			elseif s.empty and G.world.day >= (s.day or 0) + BERRY_REGROW and not (G.Meteo and rawget(G.Meteo, "drought") and G.Meteo.drought()) then
 				s.empty = nil
 				if entry then
 					for _, d in entry.model:GetDescendants() do
