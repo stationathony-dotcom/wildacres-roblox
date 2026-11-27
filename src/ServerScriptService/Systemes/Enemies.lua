@@ -1049,6 +1049,9 @@ local function dieInner(en, player: Player)
 		end
 	end
 	G.Social.collect(player, "creatures", en.kind)
+	if en.k and en.k.boss then
+		G.Social.collect(player, "boss", en.kind) -- collection des boss (titres « Pourfendeur », « Mémoire des légendes »)
+	end
 	if G.Activites and rawget(G.Activites, "note") then
 		G.Activites.note(player, "chasse") -- concours de chasse
 	end

@@ -38,6 +38,19 @@ local TITLES = {
 	{ id = "explorateur", name = "Explorateur", test = function(p)
 		return (p.stats.discovered or 0) >= 1
 	end },
+	-- 27/11 : boss différents vaincus, montures réunies (Montures.learn)
+	{ id = "pourfendeur", name = "Pourfendeur", test = function(p)
+		return Social.count(p, "boss") >= 5
+	end },
+	{ id = "memoire_legendes", name = "Mémoire des légendes", test = function(p)
+		return Social.count(p, "boss") >= 15
+	end },
+	{ id = "ecuyer", name = "Écuyer", test = function(p)
+		return Social.count(p, "montures") >= 5
+	end },
+	{ id = "grand_ecuyer", name = "Grand écuyer", test = function(p)
+		return Social.count(p, "montures") >= 15
+	end },
 	-- collections du 19/11 : plantes sauvages, antiquités étudiées, recettes connues
 	{ id = "herboriste", name = "Herboriste", test = function(p)
 		return Social.count(p, "herbs") >= 8
