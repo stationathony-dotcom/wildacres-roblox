@@ -177,6 +177,37 @@ function Villes.onRegionLoad(reg)
 		if G.Metiers and rawget(G.Metiers, "spawnTown") then
 			pcall(G.Metiers.spawnTown, reg, t.id, t.v, Villes.beds(t.v))
 		end
+		Villes.council(reg, t.id, t.v)
+	end
+end
+
+-- De la ville au royaume, 1er pas (27/11, MANQUES-MMO n° 6) : une ville de joueurs a le même conseil que
+-- les villages (Systemes/Politique) — maire élu par les habitants, taxe des étals, trésor, projets.
+-- Le conseil se tient à la borne de la charte, au centre de la ville.
+function Villes.council(reg, id: string, v)
+	if not (G.Politique and rawget(G.Politique, "register")) then
+		return
+	end
+	local key = "ville_" .. id
+	G.Politique.register(key, v.name, Vector3.new(v.x, 0, v.z))
+	local pv = G.Politique.get(key)
+	if pv then
+		pv.region = reg.key -- projets (foire, réparations) : la région de la ville
+	end
+	local name = "Conseil_" .. id
+	if not reg.folder or reg.folder:FindFirstChild(name) then
+		return
+	end
+	local borne = G.Util.clone("Panneau")
+	if not borne then
+		return
+	end
+	borne.Name = name
+	G.World.place(borne, v.x + 3, G.Util.groundY(v.x + 3, v.z), v.z, 0, reg.folder)
+	local anchor = borne.PrimaryPart or borne:FindFirstChildWhichIsA("BasePart", true)
+	if anchor then
+		local pr = G.Util.prompt(anchor, "conseil", "Conseil de la ville", v.name, { dist = 12 })
+		pr:SetAttribute("Village", key)
 	end
 end
 

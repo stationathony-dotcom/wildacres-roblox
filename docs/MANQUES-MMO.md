@@ -29,7 +29,7 @@ de `src/`. Règles d'`AGENTS.md` § 1 appliquées : **pas de saisons ni de clima
    (soutien), runique (enchantements), illusion ; apprise par grimoires, maîtres PNJ et talents. **Attend l'accord du propriétaire.**
 5. **Mer complète** : voiliers, navires marchands et d'exploration, construction de bateaux, équipages, épaves, îles
    secrètes, cartes marines, ports, routes commerciales, créatures marines, voyage vers d'autres mondes.
-6. **Royaumes et diplomatie** : de la ville au royaume, élections, maires et rois, lois locales, impôts, trésorerie,
+6. **Royaumes et diplomatie** (27/11 : 1er pas — une ville de joueurs a son conseil : maire élu, taxe des étals, trésor, projets) : de la ville au royaume, élections, maires et rois, lois locales, impôts, trésorerie,
    alliances, traités, ambassades, frontières (au-dessus de `Villes` et `Politique`).
 7. **Écosystème vivant** (27/11 : forêts qui repoussent — souche 12 j, déraciné 24 j, jamais près d'une construction) : reproduction et migration des troupeaux, forêts qui repoussent et graines qui se dispersent,
    sécheresses et inondations ponctuelles (météo, pas saisons), floraison, créatures nocturnes, régénération des ressources.

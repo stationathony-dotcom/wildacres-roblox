@@ -59,6 +59,11 @@ function Politique.register(key: string, name: string, center: Vector3)
 	v.name = name ~= "" and name or v.name
 end
 
+-- données d'un village ou d'une ville de joueurs (Villes.council)
+function Politique.get(key: string)
+	return V(key)
+end
+
 local function centerOf(v): Vector3
 	return Vector3.new(v.cx or 0, 0, v.cz or 0)
 end
@@ -254,10 +259,11 @@ function Politique.init(g)
 		end
 		v.tresor -= p.cost
 		v.projets = v.projets or {}
+		local regKey = v.region or key -- ville de joueurs (Villes.council) : sa région ; village : la clé est la région
 		if data.id == "foire" then
-			G.Evenements.fair = { region = key, day = G.world.day, name = v.name }
+			G.Evenements.fair = { region = regKey, day = G.world.day, name = v.name }
 		elseif data.id == "reparer" then
-			Politique.repairNow(key)
+			Politique.repairNow(regKey)
 		elseif data.id == "ronde" then
 			v.projets.ronde = G.world.day + 7
 		end
