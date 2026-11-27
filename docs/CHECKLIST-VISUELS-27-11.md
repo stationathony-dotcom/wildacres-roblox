@@ -3,14 +3,16 @@
 Captures (hors git) : `captures/2026-11-27/catalogue/modeles_01..05.jpg` (modèles 1 à 100 sur 136 ; 101-136 à faire).
 Astuce : capturer à y = 3000 (vitrine `_G.Vitrine`) — au ras du terrain, Studio rend un écran blanc (brouillard).
 
+- [x] Cochon : pattes qui ne touchaient pas le corps (sphère) → refait en blocs par Claude (27/11)
+
 ## Faibles (à refaire niveau planche — lot Codex)
-- [ ] Chevre : ressemble à un bonhomme de neige (boules blanches)
+- [x] Chevre : refaite en blocs par Claude (27/11)
 - [ ] Feu_Follet : simple disque plat cyan
 - [ ] Arbres (Chene, Bouleau, Saule, Sapin, Cerisier) : 2-3 blocs, trop simples face aux planches
 - [ ] Caillou, Branche : minuscules et plats
 - [ ] Ombre, Cambrioleur, PNJ_Base : silhouettes noires sans détail
 - [ ] Myconide / Myconide_Ancien : gros chapeau plat, pas de visage
-- [ ] Oie : pile de boules blanches
+- [x] Oie : refaite en blocs par Claude (27/11)
 - [ ] Ours, Mouton, Loup, Lapin : corps en un bloc, peu de détails
 - [ ] Slime, Slime_Bleu : simples cubes lisses (pas d'yeux, pas de reflets)
 - [ ] Toit_Chaume : une boîte unie, pas de chaume
