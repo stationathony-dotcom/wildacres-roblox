@@ -91,7 +91,7 @@ local forced
 if okD then
 	Design.formOf = function(w) return forced or realFormOf(w) end
 end
-local function waitCd(s) task.wait(s or 0.9) end
+local function waitCd(s) task.wait(s or 1.5) end -- > Armes.COMBO_FENETRE (1,2 s) : sinon un coup « isolé » finit un enchaînement
 
 -- 1. poings : un seul ennemi à 4 studs, touché
 reset(); weapon(nil); forced = nil
