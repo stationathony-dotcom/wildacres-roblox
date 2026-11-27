@@ -21,7 +21,7 @@ de `src/`. Règles d'`AGENTS.md` § 1 appliquées : **pas de saisons ni de clima
 ## Manques réels (ordre proposé)
 1. **Interconnexion des systèmes** (idée centrale du document) : la boucle explorateur → marchand → forgeron → aventurier →
    éleveur → navigateur. Concrètement : minerais rares propres à chaque île, commandes entre joueurs, œufs rares en donjon.
-2. **Quêtes dynamiques** selon l'état du monde (village sans nourriture → livraison de blé, pont cassé → reconstruction,
+2. **Quêtes dynamiques** (27/11 : 1er pas fait — village en pénurie → sa 1re offre demande l'objet manquant, mieux payée) selon l'état du monde (village sans nourriture → livraison de blé, pont cassé → reconstruction,
    pénurie de fer → commande, animal disparu → recherche, escorte de marchand) + **contrats publiés par les joueurs**.
 3. **Donjons poussés** : plusieurs niveaux de difficulté, énigmes et passages secrets, butin exclusif, raids de groupe,
    boss mondiaux et maritimes (pas de boss saisonniers : règle).

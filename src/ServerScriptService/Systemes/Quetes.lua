@@ -227,6 +227,19 @@ local function makeOffer(v, period: number, i: number)
 	local theme = G.wg and G.wg.theme
 	local roll = r:NextNumber()
 	local q = { v = v.key, vname = v.name }
+	-- quête selon l'état du monde (27/11, MANQUES-MMO n° 2) : un village en pénurie (Shop.shortage) le dit sur
+	-- son tableau ; sa 1re offre demande l'objet qui manque, mieux payée. Tirage à part : les autres offres
+	-- et les autres villages ne changent pas.
+	local short = i == 1 and G.Shop and rawget(G.Shop, "shortage") and G.Shop.shortage(v.key)
+	if short and Config.ITEMS[short] then
+		local rs = Random.new(G.WG.hash(G.world.seed, "quete_penurie", v.key, period))
+		local info = Config.ITEMS[short]
+		q.kind, q.key, q.need = "apporter", short, rs:NextInteger(6, 14)
+		q.title = "Pénurie à " .. v.name .. " : " .. string.lower(info.name)
+		q.gold = reward(rs, 10 + (info.price or 4) * q.need * 0.9)
+		q.penurie = true
+		return q
+	end
 	if r:NextNumber() < (tonumber(G.QuetesLieux.SHARE) or 0) and G.QuetesLieux.offer(v, r, q, reward, villages) then
 		-- quête « à un lieu » : remplie par Systemes/QuetesLieux
 	elseif roll < 0.24 then
