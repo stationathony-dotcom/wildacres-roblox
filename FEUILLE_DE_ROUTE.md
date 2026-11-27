@@ -116,6 +116,7 @@ banque agrandissable sans fin, champs sans limite.
 - [x] Corrigé : la salutation des PNJ plantait (avis par joueur lu comme l'ancien avis commun)
 - [x] **Ponts à revoir** : le tablier manquait (planches orientées dans le mauvais sens) ; culées et bornes de pierre ajoutées
 - [x] **Monde fini** : arbres, rochers, filons, cactus ne repoussent plus tout seuls (on nettoie une zone pour de bon) ; seuls les buissons à baies se regarnissent
+  - [x] 27/11 (accord du propriétaire) : les **forêts repoussent** (souche 12 j, arbre déraciné 24 j) SAUF sur une parcelle ou près d'une construction — à voir en Play
 - [x] **Reboiser** : abattre un arbre donne souvent sa graine (gland, pomme de pin, graine de bouleau, noyau de cerise, bouture de saule) ; on la plante devant soi (hors villages, pas collée à un arbre ou un rocher) ; pousse 3 jours puis vrai arbre (à couper à son tour)
 - [x] Villages : taverne, forge, chapelle, marché ajoutés autour de la place (destructibles, portes fonctionnelles)
 
@@ -196,3 +197,12 @@ ce qu'on VOIT.
   ambiance (brume selon l'heure, lanternes la nuit)
 
 - Restes des listes, volontairement laissés : jeux de dés (règles Roblox sur les jeux de hasard ; l'objet est devenu des osselets), tutoriel (principe « sans indication »), guerres/alliances déclarées (retirées le 17/11), saisons (remplacées par les biomes)
+
+## 27/11 — systèmes serveur (à voir en Play ; fenêtres = lot Codex X41)
+- [x] Six boss des planches + Baudroie qui surgit de l'eau, serpents marins des îlots — à voir en Play
+- [x] Magie : 5 sorts en grimoires — à voir en Play (barre de sorts : X41)
+- [x] Royaumes : conseil des villes de joueurs, allégeance et tribut — à voir en Play
+- [x] Prospérité des villages, pénurie au tableau, rumeurs de boss — à voir en Play
+- [x] Records du monde, succès secrets, collections boss/montures/reliques, mariages, gazette — à voir en Play
+- [x] Chefs-d'œuvre de fin de jeu, filons rares des îlots, œufs de monture, reliques des grottes — à voir en Play
+- [x] Scierie, presse, puits, poulailler, portes et rangements posables, écurie posée, sécheresse — à voir en Play
