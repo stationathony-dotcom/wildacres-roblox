@@ -65,8 +65,8 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] Claude → Codex · client · **gazette** (27/11, `Systemes/Gazette`) : au tableau du village, onglet « Gazette » : action `gazette` →
       `kind = "gazette", articles = {{id, uid, auteur, titre, texte, jour, village}}` ; « Écrire » (titre ≤ 60, texte ≤ 600) →
       `gazette_ecrire { titre, texte }` (1 papier + 1 encre) ; sur ses articles « Retirer » → `gazette_retirer { id }`.
-- [ ] Claude → Codex · client · **contrats entre joueurs** (27/11, `Systemes/Contrats`) : au tableau des quêtes d'un village, un onglet
-      « Contrats » : action `contrats` → message `kind = "contrats", contrats = {{id, name, uid, item, label, icon, n, prix, vname, reste}}` ;
+- [ ] Claude → Codex · client · **contrats entre joueurs** (27/11, `Systemes/Contrats`, même stockage que /commande en chat) : un onglet
+      « Commandes » (tableau du village ou poste) : action `contrats` → message `kind = "contrats", contrats = {{id, name, uid, item, label, icon, n, prix, vname, reste}}` ;
       « Publier » (objet + quantité + prix) → `contrat_publier { item, n, prix }` ; « Livrer » → `contrat_livrer { id }` ;
       sur ses propres contrats « Retirer » → `contrat_retirer { id }`.
 - [ ] Claude → Codex · `ConstruireModeles` + `Catalogue` · **scierie** (27/11) : l'objet posable `sawmill` utilise pour l'instant le

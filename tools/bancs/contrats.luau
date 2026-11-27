@@ -31,9 +31,6 @@ local G = {
 K.init(G)
 check("sans or : refus", not K.publish(A, "iron_ingot", 10, 100))
 bags[1].gold = 150
-inVillage = false
-check("hors du village : refus", not K.publish(A, "iron_ingot", 10, 100))
-inVillage = true
 check("objet inconnu : refus", not K.publish(A, "pas_un_objet", 10, 100))
 check("contrat publié, or mis de côté", K.publish(A, "iron_ingot", 10, 100) and bags[1].gold == 50)
 local id = K.list()[1].id
@@ -46,7 +43,8 @@ check("marchandise envoyée par la poste à Alix", #mail == 1 and mail[1].uid ==
 check("impossible de livrer deux fois", not K.deliver(B, id))
 K.publish(A, "wood", 5, 20)
 local id2 = K.list()[1].id
-check("retiré : or rendu", K.withdraw(A, id2) and bags[1].gold == 50)
+check("retiré : or rendu par la poste", K.withdraw(A, id2) and mail[#mail].parcel.gold == 20)
+check("stockage partagé avec /commandes (G.world.extra.commandes)", G.world.extra.commandes ~= nil)
 K.publish(A, "stone", 5, 30)
 G.world.day = 3 + K.DAYS
 K.newDay()

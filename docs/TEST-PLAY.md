@@ -124,7 +124,7 @@ La téléportation ne marche pas dans Studio : il faut la version publiée.
 1. [ ] Boss : attendre un boss errant (ou `DbgAppel "Evenements.startBoss"`) — Coffre-mimique, Mammouth de givre, Griffon d'orage,
        Veuve des cavernes, Crocodile des marais ; au bord de l'eau la **Baudroie** surgit avec des serpents marins (qui ne montent pas à terre).
 2. [ ] Autour d'un îlot (en barque) : deux serpents marins ; le **filon rare** de l'îlot se mine à la pioche de fer, puis « épuisé 5 jours ».
-3. [ ] Grimoire : `/wa donner grimoire_boule_feu` → l'utiliser → sort appris ; puis l'action `sort { id = "boule_feu" }` sur une bête
+3. [ ] Grimoire : `/wa donner <toi> grimoire_boule_feu 1` → l'utiliser → sort appris ; puis l'action `sort { id = "boule_feu" }` sur une bête
        (endurance qui baisse, recharge 4 s).
 4. [ ] Posables enfin utiles : poser une **presse** (pommes + bouteille → cidre le lendemain), un **puits** (remplit les seaux vides),
        un **poulailler** (blé → œufs le lendemain), une **scierie** (bois → planches), une **porte de grange** (s'ouvre),
@@ -133,7 +133,7 @@ La téléportation ne marche pas dans Studio : il faut la version publiée.
 6. [ ] Village : vendre beaucoup au même comptoir → un habitant dit que « les affaires marchent bien » (prospérité) ;
        une pénurie apparaît en 1re offre du tableau.
 7. [ ] Ville de joueurs (`/fonder`) : une borne « Conseil de la ville » au centre ; on peut s'y présenter et voter.
-8. [ ] Œuf : `/wa donner oeuf_dragonnet` → l'utiliser → « éclora dans 3 jours » → passer 3 jours → le Dragonnet est dans le journal [N].
+8. [ ] Œuf : `/wa donner <toi> oeuf_dragonnet 1` → l'utiliser → « éclora dans 3 jours » → passer 3 jours → le Dragonnet est dans le journal [N].
 9. [ ] Sécheresse : 4 jours sans pluie (`DbgAppel "Meteo.force", "clair", 6000`) → les buissons à baies ne se regarnissent plus.
 
 ## Ce qu'il faut aussi noter (même si « ça marche »)
