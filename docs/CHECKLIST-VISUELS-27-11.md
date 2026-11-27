@@ -12,6 +12,10 @@ Astuce : capturer à y = 3000 (vitrine `_G.Vitrine`) — au ras du terrain, Stud
 - [ ] Myconide / Myconide_Ancien : gros chapeau plat, pas de visage
 - [ ] Oie : pile de boules blanches
 - [ ] Ours, Mouton, Loup, Lapin : corps en un bloc, peu de détails
+- [ ] Slime, Slime_Bleu : simples cubes lisses (pas d'yeux, pas de reflets)
+- [ ] Toit_Chaume : une boîte unie, pas de chaume
+- [ ] Vache, Yeti : blocs blancs presque sans détail
+- [ ] Serpent_Marin : silhouette fine sans nageoires lisibles
 
 ## Bons
-Coffres, Filons, Etal, Etabli, Enclume, Fontaine, Moulins, Maisons, Murs, Plancher, Palissade, Metier_Tisser, Champignon, Cactus.
+Coffres, Filons, Etal, Etabli, Enclume, Fontaine, Moulins, Maisons, Murs, Plancher, Palissade, Metier_Tisser, Champignon, Cactus, Puits, Ruche, Pot_Fleurs, Tonneaux, Tableau_Quetes, Tapis, Tronc_Couche, Tour_Guet, Poule, Scorpion, soldats.
