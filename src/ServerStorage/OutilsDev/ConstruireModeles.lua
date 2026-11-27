@@ -295,7 +295,7 @@ function M.biomes()
 		P(m, "Tronc", Vector3.new(1.8, 8, 1.8), Vector3.new(0, 4, 0), brun, Mat.Wood)
 		for i = 0, 3 do
 			local a = i * math.pi / 2 + 0.3
-			P(m, "Racine", Vector3.new(1, 0.6, 1.6), Vector3.new(math.cos(a) * 1.2, 0.3, math.sin(a) * 1.2), brunF, Mat.Wood,
+			P(m, "Racine", Vector3.new(1, 0.6, 1.6), Vector3.new(math.cos(a) * 1.2, 0.48, math.sin(a) * 1.2), brunF, Mat.Wood,
 				{ collide = false, rot = CFrame.Angles(0, -a, math.rad(-14)) })
 		end
 		P(m, "Branche", Vector3.new(0.8, 3.4, 0.8), Vector3.new(1.2, 8.4, 0), brun, Mat.Wood, { collide = false, rot = CFrame.Angles(0, 0, math.rad(-40)) })
