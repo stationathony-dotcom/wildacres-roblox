@@ -9,6 +9,11 @@ local Ilots = {}
 local G, Config
 
 local LOOT_DAYS = 7
+-- filon rare propre à chaque îlot (27/11, MANQUES-MMO n° 1 « minerais rares propres à chaque île ») :
+-- une raison de prendre la mer et de commercer ; pioche de fer au moins, se regarnit en VEIN_DAYS jours
+Ilots.VEINS = { ilot1 = { "meteorite", 1, 2 }, ilot2 = { "ancient_crystal", 1, 3 }, ilot3 = { "pearl", 2, 4 }, ilot4 = { "amber", 2, 4 }, ilot5 = { "mineral_heart", 1, 1 } }
+local VEIN_DAYS = 5
+local VEIN_TIER = 3
 local list = nil -- { { id, x, z, phare } }
 
 local function islets()
@@ -99,6 +104,12 @@ end
 function Ilots.init(g)
 	G = g
 	Config = G.Config
+	G.Interact.onPrompt("filon_ilot", function(player, prompt)
+		local ok, msg = Ilots.mine(player, prompt:GetAttribute("Ilot"))
+		if msg ~= "" then
+			G.Util.toast(player, msg, ok and "gain" or nil)
+		end
+	end)
 	G.Interact.onPrompt("epave", function(player, prompt)
 		Ilots.search(player, prompt:GetAttribute("Ilot"))
 	end)
@@ -137,9 +148,45 @@ function Ilots.onRegionLoad(reg)
 				if il.phare then
 					buildLighthouse(folder, CFrame.new(il.x - il.r * 0.1, top - 1, il.z - il.r * 0.45))
 				end
+				local vein = Ilots.VEINS[il.id]
+				local info = vein and Config.ITEMS[vein[1]]
+				local filon = info and G.Util.clone("Filon_Or")
+				if filon then
+					filon.Name = "Filon_Ilot"
+					filon:PivotTo(CFrame.new(il.x + il.r * 0.1, top - 0.6, il.z + il.r * 0.5))
+					filon.Parent = folder
+					local anchor = filon.PrimaryPart or filon:FindFirstChildWhichIsA("BasePart", true)
+					if anchor then
+						local p2 = G.Util.prompt(anchor, "filon_ilot", "Miner", info.name, { hold = 1.5, dist = 9 })
+						p2:SetAttribute("Ilot", il.id)
+					end
+				end
 			end
 		end
 	end
+end
+
+function Ilots.mine(player: Player, id: string?): (boolean, string)
+	local vein = type(id) == "string" and Ilots.VEINS[id]
+	if not vein then
+		return false, ""
+	end
+	local _, tier = G.Joueurs.bestTool(player, "pickaxe")
+	if (tier or 0) < VEIN_TIER then
+		return false, "Cette roche est trop dure : il faut une pioche de fer au moins."
+	end
+	local st = state(id)
+	if st.vein and G.world.day - st.vein < VEIN_DAYS then
+		return false, "Le filon est épuisé pour l'instant (" .. (VEIN_DAYS - (G.world.day - st.vein)) .. " jour(s))."
+	end
+	st.vein = G.world.day
+	local n = math.random(vein[2], vein[3])
+	G.Joueurs.add(player, vein[1], n)
+	G.Joueurs.addSkillXp(player, "minage", 6)
+	G.Joueurs.sync(player)
+	G.Mondes.saveSoon(player)
+	local info = Config.ITEMS[vein[1]]
+	return true, "⛏️ " .. n .. " " .. (info and info.name or vein[1]) .. " : on n'en trouve qu'ici."
 end
 
 function Ilots.search(player: Player, id: string?)
