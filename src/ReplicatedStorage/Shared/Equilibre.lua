@@ -955,6 +955,16 @@ E.OEUVRES = {
 		{ "hat", "Couronne de floraison", { vie = 10, chance = 8 } } },
 }
 
+-- 12 quinquies. RELIQUES DES PROFONDEURS (27/11, MANQUES-MMO n° 3 « butin exclusif ») : une pièce par biome,
+--     qu'on ne trouve QUE dans le coffre d'une grotte de ce biome (Systemes/Donjons, 6 %). { emplacement, nom, stats, power?, visual? }
+E.RELIQUES = {
+	prairie = { "trinket", "Relique des Gisants", { vie = 6, defense = 5, chance = 3 } },
+	foret = { "cape", "Mante des Racines", { discretion = 7, vitesse = 4, vie = 3 } },
+	desert = { "hat", "Couronne de sable figé", { chance = 7, charisme = 4, defense = 3 } },
+	neige = { "armor", "Cuirasse de givre ancien", { defense = 9, vie = 5 } },
+	marais = { "weapon", "Croc des tourbières", { force = 8, discretion = 4, vitesse = 2 }, power = 11, visual = "9" },
+}
+
 -- bonus des panoplies portées : { [stat] = bonus }, et la liste lisible des panoplies actives
 function E.setBonus(equipped)
 	local count = {}

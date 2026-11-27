@@ -39,6 +39,9 @@ local TITLES = {
 		return (p.stats.discovered or 0) >= 1
 	end },
 	-- 27/11 : boss différents vaincus, montures réunies (Montures.learn)
+	{ id = "pilleur_profondeurs", name = "Pilleur des profondeurs", test = function(p)
+		return Social.count(p, "reliques") >= 5 -- les 5 reliques des grottes (Donjons)
+	end },
 	{ id = "pourfendeur", name = "Pourfendeur", test = function(p)
 		return Social.count(p, "boss") >= 5
 	end },

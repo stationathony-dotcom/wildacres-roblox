@@ -624,6 +624,15 @@ function Donjons.loot(player: Player, id: string)
 		G.Joueurs.add(player, t[1], math.random(t[2], t[3]))
 	end
 	G.Joueurs.add(player, "relic_fragment", math.random(1, 2))
+	-- relique exclusive du biome (Shared/Equilibre E.RELIQUES) : on ne la trouve que dans les grottes de ce biome
+	local okR, EqR = pcall(require, game:GetService("ReplicatedStorage").Shared.Equilibre)
+	local rel = okR and EqR.RELIQUES and EqR.RELIQUES[cave.e.biome or ""]
+	if rel and math.random() < 0.06 then
+		G.Joueurs.addGear(player, { slot = rel[1], name = rel[2], rarity = 5, stats = table.clone(rel[3]), power = rel.power or 0, visual = rel.visual or "",
+			relique = cave.e.biome })
+		G.Util.toast(player, "🏺 Au fond du coffre : " .. rel[2] .. " ! On n'en trouve nulle part ailleurs.", "big")
+		G.Social.collect(player, "reliques", cave.e.biome)
+	end
 	-- œuf de monture rare au fond du coffre (27/11, MANQUES-MMO n° 1 « œufs rares en donjon »)
 	if math.random() < 0.03 then
 		local okEc, Ecurie = pcall(require, game:GetService("ReplicatedStorage").Shared.Ecurie)
