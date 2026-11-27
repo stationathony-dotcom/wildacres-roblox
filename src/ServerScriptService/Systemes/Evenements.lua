@@ -24,6 +24,16 @@ local G, Config
 Evenements.fair = nil -- { region = clé, day = jour, name = village }
 local lastEventDay = 0
 local active = {} -- en cours : { kind, until, ... }
+-- boss errants en vie (pour les rumeurs des habitants, Npcs.rumor) : { name, pos }
+function Evenements.bossesAlive()
+	local out = {}
+	for _, a in active do
+		if a.kind == "boss" and a.en and not a.en.dead and a.en.pos then
+			table.insert(out, { name = a.name, pos = a.en.pos })
+		end
+	end
+	return out
+end
 
 Evenements.BOSSES = {
 	harvest_warden = { name = "Gardien des Moissons", biome = { "prairie", "foret" }, night = true },

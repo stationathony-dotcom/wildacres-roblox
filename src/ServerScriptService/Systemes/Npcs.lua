@@ -1189,6 +1189,19 @@ local function rumor(e, player: Player): string
 			return "On raconte qu'à " .. h.v.name .. ", ils manquent de " .. h.info.icon .. " " .. h.info.name .. " : ils paient cher pour en avoir."
 		end
 	end
+	-- boss errant dans les parages (27/11) : on l'apprend en parlant aux gens, jamais par une annonce
+	local BA = G.Evenements and rawget(G.Evenements, "bossesAlive")
+	if BA and e.root and math.random() < 0.6 then
+		local pos = e.root.Position
+		for _, b in BA() do
+			local d = b.pos - pos
+			if Vector3.new(d.X, 0, d.Z).Magnitude < 500 then
+				local DIRS = { "au nord", "au nord-est", "à l'est", "au sud-est", "au sud", "au sud-ouest", "à l'ouest", "au nord-ouest" }
+				local deg = math.deg(math.atan2(d.X, -d.Z)) % 360
+				return "Méfie-toi… on a vu " .. b.name .. " rôder " .. DIRS[math.floor((deg + 22.5) / 45) % 8 + 1] .. ", pas loin d'ici."
+			end
+		end
+	end
 	-- prospérité du village (Shop.prosperity, 27/11) : les habitants parlent de leur commerce
 	local P = G.Shop and rawget(G.Shop, "prosperity")
 	local VA = G.Reputation and rawget(G.Reputation, "villageAt")
