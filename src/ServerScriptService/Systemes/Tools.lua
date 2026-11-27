@@ -10,6 +10,7 @@ function Tools.init(g)
 	G = g
 	local models = require(ServerStorage.OutilsDev.ConstruireModelesOutils)
 	models.harpon(ServerStorage.Outils)
+	models.equipements(ServerStorage.Outils, G.Config)
 	local replicatedStorage = game:GetService("ReplicatedStorage")
 	local miniatures = require(ServerStorage.OutilsDev.ConstruireModelesMiniatures)
 	miniatures.identites(replicatedStorage)

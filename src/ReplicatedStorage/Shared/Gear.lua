@@ -10,6 +10,13 @@ G.SLOT_ORDER = { "weapon", "hat", "armor", "shoulders", "gloves", "legs", "cape"
 G.SLOT_ICONS = { weapon = "🗡️", hat = "🪖", armor = "🥋", trinket = "💍", gloves = "🧤",
 	shoulders = "🛡️", legs = "👖", cape = "🧥", boots = "🥾", offhand = "🛡️" }
 G.slotOf = Design.slotOf
+G.baseName = Design.baseName
+
+function G.durability(item)
+	local maximum = item.duraMax
+	if type(maximum) ~= "number" or maximum <= 0 then return nil end
+	return math.clamp(item.dura or maximum, 0, maximum), maximum
+end
 G.STATS = {
 	force = "Force", defense = "Défense", vie = "Vie", vitesse = "Vitesse",
 	chance = "Chance", charisme = "Charisme", discretion = "Discrétion",
@@ -290,6 +297,35 @@ end
 
 function G.visualKey(item): string
 	return G.slotOf(item) .. ":" .. item.name
+end
+
+local civilianForms = {
+	tunic = true, shirt = true, robe = true, coat = true, hood = true, feathered = true,
+	beret = true, toque = true, tricorn = true, tophat = true, magehat = true, featherhat = true,
+	strawhat = true, chapka = true, bonnet = true, turban = true, crown = true, diadem = true,
+	pants = true, leggings = true, clogs = true, boots = true, tallboots = true, mittens = true,
+}
+
+local function visualCategory(item)
+	local slot = G.slotOf(item)
+	if item.skills then return "metier" end
+	if slot == "weapon" then return "armes" end
+	if slot == "trinket" then return "accessoires" end
+	if slot == "cape" or civilianForms[Design.formOf(item)] then return "civil" end
+	return "armures"
+end
+
+function G.visualPrototypes(config)
+	local existing, totals = {}, {}
+	for _, item in G.visualEntries(config) do
+		local key = G.visualKey(item)
+		if not existing[key] then
+			existing[key] = true
+			local category = visualCategory(item)
+			totals[category] = (totals[category] or 0) + 1
+		end
+	end
+	return Design.seriesDesigns(totals, existing), Design.namedDesigns(), totals
 end
 
 return G

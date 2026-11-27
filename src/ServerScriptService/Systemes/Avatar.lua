@@ -405,31 +405,99 @@ local function layer(char, name)
 	return model
 end
 
-function Avatar.applyArmor(player: Player)
+local function outfitLimits(char, prof)
+	local worn = prof and prof.equipped or {}
+	local rank = prof and prof.stats and prof.stats.noblesse or 0
+	local reserved = not worn.cape and rank > 0 and 3 or 0
+	for _, tool in char:GetChildren() do
+		if tool:IsA("Tool") then
+			for _, part in tool:GetDescendants() do
+				if part:IsA("BasePart") then reserved += 1 end
+			end
+		end
+	end
+	return Visuals.outfitLimits(worn, reserved)
+end
+
+function Avatar.applyArmor(player: Player, limits)
 	local char, prof = player.Character, G.Joueurs.get(player)
 	if not char then return end
 	local worn = prof and prof.equipped
 	if worn and worn.armor then
-		Visuals.wear(worn.armor, char, layer(char, "Armure_WA"), {covered = worn.shoulders ~= nil})
+		limits = limits or outfitLimits(char, prof)
+		Visuals.wear(worn.armor, char, layer(char, "Armure_WA"), {covered = worn.shoulders ~= nil, limit = limits.armor})
 	else
 		clearFolder(char, "Armure_WA")
 	end
 end
 
 local visibleSlots = {"weapon", "offhand", "shoulders", "gloves", "legs", "boots", "trinket"}
+local handStates = setmetatable({}, {__mode = "k"})
+local drawTime = {taille = 0.50, estoc = 0.42, lourd = 0.75, tir = 0.85, lancer = 0.60}
 
-function Avatar.applyExtraGear(player: Player)
+local function drawWeapon(char, item, limit, drawn)
+	local holder = char:FindFirstChild("Equipement_WA")
+	if not holder then return end
+	Visuals.wear(item, char, layer(holder, "weapon"), {limit = limit, drawn = drawn})
+end
+
+local function watchGestures(player, char)
+	if typeof(player) ~= "Instance" or handStates[char] then return end
+	local state = {}
+	handStates[char] = state
+	local gestures = player:GetAttributeChangedSignal("Geste"):Connect(function()
+		if player.Character ~= char or char:FindFirstChildWhichIsA("Tool") then return end
+		local gesture = player:GetAttribute("Geste") or ""
+		local duration = drawTime[gesture:match("^(%a+):")]
+		if not duration then return end
+		local profile = G.Joueurs.get(player)
+		local worn = profile and profile.equipped
+		local item = worn and worn.weapon
+		if not item or item.dura == 0 or Design.formOf(item) == "clawglove" then return end
+		local previous = state.item
+		state.item, state.gesture = item, gesture
+		if previous ~= item then drawWeapon(char, item, outfitLimits(char, profile).weapon, true) end
+		task.delay(duration, function()
+			if player.Character ~= char or state.gesture ~= gesture then return end
+			state.item = nil
+			local current = G.Joueurs.get(player)
+			local equipped = current and current.equipped
+			if equipped and equipped.weapon == item then
+				drawWeapon(char, item, outfitLimits(char, current).weapon, false)
+			end
+		end)
+	end)
+	local function toolChanged(child)
+		if not child:IsA("Tool") then return end
+		state.item, state.gesture = nil, nil
+		task.defer(function()
+			if player.Character == char and char.Parent then Avatar.refresh(player) end
+		end)
+	end
+	local toolAdded = char.ChildAdded:Connect(toolChanged)
+	local toolRemoved = char.ChildRemoved:Connect(toolChanged)
+	char.Destroying:Once(function()
+		gestures:Disconnect()
+		toolAdded:Disconnect()
+		toolRemoved:Disconnect()
+	end)
+end
+
+function Avatar.applyExtraGear(player: Player, limits)
 	local char, prof = player.Character, G.Joueurs.get(player)
 	if not char then return end
 	local worn = prof and prof.equipped or {}
+	limits = limits or outfitLimits(char, prof)
 	local holder = layer(char, "Equipement_WA")
+	local state = handStates[char]
 	for _, slot in visibleSlots do
 		local item = worn[slot]
 		if item then
 			local itemLayer = Instance.new("Model")
 			itemLayer.Name = slot
 			itemLayer.Parent = holder
-			Visuals.wear(item, char, itemLayer, {tallboots = worn.boots and Design.formOf(worn.boots) == "tallboots"})
+			Visuals.wear(item, char, itemLayer, {tallboots = worn.boots and Design.formOf(worn.boots) == "tallboots",
+				limit = limits[slot], drawn = slot == "weapon" and state and state.item == item})
 		end
 	end
 end
@@ -438,16 +506,19 @@ end
 function Avatar.refresh(player: Player)
 	local char = player.Character
 	if not char then return end
-	Avatar.applyLook(player)
-	Avatar.applyArmor(player)
-	Avatar.applyExtraGear(player)
-	clearFolder(char, "Chapeau_WA")
 	local prof = G.Joueurs.get(player)
-	local hat = prof and prof.equipped and prof.equipped.hat
+	local worn = prof and prof.equipped or {}
+	local limits = outfitLimits(char, prof)
+	watchGestures(player, char)
+	Avatar.applyLook(player)
+	Avatar.applyArmor(player, limits)
+	Avatar.applyExtraGear(player, limits)
+	clearFolder(char, "Chapeau_WA")
+	local hat = worn.hat
 	if hat and char:FindFirstChild("Head") then
-		Visuals.wear(hat, char, layer(char, "Chapeau_WA"))
+		Visuals.wear(hat, char, layer(char, "Chapeau_WA"), {limit = limits.hat})
 	end
-	Avatar.applyCape(player)
+	Avatar.applyCape(player, limits)
 end
 
 -- Cape de noblesse (18/11) : récompense visible des titres accordés par un seigneur (Metiers).
@@ -457,20 +528,22 @@ local CAPES = {
 	{ cloth = Color3.fromRGB(40, 64, 130), trim = Color3.fromRGB(200, 205, 215) },
 	{ cloth = Color3.fromRGB(96, 30, 92), trim = Color3.fromRGB(226, 186, 70) },
 }
-function Avatar.applyCape(player: Player)
+function Avatar.applyCape(player: Player, limits)
 	local char = player.Character
 	if not char then return end
 	clearFolder(char, "Cape_WA")
 	local prof = G.Joueurs.get(player)
 	local cape = prof and prof.equipped and prof.equipped.cape
 	if cape then
-		Visuals.wear(cape, char, layer(char, "Cape_WA"))
+		limits = limits or outfitLimits(char, prof)
+		Visuals.wear(cape, char, layer(char, "Cape_WA"), {limit = limits.cape})
 		return
 	end
 	local torso = char:FindFirstChild("UpperTorso") or char:FindFirstChild("Torso")
 	local rank = prof and prof.stats and prof.stats.noblesse or 0
 	local colors = CAPES[math.clamp(rank, 0, #CAPES)]
 	if not torso or not colors then return end
+	if not limits then Avatar.refresh(player) return end
 
 	local folder = layer(char, "Cape_WA")
 	local w, h, z = torso.Size.X, torso.Size.Y, torso.Size.Z

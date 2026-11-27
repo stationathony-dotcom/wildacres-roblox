@@ -70,6 +70,17 @@ function D.lower(name: string): string
 	return name:lower():gsub("É","é"):gsub("È","è"):gsub("À","à"):gsub("Â","â"):gsub("Œ","œ")
 end
 
+-- Les affixes d'une instance changent son libellé et ses stats. Le dessin reste celui de la série.
+function D.baseName(item): string
+	local name = item.name or ""
+	local affix = item.affixes and item.affixes[1]
+	if type(affix) == "string" and affix ~= "" then
+		local ending = " " .. affix
+		if name:sub(-#ending) == ending then return name:sub(1, -#ending - 1) end
+	end
+	return name
+end
+
 function D.slotOf(it): string
 	local slot = it.slot
 	if slot ~= "armor" and slot ~= "trinket" then
@@ -178,7 +189,7 @@ local baseStyle = {
 
 function D.style(it)
 	if it.design and palettes[it.design.material] then return palettes[it.design.material] end
-	local name = D.lower(it.name or "")
+	local name = D.lower(D.baseName(it))
 	for _, palette in D.MATERIALS do
 		if name:sub(-#palette.suffix) == D.lower(palette.suffix) then return palette end
 	end
@@ -192,6 +203,112 @@ local hardColors = {
 	copper_ingot = rgb(184, 109, 66), iron_ingot = rgb(131, 148, 151), steel = rgb(168, 186, 200),
 	bone = rgb(220, 202, 160), silver_ingot = rgb(206, 219, 231), gold_ingot = rgb(203, 147, 61),
 }
+
+-- Modèles de préproduction. Le catalogue jouable et ses recettes continuent
+-- de venir de Config, Prises et Equilibre.
+local collections = {
+	{ "Gardien royal", "du Gardien royal", "royal", "dyed_cloth", "steel", 4, rgb(41, 59, 94), rgb(242, 189, 82), "crest",
+		{{"hat","Heaume","closedhelm"},{"armor","Cuirasse","plate"},{"shoulders","Spallières","lamellar"},
+			{"legs","Grèves","greaves"},{"boots","Solerets","sabatons"},{"offhand","Écu","shield"}} },
+	{ "Enfant des bois", "de l’Enfant des bois", "sylvestre", "soft_leather", "bone", 3, rgb(65, 95, 52), rgb(168, 202, 99), "leaf",
+		{{"hat","Ramure","antlers"},{"armor","Gilet","leather"},{"shoulders","Épaules à ramure","hornshoulder"},
+			{"gloves","Mitaines","fingerless"},{"cape","Mantelet","splitcape"},{"weapon","Arc long","longbow"}} },
+	{ "Mage des brumes", "du Mage des brumes", "brumes", "silk", "silver_ingot", 4, rgb(80, 66, 121), rgb(171, 213, 238), "moon",
+		{{"hat","Chapeau","magehat"},{"armor","Robe","robe"},{"gloves","Brassards","bracer"},
+			{"cape","Cape","dresscape"},{"weapon","Bâton","staff"},{"trinket","Talisman","talisman"}} },
+	{ "Maître de forge", "du Maître de forge", "maitre_forge", "soft_leather", "copper_ingot", 3, rgb(107, 64, 47), rgb(225, 149, 78), "rivets",
+		{{"hat","Casque à visière","minerhelm"},{"armor","Tablier","apron"},{"gloves","Gantelets","gauntlets"},
+			{"boots","Bottes hautes","tallboots"},{"trinket","Ceinture","belt"},{"weapon","Marteau","hammer"}} },
+	{ "Fermier ancestral", "du Fermier ancestral", "fermier", "linen", "copper_ingot", 3, rgb(128, 111, 61), rgb(240, 211, 130), "stitch",
+		{{"hat","Chapeau de paille","strawhat"},{"armor","Tablier","apron"},{"legs","Chausses","leggings"},
+			{"boots","Sabots","clogs"},{"weapon","Faucille","sickle"},{"trinket","Panier","basket"}} },
+	{ "Marchand royal", "du Marchand royal", "marchand", "silk", "gold_ingot", 3, rgb(132, 44, 54), rgb(234, 176, 88), "sun",
+		{{"hat","Haut-de-forme","tophat"},{"armor","Manteau","coat"},{"cape","Pèlerine","mantle"},
+			{"gloves","Gants","gloves"},{"trinket","Chevalière","signet"},{"legs","Pantalon","pants"}} },
+	{ "Explorateur des océans", "de l’Explorateur des océans", "oceans", "leather", "silver_ingot", 3, rgb(42, 93, 104), rgb(124, 214, 206), "crest",
+		{{"hat","Tricorne","tricorn"},{"armor","Manteau","coat"},{"cape","Cape de pluie","raincape"},
+			{"boots","Bottes","tallboots"},{"trinket","Fiole","vial"},{"weapon","Javelot","javelin"}} },
+}
+
+function D.namedDesigns()
+	local designs = {}
+	for _, group in collections do
+		local title, suffix, material, rank = group[1], group[2], group[3], group[6]
+		for _, model in group[10] do
+			table.insert(designs, {slot = model[1], name = model[2] .. " " .. suffix,
+				rarity = rank, design = {form = model[3], material = material}, collection = title})
+		end
+	end
+	return designs
+end
+
+for _, group in collections do
+	local key, cloth, hard, rank, color, trim, mark = table.unpack(group, 3, 9)
+	palettes[key] = {key = key, cloth = cloth, hard = hard, rank = rank, color = color, trim = trim, mark = mark}
+end
+
+local formsBySeries = {
+	{ id = "armes", target = 200, slots = {
+		{"weapon",{{"Épée courte","shortsword"},{"Épée longue","longsword"},{"Lame bâtarde","bastard"},{"Javelot","javelin"},
+			{"Arc court","shortbow"},{"Arc long","longbow"},{"Pique","longpike"},{"Fronde","sling"},{"Bâton","staff"},
+			{"Massue","club"},{"Haches de jet","throwaxes"},{"Couteaux de jet","throwing"}}},
+	}},
+	{ id = "armures", target = 300, slots = {
+		{"offhand",{{"Rondache","roundshield"},{"Écu","shield"},{"Pavois","pavise"}}},
+		{"armor",D.FORMS.armor}, {"shoulders",D.FORMS.shoulders}, {"gloves",{{"Brassards","bracer"},{"Gantelets","gauntlets"}}},
+		{"legs",{{"Grèves","greaves"},{"Genouillères","kneepads"}}}, {"boots",{{"Solerets","sabatons"}}},
+		{"hat",{{"Heaume","closedhelm"},{"Casque nasal","nasalhelm"},{"Casque à crête","cresthelm"}}},
+	}},
+	{ id = "civil", target = 150, slots = {
+		{"hat",{{"Béret","beret"},{"Toque","toque"},{"Chapeau à plume","featherhat"},{"Haut-de-forme","tophat"},{"Tricorne","tricorn"},
+			{"Turban","turban"},{"Chapka","chapka"},{"Bonnet","bonnet"}}},
+		{"armor",{{"Chemise","shirt"},{"Robe","robe"},{"Manteau","coat"}}},
+		{"cape",{{"Cape de pluie","raincape"},{"Cape d’apparat","dresscape"},{"Pèlerine","mantle"}}},
+		{"legs",{{"Pantalon","pants"},{"Chausses","leggings"}}}, {"boots",{{"Sabots","clogs"},{"Bottes de marche","tallboots"}}},
+		{"gloves",{{"Moufles","mittens"}}},
+	}},
+	{ id = "metier", target = 120, slots = {
+		{"hat",{{"Casque de mineur","minerhelm"},{"Chapeau de pêcheur","fisherhat"},{"Chapeau de traqueur","hunterhat"},{"Chapeau de paille","strawhat"}}},
+		{"armor",{{"Tablier","apron"},{"Manteau de travail","coat"}}},
+		{"trinket",{{"Marteau","hammer"},{"Serpe","sickle"},{"Panier","basket"},{"Gourde","gourd"},{"Lampe","lamp"},
+			{"Sacoche","satchel"},{"Bourse","pouch"},{"Ceinture","belt"},{"Filet","net"},{"Bridon","bridle"}}},
+	}},
+	{ id = "accessoires", target = 100, slots = {
+		{"trinket",{{"Chevalière","signet"},{"Talisman","talisman"},{"Amulette","amulet"},{"Broche","brooch"},
+			{"Médaillon","medallion"},{"Bracelet","bracelet"},{"Pendentif","pendant"},{"Collier","necklace"},
+			{"Carquois","quiver"},{"Corne","horn"},{"Sifflet","whistle"}}},
+	}},
+}
+
+function D.seriesDesigns(totals, existing)
+	local designs = {}
+	local used = table.clone(existing)
+	for _, group in formsBySeries do
+		local left = math.max(0, group.target - (totals[group.id] or 0))
+		local forms = {}
+		for _, slotForms in group.slots do
+			for _, form in slotForms[2] do
+				table.insert(forms, {slotForms[1], form[1], form[2]})
+			end
+		end
+		for pass = 1, #D.MATERIALS do
+			for i, form in forms do
+				if left == 0 then break end
+				local dye = D.MATERIALS[(pass + i * 5 - 2) % #D.MATERIALS + 1]
+				local name, slot = form[2] .. " " .. dye.suffix, form[1]
+				local key = slot .. ":" .. name
+				if not used[key] then
+					used[key] = true
+					left -= 1
+					table.insert(designs, {slot = slot, name = name, rarity = dye.rank,
+						design = {form = form[3], material = dye.key}, series = group.id})
+				end
+			end
+			if left == 0 then break end
+		end
+	end
+	return designs
+end
 local namedColors = {
 	{"rubis", rgb(185, 53, 63)}, {"saphir", rgb(72, 129, 199)}, {"émeraude", rgb(64, 169, 118)},
 	{"diama", rgb(143, 219, 239)}, {"jade", rgb(79, 170, 132)}, {"ambre", rgb(238, 160, 55)},
@@ -244,9 +361,10 @@ local function torsoFamily(name, form, trophy)
 end
 
 function D.appearance(item)
-	local name = D.lower(item.name or "")
+	local baseName = D.baseName(item)
+	local name = D.lower(baseName)
 	local form, style, slot = D.formOf(item), D.style(item), D.slotOf(item)
-	local trophy = trophies[item.name]
+	local trophy = trophies[baseName]
 	local source = trophy and D.lower(trophy.name) or name
 	local trait = firstMatch(source, anatomy)
 	local hash = 0
@@ -301,7 +419,7 @@ function D.appearance(item)
 	end
 	return {
 		form = form, slot = slot, torsoFamily = family, color = hide, trim = style.trim, accent = accent, metal = metal,
-		material = material, cloth = style.cloth, series = style.key, mark = style.mark, trait = trait, name = name,
+		material = material, hard = style.hard, cloth = style.cloth, series = style.key, mark = style.mark, trait = trait, name = name,
 		soul = name:find("légendaire", 1, true) ~= nil,
 		rarity = item.rarity or (name:find("légendaire", 1, true) and 4 or 1),
 		variant = hash % 5, profile = math.floor(hash / 5) % 7, cut = math.floor(hash / 35) % 17,
