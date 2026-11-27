@@ -161,6 +161,11 @@ function Magie.cast(player: Player, id: string, targetId: string?): (boolean, st
 	end
 	G.Joueurs.addStatXp(player, sp.stat, 4)
 	G.Util.geste(player, "sort")
+	-- effet vu par tous les clients proches (X41) : école, lanceur, cible retenue par le serveur
+	if G.remotes and G.remotes.Fx then
+		G.remotes.Fx:FireAllClients("sort", { ecole = sp.ecole, id = sp.id, lanceur = player.UserId,
+			de = root.Position, vers = en and en.pos or nil })
+	end
 	return true, nil
 end
 

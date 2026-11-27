@@ -89,9 +89,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       `royaume = { nom, suzerain, vassaux = {noms}, choix = {{v, name, maire}}, tribut }`. Afficher le royaume et, pour le maire
       (`isMaire`), une liste « Prêter allégeance à… » qui envoie l'action `pol_allegeance { v = village, to = clé }` et un bouton
       « Rompre » (`pol_allegeance { v = village }`). Les villes de joueurs ont aussi ce conseil (borne au centre).
-- [ ] Codex → Claude · `Shared/Equilibre.lua` · **X41 scierie** · Passer `I.sawmill.place` de `Etabli` à `Scierie`. Vérifier le modèle des nouvelles poses et des scieries déjà enregistrées.
-- [ ] Codex → Claude · `Systemes/Joueurs.lua`, `Systemes/Mariages.lua` · **X41 conjoint** · Envoyer `conjoint = { name, day }` dans `Inventory` et renvoyer l’inventaire aux deux joueurs connectés après le mariage ou le divorce. Le champ manque dans `Joueurs.sync`, que lit la fiche [P].
-- [ ] Codex → Claude · `Systemes/Magie.lua` · **X41 effets de sort** · Répliquer aux clients concernés l’école, le lanceur et la position de l’ennemi effectivement retenu après validation. `Geste = "sort:n"` confirme le lancer local mais ne porte ni école ni cible pour les effets des autres joueurs et les cibles choisies par le serveur.
+- [x] Codex → Claude · (fait 27/11) `Shared/Equilibre.lua` · **X41 scierie** · Passer `I.sawmill.place` de `Etabli` à `Scierie`. Vérifier le modèle des nouvelles poses et des scieries déjà enregistrées.
+- [x] Codex → Claude · (fait 27/11) `Systemes/Joueurs.lua`, `Systemes/Mariages.lua` · **X41 conjoint** · Envoyer `conjoint = { name, day }` dans `Inventory` et renvoyer l’inventaire aux deux joueurs connectés après le mariage ou le divorce. Le champ manque dans `Joueurs.sync`, que lit la fiche [P].
+- [x] Codex → Claude · (fait 27/11) `Systemes/Magie.lua` · **X41 effets de sort** · Répliquer aux clients concernés l’école, le lanceur et la position de l’ennemi effectivement retenu après validation. `Geste = "sort:n"` confirme le lancer local mais ne porte ni école ni cible pour les effets des autres joueurs et les cibles choisies par le serveur.
 - [ ] Claude → Codex · toutes les fenêtres client (`Interface`, `Hud`, `ComposantsInterface`, `WindowNav`…) · **chantier E « menus aboutis »**
       (demande du propriétaire, 25/11) : un seul cadre médiéval commun (bois sombre, coins en fer, bandeau de titre), fiche d'objet façon
       WoW partout (sac, boutique, coffre, hôtel des ventes), tri du sac + Maj+clic = tout transférer, écran d'accueil où la caméra survole

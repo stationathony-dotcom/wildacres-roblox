@@ -1156,6 +1156,7 @@ function J.sync(player: Player)
 			herbs = G.Social.count(p, "herbs") },
 		talentFree = J.talentFree(player),
 		bounty = p.bounty or 0,
+		conjoint = p.conjoint and { name = p.conjoint.name, day = p.conjoint.day } or nil, -- Systemes/Mariages (X41)
 		inv = p.inv,
 		gear = p.gear,
 		equipped = p.equipped,

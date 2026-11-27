@@ -24,7 +24,7 @@ local bumps = {}
 local G = {
 	world = { day = 9 },
 	playerById = function(uid) return byId[uid] end,
-	Joueurs = { get = function(p) return profs[p] end, markDirty = function() end,
+	Joueurs = { get = function(p) return profs[p] end, markDirty = function() end, sync = function() end,
 		count = function(p, i) return bags[p][i] or 0 end,
 		take = function(p, i, n) if (bags[p][i] or 0) < n then return false end bags[p][i] -= n return true end,
 		add = function(p, i, n) bags[p][i] = (bags[p][i] or 0) + n end },

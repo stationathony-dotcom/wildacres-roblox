@@ -466,7 +466,7 @@ function E.apply(C)
 	end
 	-- scierie (Systemes/Machines, 27/11) : modèle provisoire « Etabli » en attendant le sien (passage Codex)
 	if not I.sawmill and known(C, { planks = 20, iron_ingot = 6, stone = 10 }) then
-		I.sawmill = { name = "Scierie", icon = "🪚", price = 180, place = "Etabli", grid = "cell" }
+		I.sawmill = { name = "Scierie", icon = "🪚", price = 180, place = "Scierie", grid = "cell" }
 		table.insert(R, { item = "sawmill", needs = { planks = 20, iron_ingot = 6, stone = 10 }, station = "bench", cat = "outils", skill = { "artisanat", 10 } })
 		note("nouvel objet sawmill")
 	end

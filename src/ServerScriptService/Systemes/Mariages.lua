@@ -107,6 +107,7 @@ function Mariages.accept(player: Player): (boolean, string?)
 	G.Joueurs.markDirty(from)
 	for _, p in { player, from } do
 		G.Social.bump(p, "maries", 1)
+		G.Joueurs.sync(p) -- la fiche [P] affiche le conjoint (X41)
 	end
 	local ra = G.Util.root(player)
 	for _, q in G.Game.players() do
@@ -126,10 +127,12 @@ function Mariages.divorce(player: Player): (boolean, string?)
 	local other = byId(tonumber(c.uid))
 	G.Joueurs.get(player).conjoint = nil
 	G.Joueurs.markDirty(player)
+	G.Joueurs.sync(player)
 	if other and spouseOf(other) and tostring(spouseOf(other).uid) == tostring(player.UserId) then
 		G.Joueurs.get(other).conjoint = nil
 		G.Joueurs.markDirty(other)
 		G.Util.toast(other, "💔 " .. player.DisplayName .. " a rompu votre mariage.")
+		G.Joueurs.sync(other)
 	end
 	return true, "Tu n'es plus marié à " .. (c.name or "?") .. "."
 end
