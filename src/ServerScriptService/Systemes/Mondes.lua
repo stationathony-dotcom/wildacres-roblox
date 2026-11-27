@@ -605,6 +605,7 @@ end
 -- ventes, étal, coffre) : réduit la fenêtre où un arrêt brutal ferait diverger les deux sauvegardes
 -- (au plus une écriture du monde et une par joueur toutes les 10 s : budget DataStore)
 local soonWorld = false
+local soonAgain = false
 local soonPlayer = {}
 function Mondes.saveSoon(player: Player?)
 	if player and not soonPlayer[player] then
@@ -617,12 +618,16 @@ function Mondes.saveSoon(player: Player?)
 		end)
 	end
 	if soonWorld then
+		soonAgain = true -- une opération pendant la pause : le monde est réécrit à la fin de la pause
 		return
 	end
 	soonWorld = true
 	task.delay(3, function()
-		Mondes.saveWorld()
-		task.wait(7)
+		repeat
+			soonAgain = false
+			Mondes.saveWorld()
+			task.wait(7)
+		until not soonAgain
 		soonWorld = false
 	end)
 end
