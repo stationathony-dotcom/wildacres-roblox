@@ -60,6 +60,8 @@ Ne pas toucher à ces sujets avant la réponse. Écrire la réponse ici quand el
 
 Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; cocher avec le hash du commit.
 
+- [ ] Codex → Claude · `Shared/Equilibre.lua`, `Shared/Equipement.lua` · **X32** · Rendre jouables les sept ensembles de `GearDesign.namedDesigns()` et leurs bonus à 2, 4 et 6 pièces. Reprendre les couples `design.form` / `design.material`, y compris pour les séries civiles et de métier de `Gear.visualPrototypes(Config)`, puis leur donner des sources, des usages et des stats. Vérifier aussi le rattachement de `lamellarplate` et des coupes civiles aux types d’armure envoyés par le serveur, ainsi que la puissance de base encore lue sur une arme brisée.
+
 - [ ] Claude → Codex · toutes les fenêtres client (`Interface`, `Hud`, `ComposantsInterface`, `WindowNav`…) · **chantier E « menus aboutis »**
       (demande du propriétaire, 25/11) : un seul cadre médiéval commun (bois sombre, coins en fer, bandeau de titre), fiche d'objet façon
       WoW partout (sac, boutique, coffre, hôtel des ventes), tri du sac + Maj+clic = tout transférer, écran d'accueil où la caméra survole
@@ -147,7 +149,7 @@ reste à pousser / capturer sur le PC fixe.
 - [ ] **X31 · Menus E4 à E6** de `docs/DIRECTION-ARTISTIQUE.md` (accueil où la caméra survole l'île, mobile,
       HUD jamais masqué) + capture de chaque fenêtre dans le cadre commun `Cadre.lua`.
 
-- [ ] **X32 · Armes et équipement portés** niveau planche (Gear, GearDesign, Avatar, Tools) — Sol, file du 26/11.
+- [x] **X32 · Armes et équipement portés** — Codex, 27/11 · livraison sur disque. [Rapport, budgets et appels Édition](X32-RAPPORT.md). Géométrie `e984a53` et `6aa4ef4`, fiche `f55bc42` et `02ff20e`, bancs `33a7f05`. Claude reprend les captures, les bancs Studio et l’intégration des prototypes au jeu.
 - [ ] **X33 · Objets du sac** (miniatures, ConstruireModelesMiniatures) — Sol, file du 26/11.
 - [ ] **X34 · Maisons et bâtiments** (maison, villages2, moulin, château) — Sol, file du 26/11.
 - [ ] **X35 · PNJ : apparence + dialogues** (Avatar.dress, Apparence ; `Dialogue.lua` : passage accordé par Claude) — Sol.
@@ -186,6 +188,8 @@ Répartition décidée par le propriétaire le 26/11 : **Codex = ce qui se gén�
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 27/11 · Codex · X32 livre les formes portées et les outils en main, 286 prototypes dont sept tenues nommées, et l’équipement MMO affiché dans [P]. Voir le rapport pour les bancs et les captures en Édition.
 
 - 27/11 · Codex · X27 sur disque, 58 constructeurs et 58 budgets vérifiés statiquement. Syntaxe du champ réparée.
   Claude reprend en Édition la reconstruction, le banc et les captures à 15 studs. À voir ensuite en Play sur le PC fixe.
