@@ -26,6 +26,8 @@ K["mist_stag_king"] = {"name": "Cerf-Roi des brumes", "form": "quadrupede", "ran
 K["fjord_kraken"] = {"name": "Kraken des fjords", "form": "serpent", "rank": "B", "level": 10}
 K["firefly_queen"] = {"name": "Reine des lucioles", "form": "volant", "rank": "B", "level": 10}
 K["rust_golem"] = {"name": "Golem de rouille", "form": "golem", "rank": "B", "level": 10}
+K["isle_turtle"] = {"name": "Tortue-Île", "form": "quadrupede", "rank": "B", "level": 10}
+K["cliff_roc"] = {"name": "Roc des falaises", "form": "volant", "rank": "B", "level": 10}
 
 # Enemies : forme d'après le modèle
 EF = {"Ours": "quadrupede", "Sanglier": "quadrupede", "Chef_Gobelin": "humain", "Myconide_Ancien": "masse", "Roi_Slimes": "masse",
@@ -41,6 +43,7 @@ for k, v in K.items():
 def pick(name, form):
     n = name.lower()
     # matériau qui a du sens pour la bête, emplacement de la pièce, nom de la pièce
+    if "roc des" in n: return ("Rémige géante", "🪶", "hat", "Coiffe à rémiges")
     if "kraken" in n: return ("Encre de kraken", "🐙", "trinket", "Fiole d'encre des abysses")
     if "lucioles" in n: return ("Lanterne de luciole", "✨", "trinket", "Pendentif de lumière")
     if "hydre" in n: return ("Croc d'hydre", "🐍", "trinket", "Amulette aux trois têtes")
@@ -117,8 +120,8 @@ BASE = {"weapon": ("{ iron_ingot = 2, planks = 1 }", "anvil"), "armor": ("{ leat
         "hat": ("{ cloth = 2 }", "loom"), "trinket": ("{ rope = 1, copper_ingot = 1 }", "bench")}
 
 def lua_str(t): return '"' + t.replace('"', '\\"') + '"'
-BOSS_DU = ("Roi", "Chef", "Scarabée", "Myconide", "Gardien", "Colosse", "Dormeur", "Géant", "Coffre", "Mammouth", "Griffon", "Crocodile", "Taureau", "Cerf", "Kraken", "Golem")
-BOSS_DELA = ("Mère", "Wyverne", "Bête", "Baudroie", "Veuve", "Salamandre", "Reine")
+BOSS_DU = ("Roi", "Chef", "Scarabée", "Myconide", "Gardien", "Colosse", "Dormeur", "Géant", "Coffre", "Mammouth", "Griffon", "Crocodile", "Taureau", "Cerf", "Kraken", "Golem", "Roc")
+BOSS_DELA = ("Mère", "Wyverne", "Bête", "Baudroie", "Veuve", "Salamandre", "Reine", "Tortue")
 def de(name, boss=False):
     n = name.split(",")[0]
     if boss:

@@ -341,6 +341,10 @@ local KINDS = {
 		proj = { color = Color3.fromRGB(255, 236, 120), size = 2 }, loot = { { "amber", 2, 4, 1 }, { "moon_flower", 1, 2, 1 }, { "honey", 3, 6, 1 } }, gold = 10 },
 	rust_golem = { name = "Golem de rouille", model = "Golem_Rouille", form = "golem", look = { "R", "P", scale = 2.4 }, hp = 3600, dmg = 60, speed = 8, level = 10, style = "charge", radius = 4, boss = true, minion = "stone_golem",
 		loot = { { "steel", 4, 8, 1 }, { "iron_ingot", 4, 8, 1 }, { "mineral_heart", 1, 1, 0.3 } }, gold = 12 },
+	isle_turtle = { name = "Tortue-Île", model = "Tortue_Ile", form = "quadrupede", look = { "V", "BF", scale = 2.4 }, hp = 4000, dmg = 50, speed = 7, level = 10, style = "hop", radius = 5, boss = true, swims = true, minion = "bog_lizard",
+		loot = { { "ancient_seed", 2, 3, 1 }, { "pearl", 2, 4, 1 }, { "emerald", 1, 1, 0.4 } }, gold = 12 },
+	cliff_roc = { name = "Roc des falaises", model = "Roc_Falaises", form = "volant", look = { "B", "W", scale = 2.4 }, hp = 2600, dmg = 54, speed = 17, level = 10, style = "charge", radius = 3.6, boss = true, flies = true, minion = "cliff_raptor",
+		loot = { { "feather", 8, 14, 1 }, { "amber", 1, 2, 0.6 }, { "gold_ingot", 1, 2, 1 } }, gold = 11 },
 	cave_troll = { name = "Troll des cavernes", form = "humain", look = { "P", "BF", weapon = "massue", scale = 1.8, peau = "P" }, hp = 700, dmg = 38, speed = 9, level = 8, style = "charge", radius = 2.4, elite = true,
 		loot = { { "stone", 4, 8, 1 }, { "ore", 1, 3, 0.6 } }, gold = 5 },
 	-- 20/11 : les trois dernières de « listes ennemi.txt », modèles faits par Codex (ServerStorage.Modeles)
@@ -464,6 +468,8 @@ Bestiaire.ROAMING = {
 	fjord_kraken = { name = "Kraken des fjords", biome = { "neige", "marais" }, mer = true },
 	firefly_queen = { name = "Reine des lucioles", biome = { "foret" }, night = true },
 	rust_golem = { name = "Golem de rouille", biome = { "prairie" } },
+	isle_turtle = { name = "Tortue-Île", biome = { "marais" }, mer = true },
+	cliff_roc = { name = "Roc des falaises", biome = { "neige", "prairie" } },
 }
 
 -- ----------------------------------------------------------------- Modèles

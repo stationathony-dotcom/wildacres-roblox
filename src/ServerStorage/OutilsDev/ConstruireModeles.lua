@@ -5521,4 +5521,71 @@ function M.wyverneNeiges(): Model
 	return m
 end
 
+-- Tortue-Île (boss des marais, nageuse) : carapace en dalles à 3 tons portant un îlot (terre, herbe, petit arbre,
+-- rochers), tête ridée aux yeux vieux, pattes-nageoires
+function M.tortueIle(): Model
+	local m, Bx = bossBuilder("Tortue_Ile")
+	local c1, c2, c3, peau, terre, herbe = rgb(86, 98, 70), rgb(64, 76, 52), rgb(112, 124, 88), rgb(120, 136, 100), rgb(110, 84, 58), rgb(96, 150, 66)
+	Bx("Carapace", Vector3.new(6, 2.4, 7), Vector3.new(0, 2.6, 0.4), c1)
+	Bx("Bord", Vector3.new(6.6, 0.5, 7.6), Vector3.new(0, 1.5, 0.4), c2)
+	for x = -1, 1 do
+		for z = -1, 1 do
+			Bx("Dalle", Vector3.new(1.7, 0.3, 2.0), Vector3.new(x * 1.9, 3.85, 0.4 + z * 2.2), (x + z) % 2 == 0 and c3 or c2)
+		end
+	end
+	Bx("Terre", Vector3.new(4.4, 0.6, 5.0), Vector3.new(0, 4.3, 0.4), terre)
+	Bx("Herbe", Vector3.new(4.0, 0.3, 4.6), Vector3.new(0, 4.75, 0.4), herbe, Mat.Grass)
+	Bx("Tronc", Vector3.new(0.6, 2.4, 0.6), Vector3.new(0.8, 6.1, 1.0), rgb(100, 72, 48), Mat.Wood)
+	Bx("Feuillage", Vector3.new(2.6, 1.6, 2.6), Vector3.new(0.8, 7.8, 1.0), rgb(80, 140, 60), Mat.Grass)
+	Bx("Feuillage", Vector3.new(1.6, 1.0, 1.6), Vector3.new(0.9, 9.0, 0.8), rgb(110, 170, 80), Mat.Grass)
+	Bx("Rocher", Vector3.new(1.2, 0.9, 1.0), Vector3.new(-1.3, 5.3, -0.8), rgb(130, 128, 120), Mat.Slate)
+	Bx("Rocher", Vector3.new(0.7, 0.6, 0.8), Vector3.new(-1.6, 5.2, 1.6), rgb(150, 146, 138), Mat.Slate)
+	Bx("Cou", Vector3.new(1.6, 1.4, 1.8), Vector3.new(0, 2.3, -3.6), peau)
+	Bx("Tete", Vector3.new(2.0, 1.6, 2.0), Vector3.new(0, 2.6, -5.0), peau)
+	Bx("Bec", Vector3.new(1.4, 0.6, 0.6), Vector3.new(0, 2.1, -6.1), c2)
+	for _, sx in { -1, 1 } do
+		Bx("Oeil", Vector3.new(0.1, 0.3, 0.4), Vector3.new(sx * 1.01, 3.0, -5.4), rgb(230, 200, 90), Mat.Neon)
+		Bx("Ride", Vector3.new(0.05, 0.15, 0.9), Vector3.new(sx * 1.02, 2.5, -4.8), c2)
+		for _, z in { -2.4, 2.8 } do
+			Bx("Nageoire", Vector3.new(2.2, 0.6, 1.6), Vector3.new(sx * 3.6, 1.0, z), peau, nil, CFrame.Angles(0, sx * 0.3, sx * -0.2))
+		end
+	end
+	Bx("Queue", Vector3.new(0.9, 0.7, 1.4), Vector3.new(0, 1.6, 4.6), peau)
+	fini(m)
+	m:ScaleTo(1.6)
+	return m
+end
+
+-- Roc des falaises (boss volant) : rapace géant brun et crème, ailes déployées en 3 rangs de rémiges, bec crochu doré,
+-- serres noires, plumes de tête en aigrette
+function M.rocFalaises(): Model
+	local m, Bx = bossBuilder("Roc_Falaises")
+	local b1, b2, b3, creme, or1 = rgb(110, 74, 46), rgb(84, 56, 34), rgb(146, 102, 64), rgb(232, 220, 190), rgb(236, 186, 60)
+	Bx("Corps", Vector3.new(2.4, 2.6, 3.6), Vector3.new(0, 3.6, 0.3), b1)
+	Bx("Poitrail", Vector3.new(2.0, 2.0, 0.6), Vector3.new(0, 3.6, -1.6), creme)
+	Bx("Tete", Vector3.new(1.4, 1.4, 1.5), Vector3.new(0, 5.3, -1.4), creme)
+	Bx("Bec", Vector3.new(0.6, 0.6, 1.0), Vector3.new(0, 5.1, -2.5), or1)
+	Bx("Bec", Vector3.new(0.4, 0.5, 0.3), Vector3.new(0, 4.8, -2.95), rgb(200, 150, 40))
+	for k = 0, 2 do
+		Bx("Aigrette", Vector3.new(0.2, 0.8 - k * 0.15, 0.3), Vector3.new(0, 6.3 - k * 0.05, -1.1 + k * 0.4), b2, nil, CFrame.Angles(math.rad(-25), 0, 0))
+	end
+	for _, sx in { -1, 1 } do
+		Bx("Oeil", Vector3.new(0.08, 0.25, 0.3), Vector3.new(sx * 0.71, 5.5, -1.8), rgb(255, 200, 40), Mat.Neon)
+		Bx("Epaule", Vector3.new(1.6, 0.6, 1.6), Vector3.new(sx * 1.8, 4.6, 0), b2)
+		for r = 0, 2 do
+			for k = 0, 4 do
+				local x = sx * (2.4 + k * 1.1)
+				Bx("Remige", Vector3.new(1.0, 0.25, 2.2 - r * 0.5 + k * 0.15), Vector3.new(x, 4.7 + k * 0.15 - r * 0.15, 0.3 + r * 0.7), r == 0 and b3 or (r == 1 and b1 or b2))
+			end
+		end
+		Bx("Patte", Vector3.new(0.5, 1.6, 0.5), Vector3.new(sx * 0.6, 1.6, 0.6), or1)
+		Bx("Serres", Vector3.new(0.8, 0.4, 1.0), Vector3.new(sx * 0.6, 0.6, 0.3), rgb(30, 28, 30))
+	end
+	Bx("Queue", Vector3.new(1.8, 0.3, 2.2), Vector3.new(0, 3.4, 3.0), b2)
+	Bx("Queue", Vector3.new(1.4, 0.25, 1.0), Vector3.new(0, 3.3, 4.4), creme)
+	fini(m)
+	m:ScaleTo(1.7)
+	return m
+end
+
 return M
