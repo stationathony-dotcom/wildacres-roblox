@@ -176,7 +176,8 @@ function Machines.well(player: Player)
 	G.Joueurs.sync(player)
 end
 
--- Poulailler (27/11, sans effet jusqu'ici) : 2 blé le soir = 1 œuf le lendemain (rien de gratuit)
+-- Poulailler (27/11 ; il servait déjà d'abri aux poules, Animals) : nourrir SES poules au poulailler,
+-- 2 blé = 1 œuf de plus le lendemain, jusqu'à 2 par poule à soi à moins de 20 studs (pas de poule, pas d'œuf)
 function Machines.henhouse(player: Player, id: string)
 	local d = G.Protection.findPlaced(id)
 	if not mine(player, d) then
@@ -189,9 +190,20 @@ function Machines.henhouse(player: Player, id: string)
 		G.Joueurs.sync(player)
 		return
 	end
-	local n = math.floor(G.Joueurs.count(player, "wheat") / 2)
+	local hens = 0
+	for _, a in (G.Animals and G.Animals.list) or {} do
+		if a.kind == "chicken" and a.pos and G.Util.owns(player, a.owner)
+			and (a.pos - Vector3.new(d.x, a.pos.Y, d.z)).Magnitude < 20 then
+			hens += 1
+		end
+	end
+	if hens == 0 then
+		G.Util.toast(player, "Aucune de tes poules n'est près du poulailler.")
+		return
+	end
+	local n = math.min(math.floor(G.Joueurs.count(player, "wheat") / 2), hens * 2 - d.hen.grain)
 	if n < 1 then
-		G.Util.toast(player, "Les poules attendent du grain (2 blé par œuf). Elles pondent pendant la nuit.")
+		G.Util.toast(player, "Les poules attendent du grain (2 blé par œuf, 2 œufs par poule et par nuit).")
 		return
 	end
 	G.Joueurs.take(player, "wheat", n * 2)
