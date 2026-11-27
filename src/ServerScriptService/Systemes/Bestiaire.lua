@@ -316,7 +316,7 @@ local KINDS = {
 	-- boss des planches du 26/11 (lot C15) : données de combat ; dessins propres à venir (Codex, X36 / Silhouettes)
 	mimic_chest = { name = "Coffre-mimique des ruines", model = "Coffre_Mimique", form = "masse", look = { "B", "O", scale = 1.8, }, hp = 2400, dmg = 50, speed = 10, level = 10, style = "hop", radius = 3.2, boss = true, minion = "skeleton",
 		loot = { { "mimic_tongue", 1, 1, 1 }, { "ancient_jewel", 1, 3, 1 }, { "pearl", 1, 2, 0.5 } }, gold = 12 },
-	abyss_angler = { name = "Baudroie des abysses", form = "serpent", look = { "N", "BL", scale = 2.4 }, hp = 2600, dmg = 52, speed = 11, level = 10, style = "spore", radius = 3.6, boss = true, swims = true, minion = "sea_serpent",
+	abyss_angler = { name = "Baudroie des abysses", model = "Baudroie", form = "serpent", look = { "N", "BL", scale = 2.4 }, hp = 2600, dmg = 52, speed = 11, level = 10, style = "spore", radius = 3.6, boss = true, swims = true, minion = "sea_serpent",
 		proj = { color = Color3.fromRGB(120, 255, 220), size = 2.2 }, loot = { { "angler_lure", 1, 1, 1 }, { "pearl", 2, 4, 1 }, { "rare_shell", 1, 2, 0.6 } }, gold = 10 },
 	frost_mammoth = { name = "Mammouth de givre", model = "Mammouth_Givre", form = "quadrupede", look = { "BF", "W", gros = true, oreilles = true, queue = true, criniere = "W", scale = 2.6 }, hp = 3200, dmg = 56, speed = 10, level = 10, style = "charge", radius = 4, boss = true, minion = "frost_spider",
 		loot = { { "mammoth_tusk", 1, 1, 1 }, { "frost_crystal", 1, 1, 0.3 }, { "raw_hide", 4, 6, 1 } }, gold = 10 },

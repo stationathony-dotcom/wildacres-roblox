@@ -5056,4 +5056,64 @@ function M.veuveCavernes(): Model
 	return m
 end
 
+-- Baudroie des abysses (boss maritime, 27/11, Claude) : grosse tête-gueule, rangées de longues dents, leurre lumineux
+-- au bout d'une tige, petits yeux pâles, nageoires et queue, peau sombre en 3 tons avec points luminescents.
+function M.baudroie(): Model
+	dossier = dossierModeles()
+	local old = dossier:FindFirstChild("Baudroie")
+	if old then
+		old:Destroy()
+	end
+	local m = nouveau("Baudroie")
+	local p1, p2, p3, dent = rgb(34, 38, 52), rgb(52, 58, 76), rgb(74, 84, 104), rgb(232, 236, 230)
+	local lueur = rgb(120, 255, 220)
+	local function Bx(n: string, t: Vector3, pos: Vector3, c: Color3, mat: Enum.Material?, cf: CFrame?)
+		if cf then
+			return P(m, n, t, Vector3.zero, c, mat or Mat.SmoothPlastic, { collide = false, cf = cf })
+		end
+		return P(m, n, t, pos, c, mat or Mat.SmoothPlastic, { collide = false })
+	end
+	local function barre(n: string, a: Vector3, b: Vector3, e: number, c: Color3, mat: Enum.Material?)
+		return Bx(n, Vector3.new(e, e, (b - a).Magnitude + e * 0.5), Vector3.zero, c, mat, CFrame.lookAt((a + b) / 2, b))
+	end
+	-- corps-tête massif
+	Bx("Corps", Vector3.new(4.4, 3.6, 4.2), Vector3.new(0, 2.6, 0.4), p1)
+	Bx("Dos", Vector3.new(3.8, 0.6, 3.6), Vector3.new(0, 4.6, 0.6), p2)
+	Bx("Ventre", Vector3.new(3.8, 0.4, 3.8), Vector3.new(0, 0.7, 0.4), p3)
+	-- gueule : mâchoire inférieure en avant, gosier rouge sombre, dents longues
+	Bx("Machoire", Vector3.new(4.6, 1.0, 1.6), Vector3.new(0, 1.2, -2.2), p2)
+	Bx("Gosier", Vector3.new(3.6, 1.4, 0.3), Vector3.new(0, 2.4, -1.7), rgb(80, 20, 30))
+	for k = -4, 4 do
+		local h = 0.7 + (k % 2) * 0.35
+		Bx("Dent", Vector3.new(0.2, h, 0.2), Vector3.new(k * 0.48, 1.7 + h / 2, -2.85), dent)
+		if k < 4 then
+			Bx("Dent", Vector3.new(0.18, h * 0.8, 0.18), Vector3.new(k * 0.48 + 0.24, 3.6 - h * 0.4, -1.88), dent)
+		end
+	end
+	-- leurre
+	local base, coude, bout = Vector3.new(0, 4.9, -0.6), Vector3.new(0, 7.0, -1.6), Vector3.new(0, 6.6, -3.4)
+	barre("Tige", base, coude, 0.2, p3)
+	barre("Tige", coude, bout, 0.16, p3)
+	local leurre = Bx("Leurre", Vector3.new(0.8, 0.8, 0.8), bout, lueur, Mat.Neon)
+	local l = Instance.new("PointLight")
+	l.Range, l.Brightness, l.Color = 16, 2.5, lueur
+	l.Parent = leurre
+	-- yeux, points luminescents
+	for _, sx in { -1, 1 } do
+		Bx("Oeil", Vector3.new(0.4, 0.4, 0.1), Vector3.new(sx * 1.3, 4.0, -1.7), rgb(220, 240, 230), Mat.Neon)
+		Bx("Nageoire", Vector3.new(0.2, 1.6, 2.0), Vector3.new(sx * 2.4, 2.0, 0.8), p3, nil, CFrame.new(sx * 2.4, 2.0, 0.8) * CFrame.Angles(0, 0, sx * -0.6))
+		for k = 0, 2 do
+			Bx("Point", Vector3.new(0.06, 0.2, 0.2), Vector3.new(sx * 2.21, 2.2 + k * 0.6, 1.4 - k * 0.6), lueur, Mat.Neon)
+		end
+	end
+	-- queue et nageoire caudale
+	Bx("Queue", Vector3.new(2.4, 2.2, 1.6), Vector3.new(0, 2.6, 3.2), p1)
+	Bx("Queue", Vector3.new(1.4, 1.4, 1.2), Vector3.new(0, 2.7, 4.5), p2)
+	Bx("Caudale", Vector3.new(0.2, 3.0, 1.6), Vector3.new(0, 2.8, 5.6), p3)
+	Bx("Dorsale", Vector3.new(0.2, 1.2, 2.0), Vector3.new(0, 5.4, 1.6), p3)
+	fini(m)
+	m:ScaleTo(1.8) -- taille de boss
+	return m
+end
+
 return M
