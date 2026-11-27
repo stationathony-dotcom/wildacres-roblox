@@ -169,13 +169,29 @@ function U.groundY(x: number, z: number): number
 		end
 		local i = G.WG.idx(ax - plan.x0, az - plan.z0)
 		if plan.water[i] then
-			return 0
+			return nil
 		end
 		local t = G.Terraforme and G.Terraforme.cell and G.Terraforme.cell(ax, az)
 		return plan.H[i] + (t and t.d * 4 or 0)
 	end
+	-- au bord de l'eau : sur une case de terre, les coins en eau (hauteur 0) ne tirent plus le sol vers le bas
+	-- (une bête posée près d'un étang s'y enfonçait de ~2 studs) ; seuls les coins de terre sont pondérés
+	if h(math.floor(x / CELL), math.floor(z / CELL)) == nil then
+		return 0
+	end
 	local a, b, c, d = h(cx, cz), h(cx + 1, cz), h(cx, cz + 1), h(cx + 1, cz + 1)
-	return (a * (1 - tx) + b * tx) * (1 - tz) + (c * (1 - tx) + d * tx) * tz
+	if a and b and c and d then
+		return (a * (1 - tx) + b * tx) * (1 - tz) + (c * (1 - tx) + d * tx) * tz
+	end
+	local wa, wb, wc, wd = (1 - tx) * (1 - tz), tx * (1 - tz), (1 - tx) * tz, tx * tz
+	local sum, wsum = 0, 0
+	for _, p in { { a, wa }, { b, wb }, { c, wc }, { d, wd } } do
+		if p[1] then
+			sum += p[1] * p[2]
+			wsum += p[2]
+		end
+	end
+	return wsum > 0 and sum / wsum or 0
 end
 
 -- Vrai si le point est dans l'eau (case d'eau du plan)

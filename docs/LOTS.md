@@ -74,7 +74,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 - [ ] Claude → Codex (pour info) · `WindowNav.lua` (+ module neuf `Cadre.lua`) · le propriétaire a demandé à Claude de faire les
       menus le 25/11 soir : cadre commun posé dans `WindowNav.watch` (sous pcall). Studio était fermé : NON testé en jeu, à vérifier
       (bandeau sous les titres, coins, fenêtres à UIListLayout direct laissées sans décor).
-- [ ] Claude (pour soi) · `Util.groundY` · au bord de l'eau, la hauteur est interpolée avec les cases d'eau (0) : une bête posée
+- [x] Claude (pour soi) · `Util.groundY` (fait 27/11 : coins en eau exclus de l'interpolation sur une case de terre) · au bord de l'eau, la hauteur est interpolée avec les cases d'eau (0) : une bête posée
       près d'un étang s'enfonce de ~2 studs (vu en Play le 25/11, graine 7, x≈80 z≈119) · à corriger sans toucher au tirage.
 
 
