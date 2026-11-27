@@ -177,7 +177,7 @@ reste à pousser / capturer sur le PC fixe.
       HUD jamais masqué) + capture de chaque fenêtre dans le cadre commun `Cadre.lua`.
 
 - [x] **X32 · Armes et équipement portés** — Codex, 27/11 · livraison sur disque. [Rapport, budgets et appels Édition](X32-RAPPORT.md). Géométrie `e984a53` et `6aa4ef4`, fiche `f55bc42` et `02ff20e`, bancs `33a7f05`. Claude reprend les captures, les bancs Studio et l’intégration des prototypes au jeu.
-- [x] **X33 · Objets du sac** — Codex, 27/11 · livraison sur disque (`ab79f98`). [Compte des pièces et appels Édition](X33-RAPPORT.md). Claude reprend les bancs Studio et les captures à 48 px.
+- [x] **X33 · Objets du sac** — Codex, 27/11 · intégré et vérifié par Claude (`d3a8db0` ; banc visuels_objets : 1 103 miniatures, 0 à vérifier). [Compte des pièces et appels Édition](X33-RAPPORT.md). Claude reprend les bancs Studio et les captures à 48 px.
 - [ ] **X34 · Maisons et bâtiments** (maison, villages2, moulin, château) — Sol, file du 26/11.
 - [ ] **X35 · PNJ : apparence + dialogues** (Avatar.dress, Apparence ; `Dialogue.lua` : passage accordé par Claude) — Sol.
 - [ ] **X36 · Créatures du bestiaire + 6 boss** (`Silhouettes.lua` : passage accordé par Claude ; données des boss → passage à Claude) — Sol.
