@@ -322,7 +322,7 @@ local KINDS = {
 		loot = { { "mammoth_tusk", 1, 1, 1 }, { "frost_crystal", 1, 1, 0.3 }, { "raw_hide", 4, 6, 1 } }, gold = 10 },
 	storm_griffin = { name = "Griffon d'orage", form = "volant", look = { "BL", "O", scale = 2.4 }, hp = 2400, dmg = 52, speed = 16, level = 10, style = "spore", radius = 3.4, boss = true, flies = true, minion = "griffin",
 		proj = { color = Color3.fromRGB(170, 210, 255), size = 2 }, loot = { { "storm_feather", 1, 1, 1 }, { "amber", 1, 2, 0.6 } }, gold = 10 },
-	cavern_widow = { name = "Veuve des cavernes", form = "insecte", look = { "N", "R", carapace = true, scale = 2.4 }, hp = 2400, dmg = 50, speed = 12, level = 10, style = "spore", radius = 3.4, boss = true, minion = "cave_spider",
+	cavern_widow = { name = "Veuve des cavernes", model = "Veuve_Cavernes", form = "insecte", look = { "N", "R", carapace = true, scale = 2.4 }, hp = 2400, dmg = 50, speed = 12, level = 10, style = "spore", radius = 3.4, boss = true, minion = "cave_spider",
 		proj = { color = Color3.fromRGB(140, 230, 70), size = 2, poison = true }, loot = { { "widow_silk", 1, 1, 1 }, { "ancient_crystal", 1, 2, 0.5 } }, gold = 10 },
 	marsh_crocodile = { name = "Crocodile des marais", model = "Croco_Marais", form = "quadrupede", look = { "V", "BF", long = true, queue = true, scale = 2.4 }, hp = 2800, dmg = 54, speed = 12, level = 10, style = "charge", radius = 3.8, boss = true, minion = "leech",
 		loot = { { "croc_king_hide", 1, 1, 1 }, { "tooth", 3, 5, 1 }, { "black_scale", 1, 1, 0.25 } }, gold = 10 },

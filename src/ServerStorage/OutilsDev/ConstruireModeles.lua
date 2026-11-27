@@ -5000,4 +5000,60 @@ function M.crocoMarais(): Model
 	return m
 end
 
+-- Veuve des cavernes (boss, 27/11, Claude) : abdomen noir à sablier rouge, céphalothorax, 8 pattes à deux segments
+-- (cuisse qui monte, tibia qui redescend au sol), crochets, grappe d'yeux rouges luisants, poils et fils de soie.
+function M.veuveCavernes(): Model
+	dossier = dossierModeles()
+	local old = dossier:FindFirstChild("Veuve_Cavernes")
+	if old then
+		old:Destroy()
+	end
+	local m = nouveau("Veuve_Cavernes")
+	local n1, n2, n3, rouge, soie = rgb(28, 24, 30), rgb(46, 40, 50), rgb(70, 62, 76), rgb(200, 30, 40), rgb(226, 226, 236)
+	local function Bx(n: string, t: Vector3, pos: Vector3, c: Color3, mat: Enum.Material?, cf: CFrame?)
+		if cf then
+			return P(m, n, t, Vector3.zero, c, mat or Mat.SmoothPlastic, { collide = false, cf = cf })
+		end
+		return P(m, n, t, pos, c, mat or Mat.SmoothPlastic, { collide = false })
+	end
+	local function barre(n: string, a: Vector3, b: Vector3, e: number, c: Color3)
+		return Bx(n, Vector3.new(e, e, (b - a).Magnitude + e * 0.6), Vector3.zero, c, nil, CFrame.lookAt((a + b) / 2, b))
+	end
+	-- abdomen et sablier
+	Bx("Abdomen", Vector3.new(3.4, 2.8, 3.8), Vector3.new(0, 2.6, 2.4), n1)
+	Bx("Abdomen", Vector3.new(2.8, 0.6, 3.2), Vector3.new(0, 4.2, 2.4), n2)
+	Bx("Sablier", Vector3.new(0.9, 0.06, 0.6), Vector3.new(0, 4.52, 2.0), rouge, Mat.Neon)
+	Bx("Sablier", Vector3.new(0.9, 0.06, 0.6), Vector3.new(0, 4.52, 2.9), rouge, Mat.Neon)
+	Bx("Sablier", Vector3.new(0.35, 0.06, 0.4), Vector3.new(0, 4.52, 2.45), rouge, Mat.Neon)
+	for i = -1, 1 do
+		Bx("Poil", Vector3.new(0.1, 0.5, 0.1), Vector3.new(i * 1.0, 4.7, 3.6), n3)
+	end
+	-- céphalothorax, tête, crochets, yeux
+	Bx("Thorax", Vector3.new(2.4, 1.6, 2.2), Vector3.new(0, 2.2, -0.4), n2)
+	Bx("Tete", Vector3.new(1.6, 1.1, 1.0), Vector3.new(0, 2.3, -1.9), n1)
+	for _, sx in { -1, 1 } do
+		barre("Crochet", Vector3.new(sx * 0.35, 1.9, -2.3), Vector3.new(sx * 0.25, 1.1, -2.6), 0.22, rouge)
+	end
+	for k, e in { { -0.45, 2.6 }, { 0.45, 2.6 }, { -0.2, 2.85 }, { 0.2, 2.85 }, { -0.62, 2.35 }, { 0.62, 2.35 } } do
+		Bx("Oeil", Vector3.new(k <= 2 and 0.28 or 0.18, k <= 2 and 0.28 or 0.18, 0.08), Vector3.new(e[1], e[2], -2.42), rgb(255, 50, 50), Mat.Neon)
+	end
+	-- pattes : hanche sur le thorax, genou haut, pied au sol
+	for _, sx in { -1, 1 } do
+		for j, z in { -1.3, -0.6, 0.1, 0.8 } do
+			local hanche = Vector3.new(sx * 1.1, 2.3, z - 0.4)
+			local genou = Vector3.new(sx * (2.6 + j * 0.15), 3.8 - math.abs(j - 2.5) * 0.15, z + (j - 2.5) * 0.7)
+			local pied = Vector3.new(sx * (4.0 + j * 0.2), 0.15, z + (j - 2.5) * 1.3)
+			barre("Cuisse", hanche, genou, 0.32, n2)
+			barre("Tibia", genou, pied, 0.24, n1)
+			Bx("Genou", Vector3.new(0.4, 0.4, 0.4), genou, n3)
+		end
+	end
+	-- fils de soie qui pendent de l'abdomen
+	barre("Soie", Vector3.new(0, 1.3, 4.1), Vector3.new(0.3, 0.05, 4.9), 0.06, soie)
+	barre("Soie", Vector3.new(0.4, 1.4, 4.2), Vector3.new(1.2, 0.05, 4.6), 0.05, soie)
+	fini(m)
+	m:ScaleTo(2.0) -- taille de boss
+	return m
+end
+
 return M
