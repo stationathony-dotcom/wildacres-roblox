@@ -548,6 +548,13 @@ K.GEAR = {
 	{ "weapon", "Lame de givre", 4, { force = 7, vitesse = 2 }, { frost_crystal = 1, steel = 3, silver_ingot = 1 }, 34, power = 9, visual = "8" },
 	{ "hat", "Couronne du Roi sans couronne", 4, { charisme = 8, chance = 4, vie = 2 }, { lost_crown = 1, ancient_jewel = 1 }, 36, visual = "mage" },
 	{ "trinket", "Éclat de météorite", 4, { force = 4, defense = 4, chance = 3 }, { meteorite = 2, gold_ingot = 1 }, 30 },
+	-- boss des planches (27/11, lot C15)
+	{ "trinket", "Bourse du Coffre-mimique", 4, { chance = 8, charisme = 3, vie = 2 }, { mimic_tongue = 1, soft_leather = 2, gold_ingot = 1 }, 34 },
+	{ "trinket", "Lanterne de la Baudroie", 4, { discretion = 6, chance = 4, vie = 3 }, { angler_lure = 1, glowstone = 1, silver_ingot = 1 }, 34 },
+	{ "weapon", "Hache de la défense de givre", 4, { force = 8, vie = 3 }, { mammoth_tusk = 1, steel = 3, oak_log = 1 }, 36, power = 10, visual = "9" },
+	{ "hat", "Heaume du Griffon d'orage", 4, { vitesse = 6, chance = 4, defense = 3 }, { storm_feather = 1, steel = 2, linen_thread = 2 }, 36 },
+	{ "armor", "Tunique de soie noire", 4, { discretion = 7, defense = 5, vitesse = 2 }, { widow_silk = 1, linen_thread = 4, soft_leather = 2 }, 34 },
+	{ "armor", "Cuirasse du roi-croco", 4, { defense = 9, vie = 5 }, { croc_king_hide = 1, steel = 3, leather = 2 }, 36 },
 	-- outils de métier portés (petits bonus du métier)
 	{ "trinket", "Marteau de forgeron", 1, { force = 2 }, { iron_ingot = 2, planks = 1 }, 6 },
 	{ "trinket", "Faucille", 1, { chance = 2 }, { iron_ingot = 1, planks = 1 }, 3 },
