@@ -144,52 +144,96 @@ end
 -- ---------------------------------------------------------------- Arbres
 
 local function arbres()
-	-- Chêne
+	-- 27/11, Claude (le propriétaire trouvait les arbres trop simples : 2-3 blocs) : tronc en gradins d'écorce,
+	-- racines, branches qui portent les masses de feuillage, houppiers en plusieurs blocs à 3 tons qui se chevauchent.
+	-- Noms gardés : « Tronc » (collision), « Feuillage » (tag, caduc), « Racine », « Branche ».
+	local function tronc(m: Model, h: number, larg: number, c: Color3, cSombre: Color3)
+		P(m, "Tronc", Vector3.new(larg, h, larg), Vector3.new(0, h / 2, 0), c, Mat.Wood)
+		for i, y in { h * 0.25, h * 0.55, h * 0.8 } do
+			P(m, "Ecorce", Vector3.new(larg + 0.12, 0.35, larg * 0.6), Vector3.new(0, y, (i % 2 == 0) and 0.2 or -0.2), cSombre, Mat.Wood,
+				{ collide = false, rot = CFrame.Angles(0, i * 0.9, 0) })
+		end
+		for i = 0, 3 do
+			local a = i * math.pi / 2 + 0.4
+			P(m, "Racine", Vector3.new(larg * 0.55, 0.6, 1.4), Vector3.new(math.cos(a) * larg * 0.7, 0.3, math.sin(a) * larg * 0.7), cSombre, Mat.Wood,
+				{ collide = false, rot = CFrame.Angles(0, -a, math.rad(-12)) })
+		end
+	end
+	local function masse(m: Model, taille: Vector3, pos: Vector3, c: Color3, caduc: boolean, rot: number?)
+		feuillage(P(m, "Feuillage", taille, pos, c, Mat.Grass, { rot = CFrame.Angles(0, rot or 0, 0) }), caduc)
+	end
+	-- Chêne : large, trapu, trois branches maîtresses
 	do
 		local m = nouveau("Arbre_Chene")
-		P(m, "Tronc", Vector3.new(1.8, 8, 1.8), Vector3.new(0, 4, 0), BOIS, Mat.Wood)
-		P(m, "Racine", Vector3.new(3, 0.8, 3), Vector3.new(0, 0.4, 0), BOIS_FONCE, Mat.Wood, { collide = false })
-		local v1, v2 = rgb(88, 152, 62), rgb(108, 170, 72)
-		feuillage(P(m, "Feuillage", Vector3.new(9, 5, 9), Vector3.new(0, 10, 0), v1, Mat.Grass), true)
-		feuillage(P(m, "Feuillage", Vector3.new(6.5, 3.5, 6.5), Vector3.new(0.6, 13.6, -0.4), v2, Mat.Grass), true)
-		feuillage(P(m, "Feuillage", Vector3.new(4, 3.5, 4), Vector3.new(-4.2, 9.2, 1.5), v2, Mat.Grass), true)
-		feuillage(P(m, "Feuillage", Vector3.new(4, 3, 4), Vector3.new(3.8, 8.8, 2.4), v1, Mat.Grass), true)
-		feuillage(P(m, "Feuillage", Vector3.new(3.6, 3, 3.6), Vector3.new(1.4, 9, -4.4), v2, Mat.Grass), true)
+		tronc(m, 8, 1.8, BOIS, BOIS_FONCE)
+		for i, b in { { 1, 0.3, -40 }, { -1, -0.4, 38 }, { 0.2, 1, -30 } } do
+			P(m, "Branche", Vector3.new(0.8, 3.6, 0.8), Vector3.new(b[1] * 1.4, 7.4, b[2] * 1.2), BOIS, Mat.Wood,
+				{ collide = false, rot = CFrame.Angles(math.rad(b[2] * 30), 0, math.rad(b[3])) })
+		end
+		local v1, v2, v3 = rgb(70, 132, 52), rgb(92, 156, 64), rgb(122, 182, 80)
+		masse(m, Vector3.new(9, 3.6, 8.5), Vector3.new(0, 10, 0), v1, true)
+		masse(m, Vector3.new(7.5, 2.8, 7), Vector3.new(0.3, 12.6, -0.2), v2, true, 0.3)
+		masse(m, Vector3.new(4.6, 2.2, 4.4), Vector3.new(-0.4, 14.4, 0.4), v3, true, 0.7)
+		masse(m, Vector3.new(4.2, 3.2, 4.2), Vector3.new(-4.3, 9.4, 1.2), v2, true, 0.2)
+		masse(m, Vector3.new(4, 3, 4), Vector3.new(4.1, 9.2, 1.8), v1, true, -0.3)
+		masse(m, Vector3.new(3.8, 2.8, 3.8), Vector3.new(1.2, 9.6, -4.4), v2, true, 0.5)
+		masse(m, Vector3.new(2.4, 1.2, 2.4), Vector3.new(3, 11.6, 1.4), v3, true)
+		masse(m, Vector3.new(2.2, 1.1, 2.2), Vector3.new(-3.4, 11.2, -1), v3, true)
 		fini(m)
 	end
-	-- Sapin
+	-- Sapin : étages en gradins, pointes qui retombent, cime claire
 	do
 		local m = nouveau("Arbre_Sapin")
-		P(m, "Tronc", Vector3.new(1.4, 5, 1.4), Vector3.new(0, 2.5, 0), BOIS_FONCE, Mat.Wood)
-		local v1, v2 = rgb(46, 104, 64), rgb(58, 122, 74)
-		local etages = { { 9, 4.4 }, { 7.2, 7 }, { 5.4, 9.6 }, { 3.6, 12 }, { 1.8, 14 } }
+		tronc(m, 5, 1.3, BOIS_FONCE, rgb(54, 38, 28))
+		local v1, v2, v3 = rgb(36, 88, 56), rgb(48, 108, 66), rgb(70, 134, 82)
+		local etages = { { 9, 4.4 }, { 7.4, 6.8 }, { 5.8, 9.2 }, { 4.2, 11.4 }, { 2.6, 13.4 } }
 		for i, e in etages do
-			feuillage(P(m, "Feuillage", Vector3.new(e[1], 2.6, e[1]), Vector3.new(0, e[2], 0), i % 2 == 0 and v2 or v1, Mat.Grass), false)
+			masse(m, Vector3.new(e[1], 2.2, e[1]), Vector3.new(0, e[2], 0), i % 2 == 0 and v2 or v1, false, i * 0.4)
+			masse(m, Vector3.new(e[1] * 0.75, 0.6, e[1] * 0.75), Vector3.new(0, e[2] + 1.3, 0), v3, false, i * 0.4 + 0.4)
+			-- pointes de branches qui débordent sous l'étage
+			for k = 0, 3 do
+				local a = k * math.pi / 2 + i * 0.4
+				masse(m, Vector3.new(1.1, 0.8, 1.6), Vector3.new(math.cos(a) * e[1] * 0.48, e[2] - 1.1, math.sin(a) * e[1] * 0.48), v1, false, -a)
+			end
 		end
+		masse(m, Vector3.new(1, 1.6, 1), Vector3.new(0, 15.2, 0), v3, false)
 		fini(m)
 	end
-	-- Bouleau
+	-- Bouleau : tronc blanc fin à lenticelles, houppier aéré et léger
 	do
 		local m = nouveau("Arbre_Bouleau")
-		P(m, "Tronc", Vector3.new(1.3, 10, 1.3), Vector3.new(0, 5, 0), rgb(232, 228, 216), Mat.Wood)
-		for i, y in { 2.2, 4.6, 6.4, 8.5 } do
-			P(m, "Tache", Vector3.new(1.36, 0.3, 0.7), Vector3.new(0, y, (i % 2 == 0) and 0.2 or -0.2), rgb(40, 40, 40), Mat.SmoothPlastic, { collide = false })
+		P(m, "Tronc", Vector3.new(1.2, 10, 1.2), Vector3.new(0, 5, 0), rgb(236, 232, 220), Mat.Wood)
+		for i, y in { 1.6, 3.1, 4.6, 6.2, 7.6, 9 } do
+			P(m, "Tache", Vector3.new(1.26, 0.22, 0.6), Vector3.new((i % 2 == 0) and 0.15 or -0.15, y, (i % 3 == 0) and 0.25 or -0.2), rgb(46, 44, 42), Mat.SmoothPlastic, { collide = false })
 		end
-		local v1, v2 = rgb(150, 192, 82), rgb(170, 204, 96)
-		feuillage(P(m, "Feuillage", Vector3.new(5.5, 7, 5.5), Vector3.new(0, 12, 0), v1, Mat.Grass), true)
-		feuillage(P(m, "Feuillage", Vector3.new(3.5, 4, 3.5), Vector3.new(2.6, 10, 1.2), v2, Mat.Grass), true)
-		feuillage(P(m, "Feuillage", Vector3.new(3, 3.5, 3), Vector3.new(-2.4, 11, -1.4), v2, Mat.Grass), true)
+		P(m, "Racine", Vector3.new(1.8, 0.6, 1.8), Vector3.new(0, 0.3, 0), rgb(200, 192, 176), Mat.Wood, { collide = false })
+		P(m, "Branche", Vector3.new(0.4, 2.6, 0.4), Vector3.new(0.9, 9.4, 0), rgb(220, 214, 200), Mat.Wood, { collide = false, rot = CFrame.Angles(0, 0, math.rad(-35)) })
+		P(m, "Branche", Vector3.new(0.4, 2.2, 0.4), Vector3.new(-0.8, 10.2, 0.4), rgb(220, 214, 200), Mat.Wood, { collide = false, rot = CFrame.Angles(0, 0, math.rad(35)) })
+		local v1, v2, v3 = rgb(138, 182, 74), rgb(162, 200, 92), rgb(196, 220, 112)
+		masse(m, Vector3.new(4.8, 5, 4.8), Vector3.new(0, 12.2, 0), v1, true)
+		masse(m, Vector3.new(3.4, 3.4, 3.4), Vector3.new(0.4, 14.6, -0.3), v2, true, 0.5)
+		masse(m, Vector3.new(3.2, 3.2, 3.2), Vector3.new(2.4, 10.8, 1), v2, true, 0.2)
+		masse(m, Vector3.new(3, 3, 3), Vector3.new(-2.3, 11.6, -1.2), v2, true, -0.2)
+		masse(m, Vector3.new(1.8, 1.6, 1.8), Vector3.new(1.6, 13.4, 1.6), v3, true)
+		masse(m, Vector3.new(1.6, 1.4, 1.6), Vector3.new(-1.6, 14, 0.8), v3, true)
 		fini(m)
 	end
-	-- Cerisier
+	-- Cerisier : tronc tors sombre, deux branches, nuage rose en couches, pétales clairs
 	do
 		local m = nouveau("Arbre_Cerisier")
-		P(m, "Tronc", Vector3.new(1.5, 6, 1.5), Vector3.new(0, 3, 0), rgb(96, 62, 50), Mat.Wood)
-		P(m, "Branche", Vector3.new(0.8, 3, 0.8), Vector3.new(1.2, 6.5, 0), rgb(96, 62, 50), Mat.Wood, { rot = CFrame.Angles(0, 0, math.rad(-35)) })
-		local r1, r2 = rgb(240, 166, 196), rgb(250, 190, 212)
-		feuillage(P(m, "Feuillage", Vector3.new(8, 4, 7), Vector3.new(0.5, 8.6, 0), r1, Mat.Grass), true)
-		feuillage(P(m, "Feuillage", Vector3.new(5, 3, 5), Vector3.new(-0.5, 11.2, 0.6), r2, Mat.Grass), true)
-		feuillage(P(m, "Feuillage", Vector3.new(3.4, 2.6, 3.4), Vector3.new(3.6, 8, 2), r2, Mat.Grass), true)
+		tronc(m, 6, 1.4, rgb(96, 62, 50), rgb(70, 44, 36))
+		P(m, "Branche", Vector3.new(0.7, 3, 0.7), Vector3.new(1.3, 6.6, 0), rgb(96, 62, 50), Mat.Wood, { collide = false, rot = CFrame.Angles(0, 0, math.rad(-38)) })
+		P(m, "Branche", Vector3.new(0.6, 2.6, 0.6), Vector3.new(-1.1, 6.8, 0.5), rgb(96, 62, 50), Mat.Wood, { collide = false, rot = CFrame.Angles(math.rad(10), 0, math.rad(36)) })
+		local r1, r2, r3 = rgb(226, 140, 178), rgb(242, 170, 198), rgb(252, 210, 226)
+		masse(m, Vector3.new(8, 3, 7), Vector3.new(0.4, 8.6, 0), r1, true)
+		masse(m, Vector3.new(6.2, 2.4, 5.6), Vector3.new(-0.2, 10.6, 0.4), r2, true, 0.3)
+		masse(m, Vector3.new(3.8, 1.6, 3.4), Vector3.new(0.2, 12.2, 0.2), r3, true, 0.6)
+		masse(m, Vector3.new(3.4, 2.4, 3.4), Vector3.new(3.8, 8.2, 1.8), r2, true)
+		masse(m, Vector3.new(3, 2.2, 3), Vector3.new(-3.6, 8.6, -1.4), r1, true)
+		for i = 0, 4 do
+			local a = i * 1.3
+			masse(m, Vector3.new(0.7, 0.2, 0.7), Vector3.new(math.cos(a) * 3.4, 7.05, math.sin(a) * 3), r3, true, a)
+		end
 		fini(m)
 	end
 	-- Arbre mort
@@ -209,6 +253,18 @@ local function arbres()
 		P(m, "Coupe", Vector3.new(1.6, 0.1, 1.6), Vector3.new(0, 1.25, 0), BOIS_CLAIR, Mat.Wood, { collide = false })
 		fini(m)
 	end
+end
+
+-- reconstruire seulement les arbres (27/11)
+function M.arbres()
+	dossier = dossierModeles()
+	for _, n in { "Arbre_Chene", "Arbre_Sapin", "Arbre_Bouleau", "Arbre_Cerisier", "Arbre_Mort", "Souche" } do
+		local old = dossier:FindFirstChild(n)
+		if old then
+			old:Destroy()
+		end
+	end
+	arbres()
 end
 
 -- Biomes : cactus (désert), saule (marais)
