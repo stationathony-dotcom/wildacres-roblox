@@ -105,10 +105,39 @@ function Politique.taxAt(pos: Vector3): (number, string?)
 	return 0.05, nil
 end
 
+-- ROYAUMES (27/11, MANQUES-MMO n° 6) : le maire d'un village ou d'une ville peut prêter allégeance à
+-- un autre conseil qui a un maire (action « pol_allegeance »). Le suzerain touche TRIBUTE des taxes de
+-- ses vassaux ; le royaume porte le nom du conseil tout en haut de la chaîne. Rien d'imposé : on
+-- rompt l'allégeance quand on veut (même action, sans cible).
+local TRIBUTE = 0.1
+
+-- sommet de la chaîne d'allégeance (le royaume) ; nil si pas de suzerain
+function Politique.realmOf(key: string): string?
+	local seen, k = {}, key
+	while true do
+		local v = V(k)
+		if not (v and v.suzerain and V(v.suzerain)) or seen[k] then
+			break
+		end
+		seen[k] = true
+		k = v.suzerain
+	end
+	return k ~= key and k or nil
+end
+
 function Politique.credit(key: string?, n: number, why: string)
 	local v = key and V(key)
 	if v and n > 0 then
-		v.tresor = (v.tresor or 0) + n
+		local tribut = 0
+		local liege = v.suzerain and V(v.suzerain)
+		if liege and liege.maire then
+			tribut = math.floor(n * TRIBUTE)
+			if tribut > 0 then
+				liege.tresor = (liege.tresor or 0) + tribut
+				liege.tributs = (liege.tributs or 0) + tribut
+			end
+		end
+		v.tresor = (v.tresor or 0) + n - tribut
 		v.taxes = (v.taxes or 0) + n
 	end
 	local _ = why
@@ -130,6 +159,26 @@ local function tally(v)
 		end
 	end
 	return count
+end
+
+-- ce que le conseil montre du royaume : suzerain, vassaux, conseils à qui prêter allégeance
+local function royaume(key: string)
+	local v = V(key)
+	local top = Politique.realmOf(key)
+	local out = { suzerain = v.suzerain and V(v.suzerain) and V(v.suzerain).name or nil, nom = top and V(top).name or nil,
+		tribut = TRIBUTE, vassaux = {}, choix = {} }
+	for k, o in villages() do
+		if o.suzerain == key then
+			table.insert(out.vassaux, o.name)
+		end
+		if k ~= key and o.maire and Politique.realmOf(k) ~= key and o.suzerain ~= key then
+			table.insert(out.choix, { v = k, name = o.name, maire = o.maireName })
+		end
+	end
+	table.sort(out.choix, function(a, b)
+		return a.name < b.name
+	end)
+	return out
 end
 
 local function send(player: Player, key: string)
@@ -157,6 +206,7 @@ local function send(player: Player, key: string)
 		kind = "conseil", village = key, name = v.name, maire = v.maireName, isMaire = v.maire == uid,
 		resident = isResident(uid, v), candidat = v.cand[uid] ~= nil, tresor = v.tresor or 0, taxe = v.maire and v.taxe or 5,
 		cands = cands, projets = projs, log = v.log or {}, ronde = v.projets and v.projets.ronde, day = G.world.day,
+		royaume = royaume(key),
 	})
 end
 
@@ -196,6 +246,41 @@ function Politique.init(g)
 			v.cand[uid] = player.DisplayName
 			log(v, player.DisplayName .. " se présente à la mairie.")
 		end
+		send(player, key)
+	end)
+	G.Interact.onAction("pol_allegeance", function(player, data)
+		local key = type(data) == "table" and data.v
+		local v = type(key) == "string" and V(key)
+		if not v or not near(player, key) or v.maire ~= tostring(player.UserId) then
+			return
+		end
+		local to = data.to
+		if to == nil then
+			if v.suzerain and V(v.suzerain) then
+				log(V(v.suzerain), v.name .. " rompt son allégeance.")
+			end
+			if v.suzerain then
+				log(v, (v.maireName or "Le maire") .. " rompt l'allégeance du conseil.")
+			end
+			v.suzerain = nil
+		elseif type(to) == "string" and to ~= key and V(to) and V(to).maire then
+			-- pas de boucle : le futur suzerain ne doit pas déjà dépendre de nous
+			local k, guard = to, 0
+			while k and guard < 64 do
+				if k == key then
+					G.Util.toast(player, "Impossible : " .. V(to).name .. " dépend déjà de toi.")
+					return
+				end
+				k = V(k) and V(k).suzerain
+				guard += 1
+			end
+			v.suzerain = to
+			log(v, (v.maireName or "Le maire") .. " prête allégeance à " .. V(to).name .. " (" .. math.floor(TRIBUTE * 100) .. " % des taxes).")
+			log(V(to), v.name .. " prête allégeance au conseil.")
+		else
+			return
+		end
+		G.Mondes.saveSoon(player)
 		send(player, key)
 	end)
 	G.Interact.onAction("pol_vote", function(player, data)

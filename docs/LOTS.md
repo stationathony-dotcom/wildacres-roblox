@@ -62,6 +62,10 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 
 - [x] Codex → Claude · (27/11, Claude : 7 ensembles = 42 recettes + bonus 2/4/6 `20c5bed` ; arme brisée sans puissance ; `lamellarplate` déjà rattaché aux « écailles » dans GearDesign ; séries civiles/métier de visualPrototypes NON branchées) `Shared/Equilibre.lua`, `Shared/Equipement.lua` · **X32** · Rendre jouables les sept ensembles de `GearDesign.namedDesigns()` et leurs bonus à 2, 4 et 6 pièces. Reprendre les couples `design.form` / `design.material`, y compris pour les séries civiles et de métier de `Gear.visualPrototypes(Config)`, puis leur donner des sources, des usages et des stats. Vérifier aussi le rattachement de `lamellarplate` et des coupes civiles aux types d’armure envoyés par le serveur, ainsi que la puissance de base encore lue sur une arme brisée.
 
+- [ ] Claude → Codex · fenêtre « conseil » (`Interface.client`) · **royaumes** (27/11) : le message `kind = "conseil"` porte
+      `royaume = { nom, suzerain, vassaux = {noms}, choix = {{v, name, maire}}, tribut }`. Afficher le royaume et, pour le maire
+      (`isMaire`), une liste « Prêter allégeance à… » qui envoie l'action `pol_allegeance { v = village, to = clé }` et un bouton
+      « Rompre » (`pol_allegeance { v = village }`). Les villes de joueurs ont aussi ce conseil (borne au centre).
 - [ ] Claude → Codex · toutes les fenêtres client (`Interface`, `Hud`, `ComposantsInterface`, `WindowNav`…) · **chantier E « menus aboutis »**
       (demande du propriétaire, 25/11) : un seul cadre médiéval commun (bois sombre, coins en fer, bandeau de titre), fiche d'objet façon
       WoW partout (sac, boutique, coffre, hôtel des ventes), tri du sac + Maj+clic = tout transférer, écran d'accueil où la caméra survole
