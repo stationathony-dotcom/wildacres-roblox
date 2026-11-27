@@ -1030,6 +1030,10 @@ local function buildPlaced(reg, d)
 		G.Util.prompt(base, "barracks_equip", "Équiper l'armée (fer + cuir)", "Caserne" .. whose, { dist = 12, hold = 0.6, key = Enum.KeyCode.R, pad = Enum.KeyCode.ButtonY, data = { Placed = d.id } })
 	elseif d.item == "windmill" then
 		G.Util.prompt(base, "mill", "Moulin (blé / farine)", "Moulin" .. whose, { dist = 10, data = { Placed = d.id } })
+	elseif d.item == "horse_stable" then
+		-- écurie posée (27/11, sans effet jusqu'ici) : les mêmes services que l'écurie d'un village (Horses)
+		G.Util.prompt(base, "ecurie", "Faire venir ma monture", "Écurie" .. whose, { dist = 12, data = { Placed = d.id } })
+		G.Util.prompt(base, "ecurie_changer", "Changer de monture", "Écurie" .. whose, { dist = 12, key = Enum.KeyCode.R, pad = Enum.KeyCode.ButtonY, data = { Placed = d.id } })
 	elseif d.item == "well" or d.item == "water_pump" then
 		G.Util.prompt(base, "well", "Puiser (seau vide)", (d.item == "well" and "Puits" or "Pompe à eau") .. whose, { dist = 8, data = { Placed = d.id } })
 	elseif d.item == "henhouse" then
