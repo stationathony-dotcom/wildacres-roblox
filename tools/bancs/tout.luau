@@ -19,7 +19,7 @@ local URL = "http://127.0.0.1:34873/banc?f="
 local RAPIDES = {
 	"animaux", "apparence", "applique", "arc", "enums", "objets", "armee", "audit_contenu", "bestiaire_livre", "bosquets", "creatures_voxel", "lointain", "vegetation", "boss_scene", "butin", "butin_creatures", "chantiers",
 	"chasse_au_tresor", "chroniques", "courrier_reprise", "course", "demandes", "demandes_joueurs", "diligence", "donjons_groupe", "duels", "ecurie", "economie",
-	"equilibre", "flux_or", "fauche", "forets", "formes", "royaumes", "magie", "froid", "harpon", "herbes", "infos", "concours", "route", "berger", "etats", "mecanismes", "moissons", "ouvriers", "pnj_danger", "quetes",
+	"equilibre", "flux_or", "fauche", "forets", "formes", "royaumes", "magie", "prosperite", "froid", "harpon", "herbes", "infos", "concours", "route", "berger", "etats", "mecanismes", "moissons", "ouvriers", "pnj_danger", "quetes",
 	"quetes_lieux", "relations_pnj", "reputation", "resistance", "roue_eau", "save_instantane",
 	"securite", "selection", "sommeil_collectif", "stats", "talents", "tourelles", "tresors", "usure", "ventes", "villes", "combat_armes",
 }

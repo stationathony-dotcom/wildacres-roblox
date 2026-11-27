@@ -1189,6 +1189,21 @@ local function rumor(e, player: Player): string
 			return "On raconte qu'à " .. h.v.name .. ", ils manquent de " .. h.info.icon .. " " .. h.info.name .. " : ils paient cher pour en avoir."
 		end
 	end
+	-- prospérité du village (Shop.prosperity, 27/11) : les habitants parlent de leur commerce
+	local P = G.Shop and rawget(G.Shop, "prosperity")
+	local VA = G.Reputation and rawget(G.Reputation, "villageAt")
+	local here = P and VA and e.root and VA(e.root.Position)
+	if here and math.random() < 0.3 then
+		local _, label = P(here.key)
+		local lines = {
+			["en déclin"] = "Plus personne ne vient commercer ici… les marchands rognent sur tout.",
+			["prospère"] = "Les affaires marchent bien ces temps-ci, les marchands paient mieux qu'ailleurs.",
+			["florissant"] = "Jamais vu autant de monde au marché ! Le village n'a jamais été aussi riche.",
+		}
+		if lines[label] then
+			return lines[label]
+		end
+	end
 	local places = G.wg:placesAround(reg.rx, reg.rz, 3)
 	if #places == 0 then
 		return "Il n'y a rien à des lieues à la ronde."

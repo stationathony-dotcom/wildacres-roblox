@@ -211,6 +211,49 @@ local function wantedAt(e)
 end
 Shop.wantedAt = wantedAt
 
+-- PROSPÉRITÉ (27/11, MANQUES-MMO n° 8) : l'or échangé au comptoir d'un village nourrit son commerce
+-- (G.world.extra.prosp[clé]), qui s'érode de 10 % chaque matin. Un village délaissé décline (ses marchands
+-- paient 5 % de moins), un village où l'on commerce prospère (+5 %) ou fleurit (+10 %). Les habitants le disent.
+Shop.PROSP_STEPS = { { 0, "ordinaire", 1 }, { 3000, "prospère", 1.05 }, { 12000, "florissant", 1.1 } }
+Shop.PROSP_DECLINE = 300 -- un village qui a été prospère et retombe sous ce seuil est « en déclin » (−5 %)
+local function prospTable()
+	G.world.extra = G.world.extra or {}
+	G.world.extra.prosp = G.world.extra.prosp or {}
+	return G.world.extra.prosp
+end
+local function villageKeyOf(e): string?
+	local VA = G.Reputation and rawget(G.Reputation, "villageAt")
+	local v = VA and e and e.root and VA(e.root.Position)
+	return v and v.key or nil
+end
+function Shop.prosperity(key: string?): (number, string, number)
+	local n = key and prospTable()[key]
+	if not n then
+		return 0, "ordinaire", 1 -- jamais de commerce ici : ni déclin ni essor
+	end
+	local peak = (G.world.extra.prospPeak or {})[key] or 0
+	if peak >= Shop.PROSP_STEPS[2][1] and n < Shop.PROSP_DECLINE then
+		return n, "en déclin", 0.95
+	end
+	local step = Shop.PROSP_STEPS[1]
+	for _, st in Shop.PROSP_STEPS do
+		if n >= st[1] then
+			step = st
+		end
+	end
+	return n, step[2], step[3]
+end
+local function trade(e, gold: number)
+	local key = villageKeyOf(e)
+	if key and gold > 0 then
+		local t = prospTable()
+		t[key] = (t[key] or 0) + gold
+		G.world.extra.prospPeak = G.world.extra.prospPeak or {}
+		G.world.extra.prospPeak[key] = math.max(G.world.extra.prospPeak[key] or 0, t[key])
+	end
+end
+Shop.trade = trade
+
 function Shop.sellPrice(player: Player, e, item: string): number
 	local info = Config.ITEMS[item]
 	if not info or not info.price or info.price <= 0 or info.tool then
@@ -231,6 +274,7 @@ function Shop.sellPrice(player: Player, e, item: string): number
 	end
 	mult *= (1 + 0.1 * G.Joueurs.talent(player, "negociant")) * (1 + 0.2 * G.Joueurs.talent(player, "marchand_ne")) * (1 + 0.005 * G.Joueurs.skill(player, "commerce"))
 	mult *= G.Evenements.priceBonus(e.reg.key) -- foire au village
+	mult *= select(3, Shop.prosperity(villageKeyOf(e))) -- prospérité du village (commerce des joueurs)
 	local repMult = G.Reputation and rawget(G.Reputation, "priceMult")
 	if repMult and e.root then
 		local _, sellM = repMult(player, e.root.Position)
@@ -465,6 +509,7 @@ function Shop.buy(player: Player, item: string, n: number)
 		G.Util.toast(player, "Pas assez d'or.")
 		return
 	end
+	trade(e, entry.price * n)
 	if string.sub(item, 1, 7) == "animal:" then
 		local kind = string.sub(item, 8)
 		G.Animals.buy(player, kind)
@@ -537,6 +582,7 @@ function Shop.sell(player: Player, item: string, n: number)
 		G.Joueurs.addSkillXp(player, "commerce", 1 + math.floor(total / 25))
 		if G.Quetes and rawget(G.Quetes, "note") then G.Quetes.note(player, "vendre", "boutique", sold) end
 		G.Social.bump(player, "soldGold", total)
+		trade(e, total)
 		if total >= 20 and e.root then
 			G.Reputation.addAt(player, e.root.Position, 1, "commerce")
 		end
@@ -548,8 +594,17 @@ function Shop.sell(player: Player, item: string, n: number)
 	refresh(player)
 end
 
+
 function Shop.newDay()
 	table.clear(soldToday)
+	local t = prospTable()
+	local peak = G.world.extra.prospPeak or {}
+	for k, v in t do
+		t[k] = math.floor(v * 0.9)
+		if t[k] < 5 then
+			t[k], peak[k] = nil, nil -- tout oublié : le village redevient ordinaire
+		end
+	end
 end
 
 -- ----------------------------------------------------------------- Atelier
