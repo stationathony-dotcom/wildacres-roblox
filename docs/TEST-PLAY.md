@@ -119,6 +119,23 @@ La téléportation ne marche pas dans Studio : il faut la version publiée.
 3. [ ] Avec un 2e compte : `/wa bannir <pseudo> 1 test` → il est expulsé avec le message d'appel ; en revenant,
        il arrive sur l'accueil, ne peut pas entrer dans un monde, et `/appel …` marche. `/wa debannir <userId>`.
 
+## P10. Nouveautés serveur du 27/11 (15 min ; les fenêtres viendront de Codex, certaines actions passent par `DbgAppel`)
+
+1. [ ] Boss : attendre un boss errant (ou `DbgAppel "Evenements.startBoss"`) — Coffre-mimique, Mammouth de givre, Griffon d'orage,
+       Veuve des cavernes, Crocodile des marais ; au bord de l'eau la **Baudroie** surgit avec des serpents marins (qui ne montent pas à terre).
+2. [ ] Autour d'un îlot (en barque) : deux serpents marins ; le **filon rare** de l'îlot se mine à la pioche de fer, puis « épuisé 5 jours ».
+3. [ ] Grimoire : `/wa donner grimoire_boule_feu` → l'utiliser → sort appris ; puis l'action `sort { id = "boule_feu" }` sur une bête
+       (endurance qui baisse, recharge 4 s).
+4. [ ] Posables enfin utiles : poser une **presse** (pommes + bouteille → cidre le lendemain), un **puits** (remplit les seaux vides),
+       un **poulailler** (blé → œufs le lendemain), une **scierie** (bois → planches), une **porte de grange** (s'ouvre),
+       une **grange** (rangement comme un coffre), une **écurie** (faire venir sa monture).
+5. [ ] Forêt : abattre un arbre loin de chez soi → souche → arbre au bout de 12 jours (`/wa jour`) ; près d'un mur posé, rien ne repousse.
+6. [ ] Village : vendre beaucoup au même comptoir → un habitant dit que « les affaires marchent bien » (prospérité) ;
+       une pénurie apparaît en 1re offre du tableau.
+7. [ ] Ville de joueurs (`/fonder`) : une borne « Conseil de la ville » au centre ; on peut s'y présenter et voter.
+8. [ ] Œuf : `/wa donner oeuf_dragonnet` → l'utiliser → « éclora dans 3 jours » → passer 3 jours → le Dragonnet est dans le journal [N].
+9. [ ] Sécheresse : 4 jours sans pluie (`DbgAppel "Meteo.force", "clair", 6000`) → les buissons à baies ne se regarnissent plus.
+
 ## Ce qu'il faut aussi noter (même si « ça marche »)
 
 - Ce que tu n'as **pas compris** tout seul (sans tutoriel, il faut que le monde le fasse comprendre).
