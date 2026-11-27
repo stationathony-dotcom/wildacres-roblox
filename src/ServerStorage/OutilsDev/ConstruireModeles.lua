@@ -4940,6 +4940,63 @@ function M.coffreMimique(): Model
 		Bx("Piece", Vector3.new(0.5, 0.1, 0.5), Vector3.new(-2 + i * 0.8, 4.3 + (i % 2) * 0.1, 0.6 + (i % 3) * 0.3), or1, Mat.Metal)
 	end
 	fini(m)
+	m:ScaleTo(1.6) -- taille de boss (les modèles faits main ne sont pas agrandis par Bestiaire)
+	return m
+end
+
+-- Crocodile des marais (boss, 27/11, Claude) : long corps bas en écailles à 3 tons, rangées de bosses dorsales,
+-- gueule entrouverte à dents irrégulières, yeux jaunes sur le dessus du crâne, queue en segments, ventre clair, mousse.
+function M.crocoMarais(): Model
+	dossier = dossierModeles()
+	local old = dossier:FindFirstChild("Croco_Marais")
+	if old then
+		old:Destroy()
+	end
+	local m = nouveau("Croco_Marais")
+	local v1, v2, v3, ventre = rgb(66, 92, 52), rgb(48, 70, 40), rgb(96, 124, 70), rgb(196, 190, 140)
+	local dent, oeil, mousse = rgb(236, 228, 200), rgb(255, 214, 60), rgb(90, 140, 60)
+	local function Bx(n: string, t: Vector3, pos: Vector3, c: Color3, mat: Enum.Material?, rot: CFrame?)
+		return P(m, n, t, pos, c, mat or Mat.SmoothPlastic, { collide = false, rot = rot })
+	end
+	-- corps
+	Bx("Corps", Vector3.new(3.2, 1.6, 6), Vector3.new(0, 1.5, 0), v1)
+	Bx("Ventre", Vector3.new(2.8, 0.3, 5.6), Vector3.new(0, 0.75, 0), ventre)
+	for i = -2, 2 do
+		for _, sx in { -0.7, 0.7 } do
+			Bx("Bosse", Vector3.new(0.45, 0.4, 0.6), Vector3.new(sx, 2.45, i * 1.1), (i % 2 == 0) and v2 or v3)
+		end
+	end
+	Bx("Mousse", Vector3.new(1.2, 0.15, 1.6), Vector3.new(0.6, 2.35, -0.8), mousse, Mat.Grass)
+	-- tête et gueule
+	Bx("Crane", Vector3.new(2.4, 1.2, 1.8), Vector3.new(0, 1.6, -3.8), v1)
+	Bx("Museau", Vector3.new(1.8, 0.6, 3.0), Vector3.new(0, 1.65, -6.0), v2, nil, CFrame.Angles(math.rad(-8), 0, 0))
+	Bx("Machoire", Vector3.new(1.7, 0.45, 3.0), Vector3.new(0, 0.95, -5.9), v3, nil, CFrame.Angles(math.rad(6), 0, 0))
+	Bx("Gueule", Vector3.new(1.5, 0.2, 2.6), Vector3.new(0, 1.3, -5.8), rgb(150, 60, 60))
+	for i = 0, 4 do
+		for _, sx in { -1, 1 } do
+			Bx("Dent", Vector3.new(0.14, 0.3 + (i % 2) * 0.1, 0.14), Vector3.new(sx * 0.78, 1.32, -4.8 - i * 0.55), dent)
+		end
+	end
+	for _, sx in { -1, 1 } do
+		Bx("Orbite", Vector3.new(0.6, 0.5, 0.6), Vector3.new(sx * 0.75, 2.35, -3.6), v2)
+		Bx("Oeil", Vector3.new(0.35, 0.3, 0.08), Vector3.new(sx * 0.75, 2.4, -3.93), oeil, Mat.Neon)
+		Bx("Narine", Vector3.new(0.18, 0.12, 0.18), Vector3.new(sx * 0.3, 2.0, -7.35), rgb(30, 40, 26))
+		-- pattes écartées, griffues
+		for _, z in { -1.8, 1.8 } do
+			Bx("Patte", Vector3.new(1.0, 0.9, 0.9), Vector3.new(sx * 1.9, 0.6, z), v2)
+			for g = -1, 1 do
+				Bx("Griffe", Vector3.new(0.12, 0.15, 0.35), Vector3.new(sx * 2.15 + g * 0.22, 0.08, z - 0.55), dent)
+			end
+		end
+	end
+	-- queue en segments qui s'amincissent
+	for i = 0, 5 do
+		local w = 2.6 - i * 0.38
+		Bx("Queue", Vector3.new(w, 1.2 - i * 0.14, 1.3), Vector3.new(math.sin(i * 0.5) * 0.4, 1.4 - i * 0.12, 3.6 + i * 1.15), (i % 2 == 0) and v1 or v2)
+		Bx("Bosse", Vector3.new(0.3, 0.35, 0.5), Vector3.new(math.sin(i * 0.5) * 0.4, 2.0 - i * 0.18, 3.6 + i * 1.15), v3)
+	end
+	fini(m)
+	m:ScaleTo(1.7) -- taille de boss (les modèles faits main ne sont pas agrandis par Bestiaire)
 	return m
 end
 
