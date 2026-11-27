@@ -370,6 +370,10 @@ local function floorFor(en, x: number, z: number): number?
 	if en.pos.Y < -40 then
 		return G.Donjons.floorAt(x, z, en.pos.Y)
 	end
+	-- nageurs (27/11, boss maritimes) : à la surface de l'eau, jamais à terre
+	if en.k and en.k.swims then
+		return G.Util.isWater(x, z) and (G.Config.WATER_Y or 0) or nil
+	end
 	if G.Util.isWater(x, z) then
 		return nil
 	end

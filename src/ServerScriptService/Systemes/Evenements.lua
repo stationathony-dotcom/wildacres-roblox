@@ -74,7 +74,7 @@ local function nearbyVillage()
 end
 
 -- Un point au hasard dans une région chargée d'un des biomes voulus, près d'un joueur
-local function spotIn(biomes, minD: number, maxD: number): (Vector3?, any)
+local function spotIn(biomes, minD: number, maxD: number, water: boolean?): (Vector3?, any)
 	local players = G.Game.players()
 	for _ = 1, 20 do
 		local p = players[math.random(1, math.max(1, #players))]
@@ -84,8 +84,9 @@ local function spotIn(biomes, minD: number, maxD: number): (Vector3?, any)
 			local r = math.random(minD, maxD)
 			local pos = root.Position + Vector3.new(math.cos(a) * r, 0, math.sin(a) * r)
 			local reg = G.World.regionAt(pos)
-			if reg and reg.ready and not G.Util.isWater(pos.X, pos.Z) and (not biomes or table.find(biomes, G.Clock.biomeAt(pos))) then
-				return Vector3.new(pos.X, G.Util.groundY(pos.X, pos.Z), pos.Z), reg
+			local wet = G.Util.isWater(pos.X, pos.Z)
+			if reg and reg.ready and wet == (water == true) and (not biomes or table.find(biomes, G.Clock.biomeAt(pos))) then
+				return Vector3.new(pos.X, wet and (G.Config.WATER_Y or 0) or G.Util.groundY(pos.X, pos.Z), pos.Z), reg
 			end
 		end
 	end
@@ -445,7 +446,8 @@ local function startBoss()
 	end
 	local id = ids[math.random(1, #ids)]
 	local b = Evenements.BOSSES[id]
-	local pos, reg = spotIn(b.biome, 60, 120)
+	-- boss maritime (b.mer) : surgit de l'eau près d'un joueur sur la côte ou en barque
+	local pos, reg = spotIn(not b.mer and b.biome or nil, b.mer and 30 or 60, b.mer and 90 or 120, b.mer)
 	if not pos then
 		return false
 	end
@@ -455,7 +457,7 @@ local function startBoss()
 	end
 	en.transient = true
 	table.insert(active, { kind = "boss", en = en, name = b.name, untilT = os.clock() + 600 })
-	nearby(pos, 180, "Le sol tremble. Quelque chose d'énorme rôde par ici…")
+	nearby(pos, 180, b.mer and "L'eau bouillonne. Une lueur remonte des profondeurs…" or "Le sol tremble. Quelque chose d'énorme rôde par ici…")
 	return true
 end
 

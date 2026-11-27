@@ -21,9 +21,9 @@ while :; do
 		echo "$(date '+%F %T') début $nom (essai $essai)" >> "$JOURNAL"
 		codex exec -m gpt-6.2-sol -c model_reasoning_effort='"high"' -s workspace-write -C "$REPO" - < "$p" > "$S/tools/codex/$nom.log" 2>&1
 		code=$?
-		jetons=$(grep -A1 "tokens used" "$S/tools/codex/$nom.log" | tail -1)
-		if grep -q "usage limit" "$S/tools/codex/$nom.log"; then
-			heure=$(grep -o "try again at [0-9:]* *[AP]M" "$S/tools/codex/$nom.log" | tail -1 | sed 's/try again at //')
+		jetons=$(grep -a -A1 "tokens used" "$S/tools/codex/$nom.log" | tail -1)
+		if grep -aq "usage limit" "$S/tools/codex/$nom.log"; then
+			heure=$(grep -ao "try again at [0-9:]* *[AP]M" "$S/tools/codex/$nom.log" | tail -1 | sed 's/try again at //')
 			cible=$(date -d "$heure" +%s 2>/dev/null)
 			maint=$(date +%s)
 			[ -z "$cible" ] && cible=$((maint + 3600))
