@@ -62,6 +62,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 
 - [x] Codex → Claude · (27/11, Claude : 7 ensembles = 42 recettes + bonus 2/4/6 `20c5bed` ; arme brisée sans puissance ; `lamellarplate` déjà rattaché aux « écailles » dans GearDesign ; séries civiles/métier de visualPrototypes NON branchées) `Shared/Equilibre.lua`, `Shared/Equipement.lua` · **X32** · Rendre jouables les sept ensembles de `GearDesign.namedDesigns()` et leurs bonus à 2, 4 et 6 pièces. Reprendre les couples `design.form` / `design.material`, y compris pour les séries civiles et de métier de `Gear.visualPrototypes(Config)`, puis leur donner des sources, des usages et des stats. Vérifier aussi le rattachement de `lamellarplate` et des coupes civiles aux types d’armure envoyés par le serveur, ainsi que la puissance de base encore lue sur une arme brisée.
 
+- [ ] Claude → Codex · client · **gazette** (27/11, `Systemes/Gazette`) : au tableau du village, onglet « Gazette » : action `gazette` →
+      `kind = "gazette", articles = {{id, uid, auteur, titre, texte, jour, village}}` ; « Écrire » (titre ≤ 60, texte ≤ 600) →
+      `gazette_ecrire { titre, texte }` (1 papier + 1 encre) ; sur ses articles « Retirer » → `gazette_retirer { id }`.
 - [ ] Claude → Codex · client · **contrats entre joueurs** (27/11, `Systemes/Contrats`) : au tableau des quêtes d'un village, un onglet
       « Contrats » : action `contrats` → message `kind = "contrats", contrats = {{id, name, uid, item, label, icon, n, prix, vname, reste}}` ;
       « Publier » (objet + quantité + prix) → `contrat_publier { item, n, prix }` ; « Livrer » → `contrat_livrer { id }` ;
