@@ -1975,7 +1975,8 @@ function M.centrer(model)
 	model.WorldPivot = C()
 end
 
-function M.verifier(model, minimum)
+function M.verifier(model, minimum, maximum)
+	maximum = maximum or 25
 	local pieces, erreurs = piecesVisibles(model), {}
 	local total = 0
 	for _, p in model:GetDescendants() do
@@ -1993,7 +1994,7 @@ function M.verifier(model, minimum)
 		end
 	end
 	if #pieces < minimum then table.insert(erreurs, "seulement " .. #pieces .. " pièces visibles") end
-	if total > 25 then table.insert(erreurs, total .. " pièces, budget 25") end
+	if total > maximum then table.insert(erreurs, total .. " pièces, budget " .. maximum) end
 	local groupes = composantes(pieces, echelle(model) * 0.022)
 	if #groupes > 1 then
 		for i = 2, #groupes do

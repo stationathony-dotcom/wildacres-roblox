@@ -49,7 +49,7 @@ local function avatarFor(profiles)
 	return Avatar
 end
 
-if mode == "avatar" then
+if mode == "avatar" or mode == "x32-tenues" or mode == "x32-main" then
 	local profiles = {}
 	local Avatar = avatarFor(profiles)
 	local looks = {
@@ -66,12 +66,34 @@ if mode == "avatar" then
 		{"weapon:Dague à dard de scorpion", "hat:Chapeau de mage", "armor:Robe",
 			"offhand:Bouclier-carapace de tortue ancienne", "trinket:Talisman d'essence légendaire de Brumeglace"},
 	}
+	local titles = {}
+	if mode == "x32-main" then
+		looks = {
+			{"weapon:Épée longue"}, {"weapon:Hallebarde du Soleil rouge"}, {"weapon:Arc long"},
+			{"weapon:Arbalète de la Garde du pont"}, {"weapon:Dague à dard de scorpion"},
+		}
+	elseif mode == "x32-tenues" then
+		looks = {}
+		local groups = {}
+		for _, item in design.namedDesigns() do
+			local group = groups[item.collection]
+			if not group then
+				group = {}
+				groups[item.collection] = group
+				table.insert(looks, group)
+				table.insert(titles, item.collection)
+			end
+			local key = gear.visualKey(item)
+			entries[key] = item
+			table.insert(group, key)
+		end
+	end
 	local stage = Instance.new("Folder")
 	stage.Name = "PlancheEquipementPorte"
 	local center = Vector3.new(-3000, 707, -3000)
 	for i, keys in looks do
 		local char = mannequin:Clone()
-		char.Name = tostring(i) .. " · " .. keys[3]
+		char.Name = tostring(i) .. " · " .. (titles[i] or keys[3] or keys[1])
 		local player = {Character = char}
 		local equipped = {}
 		for _, key in keys do
@@ -82,8 +104,18 @@ if mode == "avatar" then
 			equipped = equipped, stats = {},
 			look = {mode = "villageois", skin = i, shirt = 1, pants = 1, hair = "court", hairColor = 1},
 		}
-		char:PivotTo(CFrame.new(center + Vector3.new((i - 3.5) * 4.9, 0, 0)))
+		char:PivotTo(CFrame.new(center + Vector3.new((i - (#looks + 1) / 2) * 4.9, 0, 0)))
 		Avatar.refresh(player)
+		if mode == "x32-main" then
+			local weapon = char.Equipement_WA.weapon
+			weapon:ClearAllChildren()
+			local count = visuals.wear(equipped.weapon, char, weapon, {drawn = true})
+			assert(count > 0 and count <= visuals.limit("weapon"), keys[1])
+			for _, part in weapon:GetChildren() do
+				local weld = assert(part:FindFirstChildWhichIsA("WeldConstraint"), part.Name)
+				assert(weld.Part0 == (i == 3 and char.LeftHand or char.RightHand), keys[1] .. " · main")
+			end
+		end
 		for _, part in char:GetDescendants() do
 			if part:IsA("BasePart") then part.Anchored = true end
 		end
@@ -93,7 +125,7 @@ if mode == "avatar" then
 	if old then old:Destroy() end
 	stage.Parent = workspace
 	workspace.CurrentCamera.CFrame = CFrame.lookAt(center + Vector3.new(0, 4, -29), center)
-	return "Six tenues sur PlancheEquipementPorte. Tourner autour pour examiner capes et armes au dos."
+	return #looks .. " tenues sur PlancheEquipementPorte. Tourner autour pour examiner capes et armes au dos."
 end
 
 local verify = assert(loadstring(H:GetAsync(bridge .. "file?p=ServerStorage.OutilsDev.ConstruireModelesMiniatures"),
@@ -135,8 +167,9 @@ end
 local function checkWorn(item, miniatureSize, expected, label)
 	local count = visuals.wear(item, trial, worn)
 	local message
-	if count < expected or count > 30 then
-		message = string.format("%d pièces portées, attendu de %d à 30", count, expected)
+	local limit = visuals.limit(gear.slotOf(item))
+	if count < expected or count > limit then
+		message = string.format("%d pièces portées, attendu de %d à %d", count, expected, limit)
 	else
 		for _, p in worn:GetChildren() do
 			local weld = p:FindFirstChildWhichIsA("WeldConstraint")
@@ -147,10 +180,34 @@ local function checkWorn(item, miniatureSize, expected, label)
 			end
 		end
 	end
-	message = message or checkNeon(worn, item.rarity or 1, miniatureSize)
+	message = message or checkNeon(worn, design.appearance(item).rarity, miniatureSize)
 	local signature = label and footprint(worn, label)
 	worn:ClearAllChildren()
 	return count, message, signature
+end
+
+if mode == "x32-prototypes" then
+	local series, named, totals = gear.visualPrototypes(config)
+	for _, item in named do table.insert(series, item) end
+	local maximum, faults = 0, {}
+	for i, item in series do
+		local icon = visuals.preview(item)
+		local issues, parts = verify(icon, 2, visuals.limit(gear.slotOf(item)))
+		local _, size = icon:GetBoundingBox()
+		local width = math.max(size.X, size.Y, size.Z)
+		local count, issue = checkWorn(item, width, parts)
+		issue = issue or checkNeon(icon, item.rarity, width)
+		if issue then table.insert(issues, issue) end
+		if #issues > 0 then table.insert(faults, item.name .. " · " .. table.concat(issues, ", ")) end
+		icon:Destroy()
+		maximum = math.max(maximum, count)
+		if i % 30 == 0 then task.wait() end
+	end
+	trial:Destroy()
+	folder:Destroy()
+	assert(#named == 42 and #faults == 0, table.concat(faults, "\n"))
+	return string.format("%d prototypes dont %d pièces de collection · maximum %d pièces portées. Catalogue canonique par catégorie : %s",
+		#series, #named, maximum, H:JSONEncode(totals))
 end
 
 if mode == "torses" then
@@ -178,7 +235,7 @@ if mode == "torses" then
 				local signature, iconParts = footprint(icon, label)
 				local _, size = icon:GetBoundingBox()
 				local width = math.max(size.X, size.Y, size.Z)
-				local issues = verify(icon, 2)
+				local issues = verify(icon, 2, visuals.limit("armor"))
 				local neon = checkNeon(icon, rank, width)
 				icon:Destroy()
 				assert(#issues == 0, label .. " : " .. table.concat(issues, ", "))
@@ -225,13 +282,14 @@ if mode == "torses" then
 end
 
 local count, maxIcon, maxWorn, issues = 0, 0, 0, {}
-local validated = {}
+local validated, densest = {}, {}
 local ok, failure = pcall(function()
 	for key, item in entries do
 		local icon = visuals.preview(item)
 		icon.Name = key
 		icon.Parent = folder
-		local problems, parts = verify(icon, 2)
+		local slot = gear.slotOf(item)
+		local problems, parts = verify(icon, 2, visuals.limit(slot))
 		local _, size = icon:GetBoundingBox()
 		local width = math.max(size.X, size.Y, size.Z)
 		local neon = checkNeon(icon, icon:GetAttribute("RangVisuel"), width)
@@ -240,6 +298,9 @@ local ok, failure = pcall(function()
 			local wornParts, issue = checkWorn(item, width, parts)
 			if issue then table.insert(problems, issue) end
 			maxWorn = math.max(maxWorn, wornParts)
+			if wornParts > (densest[slot] and densest[slot].count or 0) then
+				densest[slot] = {item = item, count = wornParts}
+			end
 			validated[item] = true
 		end
 		if #problems > 0 then table.insert(issues, key .. " · " .. table.concat(problems, ", ")) end
@@ -248,6 +309,21 @@ local ok, failure = pcall(function()
 		if count % 40 == 0 then task.wait() end
 	end
 	assert(count >= 694, string.format("Catalogue incomplet : %d / 694", count))
+	local equipped = {}
+	for slot, item in densest do equipped[slot] = item.item end
+	local profile = {equipped = equipped, stats = {}, look = {mode = "villageois", shirt = 4}}
+	local player = {Character = trial}
+	avatarFor({[player] = profile}).refresh(player)
+	local outfit = 0
+	for _, name in {"Chapeau_WA", "Armure_WA", "Cape_WA", "Equipement_WA"} do
+		local layer = trial:FindFirstChild(name)
+		if layer then
+			for _, piece in layer:GetDescendants() do
+				if piece:IsA("BasePart") then outfit += 1 end
+			end
+		end
+	end
+	assert(outfit <= 160, string.format("Tenue de 10 emplacements : %d / 160 pièces", outfit))
 	table.sort(issues)
 	assert(#issues == 0, string.format("%d modèles en échec\n%s", #issues, table.concat(issues, "\n")))
 end)
@@ -260,4 +336,5 @@ local old = RS:FindFirstChild(folder.Name)
 if old then old.Parent = nil end
 folder.Parent = RS
 if old then old:Destroy() end
-return string.format("%d miniatures validées · maximum %d pièces en miniature et %d pièces portées", count, maxIcon, maxWorn)
+return string.format("%d miniatures validées · maximum %d pièces en miniature et %d pièces portées · tenue à 10 emplacements ≤ 160",
+	count, maxIcon, maxWorn)
