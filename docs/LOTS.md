@@ -129,12 +129,10 @@ Modèle conseillé pour cette vague : `gpt-6.2-astra`, raisonnement `ultra`. Stu
 portable : écrire sur disque, garder chaque constructeur appelable en Édition, et lister dans le journal ce qui
 reste à pousser / capturer sur le PC fixe.
 
-- [ ] **X27 · Props niveau planche, famille par famille** — en cours — Codex, 26/11 (`ConstruireModeles*`) : reprendre les 90 props posables et
-      les décors de village selon les 6 points du message du 26/11. Ordre : coffres et caisses (coins dorés, bandes de
-      fer, serrure à plaque), ateliers (enclume, four, établi, métier à tisser), mobilier, clôtures/portails,
-      lanternes et puits, étals de marché, puis décor naturel (rochers en strates, souches, champignons). Pour chaque
-      famille : planche de capture avant/après dans `images/props-26-11/`, banc `visuels_props` vert, budget respecté,
-      noms de pièces et points d'accroche inchangés (le serveur lit `Recoltable`, `Touffe`, portes, coffres).
+- [x] **X27 · Props niveau planche, famille par famille** — Codex, 27/11 · 58 constructeurs `PROPS_VALDOR` livrés sur disque.
+      Passe de relief `bbcc174`, finitions intégrées par Claude le 27/11 (Codex ne commite pas depuis sa sandbox).
+      [Rapport des 58 props](X27-RAPPORT.md). Reconstruits dans Studio (58/58), banc `visuels_props` VERT 417/417.
+      Capture : rendu de Studio blanc sur le portable le 27/11 → à refaire sur le PC fixe.
 - [ ] **X28 · Ambiance façon planches** (`Shared/Eclairage.lua`, client `Ambiance`) : `Technology.Future` si le coût
       passe, `ColorCorrection` plus saturée (+0,15 à +0,25), `Bloom` léger pour les lueurs Neon, `Atmosphere` qui ne
       délave plus (densité basse, `Haze` faible), ciel lumineux le jour, nuit bleu profond où les lueurs ressortent.
@@ -188,6 +186,9 @@ Répartition décidée par le propriétaire le 26/11 : **Codex = ce qui se gén�
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 27/11 · Codex · X27 sur disque, 58 constructeurs et 58 budgets vérifiés statiquement. Syntaxe du champ réparée.
+  Claude reprend en Édition la reconstruction, le banc et les captures à 15 studs. À voir ensuite en Play sur le PC fixe.
 
 - 26/11 · Claude (PC portable, Studio Édition) : montures façon WoW + vol (664c332), vue aérienne (e3c4981), contours (c7a3d46),
   relief gen 3 (0579ea8, Y_MAX 240), ambiance par biome + tempêtes (97c2952), aubergiste/fournisseur/alchimiste (4a0af9b), armurier

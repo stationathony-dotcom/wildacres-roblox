@@ -215,12 +215,21 @@ local APPUIS_INDEPENDANTS = {
 	["Modeles/Touffe"] = { Brin = true },
 }
 
--- Le pivot et les 88 pieds récoltables expliquent à eux seuls une grande partie du champ.
--- Les budgets des bâtiments en colombage et du château couvrent la charpente, les pièces
--- jouables et les tours. Ils restent inférieurs aux nombres du rapport du 21/11.
+-- Les bâtiments jouables ont leurs propres budgets. Pour Valdor, 60 pièces par défaut,
+-- 120 pour les grands props, 160 pour le champ et 30 pour les modules répétables.
 local BUDGETS = {
-	Auberge = 238, Boutique = 140, Bureau_Sherif = 67, Champ_Ble = 110,
+	Auberge = 238, Boutique = 140, Bureau_Sherif = 67,
 	Chapelle = 67, Chateau = 193, Maison_A = 217, Maison_B = 215, Maison_C = 134, Taverne = 250,
+	Puits = 120, Fontaine = 120, Moulin = 120, Caserne = 120, Embarcadere = 120,
+	Tableau_Quetes = 120, Etal = 120, Champ_Ble = 160,
+	Plancher = 30, Mur_Planches = 30, Mur_Porte = 30, Mur_Fenetre = 30,
+	Mur_Pierre = 30, Mur_Briques = 30, Toit_Chaume = 30, Escalier_Bois = 30,
+}
+
+-- La serrure émet un point doré qui reste dans le creux de sa plaque.
+local DECORS_EMISSIFS = {
+	["Modeles/Coffre"] = "Reflet au fond de la serrure",
+	["Modeles/Coffre_Joueur"] = "Reflet au fond de la serrure",
 }
 
 -- `size` décrit le volume de grille. Les volets dépassent de 0,10 sur une seule face et le
@@ -351,7 +360,8 @@ local function relever(racine, fiche, signaler, mesures)
 		end
 	end
 	for i, e in neons do
-		if not associes[i] and e.piece.Material == Enum.Material.Neon and not CS:HasTag(e.piece, "Fenetre") then
+		if not associes[i] and e.piece.Material == Enum.Material.Neon and not CS:HasTag(e.piece, "Fenetre")
+			and e.piece.Name ~= DECORS_EMISSIFS[fiche.nom] then
 			signaler(3, "Neon hors d’un luminaire", e.titre .. " : aucune Light à 0,35 stud")
 		end
 	end

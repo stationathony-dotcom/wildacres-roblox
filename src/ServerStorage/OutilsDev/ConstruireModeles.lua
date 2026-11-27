@@ -593,9 +593,12 @@ function PROPS_VALDOR.Fontaine()
 	for i, a in { 0.10, 1.65, 3.28, 4.82 } do
 		local dir = Vp(math.sin(a), 0, math.cos(a))
 		local col = rgb(137 + i * 12, 187 + i * 6, 190 + i * 7)
-		lienProp(m, "Filet tombant de la vasque", dir * 1.54 + Vp(0, 5.265, 0), dir * (1.67 + i * 0.043) + Vp(0, 1.0, 0),
+		local impact = dir * (1.71 + i * 0.043)
+		lienProp(m, "Filet tombant de la vasque", dir * 1.60 + Vp(0, 5.32, 0), impact + Vp(0, 1.02, 0),
 			0.095 + i * 0.023, 0.11, col, Mat.Glass, false)
-		detailProp(m, "Éclaboussure au bassin", Vp(0.56, 0.066, 0.37), dir * 1.82 + Vp(0, 1.026, 0), col, Mat.Glass, Vp(0, 17 * i, 0), "Ball")
+		detailProp(m, "Éclaboussure au bassin", Vp(0.56, 0.066, 0.37), impact + Vp(0, 1.026, 0), col, Mat.Glass, Vp(0, 17 * i, 0), "Ball")
+		detailProp(m, "Écume en retrait du jet", Vp(0.33 + i * 0.033, 0.046, 0.13), impact + dir * 0.19 + Vp(0, 1.047, 0),
+			eauClaire, Mat.Glass, Vp(0, math.deg(a) - 4, 0), "Ball")
 	end
 	detailProp(m, "Ressaut de chapiteau chanfrené", Vp(1.50, 0.30, 1.50), Vp(0, 4.05, 0), PIERRE_CLAIRE, Mat.Slate, Vp(0, 13, 0))
 	detailProp(m, "Pointe lapidaire", Vp(0.34, 0.34, 0.14), Vp(0, 2.79, 0.682), CALCAIRE, Mat.Slate, Vp(0, 0, 45))
@@ -923,6 +926,8 @@ local function coffreProp(nom: string, c: Color3, colFer: Color3)
 			P(m, "Bordage de façade", Vp(2.98, 0.45, 0.23), Vp(0, y, s * 0.88), ton, Mat.WoodPlanks)
 			P(m, "Bordage de joue", Vp(0.24, 0.45, 1.61), Vp(s * 1.37, y + s * 0.012, -0.015), ton, Mat.WoodPlanks)
 		end
+		detailProp(m, "Traverse de fer entre les sabots", Vp(2.61, 0.17, 0.095),
+			Vp(s * 0.026, 0.25, s * 1.002), colFer, Mat.Metal, Vp(0, 0, s * 2))
 		mobile(detailProp(m, "Joue de voûte", Vp(0.17, 0.32, 1.82), Vp(s * 1.44, 1.84, 0), sombre, Mat.Wood))
 		mobile(detailProp(m, "Rebord du couvercle", Vp(3.06, 0.13, 0.12), Vp(0, 1.68, s * 0.975), colFer, Mat.Metal))
 	end
@@ -941,8 +946,10 @@ local function coffreProp(nom: string, c: Color3, colFer: Color3)
 		for _, z in { -1, 1 } do
 			detailProp(m, "Cerclage", Vp(0.24, 1.46, 0.10), Vp(x, 0.80, z), colFer, Mat.Metal)
 			local a, b = Vp(x, 1.74, z * 0.98), Vp(x, 2.235, z * 0.52)
-			mobile(P(m, "Cerclage de voûte", Vp(0.23, 0.092, (b - a).Magnitude), Vector3.zero, colFer, Mat.Metal,
-				{ cf = CFrame.lookAt((a + b) / 2, b), collide = false }))
+			local bande = P(m, "Cerclage de voûte", Vp(0.23, 0.092, (b - a).Magnitude), Vector3.zero, colFer, Mat.Metal,
+				{ cf = CFrame.lookAt((a + b) / 2, b), collide = false })
+			bande.CanQuery, bande.CanTouch = false, false
+			mobile(bande)
 			detailProp(m, "Sabot de bronze", Vp(0.37, 0.30, 0.17), Vp(x * 1.27, 0.24, z * 0.981), bronze, Mat.Metal, Vp(0, 0, 3 * z))
 			detailProp(m, "Gradin de laiton", Vp(0.23, 0.17, 0.062), Vp(x * 1.29, 0.29, z * 1.065), laiton, Mat.Metal)
 			mobile(detailProp(m, "Coin doré en gradin", Vp(0.31, 0.22, 0.17), Vp(x * 1.31, 1.76, z * 0.971), laiton, Mat.Metal, Vp(4 * z, 0, 0)))
@@ -986,6 +993,8 @@ function PROPS_VALDOR.Etabli()
 	P(m, "Entretoise", Vp(3.83, 0.24, 0.28), Vp(0, 0.68, 0), BOIS_FONCE, Mat.Wood)
 	P(m, "Scie", Vp(1.65, 0.061, 0.46), Vp(-0.69, 3.27, 0.11), PIERRE_CLAIRE, Mat.Metal, { collide = false })
 	P(m, "Poignée de scie", Vp(0.47, 0.18, 0.51), Vp(-1.63, 3.31, 0.12), BOIS_FONCE, Mat.Wood, { collide = false })
+	detailProp(m, "Dos bleui de la scie", Vp(1.48, 0.05, 0.17), Vp(-0.73, 3.303, -0.068), FER, Mat.Metal, Vp(0, -2, 0))
+	detailProp(m, "Paume polie de la poignée", Vp(0.32, 0.08, 0.34), Vp(-1.69, 3.406, 0.15), BOIS_CLAIR, Mat.Wood, Vp(0, -6, -4), "Wedge")
 	for i = 0, 6 do
 		P(m, "Dent de scie", Vp(0.13, 0.061, 0.14), Vp(-1.39 + i * 0.22, 3.27, 0.39), PIERRE_CLAIRE, Mat.Metal,
 			{ forme = "Wedge", collide = false })
@@ -1112,7 +1121,7 @@ function PROPS_VALDOR.Fourneau()
 	detailProp(m, "Dépôt de suie sous chapeau", Vp(0.47, 0.37, 0.12), Vp(0.82, 5.02, -0.045), rgb(65,58,55), Mat.Brick, Vp(0, 0, 6))
 	detailProp(m, "Gueule du registre", Vp(0.69, 0.44, 0.16), Vp(0.12, 2.53, 1.32), FER, Mat.Metal, Vp(0, 0, 2))
 	detailProp(m, "Poignée du registre", Vp(0.29, 0.12, 0.16), Vp(0.18, 2.57, 1.42), rgb(146,117,87), Mat.Metal, Vp(0, 0, 6))
-	detailProp(m, "Veine de braise", Vp(0.43, 0.084, 0.10), Vp(0.12, 0.57, 1.39), rgb(255,113,42), Mat.Neon, Vp(0, 0, 3))
+	detailProp(m, "Veine de braise dans la scorie", Vp(0.34, 0.077, 0.095), Vp(0.39, 0.463, 1.35), rgb(255,113,42), Mat.Neon, Vp(0, 0, -5))
 	detailProp(m, "Éclat dans la scorie", Vp(0.17, 0.11, 0.12), Vp(-0.24, 0.51, 1.27), rgb(255,166,58), Mat.Neon, Vp(5, 0, -6))
 	detailProp(m, "Tison au fond du foyer", Vp(0.26, 0.16, 0.18), Vp(-0.35, 0.73, 1.05), rgb(255,102,29), Mat.Neon, Vp(0, 5, 6))
 	fini(m)
@@ -1376,6 +1385,8 @@ function PROPS_VALDOR.Lit_Joueur()
 	detailProp(m, "Corniche de chevet", Vp(2.56, 0.13, 0.28), Vp(0, 1.843, -2.30), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -2))
 	detailProp(m, "Panneau sculpté du chevet", Vp(1.60, 0.38, 0.13), Vp(-0.03, 1.47, -2.18), BOIS_FONCE, Mat.Wood, Vp(0, 0, 3))
 	detailProp(m, "Pointe sculptée", Vp(0.35, 0.35, 0.09), Vp(-0.05, 1.50, -2.10), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 45))
+	detailProp(m, "Parement du pied de lit", Vp(2.36, 0.24, 0.12), Vp(-0.021, 0.74, 2.28), BOIS, Mat.Wood, Vp(0, 0, 2))
+	detailProp(m, "Chant lustré du pied de lit", Vp(1.71, 0.09, 0.095), Vp(0.19, 0.823, 2.32), BOIS_CLAIR, Mat.Wood, Vp(0, 0, -3))
 	detailProp(m, "Rebord ébréché", Vp(0.46, 0.13, 0.08), Vp(-0.69, 0.74, 2.32), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 7), "Wedge")
 	fini(m)
 end
@@ -1482,8 +1493,9 @@ function PROPS_VALDOR.Table_Bois()
 	detailProp(m, "Éclat d’alèse", Vp(0.69, 0.07, 0.076), Vp(0.62, 2.68, 1.052), BOIS_CLAIR, Mat.Wood, Vp(0, 0, 4))
 	detailProp(m, "Branche de contreventement", Vp(0.28, 0.78, 0.23), Vp(-1.26, 1.99, 0.78), BOIS, Mat.Wood, Vp(5, 4, -26))
 	detailProp(m, "Traverse à mi-bois", Vp(2.90, 0.22, 0.26), Vp(0.042, 0.92, -0.03), BOIS_FONCE, Mat.Wood, Vp(0, 0, -2))
-	detailProp(m, "Éclisse en papillon", Vp(0.57, 0.027, 0.35), Vp(-0.96, 2.743, -0.23), BOIS_FONCE, Mat.Wood, Vp(0, -8, 0))
-	detailProp(m, "Aile d’éclisse", Vp(0.23, 0.036, 0.43), Vp(-1.15, 2.746, -0.25), BOIS, Mat.Wood, Vp(0, 13, 0))
+	detailProp(m, "Lit sombre de l’éclisse", Vp(0.57, 0.027, 0.24), Vp(-0.96, 2.743, -0.23), BOIS_FONCE, Mat.Wood, Vp(0, -5, 0))
+	detailProp(m, "Aile gauche de l’éclisse", Vp(0.29, 0.036, 0.35), Vp(-1.13, 2.746, -0.25), LIN, Mat.Wood, Vp(0, -7, 0))
+	detailProp(m, "Aile droite de l’éclisse", Vp(0.24, 0.037, 0.31), Vp(-0.78, 2.746, -0.21), BOIS_CLAIR, Mat.Wood, Vp(0, 6, 0))
 	detailProp(m, "Tache de patine", Vp(0.91, 0.020, 0.19), Vp(0.38, 2.743, 0.36), rgb(185,139,81), Mat.Wood, Vp(0, 5, 0))
 	fini(m)
 end
@@ -2126,13 +2138,20 @@ local function murBoise(nom: string, porte: boolean, fenetre: boolean)
 			reliefProp(m, "Lèvre sombre du bardage usé", Vp(0.93 - i * 0.115, 0.22, 0.092), Vp(x, 0.46 + i * 0.071, 0.228),
 				i == 2 and BOIS or BOIS_FONCE, Mat.WoodPlanks, 0, 0, i * 3 - 7)
 		end
+		for i, x in { -1.51, -0.81, 0.67 } do
+			detailProp(m, "Chant des planches au revers", Vp(0.22 + i * 0.035, 3.22 - i * 0.45, 0.085),
+				Vp(x, 3.58 - i * 0.19, -0.234), i == 2 and BOIS_FONCE or BOIS_CLAIR,
+				Mat.WoodPlanks, Vp(0, 0, i * 3 - 7))
+		end
 	end
 	for _, y in { porte and 5.66 or 0.23, 6.89 } do
 		P(m, "Traverse", Vp(4.01, 0.21, 0.58), Vp(0, y, 0), BOIS_FONCE, Mat.Wood)
 	end
 	for _, z in { -0.254, 0.254 } do
 		detailProp(m, "Faîte raboté", Vp(3.99, 0.12, 0.096), Vp(0, 6.94, z), BOIS_CLAIR, Mat.Wood)
-		detailProp(m, "Liseré dans l’ombre", Vp(3.99, 0.105, 0.096), Vp(0, porte and 5.59 or 0.35, z), BOIS_FONCE, Mat.Wood)
+		if not fenetre then
+			detailProp(m, "Liseré dans l’ombre", Vp(3.99, 0.105, 0.096), Vp(0, porte and 5.59 or 0.35, z), BOIS_FONCE, Mat.Wood)
+		end
 	end
 	if porte then
 		for i, x in { -1.38, 1.38 } do
@@ -2170,8 +2189,8 @@ local function murMaconne(nom: string, c: Color3, mat: Enum.Material, rangs: num
 	reliefProp(m, "Chaperon éclairci", Vp(3.86, 0.14, 0.53), Vp(0, 7.037, 0), tons[3], mat, 0, 0, 1)
 	detailProp(m, "Solin inférieur", Vp(3.98, 0.18, 0.59), Vp(0, 0.12, 0), sombre, mat)
 	if rangs == 6 then
-		for _, p in { Vp(-1.15, 0.89, 0.247), Vp(-0.80, 0.80, 0.249), Vp(-0.54, 0.70, 0.241) } do
-			detailProp(m, "Front de calcaire fracturé", Vp(0.47, 0.14, 0.087), p, clair, mat, Vp(0, 0, 5), "Wedge")
+		for i, p in { Vp(-1.15, 0.88, 0.247), Vp(-0.68, 0.78, 0.247) } do
+			detailProp(m, "Front de calcaire fracturé", Vp(0.63 - i * 0.07, 0.16, 0.087), p, clair, mat, Vp(0, 0, 7 - i * 4), "Wedge")
 		end
 	end
 	fini(m)
@@ -4148,7 +4167,7 @@ function M.champBle()
 			end
 		end
 	end
-	-- clôture : poteaux tous les 4 studs, deux lisses
+	-- Trois côtés bordés de deux lisses, avec les mêmes piquets que le champ d'origine.
 	local function cote(a: Vector3, b: Vector3)
 		local d = b - a
 		local n = math.max(1, math.floor(d.Magnitude / 5.4))
@@ -4168,18 +4187,14 @@ function M.champBle()
 	cote(Vector3.new(hx, 0, -hz), Vector3.new(hx, 0, hz))
 	P(m, "Botte", Vp(2.4, 1.6, 1.6), Vp(hx + 2, 0.8, hz - 2), CHAUME, Mat.Grass,
 		{ forme = "Ball", rot = CFrame.Angles(0, 0.09, 0) })
-	for i, z in { -1.44, 1.15 } do
-		reliefProp(m, "Terre sombre du passage", Vp(17.8 - i * 0.41, 0.064, 0.46), Vp(0.19, 0.425, z),
-			BOIS_FONCE, Mat.Ground, 0, i - 2)
-	end
+	reliefProp(m, "Ornière sombre du passage", Vp(17.39, 0.064, 0.43), Vp(0.19, 0.425, -1.44), BOIS_FONCE, Mat.Ground, 0, -1)
+	reliefProp(m, "Crête claire émiettée du passage", Vp(16.98, 0.068, 0.37), Vp(-0.18, 0.426, 1.15), rgb(143, 101, 66), Mat.Ground, 0, 2)
 	for _, x in { hx + 1.52, hx + 2.38 } do
 		reliefProp(m, "Lien sombre de la botte", Vp(0.095, 1.05, 1.49), Vp(x, 0.96, hz - 2),
 			BOIS_FONCE, Mat.Fabric, 0, 4, 4)
 	end
 	reliefProp(m, "Nappe de paille sur la botte", Vp(1.79, 0.25, 0.81), Vp(hx + 2.02, 1.55, hz - 1.94),
 		OR_PALE, Mat.Grass, -7, 4, 5, "Ball")
-
-		rgb(192, 147, 67), Mat.Grass, Vp(4, 2, -4))
 	detailProp(m, "Paille qui retombe", Vp(0.61, 0.46, 0.20), Vp(hx + 1.80, 0.94, hz - 1.40), rgb(162, 111, 49), Mat.Grass, Vp(4, 11, 6), "Wedge")
 	fini(m)
 	return m
