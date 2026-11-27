@@ -15,6 +15,9 @@ function Machines.init(g)
 	G.Interact.onPrompt("mill", function(player, prompt)
 		Machines.mill(player, prompt:GetAttribute("Placed"))
 	end)
+	G.Interact.onPrompt("press", function(player, prompt)
+		Machines.press(player, prompt:GetAttribute("Placed"))
+	end)
 	G.Interact.onPrompt("sawmill", function(player, prompt)
 		Machines.sawmill(player, prompt:GetAttribute("Placed"))
 	end)
@@ -154,6 +157,31 @@ function Machines.sawmill(player: Player, id: string)
 	G.Joueurs.sync(player)
 end
 
+-- Presse (objet « press » du catalogue, sans effet jusqu'ici ; 27/11) : 3 pommes + 1 bouteille le soir = 1 cidre le lendemain (4 pommes à l'établi)
+function Machines.press(player: Player, id: string)
+	local d = G.Protection.findPlaced(id)
+	if not mine(player, d) then
+		return
+	end
+	d.press = d.press or { lots = 0, cider = 0 }
+	if d.press.cider > 0 then
+		G.Joueurs.add(player, "cider", d.press.cider)
+		d.press.cider = 0
+		G.Joueurs.sync(player)
+		return
+	end
+	local n = math.min(math.floor(G.Joueurs.count(player, "apple") / 3), G.Joueurs.count(player, "bottle"))
+	if n < 1 then
+		G.Util.toast(player, "Le pressoir attend des pommes (3) et une bouteille par cidre. Il presse pendant la nuit.")
+		return
+	end
+	G.Joueurs.take(player, "apple", n * 3)
+	G.Joueurs.take(player, "bottle", n)
+	d.press.lots += n
+	G.Util.toast(player, "🍎 " .. n .. " cidre(s) au pressoir : prêts demain.")
+	G.Joueurs.sync(player)
+end
+
 function Machines.sprinkler(player: Player, id: string)
 	local d = G.Protection.findPlaced(id)
 	if not mine(player, d) then
@@ -286,6 +314,9 @@ function Machines.newDay()
 				-- une roue à eau au bord de l'eau, tout près : le moulin moud tout (1 pour 1 au lieu de 2 pour 3)
 				d.mill.flour += Machines.waterPowered(rs, d) and d.mill.wheat or math.floor(d.mill.wheat * 2 / 3)
 				d.mill.wheat = 0
+			elseif d.item == "press" and d.press and d.press.lots > 0 then
+				d.press.cider += d.press.lots
+				d.press.lots = 0
 			elseif d.item == "sawmill" and d.saw and d.saw.wood > 0 then
 				d.saw.planks += d.saw.wood * (Machines.waterPowered(rs, d) and 4 or 3)
 				d.saw.wood = 0
