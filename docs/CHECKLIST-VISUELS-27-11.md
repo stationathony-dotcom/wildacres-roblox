@@ -20,7 +20,8 @@ Astuce : capturer à y = 3000 (vitrine `_G.Vitrine`) — au ras du terrain, Stud
 - [ ] Serpent_Marin : silhouette fine sans nageoires lisibles
 
 ## Miniatures (échantillon : 30 objets sur 1 037, 30 pièces sur 729 — `objets_echantillon.jpg`, `equipement_echantillon.jpg`)
-- [ ] Équipement : plusieurs pièces de torse et « Brassards » = boîtes unies (orange, bleu) qui ressemblent à des caisses
+- [x] Brassards : manchon d'avant-bras évasé, bandes, laçage, plaque (Claude, 27/11) ; gantelet griffu refait (doigts, jointures)
+- [ ] Équipement : quelques pièces de torse en boîtes unies
 - [ ] Bijoux : beaucoup reprennent le même anneau doré (amulette, collier, médaillon) — varier par matière / pierre
 - [ ] Prises de créatures (`prise_*`) : toutes sur le même socle en bois avec une forme générique — une forme par famille
 - Objets courants (nourriture, potions, cartes, outils, blocs de construction) : lisibles et variés

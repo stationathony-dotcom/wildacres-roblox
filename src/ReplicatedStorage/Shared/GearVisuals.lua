@@ -1238,9 +1238,9 @@ local function hands(emit, s)
 		local wrist = f == "bracer" and cuff or d
 		local y = f == "bracer" and -0.05 or 0.20
 		local material, color = plate and hard(s) or textile(s), plate and s.metal or s.color
-		wrist.box("Manchette", 0, y, 0, f == "bracer" and 0.62 or 0.55,
-			(f == "bracer" and 0.66 or 0.24) + s.variant * 0.023, 0.55, color, material)
-		wrist.box("Sangle de poignet", 0, y + 0.08, 0, f == "bracer" and 0.65 or 0.58, 0.095, 0.58, t, M.Leather)
+		wrist.box("Manchette", 0, y, 0, f == "bracer" and 0.46 or 0.55,
+			(f == "bracer" and 0.9 or 0.24) + s.variant * 0.023, f == "bracer" and 0.44 or 0.55, color, material)
+		wrist.box("Sangle de poignet", 0, y + 0.08, 0, f == "bracer" and 0.49 or 0.58, 0.095, f == "bracer" and 0.47 or 0.58, t, M.Leather)
 		wrist.box("Fermoir de poignet", side * 0.11, y + 0.08, -0.29, 0.17, 0.14, 0.07, t, M.Metal)
 		wrist.box("Rebord de manchette", -side * 0.08, y + 0.134, -0.27, 0.35, 0.105, 0.104,
 			color:Lerp(pale, 0.39), material, side * 0.084)
@@ -1269,8 +1269,16 @@ local function hands(emit, s)
 					color:Lerp(dark, 0.46), material, side * 0.095)
 			end
 		else
-			wrist.box("Mur de cuir du brassard", 0, y - 0.14, -0.258, 0.46, 0.31, 0.13, color:Lerp(dark, 0.47), material, 0.07)
-			wrist.box("Couture de brassard", side * 0.17, y - 0.16, -0.324, 0.066, 0.26, 0.042, t, M.Fabric, -0.08)
+			wrist.box("Mur de cuir du brassard", 0, y - 0.2, -0.228, 0.38, 0.31, 0.06, color:Lerp(dark, 0.47), material, 0.07)
+			wrist.box("Couture de brassard", side * 0.14, y - 0.2, -0.27, 0.066, 0.26, 0.042, t, M.Fabric, -0.08)
+			-- 27/11, Claude : la miniature se lisait comme une boîte ; évasement au coude, bandes forgées, laçage croisé
+			wrist.box("Évasement du coude", 0, y + 0.47, 0, 0.56, 0.12, 0.52, color:Lerp(pale, 0.15), material)
+			wrist.box("Bande forgée", 0, y + 0.34, 0, 0.5, 0.06, 0.48, s.metal, M.Metal)
+			wrist.box("Bande forgée", 0, y - 0.38, 0, 0.5, 0.06, 0.48, s.metal, M.Metal)
+			for k = 0, 3 do
+				wrist.box("Laçage", 0, y - 0.25 + k * 0.15, 0.235, 0.2, 0.035, 0.03, t, M.Fabric, (k % 2 == 0) and 0.6 or -0.6)
+			end
+			wrist.box("Plaque du brassard", 0, y + 0.05, -0.245, 0.26, 0.34, 0.05, s.metal:Lerp(t, 0.2), M.Metal)
 		end
 	end
 end
