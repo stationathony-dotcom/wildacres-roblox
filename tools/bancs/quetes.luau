@@ -324,5 +324,18 @@ do
 	G.world.day = day
 end
 
+-- pénurie (27/11) : un village qui manque de farine la demande en 1re offre, les autres villages non
+do
+	local day0 = G.world.day
+	G.world.day = (day0 or 1) + 4000 -- période neuve : pas d'offre en cache
+	G.Shop = { shortage = function(key) return key == v.key and "flour" or nil end }
+	local q1 = Q.offers(v)[1]
+	local autre = Q.offers(vs[2] or v)[1]
+	check("pénurie : 1re offre = apporter la farine, mieux payée", q1 and q1.kind == "apporter" and q1.key == "flour" and q1.penurie == true and (q1.gold or 0) > 0)
+	check("pénurie : un autre village n'est pas touché", vs[2] == nil or not (autre and autre.penurie))
+	G.Shop = nil
+	G.world.day = day0
+end
+
 folder:Destroy()
 return string.format("%d échec(s) — île %d (%s)\n%s", fails, G.world.seed, G.wg.theme.id, table.concat(res, "\n"))
