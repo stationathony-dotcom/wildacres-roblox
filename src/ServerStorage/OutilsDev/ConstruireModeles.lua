@@ -2689,28 +2689,37 @@ function M.animauxFerme()
 		end
 	end
 
+	-- Cochon (27/11, Claude : l'ancien corps en sphère laissait les pattes flotter sous sa courbe) : blocs
+	-- empilés, pattes ENFONCÉES dans le ventre, 3 tons de rose, groin et oreilles lisibles, queue en tire-bouchon.
 	local cochon = nouveau("Cochon")
-	local rose, groin, sabot = rgb(218, 150, 138), rgb(241, 180, 170), rgb(99, 63, 58)
-	forme(cochon, "Corps", Vector3.new(2.2, 1.7, 3.2), Vector3.new(0, 1.55, 0.2), rose, { forme = "Ball" })
-	forme(cochon, "Tête", Vector3.new(1.55, 1.32, 1.45), Vector3.new(0, 1.6, -1.35), rose, { forme = "Ball" })
-	forme(cochon, "Groin", Vector3.new(0.38, 0.66, 0.94), Vector3.new(0, 1.36, -2.02), groin,
-		{ forme = "Cylinder", rot = CFrame.Angles(0, math.pi / 2, 0) })
-	yeux(cochon, 0.42, 1.77, -1.91)
+	local rose, roseClair, roseSombre = rgb(222, 152, 140), rgb(242, 186, 174), rgb(186, 116, 108)
+	local groin, sabot = rgb(246, 176, 168), rgb(92, 60, 54)
+	forme(cochon, "Corps", Vector3.new(2.1, 1.5, 3), Vector3.new(0, 1.5, 0.2), rose)
+	forme(cochon, "Dos", Vector3.new(1.7, 0.3, 2.6), Vector3.new(0, 2.35, 0.25), roseSombre)
+	forme(cochon, "Ventre", Vector3.new(1.8, 0.3, 2.4), Vector3.new(0, 0.82, 0.2), roseClair)
+	forme(cochon, "Croupe", Vector3.new(1.9, 1.3, 0.4), Vector3.new(0, 1.55, 1.75), roseSombre)
+	forme(cochon, "Tache", Vector3.new(0.05, 0.6, 0.8), Vector3.new(1.06, 1.7, 0.6), roseSombre)
+	forme(cochon, "Tête", Vector3.new(1.5, 1.3, 1.2), Vector3.new(0, 1.7, -1.65), rose)
+	forme(cochon, "Front", Vector3.new(1.3, 0.3, 1), Vector3.new(0, 2.42, -1.6), roseSombre)
+	forme(cochon, "Joues", Vector3.new(1.6, 0.5, 0.9), Vector3.new(0, 1.25, -1.7), roseClair)
+	forme(cochon, "Groin", Vector3.new(0.9, 0.62, 0.45), Vector3.new(0, 1.55, -2.42), groin)
+	yeux(cochon, 0.42, 1.98, -2.27)
 	for _, cote in { -1, 1 } do
-		forme(cochon, "Narine", Vector3.new(0.12, 0.15, 0.08), Vector3.new(cote * 0.21, 1.38, -2.22), sabot)
-		forme(cochon, "Oreille", Vector3.new(0.4, 0.58, 0.3), Vector3.new(cote * 0.56, 2.22, -1.32), groin,
-			{ forme = "Wedge", rot = CFrame.Angles(0, 0, -cote * math.rad(24)) })
-		for _, z in { -0.78, 1.03 } do
-			forme(cochon, "Patte", Vector3.new(0.41, 1.04, 0.44), Vector3.new(cote * 0.62, 0.67, z), rose)
-			forme(cochon, "Sabot", Vector3.new(0.43, 0.25, 0.5), Vector3.new(cote * 0.62, 0.13, z), sabot)
+		forme(cochon, "Narine", Vector3.new(0.16, 0.2, 0.06), Vector3.new(cote * 0.2, 1.58, -2.66), sabot)
+		forme(cochon, "Oreille", Vector3.new(0.5, 0.18, 0.55), Vector3.new(cote * 0.55, 2.45, -1.95), roseSombre,
+			{ rot = CFrame.Angles(math.rad(25), 0, cote * math.rad(-20)) })
+		for _, z in { -0.85, 1.15 } do
+			-- la patte monte dans le corps (haut à 1,25 > bas du ventre 0,75) : jamais de vide
+			forme(cochon, "Patte", Vector3.new(0.5, 1.05, 0.5), Vector3.new(cote * 0.62, 0.72, z), rose)
+			forme(cochon, "Sabot", Vector3.new(0.54, 0.24, 0.56), Vector3.new(cote * 0.62, 0.12, z - 0.02), sabot)
 		end
 	end
 	local function pointQueue(a: number): Vector3
-		return Vector3.new(math.cos(a) * 0.22, 1.92 + math.sin(a) * 0.23, 1.62 + a * 0.055)
+		return Vector3.new(math.cos(a) * 0.2, 1.95 + math.sin(a) * 0.2, 1.98 + a * 0.05)
 	end
 	for i = 0, 7 do
 		local a, b = pointQueue(i * math.pi / 4), pointQueue((i + 1) * math.pi / 4)
-		forme(cochon, "Queue", Vector3.new(0.12, 0.12, (b - a).Magnitude + 0.035), Vector3.zero, rose,
+		forme(cochon, "Queue", Vector3.new(0.14, 0.14, (b - a).Magnitude + 0.04), Vector3.zero, roseSombre,
 			{ cf = CFrame.lookAt((a + b) / 2, b) })
 	end
 	fini(cochon)
@@ -2744,29 +2753,38 @@ function M.chevre(): Model
 	local m = nouveau("Chevre")
 	local pelage, masque = rgb(232, 220, 190), rgb(178, 145, 105)
 	local corne, sabot = rgb(129, 113, 94), rgb(73, 59, 50)
-	local function volume(nom: string, taille: Vector3, pos: Vector3, couleur: Color3, rot: CFrame?)
-		P(m, nom, taille, pos, couleur, Mat.SmoothPlastic, { forme = "Ball", rot = rot, collide = false })
+	-- 27/11, Claude : l'ancienne chèvre n'était faite que de sphères (pattes comprises : « des boules ») ; blocs
+	-- empilés comme la vache et le mouton, pattes enfoncées dans le corps, toison en mèches, cornes conservées.
+	local clair, ombre = rgb(244, 236, 212), rgb(204, 190, 160)
+	local function bloc(nom: string, taille: Vector3, pos: Vector3, couleur: Color3, rot: CFrame?)
+		P(m, nom, taille, pos, couleur, Mat.SmoothPlastic, { rot = rot, collide = false })
 	end
-	volume("Corps", Vector3.new(1.64, 1.52, 3), Vector3.new(0, 1.84, 0.23), pelage)
-	volume("Cou", Vector3.new(0.8, 1.4, 0.9), Vector3.new(0, 2.2, -0.99), pelage, CFrame.Angles(math.rad(-32), 0, 0))
-	volume("Tête", Vector3.new(0.91, 0.97, 1.08), Vector3.new(0, 2.66, -1.45), pelage)
-	volume("Museau", Vector3.new(0.67, 0.48, 0.6), Vector3.new(0, 2.38, -1.91), masque)
-	volume("Truffe", Vector3.new(0.32, 0.15, 0.12), Vector3.new(0, 2.45, -2.19), sabot)
-	volume("Barbiche", Vector3.new(0.27, 0.61, 0.25), Vector3.new(0, 1.99, -1.98), masque, CFrame.Angles(math.rad(-15), 0, 0))
-	volume("Queue", Vector3.new(0.34, 0.73, 0.36), Vector3.new(0, 2.39, 1.63), pelage, CFrame.Angles(math.rad(35), 0, 0))
+	bloc("Corps", Vector3.new(1.5, 1.3, 2.6), Vector3.new(0, 1.95, 0.25), pelage)
+	bloc("Dos", Vector3.new(1.2, 0.25, 2.3), Vector3.new(0, 2.7, 0.25), clair)
+	bloc("Ventre", Vector3.new(1.3, 0.25, 2.1), Vector3.new(0, 1.28, 0.25), ombre)
+	for i, z in { -0.6, 0.2, 1 } do
+		bloc("Meche", Vector3.new(1.62, 0.35, 0.5), Vector3.new(0, 1.45 + (i % 2) * 0.1, z), ombre)
+	end
+	bloc("Cou", Vector3.new(0.7, 1.1, 0.7), Vector3.new(0, 2.55, -1.05), pelage, CFrame.Angles(math.rad(-25), 0, 0))
+	bloc("Tête", Vector3.new(0.85, 0.85, 1.0), Vector3.new(0, 3.05, -1.55), pelage)
+	bloc("Museau", Vector3.new(0.65, 0.5, 0.55), Vector3.new(0, 2.8, -2.2), masque)
+	bloc("Truffe", Vector3.new(0.34, 0.14, 0.08), Vector3.new(0, 2.92, -2.48), sabot)
+	bloc("Barbiche", Vector3.new(0.3, 0.6, 0.25), Vector3.new(0, 2.35, -2.25), masque)
+	bloc("Queue", Vector3.new(0.3, 0.55, 0.3), Vector3.new(0, 2.6, 1.6), clair, CFrame.Angles(math.rad(35), 0, 0))
 	for _, cote in { -1, 1 } do
-		volume("Oreille", Vector3.new(0.65, 0.2, 0.33), Vector3.new(cote * 0.56, 2.76, -1.29), masque,
-			CFrame.Angles(0, -cote * math.rad(13), -cote * math.rad(18)))
-		volume("Œil", Vector3.new(0.11, 0.14, 0.18), Vector3.new(cote * 0.37, 2.73, -1.72), sabot)
-		for _, z in { -0.72, 1.12 } do
-			volume("Patte", Vector3.new(0.35, 1.38, 0.39), Vector3.new(cote * 0.49, 0.82, z), pelage)
-			P(m, "Sabot", Vector3.new(0.33, 0.25, 0.42), Vector3.new(cote * 0.49, 0.125, z), sabot, Mat.SmoothPlastic, { collide = false })
+		bloc("Oreille", Vector3.new(0.6, 0.16, 0.3), Vector3.new(cote * 0.62, 3.1, -1.4), masque, CFrame.Angles(0, 0, -cote * math.rad(25)))
+		bloc("Œil", Vector3.new(0.06, 0.16, 0.18), Vector3.new(cote * 0.43, 3.15, -1.85), sabot)
+		for _, z in { -0.75, 1.15 } do
+			-- haut de patte à 1,55 > bas du ventre 1,3 : la patte entre dans le corps
+			bloc("Patte", Vector3.new(0.34, 1.35, 0.36), Vector3.new(cote * 0.5, 0.88, z), pelage)
+			bloc("Genou", Vector3.new(0.38, 0.2, 0.4), Vector3.new(cote * 0.5, 0.6, z), ombre)
+			P(m, "Sabot", Vector3.new(0.38, 0.22, 0.42), Vector3.new(cote * 0.5, 0.11, z), sabot, Mat.SmoothPlastic, { collide = false })
 		end
 		local courbe = {
-			Vector3.new(cote * 0.26, 2.99, -1.5),
-			Vector3.new(cote * 0.32, 3.37, -1.4),
-			Vector3.new(cote * 0.39, 3.64, -1.18),
-			Vector3.new(cote * 0.43, 3.8, -0.93),
+			Vector3.new(cote * 0.28, 3.4, -1.6),
+			Vector3.new(cote * 0.34, 3.75, -1.48),
+			Vector3.new(cote * 0.4, 4.0, -1.25),
+			Vector3.new(cote * 0.44, 4.12, -0.98),
 		}
 		for i, diametre in { 0.25, 0.19, 0.12 } do
 			local a, b = courbe[i], courbe[i + 1]
