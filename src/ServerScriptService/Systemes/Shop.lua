@@ -1020,13 +1020,20 @@ local function buildPlaced(reg, d)
 		G.Util.prompt(base, "bed", ownerP and "Dormir (location " .. (d.rent or 15) .. " 💰 si ce n'est pas ton lit)" or "Dormir", "Lit" .. whose, { dist = 8, data = { Placed = d.id } })
 	elseif d.item == "chest" then
 		G.Util.prompt(base, "chest", "Ouvrir", "Coffre" .. whose, { dist = 8, data = { Placed = d.id } })
-	elseif d.item == "door" then
-		G.Util.prompt(base, "door", "Ouvrir", "Porte" .. whose, { dist = 7, data = { Placed = d.id } })
+	elseif G.Protection.DOORS and G.Protection.DOORS[d.item] then
+		G.Util.prompt(base, "door", "Ouvrir", (Config.ITEMS[d.item] and Config.ITEMS[d.item].name or "Porte") .. whose, { dist = 7, data = { Placed = d.id } })
+	elseif Shop.CONTAINERS[d.item] and d.item ~= "chest" then
+		-- grange, grenier, charrettes (27/11) : des rangements comme le coffre
+		G.Util.prompt(base, "chest", "Ouvrir", (Config.ITEMS[d.item] and Config.ITEMS[d.item].name or "Rangement") .. whose, { dist = 9, data = { Placed = d.id } })
 	elseif d.item == "barracks" then
 		G.Util.prompt(base, "barracks", "Caserne", "Caserne" .. whose, { dist = 12, data = { Placed = d.id } })
 		G.Util.prompt(base, "barracks_equip", "Équiper l'armée (fer + cuir)", "Caserne" .. whose, { dist = 12, hold = 0.6, key = Enum.KeyCode.R, pad = Enum.KeyCode.ButtonY, data = { Placed = d.id } })
 	elseif d.item == "windmill" then
 		G.Util.prompt(base, "mill", "Moulin (blé / farine)", "Moulin" .. whose, { dist = 10, data = { Placed = d.id } })
+	elseif d.item == "well" or d.item == "water_pump" then
+		G.Util.prompt(base, "well", "Puiser (seau vide)", (d.item == "well" and "Puits" or "Pompe à eau") .. whose, { dist = 8, data = { Placed = d.id } })
+	elseif d.item == "henhouse" then
+		G.Util.prompt(base, "henhouse", "Poulailler (blé / œufs)", "Poulailler" .. whose, { dist = 9, data = { Placed = d.id } })
 	elseif d.item == "press" then
 		G.Util.prompt(base, "press", "Presse (pommes / cidre)", "Presse" .. whose, { dist = 8, data = { Placed = d.id } })
 	elseif d.item == "sawmill" then
@@ -1087,6 +1094,9 @@ function Shop.onRegionLoad(reg)
 end
 
 -- Couche occupée par un objet posé : deux murs ne vont pas au même bord, deux planchers pas sur la même case…
+-- rangements posables : même inventaire que le coffre (27/11 : grange, grenier, charrettes n'avaient aucun effet)
+Shop.CONTAINERS = { chest = true, barn = true, granary = true, cart = true, merchant_cart = true, wheelbarrow = true }
+
 function Shop.slotOf(item: string, x: number, z: number): string
 	local info = Config.ITEMS[item]
 	local layer = "objet"
@@ -1275,7 +1285,7 @@ local unlocked = {} -- joueur -> coffre crocheté (accès le temps de se servir)
 
 function Shop.openChest(player: Player, id: string)
 	local d = type(id) == "string" and findPlaced(id)
-	if not d or d.item ~= "chest" then
+	if not d or not Shop.CONTAINERS[d.item] then
 		return
 	end
 	d.items = d.items or {}
@@ -1300,7 +1310,7 @@ function Shop.chestMove(player: Player, id: string, item: string, n: number, put
 	end
 	local d = findPlaced(id)
 	local root = G.Util.root(player)
-	if not d or d.item ~= "chest" or not root then
+	if not d or not Shop.CONTAINERS[d.item] or not root then
 		if not quiet then
 			G.Util.toast(player, "Ce coffre n'est plus là.")
 			G.remotes.Menu:FireClient(player, { kind = "close" })
@@ -1371,7 +1381,7 @@ function Shop.chestBulk(player: Player, id: string, mode: string)
 		items = b and b.items or nil
 	else
 		local d = findPlaced(id)
-		if not d or d.item ~= "chest" then
+		if not d or not Shop.CONTAINERS[d.item] then
 			return
 		end
 		if mode == "take" and d.owner and not G.Util.owns(player, d.owner) and not G.Util.trusted(player, d.owner, "coffres") and not Config.LIBRE.videCoffreAutrui then

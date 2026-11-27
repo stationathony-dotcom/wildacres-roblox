@@ -15,6 +15,12 @@ function Machines.init(g)
 	G.Interact.onPrompt("mill", function(player, prompt)
 		Machines.mill(player, prompt:GetAttribute("Placed"))
 	end)
+	G.Interact.onPrompt("well", function(player)
+		Machines.well(player)
+	end)
+	G.Interact.onPrompt("henhouse", function(player, prompt)
+		Machines.henhouse(player, prompt:GetAttribute("Placed"))
+	end)
 	G.Interact.onPrompt("press", function(player, prompt)
 		Machines.press(player, prompt:GetAttribute("Placed"))
 	end)
@@ -154,6 +160,43 @@ function Machines.sawmill(player: Player, id: string)
 	local _, reg = G.Protection.findPlaced(id)
 	local wheel = Machines.waterPowered(reg and reg.state, d)
 	G.Util.toast(player, "🪚 " .. n .. " bois à la scierie : " .. n * (wheel and 4 or 3) .. " planches demain" .. (wheel and " (roue à eau)." or "."))
+	G.Joueurs.sync(player)
+end
+
+-- Puits et pompe posés (27/11, sans effet jusqu'ici) : tous les seaux vides du sac sont remplis
+function Machines.well(player: Player)
+	local n = G.Joueurs.count(player, "bucket_empty")
+	if n < 1 then
+		G.Util.toast(player, "Il te faut un seau vide pour puiser.")
+		return
+	end
+	G.Joueurs.take(player, "bucket_empty", n)
+	G.Joueurs.add(player, "bucket", n, true)
+	G.Util.toast(player, "💧 " .. n .. " seau(x) rempli(s).", "gain")
+	G.Joueurs.sync(player)
+end
+
+-- Poulailler (27/11, sans effet jusqu'ici) : 2 blé le soir = 1 œuf le lendemain (rien de gratuit)
+function Machines.henhouse(player: Player, id: string)
+	local d = G.Protection.findPlaced(id)
+	if not mine(player, d) then
+		return
+	end
+	d.hen = d.hen or { grain = 0, eggs = 0 }
+	if d.hen.eggs > 0 then
+		G.Joueurs.add(player, "egg", d.hen.eggs)
+		d.hen.eggs = 0
+		G.Joueurs.sync(player)
+		return
+	end
+	local n = math.floor(G.Joueurs.count(player, "wheat") / 2)
+	if n < 1 then
+		G.Util.toast(player, "Les poules attendent du grain (2 blé par œuf). Elles pondent pendant la nuit.")
+		return
+	end
+	G.Joueurs.take(player, "wheat", n * 2)
+	d.hen.grain += n
+	G.Util.toast(player, "🐔 Grain donné : " .. n .. " œuf(s) demain.")
 	G.Joueurs.sync(player)
 end
 
@@ -314,6 +357,9 @@ function Machines.newDay()
 				-- une roue à eau au bord de l'eau, tout près : le moulin moud tout (1 pour 1 au lieu de 2 pour 3)
 				d.mill.flour += Machines.waterPowered(rs, d) and d.mill.wheat or math.floor(d.mill.wheat * 2 / 3)
 				d.mill.wheat = 0
+			elseif d.item == "henhouse" and d.hen and d.hen.grain > 0 then
+				d.hen.eggs += d.hen.grain
+				d.hen.grain = 0
 			elseif d.item == "press" and d.press and d.press.lots > 0 then
 				d.press.cider += d.press.lots
 				d.press.lots = 0

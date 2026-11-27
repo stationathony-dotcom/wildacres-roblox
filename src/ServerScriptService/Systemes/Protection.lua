@@ -152,7 +152,7 @@ function Protection.useLock(player: Player, item: string)
 	local best, bd = nil, 9
 	for _, reg in G.World.loaded do
 		for _, d in reg.state.placed do
-			if (d.item == "chest" or d.item == "door" or d.item == "drawbridge" or d.item == "trapdoor") and G.Util.owns(player, d.owner) then
+			if (d.item == "chest" or Protection.DOORS[d.item] or (G.Shop.CONTAINERS and G.Shop.CONTAINERS[d.item]) or d.item == "drawbridge" or d.item == "trapdoor") and G.Util.owns(player, d.owner) then
 				local dist = (Vector3.new(d.x, root.Position.Y, d.z) - root.Position).Magnitude
 				if dist < bd then
 					best, bd = d, dist
@@ -240,7 +240,7 @@ function Protection.access(player: Player, d, onOpen: () -> ())
 		return
 	end
 	if not d.owner or G.Util.owns(player, d.owner) or (d.lock or 0) == 0 then
-		if d.owner and not G.Util.owns(player, d.owner) and (d.item == "door" or d.item == "drawbridge" or d.item == "trapdoor") then
+		if d.owner and not G.Util.owns(player, d.owner) and (Protection.DOORS[d.item] or d.item == "drawbridge" or d.item == "trapdoor") then
 			G.Law.crime(player, "breakin", Vector3.new(d.x, 0, d.z), d.owner)
 		end
 		onOpen()
@@ -268,16 +268,35 @@ end
 
 -- ----------------------------------------------------------------- Portes
 
+-- portes posables (27/11 : les portes de grange, doubles, de château, le portail et la herse du catalogue
+-- n'avaient aucun effet) ; leurs modèles n'ont pas toujours de « Battant » : tout le modèle s'efface alors
+Protection.DOORS = { door = true, barn_door = true, double_door = true, castle_door = true, farm_gate = true, portcullis = true }
+
 local function setDoorOpen(d, reg, open: boolean)
 	for _, m in reg.placedModels or {} do
-		if m.Name == "Porte" and m.Parent then
+		if m.Parent and m:IsA("Model") then
 			local p = m:GetPivot().Position
-			if math.abs(p.X - d.x) < 0.3 and math.abs(p.Z - d.z) < 0.3 then
+			if math.abs(p.X - d.x) < 0.3 and math.abs(p.Z - d.z) < 0.3 and (m.Name == "Porte" or d.item ~= "door") then
+				local leaves = {}
 				for _, part in m:GetDescendants() do
 					if part:IsA("BasePart") and part.Name == "Battant" then
-						part.CanCollide = not open
-						part.Transparency = open and 0.65 or 0
+						table.insert(leaves, part)
 					end
+				end
+				if #leaves == 0 and d.item ~= "door" then
+					for _, part in m:GetDescendants() do
+						if part:IsA("BasePart") then
+							table.insert(leaves, part)
+						end
+					end
+				end
+				for _, part in leaves do
+					if part:GetAttribute("T0") == nil then
+						part:SetAttribute("T0", part.Transparency)
+						part:SetAttribute("C0", part.CanCollide)
+					end
+					part.CanCollide = (not open) and part:GetAttribute("C0") == true
+					part.Transparency = open and math.max(0.65, part:GetAttribute("T0")) or part:GetAttribute("T0")
 				end
 			end
 		end
@@ -286,7 +305,7 @@ end
 
 function Protection.useDoor(player: Player, id: string)
 	local d, reg = findPlaced(id)
-	if not d or d.item ~= "door" then
+	if not d or not Protection.DOORS[d.item] then
 		return
 	end
 	Protection.access(player, d, function()
