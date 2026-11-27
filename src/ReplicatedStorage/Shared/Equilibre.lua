@@ -913,6 +913,27 @@ E.SORTS = {
 	{ "peau_pierre", "geo", "Peau de pierre", "🪨", 30, 20, 0, "armure", 6, "defense", { { paper = 3, ink = 1, stone = 10, carved_stone = 1 }, 22, 240 } },
 }
 
+-- 12 quater. CHEFS-D'ŒUVRE (27/11, MANQUES-MMO n° 12, fin de jeu par voie) : un projet personnel par voie,
+--     qu'on nourrit au fil des semaines (Systemes/Oeuvres). Compétence requise (skillRaw), énormes quantités ;
+--     achevé : un titre unique et une pièce légendaire à soi.
+--     { id, voie, nom du projet, compétence, niveau, ingrédients, titre, pièce = { emplacement, nom, stats } }
+E.OEUVRES = {
+	{ "forge_maitre", "maître artisan", "la Lame des Mille Coups", "artisanat", 50, { steel = 200, gold_ingot = 40, diamond = 5, coal = 400 }, "Maître des Mille Coups",
+		{ "weapon", "Lame des Mille Coups", { force = 12, vitesse = 5, chance = 3 }, power = 16, visual = "11" } },
+	{ "comptoir", "grand marchand", "le Grand Comptoir", "commerce", 50, { gold_ingot = 100, silk = 60, planks = 300, pearl = 10 }, "Prince des marchands",
+		{ "trinket", "Sceau du Grand Comptoir", { charisme = 14, chance = 6 } } },
+	{ "haras", "maître éleveur", "le Haras royal", "elevage", 50, { wheat = 800, planks = 400, leather = 80, iron_ingot = 60 }, "Seigneur du haras",
+		{ "cape", "Cape du Haras royal", { vie = 10, vitesse = 6, charisme = 4 } } },
+	{ "carte_monde", "explorateur", "la Carte du Monde", "peche", 40, { paper = 120, ink = 40, relic_fragment = 20, rare_shell = 10 }, "Cartographe du monde",
+		{ "hat", "Tricorne de l'arpenteur", { vitesse = 10, chance = 8 } } },
+	{ "monument", "architecte", "le Monument de Valdor", "construction", 50, { carved_stone = 400, brick = 300, gold_ingot = 30, glass = 60 }, "Bâtisseur de légende",
+		{ "armor", "Tablier du Monument", { defense = 12, vie = 8 } } },
+	{ "bestiaire", "aventurier", "le Grand Bestiaire", "combat", 50, { paper = 200, ink = 60, royal_fur = 1, frost_crystal = 1, golden_carapace = 1 }, "Fléau des légendes",
+		{ "trinket", "Griffe des légendes", { force = 10, defense = 6, vie = 4 } } },
+	{ "jardin", "maître fermier", "le Jardin des Merveilles", "agriculture", 50, { ancient_seed = 20, flower = 300, clay = 200, glass = 40 }, "Jardinier des merveilles",
+		{ "hat", "Couronne de floraison", { vie = 10, chance = 8 } } },
+}
+
 -- bonus des panoplies portées : { [stat] = bonus }, et la liste lisible des panoplies actives
 function E.setBonus(equipped)
 	local count = {}

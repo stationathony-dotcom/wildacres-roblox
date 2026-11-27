@@ -46,6 +46,7 @@ Save.FIELDS = {
 	"montures", -- 26/11 : collection de montures façon WoW (Systemes/Montures), facultatif
 	"sorts", -- 27/11 : sorts appris dans les grimoires (Systemes/Magie), facultatif
 	"conjoint", -- 27/11 : époux (Systemes/Mariages), facultatif
+	"oeuvres", -- 27/11 : chefs-d'œuvre en cours / achevés (Systemes/Oeuvres), facultatif
 	"maitrise", -- 26/11 : maîtrise par famille d'armes (Combat, Shared/Armes), facultatif
 }
 

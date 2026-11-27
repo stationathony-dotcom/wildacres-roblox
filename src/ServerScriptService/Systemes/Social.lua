@@ -168,6 +168,16 @@ function Social.records()
 	end)
 	return out
 end
+-- titres des chefs-d'œuvre (Systemes/Oeuvres, données Shared/Equilibre E.OEUVRES)
+do
+	local okE, Eq = pcall(require, game:GetService("ReplicatedStorage").Shared.Equilibre)
+	for _, o in (okE and Eq.OEUVRES) or {} do
+		local id = o[1]
+		table.insert(TITLES, { id = "oeuvre_" .. id, name = o[7], test = function(p)
+			return p.oeuvres ~= nil and p.oeuvres[id] ~= nil and p.oeuvres[id].done ~= nil
+		end })
+	end
+end
 for _, f in FEATS do
 	local stat, need = f[3], f[4]
 	table.insert(TITLES, { id = f[1], name = f[2], stat = stat, need = need, test = function(p)

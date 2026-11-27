@@ -40,7 +40,7 @@ de `src/`. Règles d'`AGENTS.md` § 1 appliquées : **pas de saisons ni de clima
     festivals, jeux de plateau, musées, bibliothèques, journaux de joueurs.
 11. **Collections et prestige** (27/11 : records du monde au registre de la taverne, succès secrets, titres de magie) : codex d'équipements, poissons, herbier, fossiles, recettes, reliques ; titres, succès
     secrets, records mondiaux, apparences exclusives, historique des découvertes.
-12. **Fin de jeu** par voie (dirigeant, explorateur, maître artisan, grand marchand, maître éleveur, aventurier, architecte,
+12. **Fin de jeu** par voie (27/11 : 7 chefs-d'œuvre personnels, compétence 40-50, titre unique + pièce légendaire, `Systemes/Oeuvres`) (dirigeant, explorateur, maître artisan, grand marchand, maître éleveur, aventurier, architecte,
     navigateur) : chaque voie doit avoir ses projets ambitieux.
 13. **Technique « haute »** à revoir : tutoriel, recherche et filtres de l'inventaire, accessibilité, statistiques de jeu,
     protection contre la duplication (audit), synchronisation entre mondes, optimisation mobile (`PERFORMANCE.md`).
