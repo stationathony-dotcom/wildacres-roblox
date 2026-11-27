@@ -7,6 +7,7 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.4 — 2026-11-25
 
+- 27/11 [Claude] Six nouveaux boss errants (coffre-mimique, baudroie, mammouth de givre, griffon d'orage, veuve des cavernes, crocodile des marais) avec trophées, pièces légendaires et deux montures rares. Les 7 tenues nommées se fabriquent et donnent leur bonus à 2/4/6 pièces. Les forêts repoussent (jamais près d'une construction). Un village en pénurie le dit sur son tableau. Moins de saccades en traversant l'île. À voir en Play.
 - 27/11 [Codex] X32 affine les armes, armures, tenues, bijoux et outils portés. Les armes suivent la main pendant le geste de combat. La fiche affiche les affixes, la durabilité et la spécialisation. [Budgets et prototypes](docs/X32-RAPPORT.md). À vérifier en Édition et en Play.
 - 27/11 [Codex] Les 58 props de Valdor gagnent en relief et en matière, des coffres à serrure dorée aux ateliers, aux décors naturels et aux pièces de construction. [Détail des modèles et budgets](docs/X27-RAPPORT.md). À voir en Édition puis en Play.
 - 26/11 [Claude] Équipement façon MMO (docs/EQUIPEMENT-MMO.md) : affixes procéduraux sur toute pièce neuve (« de vigueur », « de célérité », « du tranchant »…), caractéristiques Critique, Hâte et Maîtrise, durabilité (arme et armure s'usent, brisée = sans effet) et réparation chez le forgeron ou l'armurier, types d'armure (tissu, cuir, mailles, plates : vitesse contre protection), spécialisation déduite de l'équipement avec un passif (Gardien, Ombre, Rôdeur, Guerrier, Dresseur, Artisan). À voir en Play.
