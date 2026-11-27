@@ -274,7 +274,12 @@ function WG:plan(rx: number, rz: number)
 				H[i] = h
 			end
 		end
+		-- relief gen 3 (terrasses, massifs, alpage) : ~40–80 ms d'un bloc sur le portable → pause par rangées
+		if lz % 8 == 0 then
+			pause()
+		end
 	end
+	pause()
 
 	local plan = {
 		rx = rx, rz = rz, key = pkey, x0 = x0, z0 = z0,

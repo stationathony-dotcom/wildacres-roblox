@@ -20,6 +20,9 @@ sur le PC fixe avec `docs/TEST-PLAY.md` § P7 (`/wa perf`, `/wa etat`) et vont d
   brute, distances eau / terre). Seulement dans la tâche de chargement de `World` (`planThread`) : un système qui
   demande un plan pendant sa boucle n'est jamais suspendu. Les tirages ne changent pas (mêmes mondes).
 
+- **27/11 — relief gen 3** : la boucle des hauteurs (terrasses, massifs, alpage) tenait ~75 ms d'un bloc
+  (banc `perf_serveur` rouge). Pause toutes les 8 rangées → **20 ms**, plan moyen 58 ms ; plan identique vérifié.
+
 ## À mesurer en Play (propriétaire, PC fixe)
 
 1. `/wa perf` au départ, au milieu d'un grand village, pendant un combat, en traversant l'île au galop.
