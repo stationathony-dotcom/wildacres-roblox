@@ -23,17 +23,17 @@
 - worldIdFromJoin:447
 - Mondes.boot:465
 - Mondes.acquire:566
-- Mondes.saveSoon:609
-- Mondes.heartbeat:630
-- sectorOf:641
-- Mondes.ensureRegion:646
-- posOf:704
-- Mondes.rememberPlayer:714
-- Mondes.playerRecord:724
-- Mondes.saveWorld:735
-- saveWorldInner:748
-- §Voyage (port):881
-- Mondes.travelFailed:888
-- Mondes.openSeaMap:901
-- Mondes.travel:911
-- Mondes.shutdown:1005
+- Mondes.saveSoon:610
+- Mondes.heartbeat:635
+- sectorOf:646
+- Mondes.ensureRegion:651
+- posOf:709
+- Mondes.rememberPlayer:719
+- Mondes.playerRecord:729
+- Mondes.saveWorld:740
+- saveWorldInner:753
+- §Voyage (port):886
+- Mondes.travelFailed:893
+- Mondes.openSeaMap:906
+- Mondes.travel:916
+- Mondes.shutdown:1010

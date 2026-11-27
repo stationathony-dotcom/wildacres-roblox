@@ -61,4 +61,4 @@
 - send:1094
 - Npcs.talk:1108
 - rumor:1162
-- Npcs.choice:1203
+- Npcs.choice:1218
