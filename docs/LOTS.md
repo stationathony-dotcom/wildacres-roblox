@@ -177,7 +177,7 @@ reste à pousser / capturer sur le PC fixe.
       HUD jamais masqué) + capture de chaque fenêtre dans le cadre commun `Cadre.lua`.
 
 - [x] **X32 · Armes et équipement portés** — Codex, 27/11 · livraison sur disque. [Rapport, budgets et appels Édition](X32-RAPPORT.md). Géométrie `e984a53` et `6aa4ef4`, fiche `f55bc42` et `02ff20e`, bancs `33a7f05`. Claude reprend les captures, les bancs Studio et l’intégration des prototypes au jeu.
-- [ ] **X33 · Objets du sac** (miniatures, ConstruireModelesMiniatures) — Sol, file du 26/11.
+- [x] **X33 · Objets du sac** — Codex, 27/11 · livraison sur disque (`ab79f98`). [Compte des pièces et appels Édition](X33-RAPPORT.md). Claude reprend les bancs Studio et les captures à 48 px.
 - [ ] **X34 · Maisons et bâtiments** (maison, villages2, moulin, château) — Sol, file du 26/11.
 - [ ] **X35 · PNJ : apparence + dialogues** (Avatar.dress, Apparence ; `Dialogue.lua` : passage accordé par Claude) — Sol.
 - [ ] **X36 · Créatures du bestiaire + 6 boss** (`Silhouettes.lua` : passage accordé par Claude ; données des boss → passage à Claude) — Sol.
@@ -199,7 +199,7 @@ Répartition décidée par le propriétaire le 26/11 : **Codex = ce qui se gén�
 - [ ] ~~**C14 · Créatures niveau planche**~~ → confié à Codex (X36) (`Systemes/Silhouettes.lua`) : tons multiples par masse, plaques et rivets,
       rangées de dents, langue, points lumineux le long du corps, motifs par famille, budget relevé (créature ≤ 140,
       boss ≤ 320). Banc `creatures_voxel` mis à jour.
-- [~] **C15 · Boss inspirés des planches** — données faites, Claude 27/11 (ids `mimic_chest`, `abyss_angler`, `frost_mammoth`, `storm_griffin`, `cavern_widow`, `marsh_crocodile` : Bestiaire + ROAMING + Prises + 6 trophées au Catalogue) ; reste : silhouettes propres (Codex X36) puis capture Studio (dessins par Codex en X36 ; Claude : données de combat et branchement) (noms et dessins à nous) : coffre-mimique des ruines, baudroie des
+- [x] **C15 · Boss inspirés des planches** — données ET dessins faits par Claude le 27/11 (Coffre_Mimique, Baudroie, Mammouth_Givre = modèle du concours de Sol, Griffon_Orage, Veuve_Cavernes, Croco_Marais ; captures captures/2026-11-27/catalogue/) (ids `mimic_chest`, `abyss_angler`, `frost_mammoth`, `storm_griffin`, `cavern_widow`, `marsh_crocodile` : Bestiaire + ROAMING + Prises + 6 trophées au Catalogue) ; reste : silhouettes propres (Codex X36) puis capture Studio (dessins par Codex en X36 ; Claude : données de combat et branchement) (noms et dessins à nous) : coffre-mimique des ruines, baudroie des
       abysses, mammouth de givre, griffon d'orage (silhouette propre au boss), veuve des cavernes, crocodile des
       marais. Données dans `Bestiaire`/`Equilibre`, mise en scène existante (`boss_scene`).
 - [x] **C17 · Banc d'import sûr du Store** (fait le 26/11, 6508926) `tools/bancs/store_import.luau` (pour X30).
@@ -215,6 +215,8 @@ Répartition décidée par le propriétaire le 26/11 : **Codex = ce qui se gén�
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 27/11 · Codex · X33 sur disque. Les objets et les outils se régénèrent dans le même banc. Reconstruction et captures à faire en Édition par Claude. [Rapport](X33-RAPPORT.md)
 
 - 27/11 · Codex · X32 livre les formes portées et les outils en main, 286 prototypes dont sept tenues nommées, et l’équipement MMO affiché dans [P]. Voir le rapport pour les bancs et les captures en Édition.
 

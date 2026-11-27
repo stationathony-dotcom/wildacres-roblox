@@ -5116,4 +5116,56 @@ function M.baudroie(): Model
 	return m
 end
 
+-- Griffon d'orage (boss volant, 27/11, Claude) : avant d'aigle (tête, bec crochu, collerette de plumes, serres),
+-- arrière de lion fauve, grandes ailes déployées en 3 rangs de plumes, liserés d'éclairs bleus, queue à touffe.
+function M.griffonOrage(): Model
+	dossier = dossierModeles()
+	local old = dossier:FindFirstChild("Griffon_Orage")
+	if old then
+		old:Destroy()
+	end
+	local m = nouveau("Griffon_Orage")
+	local plume1, plume2, plume3 = rgb(70, 86, 120), rgb(98, 116, 156), rgb(196, 206, 226)
+	local fauve, fauve2, bec, eclair = rgb(186, 146, 92), rgb(150, 112, 70), rgb(236, 196, 70), rgb(120, 200, 255)
+	local function Bx(n: string, t: Vector3, pos: Vector3, c: Color3, mat: Enum.Material?, rot: CFrame?)
+		return P(m, n, t, pos, c, mat or Mat.SmoothPlastic, { collide = false, rot = rot })
+	end
+	-- corps : poitrail d'aigle, arrière de lion
+	Bx("Poitrail", Vector3.new(2.4, 2.4, 2.2), Vector3.new(0, 3.2, -1.0), plume2)
+	Bx("Collerette", Vector3.new(2.8, 0.8, 1.2), Vector3.new(0, 4.2, -1.5), plume3)
+	Bx("Corps", Vector3.new(2.2, 2.0, 3.2), Vector3.new(0, 3.0, 1.4), fauve)
+	Bx("Ventre", Vector3.new(1.9, 0.3, 4.6), Vector3.new(0, 1.9, 0.4), fauve2)
+	-- tête
+	Bx("Tete", Vector3.new(1.6, 1.5, 1.6), Vector3.new(0, 5.0, -2.2), plume3)
+	Bx("Crete", Vector3.new(0.4, 0.7, 1.2), Vector3.new(0, 6.0, -2.0), plume1)
+	Bx("Bec", Vector3.new(0.7, 0.6, 1.1), Vector3.new(0, 4.8, -3.4), bec)
+	Bx("Bec", Vector3.new(0.5, 0.45, 0.4), Vector3.new(0, 4.45, -3.85), rgb(200, 160, 50))
+	for _, sx in { -1, 1 } do
+		Bx("Oeil", Vector3.new(0.08, 0.3, 0.35), Vector3.new(sx * 0.81, 5.15, -2.6), eclair, Mat.Neon)
+		-- serres à l'avant, pattes de lion à l'arrière
+		Bx("Patte", Vector3.new(0.5, 2.1, 0.5), Vector3.new(sx * 0.7, 1.25, -1.2), bec)
+		for g = -1, 1 do
+			Bx("Serre", Vector3.new(0.12, 0.15, 0.45), Vector3.new(sx * 0.7 + g * 0.18, 0.27, -1.55), rgb(40, 40, 46))
+		end
+		Bx("Patte", Vector3.new(0.7, 1.8, 0.8), Vector3.new(sx * 0.7, 1.4, 2.2), fauve2)
+		Bx("Pied", Vector3.new(0.8, 0.4, 1.0), Vector3.new(sx * 0.7, 0.4, 2.1), fauve)
+		-- aile : bras de l'aile puis 3 rangs de rémiges qui s'allongent vers la pointe
+		Bx("Aile", Vector3.new(4.0, 0.4, 1.6), Vector3.new(sx * 3.1, 4.6, 0.2), plume1, nil, CFrame.Angles(0, 0, sx * 0.25))
+		for k = 0, 4 do
+			local x = sx * (1.8 + k * 1.05)
+			local y = 4.4 + k * 0.28
+			Bx("Remige", Vector3.new(0.9, 0.25, 2.4 + k * 0.35), Vector3.new(x, y - 0.25, 1.4 + k * 0.15), k % 2 == 0 and plume2 or plume1)
+			Bx("Remige", Vector3.new(0.85, 0.2, 1.2), Vector3.new(x, y - 0.05, 0.4), plume3)
+		end
+		Bx("Eclair", Vector3.new(4.6, 0.1, 0.16), Vector3.new(sx * 3.9, 5.2, 2.9), eclair, Mat.Neon, CFrame.Angles(0, 0, sx * 0.22))
+	end
+	-- queue de lion à touffe chargée d'orage
+	Bx("Queue", Vector3.new(0.3, 0.3, 2.6), Vector3.new(0, 3.4, 4.1), fauve2, nil, CFrame.Angles(math.rad(-20), 0, 0))
+	Bx("Touffe", Vector3.new(0.7, 0.7, 0.9), Vector3.new(0, 3.9, 5.4), plume1)
+	Bx("Etincelle", Vector3.new(0.25, 0.25, 0.25), Vector3.new(0, 4.4, 5.6), eclair, Mat.Neon)
+	fini(m)
+	m:ScaleTo(1.8) -- taille de boss
+	return m
+end
+
 return M
