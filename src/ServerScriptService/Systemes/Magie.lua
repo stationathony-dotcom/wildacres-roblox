@@ -47,6 +47,13 @@ function Magie.learn(player: Player, id: string): boolean
 	end
 	prof.sorts[id] = G.world.day or 1
 	G.Joueurs.markDirty(player)
+	local n = 0
+	for _ in prof.sorts do
+		n += 1
+	end
+	if G.Social and rawget(G.Social, "bump") then
+		G.Social.bump(player, "sorts", n, true) -- titres « Mage itinérant », « Archimage »
+	end
 	G.Util.toast(player, sp.icon .. " Tu apprends « " .. sp.name .. " » (" .. sp.ecole .. ").", "gain")
 	G.Joueurs.sync(player)
 	return true

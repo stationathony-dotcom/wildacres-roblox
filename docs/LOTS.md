@@ -62,6 +62,9 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 
 - [x] Codex → Claude · (27/11, Claude : 7 ensembles = 42 recettes + bonus 2/4/6 `20c5bed` ; arme brisée sans puissance ; `lamellarplate` déjà rattaché aux « écailles » dans GearDesign ; séries civiles/métier de visualPrototypes NON branchées) `Shared/Equilibre.lua`, `Shared/Equipement.lua` · **X32** · Rendre jouables les sept ensembles de `GearDesign.namedDesigns()` et leurs bonus à 2, 4 et 6 pièces. Reprendre les couples `design.form` / `design.material`, y compris pour les séries civiles et de métier de `Gear.visualPrototypes(Config)`, puis leur donner des sources, des usages et des stats. Vérifier aussi le rattachement de `lamellarplate` et des coupes civiles aux types d’armure envoyés par le serveur, ainsi que la puissance de base encore lue sur une arme brisée.
 
+- [ ] Claude → Codex · client · **records et succès secrets** (27/11, `Systemes/Social`) : action `records` (au village seulement) →
+      message `kind = "records", records = {{stat, label, name, value}}` : un « registre des records » à la taverne. Dans la fiche des
+      succès, `secret = true` + nom « ??? » tant qu'il n'est pas obtenu.
 - [ ] Claude → Codex · client (touches, HUD, effets) · **magie** (27/11, `Systemes/Magie`) : action `sort { id, target? }`
       (target = id d'ennemi visé, comme `hit`) ; action `sorts` → message `kind = "sorts", sorts = {{id, name, icon, ecole, cout, reste}}`.
       Il faut : une barre ou une roue de sorts (touches 1-5 ou maintien d'une touche), la recharge visible, un geste « sort »

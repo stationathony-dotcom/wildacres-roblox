@@ -38,7 +38,7 @@ de `src/`. Règles d'`AGENTS.md` § 1 appliquées : **pas de saisons ni de clima
    portes mécaniques, ascenseurs à contrepoids, ateliers semi-automatiques, machines combinables.
 10. **Vie sociale** : mariages, guildes de métiers, concerts et instruments, courses de chevaux, concours agricoles, foires,
     festivals, jeux de plateau, musées, bibliothèques, journaux de joueurs.
-11. **Collections et prestige** : codex d'équipements, poissons, herbier, fossiles, recettes, reliques ; titres, succès
+11. **Collections et prestige** (27/11 : records du monde au registre de la taverne, succès secrets, titres de magie) : codex d'équipements, poissons, herbier, fossiles, recettes, reliques ; titres, succès
     secrets, records mondiaux, apparences exclusives, historique des découvertes.
 12. **Fin de jeu** par voie (dirigeant, explorateur, maître artisan, grand marchand, maître éleveur, aventurier, architecte,
     navigateur) : chaque voie doit avoir ses projets ambitieux.

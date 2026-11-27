@@ -128,7 +128,45 @@ local FEATS = {
 	{ "fondateur", "Fondateur", "villes", 1 },
 	{ "conteur", "Conteur", "chroniques", 1 },
 	{ "chroniqueur", "Chroniqueur", "chroniques", 6 },
+	-- 27/11 : magie (Systemes/Magie) ; « secret » = nom caché (« ??? ») tant qu'il n'est pas obtenu
+	{ "mage", "Mage itinérant", "sorts", 3 },
+	{ "archimage", "Archimage", "sorts", 5, secret = true },
+	{ "riche", "Fortune de Valdor", "soldGold", 100000, secret = true },
+	{ "tueur_legendes", "Tueur de légendes", "bosses", 25, secret = true },
 }
+
+-- RECORDS DU MONDE (27/11, MANQUES-MMO n° 11) : pour quelques compteurs, le meilleur joueur de CE monde
+-- (G.world.extra.records[stat] = { uid, name, value }). Rien n'est annoncé : on les lit au registre
+-- de la taverne (action « records »), le détenteur l'apprend seulement s'il est là.
+Social.RECORDS = { kills = "Créatures vaincues", bosses = "Boss abattus", fished = "Poissons pêchés", soldGold = "Or gagné au comptoir",
+	crafted = "Objets fabriqués", lieux = "Lieux découverts", built = "Pièces bâties" }
+local function noteRecord(player: Player, stat: string, value: number)
+	if not Social.RECORDS[stat] or not G.world then
+		return
+	end
+	G.world.extra = G.world.extra or {}
+	G.world.extra.records = G.world.extra.records or {}
+	local r = G.world.extra.records[stat]
+	local uid = tostring(player.UserId)
+	if not r or value > (r.value or 0) then
+		local newHolder = not r or r.uid ~= uid
+		G.world.extra.records[stat] = { uid = uid, name = player.DisplayName, value = value }
+		if newHolder and value >= 10 then
+			G.Util.toast(player, "🏆 Record du monde : " .. Social.RECORDS[stat] .. " (" .. value .. ") !", "gain")
+		end
+	end
+end
+function Social.records()
+	local out = {}
+	for stat, label in Social.RECORDS do
+		local r = G.world and G.world.extra and G.world.extra.records and G.world.extra.records[stat]
+		table.insert(out, { stat = stat, label = label, name = r and r.name or nil, value = r and r.value or 0 })
+	end
+	table.sort(out, function(a, b)
+		return a.label < b.label
+	end)
+	return out
+end
 for _, f in FEATS do
 	local stat, need = f[3], f[4]
 	table.insert(TITLES, { id = f[1], name = f[2], stat = stat, need = need, test = function(p)
@@ -165,6 +203,15 @@ local inviteAt = setmetatable({}, { __mode = "k" }) -- joueur invité -> os.cloc
 function Social.init(g)
 	G = g
 	Config = G.Config
+	-- registre des records : seulement au village (pas à distance, règle 1)
+	G.Interact.onAction("records", function(player)
+		local near = G.Quetes and rawget(G.Quetes, "nearVillage") and G.Quetes.nearVillage(player)
+		if not near then
+			G.Util.toast(player, "Le registre des records se consulte à la taverne d'un village.")
+			return
+		end
+		G.remotes.Menu:FireClient(player, { kind = "records", records = Social.records() })
+	end)
 	G.Interact.onAction("set_title", function(player, data)
 		Social.setTitle(player, data.id)
 	end)
@@ -247,6 +294,7 @@ function Social.bump(player: Player, stat: string, n: number?, max: boolean?)
 	end
 	p.stats[stat] = new
 	G.Joueurs.markDirty(player)
+	noteRecord(player, stat, new)
 	for _, need in WATCH[stat] or {} do
 		if old < need and new >= need then
 			Social.checkTitles(player)
@@ -260,8 +308,9 @@ function Social.featsOf(player: Player)
 	local p = G.Joueurs.get(player)
 	local out = {}
 	for _, f in FEATS do
-		table.insert(out, { id = f[1], name = f[2], got = p and tonumber(p.stats[f[3]]) or 0, need = f[4],
-			owned = p and p.titles and p.titles[f[1]] == true })
+		local owned = p and p.titles and p.titles[f[1]] == true
+		table.insert(out, { id = f[1], name = (f.secret and not owned) and "???" or f[2], got = p and tonumber(p.stats[f[3]]) or 0, need = f[4],
+			owned = owned, secret = f.secret or nil })
 	end
 	return out
 end
