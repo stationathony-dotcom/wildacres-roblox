@@ -43,7 +43,7 @@ for k, v in K.items():
 def pick(name, form):
     n = name.lower()
     # matériau qui a du sens pour la bête, emplacement de la pièce, nom de la pièce
-    if "roc des" in n: return ("Rémige géante", "🪶", "hat", "Coiffe à rémiges")
+    if "roc des" in n: return ("Rémige géante", "🦅", "hat", "Coiffe à rémiges")
     if "kraken" in n: return ("Encre de kraken", "🐙", "trinket", "Fiole d'encre des abysses")
     if "lucioles" in n: return ("Lanterne de luciole", "✨", "trinket", "Pendentif de lumière")
     if "hydre" in n: return ("Croc d'hydre", "🐍", "trinket", "Amulette aux trois têtes")
