@@ -27,7 +27,7 @@ de `src/`. Règles d'`AGENTS.md` § 1 appliquées : **pas de saisons ni de clima
    boss mondiaux et maritimes (pas de boss saisonniers : règle).
 4. **Magie** (27/11 : serveur fait — 5 sorts / 5 écoles en grimoires, `Systemes/Magie` ; touches et effets à faire par Codex) (déjà en tête d'`EQUIPEMENT-MMO.md`) : écoles pyro, cryo, géo, hydro, aéro, druidisme, astrale, spirituelle
    (soutien), runique (enchantements), illusion ; apprise par grimoires, maîtres PNJ et talents. **Attend l'accord du propriétaire.**
-5. **Mer complète** : voiliers, navires marchands et d'exploration, construction de bateaux, équipages, épaves, îles
+5. **Mer complète** (27/11 : serpents marins nageurs autour de chaque îlot, Baudroie des abysses en boss) : voiliers, navires marchands et d'exploration, construction de bateaux, équipages, épaves, îles
    secrètes, cartes marines, ports, routes commerciales, créatures marines, voyage vers d'autres mondes.
 6. **Royaumes et diplomatie** (27/11 : 1er pas — une ville de joueurs a son conseil : maire élu, taxe des étals, trésor, projets ; allégeance entre conseils, tribut de 10 %, royaume au sommet de la chaîne — fenêtre à faire par Codex) : de la ville au royaume, élections, maires et rois, lois locales, impôts, trésorerie,
    alliances, traités, ambassades, frontières (au-dessus de `Villes` et `Politique`).

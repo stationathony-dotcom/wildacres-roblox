@@ -148,6 +148,18 @@ function Ilots.onRegionLoad(reg)
 				if il.phare then
 					buildLighthouse(folder, CFrame.new(il.x - il.r * 0.1, top - 1, il.z - il.r * 0.45))
 				end
+				-- créatures marines (27/11, MANQUES-MMO n° 5) : deux serpents marins gardent les eaux de l'îlot
+				-- (nageurs : ils restent dans l'eau) ; mêmes ids chaque jour → ils reviennent le lendemain s'ils sont tués
+				if G.Enemies and rawget(G.Enemies, "spawn") and reg.enemyFolder then
+					for k = 1, 2 do
+						local a = k * math.pi + (G.world.day or 1)
+						local d = il.r + 10
+						local x, z = il.x + math.cos(a) * d, il.z + math.sin(a) * d
+						if G.Util.isWater(x, z) then
+							pcall(G.Enemies.spawn, reg, { id = "mer#" .. il.id .. "#" .. k .. "#" .. (G.world.day or 1), kind = "sea_serpent", x = x, z = z }, reg.enemyFolder)
+						end
+					end
+				end
 				local vein = Ilots.VEINS[il.id]
 				local info = vein and Config.ITEMS[vein[1]]
 				local filon = info and G.Util.clone("Filon_Or")
