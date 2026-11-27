@@ -3381,9 +3381,21 @@ function M.formesBestiaire()
 			local x, y, z = math.sin(i * 0.66) * 0.77, 0.66 + (extent - 0.6) * 0.5, -1.75 + i * 0.9
 			part(m, "Anneau", V(extent, extent * 0.84, 1.19), V(x, y, z), back, Mat.SmoothPlastic, { rot = CFrame.Angles(0, math.cos(i * 0.66) * 0.45, 0) })
 			part(m, "Crête", V(0.23, extent * 0.43, 0.65), V(x, y + extent * 0.54, z + 0.11), crest, Mat.SmoothPlastic, { forme = "Wedge" })
+			-- 27/11, Claude : ventre clair et nageoires (le serpent se lisait comme une simple chenille)
+			part(m, "Ventre", V(extent * 0.7, 0.12, 1.0), V(x, y - extent * 0.42, z), rgb(196, 220, 190), Mat.SmoothPlastic)
+			if i == 1 or i == 4 then
+				for _, sx in { -1, 1 } do
+					part(m, "Nageoire", V(0.12, extent * 0.5, 1.1), V(x + sx * extent * 0.55, y - 0.1, z + 0.2), crest, Mat.SmoothPlastic,
+						{ rot = CFrame.Angles(0, 0, sx * -0.9) })
+				end
+			end
 		end
 		part(m, "Crâne", V(1.64, 1.35, 1.75), V(0, 1.63, -2.6), back, Mat.SmoothPlastic)
 		part(m, "Mufle", V(1.23, 0.51, 1.15), V(0, 1.30, -3.40), rgb(123, 168, 140), Mat.SmoothPlastic)
+		part(m, "Machoire", V(1.1, 0.3, 1.0), V(0, 0.95, -3.3), rgb(30, 70, 76), Mat.SmoothPlastic)
+		for i = -1, 1 do
+			part(m, "Dent", V(0.14, 0.22, 0.14), V(i * 0.35, 1.12, -3.85), rgb(236, 230, 210), Mat.SmoothPlastic)
+		end
 		for _, x in { -1, 1 } do
 			part(m, "Œil", V(0.15, 0.3, 0.33), V(x * 0.81, 1.92, -2.69), rgb(244, 184, 79), Mat.SmoothPlastic, { forme = "Ball" })
 			part(m, "Crête latérale", V(0.24, 0.69, 0.73), V(x * 0.81, 2.22, -2.33), crest, Mat.SmoothPlastic,
@@ -3409,7 +3421,7 @@ function M.securite()
 		P(m, "Manteau", Vector3.new(5.5, 6, 2.6), Vector3.new(0, 7.6, 0), rgb(110, 50, 40), Mat.Fabric, { collide = false })
 		for _, sx in { -1, 1 } do
 			P(m, "Gerbe", Vector3.new(1.6, 2.4, 1.6), Vector3.new(sx * 5.2, 8.6, 0), rgb(226, 196, 100), Mat.Grass, { collide = false })
-			P(m, "Faux", Vector3.new(0.3, 0.3, 4), Vector3.new(sx * 5.4, 10.6, -1.4), rgb(180, 180, 190), Mat.Metal, { collide = false })
+			P(m, "Faux", Vector3.new(0.3, 0.3, 4), Vector3.new(sx * 5.4, 9.9, -1.4), rgb(180, 180, 190), Mat.Metal, { collide = false }) -- posée sur la gerbe (27/11)
 		end
 		P(m, "Tete", Vector3.new(3.6, 3.2, 3.6), Vector3.new(0, 12.3, 0), rgb(220, 120, 30), Mat.SmoothPlastic, { collide = false })
 		P(m, "Chapeau", Vector3.new(6, 0.4, 6), Vector3.new(0, 14.1, 0), rgb(60, 44, 30), Mat.Fabric, { collide = false })
