@@ -7,6 +7,7 @@ Règle : chaque commit ajoute sa ligne ici (le plus récent en haut).
 
 ## 0.2.4 — 2026-11-25
 
+- 27/11 [Claude] Suite : magie (5 sorts en grimoires), royaumes (conseil des villes de joueurs, allégeance et tribut), Baudroie des abysses qui surgit de l'eau, villages prospères ou en déclin selon le commerce, records du monde et succès secrets, mariages, chefs-d'œuvre de fin de jeu, filons rares des îlots, œufs de monture enfin trouvables, scierie, sécheresses, contrats entre joueurs. Côté serveur : les fenêtres sont à faire (passages à Codex). À voir en Play.
 - 27/11 [Claude] Six nouveaux boss errants (coffre-mimique, baudroie, mammouth de givre, griffon d'orage, veuve des cavernes, crocodile des marais) avec trophées, pièces légendaires et deux montures rares. Les 7 tenues nommées se fabriquent et donnent leur bonus à 2/4/6 pièces. Les forêts repoussent (jamais près d'une construction). Un village en pénurie le dit sur son tableau. Moins de saccades en traversant l'île. À voir en Play.
 - 27/11 [Codex] X32 affine les armes, armures, tenues, bijoux et outils portés. Les armes suivent la main pendant le geste de combat. La fiche affiche les affixes, la durabilité et la spécialisation. [Budgets et prototypes](docs/X32-RAPPORT.md). À vérifier en Édition et en Play.
 - 27/11 [Codex] Les 58 props de Valdor gagnent en relief et en matière, des coffres à serrure dorée aux ateliers, aux décors naturels et aux pièces de construction. [Détail des modèles et budgets](docs/X27-RAPPORT.md). À voir en Édition puis en Play.

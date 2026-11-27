@@ -22,7 +22,7 @@ de `src/`. Règles d'`AGENTS.md` § 1 appliquées : **pas de saisons ni de clima
 1. **Interconnexion des systèmes** (27/11 : un filon rare propre à chaque îlot du large, pioche de fer ; œufs de monture enfin branchés — nids selon le biome, 3 % des coffres de donjon, 3 jours de couvée) (idée centrale du document) : la boucle explorateur → marchand → forgeron → aventurier →
    éleveur → navigateur. Concrètement : minerais rares propres à chaque île, commandes entre joueurs, œufs rares en donjon.
 2. **Quêtes dynamiques** (27/11 : 1er pas fait — village en pénurie → sa 1re offre demande l'objet manquant, mieux payée) selon l'état du monde (village sans nourriture → livraison de blé, pont cassé → reconstruction,
-   pénurie de fer → commande, animal disparu → recherche, escorte de marchand) + **contrats publiés par les joueurs**.
+   pénurie de fer → commande, animal disparu → recherche, escorte de marchand) + **contrats publiés par les joueurs** (27/11 : fait — `Systemes/Contrats`, or mis de côté, livraison par la poste, 7 jours).
 3. **Donjons poussés** (27/11 : 1er boss maritime — la Baudroie des abysses surgit de l'eau, créatures nageuses `swims`) : plusieurs niveaux de difficulté, énigmes et passages secrets, butin exclusif, raids de groupe,
    boss mondiaux et maritimes (pas de boss saisonniers : règle).
 4. **Magie** (27/11 : serveur fait — 5 sorts / 5 écoles en grimoires, `Systemes/Magie` ; touches et effets à faire par Codex) (déjà en tête d'`EQUIPEMENT-MMO.md`) : écoles pyro, cryo, géo, hydro, aéro, druidisme, astrale, spirituelle

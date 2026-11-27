@@ -43,7 +43,7 @@ local hits = {}
 local bag = { arrow = 0 }
 local toasts = {}
 local gestes
-local prof = { equipped = { weapon = { name = "Arc court", power = 3 } } }
+local prof = { equipped = { weapon = { slot = "weapon", name = "Arc court", power = 3 } } } -- 27/11 : la forme se lit avec l'emplacement (X32)
 local P = { Parent = true, Character = Instance.new("Model") } -- un vrai joueur a toujours un Character (filtre du raycast)
 local attrs = {}
 function P:GetAttribute(k)
