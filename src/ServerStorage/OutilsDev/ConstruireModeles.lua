@@ -5624,4 +5624,65 @@ function M.beteProfondeurs(): Model
 	return m
 end
 
+-- Scarabée royal (boss du désert, redessiné) : élytres dorées bombées à reflets, corne frontale, mandibules,
+-- six pattes articulées, gemme turquoise sur le pronotum
+function M.scarabeeRoyal(): Model
+	local m, Bx, barre = bossBuilder("Scarabee_Royal")
+	local o1, o2, o3, noir, gemme = rgb(226, 178, 64), rgb(176, 128, 40), rgb(250, 214, 110), rgb(40, 34, 30), rgb(60, 220, 210)
+	for _, sx in { -1, 1 } do
+		Bx("Elytre", Vector3.new(1.8, 1.8, 4.2), Vector3.new(sx * 0.95, 2.4, 0.8), o1, Mat.Metal)
+		Bx("Reflet", Vector3.new(0.6, 0.15, 3.0), Vector3.new(sx * 1.0, 3.35, 0.6), o3, Mat.Metal)
+		Bx("Bord", Vector3.new(0.2, 1.6, 4.0), Vector3.new(sx * 1.85, 2.3, 0.8), o2, Mat.Metal)
+	end
+	Bx("Suture", Vector3.new(0.12, 0.2, 4.2), Vector3.new(0, 3.3, 0.8), o2, Mat.Metal)
+	Bx("Pronotum", Vector3.new(3.2, 1.5, 1.8), Vector3.new(0, 2.3, -2.0), o2, Mat.Metal)
+	Bx("Gemme", Vector3.new(0.6, 0.6, 0.2), Vector3.new(0, 3.0, -2.95), gemme, Mat.Neon)
+	Bx("Tete", Vector3.new(1.8, 1.0, 1.0), Vector3.new(0, 1.9, -3.4), noir)
+	barre("Corne", Vector3.new(0, 2.3, -3.6), Vector3.new(0, 4.4, -4.6), 0.4, o1, Mat.Metal)
+	barre("Corne", Vector3.new(0, 4.4, -4.6), Vector3.new(0, 4.9, -3.8), 0.3, o3, Mat.Metal)
+	for _, sx in { -1, 1 } do
+		barre("Mandibule", Vector3.new(sx * 0.5, 1.6, -3.8), Vector3.new(sx * 0.2, 1.4, -4.6), 0.22, noir)
+		Bx("Oeil", Vector3.new(0.1, 0.3, 0.3), Vector3.new(sx * 0.91, 2.0, -3.4), gemme, Mat.Neon)
+		for j, z in { -2.2, -0.4, 1.6 } do
+			local hanche = Vector3.new(sx * 1.4, 1.5, z)
+			local genou = Vector3.new(sx * 2.6, 2.0, z + (j - 2) * 0.4)
+			local pied = Vector3.new(sx * 3.2, 0.1, z + (j - 2) * 0.8)
+			barre("Cuisse", hanche, genou, 0.3, noir)
+			barre("Tibia", genou, pied, 0.24, noir)
+		end
+	end
+	Bx("Ventre", Vector3.new(3.0, 0.6, 5.4), Vector3.new(0, 1.2, 0.2), noir)
+	fini(m)
+	m:ScaleTo(1.7)
+	return m
+end
+
+-- Géant des montagnes (redessiné) : colosse de roche et de mousse, épaules-falaises, barbe de lichen, massue-tronc,
+-- yeux de cristal
+function M.geantMontagnes(): Model
+	local m, Bx, barre = bossBuilder("Geant_Montagnes")
+	local r1, r2, r3, mousse, cristal = rgb(120, 118, 112), rgb(92, 90, 86), rgb(150, 146, 136), rgb(96, 136, 70), rgb(140, 220, 255)
+	Bx("Torse", Vector3.new(4.6, 4.0, 3.0), Vector3.new(0, 7.6, 0), r1, Mat.Slate)
+	Bx("Ventre", Vector3.new(3.8, 1.8, 2.6), Vector3.new(0, 4.9, 0), r2, Mat.Slate)
+	Bx("Tete", Vector3.new(2.2, 2.0, 2.0), Vector3.new(0, 10.6, -0.3), r3, Mat.Slate)
+	Bx("Front", Vector3.new(2.4, 0.6, 2.2), Vector3.new(0, 11.4, -0.3), r2, Mat.Slate)
+	Bx("Barbe", Vector3.new(1.8, 1.4, 0.4), Vector3.new(0, 9.5, -1.35), mousse, Mat.Grass)
+	for _, sx in { -1, 1 } do
+		Bx("Oeil", Vector3.new(0.4, 0.3, 0.1), Vector3.new(sx * 0.5, 10.8, -1.32), cristal, Mat.Neon)
+		Bx("Epaule", Vector3.new(2.0, 2.0, 2.4), Vector3.new(sx * 3.1, 9.0, 0), r2, Mat.Slate)
+		Bx("Mousse", Vector3.new(1.8, 0.3, 2.0), Vector3.new(sx * 3.1, 10.15, 0), mousse, Mat.Grass)
+		Bx("Bras", Vector3.new(1.4, 3.6, 1.4), Vector3.new(sx * 3.3, 6.4, 0), r1, Mat.Slate)
+		Bx("Poing", Vector3.new(1.8, 1.6, 1.8), Vector3.new(sx * 3.4, 3.9, 0), r3, Mat.Slate)
+		Bx("Jambe", Vector3.new(1.7, 4.0, 1.8), Vector3.new(sx * 1.2, 2.0, 0), r2, Mat.Slate)
+		Bx("Pied", Vector3.new(2.0, 0.6, 2.6), Vector3.new(sx * 1.2, 0.3, -0.3), r1, Mat.Slate)
+		Bx("Cristal", Vector3.new(0.5, 1.0, 0.5), Vector3.new(sx * 1.2, 8.6, 1.55), cristal, Mat.Neon, CFrame.Angles(0, 0, sx * 0.3))
+	end
+	-- massue-tronc dans la main droite
+	barre("Massue", Vector3.new(3.4, 3.4, -0.6), Vector3.new(3.6, 9.0, -2.2), 1.1, rgb(100, 72, 48), Mat.Wood)
+	Bx("Racines", Vector3.new(1.6, 1.0, 1.6), Vector3.new(3.6, 9.2, -2.3), rgb(80, 58, 40), Mat.Wood)
+	fini(m)
+	m:ScaleTo(1.4)
+	return m
+end
+
 return M

@@ -141,7 +141,7 @@ local KINDS = {
 		proj = { color = Color3.fromRGB(120, 200, 80), size = 2.2, poison = true }, loot = { { "ancient_seed", 2, 3, 1 }, { "ancient_root", 1, 2, 1 } }, gold = 8 },
 	marsh_king = { name = "Roi des marais", form = "masse", look = { "V", "O", grand = true, scale = 2.2, couronne = true }, hp = 2200, dmg = 46, speed = 8, level = 9, style = "hop", radius = 3.6, boss = true, minion = "mud_man",
 		loot = { { "black_scale", 1, 2, 1 }, { "pearl", 1, 3, 1 } }, gold = 8 },
-	royal_scarab = { name = "Scarabée royal", form = "insecte", look = { "O", "BL", carapace = true, scale = 2.4 }, hp = 2400, dmg = 48, speed = 9, level = 10, style = "charge", radius = 3.6, boss = true, minion = "beetle",
+	royal_scarab = { name = "Scarabée royal", model = "Scarabee_Royal", form = "insecte", look = { "O", "BL", carapace = true, scale = 2.4 }, hp = 2400, dmg = 48, speed = 9, level = 10, style = "charge", radius = 3.6, boss = true, minion = "beetle",
 		loot = { { "golden_carapace", 1, 1, 1 }, { "gold_ore", 3, 6, 1 } }, gold = 9 },
 	crownless_king = { name = "Le Roi sans couronne", form = "spectre", look = { "VI", "O", weapon = "epee", scale = 1.6, couronne = true }, hp = 2800, dmg = 54, speed = 11, level = 10, style = "charge", radius = 2.8, boss = true, minion = "ghost_knight",
 		loot = { { "lost_crown", 1, 1, 1 }, { "royal_seal", 1, 1, 0.3 }, { "ancient_jewel", 1, 2, 1 } }, gold = 10 },
@@ -309,7 +309,7 @@ local KINDS = {
 	-- nouveaux boss itinérants (18/11) : butin rare = leur âme (Shared/Prises) + pièces d'équipement
 	snow_wyvern = { name = "Wyverne des neiges", model = "Wyverne_Neiges", form = "volant", look = { "W", "BL", scale = 2.6 }, hp = 2400, dmg = 50, speed = 15, level = 10, style = "spore", radius = 3.4, boss = true, flies = true, minion = "frost_spider",
 		proj = { color = Color3.fromRGB(190, 230, 255), size = 2 }, loot = { { "ice_crystal", 2, 4, 1 }, { "feather", 4, 8, 1 } }, gold = 9 },
-	mountain_giant = { name = "Géant des montagnes", form = "humain", look = { "P", "BF", weapon = "massue", scale = 2.8, peau = "P" }, hp = 3000, dmg = 56, speed = 9, level = 10, style = "charge", radius = 3.8, boss = true, minion = "cave_troll",
+	mountain_giant = { name = "Géant des montagnes", model = "Geant_Montagnes", form = "humain", look = { "P", "BF", weapon = "massue", scale = 2.8, peau = "P" }, hp = 3000, dmg = 56, speed = 9, level = 10, style = "charge", radius = 3.8, boss = true, minion = "cave_troll",
 		loot = { { "stone", 10, 20, 1 }, { "gold_ore", 2, 4, 1 } }, gold = 10 },
 	deep_beast = { name = "Bête des profondeurs", model = "Serpent_Profondeurs", form = "serpent", look = { "N", "V", long = true, scale = 2.6 }, hp = 2600, dmg = 52, speed = 12, level = 10, style = "charge", radius = 3.6, boss = true, minion = "water_snake",
 		loot = { { "raw_hide", 4, 6, 1 }, { "tooth", 3, 5, 1 } }, gold = 9 },
