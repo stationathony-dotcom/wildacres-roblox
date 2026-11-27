@@ -464,6 +464,46 @@ function E.apply(C)
 			note("haut niveau " .. m[2])
 		end
 	end
+	-- 12 bis. ensembles nommés (GearDesign.namedDesigns, X32)
+	local okD, GD = pcall(require, script.Parent.GearDesign)
+	if okD and GD.namedDesigns then
+		for _, d in GD.namedDesigns() do
+			local c = E.COLLECTIONS[d.collection]
+			if c then
+				local needs = table.clone(c[3])
+				needs[c[4]] = (needs[c[4]] or 0) + 1
+				-- recette propre à l'emplacement (sinon 6 recettes identiques) : grosse pièce = plus de matière
+				local w = ({ armor = 3, weapon = 2, offhand = 2, legs = 2, cape = 2, shoulders = 1, hat = 1, boots = 1, gloves = 0, trinket = 0 })[d.slot] or 0
+				for k, v in needs do
+					if k ~= c[4] then
+						needs[k] = v + w
+					end
+				end
+				local fil = ({ hat = 1, armor = 2, shoulders = 3, legs = 4, boots = 5, gloves = 6, cape = 7, weapon = 8, offhand = 9, trinket = 10 })[d.slot] or 11
+				needs.linen_thread = (needs.linen_thread or 0) + fil
+				-- stats au plancher de la rareté (E.RARITY_FLOOR), réparties à proportion
+				local stats, total = table.clone(c[1]), 0
+				for _, v in stats do
+					total += v
+				end
+				local floor = E.RARITY_FLOOR[d.rarity or 1] or 0
+				if total > 0 and total < floor then
+					local add = floor - total
+					for k, v in stats do
+						local extra = math.min(add, math.ceil((floor - total) * v / total))
+						stats[k] = v + extra
+						add -= extra
+					end
+				end
+				if known(C, needs) then
+					table.insert(R, { gear = { slot = d.slot, name = d.name, rarity = d.rarity, stats = stats, design = table.clone(d.design), collection = d.collection,
+						power = d.slot == "weapon" and 8 or nil },
+						needs = needs, station = "bench", cat = "equipement", skill = { "artisanat", c[2] } })
+					note("ensemble " .. d.name)
+				end
+			end
+		end
+	end
 	-- mannequin d'entraînement (Combat.shoot : cible ; XP de combat plafonnée par jour)
 	if not I.training_dummy and I.straw and I.planks and I.rope then
 		I.training_dummy = { name = "Mannequin d'entraînement", icon = "🎯", price = 40, place = "Epouvantail", grid = "cell" }
@@ -839,6 +879,19 @@ E.SET_NAME = {
 	soleil = "Soleil rouge", nord = "Veille d'hiver", os = "Reliquaire d'os", lune = "Lune d'argent", ambre = "Ambre royal", diamant = "Diamant boréal",
 }
 
+-- 12 bis. ENSEMBLES NOMMÉS (27/11, X32 de Codex : GearDesign.namedDesigns) : 7 tenues de 6 pièces,
+--     fabriquées à l'établi d'artisan ; bonus propre à l'ensemble (2 / 4 / 6 pièces : { stat, valeur }).
+--     { stats d'une pièce, niveau d'artisanat, ingrédients communs, ingrédient rare (1 par pièce), bonus }
+E.COLLECTIONS = {
+	["Gardien royal"] = { { defense = 4, vie = 2 }, 34, { steel = 2, dyed_cloth = 1 }, "gold_ingot", { { "defense", 2 }, { "vie", 4 }, { "defense", 8 } } },
+	["Enfant des bois"] = { { vitesse = 3, discretion = 2 }, 28, { soft_leather = 2, bone = 1 }, "ancient_root", { { "vitesse", 2 }, { "discretion", 4 }, { "vitesse", 6 } } },
+	["Mage des brumes"] = { { chance = 3, vie = 2 }, 34, { silk = 2, silver_ingot = 1 }, "moon_flower", { { "chance", 2 }, { "vie", 4 }, { "chance", 8 } } },
+	["Maître de forge"] = { { force = 3, defense = 2 }, 30, { soft_leather = 2, copper_ingot = 2 }, "steel", { { "force", 2 }, { "defense", 4 }, { "force", 6 } } },
+	["Fermier ancestral"] = { { vie = 3, chance = 1 }, 20, { linen = 2, copper_ingot = 1 }, "straw", { { "vie", 2 }, { "chance", 3 }, { "vie", 6 } } },
+	["Marchand royal"] = { { charisme = 4, chance = 1 }, 28, { silk = 2, gold_ingot = 1 }, "pearl", { { "charisme", 2 }, { "chance", 3 }, { "charisme", 8 } } },
+	["Explorateur des océans"] = { { vitesse = 2, vie = 2 }, 28, { leather = 2, silver_ingot = 1 }, "rare_shell", { { "vitesse", 2 }, { "vie", 4 }, { "vitesse", 6 } } },
+}
+
 -- bonus des panoplies portées : { [stat] = bonus }, et la liste lisible des panoplies actives
 function E.setBonus(equipped)
 	local count = {}
@@ -849,6 +902,22 @@ function E.setBonus(equipped)
 		end
 	end
 	local bonus, active = {}, {}
+	local named = {}
+	for _, item in equipped or {} do
+		local c = type(item) == "table" and item.collection
+		if c and E.COLLECTIONS[c] then
+			named[c] = (named[c] or 0) + 1
+		end
+	end
+	for c, n in named do
+		for i, step in E.SET_STEPS do
+			local b = E.COLLECTIONS[c][5][i]
+			if n >= step[1] and b then
+				bonus[b[1]] = (bonus[b[1]] or 0) + b[2]
+				table.insert(active, string.format("%s (%d pièces) +%d %s", c, step[1], b[2], E.STAT_LABEL[b[1]] or b[1]))
+			end
+		end
+	end
 	for m, n in count do
 		local v = 0
 		for _, step in E.SET_STEPS do
@@ -867,6 +936,15 @@ end
 
 -- texte de la panoplie d'une pièce (description)
 function E.setText(item): string?
+	local c = type(item) == "table" and item.collection
+	if c and E.COLLECTIONS[c] then
+		local parts = {}
+		for i, step in E.SET_STEPS do
+			local b = E.COLLECTIONS[c][5][i]
+			table.insert(parts, step[1] .. " : +" .. b[2] .. " " .. (E.STAT_LABEL[b[1]] or b[1]))
+		end
+		return "ensemble " .. c .. " (" .. table.concat(parts, ", ") .. ")"
+	end
 	local m = type(item) == "table" and item.design and item.design.material
 	if not (m and E.MATERIAL_STAT[m]) then
 		return nil
