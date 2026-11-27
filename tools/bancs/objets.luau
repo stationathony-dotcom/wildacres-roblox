@@ -44,6 +44,10 @@ local okM, Ecu = pcall(function() return loadstring(RS.Shared.Ecurie.Source)() e
 for _, m in (okM and Ecu.LIST) or {} do
 	if m.drop and okB and Best.KINDS[m.drop[1]] then dropped["renes_" .. m.id] = true end
 end
+-- œufs de monture : nids (biome) et coffres de donjon (Systemes/Nids, Donjons), d'après Ecurie.OEUFS
+for _, list in (okM and Ecu.OEUFS) or {} do
+	for _, e in list do dropped["oeuf_" .. e[1]] = true end
+end
 local okE, Enem = pcall(function() return loadstring(game.ServerScriptService.Systemes.Enemies.Source)() end)
 -- sources « système » : chaînes d'ids présentes dans le code serveur (récolte, pêche, ferme, trésors…)
 local code = {}

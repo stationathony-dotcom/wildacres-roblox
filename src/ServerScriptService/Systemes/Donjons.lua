@@ -624,6 +624,23 @@ function Donjons.loot(player: Player, id: string)
 		G.Joueurs.add(player, t[1], math.random(t[2], t[3]))
 	end
 	G.Joueurs.add(player, "relic_fragment", math.random(1, 2))
+	-- œuf de monture rare au fond du coffre (27/11, MANQUES-MMO n° 1 « œufs rares en donjon »)
+	if math.random() < 0.03 then
+		local okEc, Ecurie = pcall(require, game:GetService("ReplicatedStorage").Shared.Ecurie)
+		local pool = {}
+		for _, list in (okEc and Ecurie.OEUFS) or {} do
+			for _, e in list do
+				if G.Config.ITEMS[Ecurie.oeufId(e[1])] then
+					table.insert(pool, Ecurie.oeufId(e[1]))
+				end
+			end
+		end
+		if #pool > 0 then
+			local id = pool[math.random(1, #pool)]
+			G.Joueurs.add(player, id, 1, true)
+			G.Util.toast(player, "🥚 Dans un recoin du coffre, un œuf encore tiède : " .. G.Config.ITEMS[id].name .. " !", "big")
+		end
+	end
 	local danger = (G.world.danger or 1)
 	G.Joueurs.addGear(player, G.Gear.roll(Random.new(), math.min(10, 4 + danger)))
 	G.Joueurs.sync(player)

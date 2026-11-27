@@ -140,6 +140,17 @@ function Nids.search(player: Player, id: string?)
 	if egg then
 		G.Joueurs.add(player, "egg", 1, true)
 	end
+	-- œuf de monture (Shared/Ecurie.OEUFS, 27/11) : rare, selon le biome du nid
+	local okEc, Ecurie = pcall(require, game:GetService("ReplicatedStorage").Shared.Ecurie)
+	local biome = G.Clock and rawget(G.Clock, "biomeAt") and G.Clock.biomeAt(n.pos)
+	for _, e in (okEc and biome and Ecurie.OEUFS[biome]) or {} do
+		local id = Ecurie.oeufId(e[1])
+		if G.Config.ITEMS[id] and math.random() < e[2] * 5 then
+			G.Joueurs.add(player, id, 1, true)
+			G.Util.toast(player, "✨ Au fond du nid, un œuf qui n'est pas d'ici… " .. G.Config.ITEMS[id].name .. " !", "big")
+			break
+		end
+	end
 	G.Joueurs.addSkillXp(player, "elevage", 2)
 	G.Util.sfx("coffre", n.pos, player)
 	G.Util.toast(player, "🥚 Tu déniches " .. feathers .. " plume" .. (feathers > 1 and "s" or "") .. (egg and " et un œuf" or "") .. ". L'oiseau reviendra pondre.", "gain")

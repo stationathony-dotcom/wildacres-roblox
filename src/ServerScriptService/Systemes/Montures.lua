@@ -129,6 +129,43 @@ function Montures.learn(player: Player, id: string?, how: string?): boolean
 	return true
 end
 
+-- Œufs (27/11) : prof.montures.couvee[id] = jour de mise à couver ; éclosion au bout de Ecurie.INCUBATION jours
+function Montures.incubate(player: Player, id: string?): boolean
+	local m = id and Ecurie.BY_ID[id]
+	local p = prof(player)
+	if not (m and p) then
+		return false
+	end
+	if p.montures.learned[id] then
+		G.Util.toast(player, m.name .. " est déjà dans ta collection. (L'œuf se revend bien.)")
+		return false
+	end
+	p.montures.couvee = p.montures.couvee or {}
+	if p.montures.couvee[id] then
+		G.Util.toast(player, "Un œuf de " .. m.name .. " couve déjà.")
+		return false
+	end
+	p.montures.couvee[id] = G.world and G.world.day or 0
+	G.Joueurs.markDirty(player)
+	G.Util.toast(player, "🥚 Tu mets l'œuf à couver : il éclora dans " .. (Ecurie.INCUBATION or 3) .. " jours.", "gain")
+	return true
+end
+
+function Montures.hatch(player: Player)
+	local p = prof(player)
+	local c = p and p.montures.couvee
+	if not c then
+		return
+	end
+	local day = G.world and G.world.day or 0
+	for id, d in c do
+		if day >= d + (Ecurie.INCUBATION or 3) then
+			c[id] = nil
+			Montures.learn(player, id, "oeuf")
+		end
+	end
+end
+
 function Montures.learnHorse(player: Player, species: string?, coat: number?)
 	local id = Ecurie.horseId(species, coat)
 	if id then
@@ -385,13 +422,18 @@ end
 -- ----------------------------------------------------------------- Boucle : Équitation, nettoyage
 
 local acc = 0
+local hatchAcc = 0
 function Montures.step(dt: number)
 	acc += dt
 	if acc < 0.5 then
 		return
 	end
 	acc = 0
+	hatchAcc += 1
 	for _, player in G.Game.players() do
+		if hatchAcc >= 20 then
+			Montures.hatch(player) -- toutes les 10 s : les œufs mûrs éclosent
+		end
 		local root = G.Util.root(player)
 		local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
 		if ground[player] and (not root or not hum or hum.Health <= 0 or not ground[player].model.Parent) then
@@ -418,6 +460,9 @@ function Montures.step(dt: number)
 		else
 			lastPos[player] = nil
 		end
+	end
+	if hatchAcc >= 20 then
+		hatchAcc = 0
 	end
 end
 

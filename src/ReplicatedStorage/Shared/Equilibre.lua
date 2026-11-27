@@ -532,6 +532,21 @@ function E.apply(C)
 	-- et compétence Équitation (vitesse en selle, vol à partir de Ecurie.FLY_SKILL)
 	local okEc, Ecurie = pcall(require, script.Parent.Ecurie)
 	if okEc then
+		-- œufs de monture (27/11 : décrits dans Ecurie.OEUFS mais jamais branchés) : à couver (Montures.incubate)
+		local eggs = {}
+		for _, list in Ecurie.OEUFS or {} do
+			for _, e in list do
+				eggs[e[1]] = true
+			end
+		end
+		for mid in eggs do
+			local m = Ecurie.BY_ID and Ecurie.BY_ID[mid]
+			local id = Ecurie.oeufId(mid)
+			if m and not I[id] then
+				I[id] = { name = "Œuf : " .. m.name, icon = "🥚", price = Ecurie.itemPrice(m), use = "cat_oeuf", useArg = mid }
+				note("œuf " .. id)
+			end
+		end
 		for _, m in Ecurie.LIST do
 			if m.drop then
 				local id = Ecurie.itemId(m.id)
