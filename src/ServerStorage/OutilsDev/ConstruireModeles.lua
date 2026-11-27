@@ -5588,4 +5588,40 @@ function M.rocFalaises(): Model
 	return m
 end
 
+-- Bête des profondeurs (boss des marais, redessinée) : long serpent de vase cuirassé, plaques dorsales en écailles,
+-- tête dressée à deux mâchoires et crocs, barbillons lumineux, anneaux qui s'amincissent vers la queue
+function M.beteProfondeurs(): Model
+	local m, Bx, barre = bossBuilder("Serpent_Profondeurs")
+	local v1, v2, v3, ventre, lueur = rgb(46, 60, 44), rgb(34, 44, 34), rgb(70, 90, 62), rgb(160, 160, 110), rgb(150, 255, 170)
+	local prev = Vector3.new(0, 1.4, 6)
+	for k = 0, 9 do
+		local z = 6 - k * 1.1
+		local x = math.sin(k * 0.7) * 1.4
+		local y = 1.2 + math.max(0, k - 6) * 0.9
+		local p = Vector3.new(x, y, z)
+		local e = 0.9 + math.min(k, 6) * 0.12
+		barre("Anneau", prev, p, e * 1.4, (k % 2 == 0) and v1 or v2)
+		Bx("Plaque", Vector3.new(e * 0.8, 0.3, 0.8), p + Vector3.new(0, e * 0.72, 0), v3)
+		Bx("Ventre", Vector3.new(e * 1.1, 0.2, 0.9), p - Vector3.new(0, e * 0.66, 0), ventre)
+		prev = p
+	end
+	-- tête au bout du cou dressé
+	local tete = prev + Vector3.new(0, 0.9, -1.0)
+	Bx("Crane", Vector3.new(2.2, 1.4, 2.4), tete, v1)
+	Bx("Machoire", Vector3.new(1.8, 0.6, 2.0), tete + Vector3.new(0, -1.0, -0.6), v2)
+	Bx("Gueule", Vector3.new(1.6, 0.4, 1.6), tete + Vector3.new(0, -0.55, -0.7), rgb(110, 30, 40))
+	for i = -2, 2 do
+		Bx("Croc", Vector3.new(0.16, 0.4, 0.16), tete + Vector3.new(i * 0.35, -0.5, -1.55), rgb(236, 230, 210))
+	end
+	for _, sx in { -1, 1 } do
+		Bx("Oeil", Vector3.new(0.35, 0.25, 0.1), tete + Vector3.new(sx * 0.7, 0.35, -1.22), lueur, Mat.Neon)
+		barre("Barbillon", tete + Vector3.new(sx * 0.8, -0.6, -1.0), tete + Vector3.new(sx * 1.6, -1.6, -1.8), 0.12, v3)
+		Bx("Lueur", Vector3.new(0.25, 0.25, 0.25), tete + Vector3.new(sx * 1.6, -1.6, -1.8), lueur, Mat.Neon)
+		Bx("Crete", Vector3.new(0.2, 0.9, 1.0), tete + Vector3.new(sx * 0.6, 1.0, 0.4), v3, nil, CFrame.Angles(0, 0, sx * -0.3))
+	end
+	fini(m)
+	m:ScaleTo(1.6)
+	return m
+end
+
 return M

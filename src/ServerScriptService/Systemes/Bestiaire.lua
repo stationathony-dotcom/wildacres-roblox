@@ -311,7 +311,7 @@ local KINDS = {
 		proj = { color = Color3.fromRGB(190, 230, 255), size = 2 }, loot = { { "ice_crystal", 2, 4, 1 }, { "feather", 4, 8, 1 } }, gold = 9 },
 	mountain_giant = { name = "Géant des montagnes", form = "humain", look = { "P", "BF", weapon = "massue", scale = 2.8, peau = "P" }, hp = 3000, dmg = 56, speed = 9, level = 10, style = "charge", radius = 3.8, boss = true, minion = "cave_troll",
 		loot = { { "stone", 10, 20, 1 }, { "gold_ore", 2, 4, 1 } }, gold = 10 },
-	deep_beast = { name = "Bête des profondeurs", form = "serpent", look = { "N", "V", long = true, scale = 2.6 }, hp = 2600, dmg = 52, speed = 12, level = 10, style = "charge", radius = 3.6, boss = true, minion = "water_snake",
+	deep_beast = { name = "Bête des profondeurs", model = "Serpent_Profondeurs", form = "serpent", look = { "N", "V", long = true, scale = 2.6 }, hp = 2600, dmg = 52, speed = 12, level = 10, style = "charge", radius = 3.6, boss = true, minion = "water_snake",
 		loot = { { "raw_hide", 4, 6, 1 }, { "tooth", 3, 5, 1 } }, gold = 9 },
 	-- boss des planches du 26/11 (lot C15) : données de combat ; dessins propres à venir (Codex, X36 / Silhouettes)
 	mimic_chest = { name = "Coffre-mimique des ruines", model = "Coffre_Mimique", form = "masse", look = { "B", "O", scale = 1.8, }, hp = 2400, dmg = 50, speed = 10, level = 10, style = "hop", radius = 3.2, boss = true, minion = "skeleton",
