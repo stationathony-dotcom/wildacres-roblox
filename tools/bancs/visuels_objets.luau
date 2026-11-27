@@ -20,6 +20,9 @@ dossier.Name = "IconesObjets"
 local ancienne = RS:FindFirstChild(dossier.Name)
 local modeles = SS:FindFirstChild("Modeles")
 local materiau = Enum.Material
+local dossierOutils = Instance.new("Folder")
+dossierOutils.Name = "IconesOutils"
+local anciensOutils = RS:FindFirstChild(dossierOutils.Name)
 
 local function bloc(b)
 	local modele = miniatures.construireBloc(b)
@@ -55,6 +58,7 @@ local function bloc(b)
 			ajouter(p, b.size, CFrame.new())
 		end
 	end
+	miniatures.rehausser(modele, "chantier", nil, { dessus = b.size.Y < b.size.X * 0.40 })
 	return modele
 end
 
@@ -82,10 +86,6 @@ local function preparer()
 				if genere then genere:Destroy() end
 				props += 1
 			end
-		elseif id == "seed_sack" then
-			-- Le banc des graines exclut ce contenant. Garder sa miniature existante.
-			local precedente = ancienne and ancienne:FindFirstChild(id)
-			if precedente and precedente:IsA("Model") then modele = precedente:Clone() end
 		end
 		if modele then modele.Parent = dossier end
 		if i % 40 == 0 then task.wait() end
@@ -93,29 +93,60 @@ local function preparer()
 	finitions(dossier, miniatures, config)
 end
 
+local function preparerOutils(erreurs)
+	local fabricant = require(SS.OutilsDev.ConstruireModelesOutils)
+	local sources = SS.Outils:Clone()
+	local ok, raison = pcall(function()
+		fabricant.harpon(sources)
+		fabricant.equipements(sources, config)
+		local function ajouter(id, outil, teinte)
+			local m = miniatures.depuisProp(outil, id, teinte)
+			miniatures.raccorder(m)
+			miniatures.centrer(m)
+			local problemes = miniatures.verifier(m, 4)
+			for _, probleme in problemes do table.insert(erreurs, id .. " : " .. probleme) end
+			m.Parent = dossierOutils
+		end
+		for _, outil in sources:GetChildren() do
+			if outil:IsA("Tool") then ajouter(outil.Name, outil) end
+		end
+		local aliases = {
+			hoe = "Houe", can = "Arrosoir", shovel = "Pelle", axe = "Hache", pickaxe = "Pioche",
+			rod = "Canne à pêche", club = "Gourdin", sword = "Épée", spade = "Pelle",
+		}
+		for id, info in config.ITEMS do
+			if not info.tool or dossierOutils:FindFirstChild(id) then continue end
+			local nom = aliases[info.base or id]
+			local outil = nom and sources:FindFirstChild(nom)
+			if outil then
+				ajouter(id, outil, config.TOOL_TINTS[config.tierOf(id)])
+			else
+				table.insert(erreurs, id .. " : outil source absent")
+			end
+		end
+	end)
+	sources:Destroy()
+	assert(ok, raison)
+end
+
 local erreurs, erreursFamilles = {}, {}
 local delegues, maximum = 0, 0
-local ancienneDeplacee = false
 local ok, message = pcall(function()
 	preparer()
-	if ancienne then
-		ancienne.Parent = nil
-		ancienneDeplacee = true
-	end
-	dossier.Parent = RS
-	local compteRenduFamilles = familles()
+	preparerOutils(erreurs)
+	local compteRenduFamilles = familles(miniatures, dossier)
 	for i, id in ids do
 		local info = config.ITEMS[id]
 		local m = dossier:FindFirstChild(id)
-		local delegue = id == "seed_sack" or m and m:GetAttribute("Famille") ~= nil
+		local delegue = m and m:GetAttribute("Famille") ~= nil
 		local liste = delegue and erreursFamilles or erreurs
 		if m then
 			if delegue then
 				delegues += 1
 			else
-				if not info.block then miniatures.raccorder(m) end
 				m:SetAttribute("MiniatureObjet", true)
 			end
+			if not info.block then miniatures.raccorder(m) end
 			miniatures.centrer(m)
 			local raisons, total = miniatures.verifier(m, info.block and 1 or 6)
 			maximum = math.max(maximum, total)
@@ -125,17 +156,21 @@ local ok, message = pcall(function()
 		end
 		if i % 40 == 0 then task.wait() end
 	end
-	assert(#erreurs == 0, table.concat(erreurs, "\n"))
 	SS:SetAttribute("BancVisuelsObjetsFamilles", #erreursFamilles == 0 and "OK" or table.concat(erreursFamilles, "\n"))
+	for _, erreur in erreursFamilles do table.insert(erreurs, erreur) end
+	assert(#erreurs == 0, table.concat(erreurs, "\n"))
 	module.Source = source
-	return string.format("%d miniatures · %d dessins repris · %d props · %d pièces de construction · maximum %d pièces\n"
+	return string.format("%d miniatures · %d outils · %d dessins repris · %d props · %d pièces de construction · maximum %d pièces\n"
 		.. "%d miniatures du lot familles, %d à vérifier\n%s",
-		#dossier:GetChildren(), redessines, props, blocs, maximum, delegues, #erreursFamilles, compteRenduFamilles)
+		#dossier:GetChildren(), #dossierOutils:GetChildren(), redessines, props, blocs, maximum, delegues, #erreursFamilles, compteRenduFamilles)
 end)
 if not ok then
 	dossier:Destroy()
-	if ancienneDeplacee then ancienne.Parent = RS end
+	dossierOutils:Destroy()
 	error(message, 0)
 end
 if ancienne then ancienne:Destroy() end
+dossier.Parent = RS
+if anciensOutils then anciensOutils:Destroy() end
+dossierOutils.Parent = RS
 return message

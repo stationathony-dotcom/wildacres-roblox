@@ -1,5 +1,5 @@
 -- Studio Edit (21/11, Claude) : miniatures « top niveau » des familles d'objets qui se ressemblaient toutes.
--- À lancer APRÈS tools/bancs/visuels_objets.luau (Codex) : remplace ces miniatures dans ReplicatedStorage.IconesObjets.
+-- Chargé par visuels_objets après les dessins unitaires.
 --   graines seed_*       : sachet de toile + la plante qu'elle donne devant (épi, racine, chou, courge, vigne, pousse…)
 --   livres               : reliure + coins + fermoir + emblème du métier en relief, épaisseur et teinte propres
 --   parchemins           : rouleau / carte / lettre scellée / contrat, sceau de cire et ruban différenciés
@@ -8,12 +8,14 @@
 --   âmes de boss ame_*   : orbe à cœur lumineux + un trait du boss (couronne, champignon, glace, ailes…)
 --   prises de créatures  : la partie de la bête qui leur donne leur nom (croc, griffe, écaille, plume, corne…)
 -- Rend un résumé « famille : n ». Ne touche à rien d'autre que ces modèles.
+local miniatures, dest = ...
+miniatures = miniatures or require(game:GetService("ServerStorage").OutilsDev.ConstruireModelesMiniatures)
 local RS = game:GetService("ReplicatedStorage")
 local copy = RS.Shared:Clone()
 copy.Parent = game:GetService("ServerStorage")
 local C = require(copy.Config)
 copy:Destroy()
-local dest = RS:FindFirstChild("IconesObjets")
+dest = dest or RS:FindFirstChild("IconesObjets")
 assert(dest, "IconesObjets introuvable : lancer d'abord visuels_objets")
 
 local rgb, v, cf = Color3.fromRGB, Vector3.new, CFrame.new
@@ -49,11 +51,12 @@ local function has(s, ...)
 end
 
 local count, fam = 0, {}
-local function icon(id, family, build)
+local function icon(id, family, build, appui, dessus)
 	local m = Instance.new("Model")
 	m.Name = id
 	m:SetAttribute("ApercuDroit", true)
 	m:SetAttribute("Famille", family)
+	local pieces = {}
 	local function add(size, at, color, mat, shape, rot, name)
 		if typeof(rot) == "CFrame" then
 			at = at * rot
@@ -84,9 +87,12 @@ local function icon(id, family, build)
 		p.Anchored, p.CanCollide, p.CanTouch, p.CanQuery = true, false, false, false
 		p.TopSurface, p.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
 		p.Parent = m
+		table.insert(pieces, p)
 		return p
 	end
-	build(add)
+	build(add, m)
+	local profil = family == "teinture" and "pigment" or family
+	if appui then miniatures.rehausser(m, profil, pieces[appui], { dessus = dessus }) end
 	local old = dest:FindFirstChild(id)
 	if old then
 		old:Destroy()
@@ -101,9 +107,9 @@ local UP = ANG(0, 0, rad(90)) -- cylindre debout
 local function sachet(add, h, tissu)
 	-- petit sachet de toile ouvert, à gauche ; la plante se tient à droite, bien visible
 	local x = -0.62
-	add(v(0.95, 1.05, 0.8), cf(x, 0.52, 0), tissu, M.Fabric)
-	add(v(1.02, 0.22, 0.86), cf(x, 1.12, 0) * ANG(0, 0, rad(5)), shade(tissu, 0.85), M.Fabric) -- bord roulé
-	add(v(1.06, 0.1, 0.9), cf(x, 0.9, 0), rgb(120, 86, 48), M.Fabric) -- ficelle
+	add(v(0.95, 1.05, 0.8), cf(x, 0.52, 0) * ANG(0, 0, rad(-4)), tissu, M.Fabric, "ball", nil, "Corps du sachet")
+	add(v(0.98, 0.25, 0.86), cf(x + 0.025, 1.08, 0) * ANG(0, 0, rad(5)), shade(tissu, 0.85), M.Fabric, "ball", nil, "Bord roulé")
+	add(v(0.91, 0.11, 0.79), cf(x - 0.012, 0.91, 0) * ANG(0, 0, rad(6)), rgb(120, 86, 48), M.Fabric, "ball", nil, "Lien de chanvre")
 	add(v(0.8, 0.08, 0.66), cf(x, 1.2, 0), rgb(176, 136, 82), M.SmoothPlastic) -- graines dans l'ouverture
 	for i = 0, 2 do
 		local a = i * 2.1 + (h % 5)
@@ -115,7 +121,7 @@ local function plante(add, shape, col, crop)
 	if shape == "wheat" then
 		for i = -1, 1 do
 			add(v(0.06, 1.5, 0.06), cf(x + i * 0.22, 0.75, z) * ANG(0, 0, rad(i * 8)), rgb(184, 160, 80), M.Grass)
-			for k = 0, 3 do
+			for k = 0, 2 do
 				add(v(0.14, 0.2, 0.12), cf(x + i * 0.22 + i * 0.08 + (k % 2 == 0 and -0.06 or 0.06), 1.35 + k * 0.15, z), col, M.Grass, "ball")
 			end
 		end
@@ -155,7 +161,7 @@ local function plante(add, shape, col, crop)
 				add(v(0.24, 0.24, 0.24), cf(x + math.cos(a) * 0.18, 0.55 - (i % 3) * 0.12, z + math.sin(a) * 0.18), col, M.SmoothPlastic, "ball")
 			end
 		else -- herbes, lin : brins et petites fleurs
-			for i = -2, 2 do
+			for i = -1, 1 do
 				add(v(0.05, 0.9, 0.05), cf(x + i * 0.12, 0.45, z) * ANG(0, 0, rad(i * 10)), rgb(96, 150, 70), M.Grass)
 				add(v(0.14, 0.14, 0.14), cf(x + i * 0.2, 0.95, z), col, M.SmoothPlastic, "ball")
 			end
@@ -180,7 +186,7 @@ for id in C.ITEMS do
 			add(v(2.4, 0.16, 1.3), cf(0, -0.06, 0), rgb(112, 80, 52), M.Ground or M.Slate) -- motte de terre commune
 			sachet(add, h, tissu)
 			plante(add, shape, col, crop)
-		end)
+		end, 2)
 	end
 end
 
@@ -240,9 +246,12 @@ for id, info in C.ITEMS do
 			end
 		end
 		icon(id, "livre", function(add)
-			local base = cf(0, 1.1, 0) * ANG(rad(-12), rad(18), 0)
-			add(v(1.5, 2.0, ep), base, reliure, M.Leather or M.Fabric)
-			add(v(1.38, 1.9, ep - 0.08), base * cf(0.07, 0, 0), rgb(236, 224, 196), M.SmoothPlastic) -- tranche des pages
+			local base = cf(0, 1.1, 0) * ANG(rad(-9), rad(17), rad(-5))
+			add(v(1.38, 1.89, ep), base * cf(0.06, 0, 0), rgb(236, 224, 196), M.SmoothPlastic)
+			add(v(1.59, 2.04, 0.10), base * cf(0, 0.01, -ep / 2), reliure, M.Leather)
+			add(v(1.54, 1.99, 0.085), base * cf(0.017, -0.015, ep / 2), shade(reliure, 0.75), M.Leather)
+			add(v(0.71, 0.037, 0.065), base * cf(0.33, -0.96, 0.07), rgb(181, 151, 110), M.SmoothPlastic)
+			add(v(0.54, 0.14, 0.10), base * cf(0.37, -0.99, -0.05) * ANG(0, 0, rad(-6)), metal, M.Metal, "wedge")
 			add(v(0.12, 2.04, ep + 0.04), base * cf(-0.74, 0, 0), shade(reliure, 0.7), M.Leather or M.Fabric) -- dos
 			for _, y in { -0.6, 0, 0.6 } do -- nerfs du dos
 				add(v(0.14, 0.08, ep + 0.08), base * cf(-0.74, y, 0), shade(reliure, 0.55), M.Leather or M.Fabric)
@@ -257,7 +266,7 @@ for id, info in C.ITEMS do
 			if h % 2 == 0 then -- signet
 				add(v(0.12, 0.5, 0.03), base * cf(0.3, -1.15, 0), rgb(170, 40, 40), M.Fabric)
 			end
-		end)
+		end, 2, false)
 	end
 end
 
@@ -304,7 +313,7 @@ for id, info in C.ITEMS do
 				add(v(0.16, 0.66, 0.66), cf(0, 0.32, 0), cire, M.Fabric, "cyl") -- ruban
 				add(v(0.32, 0.32, 0.1), cf(0, 0.32, -0.36), shade(cire, 0.85), M.SmoothPlastic, "cyl", ANG(0, rad(90), 0))
 			end
-		end)
+		end, 1, forme ~= "rouleau")
 	end
 end
 
@@ -321,29 +330,11 @@ for id, info in C.ITEMS do
 			or (has(n, "vitesse", "speed", "endurance") and rgb(60, 200, 90)) or (has(n, "chance", "luck") and rgb(240, 200, 50))
 			or (has(n, "discret", "ombre", "nuit", "invis") and rgb(90, 60, 150)) or (has(n, "froid", "glace", "givre") and rgb(140, 210, 240))
 			or (has(n, "poison", "venin") and rgb(120, 180, 40)) or ({ rgb(200, 60, 160), rgb(60, 120, 220), rgb(240, 140, 60), rgb(80, 190, 170) })[h % 4 + 1]
-		local forme = h % 4
-		icon(id, "potion", function(add)
-			local verre = rgb(210, 236, 240)
-			if forme == 0 then -- flacon rond
-				add(v(1.4, 1.4, 1.4), cf(0, 0.75, 0), liquide, M.Glass, "ball").Transparency = 0.15
-				add(v(0.42, 0.55, 0.42), cf(0, 1.6, 0), verre, M.Glass, "cyl", UP).Transparency = 0.3
-			elseif forme == 1 then -- flacon carré
-				add(v(1.0, 1.3, 1.0), cf(0, 0.65, 0), liquide, M.Glass).Transparency = 0.15
-				add(v(1.06, 0.12, 1.06), cf(0, 1.32, 0), verre, M.Glass).Transparency = 0.3
-				add(v(0.4, 0.4, 0.4), cf(0, 1.55, 0), verre, M.Glass, "cyl", UP).Transparency = 0.3
-			elseif forme == 2 then -- fiole longue
-				add(v(1.7, 0.6, 0.6), cf(0, 0.95, 0), liquide, M.Glass, "cyl", UP).Transparency = 0.15
-				add(v(0.6, 0.6, 0.6), cf(0, 0.12, 0), liquide, M.Glass, "ball").Transparency = 0.15
-			else -- gourde plate
-				add(v(1.3, 1.3, 0.55), cf(0, 0.72, 0), liquide, M.Glass, "cyl", ANG(0, rad(90), 0)).Transparency = 0.15
-				add(v(0.36, 0.45, 0.36), cf(0, 1.55, 0), verre, M.Glass, "cyl", UP).Transparency = 0.3
-				add(v(0.08, 1.4, 0.62), cf(0, 0.72, 0), rgb(120, 80, 50), M.Leather or M.Fabric) -- sangle
-			end
-			local top = forme == 2 and 1.95 or (forme == 1 and 1.85 or 1.95)
-			add(v(0.34, 0.3, 0.34), cf(0, top, 0), rgb(150, 100, 60), M.Wood, "cyl", UP) -- bouchon
-			add(v(0.4, 0.06, 0.4), cf(0, top - 0.12, 0), rgb(214, 172, 70), M.Metal, "cyl", UP) -- bague
-			add(v(0.62, 0.4, 0.04), cf(0, 0.7, forme == 2 and -0.31 or -0.62), rgb(236, 222, 186), M.SmoothPlastic) -- étiquette
-			add(v(0.2, 0.2, 0.05), cf(0, 0.72, forme == 2 and -0.34 or -0.65), shade(liquide, 0.7), M.SmoothPlastic, "cyl", ANG(0, rad(90), 0))
+		local effet = has(n, "soin", "vie", "heal", "sante") and "soin" or has(n, "force", "strength") and "force"
+			or has(n, "vitesse", "speed", "endurance") and "élan" or has(n, "poison", "venin") and "venin"
+		local forme = ({ soin = 1, force = 2, ["élan"] = 3, venin = 4 })[effet] or h % 4 + 1
+		icon(id, "potion", function(_, modele)
+			miniatures.flacon(modele, forme, liquide, effet)
 		end)
 	end
 end
@@ -360,7 +351,7 @@ for id, info in C.ITEMS do
 			add(v(0.12, 1.2, 0.12), cf(0.25, 1.2, 0) * ANG(0, 0, rad(-25)), rgb(140, 100, 60), M.Wood) -- bâton
 			add(v(1.0, 0.04, 0.7), cf(0.9, 0.02, 0.5) * ANG(0, rad(20), 0), c, M.SmoothPlastic, "cyl", UP) -- tache
 			add(v(0.5, 0.04, 0.4), cf(-0.8, 0.02, -0.6), c, M.SmoothPlastic, "cyl", UP)
-		end)
+		end, 3, true)
 	end
 end
 
@@ -429,7 +420,7 @@ for id, info in C.ITEMS do
 			else -- roc
 				add(v(0.6, 0.45, 0.55), top * cf(0, 0.1, 0) * ANG(0.3, 0.4, 0.2), rgb(120, 116, 110), M.Slate)
 			end
-		end)
+		end, 3, false)
 	end
 end
 
@@ -574,7 +565,7 @@ for id, info in C.ITEMS do
 			end
 			-- étiquette nouée : la couleur rappelle la créature
 			add(v(0.34, 0.05, 0.22), cf(0.55, 0.17, 0.4), shade(c, 0.9), M.Fabric) -- étiquette posée sur le cuir
-		end)
+		end, 3, partie == "ecaille" or partie == "tissu" or partie == "peau" or partie == "crin")
 	end
 end
 

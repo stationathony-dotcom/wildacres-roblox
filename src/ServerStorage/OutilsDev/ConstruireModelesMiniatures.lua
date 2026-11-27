@@ -8,10 +8,13 @@ local cream, dark, green = rgb(241, 214, 164), rgb(61, 42, 32), rgb(102, 147, 65
 local clay, gold = rgb(171, 92, 55), rgb(224, 172, 65)
 
 local formes = {}
-local function serie(ids, construire)
+local profils = {}
+local function serie(ids, construire, profil, appui, dessus)
+	local finition = { profil = profil, appui = appui, dessus = dessus }
 	for id in ids:gmatch("%S+") do
 		assert(not formes[id], "Miniature en double : " .. id)
 		formes[id] = construire
+		profils[id] = finition
 	end
 end
 
@@ -61,6 +64,12 @@ end
 
 function M.objet(id)
 	local construire = formes[id]
+	local finition = profils[id]
+	if not construire and id:match("^oeuf_") then
+		construire, finition = M.oeufDeMonture, { profil = "graine" }
+	elseif not construire and id:match("^renes_") then
+		construire, finition = M.renesDeMonture, { profil = "tissu", appui = "Patte de la bride" }
+	end
 	if construire then
 		local model = Instance.new("Model")
 		model.Name = id
@@ -68,8 +77,214 @@ function M.objet(id)
 		model:SetAttribute("PaletteDediee", true)
 		model:SetAttribute("SilhouetteDediee", true)
 		construire(dessin(model), id)
+		local support = finition.appui and model:FindFirstChild(finition.appui)
+		M.rehausser(model, finition.profil, support, finition)
 		return model
 	end
+end
+
+local couleursMonture = {
+	{ "givre", rgb(122, 178, 204) }, { "blanc", rgb(216, 220, 205) }, { "neiges", rgb(158, 189, 216) },
+	{ "orage", rgb(107, 136, 184) }, { "spectral", rgb(125, 201, 181) }, { "dragon", rgb(184, 93, 62) },
+	{ "marais", rgb(109, 146, 79) }, { "griffon", rgb(189, 146, 69) }, { "aigle", rgb(142, 114, 83) },
+	{ "hippogriffe", rgb(164, 133, 109) }, { "noir", rgb(85, 76, 100) },
+}
+
+local function couleurMonture(id)
+	for _, entree in couleursMonture do
+		if id:find(entree[1], 1, true) then return entree[2] end
+	end
+	return wood:Lerp(bronze, 0.40)
+end
+
+function M.oeufDeMonture(d, id)
+	local c = couleurMonture(id)
+	local pose = C(0, 0.76, 0) * rot(0, -0.13, -0.09)
+	d.part("Coque", V(1.03, 1.29, 0.97), pose, c, "ball")
+	d.part("Calotte", V(0.76, 0.82, 0.68), pose * C(0.055, 0.37, -0.02), c:Lerp(cream, 0.26), "ball")
+	d.ball("Appui de coquille", 1.04, 0.32, 0.84, -0.02, 0.20, 0.03, c:Lerp(dark, 0.38))
+	d.part("Écaille de coquille", V(0.23, 0.39, 0.10), pose * C(-0.23, -0.19, -0.43) * rot(0, -0.36, -0.29),
+		c:Lerp(dark, 0.42), "corner")
+	d.part("Moucheture longue", V(0.21, 0.29, 0.10), pose * C(0.21, 0.08, -0.46) * rot(0, 0.23, 0.25),
+		c:Lerp(cream, 0.52), "wedge")
+	d.part("Moucheture courte", V(0.18, 0.20, 0.10), pose * C(0.30, -0.31, -0.35) * rot(0, 0.31, 0.14),
+		c:Lerp(dark, 0.28), "corner")
+end
+
+function M.renesDeMonture(d, id)
+	local c = couleurMonture(id)
+	local a = id:find("givre", 1, true) and 0.23 or id:find("griff", 1, true) and -0.20 or -0.08
+	d.anneau("Rêne de cuir", 0, 0.66, 0.08, 0.52, 0.65, 0.13, c:Lerp(dark, 0.30), mat.Leather, 9, false, a)
+	d.part("Patte de la bride", V(0.44, 0.68, 0.19), C(0.38, 0.45, -0.04) * rot(0, 0, 0.15), c, nil, mat.Leather)
+	d.part("Chape claire", V(0.35, 0.16, 0.24), C(0.40, 0.79, -0.05) * rot(0, 0, -0.10),
+		c:Lerp(cream, 0.56), "wedge", mat.Metal)
+	d.part("Mors de la bride", V(0.03, 0.30, 0.30), C(0.43, 0.30, -0.17) * rot(0, pi / 2, 0),
+		bronze:Lerp(c, 0.25), "cylinder", mat.Metal)
+end
+
+-- Détails dessinés dans le plan de la face utile. Chaque motif conserve une
+-- assise sombre sous une surface continue dont un éclat déborde sur le côté.
+local motifs = {
+	ecorce = { "Fente de l’écorce", "Lame d’aubier", "Éclisse relevée", 0.48, 0.19, -0.14 },
+	tissu = { "Ourlet enfoui", "Revers de l’étoffe", "Coin effiloché", 0.57, 0.22, 0.08 },
+	filon = { "Joint de la gangue", "Crête du filon", "Cassure brillante", 0.60, 0.37, 0.12 },
+	lingot = { "Repli de coulée", "Reflet laminé", "Ébarbure de coulée", 0.63, 0.20, -0.08 },
+	croute = { "Fente de cuisson", "Lèvre dorée", "Écaille de croûte", 0.45, 0.20, -0.19 },
+	plat = { "Sillon du bouillon", "Nappe de sauce", "Herbe sur la sauce", 0.53, 0.25, 0.11 },
+	fruit = { "Pli de la peau", "Joue brillante", "Éclat de la peau", 0.41, 0.27, -0.18 },
+	feuille = { "Repli du limbe", "Nervure claire", "Pointe du limbe", 0.55, 0.27, -0.25 },
+	graine = { "Pli du sachet", "Rabat de toile", "Pointe du rabat", 0.68, 0.24, 0.11 },
+	prise = { "Sillon du trophée", "Crête du trophée", "Éclat du trophée", 0.50, 0.29, -0.19 },
+	outil = { "Joint du renfort", "Dos poli", "Biseau du renfort", 0.66, 0.25, 0.09 },
+	livre = { "Fond du cartouche", "Galon de reliure", "Coin du cartouche", 0.67, 0.19, -0.09 },
+	ecrit = { "Pli du vélin", "Revers du vélin", "Déchirure du vélin", 0.51, 0.25, 0.12 },
+	gemme = { "Facette profonde", "Facette miroir", "Pointe prismatique", 0.57, 0.40, -0.16 },
+	bijou = { "Fond de la gravure", "Filet du métal", "Pointe du filet", 0.62, 0.33, -0.18 },
+	chantier = { "Joint de parement", "Chant dégagé", "Éclat du chant", 0.52, 0.24, -0.08 },
+	quete = { "Creux de l’empreinte", "Contour de l’empreinte", "Pointe du sceau", 0.55, 0.37, 0.12 },
+	ame = { "Ombre de l’orbe", "Croissant de lumière", "Éclat de l’orbe", 0.44, 0.29, -0.20 },
+	verre = { "Bord de l’étiquette", "Étiquette de verrier", "Coin de l’étiquette", 0.51, 0.35, 0.09 },
+	pigment = { "Creux du pigment", "Croûte de pigment", "Écaille de pigment", 0.49, 0.38, -0.10 },
+}
+
+local facesAuDessus = { croute = true, plat = true, filon = true, lingot = true, ecrit = true, pigment = true }
+
+-- Prend la face la plus exposée parmi les faces locales de la pièce. On garde
+-- ainsi la pente de la masse au lieu de plaquer le détail dans les axes monde.
+local function faceUtile(p, dessus)
+	local cadre, s = p.CFrame, p.Size
+	local cible = dessus and Vector3.yAxis or -Vector3.zAxis
+	local faces = {
+		{ cadre, s },
+		{ cadre * rot(0, pi / 2, 0), V(s.Z, s.Y, s.X) },
+		{ cadre * rot(pi / 2, 0, 0), V(s.X, s.Z, s.Y) },
+	}
+	local choix, score = nil, -math.huge
+	for _, face in faces do
+		local direction = face[1].LookVector:Dot(cible)
+		if math.abs(direction) > score then
+			choix, score = face, math.abs(direction)
+		end
+	end
+	local pose = choix[1]
+	if pose.LookVector:Dot(cible) < 0 then pose *= rot(0, pi, 0) end
+	return pose, choix[2]
+end
+
+function M.rehausser(model, profil, support, options)
+	local motif = motifs[profil]
+	if not motif then return end
+	-- 27/11, Claude : un appui trouvé par nom peut être un sous-modèle ou un dossier (pas de CFrame) → choix automatique
+	if type(support) == "string" then support = model:FindFirstChild(support, true) end
+	if typeof(support) ~= "Instance" or not support:IsA("BasePart") then support = nil end
+	options = options or {}
+	local dessus = options.dessus
+	if dessus == nil then dessus = facesAuDessus[profil] end
+	local poids, nombre, meilleur = -math.huge, 0, nil
+	local cible = dessus and Vector3.yAxis or -Vector3.zAxis
+	local centre, limites = model:GetBoundingBox()
+	local echelle = math.max(limites.X, limites.Y, limites.Z, 0.01)
+	for _, p in model:GetDescendants() do
+		if not p:IsA("BasePart") then continue end
+		nombre += 1
+		if not support and p.Transparency < 0.95 then
+			local cadre, s = faceUtile(p, dessus)
+			local saillie = (cadre.Position - centre.Position):Dot(cible) + s.Z * 0.5
+			local score = math.sqrt(s.X * s.Y) / echelle + saillie / echelle * 0.66
+			if score > poids then poids, meilleur = score, p end
+		end
+	end
+	support = support or meilleur
+	if not support then return end
+	assert(nombre <= 22, model.Name .. " : réserve de trois pièces dépassée (" .. nombre .. " pièces)")
+	local pose, s = faceUtile(support, dessus)
+	local c, m = support.Color, support.Material
+	if profil == "verre" then c, m = cream:Lerp(c, 0.28), mat.SmoothPlastic end
+	if m == mat.Neon then m = mat.Glass end
+	local d = dessin(model)
+	local l, h = s.X * motif[4], s.Y * motif[5]
+	local relief = math.min(math.max(l, h) * 0.19, s.Z * 0.32)
+	-- Un coin ou un volume rond rentre sous sa boîte de mesure. Enfoncer
+	-- l’assise évite une coquille suspendue devant la matière.
+	local arrondi = support:IsA("Part") and (support.Shape == Enum.PartType.Ball
+		or support.Shape == Enum.PartType.Cylinder)
+	local coin = support:IsA("WedgePart") or support:IsA("CornerWedgePart")
+	local profondeur = coin and 0.37 or arrondi and 0.43 or 0.48
+	local face = pose * C(-s.X * 0.07, s.Y * 0.06, -s.Z * profondeur)
+		* rot(0, 0, math.clamp(motif[6], -0.12, 0.12))
+
+	if profil == "feuille" then
+		-- Nervure sur le limbe. Le lobe éclairé et la pointe rabattue
+		-- prolongent la feuille dans deux directions différentes.
+		d.part(motif[1], V(l * 0.55, h * 1.45, relief), face, c:Lerp(dark, 0.48), "wedge", m)
+		d.part(motif[2], V(l * 0.26, h * 2.0, relief), face * C(-l * 0.04, h * 0.12, -relief * 0.6),
+			c:Lerp(cream, 0.65), nil, m)
+		d.part(motif[3], V(l * 0.68, h * 0.90, relief), face * C(l * 0.25, -h * 0.2, -relief * 0.20)
+			* rot(0, -0.09, 0.15), c:Lerp(cream, 0.31), "corner", m)
+		return
+	elseif profil == "gemme" or profil == "filon" then
+		-- Trois plans d’une cassure, dont la plus petite facette tourne
+		-- pour accrocher la lumière du haut du ViewportFrame.
+		d.part(motif[1], V(l, h, relief * 2.1), face, c:Lerp(dark, 0.58), "corner", m)
+		d.part(motif[2], V(l * 0.73, h * 0.71, relief * 1.7),
+			face * C(-l * 0.13, h * 0.06, -relief * 0.47) * rot(0, 0.11, -0.07),
+			c:Lerp(cream, 0.67), "wedge", m)
+		d.part(motif[3], V(l * 0.47, h * 0.75, relief * 1.4),
+			face * C(l * 0.30, -h * 0.13, -relief * 0.28) * rot(0, -0.10, 0.11),
+			c:Lerp(cream, 0.37), "corner", m)
+		return
+	end
+	d.part(motif[1], V(l, h, relief * 1.65), face, c:Lerp(dark, 0.62), nil, m)
+	d.part(motif[2], V(l * 0.90, h * 0.56, relief), face * C(-l * 0.09, h * 0.16, -relief * 0.67),
+		c:Lerp(cream, 0.57), nil, m)
+	d.part(motif[3], V(l * 0.37, h * 1.24, relief * 1.35),
+		face * C(l * 0.34, -h * 0.17, -relief * 0.20) * rot(0, -0.09, 0.12), c:Lerp(cream, 0.19), "wedge", m)
+end
+
+-- Le verre et le ménisque suivent le même cadre incliné. Les quatre moules se
+-- distinguent par leur col, leur épaule et leur pied, même en niveaux de gris.
+local flacons = {
+	{ 1.18, 1.20, 0.92, 0.38, 0.39, "ball" },
+	{ 1.04, 1.02, 0.80, 0.43, 0.31 },
+	{ 0.65, 1.48, 0.63, 0.41, 0.40, "cylinder" },
+	{ 1.38, 1.05, 0.62, 0.36, 0.29, "ball" },
+}
+
+function M.flacon(model, moule, liquide, effet)
+	local d = dessin(model)
+	local f = flacons[moule]
+	local l, h, p, col, cou, forme = table.unpack(f)
+	local verre = rgb(193, 226, 224):Lerp(liquide, 0.24)
+	local pose = C() * rot(0, -0.10, moule == 3 and -0.12 or 0.07)
+	local vertical = rot(0, 0, pi / 2)
+	local function corps(nom, largeur, hauteur, profondeur, y, couleur, transparence)
+		local taille = forme == "cylinder" and V(hauteur, largeur, largeur) or V(largeur, hauteur, profondeur)
+		local cadre = pose * C(0, y, 0) * (forme == "cylinder" and vertical or C())
+		d.part(nom, taille, cadre, couleur, forme, mat.Glass).Transparency = transparence
+	end
+	corps("Verre soufflé", l, h, p, h * 0.53, verre, 0.37)
+	corps("Potion", l * 0.88, h * 0.71, p * 0.88, h * 0.41, liquide, 0.10)
+	d.part("Ménisque clair", V(0.08, l * 0.79, p * 0.73), pose * C(0, h * 0.74, 0) * vertical,
+		liquide:Lerp(cream, 0.50), "cylinder", mat.Glass).Transparency = 0.22
+	d.part("Épaule soufflée", V(l * 0.61, h * 0.29, p * 0.59), pose * C(0, h * 0.92, 0), verre, "ball", mat.Glass).Transparency = 0.28
+	d.part("Pied de verre", V(0.14, l * 0.66, p * 0.78), pose * C(0, h * 0.12, 0) * vertical,
+		liquide:Lerp(dark, 0.52), "cylinder", mat.Glass)
+	d.part("Col", V(cou, col, col), pose * C(0, h + cou * 0.44, 0) * vertical, verre, "cylinder", mat.Glass).Transparency = 0.24
+	d.part("Bague du col", V(0.085, col * 1.26, col * 1.26), pose * C(0, h + cou * 0.90, 0) * vertical, bronze, "cylinder", mat.Metal)
+	d.part("Liège", V(0.17, col * 0.95, col * 0.95), pose * C(0, h + cou * 1.03, 0) * vertical, wood:Lerp(cream, 0.38), "cylinder", mat.Wood)
+	local label = pose * C(l * 0.07, h * 0.43, -p * 0.47) * rot(0, 0, -0.09)
+	local encre = liquide:Lerp(dark, 0.63)
+	d.part("Étiquette gaufrée", V(l * 0.55, 0.32, 0.09), label, cream)
+	d.part("Coin relevé de l’étiquette", V(l * 0.18, 0.20, 0.10), label * C(l * 0.24, -0.07, 0) * rot(0, 0, -0.11), bronze, "wedge")
+	local signe = label * C(-l * 0.05, 0.012, -0.048)
+	d.part("Marque de l’apothicaire", V(l * 0.19, 0.17, 0.04), signe * rot(0, 0, pi / 4), encre, effet ~= "soin" and "wedge" or nil)
+	if effet == "soin" then
+		d.part("Traverse du signe de soin", V(l * 0.27, 0.076, 0.04), signe, encre)
+	elseif effet == "force" then
+		d.part("Pied du signe de force", V(l * 0.24, 0.065, 0.04), signe * C(0, -0.08, 0), encre)
+	end
+	d.part("Reflet courbe du verre", V(l * 0.16, h * 0.43, p * 0.16),
+		pose * C(-l * 0.24, h * 0.62, -p * 0.38) * rot(0, 0, -0.11), rgb(239, 247, 229), "ball", mat.Glass).Transparency = 0.13
 end
 
 -- Les planches 2 et 3 montrent ces pièces de chantier. Les autres blocs sont
@@ -134,7 +349,10 @@ function M.construireBloc(b)
 	local model = Instance.new("Model")
 	model.Name = b.item
 	model:SetAttribute("ApercuDroit", true)
-	if construction(dessin(model), b) then return model end
+	if construction(dessin(model), b) then
+		M.rehausser(model, "chantier", nil, { dessus = b.size.Y < b.size.X * 0.40 })
+		return model
+	end
 	model:Destroy()
 	return nil
 end
@@ -161,7 +379,7 @@ serie("bread country_bread whole_bread", function(d, id)
 		d.ball("Tranche de pain complet", 0.48, 0.56, 0.79, 0.79, 0.29, -0.10, c)
 		d.ball("Mie de la tranche", 0.20, 0.47, 0.64, 0.96, 0.30, -0.10, cream:Lerp(c, 0.4))
 	end
-end)
+end, "croute")
 
 serie("apple_pie meat_pie pie galette honey_cake omelette", function(d, id)
 	local omelette = id == "omelette"
@@ -211,7 +429,7 @@ serie("apple_pie meat_pie pie galette honey_cake omelette", function(d, id)
 		d.ball("Glaçage", 1.40, 0.18, 1.40, 0, hauteur + 0.08, 0, cream)
 		d.ball("Noix centrale", 0.27, 0.17, 0.28, 0, hauteur + 0.20, 0, c)
 	end
-end)
+end, "croute")
 
 local plats = {
 	broth = { rgb(181, 106, 45), rgb(246, 194, 101), "rond", 3, 1.15 },
@@ -253,7 +471,7 @@ serie("broth stew soup nettle_soup fish_soup rabbit_stew game_stew porridge sala
 		local y = hauteur * 0.87
 		d.line("Manche de la cuillère", V(0.30, y + 0.06, -0.13), V(0.91, y + 0.18, -0.35), 0.10, wood, mat.Wood)
 	end
-end)
+end, "plat")
 
 serie("cheese butter fat soap beeswax candle_wax", function(d, id)
 	if id == "cheese" then
@@ -295,7 +513,7 @@ serie("cheese butter fat soap beeswax candle_wax", function(d, id)
 				i * 0.22, 0.53, -0.08, c:Lerp(dark, 0.2), nil, i * 0.40)
 		end
 	end
-end)
+end, "croute")
 
 local filons = {
 	ore = { rgb(95, 103, 102), rgb(143, 168, 167), 4, 1.52 },
@@ -326,7 +544,7 @@ serie("ore copper_ore gold_ore silver_ore coal meteorite stone colored_stone glo
 			C(x, y, z) * rot(0.2 * i, a, i * 0.22), p[2]:Lerp(cream, i % 3 * 0.17),
 			i % 2 == 0 and "corner" or "wedge", lumiere and mat.Neon or id:find("_ore") and mat.Metal or rock)
 	end
-end)
+end, "filon")
 
 local barres = {
 	copper_ingot = { rgb(191, 106, 60), 1.29, 2, 1 },
@@ -358,7 +576,7 @@ serie("copper_ingot iron_ingot silver_ingot gold_ingot precious_ingot steel iron
 		d.part("Poinçon de forge", V(0.08, 0.028, 0.21 - i * 0.017),
 			top * C((i - (p[4] + 1) / 2) * 0.14, 0, 0) * rot(0, -0.44, 0), c:Lerp(dark, 0.47), nil, mat.Metal)
 	end
-end)
+end, "lingot")
 
 local gemmes = {
 	diamond = { rgb(153, 220, 233), 0.82, 1.23, 4 }, ruby = { rgb(181, 49, 61), 0.84, 0.91, 6 },
@@ -387,7 +605,7 @@ serie("diamond ruby sapphire emerald amber ancient_crystal ice_crystal frost_cry
 		d.part("Éclat secondaire", V(w * 0.69, h * 0.57, z * 0.72), C(w * 0.43, h * 0.32, z * 0.14) * rot(0, 1.2, -0.51),
 			c:Lerp(cream, 0.39), "wedge", mat.Glass)
 	end
-end)
+end, "gemme", "Corps de la pierre")
 
 serie("glass brick prepared_clay", function(d, id)
 	local verre = id == "glass"
@@ -400,7 +618,7 @@ serie("glass brick prepared_clay", function(d, id)
 		d.box(verre and "Arête du verre" or "Face lissée", 1.20 - i * 0.09, 0.035, verre and 0.10 or 0.64, x, y + 0.10, -0.08,
 			c:Lerp(cream, 0.34), m, i * 0.14)
 	end
-end)
+end, "chantier")
 
 local boites = {
 	craft_kit = { 1.38, 0.46, 0.91, rgb(104, 105, 70), "outil" },
@@ -465,7 +683,7 @@ serie("craft_kit jewel_box keepsake_box travel_chest reinforced_chest supply_che
 		d.box(sangle and "Nœud" or "Fermoir", 0.29, 0.25, 0.09, 0, y * 0.70, -z * 0.55, trim, m)
 		d.ball("Goupille", 0.10, 0.10, 0.06, 0, y * 0.70, -z * 0.60, dark)
 	end
-end)
+end, "quete")
 
 local serrures = {
 	lock_2 = { 1.23, 0.77, 0.43, rgb(158, 87, 52), 0.36, 0.31 },
@@ -523,7 +741,7 @@ serie("lock_1 lock_2 lock_3 lock_4 practice_lock", function(d, id)
 		d.line("Tige de l'étau", V(0.39, y * 0.31, 0.07), V(0.78, y * 0.31, 0.07), 0.11, steel, mat.Metal)
 		d.ball("Bouton de l'étau", 0.20, 0.22, 0.18, 0.80, y * 0.31, 0.07, gold, mat.Metal)
 	end
-end)
+end, "outil")
 
 local sacs = {
 	backpack = { 1.0, 1.22, 0.63, rgb(89, 114, 80), "dos" },
@@ -576,7 +794,7 @@ serie("backpack canvas_bag coin_purse merchant_bag merchant_purse satchel provis
 			d.line("Bandoulière", V(-x * 0.27, y * 1.20, 0), V(x * 0.28, y * 1.20, 0), 0.12, trim, mat.Leather)
 		end
 	end
-end)
+end, "tissu")
 
 local pieces = {
 	copper_coin = { rgb(179, 99, 61), 1.24, 1, 3 },
@@ -608,7 +826,7 @@ serie("copper_coin silver_coin gold_coin gold ancient_coin event_token medal fes
 		d.box("Ruban", 0.61, 0.12, 0.66, x, y - 0.11, z + 0.56, ribbon, mat.Fabric)
 		d.box("Galon", 0.10, 0.055, 0.61, x, y - 0.04, z + 0.58, cream, mat.Fabric)
 	end
-end)
+end, "bijou")
 
 serie("bracelet buckle brooch necklace ring_gem dog_collar ancient_jewel talisman hoop iron_ring", function(d, id)
 	local chien, broche, collier = id == "dog_collar", id == "brooch", id == "necklace"
@@ -641,7 +859,7 @@ serie("bracelet buckle brooch necklace ring_gem dog_collar ancient_jewel talisma
 			d.ball("Cabochon du bracelet", 0.17, 0.17, 0.13, rx * math.cos(a), ry * math.sin(a), -0.09, bronze, mat.Metal)
 		end
 	end
-end)
+end, "bijou")
 
 serie("rope braided_rope climbing_rope linen_thread wool_thread silk", function(d, id)
 	local bobine = id:find("thread") or id == "silk"
@@ -669,7 +887,7 @@ serie("rope braided_rope climbing_rope linen_thread wool_thread silk", function(
 			d.box("Ligature", 0.20, 0.32, 0.32, 0.52, 0.07, 0.02, cream, mat.Fabric)
 		end
 	end
-end)
+end, "tissu")
 
 local fruits = {
 	apple = { 1.31, 1.12, 1.18, rgb(173, 54, 47), "pomme" },
@@ -725,7 +943,7 @@ serie("apple tomato pumpkin squash pear melon plum beetroot eggplant potato cabb
 	if kind == "racine" then
 		d.line("Radicelle", V(0, 0.15, 0), V(-0.13, -0.21, 0.10), 0.07, c)
 	end
-end)
+end, "fruit")
 
 serie("egg mystery_egg ancient_seed bean pea bait", function(d, id)
 	local oeuf = id == "egg" or id == "mystery_egg"
@@ -755,7 +973,17 @@ serie("egg mystery_egg ancient_seed bean pea bait", function(d, id)
 	elseif id == "pea" then
 		d.ball("Bord de la cosse", 1.28, 0.20, 0.24, -0.03, 0.31, 0.21, green, mat.Grass)
 	end
-end)
+end, "graine")
+
+serie("seed_sack", function(d)
+	local toile = rgb(158, 121, 73)
+	d.part("Sac de graines", V(1.03, 1.20, 0.77), C(0, 0.61, 0) * rot(0, 0, 0.07), toile, "ball", mat.Fabric)
+	d.ball("Soufflet du sac", 0.85, 0.40, 0.70, 0.06, 0.22, 0.04, toile:Lerp(dark, 0.25), mat.Fabric)
+	d.ball("Bouche froncée", 0.48, 0.28, 0.45, -0.035, 1.14, 0, toile:Lerp(cream, 0.24), mat.Fabric)
+	d.disc("Lien de chanvre", 0.39, 0.085, -0.024, 1.04, 0, dark, mat.Fabric)
+	d.box("Écusson de toile", 0.40, 0.36, 0.095, 0.04, 0.56, -0.35, cream, mat.Fabric, 0.09)
+	d.part("Graine brodée", V(0.19, 0.29, 0.05), C(0.04, 0.56, -0.405) * rot(0, 0, -0.44), wood, "ball", mat.Fabric)
+end, "graine", "Sac de graines")
 
 local poissons = {
 	fish_1 = { 1.43, 0.57, rgb(133, 161, 174), "gardon" }, fish_2 = { 1.53, 0.75, rgb(145, 130, 75), "carpe" },
@@ -809,7 +1037,50 @@ serie("fish fish_1 fish_2 fish_3 fish_4 fish_5 fish_6 fish_7 salmon grilled_fish
 				V(i * 0.29 - 0.26, y + h * 0.24, -thick * 0.40), 0.062, dark)
 		end
 	end
-end)
+end, "prise")
+
+serie("mimic_tongue angler_lure mammoth_tusk storm_feather widow_silk croc_king_hide", function(d, id)
+	if id == "mammoth_tusk" then
+		local at = C(-0.27, 0.47, 0) * rot(0, 0.18, -0.66)
+		d.part("Racine de la défense", V(0.52, 0.76, 0.50), at, cream:Lerp(wood, 0.34), "ball")
+		d.part("Courbe d’ivoire", V(0.42, 0.86, 0.40), at * C(0.035, 0.56, 0) * rot(0, 0, 0.38), cream, "ball")
+		d.part("Pointe usée", V(0.25, 0.53, 0.28), C(0.24, 1.33, -0.02) * rot(0, 0, 0.59), cream:Lerp(wood, 0.20), "wedge")
+		d.part("Corniche de givre", V(0.39, 0.57, 0.27), at * C(-0.03, 0.44, -0.16) * rot(0, 0, 0.20), rgb(138, 205, 227), "wedge", mat.Glass)
+	elseif id == "storm_feather" then
+		local at = C(0, 0.78, 0) * rot(0, -0.19, -0.41)
+		d.part("Vexille bleu nuit", V(0.61, 1.28, 0.17), at, rgb(67, 83, 129), "ball")
+		d.part("Barbes du haut", V(0.38, 0.71, 0.14), at * C(-0.15, 0.28, -0.062) * rot(0, 0, 0.13), rgb(155, 203, 225), "wedge")
+		d.part("Déchirure des barbes", V(0.24, 0.42, 0.14), at * C(0.22, -0.23, 0.025), rgb(48, 53, 87), "wedge")
+		d.part("Rachis", V(0.08, 1.42, 0.13), at * C(-0.025, -0.11, -0.065), cream, "ball")
+	elseif id == "angler_lure" then
+		local bleu = rgb(74, 113, 134)
+		local a, b, c = V(-0.43, 0.10, 0.03), V(-0.36, 0.91, 0.04), V(0.27, 1.10, -0.03)
+		d.ball("Racine du leurre", 0.52, 0.32, 0.54, -0.38, 0.15, 0.04, bleu:Lerp(dark, 0.51))
+		d.line("Tige du leurre", a, b, 0.21, bleu)
+		d.line("Retombée du leurre", b, c, 0.17, bleu)
+		d.ball("Membrane de lanterne", 0.64, 0.56, 0.55, 0.37, 0.89, -0.04, bleu, mat.Glass)
+		d.ball("Lueur enfermée", 0.37, 0.33, 0.20, 0.37, 0.87, -0.29, rgb(175, 242, 217), mat.Neon)
+	elseif id == "widow_silk" then
+		for i = 0, 3 do
+			d.part("Mèche de soie", V(0.41, 0.35, 0.95 - i * 0.09), C(-0.41 + i * 0.25, 0.31 + i % 2 * 0.07, 0)
+				* rot(0, i * 0.18 - 0.21, 0.14), rgb(153 + i * 13, 154 + i * 10, 188 + i * 10), "ball", mat.Fabric)
+		end
+		d.box("Lien arachnéen", 1.05, 0.18, 0.24, 0, 0.25, -0.40, rgb(115, 96, 137), mat.Fabric, -0.09)
+	elseif id == "croc_king_hide" then
+		local c = rgb(102, 129, 58)
+		d.part("Revers de la peau", V(1.34, 0.25, 0.96), C(0, 0.18, 0) * rot(0, 0.11, 0), c:Lerp(dark, 0.38), nil, mat.Leather)
+		for i = 0, 3 do
+			d.part("Plaque dorsale", V(0.52, 0.39 - i * 0.046, 0.83), C(-0.42 + i * 0.28, 0.32, i % 2 * 0.09)
+				* rot(0, i * 0.09, 0.08), c:Lerp(cream, (i % 3) * 0.15), "wedge", mat.Leather)
+		end
+		d.part("Bord arraché", V(0.46, 0.29, 0.51), C(0.55, 0.18, -0.16) * rot(0, -0.23, 0.18), c, "corner", mat.Leather)
+	else
+		local c = rgb(167, 87, 112)
+		d.part("Massif de la langue", V(1.12, 0.42, 0.68), C(-0.12, 0.35, 0) * rot(0, 0.20, 0.13), c, "ball")
+		d.part("Pointe repliée", V(0.63, 0.38, 0.54), C(0.42, 0.41, -0.09) * rot(0, 0.30, -0.38), c:Lerp(cream, 0.26), "ball")
+		d.part("Gorge du pli", V(0.61, 0.17, 0.24), C(0.22, 0.28, -0.29) * rot(0, 0.21, 0.08), c:Lerp(dark, 0.45), "ball")
+	end
+end, "prise")
 
 serie("arrow arrow_barbed arrow_iron bolt bolt_heavy javelin", function(d, id)
 	local heavy, bolt = id == "bolt_heavy", id == "bolt" or id == "bolt_heavy"
@@ -829,7 +1100,7 @@ serie("arrow arrow_barbed arrow_iron bolt bolt_heavy javelin", function(d, id)
 		end
 	end
 	d.part("Encoche", V(e * 1.45, 0.17, e * 1.31), pose * C(0, -long * 0.47, 0), dark, nil, mat.Wood)
-end)
+end, "outil")
 
 local manches = {
 	chisel = { 0.86, 0.22, "ciseau" }, artisan_hammer = { 1.12, 0.17, "marteau" },
@@ -904,14 +1175,14 @@ serie("chisel artisan_hammer ice_pick hand_saw pitchfork rake sickle throwing_ax
 			piece("Fil du tranchant", w * 0.21, h * 0.85, 0.06, -w * 0.38, h * 0.49, -0.05, 0, nil, cream)
 		end
 	end
-end)
+end, "outil")
 
 serie("chain weights nasse cork_float fishing_net sieve", function(d, id)
 	if id == "chain" then
 		for i = -1, 1 do
 			local x = i * 0.58
 			d.anneau("Maillon", x, 0.28 + i % 2 * 0.02, 0, 0.42, 0.26, 0.139,
-				steel:Lerp(dark, (i + 1) * 0.16), mat.Metal, 8, i % 2 == 0)
+				steel:Lerp(dark, (i + 1) * 0.16), mat.Metal, 7, i % 2 == 0)
 		end
 	elseif id == "weights" then
 		d.box("Plateau de transport", 1.50, 0.19, 0.91, 0, 0.09, 0, wood, mat.Wood)
@@ -929,9 +1200,9 @@ serie("chain weights nasse cork_float fishing_net sieve", function(d, id)
 		local trap = id == "nasse"
 		local dia, z = trap and 0.59 or 0.75, trap and 0.51 or 0.48
 		d.anneau("Cadre", 0, 0.18, 0, dia, z, 0.115, wood, mat.Wood, 8, true)
-		if trap then d.anneau("Col de la nasse", 0, 0.85, 0, dia * 0.60, z * 0.63, 0.095, bronze, mat.Wood, 8, true) end
-		for i = 0, trap and 7 or 4 do
-			local a = 2 * pi * i / 8
+		if trap then d.anneau("Col de la nasse", 0, 0.85, 0, dia * 0.60, z * 0.63, 0.095, bronze, mat.Wood, 7, true) end
+		for i = 0, trap and 6 or 4 do
+			local a = 2 * pi * i / 7
 			if trap then
 				d.line("Brin d'osier", V(dia * math.cos(a), 0.19, z * math.sin(a)),
 					V(dia * 0.63 * math.cos(a), 0.86, z * 0.63 * math.sin(a)), 0.084, bronze, mat.Wood)
@@ -946,7 +1217,7 @@ serie("chain weights nasse cork_float fishing_net sieve", function(d, id)
 			d.line("Manche de l'épuisette", V(-0.65, 0.18, 0), V(-1.31, 0.37, 0), 0.14, wood, mat.Wood)
 		end
 	end
-end)
+end, "outil")
 
 local textiles = {
 	blanket = { 1.22, 0.84, rgb(156, 77, 62), "pli" }, canvas = { 1.41, 0.76, cream, "cadre" },
@@ -992,7 +1263,7 @@ serie("blanket canvas cloth dyed_cloth enchanted_cloth fine_cloth leather soft_l
 				fx * 0.90, e * (k == "oreiller" and 0.71 or 0.93), 0, c:Lerp(trim, (i + 1) * 0.28), m)
 		end
 	end
-end)
+end, "tissu")
 
 serie("wood fine_planks heartwood bark peg wool", function(d, id)
 	if id == "wool" then
@@ -1028,7 +1299,7 @@ serie("wood fine_planks heartwood bark peg wool", function(d, id)
 			d.part("Cœur", V(0.033, dia * 0.30, dia * 0.30), pose * C(l * 0.5 + 0.055, 0, 0), id == "heartwood" and rgb(143, 54, 47) or wood, "cylinder", mat.Wood)
 		end
 	end
-end)
+end, "ecorce")
 
 local plantes = {
 	wheat = { 1.40, 3, rgb(185, 137, 62), "épi" }, rye = { 1.50, 2, rgb(152, 120, 66), "épi" },
@@ -1059,7 +1330,7 @@ serie("wheat rye barley oat hay straw reeds fiber flax flower chamomile st_john 
 					top.Y + j * 0.078 - 0.11, top.Z, c:Lerp(cream, j % 3 * 0.12))
 			end
 		elseif k == "fleur" or k == "bouquet" then
-			local petals = count == 1 and 6 or k == "bouquet" and 4 or 5
+			local petals = count == 1 and 6 or count == 3 and 4 or 5
 			d.ball("Cœur de fleur", 0.17, 0.16, 0.17, top.X, top.Y, top.Z, id == "st_john" and rgb(187, 102, 45) or gold)
 			for j = 1, petals do
 				local theta = j * 2 * pi / petals
@@ -1080,7 +1351,7 @@ serie("wheat rye barley oat hay straw reeds fiber flax flower chamomile st_john 
 				end
 			end
 		elseif k == "grappe" then
-			for j = 0, id == "oat" and 2 or 3 do
+			for j = 0, 2 do
 				local s = j % 2 * 2 - 1
 				local b = V(top.X + s * (0.09 + j * 0.04), top.Y - 0.08 - j * 0.105, top.Z)
 				d.line("Pédicelle", V(top.X * 0.9, b.Y - 0.011, top.Z * 0.8), b, 0.05, stem, mat.Grass)
@@ -1097,7 +1368,7 @@ serie("wheat rye barley oat hay straw reeds fiber flax flower chamomile st_john 
 		end
 	end
 	d.box("Ligature", 0.31, 0.12, 0.22, 0, 0.15, 0, cream:Lerp(wood, 0.37), mat.Fabric)
-end)
+end, "feuille")
 
 serie("mushroom glow_mushroom rare_mushroom truffle", function(d, id)
 	local rare, glow = id == "rare_mushroom", id == "glow_mushroom"
@@ -1123,7 +1394,7 @@ serie("mushroom glow_mushroom rare_mushroom truffle", function(d, id)
 				glow and rgb(159, 223, 190) or cream, glow and mat.Neon or nil)
 		end
 	end
-end)
+end, "feuille")
 
 serie("wicker_basket veg_basket fruit_crate rations fisher_platter lord_banquet village_feast", function(d,id)
 	local caisse = id == "fruit_crate"
@@ -1136,7 +1407,7 @@ serie("wicker_basket veg_basket fruit_crate rations fisher_platter lord_banquet 
 		d.box("Petit pan", 0.15, base, 1.02, 0.67 * s, base * 0.57, 0, wood, mat.Wood)
 	end
 	if id == "wicker_basket" or id == "veg_basket" then
-		d.anneau("Anse d'osier", 0, 0.43, 0, 0.64, 0.70, 0.13, bronze, mat.Wood, 10)
+		d.anneau("Anse d'osier", 0, 0.43, 0, 0.64, 0.70, 0.13, bronze, mat.Wood, id == "veg_basket" and 7 or 10)
 	elseif caisse then
 		for i = -1, 1 do
 			d.box("Traverse clouée", 0.14, 0.46, 0.09, i * 0.51, 0.25, -0.58, bronze, mat.Wood)
@@ -1153,7 +1424,7 @@ serie("wicker_basket veg_basket fruit_crate rations fisher_platter lord_banquet 
 			d.ball("Garniture", 0.14, 0.11, 0.15, x, y + 0.14, z, i % 2 == 0 and cream or green)
 		end
 	end
-end)
+end, "plat")
 
 local recipients = {
 	bottle = { 0.73, 1.23, rgb(111, 158, 152), "verre" },
@@ -1209,7 +1480,7 @@ serie("bottle message_bottle cider honey milk ink inkwell perfume gourd waterski
 			d.disc("Frise", w * 0.98, 0.09, 0, h * 0.49, 0, c:Lerp(gold, 0.53), m)
 		end
 	end
-end)
+end, "verre")
 
 serie("compass old_compass pocket_mirror spyglass", function(d, id)
 	local old, mirror = id == "old_compass", id == "pocket_mirror"
@@ -1246,7 +1517,7 @@ serie("compass old_compass pocket_mirror spyglass", function(d, id)
 				wood, "cylinder", mat.Wood)
 		end
 	end
-end)
+end, "outil")
 
 serie("guard_badge sheriff_badge royal_seal seal wax_seal champion_ribbon ribbon fair_ticket", function(d, id)
 	local wax = id == "seal" or id == "wax_seal" or id == "royal_seal"
@@ -1272,7 +1543,7 @@ serie("guard_badge sheriff_badge royal_seal seal wax_seal champion_ribbon ribbon
 	elseif id == "guard_badge" then
 		d.box("Écu de la garde", 0.37, 0.065, 0.44, 0, 0.316, 0, bronze, mat.Metal, pi / 4)
 	end
-end)
+end, "quete")
 
 serie("artifact relic ruin_piece frozen_heart mineral_heart wisp_dust mineral_powder pearl", function(d, id)
 	local pale = rgb(170, 173, 156)
@@ -1311,7 +1582,7 @@ serie("artifact relic ruin_piece frozen_heart mineral_heart wisp_dust mineral_po
 			d.box("Entaille", 0.065, 0.37, 0.06, i * 0.18, 0.57 - i * 0.12, -0.24, id == "relic" and bronze or ton:Lerp(dark, 0.39), mat.Slate, -0.21)
 		end
 	end
-end)
+end, "quete")
 
 serie("ancient_scale black_scale bone horn rare_horn tooth stinger", function(d, id)
 	local c = id == "black_scale" and rgb(66, 67, 82) or id == "ancient_scale" and rgb(82, 143, 133)
@@ -1345,7 +1616,7 @@ serie("ancient_scale black_scale bone horn rare_horn tooth stinger", function(d,
 			d.disc("Cerclage de corne", 0.58, 0.13, 0.005, 0.12, 0, gold, mat.Metal)
 		end
 	end
-end)
+end, "prise")
 
 serie("bridle halter leash pet_harness spiked_collar stirrups saddle_leather saddle_race saddle_war", function(d, id)
 	local selle = id:find("saddle") ~= nil
@@ -1384,7 +1655,7 @@ serie("bridle halter leash pet_harness spiked_collar stirrups saddle_leather sad
 			d.ball("Boucle", 0.20, 0.20, 0.13, k * 0.87, 0.72, 0, bronze, mat.Metal)
 		end
 	end
-end)
+end, "tissu")
 
 serie("truffle_cheese aged_cheese truffle_omelette damascus_steel dried_petals spice salt mortar_pestle incense", function(d, id)
 	if id:find("cheese") then
@@ -1429,7 +1700,7 @@ serie("truffle_cheese aged_cheese truffle_omelette damascus_steel dried_petals s
 			end
 		end
 	end
-end)
+end, "croute")
 
 serie("banniere kite music_sheet paper price_tags map_fragment", function(d, id)
 	if id == "banniere" or id == "kite" then
@@ -1454,7 +1725,7 @@ serie("banniere kite music_sheet paper price_tags map_fragment", function(d, id)
 				0.21, i * 0.19, id == "paper" and c:Lerp(wood, 0.30) or dark, nil, id == "map_fragment" and i * 0.49 or 0.24)
 		end
 	end
-end)
+end, "ecrit")
 
 serie("lost_crown horn_call trumpet drum", function(d, id)
 	if id == "lost_crown" then
@@ -1492,7 +1763,7 @@ serie("lost_crown horn_call trumpet drum", function(d, id)
 			d.line("Retour du tube", V(-0.45, 0.19, 0.07), V(0.34, 0.28, 0.24), 0.094, c, m)
 		end
 	end
-end)
+end, "quete")
 
 local function planches(d, x, y, z, h, l, p, n, vertical)
 	for i = 1, n do
@@ -1556,7 +1827,7 @@ serie("floor floor2 roof roof2 stairs wall wall2 wall_brick wall_stone wall_wind
 			d.box("Traverse", 1.46, 0.15, 0.15, 0, h * 0.23, -0.084, wood, mat.Wood)
 		end
 	end
-end)
+end, "chantier")
 
 serie("bed chair garden_bench table_wood workbench shelf stall tannery trough loom", function(d, id)
 	local chaise = id == "chair"
@@ -1612,7 +1883,23 @@ serie("bed chair garden_bench table_wood workbench shelf stall tannery trough lo
 	else
 		d.box("Traverse sous le plateau", w, 0.15, 0.14, 0, h * 0.58, p * 0.40, dark, mat.Wood)
 	end
-end)
+end, "chantier")
+
+serie("sawmill", function(d)
+	local fer = rgb(111, 136, 145)
+	local plateau = C(0, 0.65, 0) * rot(0, -0.12, 0)
+	d.part("Chevalet gauche", V(0.18, 0.68, 0.79), plateau * C(-0.55, -0.34, 0) * rot(0, 0, 0.10), wood, nil, mat.Wood)
+	d.part("Chevalet droit", V(0.16, 0.68, 0.79), plateau * C(0.53, -0.34, 0) * rot(0, 0, -0.08), wood, nil, mat.Wood)
+	d.part("Plateau de sciage", V(1.48, 0.21, 1.00), plateau, wood:Lerp(cream, 0.22), nil, mat.Wood)
+	d.part("Lame circulaire", V(0.14, 0.94, 0.94), plateau * C(-0.18, 0.34, 0.10), fer, "cylinder", mat.Metal)
+	d.part("Moyeu sombre", V(0.20, 0.35, 0.35), plateau * C(-0.19, 0.33, 0.10), fer:Lerp(dark, 0.51), "cylinder", mat.Metal)
+	for i = 0, 2 do
+		local at = plateau * C(-0.18, 0.34, 0.10) * rot(-0.62 + i * 0.61, 0, 0)
+		d.part("Dent de scie", V(0.14, 0.20, 0.19), at * C(0, 0.46, 0), fer:Lerp(cream, 0.52), "wedge", mat.Metal)
+	end
+	d.part("Planche à déligner", V(0.38, 0.16, 1.25), plateau * C(0.40, 0.13, -0.06) * rot(0, 0.07, 0),
+		cream:Lerp(wood, 0.36), nil, mat.Wood)
+end, "chantier", "Plateau de sciage")
 
 serie("alarm alembic anvil barracks beehive campfire furnace lantern rug scarecrow sprinkler training_dummy well windmill", function(d, id)
 	local c = rgb(132, 134, 127)
@@ -1699,7 +1986,7 @@ serie("alarm alembic anvil barracks beehive campfire furnace lantern rug scarecr
 			d.box("Écusson", 0.21, 0.25, 0.053, 0, 0.69, -0.46, rgb(150, 55, 45), mat.Fabric)
 		end
 	end
-end)
+end, "outil")
 
 serie("carrot parsnip onion garlic turnip pickled_onions grape berries dried_fruit crab crayfish shellfish rare_shell", function(d, id)
 	if id == "carrot" or id == "parsnip" then
@@ -1774,7 +2061,7 @@ serie("carrot parsnip onion garlic turnip pickled_onions grape berries dried_fru
 			d.ball("Charnière", 0.34, 0.22, 0.22, 0, 0.17, 0.44, c)
 		end
 	end
-end)
+end, "fruit")
 
 local boissons = {
 	water = { 1.08, 0.66, rgb(110, 170, 182), "verre" }, ale = { 1.01, 0.87, rgb(173, 102, 44), "mousse" },
@@ -1823,7 +2110,7 @@ serie("water ale chamomile_tea evening_tea mint_tea thyme_tea sage_tea mug tanka
 			d.line("Bout de cuillère", V(0.22, h + 0.03, 0), V(0.69, h + 0.11, -0.02), 0.10, wood, mat.Wood)
 		end
 	end
-end)
+end, "verre")
 
 serie("ancient_key rusty_key hourglass feeder flowerpot planter", function(d, id)
 	if id:find("_key") then
@@ -1879,7 +2166,7 @@ serie("ancient_key rusty_key hourglass feeder flowerpot planter", function(d, id
 			d.ball("Fleur", 0.29, 0.22, 0.23, i * 0.30, 1.15 + (1 - math.abs(i)) * 0.23, 0, rgb(168, 69 + i * 12, 126))
 		end
 	end
-end)
+end, "quete")
 
 local function folder(parent, name)
 	local result = parent:FindFirstChild(name)
@@ -2042,25 +2329,38 @@ local function importance(p)
 	return 1
 end
 
-function M.depuisProp(source, id)
+function M.depuisProp(source, id, teinte)
 	local model = Instance.new("Model")
 	model.Name = id
 	model:SetAttribute("ApercuDroit", true)
 	model:SetAttribute("PaletteDediee", true)
 	local pieces = piecesVisibles(source)
-	local sourcePivot = source:GetPivot()
-	local _, taille = source:GetBoundingBox()
+	local sourcePivot, portee
+	local outil = source:IsA("Tool")
+	if not outil then
+		sourcePivot = source:GetPivot()
+		local _, taille = source:GetBoundingBox()
+		portee = taille.Magnitude
+	else
+		local manche = source:FindFirstChild("Handle") or pieces[1]
+		if not manche then return model end
+		sourcePivot, portee = manche.CFrame, 0
+		for _, p in pieces do
+			portee = math.max(portee, (p.Position - sourcePivot.Position).Magnitude + p.Size.Magnitude)
+		end
+	end
 	-- La première pièce est la masse principale. Les suivantes favorisent
 	-- les zones encore vides et les garnitures qui expliquent l'usage.
+	-- Trois places restent libres pour le relief de la miniature.
 	local places = {}
-	while #pieces > 0 and #places < 25 do
+	while #pieces > 0 and #places < 22 do
 		local indice, meilleur = 1, -math.huge
 		for i, p in pieces do
-			local distance = taille.Magnitude
+			local distance = portee
 			for _, voisin in places do
 				distance = math.min(distance, (p.Position - voisin.Position).Magnitude)
 			end
-			local poids = volume(p) ^ 0.54 * importance(p) * (0.6 + distance / math.max(taille.Magnitude, 0.01))
+			local poids = volume(p) ^ 0.54 * importance(p) * (0.6 + distance / math.max(portee, 0.01))
 			if poids > meilleur then indice, meilleur = i, poids end
 		end
 		table.insert(places, table.remove(pieces, indice))
@@ -2073,6 +2373,9 @@ function M.depuisProp(source, id)
 		end
 		p.CFrame = sourcePivot:ToObjectSpace(original.CFrame)
 		p.Anchored, p.CanCollide, p.CanTouch, p.CanQuery = true, false, false, false
+		if teinte and (p.Material == mat.Metal or p.Material == mat.Slate or p.Material == mat.Rock) then
+			p.Color = teinte:Lerp(p.Color, 0.24)
+		end
 		if p.Material == mat.Neon then
 			if p.Name:lower():find("flamme") or p.Name:lower():find("braise") then
 				p.Name = "Lueur " .. p.Name
@@ -2095,6 +2398,16 @@ function M.depuisProp(source, id)
 	end
 	if avant > 0.15 then
 		for _, p in model:GetChildren() do p.CFrame = rot(0, pi, 0) * p.CFrame end
+	end
+	if outil then
+		model:SetAttribute("ApercuDroit", false)
+		local tete = model:FindFirstChild("Fer") or model:FindFirstChild("Lame") or model:FindFirstChild("Cuve")
+			or model:FindFirstChild("Pelle")
+			or model:FindFirstChild("Pointe") or model:FindFirstChild("Moulinet") or model:FindFirstChild("Tete")
+		if id == "spade" and tete then tete.Size *= V(0.78, 1.13, 1) end
+		M.rehausser(model, "outil", tete)
+	else
+		M.rehausser(model, "chantier")
 	end
 	return model
 end
@@ -2142,20 +2455,16 @@ function M.mobilier(replicatedStorage, modeles, config)
 		local nom = info and info.place or (id == "wall_lantern" and "Cat_wall_lantern")
 		if not nom then continue end
 		local source = modeles:FindFirstChild(nom)
-		local image = source and source:Clone() or config.Catalogue.build(nom)
+		local genere = not source and config.Catalogue.build(nom)
+		local image = source or genere
 		if not image then continue end
-		for _, objet in image:GetDescendants() do
-			if objet:IsA("BasePart") then
-				objet.CanCollide, objet.CanQuery, objet.CanTouch = false, false, false
-			elseif objet:IsA("Light") or objet:IsA("Fire") or objet:IsA("ParticleEmitter") or objet:IsA("ProximityPrompt") then
-				objet:Destroy()
-			end
-		end
+		local miniature = M.objet(id) or M.depuisProp(image, id)
+		if genere then genere:Destroy() end
+		M.raccorder(miniature)
+		M.centrer(miniature)
 		local ancienne = icons:FindFirstChild(id)
 		if ancienne then ancienne:Destroy() end
-		image.Name = id
-		image:SetAttribute("PaletteDediee", true)
-		image.Parent = icons
+		miniature.Parent = icons
 	end
 end
 

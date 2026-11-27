@@ -523,10 +523,10 @@ local function cut(d,name,outline,x,y,z,thickness,color,sx,sz)
 	for i=2,#polygon-1 do prism(polygon[1],polygon[i],polygon[i+1]) end
 end
 local cuts = {
-	raw={{-0.54,-0.24},{-0.20,-0.42},{0.33,-0.34},{0.58,-0.06},{0.41,0.26},{0.01,0.37},{-0.42,0.25}},
+	raw={{-0.54,-0.24},{-0.20,-0.42},{0.33,-0.34},{0.58,-0.06},{0.34,0.30},{-0.42,0.25}},
 	steak={{-0.58,-0.17},{-0.39,-0.39},{0.14,-0.45},{0.43,-0.32},{0.61,0.04},{0.36,0.32},{0.04,0.40},{-0.43,0.25}},
 	medallion={{-0.49,-0.19},{-0.31,-0.37},{0.24,-0.33},{0.50,-0.11},{0.39,0.24},{0.05,0.35},{-0.38,0.25}},
-	rib={{-0.54,-0.24},{-0.25,-0.42},{0.31,-0.35},{0.55,-0.17},{0.53,0.22},{0.15,0.40},{-0.37,0.28}},
+	rib={{-0.54,-0.24},{-0.25,-0.42},{0.54,-0.25},{0.53,0.22},{0.15,0.40},{-0.37,0.28}},
 }
 local function meat(d,id)
 	local raw,cooked,rind = rgb(156,62,60),rgb(134,68,41),rgb(186,107,60)
@@ -1062,7 +1062,7 @@ local function itemShape(d,id,kind,c)
 		end
 	elseif kind=="gear" then
 		local wheel=id=="gear_wood" and wood or steel
-		d.oval("Couronne dentée",0,0,0,0.49,0.49,0.17,wheel)
+		d.oval("Couronne dentée",0,0,0,0.49,0.49,0.17,wheel,nil,9)
 		for i=0,7 do
 			local a=i*math.pi/4
 			d.box("Dent",0.17,0.24,0.18,math.sin(a)*0.59,math.cos(a)*0.59,0,wheel,-a)
@@ -1277,6 +1277,20 @@ local function stage(parent,id,kind,build)
 	result[id]=kind
 	if #pending%60==0 then task.wait() end
 end
+local profilsObjets = {
+	meat = "croute", cloth = "tissu", hide = "tissu", heap = "filon", nugget = "filon", bar = "lingot",
+	brick = "chantier", wood = "ecorce", timber = "ecorce", brush = "outil", horse = "outil",
+	lamp = "outil", bell = "outil", seeds = "graine", badge = "quete", weights = "outil", scale = "outil",
+	gear = "outil", ball = "tissu", boat = "chantier", kite = "tissu", figurine = "quete",
+	instrument = "ecorce", osselets = "bijou", horn = "prise", shell = "prise", skinscale = "prise",
+	mushroom = "feuille", spores = "prise", fang = "prise", bone = "prise", tablet = "quete", map = "ecrit",
+	feather = "feuille", root = "feuille", flower = "feuille", bundle = "quete", egg = "graine",
+	pearl = "gemme", rotten = "croute", fish = "prise", crown = "bijou", banner = "tissu", anchor = "outil",
+	hardware = "outil", liquid = "verre", tablegame = "ecrit", hanging_art = "quete", case = "ecrit",
+	horn_call = "outil", juice = "verre", forged_nails = "outil", core = "gemme",
+	sack = "tissu", scale_art = "prise", gel_art = "ame", fang_art = "prise", bone_art = "prise",
+	vial_art = "verre",
+}
 if cibleObjets then
 	for id,kind in itemForms do
 		local existant = items:FindFirstChild(id)
@@ -1287,6 +1301,7 @@ if cibleObjets then
 		stage(items, id, kind, function(d)
 			d.model:SetAttribute("PaletteDediee", true)
 			itemShape(d, id, kind, c)
+			miniatures.rehausser(d.model, assert(profilsObjets[kind], kind))
 		end)
 	end
 	for _, entry in pending do

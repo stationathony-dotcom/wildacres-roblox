@@ -1,14 +1,14 @@
 # Style des miniatures de Wild Acres
 
-Une miniature doit se reconnaître sans nom dans une case de 36 px du sac, de la barre rapide ou de l’atelier. La caméra voit la face utile, un côté et le dessus. L’objet occupe la case sans couper ses extrémités.
+Le contrôle de lecture se fait sans nom à 48 px, puis à 36 px pour la barre rapide. La caméra voit la face utile, un côté et le dessus. L’objet occupe la case sans couper ses extrémités.
 
 ## Masse, structure et détail
 
 1. **Masse.** Donner à chaque objet son contour utile. Le cadenas montre son anse, le panier son ouverture et le bois son bout de coupe. Deux variantes se distinguent par un contour, un assemblage ou un ornement qui reste visible en petit.
 2. **Structure.** Montrer comment l’objet tient et à quoi il sert. Une poignée rejoint ses attaches, les pieds rejoignent le meuble et la garniture repose dans le plat. Limiter les petits éléments à ce qui rend l’objet identifiable.
-3. **Détail.** Faire ressortir la croûte, les cernes, un poinçon, un rivet ou une couture. Employer le bois pour le bois, le métal pour les ferrures, le tissu pour les étoffes, le verre pour les contenants et l’ardoise ou la roche pour les matières minérales. Réserver le `Neon` aux parties qui représentent une lueur.
+3. **Détail.** Faire lire trois plans avec la masse en ton moyen, le joint sombre et le relief clair. Incliner légèrement les pièces, décaler leurs extrémités, puis prolonger la matière en éclat ou en lobe sur un seul bord. Donner à chaque famille un signe reconnaissable, comme la nervure d’une feuille, le rabat du sachet ou le ménisque et l’étiquette du flacon. Réserver le `Neon` aux parties qui représentent une lueur.
 
-Compter de 6 à 25 pièces pour un objet dessiné à la main. Les pièces de construction suivent la géométrie du bloc que le joueur pose. Les miniatures sont centrées, avec leur dessous ramené au sol. Relier chaque composant à la masse, y compris les garnitures et les effets visibles. Regrouper les éléments qui doivent être lus ensemble, par exemple les branches dans une ligature et les baies dans une coupelle.
+Compter chaque `BasePart`, y compris une pièce transparente. Le plafond est de 25. Réserver les trois dernières places à l’appui sombre, au reflet et à la rupture du bord dans les modèles copiés du décor. Les pièces de construction suivent la géométrie du bloc que le joueur pose. Centrer la miniature avec son dessous au sol et raccorder les garnitures à la masse, par exemple les branches dans une ligature et les baies dans une coupelle.
 
 ## Repères par famille
 
@@ -27,7 +27,7 @@ Compter de 6 à 25 pièces pour un objet dessiné à la main. Les pièces de con
 | Âmes de boss | Orbe ou cristal qui reprend un trait du boss, comme sa couronne ou sa carapace. |
 | Prises de créatures | Croc, griffe, plume, écaille, corne ou autre partie identifiable de la créature. |
 
-Les sept dernières familles sont produites par [le banc de Claude](../tools/bancs/visuels_objets_familles.luau), à la fin de la génération des objets.
+Le banc des familles applique les mêmes règles de relief aux graines, livres, écrits, potions, teintures, âmes et prises. Le module des miniatures fournit les compositions et les quatre moules des flacons. [Banc des familles](../tools/bancs/visuels_objets_familles.luau) · [Rapport X33](X33-RAPPORT.md)
 
 ## Relecture des captures d’origine
 
@@ -61,8 +61,8 @@ Avec `python tools/sync.py` en marche, lancer cette ligne dans la barre de comma
 task.spawn(function() local s = game:GetService("ServerStorage"); s:SetAttribute("BancVisuelsObjets", "en cours"); local ok, r = pcall(function() return assert(loadstring(game:GetService("HttpService"):GetAsync("http://127.0.0.1:34873/banc?f=visuels_objets")))() end); s:SetAttribute("BancVisuelsObjets", ok and r or "ÉCHEC\n" .. tostring(r)); if ok then print(r) else warn(r) end end)
 ```
 
-Le banc charge le module sur disque, construit les modèles par identifiant, applique les finitions puis exécute le banc des familles. Les outils équipés utilisent leur dossier `IconesOutils`. Les anciennes miniatures du sac sont restaurées si un modèle du périmètre principal échoue. Le rapport compte les pièces visibles et totales, contrôle les tailles, vérifie les contacts avec des boîtes orientées et repère le `Neon` sans nom de lueur, flamme ou braise.
+Le banc charge le module sur disque, construit les modèles par identifiant, applique les finitions puis exécute le banc des familles. Il prépare aussi `IconesOutils` à partir de copies des outils, puis publie les deux dossiers après validation. Le contrôle compte les pièces visibles et totales, vérifie les contacts avec des boîtes orientées et contrôle les noms des pièces en `Neon`.
 
-`ServerStorage.BancVisuelsObjets` donne le résultat. `ServerStorage.BancVisuelsObjetsFamilles` liste les écarts du lot de Claude, dont le cas éventuel de `seed_sack`. Le banc des graines exclut expressément cet identifiant. La génération conserve son modèle précédent quand il existe.
+`ServerStorage.BancVisuelsObjets` donne le résultat global et `ServerStorage.BancVisuelsObjetsFamilles` celui du banc des familles. Le contenant `seed_sack` a son propre dessin, avec soufflet, gueule froncée et graine brodée.
 
-Pour la relecture photo, reprendre le nouvel ordre renvoyé par le banc des planches. La façade des miniatures du sac est du côté `-Z`. Regarder aussi une sélection sans noms à 36 px avec l’angle du HUD, notamment les serrures, sacs, plats, outils et herbes. [Banc de planches](../tools/bancs/planche_miniatures.luau) · [Cadrage du HUD](../src/StarterPlayer/StarterPlayerScripts/Hud.lua)
+Pour la relecture photo, reprendre l’ordre renvoyé par le banc des planches. La façade des objets du sac est du côté `-Z`. Vérifier les serrures, sacs, plats, outils et herbes à l’angle du HUD. [Banc de planches](../tools/bancs/planche_miniatures.luau) · [Cadrage du HUD](../src/StarterPlayer/StarterPlayerScripts/Hud.lua)

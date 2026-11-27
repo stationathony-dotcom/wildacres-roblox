@@ -128,7 +128,7 @@ Usage : chercher ici le fichier et la ligne, puis lire **seulement cette plage**
 - `src/ServerScriptService/Systemes/World.lua` (524 l.) Monde : charge / décharge les régions autour des joueurs (terrain Roblox + modèles),…
 - `src/ServerStorage/OutilsDev/ConstruireModeles.lua` (4280 l.) Construit les modèles du décor dans ServerStorage.Modeles. En Édition, préférer les…
   - fonctions : `docs/carte/ServerStorage_OutilsDev_ConstruireModeles.md`
-- `src/ServerStorage/OutilsDev/ConstruireModelesMiniatures.lua` (2495 l.) Miniatures dont la silhouette porte l’identité de l’objet.
+- `src/ServerStorage/OutilsDev/ConstruireModelesMiniatures.lua` (2655 l.) Miniatures dont la silhouette porte l’identité de l’objet.
   - fonctions : `docs/carte/ServerStorage_OutilsDev_ConstruireModelesMiniatures.md`
 - `src/ServerStorage/OutilsDev/ConstruireModelesOutils.lua` (174 l.) Modèles d’outils construits au démarrage, utilisables aussi en mode Edit.
 - `src/StarterPlayer/StarterPlayerScripts/Activites.client.lua` (237 l.) Tableau d'affichage (client) : Menu kind = "activites". Liste des événements du village…
@@ -216,3 +216,4 @@ Usage : chercher ici le fichier et la ligne, puis lire **seulement cette plage**
 - `docs/X27-RAPPORT.md` (10 Ko) — X27 · Props de Valdor au niveau des planches
 - `docs/X28-RAPPORT.md` (2 Ko) — X28 — Éclairage et ambiance
 - `docs/X32-RAPPORT.md` (13 Ko) — X32 · Armes et équipement portés
+- `docs/X33-RAPPORT.md` (7 Ko) — X33 — Miniatures des objets du sac
