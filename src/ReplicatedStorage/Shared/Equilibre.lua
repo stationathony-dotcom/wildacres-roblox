@@ -464,6 +464,12 @@ function E.apply(C)
 			note("haut niveau " .. m[2])
 		end
 	end
+	-- scierie (Systemes/Machines, 27/11) : modèle provisoire « Etabli » en attendant le sien (passage Codex)
+	if not I.sawmill and known(C, { planks = 20, iron_ingot = 6, stone = 10 }) then
+		I.sawmill = { name = "Scierie", icon = "🪚", price = 180, place = "Etabli", grid = "cell" }
+		table.insert(R, { item = "sawmill", needs = { planks = 20, iron_ingot = 6, stone = 10 }, station = "bench", cat = "outils", skill = { "artisanat", 10 } })
+		note("nouvel objet sawmill")
+	end
 	-- 12 ter. grimoires de sorts (Systemes/Magie)
 	for _, sp in E.SORTS do
 		local id, gr = "grimoire_" .. sp[1], sp[11]

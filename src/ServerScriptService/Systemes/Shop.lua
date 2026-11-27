@@ -1027,6 +1027,8 @@ local function buildPlaced(reg, d)
 		G.Util.prompt(base, "barracks_equip", "Équiper l'armée (fer + cuir)", "Caserne" .. whose, { dist = 12, hold = 0.6, key = Enum.KeyCode.R, pad = Enum.KeyCode.ButtonY, data = { Placed = d.id } })
 	elseif d.item == "windmill" then
 		G.Util.prompt(base, "mill", "Moulin (blé / farine)", "Moulin" .. whose, { dist = 10, data = { Placed = d.id } })
+	elseif d.item == "sawmill" then
+		G.Util.prompt(base, "sawmill", "Scierie (bois / planches)", "Scierie" .. whose, { dist = 10, data = { Placed = d.id } })
 	elseif d.item == "sprinkler" then
 		G.Util.prompt(base, "sprinkler", "Remplir (seau d'eau)", "Arroseur" .. whose, { dist = 8, data = { Placed = d.id } })
 	elseif d.item == "beehive" then

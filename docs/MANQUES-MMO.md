@@ -34,7 +34,7 @@ de `src/`. Règles d'`AGENTS.md` § 1 appliquées : **pas de saisons ni de clima
 7. **Écosystème vivant** (27/11 : forêts qui repoussent — souche 12 j, déraciné 24 j, jamais près d'une construction) : reproduction et migration des troupeaux, forêts qui repoussent et graines qui se dispersent,
    sécheresses et inondations ponctuelles (météo, pas saisons), floraison, créatures nocturnes, régénération des ressources.
 8. **PNJ évolutifs** (27/11 : village qui prospère / fleurit / décline selon l'or échangé au comptoir, −5 % à +10 %, les habitants en parlent) : domicile, horaires, inventaire, besoins ; village qui prospère ou décline selon le commerce des joueurs.
-9. **Automatisation étendue** : engrenages, axes, roue à aube, moulin à vent, poulies, treuils, presses, scierie, meules,
+9. **Automatisation étendue** (27/11 : scierie — bois le soir, 3 planches par bûche le lendemain, 4 avec une roue à eau) : engrenages, axes, roue à aube, moulin à vent, poulies, treuils, presses, scierie, meules,
    portes mécaniques, ascenseurs à contrepoids, ateliers semi-automatiques, machines combinables.
 10. **Vie sociale** (27/11 : mariages au village avec une bague sertie, +10 % d'expérience côte à côte) : mariages, guildes de métiers, concerts et instruments, courses de chevaux, concours agricoles, foires,
     festivals, jeux de plateau, musées, bibliothèques, journaux de joueurs.

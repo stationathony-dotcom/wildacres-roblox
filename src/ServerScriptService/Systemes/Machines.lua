@@ -15,6 +15,9 @@ function Machines.init(g)
 	G.Interact.onPrompt("mill", function(player, prompt)
 		Machines.mill(player, prompt:GetAttribute("Placed"))
 	end)
+	G.Interact.onPrompt("sawmill", function(player, prompt)
+		Machines.sawmill(player, prompt:GetAttribute("Placed"))
+	end)
 	G.Interact.onPrompt("sprinkler", function(player, prompt)
 		Machines.sprinkler(player, prompt:GetAttribute("Placed"))
 	end)
@@ -122,6 +125,33 @@ function Machines.mill(player: Player, id: string)
 	G.Util.toast(player, "🌾 " .. n .. " blé au moulin : la farine sera prête demain" .. (wheel and " (roue à eau : tout est moulu, 1 pour 1)." or " (2 pour 3 ; une roue à eau au bord de l'eau, tout près, fait mieux)."))
 	G.Joueurs.sync(player)
 	Machines.refresh(d)
+end
+
+-- Scierie (27/11, MANQUES-MMO n° 9) : du bois le soir, des planches le lendemain — 3 par bûche (2 à l'établi),
+-- 4 avec une roue à eau tout près. Même logique que le moulin : rien de gratuit, juste mieux et sans y passer.
+function Machines.sawmill(player: Player, id: string)
+	local d = G.Protection.findPlaced(id)
+	if not mine(player, d) then
+		return
+	end
+	d.saw = d.saw or { wood = 0, planks = 0 }
+	if d.saw.planks > 0 then
+		G.Joueurs.add(player, "planks", d.saw.planks)
+		d.saw.planks = 0
+		G.Joueurs.sync(player)
+		return
+	end
+	local n = G.Joueurs.count(player, "wood")
+	if n < 1 then
+		G.Util.toast(player, "La scierie attend du bois. Elle débite pendant la nuit.")
+		return
+	end
+	G.Joueurs.take(player, "wood", n)
+	d.saw.wood += n
+	local _, reg = G.Protection.findPlaced(id)
+	local wheel = Machines.waterPowered(reg and reg.state, d)
+	G.Util.toast(player, "🪚 " .. n .. " bois à la scierie : " .. n * (wheel and 4 or 3) .. " planches demain" .. (wheel and " (roue à eau)." or "."))
+	G.Joueurs.sync(player)
 end
 
 function Machines.sprinkler(player: Player, id: string)
@@ -256,6 +286,9 @@ function Machines.newDay()
 				-- une roue à eau au bord de l'eau, tout près : le moulin moud tout (1 pour 1 au lieu de 2 pour 3)
 				d.mill.flour += Machines.waterPowered(rs, d) and d.mill.wheat or math.floor(d.mill.wheat * 2 / 3)
 				d.mill.wheat = 0
+			elseif d.item == "sawmill" and d.saw and d.saw.wood > 0 then
+				d.saw.planks += d.saw.wood * (Machines.waterPowered(rs, d) and 4 or 3)
+				d.saw.wood = 0
 			elseif d.item == "sprinkler" and (d.water or 0) > 0 then
 				d.water -= 1
 				local cx, cz = math.floor(d.x / Config.CELL), math.floor(d.z / Config.CELL)
