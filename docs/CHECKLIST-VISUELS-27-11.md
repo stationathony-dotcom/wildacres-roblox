@@ -17,5 +17,11 @@ Astuce : capturer à y = 3000 (vitrine `_G.Vitrine`) — au ras du terrain, Stud
 - [ ] Vache, Yeti : blocs blancs presque sans détail
 - [ ] Serpent_Marin : silhouette fine sans nageoires lisibles
 
+## Miniatures (échantillon : 30 objets sur 1 037, 30 pièces sur 729 — `objets_echantillon.jpg`, `equipement_echantillon.jpg`)
+- [ ] Équipement : plusieurs pièces de torse et « Brassards » = boîtes unies (orange, bleu) qui ressemblent à des caisses
+- [ ] Bijoux : beaucoup reprennent le même anneau doré (amulette, collier, médaillon) — varier par matière / pierre
+- [ ] Prises de créatures (`prise_*`) : toutes sur le même socle en bois avec une forme générique — une forme par famille
+- Objets courants (nourriture, potions, cartes, outils, blocs de construction) : lisibles et variés
+
 ## Bons
 Coffres, Filons, Etal, Etabli, Enclume, Fontaine, Moulins, Maisons, Murs, Plancher, Palissade, Metier_Tisser, Champignon, Cactus, Puits, Ruche, Pot_Fleurs, Tonneaux, Tableau_Quetes, Tapis, Tronc_Couche, Tour_Guet, Poule, Scorpion, soldats.
