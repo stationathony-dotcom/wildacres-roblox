@@ -40,7 +40,7 @@ for _, k in (okB and Best.KINDS) or {} do
 	for _, l in k.loot or {} do dropped[l[1]] = true end
 end
 -- rênes : ajoutées au butin des bêtes au démarrage par Montures (m.drop = { bête, chance })
-local okM, Ecu = pcall(require, RS.Shared.Ecurie)
+local okM, Ecu = pcall(function() return loadstring(RS.Shared.Ecurie.Source)() end)
 for _, m in (okM and Ecu.LIST) or {} do
 	if m.drop and okB and Best.KINDS[m.drop[1]] then dropped["renes_" .. m.id] = true end
 end
