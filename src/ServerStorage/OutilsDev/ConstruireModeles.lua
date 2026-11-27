@@ -5168,4 +5168,58 @@ function M.griffonOrage(): Model
 	return m
 end
 
+-- Vargor, le Roi des loups (boss, 27/11, Claude) : loup noir massif, crinière blanche en mèches sur 3 rangs,
+-- couronne d'os, yeux de braise, cicatrice, crocs, échine hérissée, queue en panache.
+function M.vargor(): Model
+	dossier = dossierModeles()
+	local old = dossier:FindFirstChild("Vargor")
+	if old then
+		old:Destroy()
+	end
+	local m = nouveau("Vargor")
+	local n1, n2, n3 = rgb(30, 28, 34), rgb(48, 46, 54), rgb(72, 70, 80)
+	local b1, b2, os, braise = rgb(236, 234, 228), rgb(196, 192, 186), rgb(226, 214, 184), rgb(255, 120, 40)
+	local function Bx(n: string, t: Vector3, pos: Vector3, c: Color3, mat: Enum.Material?, rot: CFrame?)
+		return P(m, n, t, pos, c, mat or Mat.SmoothPlastic, { collide = false, rot = rot })
+	end
+	Bx("Corps", Vector3.new(2.6, 2.4, 5.0), Vector3.new(0, 3.2, 0.6), n1)
+	Bx("Echine", Vector3.new(2.0, 0.4, 4.4), Vector3.new(0, 4.55, 0.8), n2)
+	for k = 0, 5 do
+		Bx("Pique", Vector3.new(0.3, 0.6 - k * 0.05, 0.4), Vector3.new(0, 4.85, -0.8 + k * 0.7), n3)
+	end
+	Bx("Ventre", Vector3.new(2.2, 0.3, 4.2), Vector3.new(0, 1.95, 0.6), n3)
+	-- crinière en 3 rangs autour du cou
+	for r = 0, 2 do
+		Bx("Criniere", Vector3.new(3.4 - r * 0.4, 1.0, 1.0), Vector3.new(0, 3.2 + r * 0.8, -1.6 + r * 0.3), r % 2 == 0 and b1 or b2)
+	end
+	-- tête
+	Bx("Tete", Vector3.new(1.8, 1.6, 1.8), Vector3.new(0, 4.4, -2.7), n1)
+	Bx("Museau", Vector3.new(1.0, 0.8, 1.4), Vector3.new(0, 4.0, -4.0), n2)
+	Bx("Truffe", Vector3.new(0.4, 0.3, 0.12), Vector3.new(0, 4.3, -4.76), rgb(12, 10, 12))
+	Bx("Machoire", Vector3.new(0.9, 0.3, 1.2), Vector3.new(0, 3.45, -3.9), n3)
+	Bx("Cicatrice", Vector3.new(0.08, 0.9, 0.12), Vector3.new(0.5, 4.6, -3.62), rgb(150, 60, 60), nil, CFrame.Angles(0, 0, 0.4))
+	for _, sx in { -1, 1 } do
+		Bx("Oeil", Vector3.new(0.3, 0.18, 0.08), Vector3.new(sx * 0.48, 4.75, -3.62), braise, Mat.Neon)
+		Bx("Oreille", Vector3.new(0.4, 0.8, 0.3), Vector3.new(sx * 0.6, 5.5, -2.6), n2)
+		Bx("Croc", Vector3.new(0.14, 0.4, 0.14), Vector3.new(sx * 0.35, 3.55, -4.55), os)
+		-- couronne d'os : pointes autour du front
+		Bx("Couronne", Vector3.new(0.25, 0.9, 0.25), Vector3.new(sx * 0.62, 5.45, -2.3), os, nil, CFrame.Angles(0, 0, -sx * 0.3))
+		Bx("Couronne", Vector3.new(0.22, 0.7, 0.22), Vector3.new(sx * 0.35, 5.45, -3.0), os)
+		for _, z in { -1.2, 2.4 } do
+			Bx("Patte", Vector3.new(0.75, 2.4, 0.8), Vector3.new(sx * 0.85, 1.25, z), n2)
+			Bx("Pied", Vector3.new(0.9, 0.35, 1.1), Vector3.new(sx * 0.85, 0.18, z - 0.15), n1)
+			for g = -1, 1 do
+				Bx("Griffe", Vector3.new(0.12, 0.12, 0.3), Vector3.new(sx * 0.85 + g * 0.26, 0.08, z - 0.8), os)
+			end
+		end
+	end
+	Bx("Couronne", Vector3.new(0.26, 1.0, 0.26), Vector3.new(0, 5.55, -2.6), os)
+	-- queue en panache
+	Bx("Queue", Vector3.new(0.7, 0.7, 2.2), Vector3.new(0, 3.9, 4.0), n2, nil, CFrame.Angles(math.rad(25), 0, 0))
+	Bx("Queue", Vector3.new(0.9, 0.9, 1.0), Vector3.new(0, 3.3, 5.1), b2)
+	fini(m)
+	m:ScaleTo(1.8) -- taille de boss
+	return m
+end
+
 return M

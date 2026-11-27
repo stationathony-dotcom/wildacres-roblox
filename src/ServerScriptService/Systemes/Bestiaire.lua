@@ -133,7 +133,7 @@ local KINDS = {
 	minotaur = { name = "Minotaure", form = "humain", look = { "BF", "R", weapon = "hache", scale = 1.8, cornes = true, peau = "BF" }, hp = 900, dmg = 44, speed = 12, level = 9, style = "charge", radius = 2.4, elite = true,
 		loot = { { "horn", 2, 2, 1 }, { "rare_horn", 1, 1, 0.2 }, { "steel", 1, 3, 0.6 } }, gold = 7 },
 	-- boss uniques (repaires des grottes et errances)
-	vargor = { name = "Vargor, le Roi des loups", form = "quadrupede", look = { "P", "N", tete = 2, gros = true, oreilles = true, queue = true, criniere = "W", scale = 1.6 }, hp = 2000, dmg = 48, speed = 16, level = 9, style = "charge", radius = 3.2, boss = true, minion = "black_wolf",
+	vargor = { name = "Vargor, le Roi des loups", model = "Vargor", form = "quadrupede", look = { "P", "N", tete = 2, gros = true, oreilles = true, queue = true, criniere = "W", scale = 1.6 }, hp = 2000, dmg = 48, speed = 16, level = 9, style = "charge", radius = 3.2, boss = true, minion = "black_wolf",
 		loot = { { "royal_fur", 1, 1, 1 }, { "wolf_pelt", 3, 5, 1 } }, gold = 8 },
 	brumeglace = { name = "Brumeglace", form = "spectre", look = { "W", "BL", scale = 2.4 }, hp = 2600, dmg = 52, speed = 9, level = 10, style = "spore", radius = 3.6, boss = true, minion = "blizzard_spectre",
 		proj = { color = Color3.fromRGB(200, 240, 255), size = 2.6 }, loot = { { "frost_crystal", 1, 1, 1 }, { "ice_crystal", 4, 6, 1 } }, gold = 9 },
