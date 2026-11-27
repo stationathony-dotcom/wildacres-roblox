@@ -289,21 +289,28 @@ function M.biomes()
 		fini(m)
 	end
 	do
+		-- 27/11, Claude : masses de feuillage en blocs (plus de sphères), rameaux tombants fins sur 2 tons, racines
 		local m = nouveau("Arbre_Saule")
-		local brun = rgb(128, 104, 78)
+		local brun, brunF = rgb(128, 104, 78), rgb(92, 74, 56)
 		P(m, "Tronc", Vector3.new(1.8, 8, 1.8), Vector3.new(0, 4, 0), brun, Mat.Wood)
-		P(m, "Branche", Vector3.new(0.8, 3.4, 0.8), Vector3.new(1.2, 8.4, 0), brun, Mat.Wood, { rot = CFrame.Angles(0, 0, math.rad(-40)) })
-		P(m, "Branche", Vector3.new(0.8, 3.4, 0.8), Vector3.new(-1.2, 8.2, 0.4), brun, Mat.Wood, { rot = CFrame.Angles(0, 0, math.rad(40)) })
-		local v1, v2 = rgb(110, 156, 76), rgb(136, 176, 92)
-		feuillage(P(m, "Feuillage", Vector3.new(10, 5, 10), Vector3.new(0, 10, 0), v1, Mat.Grass, { forme = "Ball" }), false)
-		feuillage(P(m, "Feuillage", Vector3.new(7, 4, 7), Vector3.new(0.5, 12, -0.3), v2, Mat.Grass, { forme = "Ball" }), false)
-		-- rameaux qui retombent
-		for i = 0, 13 do
-			local a = i * math.pi * 2 / 14
-			local r = 3.6 + (i % 3) * 0.5
-			local len = 5 + (i % 4) * 0.8
+		for i = 0, 3 do
+			local a = i * math.pi / 2 + 0.3
+			P(m, "Racine", Vector3.new(1, 0.6, 1.6), Vector3.new(math.cos(a) * 1.2, 0.3, math.sin(a) * 1.2), brunF, Mat.Wood,
+				{ collide = false, rot = CFrame.Angles(0, -a, math.rad(-14)) })
+		end
+		P(m, "Branche", Vector3.new(0.8, 3.4, 0.8), Vector3.new(1.2, 8.4, 0), brun, Mat.Wood, { collide = false, rot = CFrame.Angles(0, 0, math.rad(-40)) })
+		P(m, "Branche", Vector3.new(0.8, 3.4, 0.8), Vector3.new(-1.2, 8.2, 0.4), brun, Mat.Wood, { collide = false, rot = CFrame.Angles(0, 0, math.rad(40)) })
+		local v1, v2, v3 = rgb(96, 146, 66), rgb(122, 168, 82), rgb(156, 194, 104)
+		feuillage(P(m, "Feuillage", Vector3.new(9.5, 2.6, 9.5), Vector3.new(0, 10.2, 0), v1, Mat.Grass), false)
+		feuillage(P(m, "Feuillage", Vector3.new(7, 2, 7), Vector3.new(0.4, 12, -0.3), v2, Mat.Grass, { rot = CFrame.Angles(0, 0.4, 0) }), false)
+		feuillage(P(m, "Feuillage", Vector3.new(4, 1.4, 4), Vector3.new(-0.2, 13.4, 0.2), v3, Mat.Grass, { rot = CFrame.Angles(0, 0.8, 0) }), false)
+		-- rameaux qui retombent (fins, deux tons, longueurs variées)
+		for i = 0, 15 do
+			local a = i * math.pi * 2 / 16
+			local r = 3.9 + (i % 3) * 0.35
+			local len = 4.6 + (i % 4) * 0.9
 			local x, z = math.cos(a) * r, math.sin(a) * r
-			feuillage(P(m, "Feuillage", Vector3.new(0.9, len, 0.9), Vector3.new(x, 9.5 - len / 2, z), (i % 2 == 0) and v2 or v1, Mat.Grass), false)
+			feuillage(P(m, "Feuillage", Vector3.new(0.6, len, 0.6), Vector3.new(x, 9.2 - len / 2, z), (i % 2 == 0) and v2 or v1, Mat.Grass), false)
 		end
 		fini(m)
 	end

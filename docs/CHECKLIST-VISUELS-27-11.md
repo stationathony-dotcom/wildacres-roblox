@@ -8,7 +8,7 @@ Astuce : capturer à y = 3000 (vitrine `_G.Vitrine`) — au ras du terrain, Stud
 ## Faibles (à refaire niveau planche — lot Codex)
 - [x] Chevre : refaite en blocs par Claude (27/11)
 - [x] Feu_Follet : flamme spectrale (Claude, 27/11)
-- [x] Arbres Chene, Bouleau, Sapin, Cerisier : refaits par Claude (27/11) — Saule à revoir
+- [x] Arbres Chene, Bouleau, Sapin, Cerisier, Saule : refaits par Claude (27/11)
 - [ ] Caillou, Branche : minuscules et plats
 - [ ] Ombre, Cambrioleur, PNJ_Base : silhouettes noires sans détail
 - [x] Myconide / Myconide_Ancien : visage, lamelles, points, bras, mousse (Claude, 27/11)
