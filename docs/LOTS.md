@@ -79,7 +79,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
 
 
 
-- [ ] Codex → Claude · `Systemes/Villes.lua` · compter les lettres UTF-8 du nom (`utf8.len`) après normalisation NFC.
+- [x] Codex → Claude · `Systemes/Villes.lua` · (fait 27/11 : NFC puis `utf8.len`, UTF-8 invalide refusé) compter les lettres UTF-8 du nom (`utf8.len`) après normalisation NFC.
       La limite actuelle en octets refuse certains noms de 3 à 24 lettres accentuées acceptés par la saisie du sac.
 
 ---
