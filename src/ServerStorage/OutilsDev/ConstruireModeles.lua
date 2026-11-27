@@ -2887,6 +2887,102 @@ function M.slimes()
 	end
 end
 
+-- Bêtes qui n'existaient que dans la place (27/11, Claude) : myconides, yéti, ours — mêmes dimensions qu'avant,
+-- mêmes noms de pièces (Corps, Chapeau, Tete, Oeil…), blocs à 3 tons, visage lisible.
+function M.betesFaitesMain()
+	dossier = dossierModeles()
+	local function neuf(nom: string): Model
+		local old = dossier:FindFirstChild(nom)
+		if old then
+			old:Destroy()
+		end
+		return nouveau(nom)
+	end
+	local function B(m: Model, n: string, t: Vector3, pos: Vector3, c: Color3, mat: Enum.Material?, rot: CFrame?)
+		return P(m, n, t, pos, c, mat or Mat.SmoothPlastic, { collide = false, rot = rot })
+	end
+	-- Myconide (k = échelle : 1 = petit, 2,2 = ancien, couvert de mousse)
+	local function myconide(nom: string, k: number, ancien: boolean)
+		local m = neuf(nom)
+		local cap1, cap2, cap3 = rgb(196, 70, 60), rgb(160, 52, 46), rgb(236, 226, 210)
+		local pied, ombre = rgb(232, 220, 196), rgb(196, 180, 150)
+		local function b(n, t, pos, c, mat, rot) return B(m, n, t * k, pos * k, c, mat, rot) end
+		b("Corps", Vector3.new(1.6, 2, 1.4), Vector3.new(0, 1.55, 0), pied)
+		b("Ventre", Vector3.new(1.3, 1.2, 0.1), Vector3.new(0, 1.4, -0.72), ombre)
+		b("Chapeau", Vector3.new(3.4, 0.9, 3.4), Vector3.new(0, 3.05, 0), cap1)
+		b("Chapeau", Vector3.new(2.6, 0.6, 2.6), Vector3.new(0, 3.75, 0), cap2)
+		b("Lamelles", Vector3.new(3.0, 0.15, 3.0), Vector3.new(0, 2.55, 0), ombre)
+		for i, pos in { { 1, 3.62, 0.9 }, { -1.1, 3.6, -0.6 }, { 0.3, 4.08, -0.5 }, { -0.5, 3.6, 1.2 } } do
+			b("Point", Vector3.new(0.5, 0.12, 0.5), Vector3.new(pos[1], pos[2], pos[3]), cap3)
+		end
+		for _, sx in { -1, 1 } do
+			b("Oeil", Vector3.new(0.28, 0.38, 0.08), Vector3.new(sx * 0.38, 2.05, -0.72), rgb(24, 20, 20))
+			b("Pied", Vector3.new(0.55, 0.6, 0.7), Vector3.new(sx * 0.45, 0.3, 0), ombre)
+			b("Bras", Vector3.new(0.35, 1.0, 0.35), Vector3.new(sx * 0.98, 1.6, 0), pied, nil, CFrame.Angles(0, 0, sx * 0.35))
+		end
+		b("Bouche", Vector3.new(0.5, 0.1, 0.08), Vector3.new(0, 1.65, -0.72), rgb(90, 50, 40))
+		if ancien then
+			for i = 0, 3 do
+				local a = i * 1.6
+				b("Mousse", Vector3.new(0.9, 0.2, 0.7), Vector3.new(math.cos(a) * 1.3, 3.55 + (i % 2) * 0.1, math.sin(a) * 1.3), rgb(86, 130, 60), Mat.Grass)
+			end
+			b("Barbe", Vector3.new(1.0, 0.7, 0.1), Vector3.new(0, 1.15, -0.76), rgb(110, 150, 80), Mat.Grass)
+		end
+		fini(m)
+	end
+	myconide("Myconide", 1, false)
+	myconide("Myconide_Ancien", 2.2, true)
+	-- Yéti : grand, fourrure en mèches sur 3 tons, face bleu-gris, cornes, griffes
+	do
+		local m = neuf("Yeti")
+		local f1, f2, f3, face = rgb(236, 240, 246), rgb(206, 214, 226), rgb(170, 182, 200), rgb(120, 150, 178)
+		B(m, "Corps", Vector3.new(3.4, 3.4, 2.1), Vector3.new(0, 5, 0), f1)
+		B(m, "Ventre", Vector3.new(2.4, 2.2, 0.1), Vector3.new(0, 4.8, -1.06), f2)
+		for i = 0, 3 do
+			B(m, "Meche", Vector3.new(3.6, 0.4, 2.2), Vector3.new(0, 3.5 + i * 0.85, 0.05), i % 2 == 0 and f2 or f3)
+		end
+		B(m, "Tete", Vector3.new(2.2, 1.9, 1.9), Vector3.new(0, 7.6, -0.1), f1)
+		B(m, "Visage", Vector3.new(1.5, 1.1, 0.12), Vector3.new(0, 7.45, -1.06), face)
+		for _, sx in { -1, 1 } do
+			B(m, "Oeil", Vector3.new(0.3, 0.22, 0.06), Vector3.new(sx * 0.38, 7.7, -1.13), rgb(20, 24, 40))
+			B(m, "Corne", Vector3.new(0.3, 0.9, 0.3), Vector3.new(sx * 0.95, 8.7, 0), f3, nil, CFrame.Angles(0, 0, -sx * 0.45))
+			B(m, "Bras", Vector3.new(1.0, 3.2, 1.0), Vector3.new(sx * 2.15, 4.9, 0), f2)
+			B(m, "Poing", Vector3.new(1.15, 0.9, 1.15), Vector3.new(sx * 2.2, 3.0, 0), f3)
+			for g = -1, 1 do
+				B(m, "Griffe", Vector3.new(0.15, 0.35, 0.15), Vector3.new(sx * 2.2 + g * 0.3, 2.45, -0.4), rgb(60, 60, 70))
+			end
+			B(m, "Jambe", Vector3.new(1.2, 3.3, 1.2), Vector3.new(sx * 0.85, 1.65, 0), f2)
+			B(m, "Pied", Vector3.new(1.4, 0.4, 1.7), Vector3.new(sx * 0.85, 0.2, -0.2), f3)
+		end
+		B(m, "Bouche", Vector3.new(0.8, 0.15, 0.06), Vector3.new(0, 7.15, -1.13), rgb(40, 30, 50))
+		fini(m)
+	end
+	-- Ours : masses du garrot et de la croupe, fourrure en 3 tons, museau clair, griffes
+	do
+		local m = neuf("Ours")
+		local b1, b2, b3, mus = rgb(110, 72, 44), rgb(86, 56, 34), rgb(140, 96, 60), rgb(196, 160, 120)
+		B(m, "Corps", Vector3.new(2.6, 2.2, 4.6), Vector3.new(0, 2.6, 0.3), b1)
+		B(m, "Garrot", Vector3.new(2.7, 0.7, 1.6), Vector3.new(0, 3.75, -1.0), b2)
+		B(m, "Croupe", Vector3.new(2.5, 0.5, 1.6), Vector3.new(0, 3.75, 1.6), b3)
+		B(m, "Ventre", Vector3.new(2.2, 0.3, 3.8), Vector3.new(0, 1.45, 0.3), b3)
+		for _, sx in { -1, 1 } do
+			for _, z in { -1.4, 1.8 } do
+				B(m, "Patte", Vector3.new(0.85, 1.7, 0.95), Vector3.new(sx * 0.85, 0.95, z), b2)
+				for g = -1, 1 do
+					B(m, "Griffe", Vector3.new(0.14, 0.12, 0.3), Vector3.new(sx * 0.85 + g * 0.24, 0.06, z - 0.55), rgb(230, 222, 200))
+				end
+			end
+			B(m, "Oreille", Vector3.new(0.45, 0.45, 0.25), Vector3.new(sx * 0.6, 4.15, -2.2), b2)
+			B(m, "Oeil", Vector3.new(0.18, 0.18, 0.06), Vector3.new(sx * 0.4, 3.55, -2.88), rgb(18, 14, 12))
+		end
+		B(m, "Tete", Vector3.new(1.8, 1.6, 1.5), Vector3.new(0, 3.35, -2.1), b1)
+		B(m, "Museau", Vector3.new(1.0, 0.8, 0.8), Vector3.new(0, 3.0, -3.0), mus)
+		B(m, "Truffe", Vector3.new(0.4, 0.3, 0.12), Vector3.new(0, 3.25, -3.42), rgb(30, 22, 20))
+		B(m, "Queue", Vector3.new(0.5, 0.5, 0.4), Vector3.new(0, 3.2, 2.75), b3)
+		fini(m)
+	end
+end
+
 -- Créatures du monde vivant (ennemis par biome, monstres de nuit, animaux sauvages).
 -- Convention des bêtes : pièce « Base » au sol, tout ancré, sans collision, la tête vers -Z.
 function M.creatures()
@@ -2894,6 +2990,7 @@ function M.creatures()
 	M.animauxFerme()
 	M.chevre()
 	M.slimes()
+	M.betesFaitesMain()
 	local function Q(m: Instance, nom: string, taille: Vector3, pos: Vector3, couleur: Color3, mat: Enum.Material?, o: Opts?): BasePart
 		local opts: Opts = o or {}
 		opts.collide = false
