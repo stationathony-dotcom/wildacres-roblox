@@ -2724,24 +2724,26 @@ function M.animauxFerme()
 	end
 	fini(cochon)
 
+	-- Oie (27/11, Claude : l'ancienne n'était qu'une pile de sphères) : blocs, cou en trois segments qui se
+	-- chevauchent, ailes repliées en 2 tons, bec et pattes orange, palmes au sol.
 	local oie = nouveau("Oie")
-	local blanc, plume, orange = rgb(244, 238, 220), rgb(216, 212, 199), rgb(224, 143, 67)
-	forme(oie, "Corps", Vector3.new(1.45, 1.3, 2.65), Vector3.new(0, 1.1, 0.28), blanc, { forme = "Ball" })
-	forme(oie, "Cou bas", Vector3.new(0.59, 1.38, 0.64), Vector3.new(0, 1.88, -0.66), blanc,
-		{ forme = "Ball", rot = CFrame.Angles(math.rad(-32), 0, 0) })
-	forme(oie, "Cou", Vector3.new(0.47, 1.27, 0.51), Vector3.new(0, 2.38, -0.98), blanc, { forme = "Ball" })
-	forme(oie, "Tête", Vector3.new(0.76, 0.69, 0.78), Vector3.new(0, 2.94, -1.05), blanc, { forme = "Ball" })
-	forme(oie, "Bec", Vector3.new(0.52, 0.24, 0.74), Vector3.new(0, 2.81, -1.57), orange,
-		{ forme = "Wedge", rot = CFrame.Angles(0, math.pi, 0) })
-	forme(oie, "Queue", Vector3.new(0.85, 0.34, 1.03), Vector3.new(0, 1.35, 1.5), plume,
-		{ forme = "Wedge", rot = CFrame.Angles(math.rad(8), 0, 0) })
-	yeux(oie, 0.25, 3.03, -1.36)
+	local blanc, plume, gris, orange = rgb(246, 242, 228), rgb(222, 216, 200), rgb(176, 172, 160), rgb(232, 146, 60)
+	forme(oie, "Corps", Vector3.new(1.4, 1.15, 2.4), Vector3.new(0, 1.2, 0.25), blanc)
+	forme(oie, "Poitrail", Vector3.new(1.2, 0.95, 0.5), Vector3.new(0, 1.3, -1.0), blanc)
+	forme(oie, "Ventre", Vector3.new(1.2, 0.25, 2), Vector3.new(0, 0.66, 0.3), plume)
+	forme(oie, "Queue", Vector3.new(0.9, 0.4, 0.7), Vector3.new(0, 1.55, 1.65), plume, { rot = CFrame.Angles(math.rad(-20), 0, 0) })
+	forme(oie, "Queue", Vector3.new(0.6, 0.3, 0.35), Vector3.new(0, 1.78, 1.98), gris, { rot = CFrame.Angles(math.rad(-30), 0, 0) })
+	forme(oie, "Cou bas", Vector3.new(0.55, 0.8, 0.55), Vector3.new(0, 1.95, -1.05), blanc, { rot = CFrame.Angles(math.rad(-15), 0, 0) })
+	forme(oie, "Cou", Vector3.new(0.45, 0.8, 0.45), Vector3.new(0, 2.55, -1.18), blanc)
+	forme(oie, "Tête", Vector3.new(0.6, 0.55, 0.75), Vector3.new(0, 3.05, -1.3), blanc)
+	forme(oie, "Bec", Vector3.new(0.36, 0.2, 0.55), Vector3.new(0, 2.95, -1.88), orange)
+	forme(oie, "Bec bas", Vector3.new(0.3, 0.1, 0.4), Vector3.new(0, 2.82, -1.8), rgb(200, 120, 50))
+	yeux(oie, 0.31, 3.12, -1.45)
 	for _, cote in { -1, 1 } do
-		forme(oie, "Aile", Vector3.new(0.36, 0.78, 1.88), Vector3.new(cote * 0.58, 1.21, 0.43), plume,
-			{ forme = "Ball", rot = CFrame.Angles(math.rad(-14), 0, 0) })
-		forme(oie, "Patte", Vector3.new(0.13, 0.69, 0.16), Vector3.new(cote * 0.31, 0.43, 0.12), orange)
-		forme(oie, "Palme", Vector3.new(0.42, 0.16, 0.62), Vector3.new(cote * 0.31, 0.08, -0.09), orange,
-			{ forme = "Wedge", rot = CFrame.Angles(0, cote * math.rad(10), 0) })
+		forme(oie, "Aile", Vector3.new(0.2, 0.8, 1.8), Vector3.new(cote * 0.75, 1.3, 0.35), plume)
+		forme(oie, "Remige", Vector3.new(0.18, 0.4, 0.9), Vector3.new(cote * 0.77, 1.15, 1.05), gris)
+		forme(oie, "Patte", Vector3.new(0.14, 0.7, 0.14), Vector3.new(cote * 0.32, 0.4, 0.2), orange)
+		forme(oie, "Palme", Vector3.new(0.45, 0.1, 0.55), Vector3.new(cote * 0.32, 0.05, 0.0), orange)
 	end
 	fini(oie)
 	return cochon, oie
