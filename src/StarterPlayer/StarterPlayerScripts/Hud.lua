@@ -155,17 +155,26 @@ function Hud.gearThumbnail(it, dim: boolean?): GuiObject?
 	local gear = require(shared:WaitForChild("Gear"))
 	local slot = gear.slotOf(it)
 	if not it.name or not gear.SLOTS[slot] then return nil end
+	local tint = nil
+	if it.dura ~= nil and it.dura <= 0 then
+		tint = function(part)
+			local c = part.Color
+			local grey = (c.R * 0.22 + c.G * 0.70 + c.B * 0.08) * 0.73
+			part.Color = Color3.new(grey, grey, grey)
+			if part.Material == Enum.Material.Neon then part.Material = Enum.Material.SmoothPlastic end
+		end
+	end
 	local template = equipment and equipment:FindFirstChild(slot .. ":" .. gear.baseName(it))
 	if template and template:IsA("Model") and template:GetAttribute("EquipementCommun")
 		and (slot ~= "armor" or template:GetAttribute("FamilleTorse"))
 		and template:GetAttribute("RangVisuel") == (it.rarity or 1) then
-		return Hud.objectViewport(template, dim)
+		return Hud.objectViewport(template, dim, tint)
 	end
 	-- Pièce de butin, ancienne sauvegarde ou place dont la planche n'a pas
 	-- encore été reconstruite. La vignette reprend la rareté de l'objet porté.
 	local visuals = require(shared:WaitForChild("GearVisuals"))
 	local model = visuals.preview(it)
-	local viewport = Hud.objectViewport(model, dim)
+	local viewport = Hud.objectViewport(model, dim, tint)
 	model:Destroy()
 	return viewport
 end

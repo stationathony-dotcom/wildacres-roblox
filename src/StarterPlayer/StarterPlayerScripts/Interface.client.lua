@@ -1594,6 +1594,10 @@ local function game_()
 				table.insert(lines, { (STAT_ICON[st] or "") .. " +" .. v .. " " .. Gear.STATS[st], broken and C.dim or C.green })
 			end
 		end
+		for skill, bonus in it.skills or {} do
+			local name = Config.SKILLS[skill] and Config.SKILLS[skill].name or skill
+			table.insert(lines, { string.format("%+d %s", bonus, name), broken and C.dim or C.green })
+		end
 		local worn = inv.equipped[it.slot]
 		if worn and worn.id ~= it.id then
 			table.insert(lines, { "Par rapport à " .. worn.name, C.dim, 12 })
@@ -1622,10 +1626,9 @@ local function game_()
 		}, { corner(4) })
 		stroke(broken and C.dim or r and r.color or Color3.fromRGB(70, 60, 50), r and 2 or 1).Parent = cell
 		if it then
-			local preview = Hud.gearThumbnail(it, broken)
+			local preview = Hud.gearThumbnail(it)
 			if preview then
 				cell.Text = ""
-				if broken then preview.ImageColor3 = Color3.fromRGB(119, 115, 121) end
 				preview.ZIndex, preview.Parent = 9, cell
 			end
 			if broken then
