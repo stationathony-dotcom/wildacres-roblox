@@ -2957,6 +2957,76 @@ function M.betesFaitesMain()
 		B(m, "Bouche", Vector3.new(0.8, 0.15, 0.06), Vector3.new(0, 7.15, -1.13), rgb(40, 30, 50))
 		fini(m)
 	end
+	-- Mouton : toison en touffes sur 3 tons, tête et pattes sombres, toupet
+	do
+		local m = neuf("Mouton")
+		local l1, l2, l3, noir = rgb(244, 240, 228), rgb(222, 216, 200), rgb(196, 188, 170), rgb(46, 40, 38)
+		B(m, "Laine", Vector3.new(2.6, 2.1, 3.6), Vector3.new(0, 2.45, 0.3), l1)
+		for i, z in { -1.0, 0.1, 1.2 } do
+			B(m, "Laine", Vector3.new(2.8, 0.5, 0.9), Vector3.new(0, 3.55, z), i % 2 == 0 and l2 or l1)
+			for _, sx in { -1, 1 } do
+				B(m, "Laine", Vector3.new(0.25, 1.4, 0.9), Vector3.new(sx * 1.38, 2.5, z), l3)
+			end
+		end
+		B(m, "Laine", Vector3.new(2.2, 0.4, 3.0), Vector3.new(0, 1.35, 0.3), l3)
+		B(m, "Tete", Vector3.new(1.1, 1.2, 1.2), Vector3.new(0, 3.0, -1.95), noir)
+		B(m, "Toupet", Vector3.new(1.2, 0.5, 0.9), Vector3.new(0, 3.75, -1.85), l2)
+		for _, sx in { -1, 1 } do
+			B(m, "Oeil", Vector3.new(0.18, 0.16, 0.06), Vector3.new(sx * 0.3, 3.2, -2.56), rgb(230, 220, 160))
+			B(m, "Oreille", Vector3.new(0.6, 0.18, 0.3), Vector3.new(sx * 0.75, 3.25, -1.9), noir, nil, CFrame.Angles(0, 0, -sx * 0.3))
+			for _, z in { -0.8, 1.3 } do
+				B(m, "Patte", Vector3.new(0.4, 1.5, 0.4), Vector3.new(sx * 0.7, 0.85, z), noir)
+			end
+		end
+		fini(m)
+	end
+	-- Vache : robe blanche à taches noires, mufle rose, cornes, pis, queue à touffe
+	do
+		local m = neuf("Vache")
+		local blanc, noir, rose, corne = rgb(244, 242, 236), rgb(40, 36, 34), rgb(232, 170, 160), rgb(232, 222, 196)
+		B(m, "Corps", Vector3.new(2.9, 2.5, 5.0), Vector3.new(0, 3.35, 0.5), blanc)
+		B(m, "Echine", Vector3.new(2.5, 0.35, 4.6), Vector3.new(0, 4.75, 0.5), rgb(226, 222, 214))
+		for i, t in { { 1.46, 3.5, -0.6, 1.4, 1.2 }, { -1.46, 3.2, 1.2, 1.6, 1.4 }, { 0, 4.62, 1.8, 1.2, 0.1 }, { 1.46, 2.9, 1.9, 1.0, 1.0 } } do
+			B(m, "Tache", Vector3.new(t[5] == 0.1 and 1.6 or 0.06, t[5] == 0.1 and 0.06 or t[5], t[4]), Vector3.new(t[1], t[2], t[3]), noir)
+		end
+		B(m, "Pis", Vector3.new(1.0, 0.5, 0.9), Vector3.new(0, 1.85, 1.6), rose)
+		B(m, "Tete", Vector3.new(1.6, 1.6, 1.6), Vector3.new(0, 4.1, -2.65), blanc)
+		B(m, "Tache", Vector3.new(0.9, 0.9, 0.06), Vector3.new(0.3, 4.4, -3.46), noir)
+		B(m, "Museau", Vector3.new(1.4, 0.8, 0.5), Vector3.new(0, 3.55, -3.55), rose)
+		B(m, "Queue", Vector3.new(0.2, 1.6, 0.2), Vector3.new(0, 3.6, 3.05), blanc)
+		B(m, "Queue", Vector3.new(0.4, 0.5, 0.4), Vector3.new(0, 2.65, 3.1), noir)
+		for _, sx in { -1, 1 } do
+			B(m, "Oeil", Vector3.new(0.18, 0.22, 0.06), Vector3.new(sx * 0.45, 4.45, -3.47), rgb(20, 18, 18))
+			B(m, "Corne", Vector3.new(0.6, 0.2, 0.2), Vector3.new(sx * 1.0, 5.0, -2.6), corne, nil, CFrame.Angles(0, 0, sx * 0.5))
+			B(m, "Oreille", Vector3.new(0.55, 0.3, 0.2), Vector3.new(sx * 1.0, 4.55, -2.3), noir)
+			for _, z in { -1.4, 2.3 } do
+				B(m, "Patte", Vector3.new(0.6, 2.2, 0.6), Vector3.new(sx * 0.95, 1.3, z), blanc)
+				B(m, "Sabot", Vector3.new(0.66, 0.3, 0.7), Vector3.new(sx * 0.95, 0.15, z), noir)
+			end
+		end
+		fini(m)
+	end
+	-- Loups : collerette de fourrure, oreilles pointues, queue touffue, 3 tons
+	for nom, c in { Loup = { rgb(120, 120, 128), rgb(90, 90, 98), rgb(176, 172, 166) }, Loup_Blanc = { rgb(232, 234, 238), rgb(196, 200, 210), rgb(250, 250, 250) } } do
+		local m = neuf(nom)
+		B(m, "Corps", Vector3.new(1.4, 1.4, 3.6), Vector3.new(0, 2.0, 0.4), c[1])
+		B(m, "Echine", Vector3.new(1.0, 0.3, 3.2), Vector3.new(0, 2.8, 0.4), c[2])
+		B(m, "Ventre", Vector3.new(1.2, 0.25, 2.6), Vector3.new(0, 1.28, 0.4), c[3])
+		B(m, "Collerette", Vector3.new(1.6, 1.6, 0.8), Vector3.new(0, 2.25, -1.3), c[3])
+		B(m, "Tete", Vector3.new(1.1, 1.0, 1.1), Vector3.new(0, 2.85, -2.0), c[1])
+		B(m, "Museau", Vector3.new(0.6, 0.5, 0.8), Vector3.new(0, 2.6, -2.85), c[3])
+		B(m, "Truffe", Vector3.new(0.25, 0.2, 0.1), Vector3.new(0, 2.8, -3.27), rgb(24, 22, 22))
+		B(m, "Queue", Vector3.new(0.5, 0.5, 1.8), Vector3.new(0, 2.3, 2.9), c[2], nil, CFrame.Angles(math.rad(25), 0, 0))
+		B(m, "Queue", Vector3.new(0.4, 0.4, 0.5), Vector3.new(0, 1.85, 3.8), c[3])
+		for _, sx in { -1, 1 } do
+			B(m, "Oeil", Vector3.new(0.14, 0.12, 0.06), Vector3.new(sx * 0.3, 3.05, -2.56), rgb(230, 190, 60), Mat.Neon)
+			B(m, "Oreille", Vector3.new(0.25, 0.5, 0.2), Vector3.new(sx * 0.35, 3.55, -1.9), c[2])
+			for _, z in { -0.8, 1.6 } do
+				B(m, "Patte", Vector3.new(0.35, 1.5, 0.4), Vector3.new(sx * 0.45, 0.8, z), c[2])
+			end
+		end
+		fini(m)
+	end
 	-- Ours : masses du garrot et de la croupe, fourrure en 3 tons, museau clair, griffes
 	do
 		local m = neuf("Ours")
@@ -3067,16 +3137,7 @@ function M.creatures()
 		end,
 	})
 	-- ---------------------------------------------------------------- Ours
-	quadrupede("Ours", {
-		corps = Vector3.new(3, 2.6, 4.4), couleur = rgb(100, 68, 44), pattes = 1.6, tete = Vector3.new(2, 1.8, 1.8), patte = 1,
-		extra = function(m, c)
-			museau(m, c, rgb(170, 130, 96), Vector3.new(1, 0.8, 0.7))
-			for _, sx in { -1, 1 } do
-				Q(m, "Oreille", Vector3.new(0.6, 0.6, 0.3), Vector3.new(sx * 0.7, c.hy + 1.05, c.hz + 0.2), rgb(80, 54, 36), Mat.SmoothPlastic, { forme = "Cylinder", rot = CFrame.Angles(0, math.rad(90), 0) })
-			end
-			queue(m, c, rgb(80, 54, 36), Vector3.new(0.5, 0.5, 0.5), 0)
-		end,
-	})
+	-- Ours : construit par M.betesFaitesMain (27/11)
 	-- ---------------------------------------------------------------- Araignée géante
 	do
 		local m = nouveau("Araignee")

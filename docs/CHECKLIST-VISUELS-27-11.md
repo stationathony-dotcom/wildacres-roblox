@@ -14,11 +14,12 @@ Astuce : capturer à y = 3000 (vitrine `_G.Vitrine`) — au ras du terrain, Stud
 - [x] Myconide / Myconide_Ancien : visage, lamelles, points, bras, mousse (Claude, 27/11)
 - [x] Oie : refaite en blocs par Claude (27/11)
 - [x] Ours : garrot, croupe, 3 tons, griffes (Claude, 27/11)
-- [ ] Mouton, Loup, Lapin : corps en un bloc, peu de détails
+- [x] Mouton, Loup, Loup_Blanc : toison en touffes / collerette, 3 tons (Claude, 27/11)
+- [ ] Lapin : simple
 - [x] Slime, Slime_Bleu : visage, reflet, noyau, gouttes (Claude, 27/11 ; constructeur M.slimes ajouté)
 - [x] Toit_Chaume : déjà détaillé (X27), mal vu de loin
 - [x] Yeti : fourrure en mèches, face, cornes, griffes (Claude, 27/11)
-- [ ] Vache : blocs presque sans détail
+- [x] Vache : taches, mufle, cornes, pis (Claude, 27/11)
 - [ ] Serpent_Marin : silhouette fine sans nageoires lisibles
 
 ## Miniatures (échantillon : 30 objets sur 1 037, 30 pièces sur 729 — `objets_echantillon.jpg`, `equipement_echantillon.jpg`)
