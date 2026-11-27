@@ -1513,7 +1513,7 @@ local function game_()
 	local equipment = require(Shared:WaitForChild("Equipement"))
 	local combatStats = {
 		critique = { equipment.CRIT_PAR_POINT, equipment.CRIT_MAX, "de chance de coup double" },
-		hate = { equipment.HATE_PAR_POINT, equipment.HATE_MAX, "de cadence" },
+		hate = { equipment.HATE_PAR_POINT, equipment.HATE_MAX, "de réduction du délai d’attaque" },
 		maitrise = { equipment.MAITRISE_PAR_POINT, math.huge, "de dégâts" },
 	}
 	local charTab = "stats"

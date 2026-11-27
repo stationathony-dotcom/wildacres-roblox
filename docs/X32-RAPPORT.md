@@ -178,4 +178,4 @@ task.spawn(function()
 end)
 ```
 
-Claude reprend la validation Édition et les captures. Comparer face, profil et dos à environ 15 studs, puis les miniatures à 36 px. En Play sur le PC fixe, vérifier le retour à l’attache après l’attaque, le dégagement entre l’arc et la torche, les superpositions aux articulations, l’usure puis la réparation depuis [P].
+Claude reprend la validation Édition et les captures. Comparer face, profil et dos à environ 15 studs, puis les miniatures à 36 px. En Play sur le PC fixe, vérifier le retour à l’attache après l’attaque, le dégagement entre l’arc et la torche et les superpositions aux articulations. Suivre l’usure et l’état brisé dans [P], faire réparer la pièce chez le forgeron ou l’armurier, puis vérifier que sa barre et ses statistiques se rétablissent dans [P].

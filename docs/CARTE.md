@@ -196,7 +196,6 @@ Usage : chercher ici le fichier et la ligne, puis lire **seulement cette plage**
 - `docs/QUETES-COUVERTURE.md` (4 Ko) — `liste quetes.txt` comparée au jeu (19/11/2026)
 - `docs/RAPPORT-BANC-PROPS.md` (65 Ko) — Rapport du banc visuels_props (21/11, Studio Edit)
 - `docs/REFERENCE.md` (131 Ko) — Wild Acres — fiche de référence (générée)
-- `docs/X32-RAPPORT.md` (13 Ko) — X32 · Armes et équipement portés
   - sections : Contrôles:10 · Objets:16 · Trouvailles par source et biome (chance par geste):1112 · Cultures:1260 · Poissons:1288 · Bêtes de ferme:1300 · Dressage (bêtes sauvages):1311 · Créatures:1328 · Compétences : ce qui donne de l'XP:1504 · Or : entrées et sorties:1601
 - `docs/RELECTURE-PLANCHES-VISUELLES.md` (11 Ko) — Wild Acres — relecture visuelle des 37 planches
 - `docs/STORE.md` (1 Ko) — Props gratuits du Store créateur (lot X30)
@@ -210,3 +209,4 @@ Usage : chercher ici le fichier et la ligne, puis lire **seulement cette plage**
 - `docs/VERIFICATION-SERVEUR.md` (7 Ko) — Vérification des documents — couloir Claude (serveur, règles, monde)
 - `docs/X27-RAPPORT.md` (10 Ko) — X27 · Props de Valdor au niveau des planches
 - `docs/X28-RAPPORT.md` (2 Ko) — X28 — Éclairage et ambiance
+- `docs/X32-RAPPORT.md` (13 Ko) — X32 · Armes et équipement portés
