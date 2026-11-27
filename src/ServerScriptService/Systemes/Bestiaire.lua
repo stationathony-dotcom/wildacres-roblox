@@ -307,7 +307,7 @@ local KINDS = {
 	woods_spirit = { name = "Esprit des bois", form = "spectre", look = { "V", "Y" }, hp = 140, dmg = 18, speed = 13, level = 5, style = "charge", radius = 1.2, night = true, fearsLight = true,
 		loot = { { "resin", 1, 2, 0.6 } }, gold = 1 },
 	-- nouveaux boss itinérants (18/11) : butin rare = leur âme (Shared/Prises) + pièces d'équipement
-	snow_wyvern = { name = "Wyverne des neiges", form = "volant", look = { "W", "BL", scale = 2.6 }, hp = 2400, dmg = 50, speed = 15, level = 10, style = "spore", radius = 3.4, boss = true, flies = true, minion = "frost_spider",
+	snow_wyvern = { name = "Wyverne des neiges", model = "Wyverne_Neiges", form = "volant", look = { "W", "BL", scale = 2.6 }, hp = 2400, dmg = 50, speed = 15, level = 10, style = "spore", radius = 3.4, boss = true, flies = true, minion = "frost_spider",
 		proj = { color = Color3.fromRGB(190, 230, 255), size = 2 }, loot = { { "ice_crystal", 2, 4, 1 }, { "feather", 4, 8, 1 } }, gold = 9 },
 	mountain_giant = { name = "Géant des montagnes", form = "humain", look = { "P", "BF", weapon = "massue", scale = 2.8, peau = "P" }, hp = 3000, dmg = 56, speed = 9, level = 10, style = "charge", radius = 3.8, boss = true, minion = "cave_troll",
 		loot = { { "stone", 10, 20, 1 }, { "gold_ore", 2, 4, 1 } }, gold = 10 },
@@ -335,6 +335,12 @@ local KINDS = {
 		proj = { color = Color3.fromRGB(255, 120, 40), size = 2.4 }, loot = { { "meteorite", 1, 1, 0.5 }, { "ruby", 1, 2, 1 }, { "coal", 6, 10, 1 } }, gold = 11 },
 	mist_stag_king = { name = "Cerf-Roi des brumes", model = "Cerf_Roi", form = "quadrupede", look = { "W", "BL", scale = 2.4 }, hp = 2600, dmg = 50, speed = 15, level = 10, style = "charge", radius = 3.6, boss = true, minion = "spectral_fox",
 		loot = { { "moon_flower", 2, 3, 1 }, { "sapphire", 1, 1, 0.5 }, { "ancient_jewel", 1, 2, 1 } }, gold = 11 },
+	fjord_kraken = { name = "Kraken des fjords", model = "Kraken_Fjords", form = "serpent", look = { "VI", "N", scale = 2.4 }, hp = 3200, dmg = 56, speed = 10, level = 10, style = "spore", radius = 4.4, boss = true, swims = true, minion = "sea_serpent",
+		proj = { color = Color3.fromRGB(60, 30, 80), size = 2.6 }, loot = { { "pearl", 3, 5, 1 }, { "rare_shell", 1, 3, 1 }, { "sapphire", 1, 1, 0.4 } }, gold = 12 },
+	firefly_queen = { name = "Reine des lucioles", model = "Reine_Lucioles", form = "volant", look = { "O", "BF", scale = 2.4 }, hp = 2400, dmg = 48, speed = 15, level = 10, style = "spore", radius = 3.4, boss = true, flies = true, minion = "bee_swarm",
+		proj = { color = Color3.fromRGB(255, 236, 120), size = 2 }, loot = { { "amber", 2, 4, 1 }, { "moon_flower", 1, 2, 1 }, { "honey", 3, 6, 1 } }, gold = 10 },
+	rust_golem = { name = "Golem de rouille", model = "Golem_Rouille", form = "golem", look = { "R", "P", scale = 2.4 }, hp = 3600, dmg = 60, speed = 8, level = 10, style = "charge", radius = 4, boss = true, minion = "stone_golem",
+		loot = { { "steel", 4, 8, 1 }, { "iron_ingot", 4, 8, 1 }, { "mineral_heart", 1, 1, 0.3 } }, gold = 12 },
 	cave_troll = { name = "Troll des cavernes", form = "humain", look = { "P", "BF", weapon = "massue", scale = 1.8, peau = "P" }, hp = 700, dmg = 38, speed = 9, level = 8, style = "charge", radius = 2.4, elite = true,
 		loot = { { "stone", 4, 8, 1 }, { "ore", 1, 3, 0.6 } }, gold = 5 },
 	-- 20/11 : les trois dernières de « listes ennemi.txt », modèles faits par Codex (ServerStorage.Modeles)
@@ -455,6 +461,9 @@ Bestiaire.ROAMING = {
 	bronze_bull = { name = "Taureau d'airain", biome = { "prairie" } },
 	ember_salamander = { name = "Salamandre de braise", biome = { "desert" } },
 	mist_stag_king = { name = "Cerf-Roi des brumes", biome = { "foret" }, night = true },
+	fjord_kraken = { name = "Kraken des fjords", biome = { "neige", "marais" }, mer = true },
+	firefly_queen = { name = "Reine des lucioles", biome = { "foret" }, night = true },
+	rust_golem = { name = "Golem de rouille", biome = { "prairie" } },
 }
 
 -- ----------------------------------------------------------------- Modèles

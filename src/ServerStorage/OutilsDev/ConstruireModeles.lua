@@ -5386,4 +5386,139 @@ function M.cerfRoi(): Model
 	return m
 end
 
+-- Kraken des fjords (boss maritime) : tête-manteau violacée, gros yeux, bec, 8 tentacules qui ondulent en segments
+function M.kraken(): Model
+	local m, Bx, barre = bossBuilder("Kraken_Fjords")
+	local k1, k2, k3, ventouse = rgb(110, 60, 120), rgb(80, 40, 92), rgb(150, 96, 160), rgb(230, 190, 210)
+	Bx("Manteau", Vector3.new(4, 4.6, 4), Vector3.new(0, 4.6, 0.6), k1)
+	Bx("Sommet", Vector3.new(3.2, 1.4, 3.2), Vector3.new(0, 7.5, 0.8), k2)
+	Bx("Taches", Vector3.new(4.05, 0.4, 1.2), Vector3.new(0, 5.6, 0.2), k3)
+	Bx("Corps", Vector3.new(3.4, 1.6, 3.4), Vector3.new(0, 2.1, 0.2), k1)
+	Bx("Bec", Vector3.new(0.8, 0.6, 0.6), Vector3.new(0, 1.8, -1.8), rgb(40, 30, 30))
+	for _, sx in { -1, 1 } do
+		Bx("Oeil", Vector3.new(1.0, 1.0, 0.2), Vector3.new(sx * 1.0, 3.6, -1.42), rgb(250, 220, 90), Mat.Neon)
+		Bx("Pupille", Vector3.new(0.3, 0.7, 0.1), Vector3.new(sx * 1.0, 3.6, -1.55), rgb(20, 14, 20))
+	end
+	for t = 0, 7 do
+		local a = t * math.pi / 4 + 0.2
+		local prev = Vector3.new(math.cos(a) * 1.4, 1.6, math.sin(a) * 1.4 + 0.2)
+		for k = 1, 4 do
+			local r = 1.4 + k * 1.3
+			local nxt = Vector3.new(math.cos(a + k * 0.25) * r, 0.5 + math.max(0, k - 2) * 0.6 * (t % 2), math.sin(a + k * 0.25) * r + 0.2)
+			barre("Tentacule", prev, nxt, 0.75 - k * 0.12, (k % 2 == 0) and k2 or k1)
+			if k <= 2 then
+				Bx("Ventouse", Vector3.new(0.25, 0.1, 0.25), (prev + nxt) / 2 - Vector3.new(0, 0.32 - k * 0.05, 0), ventouse)
+			end
+			prev = nxt
+		end
+	end
+	fini(m)
+	m:ScaleTo(1.6)
+	return m
+end
+
+-- Reine des lucioles (boss volant, forêt, nuit) : grand insecte doré, abdomen lumineux, quatre ailes translucides,
+-- antennes plumeuses, couronne de lumière
+function M.reineLucioles(): Model
+	local m, Bx, barre = bossBuilder("Reine_Lucioles")
+	local c1, c2, lueur, aile = rgb(70, 54, 30), rgb(110, 86, 44), rgb(255, 236, 120), rgb(220, 240, 255)
+	Bx("Thorax", Vector3.new(1.6, 1.4, 1.8), Vector3.new(0, 3.4, -0.4), c2)
+	Bx("Abdomen", Vector3.new(1.8, 1.6, 2.6), Vector3.new(0, 3.1, 1.6), c1)
+	local ventre = Bx("Lanterne", Vector3.new(1.6, 1.3, 1.4), Vector3.new(0, 2.9, 2.6), lueur, Mat.Neon)
+	Bx("Tete", Vector3.new(1.2, 1.0, 1.0), Vector3.new(0, 3.7, -1.7), c2)
+	for _, sx in { -1, 1 } do
+		Bx("Oeil", Vector3.new(0.4, 0.5, 0.4), Vector3.new(sx * 0.55, 3.8, -2.0), rgb(60, 200, 160), Mat.Neon)
+		barre("Antenne", Vector3.new(sx * 0.3, 4.1, -2.0), Vector3.new(sx * 1.0, 5.6, -3.0), 0.12, c1)
+		Bx("Plume", Vector3.new(0.5, 0.2, 0.7), Vector3.new(sx * 1.0, 5.6, -3.0), lueur, Mat.Neon)
+		for k = 0, 1 do
+			local w = Bx("Aile", Vector3.new(3.6 - k * 0.8, 0.1, 1.6 - k * 0.3), Vector3.new(sx * (2.4 - k * 0.3), 4.4 - k * 0.5, -0.6 + k * 1.2), aile, Mat.Glass,
+				CFrame.Angles(0, 0, sx * (0.35 - k * 0.2)))
+			w.Transparency = 0.45
+		end
+		for j, z in { -0.8, -0.3, 0.2 } do
+			barre("Patte", Vector3.new(sx * 0.7, 2.9, z), Vector3.new(sx * 1.4, 1.4, z - 0.2 + j * 0.1), 0.14, c1)
+			barre("Patte", Vector3.new(sx * 1.4, 1.4, z - 0.2 + j * 0.1), Vector3.new(sx * 1.6, 0.1, z), 0.12, c1)
+		end
+	end
+	for k = 0, 4 do
+		local a = k * math.pi * 2 / 5
+		Bx("Couronne", Vector3.new(0.18, 0.5, 0.18), Vector3.new(math.cos(a) * 0.45, 4.45, -1.7 + math.sin(a) * 0.4), lueur, Mat.Neon)
+	end
+	local l = Instance.new("PointLight")
+	l.Range, l.Brightness, l.Color = 18, 2, lueur
+	l.Parent = ventre
+	fini(m)
+	m:ScaleTo(1.9)
+	return m
+end
+
+-- Golem de rouille (boss des ruines de prairie) : vieille machine de garde en fer rouillé, plaques boulonnées, cœur
+-- de vapeur lumineux, poings-masses, mousse et lierre qui ont poussé dessus
+function M.golemRouille(): Model
+	local m, Bx = bossBuilder("Golem_Rouille")
+	local r1, r2, r3, fer, coeur, lierre = rgb(150, 80, 50), rgb(116, 60, 40), rgb(176, 110, 70), rgb(90, 92, 100), rgb(120, 230, 255), rgb(80, 130, 60)
+	Bx("Torse", Vector3.new(4.4, 3.6, 2.8), Vector3.new(0, 6.4, 0), r1, Mat.CorrodedMetal)
+	Bx("Ventre", Vector3.new(3.4, 1.4, 2.4), Vector3.new(0, 4.0, 0), r2, Mat.CorrodedMetal)
+	local c = Bx("Coeur", Vector3.new(1.2, 1.2, 0.3), Vector3.new(0, 6.4, -1.45), coeur, Mat.Neon)
+	Bx("Grille", Vector3.new(1.6, 0.15, 0.2), Vector3.new(0, 6.4, -1.6), fer, Mat.Metal)
+	Bx("Tete", Vector3.new(2.0, 1.6, 1.8), Vector3.new(0, 9.0, -0.2), r3, Mat.CorrodedMetal)
+	Bx("Visiere", Vector3.new(1.6, 0.3, 0.1), Vector3.new(0, 9.1, -1.12), coeur, Mat.Neon)
+	for _, sx in { -1, 1 } do
+		Bx("Epaule", Vector3.new(1.8, 1.4, 2.0), Vector3.new(sx * 2.9, 7.6, 0), r2, Mat.CorrodedMetal)
+		Bx("Bras", Vector3.new(1.2, 3.0, 1.2), Vector3.new(sx * 3.1, 5.4, 0), r1, Mat.CorrodedMetal)
+		Bx("Poing", Vector3.new(2.0, 1.8, 2.0), Vector3.new(sx * 3.2, 3.1, 0), fer, Mat.Metal)
+		Bx("Jambe", Vector3.new(1.5, 3.4, 1.6), Vector3.new(sx * 1.2, 1.7, 0), r2, Mat.CorrodedMetal)
+		Bx("Pied", Vector3.new(1.9, 0.5, 2.4), Vector3.new(sx * 1.2, 0.25, -0.3), fer, Mat.Metal)
+		for k = -1, 1 do
+			Bx("Boulon", Vector3.new(0.25, 0.25, 0.15), Vector3.new(sx * 1.6, 6.4 + k * 1.0, -1.45), fer, Mat.Metal)
+		end
+	end
+	Bx("Lierre", Vector3.new(0.6, 2.4, 0.2), Vector3.new(1.3, 6.0, 1.45), lierre, Mat.Grass)
+	Bx("Mousse", Vector3.new(1.6, 0.3, 1.2), Vector3.new(-2.9, 8.4, 0.2), lierre, Mat.Grass)
+	local l = Instance.new("PointLight")
+	l.Range, l.Brightness, l.Color = 12, 1.5, coeur
+	l.Parent = c
+	fini(m)
+	m:ScaleTo(1.4)
+	return m
+end
+
+-- Wyverne des neiges (redessinée) : blanche et bleu glacier, ailes membraneuses à 3 doigts, cornes, crête de glace
+function M.wyverneNeiges(): Model
+	local m, Bx, barre = bossBuilder("Wyverne_Neiges")
+	local w1, w2, glace, memb = rgb(232, 240, 248), rgb(186, 204, 226), rgb(150, 220, 255), rgb(170, 200, 236)
+	Bx("Corps", Vector3.new(2.4, 2.2, 4.4), Vector3.new(0, 3.6, 0.4), w1)
+	Bx("Ventre", Vector3.new(2.0, 0.3, 3.8), Vector3.new(0, 2.5, 0.4), w2)
+	for k = 0, 4 do
+		Bx("Crete", Vector3.new(0.3, 0.8 - k * 0.08, 0.5), Vector3.new(0, 4.65 + (0.8 - k * 0.08) / 2, -1.2 + k * 0.9), glace, Mat.Ice)
+	end
+	barre("Cou", Vector3.new(0, 4.2, -1.6), Vector3.new(0, 5.8, -3.0), 1.1, w1)
+	Bx("Tete", Vector3.new(1.4, 1.1, 1.8), Vector3.new(0, 6.1, -3.6), w1)
+	Bx("Machoire", Vector3.new(1.1, 0.4, 1.4), Vector3.new(0, 5.5, -3.9), w2)
+	for _, sx in { -1, 1 } do
+		Bx("Oeil", Vector3.new(0.08, 0.22, 0.35), Vector3.new(sx * 0.71, 6.3, -3.9), glace, Mat.Neon)
+		barre("Corne", Vector3.new(sx * 0.45, 6.6, -3.2), Vector3.new(sx * 0.8, 7.4, -2.4), 0.22, glace, Mat.Ice)
+		-- aile : os de bras et trois doigts, membrane en panneaux
+		local epaule, coude = Vector3.new(sx * 1.2, 4.4, -0.4), Vector3.new(sx * 4.0, 6.0, 0.2)
+		barre("Bras", epaule, coude, 0.35, w2)
+		for k, d in { { 7.2, 6.6, -0.2 }, { 7.0, 4.6, 1.2 }, { 5.6, 3.6, 2.2 } } do
+			local bout = Vector3.new(sx * d[1], d[2], d[3])
+			barre("Doigt", coude, bout, 0.2, w2)
+			local mid = (coude + bout) / 2
+			local mb = Bx("Membrane", Vector3.new(0.1, 1.6 - k * 0.2, (bout - coude).Magnitude * 0.8), Vector3.zero, memb, nil)
+			mb.CFrame = CFrame.lookAt(mid + Vector3.new(0, -0.7, 0.6), bout + Vector3.new(0, -0.7, 0.6))
+			mb.Transparency = 0.2
+		end
+		Bx("Patte", Vector3.new(0.7, 2.0, 0.8), Vector3.new(sx * 0.8, 1.6, 1.4), w2)
+		Bx("Pied", Vector3.new(0.9, 0.4, 1.2), Vector3.new(sx * 0.8, 0.4, 1.2), glace, Mat.Ice)
+	end
+	for k = 0, 4 do
+		Bx("Queue", Vector3.new(1.4 - k * 0.22, 1.2 - k * 0.18, 1.3), Vector3.new(0, 3.4 - k * 0.2, 3.1 + k * 1.15), k % 2 == 0 and w1 or w2)
+	end
+	Bx("Pointe", Vector3.new(0.6, 0.5, 0.9), Vector3.new(0, 2.4, 8.4), glace, Mat.Ice)
+	fini(m)
+	m:ScaleTo(1.8)
+	return m
+end
+
 return M
