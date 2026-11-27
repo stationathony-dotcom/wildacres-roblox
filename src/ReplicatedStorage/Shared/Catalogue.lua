@@ -364,6 +364,12 @@ black_scale|Écaille noire (Roi des marais)|🖤|700|m|-|
 golden_carapace|Carapace dorée (Scarabée royal)|🐞|800|m|-|
 frost_crystal|Cristal de givre (Brumeglace)|❄️|800|m|-|
 lost_crown|Couronne oubliée|👑|1500|v|-|
+mimic_tongue|Langue de mimique (Coffre-mimique)|👅|800|m|-|
+angler_lure|Leurre des abysses (Baudroie)|🏮|800|m|-|
+mammoth_tusk|Défense de givre (Mammouth)|🦣|800|m|-|
+storm_feather|Plume d'orage (Griffon d'orage)|⚡|800|m|-|
+widow_silk|Soie noire (Veuve des cavernes)|🕸️|800|m|-|
+croc_king_hide|Cuir de roi-croco (Crocodile des marais)|🐊|800|m|-|
 # ---------- Faction et armée
 clan_banner|Bannière de clan|🚩|60|p:banniere:R|cloth2 planks2 dye1 @bench|decoration
 guard_badge|Insigne de garde|🛡️|60|v|iron_ingot1 dye1 @bench|commerce

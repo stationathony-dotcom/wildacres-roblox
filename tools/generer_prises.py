@@ -12,6 +12,13 @@ for l in dump:
 K["snow_wyvern"] = {"name": "Wyverne des neiges", "form": "volant", "rank": "B", "level": 10}
 K["mountain_giant"] = {"name": "Géant des montagnes", "form": "humain", "rank": "B", "level": 10}
 K["deep_beast"] = {"name": "Bête des profondeurs", "form": "serpent", "rank": "B", "level": 10}
+# boss des planches du 26/11 (lot C15)
+K["mimic_chest"] = {"name": "Coffre-mimique des ruines", "form": "masse", "rank": "B", "level": 10}
+K["abyss_angler"] = {"name": "Baudroie des abysses", "form": "serpent", "rank": "B", "level": 10}
+K["frost_mammoth"] = {"name": "Mammouth de givre", "form": "quadrupede", "rank": "B", "level": 10}
+K["storm_griffin"] = {"name": "Griffon d'orage", "form": "volant", "rank": "B", "level": 10}
+K["cavern_widow"] = {"name": "Veuve des cavernes", "form": "insecte", "rank": "B", "level": 10}
+K["marsh_crocodile"] = {"name": "Crocodile des marais", "form": "quadrupede", "rank": "B", "level": 10}
 
 # Enemies : forme d'après le modèle
 EF = {"Ours": "quadrupede", "Sanglier": "quadrupede", "Chef_Gobelin": "humain", "Myconide_Ancien": "masse", "Roi_Slimes": "masse",
@@ -27,6 +34,10 @@ for k, v in K.items():
 def pick(name, form):
     n = name.lower()
     # matériau qui a du sens pour la bête, emplacement de la pièce, nom de la pièce
+    if "coffre" in n: return ("Langue de mimique", "👅", "trinket", "Bourse vorace")
+    if "baudroie" in n: return ("Leurre lumineux", "🏮", "trinket", "Lanterne des abysses")
+    if "mammouth" in n: return ("Défense de mammouth", "🦣", "weapon", "Hache à défense")
+    if "veuve" in n: return ("Glande à soie noire", "🕸️", "armor", "Tunique de soie noire")
     if "sorci" in n or "moine" in n: return ("Grimoire déchiré", "📜", "hat", "Capuche ensorcelée")
     if "gobelin" in n: return ("Oreille pointue", "👂", "trinket", "Amulette gobeline")
     if "wyverne" in n: return ("Écailles", "🐉", "armor", "Armure d'écailles")
@@ -94,8 +105,8 @@ BASE = {"weapon": ("{ iron_ingot = 2, planks = 1 }", "anvil"), "armor": ("{ leat
         "hat": ("{ cloth = 2 }", "loom"), "trinket": ("{ rope = 1, copper_ingot = 1 }", "bench")}
 
 def lua_str(t): return '"' + t.replace('"', '\\"') + '"'
-BOSS_DU = ("Roi", "Chef", "Scarabée", "Myconide", "Gardien", "Colosse", "Dormeur", "Géant")
-BOSS_DELA = ("Mère", "Wyverne", "Bête")
+BOSS_DU = ("Roi", "Chef", "Scarabée", "Myconide", "Gardien", "Colosse", "Dormeur", "Géant", "Coffre", "Mammouth", "Griffon", "Crocodile")
+BOSS_DELA = ("Mère", "Wyverne", "Bête", "Baudroie", "Veuve")
 def de(name, boss=False):
     n = name.split(",")[0]
     if boss:

@@ -172,10 +172,10 @@ Répartition décidée par le propriétaire le 26/11 : **Codex = ce qui se gén�
 - [ ] ~~**C14 · Créatures niveau planche**~~ → confié à Codex (X36) (`Systemes/Silhouettes.lua`) : tons multiples par masse, plaques et rivets,
       rangées de dents, langue, points lumineux le long du corps, motifs par famille, budget relevé (créature ≤ 140,
       boss ≤ 320). Banc `creatures_voxel` mis à jour.
-- [ ] **C15 · Boss inspirés des planches** (dessins par Codex en X36 ; Claude : données de combat et branchement) (noms et dessins à nous) : coffre-mimique des ruines, baudroie des
+- [~] **C15 · Boss inspirés des planches** — données faites, Claude 27/11 (ids `mimic_chest`, `abyss_angler`, `frost_mammoth`, `storm_griffin`, `cavern_widow`, `marsh_crocodile` : Bestiaire + ROAMING + Prises + 6 trophées au Catalogue) ; reste : silhouettes propres (Codex X36) puis capture Studio (dessins par Codex en X36 ; Claude : données de combat et branchement) (noms et dessins à nous) : coffre-mimique des ruines, baudroie des
       abysses, mammouth de givre, griffon d'orage (silhouette propre au boss), veuve des cavernes, crocodile des
       marais. Données dans `Bestiaire`/`Equilibre`, mise en scène existante (`boss_scene`).
-- [ ] **C17 · Banc d'import sûr du Store** `tools/bancs/store_import.luau` (pour X30).
+- [x] **C17 · Banc d'import sûr du Store** (fait le 26/11, 6508926) `tools/bancs/store_import.luau` (pour X30).
 
 ## Pour le propriétaire (personne d'autre ne peut le faire)
 

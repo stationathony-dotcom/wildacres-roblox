@@ -313,6 +313,19 @@ local KINDS = {
 		loot = { { "stone", 10, 20, 1 }, { "gold_ore", 2, 4, 1 } }, gold = 10 },
 	deep_beast = { name = "Bête des profondeurs", form = "serpent", look = { "N", "V", long = true, scale = 2.6 }, hp = 2600, dmg = 52, speed = 12, level = 10, style = "charge", radius = 3.6, boss = true, minion = "water_snake",
 		loot = { { "raw_hide", 4, 6, 1 }, { "tooth", 3, 5, 1 } }, gold = 9 },
+	-- boss des planches du 26/11 (lot C15) : données de combat ; dessins propres à venir (Codex, X36 / Silhouettes)
+	mimic_chest = { name = "Coffre-mimique des ruines", form = "masse", look = { "B", "O", scale = 1.8, }, hp = 2400, dmg = 50, speed = 10, level = 10, style = "hop", radius = 3.2, boss = true, minion = "skeleton",
+		loot = { { "mimic_tongue", 1, 1, 1 }, { "ancient_jewel", 1, 3, 1 }, { "pearl", 1, 2, 0.5 } }, gold = 12 },
+	abyss_angler = { name = "Baudroie des abysses", form = "serpent", look = { "N", "BL", scale = 2.4 }, hp = 2600, dmg = 52, speed = 11, level = 10, style = "spore", radius = 3.6, boss = true, minion = "water_snake",
+		proj = { color = Color3.fromRGB(120, 255, 220), size = 2.2 }, loot = { { "angler_lure", 1, 1, 1 }, { "pearl", 2, 4, 1 }, { "rare_shell", 1, 2, 0.6 } }, gold = 10 },
+	frost_mammoth = { name = "Mammouth de givre", form = "quadrupede", look = { "BF", "W", gros = true, oreilles = true, queue = true, criniere = "W", scale = 2.6 }, hp = 3200, dmg = 56, speed = 10, level = 10, style = "charge", radius = 4, boss = true, minion = "frost_spider",
+		loot = { { "mammoth_tusk", 1, 1, 1 }, { "frost_crystal", 1, 1, 0.3 }, { "raw_hide", 4, 6, 1 } }, gold = 10 },
+	storm_griffin = { name = "Griffon d'orage", form = "volant", look = { "BL", "O", scale = 2.4 }, hp = 2400, dmg = 52, speed = 16, level = 10, style = "spore", radius = 3.4, boss = true, flies = true, minion = "griffin",
+		proj = { color = Color3.fromRGB(170, 210, 255), size = 2 }, loot = { { "storm_feather", 1, 1, 1 }, { "amber", 1, 2, 0.6 } }, gold = 10 },
+	cavern_widow = { name = "Veuve des cavernes", form = "insecte", look = { "N", "R", carapace = true, scale = 2.4 }, hp = 2400, dmg = 50, speed = 12, level = 10, style = "spore", radius = 3.4, boss = true, minion = "cave_spider",
+		proj = { color = Color3.fromRGB(140, 230, 70), size = 2, poison = true }, loot = { { "widow_silk", 1, 1, 1 }, { "ancient_crystal", 1, 2, 0.5 } }, gold = 10 },
+	marsh_crocodile = { name = "Crocodile des marais", form = "quadrupede", look = { "V", "BF", long = true, queue = true, scale = 2.4 }, hp = 2800, dmg = 54, speed = 12, level = 10, style = "charge", radius = 3.8, boss = true, minion = "leech",
+		loot = { { "croc_king_hide", 1, 1, 1 }, { "tooth", 3, 5, 1 }, { "black_scale", 1, 1, 0.25 } }, gold = 10 },
 	cave_troll = { name = "Troll des cavernes", form = "humain", look = { "P", "BF", weapon = "massue", scale = 1.8, peau = "P" }, hp = 700, dmg = 38, speed = 9, level = 8, style = "charge", radius = 2.4, elite = true,
 		loot = { { "stone", 4, 8, 1 }, { "ore", 1, 3, 0.6 } }, gold = 5 },
 	-- 20/11 : les trois dernières de « listes ennemi.txt », modèles faits par Codex (ServerStorage.Modeles)
@@ -423,6 +436,12 @@ Bestiaire.ROAMING = {
 	snow_wyvern = { name = "Wyverne des neiges", biome = { "neige" } },
 	mountain_giant = { name = "Géant des montagnes", biome = { "prairie", "neige" } },
 	deep_beast = { name = "Bête des profondeurs", biome = { "marais" } },
+	mimic_chest = { name = "Coffre-mimique des ruines", biome = { "prairie", "desert" }, night = true },
+	abyss_angler = { name = "Baudroie des abysses", biome = { "marais" }, night = true },
+	frost_mammoth = { name = "Mammouth de givre", biome = { "neige" } },
+	storm_griffin = { name = "Griffon d'orage", biome = { "prairie", "neige" } },
+	cavern_widow = { name = "Veuve des cavernes", biome = { "foret" }, night = true },
+	marsh_crocodile = { name = "Crocodile des marais", biome = { "marais" } },
 }
 
 -- ----------------------------------------------------------------- Modèles
