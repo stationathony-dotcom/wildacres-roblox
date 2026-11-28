@@ -89,7 +89,7 @@ Format : `- [ ] <qui> → <à qui> · <fichier> · <besoin> · <pourquoi>` ; coc
       `royaume = { nom, suzerain, vassaux = {noms}, choix = {{v, name, maire}}, tribut }`. Afficher le royaume et, pour le maire
       (`isMaire`), une liste « Prêter allégeance à… » qui envoie l'action `pol_allegeance { v = village, to = clé }` et un bouton
       « Rompre » (`pol_allegeance { v = village }`). Les villes de joueurs ont aussi ce conseil (borne au centre).
-- [ ] Claude → Codex · `MagieClient` · **effets de sort des autres joueurs** (27/11) : le serveur envoie maintenant `Fx:FireAllClients("sort", { ecole, id, lanceur = UserId, de = Vector3, vers = Vector3? })` après chaque sort validé ; jouer l'effet de l'école entre `de` et `vers` (ou autour de `de` sans cible), sauf si `lanceur` est le joueur local (déjà joué).
+- [x] Claude → Codex · `MagieClient` · **effets de sort des autres joueurs** (27/11) : les cinq écoles s’affichent à partir de `Fx « sort »`, jusqu’à 300 studs et huit effets distants simultanés. Le lanceur local voit son effet à la confirmation. Livré sur disque, à voir en Play.
 - [x] Codex → Claude · (fait 27/11) `Shared/Equilibre.lua` · **X41 scierie** · Passer `I.sawmill.place` de `Etabli` à `Scierie`. Vérifier le modèle des nouvelles poses et des scieries déjà enregistrées.
 - [x] Codex → Claude · (fait 27/11) `Systemes/Joueurs.lua`, `Systemes/Mariages.lua` · **X41 conjoint** · Envoyer `conjoint = { name, day }` dans `Inventory` et renvoyer l’inventaire aux deux joueurs connectés après le mariage ou le divorce. Le champ manque dans `Joueurs.sync`, que lit la fiche [P].
 - [x] Codex → Claude · (fait 27/11) `Systemes/Magie.lua` · **X41 effets de sort** · Répliquer aux clients concernés l’école, le lanceur et la position de l’ennemi effectivement retenu après validation. `Geste = "sort:n"` confirme le lancer local mais ne porte ni école ni cible pour les effets des autres joueurs et les cibles choisies par le serveur.
@@ -186,7 +186,7 @@ reste à pousser / capturer sur le PC fixe.
 - [ ] **X35 · PNJ : apparence + dialogues** (Avatar.dress, Apparence ; `Dialogue.lua` : passage accordé par Claude) — Sol.
 - [ ] **X36 · Créatures du bestiaire + 6 boss** (`Silhouettes.lua` : passage accordé par Claude ; données des boss → passage à Claude) — Sol.
 - [ ] **X38 · Journal des montures, beau bestiaire, animations en selle** (peaufinage de 664c332) — Sol.
-- [ ] **X40 · Interface un peu façon Luma Island** (habillage arrondi et chaleureux ; disposition et proportions de l'image cible gardées) — Sol.
+- [x] **X40 · Interface un peu façon Luma Island** — Codex, 27/11 · habillage livré sur disque. [Compte des pièces et appels Édition](X40-RAPPORT.md). Claude reprend les captures et les bancs Studio. Commit en attente, index Git en lecture seule dans la session Codex.
 - [ ] **X39 · Animations de combat du personnage** (Gestes.client : anticipation/frappe/suite, enchaînements, réactions, traînées) — Sol.
 - [ ] **X37 · Écriture des quêtes** (TEXTE seulement de `Quetes.lua` / `QuetesLieux.lua` : passage accordé) — Sol.
 
@@ -219,6 +219,8 @@ Répartition décidée par le propriétaire le 26/11 : **Codex = ce qui se gén�
 ---
 
 ## Journal (5 lignes maximum par session)
+
+- 27/11 · Codex · X40 livré sur disque. Le HUD garde ses ancrages et les fenêtres partagent le thème parchemin. À vérifier dans Studio, au doigt et à la manette. Les captures et le commit restent à intégrer.
 
 - 27/11 · Codex · X33 sur disque. Les objets et les outils se régénèrent dans le même banc. Reconstruction et captures à faire en Édition par Claude. [Rapport](X33-RAPPORT.md)
 

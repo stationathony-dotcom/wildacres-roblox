@@ -1,4 +1,5 @@
 local Composants = {}
+local Theme = require(script.Parent:WaitForChild("ThemeInterface"))
 
 local ETATS = {
 	disponible = { "✓", Color3.fromRGB(62, 113, 61) },
@@ -71,10 +72,22 @@ function Composants.bouton(props, action, children)
 	return bouton
 end
 
+function Composants.habillerBouton(bouton)
+	if bouton.BackgroundTransparency >= 0.5 then return end
+	bouton.Font, bouton.TextColor3 = Theme.polices.gras, Theme.encre(bouton.TextColor3)
+	Theme.bouton(bouton, Theme.carton(bouton.BackgroundColor3), Theme.rayons.bouton)
+end
+
 function Composants.etatBouton(bouton, texte, etat, couleurNeutre)
 	local style = ETATS[etat]
 	bouton.Text = Composants.texteCompatible(style and style[1] .. " " .. texte or texte)
-	bouton.BackgroundColor3 = style and style[2] or couleurNeutre
+	local couleur = style and style[2] or couleurNeutre
+	if style and etat == "selectionne" and bouton:FindFirstChild("VernisX40") then
+		couleur = Theme.couleurs.miel
+	end
+	if couleur then
+		bouton.BackgroundColor3 = bouton:FindFirstChild("VernisX40") and Theme.carton(couleur) or couleur
+	end
 	bouton.Interactable = etat ~= "verrouille"
 end
 

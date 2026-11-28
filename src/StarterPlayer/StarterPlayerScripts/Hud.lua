@@ -10,6 +10,8 @@
 
 local Hud = {}
 Hud.__index = Hud
+local Theme = require(script.Parent:WaitForChild("ThemeInterface"))
+local C, R, T = Theme.couleurs, Theme.rayons, Theme.traits
 
 -- Échelle du HUD : mêmes proportions que l'image cible (1672 x 941, HUD dans les coins, centre
 -- libre). Le HUD a sa propre ScreenGui : les fenêtres (sac, atelier…) gardent leur échelle.
@@ -18,17 +20,13 @@ function Hud.scaleFor(v: Vector2): number
 	return math.clamp(math.min(v.X / Hud.REF.X, v.Y / Hud.REF.Y), 0.42, 1.15)
 end
 
-local DARK = Color3.fromRGB(27, 22, 18)
-local DARK2 = Color3.fromRGB(48, 37, 28)
-local EDGE = Color3.fromRGB(183, 149, 101)
-local EDGE_DIM = Color3.fromRGB(108, 82, 58)
-local TEXT = Color3.fromRGB(248, 242, 228)
-local DIM = Color3.fromRGB(196, 188, 170)
-local GOLD = Color3.fromRGB(246, 200, 70)
-local NAVY = Color3.fromRGB(34, 52, 86)
-local TITLE = Enum.Font.GothamBold
-local BOLD = Enum.Font.GothamBold
-local BODY = Enum.Font.GothamMedium
+local EDGE = C.joint
+local TEXT = C.encre
+local DIM = C.secondaire
+local GOLD = Theme.rarete(5).encre
+local TITLE = Theme.polices.titre
+local BOLD = Theme.polices.gras
+local BODY = Theme.polices.texte
 
 local function new(class: string, props, children)
 	local o = Instance.new(class)
@@ -58,9 +56,6 @@ local function text(props)
 	props.TextSize = props.TextSize or 16
 	props.TextXAlignment = props.TextXAlignment or Enum.TextXAlignment.Left
 	return new("TextLabel", props)
-end
-local function grad(top: Color3, bottom: Color3)
-	return new("UIGradient", { Rotation = 90, Color = ColorSequence.new(top, bottom) })
 end
 
 -- Icône 3D d'un objet (maquette clonée dans un ViewportFrame), façon icône peinte : l'objet est vu
@@ -318,11 +313,14 @@ end
 -- ---------------------------------------------------------------- carte du joueur (haut-gauche)
 local function bar(parent, y: number, color: Color3, icon: string)
 	local row = new("Frame", { Size = UDim2.fromOffset(250, 24), Position = UDim2.fromOffset(150, y), BackgroundTransparency = 1, Parent = parent })
-	local back = new("Frame", { Size = UDim2.new(1, -14, 1, 0), Position = UDim2.fromOffset(14, 0), BackgroundColor3 = Color3.fromRGB(18, 16, 20), BackgroundTransparency = 0.15, Parent = row },
-		{ corner(5), stroke(EDGE_DIM, 1.5) })
-	local fill = new("Frame", { Size = UDim2.fromScale(1, 1), BackgroundColor3 = color, Parent = back }, { corner(5), grad(color:Lerp(Color3.new(1, 1, 1), 0.25), color:Lerp(Color3.new(0, 0, 0), 0.25)) })
-	local val = text({ Text = "", Font = BOLD, TextSize = 15, TextXAlignment = Enum.TextXAlignment.Center, TextStrokeTransparency = 0.35, Size = UDim2.fromScale(1, 1), Parent = back, ZIndex = 3 })
-	text({ Text = icon, TextSize = 20, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(26, 26), Position = UDim2.fromOffset(0, -1), Parent = row, ZIndex = 4 })
+	local back = new("Frame", { Size = UDim2.new(1, -14, 1, 0), Position = UDim2.fromOffset(14, 0), Parent = row })
+	Theme.surface(back, C.creux, 12, T.case)
+	local fill = new("Frame", { Size = UDim2.fromScale(1, 1), BackgroundColor3 = color, BorderSizePixel = 0, Parent = back }, { corner(12) })
+	Theme.degrade(fill, 88, Color3.new(1, 1, 1), C.relief, Color3.fromRGB(202, 157, 133))
+	local val = text({ Text = "", Font = BOLD, TextSize = 15, TextXAlignment = Enum.TextXAlignment.Center, TextStrokeColor3 = C.relief, TextStrokeTransparency = 0.33, Size = UDim2.fromScale(1, 1), Parent = back, ZIndex = 3 })
+	local medaillon = text({ Text = icon, TextSize = 17, TextXAlignment = Enum.TextXAlignment.Center, BackgroundTransparency = 0,
+		Size = UDim2.fromOffset(26, 26), Position = UDim2.fromOffset(0, -1), Parent = row, ZIndex = 4 })
+	Theme.surface(medaillon, C.feuillet, UDim.new(0.5, 0), T.case)
 	return { fill = fill, val = val, color = color }
 end
 
@@ -335,27 +333,30 @@ function Hud.build(parent: Instance, opts)
 
 	-- carte du joueur
 	local card = new("Frame", { Name = "Joueur", Size = UDim2.fromOffset(420, 150), Position = UDim2.fromOffset(20, 31), BackgroundTransparency = 1, Parent = root })
-	new("Frame", { Size = UDim2.fromOffset(300, 108), Position = UDim2.fromOffset(110, 14), BackgroundColor3 = DARK, BackgroundTransparency = 0.3, Parent = card },
-		{ corner(10), new("UIGradient", { Transparency = NumberSequence.new(0, 1) }) })
-	local ring = new("Frame", { Size = UDim2.fromOffset(128, 128), Position = UDim2.fromOffset(0, 4), BackgroundColor3 = Color3.fromRGB(70, 56, 40), Parent = card, ZIndex = 2 },
-		{ corner(UDim.new(0.5, 0)), stroke(EDGE, 4) })
-	self.portrait = new("Frame", { Size = UDim2.new(1, -12, 1, -12), Position = UDim2.fromOffset(6, 6), BackgroundColor3 = Color3.fromRGB(54, 69, 80), Parent = ring, ZIndex = 3 },
-		{ corner(UDim.new(0.5, 0)) })
-	local badge = new("Frame", { Size = UDim2.fromOffset(46, 52), Position = UDim2.fromOffset(92, 92), BackgroundColor3 = NAVY, Parent = card, ZIndex = 5 },
-		{ corner(UDim.new(0.3, 0)), stroke(GOLD, 2.5), grad(Color3.fromRGB(60, 84, 130), Color3.fromRGB(26, 36, 62)) })
+	local feuille = new("Frame", { Size = UDim2.fromOffset(300, 108), Position = UDim2.fromOffset(110, 14), Parent = card })
+	Theme.surface(feuille, C.papier, R.bandeau, T.bouton)
+	Theme.piece(feuille, "RetourDuFeuillet", UDim2.fromOffset(20, 5), UDim2.new(1, -28, 1, -12), C.relief, 3, -5)
+	local ring = new("Frame", { Size = UDim2.fromOffset(128, 128), Position = UDim2.fromOffset(0, 4), Parent = card, ZIndex = 2 })
+	Theme.surface(ring, C.miel, UDim.new(0.5, 0), 4)
+	self.portrait = new("Frame", { Size = UDim2.new(1, -12, 1, -12), Position = UDim2.fromOffset(6, 6), Parent = ring, ZIndex = 3 })
+	Theme.surface(self.portrait, C.turquoise, UDim.new(0.5, 0), T.case)
+	local badge = new("Frame", { Size = UDim2.fromOffset(46, 52), Position = UDim2.fromOffset(92, 92), Parent = card, ZIndex = 5 })
+	Theme.surface(badge, C.sauge, UDim.new(0.3, 0), T.bouton)
 	self.badge = text({ Text = "😇", TextSize = 24, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), Parent = badge, ZIndex = 6 })
-	self.name = text({ Text = "Joueur", Font = TITLE, TextSize = 24, TextStrokeTransparency = 0.5, TextTruncate = Enum.TextTruncate.AtEnd, Size = UDim2.fromOffset(260, 30), Position = UDim2.fromOffset(150, 14), Parent = card, ZIndex = 3 })
-	self.hp = bar(card, 48, Color3.fromRGB(206, 44, 44), "❤️")
-	self.st = bar(card, 78, Color3.fromRGB(44, 120, 220), "⚡")
-	local goldPill = new("Frame", { Size = UDim2.fromOffset(0, 26), AutomaticSize = Enum.AutomaticSize.X, Position = UDim2.fromOffset(164, 110), BackgroundColor3 = DARK, BackgroundTransparency = 0.2, Parent = card },
-		{ corner(13), stroke(EDGE_DIM, 1.5), new("UIPadding", { PaddingLeft = UDim.new(0, 10), PaddingRight = UDim.new(0, 12) }) })
+	self.name = text({ Text = "Joueur", Font = TITLE, TextSize = 24, TextTruncate = Enum.TextTruncate.AtEnd, Size = UDim2.fromOffset(260, 30), Position = UDim2.fromOffset(150, 14), Parent = card, ZIndex = 3 })
+	self.hp = bar(card, 48, C.vie, "❤️")
+	self.st = bar(card, 78, C.endurance, "⚡")
+	local goldPill = new("Frame", { Size = UDim2.fromOffset(0, 26), AutomaticSize = Enum.AutomaticSize.X, Position = UDim2.fromOffset(164, 110), Parent = card },
+		{ new("UIPadding", { PaddingLeft = UDim.new(0, 10), PaddingRight = UDim.new(0, 12) }) })
+	Theme.surface(goldPill, C.miel, 13, T.case)
 	self.gold = text({ Text = "💰 0", Font = BOLD, TextSize = 16, TextColor3 = GOLD, AutomaticSize = Enum.AutomaticSize.X, Size = UDim2.fromOffset(0, 26), Parent = goldPill })
-	self.stars = text({ Text = "", TextSize = 20, TextColor3 = GOLD, TextStrokeTransparency = 0.4, Size = UDim2.fromOffset(240, 26), Position = UDim2.fromOffset(290, 110), Parent = card })
+	self.stars = text({ Text = "", TextSize = 20, TextColor3 = C.ombre, TextStrokeColor3 = C.relief, TextStrokeTransparency = 0.22, Size = UDim2.fromOffset(240, 26), Position = UDim2.fromOffset(290, 110), Parent = card })
 
 	-- boussole + lieu (haut-centre)
 	local comp = new("Frame", { Name = "Boussole", Size = UDim2.fromOffset(448, 36), Position = UDim2.new(0.5, 0, 0, 27), AnchorPoint = Vector2.new(0.5, 0),
-		BackgroundColor3 = NAVY, BackgroundTransparency = 0.12, ClipsDescendants = true, Visible = not opts.compact, Parent = root },
-		{ corner(6), stroke(EDGE, 2.5), grad(Color3.fromRGB(56, 78, 120), Color3.fromRGB(24, 34, 58)) })
+		ClipsDescendants = true, Visible = not opts.compact, Parent = root })
+	Theme.surface(comp, C.turquoise, R.bandeau, 2.5)
+	Theme.piece(comp, "RailDeBoussole", UDim2.new(1, -18, 0, 2), UDim2.new(0, 9, 1, -5), C.joint, 2)
 	local strip = new("Frame", { Size = UDim2.fromOffset(0, 40), BackgroundTransparency = 1, Parent = comp })
 	self.strip = strip
 	self.PX_PER_DEG = 2.6
@@ -372,27 +373,33 @@ function Hud.build(parent: Instance, opts)
 			end
 		end
 	end
-	new("Frame", { Size = UDim2.fromOffset(34, 34), Position = UDim2.new(0.5, 0, 0, 45), AnchorPoint = Vector2.new(0.5, 0.5), Rotation = 45, BackgroundColor3 = NAVY, Visible = not opts.compact, Parent = root, ZIndex = 3 }, { stroke(EDGE, 2.5) })
+	local cap = new("Frame", { Size = UDim2.fromOffset(34, 34), Position = UDim2.new(0.5, 0, 0, 45), AnchorPoint = Vector2.new(0.5, 0.5), Rotation = 45, Visible = not opts.compact, Parent = root, ZIndex = 3 })
+	Theme.surface(cap, C.miel, R.etiquette, 2.5)
 	self.heading = text({ Text = "N", Font = BOLD, TextSize = 19, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(46, 36), Position = UDim2.new(0.5, 0, 0, 45), AnchorPoint = Vector2.new(0.5, 0.5), Visible = not opts.compact, Parent = root, ZIndex = 4 })
 	local place = new("Frame", { Name = "Lieu", Size = UDim2.fromOffset(0, 34), AutomaticSize = Enum.AutomaticSize.X, Position = UDim2.new(0.5, 0, 0, 73), AnchorPoint = Vector2.new(0.5, 0),
-		BackgroundColor3 = DARK, BackgroundTransparency = 0.35, Parent = root },
-		{ corner(8), new("UIPadding", { PaddingLeft = UDim.new(0, 14), PaddingRight = UDim.new(0, 18) }),
+		Parent = root },
+		{ new("UIPadding", { PaddingLeft = UDim.new(0, 14), PaddingRight = UDim.new(0, 18) }),
 			new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 8), VerticalAlignment = Enum.VerticalAlignment.Center }) })
+	Theme.surface(place, C.feuillet, R.bandeau, T.case)
 	self.placeIcon = text({ Text = "🏠", TextSize = 22, Size = UDim2.fromOffset(28, 34), LayoutOrder = 1, Parent = place })
-	self.placeName = text({ Text = "", Font = TITLE, TextSize = 22, TextStrokeTransparency = 0.5, AutomaticSize = Enum.AutomaticSize.X, Size = UDim2.fromOffset(0, 34), LayoutOrder = 2, Parent = place })
+	self.placeName = text({ Text = "", Font = TITLE, TextSize = 22, AutomaticSize = Enum.AutomaticSize.X, Size = UDim2.fromOffset(0, 34), LayoutOrder = 2, Parent = place })
 
 	-- horloge / météo + minicarte (haut-droite)
 	local clock = new("Frame", { Name = "Horloge", Size = UDim2.fromOffset(240, 66), Position = opts.compact and UDim2.new(1, -12, 0, 220) or UDim2.new(1, -220, 0, 27), AnchorPoint = Vector2.new(1, 0),
-		BackgroundColor3 = NAVY, BackgroundTransparency = 0.15, Parent = root }, { corner(10), stroke(EDGE, 2), grad(Color3.fromRGB(56, 78, 120), Color3.fromRGB(24, 34, 58)) })
+		Parent = root })
+	Theme.surface(clock, C.papier, R.bandeau, T.bouton)
+	Theme.piece(clock, "LogementMeteo", UDim2.fromOffset(45, 45), UDim2.fromOffset(6, 10), C.miel, UDim.new(0.5, 0), -4)
+	Theme.piece(clock, "JointHorloge", UDim2.new(1, -73, 0, 2), UDim2.fromOffset(58, 36), C.creux, 2)
 	self.sky = text({ Text = "☀️", TextSize = 36, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(56, 66), Parent = clock })
 	self.day = text({ Text = "", Font = TITLE, TextSize = 21, Size = UDim2.new(1, -62, 0, 30), Position = UDim2.fromOffset(58, 6), Parent = clock })
 	self.weather = text({ Text = "", TextSize = 14, TextColor3 = DIM, Size = UDim2.new(1, -62, 0, 22), Position = UDim2.fromOffset(58, 36), Parent = clock })
 
 	local MAP = 190
 	local mapRing = new("Frame", { Name = "Minicarte", Size = UDim2.fromOffset(MAP + 12, MAP + 12), Position = UDim2.new(1, -12, 0, 10), AnchorPoint = Vector2.new(1, 0),
-		BackgroundColor3 = Color3.fromRGB(70, 56, 40), Parent = root }, { corner(UDim.new(0.5, 0)), stroke(EDGE, 4) })
+		Parent = root })
+	Theme.surface(mapRing, C.miel, UDim.new(0.5, 0), 4)
 	local mapGroup = new("CanvasGroup", { Size = UDim2.fromOffset(MAP, MAP), Position = UDim2.fromOffset(6, 6), BackgroundColor3 = Color3.fromRGB(70, 110, 140), Parent = mapRing },
-		{ corner(UDim.new(0.5, 0)) })
+		{ corner(UDim.new(0.5, 0)), stroke(C.ombre, 1.5) })
 	self.mapN = opts.mapCells or 23
 	self.mapCells = {}
 	local cs = MAP / self.mapN
@@ -407,14 +414,15 @@ function Hud.build(parent: Instance, opts)
 	self.arrow = text({ Text = "▲", Font = BOLD, TextSize = 22, TextColor3 = Color3.fromRGB(80, 200, 255), TextStrokeTransparency = 0, TextXAlignment = Enum.TextXAlignment.Center,
 		Size = UDim2.fromOffset(24, 24), Position = UDim2.fromScale(0.5, 0.5), AnchorPoint = Vector2.new(0.5, 0.5), Parent = mapGroup, ZIndex = 5 })
 	local function roundBtn(t: string, pos: UDim2, fn)
-		local b = new("TextButton", { Text = t, Font = TITLE, TextSize = 20, TextColor3 = TEXT, BackgroundColor3 = Color3.fromRGB(30, 30, 34), Size = UDim2.fromOffset(34, 34),
-			Position = pos, AnchorPoint = Vector2.new(0.5, 0.5), Parent = mapRing, ZIndex = 6 }, { corner(UDim.new(0.5, 0)), stroke(EDGE, 2) })
+		local b = new("TextButton", { Text = t, Font = TITLE, TextSize = 20, TextColor3 = TEXT, Size = UDim2.fromOffset(34, 34),
+			Position = pos, AnchorPoint = Vector2.new(0.5, 0.5), Parent = mapRing, ZIndex = 6 })
+		Theme.bouton(b, C.feuillet, UDim.new(0.5, 0), EDGE, true)
 		if fn then
 			b.Activated:Connect(fn)
 		end
 		return b
 	end
-	roundBtn("M", UDim2.new(0.86, 0, 0.88, 0), opts.onMap)
+	roundBtn("🧭", UDim2.new(0.86, 0, 0.88, 0), opts.onMap)
 	self.zoomBtn = roundBtn("+", UDim2.new(0.88, 0, 0.1, 0), opts.onZoom)
 
 	-- colonne de boutons (gauche)
@@ -450,7 +458,8 @@ function Hud.build(parent: Instance, opts)
 		end
 	end
 	if opts.compact then
-		menuToggle = new("TextButton", { Name = "OuvrirMenu", Text = "☰  Menu", Font = BOLD, TextSize = 18, TextColor3 = TEXT, BackgroundColor3 = DARK, Size = UDim2.fromOffset(132, 44), Position = UDim2.fromOffset(12, 66), Parent = touchLayer }, { corner(9), stroke(EDGE, 2) })
+		menuToggle = new("TextButton", { Name = "OuvrirMenu", Text = "☰  Menu", Font = BOLD, TextSize = 18, TextColor3 = TEXT, Size = UDim2.fromOffset(132, 44), Position = UDim2.fromOffset(12, 66), Parent = touchLayer })
+		Theme.bouton(menuToggle, C.miel, R.bouton)
 		menuToggle.Activated:Connect(function()
 			if menu.Visible then
 				closeMenu()
@@ -461,8 +470,8 @@ function Hud.build(parent: Instance, opts)
 		end)
 	end
 	for i, m in opts.menu or {} do
-		local b = new("TextButton", { Name = m.id or m.label, Text = "", AutoButtonColor = true, BackgroundColor3 = DARK2, BackgroundTransparency = 0.10, Size = opts.compact and UDim2.new(1, -6, 0, 44) or UDim2.fromOffset(216, 52), LayoutOrder = i, Parent = menu },
-			{ corner(10), stroke(EDGE, 1.5), grad(Color3.fromRGB(76, 58, 42), Color3.fromRGB(28, 23, 19)) })
+		local b = new("TextButton", { Name = m.id or m.label, Text = "", Size = opts.compact and UDim2.new(1, -6, 0, 44) or UDim2.fromOffset(216, 52), LayoutOrder = i, Parent = menu })
+		Theme.bouton(b, C.papier, R.bouton)
 		b.Selectable = true
 		firstButton = firstButton or b
 		if lastButton then
@@ -474,15 +483,20 @@ function Hud.build(parent: Instance, opts)
 		local model = m.model and icons and icons:FindFirstChild(m.model)
 		local painted = m.id and require(script.Parent:WaitForChild("IconesPeintes"))
 		local holder = new("Frame", { Size = opts.compact and UDim2.fromOffset(44, 42) or UDim2.fromOffset(56, 49), Position = UDim2.fromOffset(5, 1), BackgroundTransparency = 1, Parent = b })
+		local pastille = Theme.piece(holder, "PastilleEmail", UDim2.new(1, -11, 1, -9), UDim2.fromOffset(4, 4), ({ C.sauge, C.turquoise, C.miel })[(i - 1) % 3 + 1], R.bouton, i % 2 == 0 and -4 or 3)
+		Theme.bord(pastille, EDGE, 1.25)
 		local hasPainted = painted and painted.add("menu:" .. m.id, holder, UDim2.fromScale(0.9, 0.9), 2, false)
 		if not hasPainted and model and model:IsA("Model") then
 			Hud.objectViewport(model).Parent = holder
 		elseif not hasPainted then
-			text({ Text = m.icon, TextSize = opts.compact and 25 or 35, TextXAlignment = Enum.TextXAlignment.Center, Size = opts.compact and UDim2.fromOffset(54, 44) or UDim2.fromOffset(65, 52), Parent = b })
+			text({ Text = m.icon, TextSize = opts.compact and 25 or 35, TextStrokeColor3 = C.ombre, TextStrokeTransparency = 0.35,
+				TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.new(1, -3, 1, 0), Parent = holder })
 		end
-		text({ Text = m.label, Font = BOLD, TextSize = opts.compact and 17 or 18, TextStrokeTransparency = 0.6, Size = UDim2.new(1, opts.compact and -70 or -96, 1, 0), Position = UDim2.fromOffset(68, 0), Parent = b })
+		text({ Text = m.label, Font = BOLD, TextSize = opts.compact and 17 or 18, Size = UDim2.new(1, opts.compact and -70 or -96, 1, 0), Position = UDim2.fromOffset(68, 0), Parent = b })
 		if m.key and not opts.compact then
-			text({ Text = typeof(m.key) == "EnumItem" and m.key.Name or m.key, Font = BOLD, TextSize = 13, TextColor3 = DIM, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(28, 50), Position = UDim2.new(1, -32, 0, 0), Parent = b })
+			local touche = text({ Text = typeof(m.key) == "EnumItem" and m.key.Name or m.key, Font = BOLD, TextSize = 13, TextColor3 = DIM,
+				TextXAlignment = Enum.TextXAlignment.Center, BackgroundTransparency = 0, Size = UDim2.fromOffset(26, 22), Position = UDim2.new(1, -31, 0, 15), Parent = b })
+			Theme.surface(touche, C.feuillet, R.etiquette, 1)
 		end
 		if m.fn then
 			b.Activated:Connect(function()
@@ -612,12 +626,13 @@ end
 -- notification à droite : icône ronde, titre (couleur), détail ; disparaît seule
 function Hud:notify(icon: string, title: string, sub: string?, color: Color3?, life: number?)
 	self.noteN += 1
-	local card = new("Frame", { Size = UDim2.fromOffset(280, sub and 64 or 46), BackgroundColor3 = DARK, BackgroundTransparency = 0.12, LayoutOrder = self.noteN, Parent = self.notes },
-		{ corner(10), stroke(EDGE_DIM, 2) })
-	local disc = new("Frame", { Size = UDim2.fromOffset(42, 42), Position = UDim2.new(0, 10, 0.5, 0), AnchorPoint = Vector2.new(0, 0.5), BackgroundColor3 = Color3.fromRGB(20, 22, 28), Parent = card },
-		{ corner(UDim.new(0.5, 0)), stroke(color or GOLD, 2) })
+	local card = new("Frame", { Size = UDim2.fromOffset(280, sub and 64 or 46), LayoutOrder = self.noteN, Parent = self.notes })
+	Theme.surface(card, C.papier, R.bandeau, T.bouton)
+	Theme.piece(card, "Recepisse", UDim2.fromOffset(26, 5), UDim2.new(1, -38, 1, -10), C.relief, 3, -6)
+	local disc = new("Frame", { Size = UDim2.fromOffset(42, 42), Position = UDim2.new(0, 10, 0.5, 0), AnchorPoint = Vector2.new(0, 0.5), Parent = card })
+	Theme.surface(disc, color and C.miel:Lerp(color, 0.45) or C.sauge, UDim.new(0.5, 0), T.bouton)
 	text({ Text = icon, TextSize = 24, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), Parent = disc })
-	local heading = text({ Text = title, Font = BOLD, TextSize = 18, TextColor3 = color or GOLD, TextTruncate = Enum.TextTruncate.AtEnd, Size = UDim2.new(1, -70, 0, 24),
+	local heading = text({ Text = title, Font = BOLD, TextSize = 18, TextColor3 = Theme.encre(color), TextTruncate = Enum.TextTruncate.AtEnd, Size = UDim2.new(1, -70, 0, 24),
 		Position = UDim2.fromOffset(62, sub and 8 or 11), Parent = card })
 	if sub then
 		text({ Text = sub, TextSize = 14, TextColor3 = DIM, TextTruncate = Enum.TextTruncate.AtEnd, Size = UDim2.new(1, -70, 0, 20), Position = UDim2.fromOffset(62, 34), Parent = card })

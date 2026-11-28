@@ -6,11 +6,19 @@ local old = SG:FindFirstChild("ApercuHud")
 if old then
 	old:Destroy()
 end
-local tmp = game.StarterPlayer.StarterPlayerScripts.Hud:Clone()
+local scripts = game.StarterPlayer.StarterPlayerScripts
+local tmp = scripts.Hud:Clone()
+local themeSource = scripts:FindFirstChild("ThemeInterface")
 local shared = game.ReplicatedStorage.Shared:Clone()
 local folder = Instance.new("Folder")
 folder.Parent = game:GetService("ServerStorage")
 tmp.Parent, shared.Parent = folder, folder
+local Theme
+if themeSource then
+	local copie = themeSource:Clone()
+	copie.Parent = folder
+	Theme = require(copie)
+end
 local Hud = require(tmp)
 local Config = require(shared.Config)
 local WG = require(shared.WorldGen)
@@ -91,6 +99,11 @@ for i, sl in SLOTS do
 	local st = Instance.new("UIStroke", cell)
 	st.Thickness = i == 1 and 3 or 1.5
 	st.Color = i == 1 and Color3.fromRGB(246, 200, 70) or Color3.fromRGB(110, 90, 60)
+	if Theme then
+		local teinte = Theme.rarete(sl[1] and 2 or 1)
+		Theme.surface(cell, i == 1 and Theme.couleurs.miel or teinte.fond, Theme.rayons.case, i == 1 and 3.5 or 2, teinte.encre)
+		Theme.piece(cell, "PliDeCase", UDim2.fromOffset(9, 3), UDim2.new(1, -15, 0, 5), Theme.couleurs.relief, 2, -5)
+	end
 	local tpl = sl[1] and ((icons and icons:FindFirstChild(sl[1])) or (objs and objs:FindFirstChild(sl[1])))
 	if tpl then
 		local vf = Hud.objectViewport(tpl)
@@ -121,6 +134,15 @@ for i, sl in SLOTS do
 		q.Position = UDim2.new(0, 0, 1, -20)
 		q.TextXAlignment = Enum.TextXAlignment.Right
 		q.Parent = cell
+		if Theme then
+			q.Font, q.TextColor3 = Theme.polices.gras, Theme.couleurs.encre
+			q.TextStrokeTransparency = 1
+		end
+	end
+	if Theme then
+		num.Font, num.TextColor3 = Theme.polices.gras, Theme.couleurs.encre
+		num.TextXAlignment, num.BackgroundTransparency, num.TextStrokeTransparency = Enum.TextXAlignment.Center, 0, 1
+		Theme.surface(num, i == 1 and Theme.couleurs.miel or Theme.couleurs.feuillet, 6, 1)
 	end
 end
 gui.Parent = SG

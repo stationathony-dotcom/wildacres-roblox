@@ -1,161 +1,125 @@
--- Cadre médiéval commun à toutes les fenêtres (chantier E1, 25/11, docs/DIRECTION-ARTISTIQUE.md) :
--- fond en dégradé de bois sombre, bordure de fer, liseré doré intérieur, bandeau de titre et quatre coins
--- de fer rivetés. Comme les refontes Valheim (Auga, SeneaL UI) : UN cadre pour toutes les fenêtres.
--- Posé par WindowNav.watch (toutes les fenêtres suivies) ; Cadre.habiller(frame) pour les autres.
--- N'ajoute que des enfants décoratifs (non actifs, ZIndex calculé) ; ne touche ni aux tailles ni aux
--- positions, ni au contenu. Rien n'est ajouté dans un cadre qui range ses enfants lui-même (UIListLayout…).
--- Écrit par Claude (couloir Codex : module neuf, à reprendre librement — voir docs/LOTS.md).
-
+-- Cadre commun. Les ornaments sont hors du contenu défilant et ignorent les entrées.
+local Theme = require(script.Parent:WaitForChild("ThemeInterface"))
+local C, R, T = Theme.couleurs, Theme.rayons, Theme.traits
 local Cadre = {}
+local habilles = setmetatable({}, { __mode = "k" })
 
-local BOIS_HAUT = Color3.fromRGB(62, 45, 33)
-local BOIS_BAS = Color3.fromRGB(36, 26, 20)
-local FER = Color3.fromRGB(58, 56, 60)
-local FER_CLAIR = Color3.fromRGB(128, 124, 120)
-local OR = Color3.fromRGB(214, 168, 78)
-local BANDEAU = Color3.fromRGB(30, 21, 16)
-
-local function enfant(class: string, props, parent: Instance)
-	local o = Instance.new(class)
-	for k, v in props do
-		(o :: any)[k] = v
-	end
-	o.Parent = parent
-	return o
-end
-
-local function zMinMax(frame: GuiObject): (number, number)
-	local lo, hi = math.huge, frame.ZIndex
-	for _, c in frame:GetChildren() do
-		if c:IsA("GuiObject") then
-			lo = math.min(lo, c.ZIndex)
-			hi = math.max(hi, c.ZIndex)
+local function trouverTitre(frame)
+	local titre
+	for _, enfant in frame:GetChildren() do
+		if enfant:IsA("TextLabel") and enfant.Position.Y.Scale == 0 and enfant.Position.Y.Offset <= 24
+			and (enfant.TextScaled or enfant.TextSize >= 18) then
+			if not titre or enfant.Position.Y.Offset < titre.Position.Y.Offset then titre = enfant end
 		end
 	end
-	if lo == math.huge then
-		lo = frame.ZIndex
-	end
-	return lo, hi
+	return titre
 end
 
--- titre de la fenêtre : premier texte en haut, assez grand
-local function trouverTitre(frame: GuiObject): TextLabel?
-	local best
-	for _, c in frame:GetChildren() do
-		if c:IsA("TextLabel") and c.Position.Y.Scale == 0 and c.Position.Y.Offset <= 24 and c.TextSize >= 18 then
-			if not best or c.Position.Y.Offset < best.Position.Y.Offset then
-				best = c
+local function encre(objet)
+	local derniere
+	local function update()
+		if objet.TextColor3 == derniere then return end
+		derniere = Theme.encre(objet.TextColor3)
+		objet.TextColor3 = derniere
+	end
+	update()
+	objet:GetPropertyChangedSignal("TextColor3"):Connect(update)
+end
+
+local function habillerContenu(objet)
+	if not objet:IsA("GuiObject") or Theme.estPiece(objet) or habilles[objet] then return end
+	habilles[objet] = true
+	if objet:IsA("GuiButton") or objet:IsA("TextBox") then Theme.selection(objet) end
+	if objet:FindFirstChild("VernisX40") then return end
+	if objet:IsA("TextLabel") or objet:IsA("TextButton") or objet:IsA("TextBox") then
+		local police = Theme.polices
+		local gras = objet:IsA("TextButton") or objet.Font == Enum.Font.GothamBold
+		objet.Font = objet.TextSize >= 20 and police.titre or gras and police.gras or police.texte
+		objet.TextStrokeTransparency = 1
+		encre(objet)
+	end
+	if objet:IsA("ScrollingFrame") then objet.ScrollBarImageColor3 = C.joint end
+	if objet.BackgroundTransparency >= 0.5 then return end
+	if objet:IsA("GuiButton") then
+		local derniere
+		local function update()
+			if objet.BackgroundColor3 == derniere then return end
+			derniere = Theme.carton(objet.BackgroundColor3)
+			if objet:FindFirstChild("VernisX40") then
+				objet.BackgroundColor3 = derniere
+			elseif not objet:FindFirstChildWhichIsA("UIGridStyleLayout") then
+				Theme.bouton(objet, derniere, R.bouton)
 			end
 		end
+		update()
+		objet:GetPropertyChangedSignal("BackgroundColor3"):Connect(update)
+	elseif objet:IsA("TextBox") then
+		objet.PlaceholderColor3 = C.secondaire
+		Theme.surface(objet, C.feuillet, R.etiquette, T.case)
+	elseif objet:IsA("ScrollingFrame") then
+		objet.BackgroundColor3 = Theme.carton(objet.BackgroundColor3)
+	elseif (objet:IsA("Frame") or objet:IsA("TextLabel")) and objet:FindFirstChildOfClass("UICorner") then
+		local taille = objet.Size.Y
+		if objet:IsA("TextLabel") or taille.Scale > 0 or taille.Offset >= 20 then
+			Theme.surface(objet, Theme.carton(objet.BackgroundColor3), R.bouton, T.case)
+		end
 	end
-	return best
 end
 
-local function coin(frame: GuiObject, ax: number, ay: number, z: number)
-	local c = enfant("Frame", {
-		Name = "CadreCoin", Size = UDim2.fromOffset(16, 16), AnchorPoint = Vector2.new(ax, ay),
-		Position = UDim2.new(ax, ax == 0 and -3 or 3, ay, ay == 0 and -3 or 3),
-		BackgroundColor3 = FER, BorderSizePixel = 0, ZIndex = z, Active = false,
-	}, frame)
-	enfant("UICorner", { CornerRadius = UDim.new(0, 3) }, c)
-	enfant("UIStroke", { Color = Color3.fromRGB(20, 18, 20), Thickness = 1.5 }, c)
-	local rivet = enfant("Frame", {
-		Name = "Rivet", Size = UDim2.fromOffset(6, 6), AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.fromScale(0.5, 0.5), BackgroundColor3 = FER_CLAIR, BorderSizePixel = 0, ZIndex = z, Active = false,
-	}, c)
-	enfant("UICorner", { CornerRadius = UDim.new(1, 0) }, rivet)
-end
-
--- options : { titre = TextLabel?, sansBandeau = bool, sansCoins = bool }
 function Cadre.habiller(frame: GuiObject, options)
-	if not frame or not frame:IsA("GuiObject") or frame:GetAttribute("Cadre") then
-		return
-	end
+	if not frame or not frame:IsA("GuiObject") or frame:GetAttribute("Cadre") then return end
 	frame:SetAttribute("Cadre", true)
 	options = options or {}
-	-- fond : dégradé de bois (seulement si la fenêtre a un fond plein)
-	if frame.BackgroundTransparency < 0.5 and not frame:FindFirstChildOfClass("UIGradient") then
-		frame.BackgroundColor3 = Color3.new(1, 1, 1)
-		enfant("UIGradient", {
-			Name = "CadreBois", Rotation = 90,
-			Color = ColorSequence.new({
-				ColorSequenceKeypoint.new(0, BOIS_HAUT),
-				ColorSequenceKeypoint.new(0.55, BOIS_HAUT:Lerp(BOIS_BAS, 0.5)),
-				ColorSequenceKeypoint.new(1, BOIS_BAS),
-			}),
-		}, frame)
-	end
-	-- bordure de fer (on garde l'épaisseur voulue par la fenêtre, au moins 2,5)
-	local stroke = frame:FindFirstChildOfClass("UIStroke")
-	if not stroke then
-		stroke = enfant("UIStroke", {}, frame)
-	end
-	stroke.Color = FER
-	stroke.Thickness = math.max(stroke.Thickness, 2.5)
-	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	-- une fenêtre qui range ses enfants elle-même : rien de plus (on casserait sa mise en page)
-	if frame:FindFirstChildWhichIsA("UIGridStyleLayout") then
-		return
-	end
-	local lo, hi = zMinMax(frame)
-	local corner = frame:FindFirstChildOfClass("UICorner")
-	local radius = corner and corner.CornerRadius.Offset or 0
-	-- liseré doré à l'intérieur
-	local liser = enfant("Frame", {
-		Name = "CadreLisere", Size = UDim2.new(1, -10, 1, -10), Position = UDim2.fromOffset(5, 5),
-		BackgroundTransparency = 1, ZIndex = lo, Active = false,
-	}, frame)
-	enfant("UIStroke", { Color = OR, Thickness = 1, Transparency = 0.45 }, liser)
-	if radius > 0 then
-		enfant("UICorner", { CornerRadius = UDim.new(0, math.max(radius - 4, 2)) }, liser)
-	end
-	-- bandeau de titre
+
+	-- Le titre et les contrôles restent au-dessus des feuillets.
 	local titre = options.titre or trouverTitre(frame)
-	if titre and not options.sansBandeau then
-		local h = math.max(titre.AbsoluteSize.Y, titre.Size.Y.Offset, 28) + titre.Position.Y.Offset + 6
-		local band = enfant("Frame", {
-			Name = "CadreBandeau", Size = UDim2.new(1, -10, 0, h), Position = UDim2.fromOffset(5, 5),
-			BackgroundColor3 = BANDEAU, BackgroundTransparency = 0.25, BorderSizePixel = 0,
-			ZIndex = math.max(1, titre.ZIndex - 1), Active = false,
-		}, frame)
-		if radius > 0 then
-			enfant("UICorner", { CornerRadius = UDim.new(0, math.max(radius - 4, 2)) }, band)
+	local z = frame.ZIndex
+	local layout = frame:FindFirstChildWhichIsA("UIGridStyleLayout")
+	Theme.surface(frame, C.papier, R.fenetre, T.fenetre)
+	frame.BackgroundTransparency = 0
+	if not layout then
+		-- Les anciens écrans utilisent aussi ZIndex = 1 pour leur contenu.
+		local function relever(objet)
+			if objet:IsA("GuiObject") and not Theme.estPiece(objet) then
+				objet.ZIndex = math.max(z + 1, objet.ZIndex)
+			end
 		end
-		enfant("Frame", {
-			Name = "Filet", Size = UDim2.new(1, -24, 0, 2), Position = UDim2.new(0, 12, 1, -2),
-			BackgroundColor3 = OR, BackgroundTransparency = 0.2, BorderSizePixel = 0, ZIndex = band.ZIndex, Active = false,
-		}, band)
-		if band.ZIndex >= titre.ZIndex then
-			titre.ZIndex = band.ZIndex + 1
+		for _, objet in frame:GetChildren() do relever(objet) end
+		frame.ChildAdded:Connect(relever)
+		local ombre = Theme.piece(frame, "OmbreParchemin", UDim2.new(1, -14, 1, -3), UDim2.fromOffset(7, 6), C.ombre, R.fenetre)
+		ombre.ZIndex, ombre.BackgroundTransparency = math.max(1, z - 1), 1
+		Theme.bord(ombre, C.ombre, 5).Transparency = 0.72
+		local papier = Theme.piece(frame, "Feuillet", UDim2.new(1, -12, 1, -13), UDim2.fromOffset(6, 5), C.feuillet, R.bandeau)
+		papier.ZIndex = math.max(1, z - 1)
+		Theme.degrade(papier, 94, C.relief, C.feuillet, C.creux)
+		local hauteur = titre and math.max(28, titre.Size.Y.Offset) + titre.Position.Y.Offset - 5 or 0
+		if hauteur > 0 and not options.sansBandeau then
+			local bandeau = Theme.piece(frame, "BandeauMiel", UDim2.new(1, -14, 0, hauteur), UDim2.fromOffset(7, 5), C.miel, R.bandeau)
+			bandeau.ZIndex = math.max(1, z - 1)
+			Theme.degrade(bandeau, 84, C.papier, C.miel, Color3.fromRGB(217, 154, 87))
+			local couture = Theme.piece(bandeau, "JointDuBandeau", UDim2.new(1, -25, 0, 2), UDim2.new(0, 8, 1, -3), C.joint, 2)
+			couture.BackgroundTransparency = 0.48
+			Theme.piece(bandeau, "RetourDuPapier", UDim2.fromOffset(16, 5), UDim2.new(1, -24, 1, -6), C.relief, 3, -6)
 		end
-		titre.TextStrokeColor3 = Color3.fromRGB(20, 12, 6)
-		titre.TextStrokeTransparency = 0.4
 	end
-	-- coins de fer rivetés
-	if not options.sansCoins then
-		for _, a in { { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } } do
-			coin(frame, a[1], a[2], hi + 1)
-		end
+
+	-- Les menus à contenu dynamique et les fenêtres plus anciennes passent par le même cadre.
+	for _, objet in frame:GetDescendants() do habillerContenu(objet) end
+	if titre then
+		titre.Font, titre.TextColor3 = Theme.polices.titre, C.encre
+		titre.TextStrokeTransparency = 1
 	end
+	frame.DescendantAdded:Connect(function(objet)
+		if objet:IsA("GuiObject") then
+			task.defer(function()
+				if objet:IsDescendantOf(frame) then habillerContenu(objet) end
+			end)
+		end
+	end)
 end
 
--- Infobulle : cadre plus léger (fer + liseré doré, sans bandeau ni coins)
 function Cadre.infobulle(frame: GuiObject)
-	if not frame or frame:GetAttribute("Cadre") then
-		return
-	end
-	frame:SetAttribute("Cadre", true)
-	local stroke = frame:FindFirstChildOfClass("UIStroke") or enfant("UIStroke", {}, frame)
-	stroke.Color = FER_CLAIR
-	stroke.Thickness = math.max(stroke.Thickness, 1.5)
-	if not frame:FindFirstChildWhichIsA("UIGridStyleLayout") then
-		local lo = zMinMax(frame)
-		local liser = enfant("Frame", {
-			Name = "CadreLisere", Size = UDim2.new(1, -6, 1, -6), Position = UDim2.fromOffset(3, 3),
-			BackgroundTransparency = 1, ZIndex = lo, Active = false,
-		}, frame)
-		enfant("UIStroke", { Color = OR, Thickness = 1, Transparency = 0.55 }, liser)
-	end
+	Theme.surface(frame, C.feuillet, R.bandeau, T.bouton)
 end
 
 return Cadre

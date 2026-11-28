@@ -1,4 +1,4 @@
--- Barre des sorts et effets joués après le geste de lancer répliqué par le serveur.
+-- Barre des sorts et effets des lancers confirmés par le serveur.
 local Debris = game:GetService("Debris")
 local GuiService = game:GetService("GuiService")
 local RunService = game:GetService("RunService")
@@ -19,6 +19,9 @@ local COLORS = {
 }
 local GOLD = Color3.fromRGB(239, 199, 116)
 local DARK = Color3.fromRGB(46, 35, 29)
+local PORTEE_FX = 300
+local MAX_FX_DISTANTS = 8
+local DUREE_MAX_FX_DISTANT = 1.2
 
 local function effect(name, size, color, cf, life, material)
 	local p = C.creer("Part", {
@@ -35,31 +38,43 @@ local function tween(part, duration, goals)
 	TweenService:Create(part, TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), goals):Play()
 end
 
-local function jouer(personnage, ecole, vise)
-	local root = personnage and personnage:FindFirstChild("HumanoidRootPart")
-	if not root or not COLORS[ecole] then return end
+local function jouer(ecole, debut, fin, root)
 	local color = COLORS[ecole]
-	local hand = personnage:FindFirstChild("RightHand") or root
-	local debut = hand.Position + root.CFrame.LookVector * 0.6
-	local fin = vise or (debut + root.CFrame.LookVector * 14)
+	if not color then return end
 
 	if ecole == "pyro" then
-		-- La boule de feu en vol est déjà répliquée par le serveur. On ajoute sa lueur au départ.
+		-- La boule de feu en vol est déjà répliquée par le serveur.
 		local ball = effect("Lueur du feu", Vector3.one * 0.68, color, CFrame.new(debut), 0.22)
 		ball.Shape = Enum.PartType.Ball
 		tween(ball, 0.21, { Size = Vector3.one * 1.65, Transparency = 1 })
+		if fin and not root then
+			local impact = effect("Éclat de feu", Vector3.one * 0.5, color, CFrame.new(fin), 0.3)
+			impact.Shape = Enum.PartType.Ball
+			tween(impact, 0.28, { Size = Vector3.one * 1.9, Transparency = 1 })
+		end
 	elseif ecole == "cryo" then
-		local distance = (fin - debut).Magnitude
-		if distance < 0.2 then return end
-		local ray = effect("Trait de givre", Vector3.new(0.24, 0.24, distance), color, CFrame.lookAt((debut + fin) / 2, fin), 0.32)
-		tween(ray, 0.29, { Transparency = 1, Size = Vector3.new(0.045, 0.045, distance) })
+		local impact = fin or debut
+		local distance = (impact - debut).Magnitude
+		if distance >= 0.2 then
+			local ray = effect("Trait de givre", Vector3.new(0.24, 0.24, distance), color, CFrame.lookAt((debut + impact) / 2, impact), 0.32)
+			tween(ray, 0.29, { Transparency = 1, Size = Vector3.new(0.045, 0.045, distance) })
+		end
 		for i = 1, 7 do
 			local angle = i * math.pi * 2 / 7
 			local pointe = Vector3.new(math.cos(angle), 0.65, math.sin(angle))
-			local crystal = effect("Cristal de givre", Vector3.new(0.17, 0.17, 0.58), color, CFrame.lookAt(fin, fin + pointe), 0.55, Enum.Material.Ice)
+			local crystal = effect("Cristal de givre", Vector3.new(0.17, 0.17, 0.58), color, CFrame.lookAt(impact, impact + pointe), 0.55, Enum.Material.Ice)
 			tween(crystal, 0.5, { CFrame = crystal.CFrame + pointe * 1.8, Transparency = 1 })
 		end
+	elseif ecole == "geo" and not root then
+		for i = 1, 6 do
+			local angle = i * math.pi / 3
+			local radial = Vector3.new(math.cos(angle), 0, math.sin(angle))
+			local cf = CFrame.lookAt(debut + radial * 1.3, debut + radial * 2) * CFrame.Angles(0.25, 0, 0)
+			local slate = effect("Plaque de schiste", Vector3.new(0.65, 0.9, 0.22), color, cf, DUREE_MAX_FX_DISTANT, Enum.Material.Slate)
+			tween(slate, 1.1, { CFrame = cf + ((fin or debut) - debut) + radial * 0.6, Transparency = 1 })
+		end
 	elseif ecole == "geo" then
+		local personnage = root.Parent
 		local shell = C.creer("Highlight", {
 			Name = "Peau de pierre", Adornee = personnage, FillColor = color, FillTransparency = 0.33,
 			OutlineColor = Color3.fromRGB(96, 92, 89), OutlineTransparency = 0.45,
@@ -85,18 +100,19 @@ local function jouer(personnage, ecole, vise)
 		for i = 1, leaves and 12 or 18 do
 			local size = leaves and Vector3.new(0.44, 0.09, 0.23) or Vector3.new(1.25, 0.09, 0.19)
 			local tint = leaves and color:Lerp(Color3.fromRGB(204, 219, 124), (i % 3) / 4) or color
-			parts[i] = effect(leaves and "Feuille" or "Anneau de vent", size, tint, root.CFrame, duration,
+			parts[i] = effect(leaves and "Feuille" or "Anneau de vent", size, tint, CFrame.new(debut), duration,
 				leaves and Enum.Material.Grass or Enum.Material.ForceField)
 		end
 		task.spawn(function()
 			local start = os.clock()
-			while root.Parent and os.clock() - start < duration do
+			while (not root or root.Parent) and os.clock() - start < duration do
 				local t = (os.clock() - start) / duration
+				local centre = root and root.Position or debut:Lerp(fin or debut, t)
 				for i, p in parts do
 					local angle = i * math.pi * 2 / #parts + t * (leaves and 5 or 1.3)
 					local radius = leaves and (1.3 + 0.9 * t) or (1.5 + 6.5 * t)
 					local y = leaves and (-1.5 + 2.8 * t + (i % 4) * 0.32) or -1.0
-					p.CFrame = CFrame.new(root.Position + Vector3.new(math.cos(angle) * radius, y, math.sin(angle) * radius))
+					p.CFrame = CFrame.new(centre + Vector3.new(math.cos(angle) * radius, y, math.sin(angle) * radius))
 						* CFrame.Angles(leaves and angle * 1.4 or 0, -angle - math.pi / 2, leaves and 0.48 or 0)
 					p.Transparency = math.clamp(t * 1.3 - 0.3, 0, 1)
 				end
@@ -217,12 +233,35 @@ function Magie.mount(player, gui, scale, remotes, targetOf, canCast)
 		if shortcut and now - shortcut.time < 2 then lancer(shortcut.index) end
 	end)
 
+	local fxDistants = 0
+	remotes:WaitForChild("Fx").OnClientEvent:Connect(function(kind, data)
+		if kind ~= "sort" or type(data) ~= "table" or data.lanceur == player.UserId then return end
+		if fxDistants >= MAX_FX_DISTANTS or not COLORS[data.ecole] or typeof(data.de) ~= "Vector3" then return end
+		local fin = data.vers
+		if fin ~= nil and typeof(fin) ~= "Vector3" then return end
+		local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+		if not root then return end
+		local position = root.Position
+		if (data.de - position).Magnitude > PORTEE_FX or (fin and (fin - position).Magnitude > PORTEE_FX) then return end
+
+		fxDistants += 1
+		task.delay(DUREE_MAX_FX_DISTANT, function() fxDistants -= 1 end)
+		jouer(data.ecole, data.de, fin)
+	end)
+
 	player:GetAttributeChangedSignal("Geste"):Connect(function()
 		local gesture = player:GetAttribute("Geste")
 		if type(gesture) ~= "string" or not gesture:match("^sort:") then return end
 		local accepted = cast
 		cast = nil
-		if accepted and os.clock() - accepted.time < 2 then jouer(player.Character, accepted.ecole, accepted.vise) end
+		local personnage = player.Character
+		local root = personnage and personnage:FindFirstChild("HumanoidRootPart")
+		if root and accepted and os.clock() - accepted.time < 2 then
+			local hand = personnage:FindFirstChild("RightHand") or root
+			local direction = root.CFrame.LookVector
+			local debut = hand.Position + direction * 0.6
+			jouer(accepted.ecole, debut, accepted.vise or (debut + direction * 14), root)
+		end
 		stale = true
 		request()
 	end)

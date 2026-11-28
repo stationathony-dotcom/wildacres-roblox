@@ -1,20 +1,20 @@
 # src/StarterPlayer/StarterPlayerScripts/Interface.client.lua — fonctions et lignes
 
-- §Style:25
-- corner:44
-- stroke:48
-- pad:52
-- label:56
-- button:66
-- rescale:109
-- send:132
-- makePanel:139
-- clear:165
-- closeAll:173
-- §Messages et fondu:179
-- toast:189
-- §ACCUEIL (liste des mondes):243
-- lobby:245
-- §EN JEU:398
-- game_:400
-- §Démarrage:4329
+- §Style:27
+- corner:46
+- stroke:50
+- pad:54
+- label:58
+- button:68
+- rescale:121
+- send:144
+- makePanel:152
+- clear:178
+- closeAll:186
+- §Messages et fondu:192
+- toast:202
+- §ACCUEIL (liste des mondes):256
+- lobby:258
+- §EN JEU:411
+- game_:413
+- §Démarrage:4437

@@ -1,5 +1,6 @@
 -- Ajuste les fenêtres à la zone sûre, y compris lorsque le clavier tactile est affiché.
 local Input = game:GetService("UserInputService")
+local Theme = require(script.Parent:WaitForChild("ThemeInterface"))
 local M = {}
 
 function M.dimensions(design, screen, scale, keyboard)
@@ -16,7 +17,8 @@ function M.bind(panel, scale, adapted)
 	local function update()
 		local pixels = screen.AbsoluteSize
 		if pixels.X < 1 or pixels.Y < 1 then return end
-		local obscured = keyboard and Input.OnScreenKeyboardVisible and Input.OnScreenKeyboardSize.Y or 0
+		local obscured = keyboard and Input.OnScreenKeyboardVisible
+			and math.clamp(screen.AbsolutePosition.Y + pixels.Y - Input.OnScreenKeyboardPosition.Y, 0, Input.OnScreenKeyboardSize.Y) or 0
 		local factor = scale and scale.Scale or 1
 		local size, narrow = M.dimensions(design, pixels, factor, obscured)
 		panel.Size = UDim2.fromOffset(size.X, size.Y)
@@ -33,6 +35,7 @@ function M.bind(panel, scale, adapted)
 	if keyboard then
 		table.insert(connections, Input:GetPropertyChangedSignal("OnScreenKeyboardVisible"):Connect(update))
 		table.insert(connections, Input:GetPropertyChangedSignal("OnScreenKeyboardSize"):Connect(update))
+		table.insert(connections, Input:GetPropertyChangedSignal("OnScreenKeyboardPosition"):Connect(update))
 	end
 	panel.Destroying:Connect(function()
 		for _, connection in connections do connection:Disconnect() end
@@ -49,6 +52,7 @@ function M.columns(panel, sections, top)
 	scroll.CanvasSize = UDim2.new()
 	scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	scroll.ScrollingDirection, scroll.ScrollBarThickness = Enum.ScrollingDirection.Y, 5
+	scroll.ScrollBarImageColor3 = Theme.couleurs.joint
 	scroll.ZIndex, scroll.Visible, scroll.Parent = 6, false, panel
 	local layout = Instance.new("UIListLayout", scroll)
 	layout.SortOrder, layout.Padding = Enum.SortOrder.LayoutOrder, UDim.new(0, 8)

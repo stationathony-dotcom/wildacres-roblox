@@ -11,6 +11,8 @@ local HttpService = game:GetService("HttpService")
 local player = Players.LocalPlayer
 local Ecurie = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Ecurie"))
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
+local WindowNav = require(script.Parent:WaitForChild("WindowNav"))
+local Input = game:GetService("UserInputService")
 
 local BOIS = Color3.fromRGB(44, 32, 24)
 local BOIS_CLAIR = Color3.fromRGB(70, 52, 38)
@@ -41,7 +43,7 @@ local panel = new("Frame", { Name = "Montures", Size = UDim2.new(0.62, 0, 0.7, 0
 	AnchorPoint = Vector2.new(0.5, 0.5), BackgroundColor3 = BOIS, Visible = false, Parent = gui },
 	{ corner(10), new("UISizeConstraint", { MinSize = Vector2.new(520, 340), MaxSize = Vector2.new(980, 640) }),
 		new("UIStroke", { Color = OR, Thickness = 2 }) })
-new("TextLabel", { Name = "Titre", Text = "Journal des montures", Font = Enum.Font.Fondamento, TextScaled = true, TextColor3 = OR,
+local titre = new("TextLabel", { Name = "Titre", Text = "Journal des montures", Font = Enum.Font.Fondamento, TextScaled = true, TextColor3 = OR,
 	BackgroundTransparency = 1, Size = UDim2.new(1, -120, 0, 34), Position = UDim2.fromOffset(16, 8), TextXAlignment = Enum.TextXAlignment.Left, Parent = panel })
 local compte = new("TextLabel", { Text = "", Font = Enum.Font.GothamBold, TextSize = 15, TextColor3 = TEXTE, BackgroundTransparency = 1,
 	Size = UDim2.fromOffset(160, 24), Position = UDim2.new(1, -220, 0, 14), TextXAlignment = Enum.TextXAlignment.Right, Parent = panel })
@@ -71,6 +73,29 @@ end
 local bInvoquer = bouton("Invoquer", 0, 0.4)
 local bFavori = bouton("☆ Favori", 0.4, 0.3)
 local bHasard = bouton("🎲 Au hasard", 0.7, 0.3)
+
+local function adapter()
+	local ecran = gui.AbsoluteSize
+	if ecran.X < 1 or ecran.Y < 1 then return end
+	local etroit = ecran.X < 560
+	local zone = panel:FindFirstChildOfClass("UISizeConstraint")
+	zone.MinSize = Vector2.new(math.min(520, ecran.X - 20), math.min(340, ecran.Y - 18))
+	panel.Size = UDim2.fromScale(etroit and 0.94 or 0.62, etroit and 0.86 or 0.7)
+	titre.Size = UDim2.new(1, etroit and -174 or -220, 0, 34)
+	compte.Size = UDim2.fromOffset(etroit and 106 or 160, 24)
+	compte.Position = UDim2.new(1, etroit and -158 or -220, 0, 14)
+	compte.TextSize = etroit and 12 or 15
+	for _, b in { bInvoquer, bFavori, bHasard } do
+		b.TextScaled = etroit
+	end
+	if Input.TouchEnabled then
+		fermer.Size = UDim2.fromOffset(38, 38)
+		fermer.Position = UDim2.new(1, -46, 0, 7)
+	end
+end
+gui.ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(adapter)
+adapter()
 
 -- barre d'invocation
 local barre = new("Frame", { Size = UDim2.fromOffset(260, 14), Position = UDim2.new(0.5, 0, 0.78, 0), AnchorPoint = Vector2.new(0.5, 0.5),
@@ -156,9 +181,9 @@ local function remplir()
 			n += 1
 		end
 		local r = Ecurie.RARITY[m.rarity]
-		local b = new("TextButton", { LayoutOrder = i, Size = UDim2.new(1, 0, 0, 30), BackgroundColor3 = BOIS_CLAIR, AutoButtonColor = true,
+		local b = new("TextButton", { LayoutOrder = i, Size = UDim2.new(1, 0, 0, Input.TouchEnabled and 42 or 30), BackgroundColor3 = BOIS_CLAIR, AutoButtonColor = true,
 			Text = "  " .. (m.type == "vol" and "🪶 " or "🐎 ") .. (connue and m.name or "???") .. (etat.fav == m.id and "  ★" or ""),
-			Font = Enum.Font.GothamBold, TextSize = 14, TextXAlignment = Enum.TextXAlignment.Left,
+			Font = Enum.Font.GothamBold, TextSize = 14, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd,
 			TextColor3 = connue and r.color or GRIS, Parent = liste }, { corner(5) })
 		b.Activated:Connect(function()
 			montrer(m.id)
@@ -203,14 +228,9 @@ local ouvrir = Instance.new("BindableEvent")
 ouvrir.Name = "OuvrirMontures"
 ouvrir.Event:Connect(basculer)
 ouvrir.Parent = player
-local okNav, WindowNav = pcall(function()
-	return require(script.Parent:WaitForChild("WindowNav", 5))
+WindowNav.watch(panel, fermer, function()
+	panel.Visible = false
 end)
-if okNav and WindowNav and WindowNav.watch then
-	pcall(WindowNav.watch, panel, function()
-		panel.Visible = false
-	end, basculer)
-end
 
 RunService.RenderStepped:Connect(function(dt)
 	-- aperçu qui tourne

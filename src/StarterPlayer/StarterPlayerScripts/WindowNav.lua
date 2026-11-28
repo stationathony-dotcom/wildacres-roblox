@@ -4,22 +4,15 @@ local GuiService = game:GetService("GuiService")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
+local Theme = require(script.Parent:WaitForChild("ThemeInterface"))
 
 local WindowNav = {}
 local open = {}
 local menuReturn
+local retour
 
--- cadre médiéval commun (Cadre.lua, 25/11) : chargé sans risque, une fenêtre reste utilisable sans lui
-local okCadre, Cadre = pcall(require, script.Parent:WaitForChild("Cadre", 5))
-local function habiller(panel)
-	if okCadre and type(Cadre) == "table" then
-		local ok, err = pcall(Cadre.habiller, panel)
-		if not ok then
-			warn("[WildAcres] Cadre :", err)
-		end
-	end
-end
-WindowNav.habiller = habiller
+local Cadre = require(script.Parent:WaitForChild("Cadre"))
+WindowNav.habiller = Cadre.habiller
 
 local function usesGamepad()
 	return UserInputService:GetLastInputType().Name:match("^Gamepad") ~= nil
@@ -71,6 +64,27 @@ local function controls(panel)
 	return list
 end
 
+local function defilerVers(objet)
+	local parent = objet.Parent
+	while parent and parent:IsA("GuiObject") do
+		if parent:IsA("ScrollingFrame") then
+			local position = objet.AbsolutePosition - parent.AbsolutePosition
+			local fin = position + objet.AbsoluteSize - parent.AbsoluteWindowSize
+			local delta = Vector2.new(
+				position.X < 0 and position.X or math.max(0, fin.X),
+				position.Y < 0 and position.Y or math.max(0, fin.Y)
+			)
+			local cible = parent.CanvasPosition + delta
+			local direction = parent.ScrollingDirection
+			parent.CanvasPosition = Vector2.new(
+				direction == Enum.ScrollingDirection.Y and parent.CanvasPosition.X or math.max(0, cible.X),
+				direction == Enum.ScrollingDirection.X and parent.CanvasPosition.Y or math.max(0, cible.Y)
+			)
+		end
+		parent = parent.Parent
+	end
+end
+
 local function keyboard(_, state, input)
 	local entry = topWindow()
 	if not entry or not entry.panel:GetAttribute("NavigationClavier") then return Enum.ContextActionResult.Pass end
@@ -91,13 +105,7 @@ local function keyboard(_, state, input)
 				if focused then focused:ReleaseFocus() end
 				local nextItem = items[(index - 1 + (shift and -1 or 1)) % #items + 1]
 				GuiService.SelectedObject = nextItem
-				local scroll = nextItem:FindFirstAncestorWhichIsA("ScrollingFrame")
-				if scroll then
-					local y = nextItem.AbsolutePosition.Y - scroll.AbsolutePosition.Y
-					local height = nextItem.AbsoluteSize.Y
-					local delta = math.min(y, 0) + math.max(y + height - scroll.AbsoluteWindowSize.Y, 0)
-					scroll.CanvasPosition = Vector2.new(scroll.CanvasPosition.X, math.max(0, scroll.CanvasPosition.Y + delta))
-				end
+				defilerVers(nextItem)
 			end
 		elseif selected:IsA("TextBox") then
 			selected:CaptureFocus()
@@ -123,7 +131,10 @@ end
 local function focusTop()
 	local top = topWindow()
 	if top and usesGamepad() then
-		GuiService.SelectedObject = top.focus
+		local courant = GuiService.SelectedObject
+		if not courant or not courant:IsDescendantOf(top.panel) then
+			GuiService.SelectedObject = top.focus
+		end
 	end
 end
 
@@ -134,13 +145,22 @@ function WindowNav.rememberMenu(restore)
 	end)
 end
 
+function WindowNav.intercepterRetour(action)
+	retour = action
+end
+
 function WindowNav.watch(panel, closeButton, close, screen, initialFocus)
 	local layer = panel:FindFirstAncestorWhichIsA("ScreenGui")
 	local source, property = screen or panel, screen and "Enabled" or "Visible"
 	local entry = { panel = panel, focus = initialFocus or closeButton, close = close, layer = layer }
-	habiller(panel)
+	-- Les fenêtres modales ont un fond plein écran et un panneau centré.
+	local carte = panel:IsA("GuiButton") and closeButton.Parent ~= panel and closeButton.Parent or panel
+	Cadre.habiller(carte)
 	closeButton.Text = Composants.PICTOGRAMMES.fermer
 	closeButton.Selectable = true
+	closeButton.TextColor3, closeButton.Font = Theme.couleurs.encre, Theme.polices.titre
+	local rayon = UDim.new(0.5, 0)
+	Theme.bouton(closeButton, Theme.couleurs.terreCuite, rayon)
 	panel.Active = true
 	panel.SelectionGroup = true
 	panel.SelectionBehaviorUp = Enum.SelectionBehavior.Stop
@@ -189,6 +209,13 @@ end
 
 function WindowNav.bindMenu(menu, toggle, close)
 	UserInputService.LastInputTypeChanged:Connect(focusTop)
+	GuiService:GetPropertyChangedSignal("SelectedObject"):Connect(function()
+		local selected = GuiService.SelectedObject
+		local entry = topWindow()
+		if usesGamepad() and selected and entry and selected:IsDescendantOf(entry.panel) then
+			defilerVers(selected)
+		end
+	end)
 	ContextActionService:BindActionAtPriority("WildAcresNavigationClavier", keyboard, false,
 		Enum.ContextActionPriority.High.Value, Enum.KeyCode.Tab, Enum.KeyCode.Return, Enum.KeyCode.KeypadEnter)
 	ContextActionService:BindActionAtPriority("WildAcresSaisieManette", manetteTexte, false,
@@ -208,6 +235,9 @@ function WindowNav.bindMenu(menu, toggle, close)
 			return Enum.ContextActionResult.Pass
 		end
 		if state == Enum.UserInputState.Begin then
+			local intercepter = retour
+			retour = nil
+			if intercepter and intercepter() then return Enum.ContextActionResult.Sink end
 			if entry then entry.close() else close() end
 		end
 		return Enum.ContextActionResult.Sink

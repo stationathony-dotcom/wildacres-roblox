@@ -18,6 +18,8 @@ local Config = require(Shared:WaitForChild("Config"))
 local Gear = require(Shared:WaitForChild("Gear"))
 local ApercuPose = require(script.Parent:WaitForChild("ApercuPose"))
 local Composants = require(script.Parent:WaitForChild("ComposantsInterface"))
+local Theme = require(script.Parent:WaitForChild("ThemeInterface"))
+local Cadre = require(script.Parent:WaitForChild("Cadre"))
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 
 local MOBILE = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
@@ -35,9 +37,9 @@ local C = {
 	red = Color3.fromRGB(220, 80, 70),
 	blue = Color3.fromRGB(90, 150, 220),
 }
-local TITLE = Enum.Font.FredokaOne
-local BODY = Enum.Font.GothamMedium
-local BOLD = Enum.Font.GothamBold
+local TITLE = Theme.polices.titre
+local BODY = Theme.polices.texte
+local BOLD = Theme.polices.gras
 
 local new = Composants.creer
 
@@ -64,10 +66,12 @@ local function label(props)
 end
 
 local function button(text: string, color: Color3?, onClick: () -> ())
-	return Composants.bouton({
+	local b = Composants.bouton({
 		Text = text, Font = BOLD, TextSize = 16, TextColor3 = C.text,
 		BackgroundColor3 = color or C.panel2, Size = UDim2.new(0, 120, 0, 36),
-	}, onClick, { corner(8), stroke(C.line, 1.5) })
+	}, onClick)
+	Composants.habillerBouton(b)
+	return b
 end
 
 local gui = new("ScreenGui", { Name = "WildAcres", ResetOnSpawn = false, IgnoreGuiInset = true, ZIndexBehavior = Enum.ZIndexBehavior.Sibling, Parent = player:WaitForChild("PlayerGui") })
@@ -86,22 +90,30 @@ pcall(function()
 		w.VerticalAlignment = Enum.VerticalAlignment.Bottom
 		w.WidthScale = 0.85
 		w.HeightScale = 0.7
-		w.BackgroundColor3 = Color3.fromRGB(32, 25, 20)
-		w.BackgroundTransparency = 0.35
-		w.TextColor3 = Color3.fromRGB(248, 242, 228)
+		w.BackgroundColor3 = Theme.couleurs.papier
+		w.BackgroundTransparency = 0.18
+		w.TextColor3 = Theme.couleurs.encre
+		w.TextStrokeTransparency = 1
+		w.FontFace = Font.fromEnum(BOLD)
 		w.TextSize = 15
 	end
 	local bar = TCS:FindFirstChildOfClass("ChatInputBarConfiguration")
 	if bar then
-		bar.BackgroundColor3 = Color3.fromRGB(28, 22, 18)
-		bar.BackgroundTransparency = 0.25
-		bar.PlaceholderColor3 = Color3.fromRGB(196, 188, 170)
+		bar.BackgroundColor3 = Theme.couleurs.feuillet
+		bar.BackgroundTransparency = 0.12
+		bar.PlaceholderColor3 = Theme.couleurs.secondaire
+		bar.TextColor3 = Theme.couleurs.encre
+		bar.TextStrokeTransparency = 1
+		bar.FontFace = Font.fromEnum(BODY)
 	end
 	local tabs = TCS:FindFirstChildOfClass("ChannelTabsConfiguration")
 	if tabs then
 		tabs.Enabled = true
-		tabs.BackgroundColor3 = Color3.fromRGB(55, 42, 31)
-		tabs.SelectedTabTextColor3 = Color3.fromRGB(246, 200, 70)
+		tabs.BackgroundColor3 = Theme.couleurs.miel
+		tabs.HoverBackgroundColor3 = Theme.couleurs.feuillet
+		tabs.SelectedTabTextColor3 = Theme.couleurs.encre
+		tabs.TextColor3 = Theme.couleurs.secondaire
+		tabs.FontFace = Font.fromEnum(BOLD)
 	end
 end)
 local hudScaleUpdate: (() -> ())? = nil -- HUD et barre rapide : échelle de l'image cible
@@ -318,7 +330,7 @@ local function lobby()
 	local function updateBan()
 		local banned = player:GetAttribute("Banni") ~= nil
 		play.Interactable = not banned
-		play.BackgroundColor3 = banned and C.panel2 or C.green
+		play.BackgroundColor3 = banned and Theme.couleurs.creux or Theme.couleurs.sauge
 		list.Visible = not banned
 		support.Text = banned and "Faire appel" or "Écrire à l’équipe"
 		if banned then
@@ -701,7 +713,7 @@ local function game_()
 		inv.stats = inv.stats or {}
 	end)
 
-	-- ---------------------------------------------------------------- Infobulle (façon WoW)
+	-- ---------------------------------------------------------------- Infobulle
 	local selectionGui = game:GetService("GuiService")
 	local QUALITY = {
 		Color3.fromRGB(235, 235, 235), -- commun
@@ -746,19 +758,27 @@ local function game_()
 		Name = "Infobulle", Size = UDim2.fromOffset(250, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundColor3 = Color3.fromRGB(14, 12, 22),
 		BackgroundTransparency = 0.04, Visible = false, ZIndex = 80, Parent = gui,
 	}, { corner(4), stroke(Color3.fromRGB(140, 140, 160), 1.5), pad(8), new("UIListLayout", { Padding = UDim.new(0, 2), SortOrder = Enum.SortOrder.LayoutOrder }) })
+	Cadre.infobulle(tip)
 	local tipActions = nil
 	local function tipLine(text: string, color: Color3?, size: number?, order: number)
-		label({ Text = text, TextSize = size or 13, TextColor3 = color or C.text, Font = (size or 13) > 14 and BOLD or BODY, Size = UDim2.new(1, 0, 0, 0),
-			AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = order, Parent = tip, ZIndex = 81 })
+		local ligne = label({ Text = text, TextSize = size or 13, TextColor3 = Theme.encre(color), Font = order == 1 and TITLE or BODY,
+			Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = order, Parent = tip, ZIndex = 81 })
+		if order == 1 then
+			ligne.BackgroundTransparency = 0
+			Theme.surface(ligne, color and Theme.couleurs.feuillet:Lerp(color, 0.27) or Theme.couleurs.miel,
+				Theme.rayons.etiquette, Theme.traits.case)
+			pad(6).Parent = ligne
+		end
 	end
 	local function hideTip()
 		tip.Visible = false
 		tipActions = nil
+		WindowNav.intercepterRetour(nil)
 	end
 	local function placeTip(source)
-		local m = source and (source.AbsolutePosition + source.AbsoluteSize / 2) or UserInputService:GetMouseLocation()
+		local m = (source and (source.AbsolutePosition + source.AbsoluteSize / 2) or UserInputService:GetMouseLocation()) - gui.AbsolutePosition
 		local s = uiScale.Scale
-		local vp = workspace.CurrentCamera.ViewportSize
+		local vp = gui.AbsoluteSize
 		local x, y = m.X + 18, m.Y + 6
 		if x + tip.AbsoluteSize.X > vp.X then
 			x = m.X - tip.AbsoluteSize.X - 12
@@ -766,6 +786,8 @@ local function game_()
 		if y + tip.AbsoluteSize.Y > vp.Y then
 			y = vp.Y - tip.AbsoluteSize.Y - 4
 		end
+		x = math.clamp(x, 4, math.max(4, vp.X - tip.AbsoluteSize.X - 4))
+		y = math.clamp(y, 4, math.max(4, vp.Y - tip.AbsoluteSize.Y - 4))
 		tip.Position = UDim2.fromOffset(x / s, y / s)
 	end
 	-- lines = { {texte, couleur?, taille?} } ; actions = { {texte, fonction} } (boutons, infobulle épinglée)
@@ -775,7 +797,7 @@ local function game_()
 		clear(tip)
 		for i, l in lines do
 			if l.fill then
-				local track = new("Frame", { Size = UDim2.new(1, 0, 0, 7), BackgroundColor3 = Color3.fromRGB(55, 48, 45),
+				local track = new("Frame", { Size = UDim2.new(1, 0, 0, 7), BackgroundColor3 = Theme.couleurs.creux,
 					LayoutOrder = i, Parent = tip, ZIndex = 81 }, { corner(3) })
 				new("Frame", { Size = UDim2.fromScale(l.fill, 1), BackgroundColor3 = l[2],
 					Visible = l.fill > 0, Parent = track, ZIndex = 82 }, { corner(3) })
@@ -785,15 +807,18 @@ local function game_()
 		end
 		tipActions = actions
 		if actions and #actions > 0 then
-			local row = new("Frame", { Size = UDim2.new(1, 0, 0, 30), BackgroundTransparency = 1, LayoutOrder = 100, Parent = tip, ZIndex = 81 },
-				{ new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 6) }) })
-			for _, a in actions do
+			local row = new("Frame", { Size = UDim2.new(1, 0, 0, 38 * math.ceil(#actions / 2)), BackgroundTransparency = 1, LayoutOrder = 100, Parent = tip, ZIndex = 81 },
+				{ new("UIGridLayout", { CellSize = UDim2.new(0.5, -3, 0, 33), CellPadding = UDim2.fromOffset(6, 5), FillDirectionMaxCells = 2, SortOrder = Enum.SortOrder.LayoutOrder }) })
+			row.SelectionGroup = true
+			row.SelectionBehaviorUp, row.SelectionBehaviorDown = Enum.SelectionBehavior.Stop, Enum.SelectionBehavior.Stop
+			row.SelectionBehaviorLeft, row.SelectionBehaviorRight = Enum.SelectionBehavior.Stop, Enum.SelectionBehavior.Stop
+			for index, a in ipairs(actions) do
 				local b = button(a[1], a[3] or C.panel2, function()
 					if manette and source.Parent then selectionGui.SelectedObject = source end
 					hideTip()
 					a[2]()
 				end)
-				b.Size = UDim2.fromOffset(110, 28)
+				b.LayoutOrder = index
 				b.TextSize = 13
 				b.ZIndex = 82
 				b.Parent = row
@@ -801,7 +826,19 @@ local function game_()
 			end
 		end
 		tip.Visible = true
+		if actions then actions.source = source end
 		placeTip(source)
+		task.defer(function()
+			if tip.Visible and tipActions == actions and (not source or source.Parent) then placeTip(source) end
+		end)
+		if manette and premiereAction then
+			WindowNav.intercepterRetour(function()
+				if not tip.Visible or tipActions ~= actions then return false end
+				hideTip()
+				if source.Parent then selectionGui.SelectedObject = source end
+				return true
+			end)
+		end
 		if manette and premiereAction then selectionGui.SelectedObject = premiereAction end
 	end
 	local function itemLines(id: string, n: number?)
@@ -871,7 +908,9 @@ local function game_()
 		return lines
 	end
 	RunService.RenderStepped:Connect(function()
-		if tip.Visible and not tipActions then
+		if tipActions and tipActions.source and not tipActions.source:IsDescendantOf(gui) then
+			hideTip()
+		elseif tip.Visible and not tipActions then
 			placeTip()
 		end
 	end)
@@ -933,17 +972,23 @@ local function game_()
 		local info = id and id ~= "" and itemInfo(id) or nil
 		local cell = new("TextButton", {
 			Text = "", AutoButtonColor = true, BackgroundColor3 = Color3.fromRGB(30, 26, 22), Size = UDim2.fromOffset(size, size), Parent = parent, ZIndex = z or 6,
-		}, { corner(4) })
-		local st = stroke(info and QUALITY[qualityOf(info)] or Color3.fromRGB(70, 60, 50), info and 1.5 or 1)
-		st.Parent = cell
+		})
+		local teinte = Theme.rarete(info and qualityOf(info))
+		if info then
+			Theme.bouton(cell, teinte.fond, Theme.rayons.case, teinte.encre, true)
+			Theme.piece(cell, "PliDeCase", UDim2.fromOffset(9, 3), UDim2.new(1, -15, 0, 5), Theme.couleurs.relief, 2, -5)
+		else
+			Theme.surface(cell, Theme.couleurs.creux, Theme.rayons.case, Theme.traits.case)
+			cell.Selectable, cell.AutoButtonColor = parent.Name == "BarreRapide", false
+		end
 		if info then
 			if differer or not toolIcon(id :: string, cell, (z or 6) + 1, n == 0) then
-				label({ Name = "IconeSecours", Text = info.icon or "❔", TextSize = math.floor(size * 0.56), TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1),
+				label({ Name = "IconeSecours", Text = info.icon or "❔", TextColor3 = Theme.couleurs.encre, TextSize = math.floor(size * 0.56), TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1),
 					TextTransparency = (n == 0) and 0.6 or 0, Parent = cell, ZIndex = (z or 6) + 1 })
 			end
 			if n and n > 1 then
 				label({ Text = tostring(n), Font = BOLD, TextSize = math.max(11, math.floor(size * 0.28)), TextXAlignment = Enum.TextXAlignment.Right,
-					TextYAlignment = Enum.TextYAlignment.Bottom, TextStrokeTransparency = 0.2, Size = UDim2.new(1, -3, 1, -1), Parent = cell, ZIndex = (z or 6) + 2 })
+					TextYAlignment = Enum.TextYAlignment.Bottom, TextColor3 = Theme.couleurs.encre, Size = UDim2.new(1, -4, 1, -2), Parent = cell, ZIndex = (z or 6) + 2 })
 			end
 		end
 		return cell
@@ -1170,21 +1215,17 @@ local function game_()
 			local cell = slotCell(hotbar, 69, shown, (not tool) and n or (n == 0 and 0 or nil), 5)
 			cell.Name = "Barre" .. i
 			cell.LayoutOrder = i
-			cell.BackgroundColor3 = i == selected and Color3.fromRGB(46, 57, 72) or Color3.fromRGB(50, 40, 32)
-			cell.BackgroundTransparency = 0.08
-			cell:FindFirstChildOfClass("UICorner").CornerRadius = UDim.new(0, 8)
-			new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(137, 119, 103)), Parent = cell })
-			label({ Text = tostring(i), Font = BOLD, TextSize = 14, TextColor3 = C.text, TextStrokeTransparency = 0.3, Size = UDim2.fromOffset(16, 16), Position = UDim2.fromOffset(5, 3), Parent = cell, ZIndex = 8 })
-			local s = cell:FindFirstChildOfClass("UIStroke")
+			local touche = label({ Text = tostring(i), Font = BOLD, TextSize = 13, TextColor3 = Theme.couleurs.encre,
+				TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromOffset(17, 17), Position = UDim2.fromOffset(5, 4), Parent = cell, ZIndex = 8 })
+			touche.BackgroundTransparency = 0
+			Theme.surface(touche, Theme.couleurs.feuillet, 6, 1)
+			Theme.selection(cell)
 			if i == selected then
-				s.Color = C.gold
-				s.Thickness = 3.5
-				new("Frame", { Size = UDim2.new(1, -8, 1, -8), Position = UDim2.fromOffset(4, 4), BackgroundTransparency = 1, Parent = cell }, { corner(5), stroke(Color3.fromRGB(168, 109, 32), 1.5) })
-			else
-				if not shown then
-					s.Color = C.line
-				end
-				s.Thickness = math.max(s.Thickness, 2)
+				cell.BackgroundColor3 = Theme.couleurs.miel
+				touche.BackgroundColor3 = Theme.couleurs.miel
+				Theme.bord(cell, Theme.couleurs.ombre, 3.5)
+				local retour = Theme.piece(cell, "RetourEmail", UDim2.fromOffset(18, 4), UDim2.new(0, 8, 1, -9), Theme.couleurs.relief, 3, -5)
+				retour.ZIndex = 8
 			end
 			cell.MouseButton1Down:Connect(function()
 				if id ~= "" then
@@ -1441,7 +1482,7 @@ local function game_()
 							send("repair", { id = id })
 						end })
 					end
-					showTip(itemLines(id, n), actions, id == "charter" and cell or nil)
+					showTip(itemLines(id, n), actions, cell)
 				end)
 			end
 		end
@@ -1621,13 +1662,20 @@ local function game_()
 		return lines
 	end
 	local function gearCell(parent, size: number, it, slot: string?)
-		local r = it and (Gear.RARITIES[it.rarity] or Gear.RARITIES[1])
 		local broken = equipment.brisee(it)
+		local teinte = Theme.rarete(it and it.rarity)
 		local cell = new("TextButton", {
 			Text = it and Hud.gearIcon(it) or (SLOT_ICON[slot] or ""), TextSize = math.floor(size * 0.5), Font = BOLD, TextTransparency = it and 0 or 0.75,
 			AutoButtonColor = it ~= nil, BackgroundColor3 = Color3.fromRGB(30, 26, 22), Size = UDim2.fromOffset(size, size), Parent = parent, ZIndex = 8,
-		}, { corner(4) })
-		stroke(broken and C.dim or r and r.color or Color3.fromRGB(70, 60, 50), r and 2 or 1).Parent = cell
+		})
+		cell.TextColor3 = Theme.couleurs.encre
+		if it then
+			Theme.bouton(cell, broken and Theme.couleurs.creux or teinte.fond, Theme.rayons.case, teinte.encre, true)
+			Theme.piece(cell, "PliDeCase", UDim2.fromOffset(9, 3), UDim2.new(1, -15, 0, 5), Theme.couleurs.relief, 2, -5)
+		else
+			Theme.surface(cell, Theme.couleurs.creux, Theme.rayons.case, Theme.traits.case)
+			cell.Selectable = false
+		end
 		if it then
 			local preview = Hud.gearThumbnail(it)
 			if preview then
@@ -1635,8 +1683,8 @@ local function game_()
 				preview.ZIndex, preview.Parent = 9, cell
 			end
 			if broken then
-				cell.TextColor3 = C.dim
-				label({ Text = "BRISÉE", Font = BOLD, TextSize = 8, TextColor3 = C.text, TextXAlignment = Enum.TextXAlignment.Center,
+				cell.TextColor3 = Theme.couleurs.secondaire
+				label({ Text = "BRISÉE", Font = BOLD, TextSize = 8, TextColor3 = Theme.couleurs.encre, TextXAlignment = Enum.TextXAlignment.Center,
 					Size = UDim2.new(1, 0, 0, 11), Position = UDim2.new(0, 0, 1, -11), Parent = cell, ZIndex = 10 })
 			end
 			cell.MouseEnter:Connect(function()
@@ -1688,7 +1736,7 @@ local function game_()
 				c.Activated:Connect(function()
 					showTip(gearLines(it), { { "Retirer", function()
 						send("unequip", { slot = slot })
-					end } })
+					end } }, c)
 				end)
 			end
 		end
@@ -1712,12 +1760,12 @@ local function game_()
 						task.defer(function()
 							showTip({ { "Démonter " .. it.name .. " ?", C.red, 15 }, { "C'est définitif.", C.dim, 12 } }, { { "Oui, démonter", function()
 								send("drop_gear", { id = it.id })
-							end, C.red }, { "Annuler", function() end } })
+							end, C.red }, { "Annuler", function() end } }, c)
 						end)
 						return
 					end
 					send("drop_gear", { id = it.id })
-				end, C.red } })
+			end, C.red } }, c)
 			end)
 		end
 		-- droite : onglets
@@ -2508,6 +2556,19 @@ local function game_()
 	local dText = label({ Text = "", TextSize = 18, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 3, Parent = dlg, ZIndex = 9 })
 	local dOpts = new("Frame", { Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, LayoutOrder = 4, Parent = dlg, ZIndex = 9 },
 		{ new("UIListLayout", { Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder }) })
+	Cadre.habiller(dlg, { titre = dName })
+	dName.BackgroundTransparency = 0
+	Theme.surface(dName, Theme.couleurs.miel, Theme.rayons.etiquette, Theme.traits.case)
+	pad(3).Parent = dName
+	do
+		local function adapterDialogue()
+			if gui.AbsoluteSize.X < 1 then return end
+			dlg.Size = UDim2.fromOffset(math.clamp(gui.AbsoluteSize.X / uiScale.Scale - 20, 1, 640), 0)
+		end
+		gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(adapterDialogue)
+		uiScale:GetPropertyChangedSignal("Scale"):Connect(adapterDialogue)
+		adapterDialogue()
+	end
 	local dlgToken = 0
 	Remotes:WaitForChild("Dialog").OnClientEvent:Connect(function(data)
 		dlgToken += 1
@@ -2572,12 +2633,15 @@ local function game_()
 	tclose.ZIndex = 6
 	tclose.Parent = tal
 	WindowNav.watch(tal, tclose, closeTal)
-	local tcols = new("Frame", { Size = UDim2.new(1, -24, 1, -96), Position = UDim2.fromOffset(12, 44), BackgroundTransparency = 1, Parent = tal, ZIndex = 6 },
+	MiseEnPage.bind(tal, uiScale)
+	local tcols = new("ScrollingFrame", { Size = UDim2.new(1, -24, 1, -96), Position = UDim2.fromOffset(12, 44), BackgroundTransparency = 1,
+		BorderSizePixel = 0, CanvasSize = UDim2.fromOffset(nTrees * (COLW + 8) - 8, 456),
+		ScrollBarThickness = 5, ScrollingDirection = Enum.ScrollingDirection.XY, Parent = tal, ZIndex = 6 },
 		{ new("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 8) }) })
 	local tfoot = new("Frame", { Size = UDim2.new(1, -24, 0, 36), Position = UDim2.new(0, 12, 1, -46), BackgroundTransparency = 1, Parent = tal, ZIndex = 6 })
 	local TREE_BG = {
-		horsloi = Color3.fromRGB(40, 26, 40), fermier = Color3.fromRGB(32, 40, 24), dresseur = Color3.fromRGB(40, 32, 22),
-		artisan = Color3.fromRGB(38, 34, 30), justicier = Color3.fromRGB(26, 32, 44), explorateur = Color3.fromRGB(24, 38, 40),
+		horsloi = Theme.rarete(4).fond, fermier = Theme.rarete(2).fond, dresseur = Theme.rarete(5).fond,
+		artisan = Theme.rarete(1).fond, justicier = Theme.rarete(3).fond, explorateur = Theme.couleurs.turquoise,
 	}
 
 	local function renderTalents()
@@ -2600,7 +2664,7 @@ local function game_()
 					table.insert(tiers[t.req], t)
 				end
 			end
-			local col = new("Frame", { Size = UDim2.new(0, COLW, 1, 0), BackgroundColor3 = TREE_BG[tree.id] or C.panel2, LayoutOrder = ti, Parent = tcols, ZIndex = 6 },
+			local col = new("Frame", { Size = UDim2.fromOffset(COLW, 456), BackgroundColor3 = TREE_BG[tree.id] or C.panel2, LayoutOrder = ti, Parent = tcols, ZIndex = 6 },
 				{ corner(6), stroke(Color3.fromRGB(90, 72, 46), 1.5) })
 			label({ Text = tree.icon .. " " .. tree.name, Font = TITLE, TextSize = 16, TextColor3 = C.gold, TextXAlignment = Enum.TextXAlignment.Center,
 				Size = UDim2.new(1, 0, 0, 24), Position = UDim2.fromOffset(0, 4), Parent = col, ZIndex = 7 })
@@ -2639,7 +2703,9 @@ local function game_()
 						BackgroundColor3 = locked and Color3.fromRGB(34, 32, 30) or Color3.fromRGB(46, 38, 30), Size = UDim2.fromOffset(52, 52),
 						Position = UDim2.fromOffset(x, y), TextTransparency = locked and 0.6 or 0, Parent = col, ZIndex = 7,
 					}, { corner(6) })
-					stroke(maxed and C.gold or (can and Color3.fromRGB(30, 255, 0) or (rank > 0 and Color3.fromRGB(30, 200, 0) or Color3.fromRGB(90, 84, 76))), maxed and 2.5 or 2).Parent = b
+					b.TextColor3 = Theme.couleurs.encre
+					Theme.bouton(b, maxed and Theme.couleurs.miel or can and Theme.couleurs.sauge
+						or rank > 0 and Theme.couleurs.turquoise or Theme.couleurs.creux, Theme.rayons.case)
 					new("TextLabel", {
 						Text = rank .. "/" .. t.max, Font = BOLD, TextSize = 12, TextColor3 = maxed and C.gold or (rank > 0 and Color3.fromRGB(30, 255, 0) or C.text),
 						BackgroundColor3 = Color3.fromRGB(10, 8, 6), BackgroundTransparency = 0.1, Size = UDim2.fromOffset(30, 16), Position = UDim2.new(1, -24, 1, -10),
